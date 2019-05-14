@@ -139,8 +139,12 @@ public class VloConfig {
     private int solrThreads = 2;
 
     private String linkCheckerMongoDbName;
-    
+
     private String linkCheckerMongoConnectionString;
+
+    private String centreRegistryCentresListJsonUrl;
+
+    private String centreRegistryOaiPmhEndpointsListJsonUrl;
 
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String, String> fields;
@@ -1352,6 +1356,21 @@ public class VloConfig {
     public void setLinkCheckerMongoConnectionString(String linkCheckerMongoConnectionString) {
         this.linkCheckerMongoConnectionString = linkCheckerMongoConnectionString;
     }
-    
-    
+
+    public String getCentreRegistryCentresListJsonUrl() {
+        return centreRegistryCentresListJsonUrl;
+    }
+
+    public void setCentreRegistryCentresListJsonUrl(String centreRegistryCentresListJsonUrl) {
+        this.centreRegistryCentresListJsonUrl = centreRegistryCentresListJsonUrl;
+    }
+
+    public String getCentreRegistryOaiPmhEndpointsListJsonUrl() {
+        return centreRegistryOaiPmhEndpointsListJsonUrl;
+    }
+
+    public void setCentreRegistryOaiPmhEndpointsListJsonUrl(String centreRegistryOaiPmhEndpointsListJsonUrl) {
+        this.centreRegistryOaiPmhEndpointsListJsonUrl = centreRegistryOaiPmhEndpointsListJsonUrl;
+    }
+
 }

@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.centreregistry;
 
-import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService.EndpointProvider;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

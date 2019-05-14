@@ -17,9 +17,9 @@
 package eu.clarin.cmdi.vlo.service.centreregistry;
 
 import com.google.common.collect.Lists;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
@@ -39,16 +39,21 @@ import org.json.JSONTokener;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class CentreRegistryProvidersService {
+public class CentreRegistryProvidersService implements EndpointProvidersService {
 
     private final String centresJsonUrl;
     private final String endpointsJsonUrl;
+
+    public CentreRegistryProvidersService(VloConfig vloConfig) {
+        this(vloConfig.getCentreRegistryCentresListJsonUrl(), vloConfig.getCentreRegistryOaiPmhEndpointsListJsonUrl());
+    }
 
     public CentreRegistryProvidersService(String centresJsonUrl, String endpointsJsonUrl) {
         this.centresJsonUrl = centresJsonUrl;
         this.endpointsJsonUrl = endpointsJsonUrl;
     }
 
+    @Override
     public List<EndpointProvider> retrieveCentreEndpoints() throws IOException {
         final List<EndpointProvider> endpoints = parseEndpoints();
         fillInCentreDetails(endpoints);
@@ -69,7 +74,7 @@ public class CentreRegistryProvidersService {
                             .setKey(o.getInt("centre"))
                             .setEndpointUrl(Lists.newArrayList(o.getString("uri"))))
                     .collect(Collectors.groupingBy(EndpointProvider::getCentreKey));
-            
+
             // merge all endpoint provider objects per centre
             return groupedByCentre.entrySet().stream()
                     .map(set -> {
@@ -120,47 +125,4 @@ public class CentreRegistryProvidersService {
                 .map(o -> (JSONObject) o);
     }
 
-    public static class EndpointProvider implements Serializable {
-
-        private String centreName;
-        private String centreWebsiteUrl;
-        private Integer centreKey;
-        private Collection<String> endpointUrls;
-
-        public Integer getCentreKey() {
-            return centreKey;
-        }
-
-        public EndpointProvider setKey(Integer key) {
-            this.centreKey = key;
-            return this;
-        }
-
-        public String getCentreName() {
-            return centreName;
-        }
-
-        public EndpointProvider setName(String name) {
-            this.centreName = name;
-            return this;
-        }
-
-        public String getCentreWebsiteUrl() {
-            return centreWebsiteUrl;
-        }
-
-        public EndpointProvider setWebsiteUrl(String websiteUrl) {
-            this.centreWebsiteUrl = websiteUrl;
-            return this;
-        }
-
-        public Collection<String> getEndpointUrls() {
-            return endpointUrls;
-        }
-
-        public EndpointProvider setEndpointUrl(Collection<String> endpointUrl) {
-            this.endpointUrls = endpointUrl;
-            return this;
-        }
-    }
 }

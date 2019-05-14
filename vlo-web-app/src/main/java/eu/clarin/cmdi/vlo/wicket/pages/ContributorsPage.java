@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.base.Strings;
-import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService;
-import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService.EndpointProvider;
+import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvider;
+import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,16 +43,15 @@ public class ContributorsPage extends VloBasePage {
 
     private final static Logger logger = LoggerFactory.getLogger(ContributorsPage.class);
 
-    //TODO: Spring bean
-    private final CentreRegistryProvidersService providersService = new CentreRegistryProvidersService(CENTRE_REGISTRY_CENTRES_LIST_JSON_URL, CENTRE_REGISTRY_ENDPOINTS_LIST_JSON_URL);
-    private final static String CENTRE_REGISTRY_ENDPOINTS_LIST_JSON_URL = "https://centres.clarin.eu/api/model/OAIPMHEndpoint";
-    private final static String CENTRE_REGISTRY_CENTRES_LIST_JSON_URL = "https://centres.clarin.eu/api/model/Centre";
+    @SpringBean
+    private EndpointProvidersService providersService;
 
     //TOOD: get from config
     private final static String OTHER_PROVIDERS_LIST_FILE = "/Users/twagoo/Desktop/ContributorsPageOtherDefault.html";
 
     public ContributorsPage() {
         add(new ListView<EndpointProvider>("centresList", new EndpointProvidersModel()) {
+
             @Override
             protected void populateItem(ListItem<EndpointProvider> item) {
                 item.setDefaultModel(new CompoundPropertyModel<>(item.getModel()));

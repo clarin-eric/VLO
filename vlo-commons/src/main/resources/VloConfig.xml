@@ -259,6 +259,10 @@
 
     <vcrSubmitEndpoint>${vloconfig.vcrSubmitEndpoint}</vcrSubmitEndpoint>
 
+    <centreRegistryCentresListJsonUrl>${vloconfig.centreRegistryCentresListJsonUrl}</centreRegistryCentresListJsonUrl>
+
+    <centreRegistryOaiPmhEndpointsListJsonUrl>${vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl}</centreRegistryOaiPmhEndpointsListJsonUrl>
+
     <lrSwitchboardBaseUrl>${vloconfig.lrSwitchboardBaseUrl}</lrSwitchboardBaseUrl>
     
     <linkCheckerMongoDbName>${vloconfig.linkCheckerMongoDbName}</linkCheckerMongoDbName>

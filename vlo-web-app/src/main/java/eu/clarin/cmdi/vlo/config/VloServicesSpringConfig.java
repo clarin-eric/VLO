@@ -33,6 +33,8 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService;
+import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
 import eu.clarin.cmdi.vlo.service.impl.DOIResolver;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
@@ -204,6 +206,11 @@ public class VloServicesSpringConfig {
     @Bean
     public SnippetConfig snippetConfig() {
         return new SnippetConfig();
+    }
+
+    @Bean
+    public EndpointProvidersService endpointProvidersService() {
+        return new CentreRegistryProvidersService(vloConfig);
     }
 
 }

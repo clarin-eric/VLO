@@ -37,7 +37,8 @@
         <vloconfig.federatedContentSearchUrl>https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/</vloconfig.federatedContentSearchUrl>
         <vloconfig.lrSwitchboardBaseUrl>https://switchboard.clarin.eu/</vloconfig.lrSwitchboardBaseUrl>        
         <vloconfig.vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vloconfig.vcrSubmitEndpoint>
-        
+        <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
+        <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
     </properties>
     
     <build>
@@ -152,6 +153,8 @@
                 <vloconfig.solrUserReadWritePass>${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}</vloconfig.solrUserReadWritePass>
                 <vloconfig.linkCheckerMongoDbName>${VLO_DOCKER_LINK_CHECKER_MONGO_DB_NAME}</vloconfig.linkCheckerMongoDbName>
                 <vloconfig.linkCheckerMongoConnectionString>${VLO_DOCKER_LINK_CHECKER_MONGO_DB_CONNECTION_STRING}</vloconfig.linkCheckerMongoConnectionString>
+                <vloconfig.centreRegistryCentresListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_CENTRES_LIST_JSON_URL}</vloconfig.centreRegistryCentresListJsonUrl>
+                <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_OAI_PMH_ENDPOINTS_LIST_JSON_URL}</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
             </properties>
         </profile>
     </profiles>
