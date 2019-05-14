@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.base.Strings;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvider;
 import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
 import java.io.File;
@@ -45,9 +46,8 @@ public class ContributorsPage extends VloBasePage {
 
     @SpringBean
     private EndpointProvidersService providersService;
-
-    //TOOD: get from config
-    private final static String OTHER_PROVIDERS_LIST_FILE = "/Users/twagoo/Desktop/ContributorsPageOtherDefault.html";
+    @SpringBean
+    private VloConfig vloConfig;
 
     public ContributorsPage() {
         add(new ListView<EndpointProvider>("centresList", new EndpointProvidersModel()) {
@@ -62,10 +62,12 @@ public class ContributorsPage extends VloBasePage {
 
         });
 
-        if (!Strings.isNullOrEmpty(OTHER_PROVIDERS_LIST_FILE) && new File(OTHER_PROVIDERS_LIST_FILE).canRead()) {
-            add(new Include("othersList", "file://" + OTHER_PROVIDERS_LIST_FILE));
+        final String otherProvidersListFile = vloConfig.getOtherProvidersMarkupFile();
+
+        if (!Strings.isNullOrEmpty(otherProvidersListFile) && new File(otherProvidersListFile).canRead()) {
+            add(new Include("othersList", "file://" + otherProvidersListFile));
         } else {
-            logger.warn("Could not load list of 'other' metadata providers from {}", OTHER_PROVIDERS_LIST_FILE);
+            logger.warn("Could not load list of 'other' metadata providers from {}", otherProvidersListFile);
             error("List of other metadata providers could not be loaded");
             add(new Label("othersList", ""));
         }

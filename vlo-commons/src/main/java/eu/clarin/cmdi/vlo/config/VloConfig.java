@@ -146,6 +146,8 @@ public class VloConfig {
 
     private String centreRegistryOaiPmhEndpointsListJsonUrl;
 
+    private String otherProvidersMarkupFile;
+
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String, String> fields;
 
@@ -1371,6 +1373,14 @@ public class VloConfig {
 
     public void setCentreRegistryOaiPmhEndpointsListJsonUrl(String centreRegistryOaiPmhEndpointsListJsonUrl) {
         this.centreRegistryOaiPmhEndpointsListJsonUrl = centreRegistryOaiPmhEndpointsListJsonUrl;
+    }
+
+    public String getOtherProvidersMarkupFile() {
+        return otherProvidersMarkupFile;
+    }
+
+    public void setOtherProvidersMarkupFile(String otherProvidersMarkupFile) {
+        this.otherProvidersMarkupFile = otherProvidersMarkupFile;
     }
 
 }

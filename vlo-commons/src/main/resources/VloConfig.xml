@@ -263,6 +263,8 @@
 
     <centreRegistryOaiPmhEndpointsListJsonUrl>${vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl}</centreRegistryOaiPmhEndpointsListJsonUrl>
 
+    <otherProvidersMarkupFile>${vloConfig.otherProvidersMarkupFile}</otherProvidersMarkupFile>
+
     <lrSwitchboardBaseUrl>${vloconfig.lrSwitchboardBaseUrl}</lrSwitchboardBaseUrl>
     
     <linkCheckerMongoDbName>${vloconfig.linkCheckerMongoDbName}</linkCheckerMongoDbName>
