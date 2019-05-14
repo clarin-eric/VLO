@@ -64,19 +64,19 @@ public class CentreRegistryProvidersServiceTest {
     public void testParseEndpoints() throws Exception {
         List<EndpointProvider> providers = instance.parseEndpoints();
         assertNotNull(providers);
-        assertEquals(44, providers.size());
+        assertEquals(39, providers.size());
 
         //check content for all
         providers.forEach(provider -> {
             assertNotNull(provider.getCentreKey());
-            assertNotNull(provider.getEndpointUrl());
+            assertNotNull(provider.getEndpointUrls());
         });
 
         //check one example
         assertTrue(
                 providers.stream()
                         .filter(provider
-                                -> provider.getCentreKey().equals(45) && provider.getEndpointUrl().equals("http://arche.acdh.oeaw.ac.at/oai"))
+                                -> provider.getCentreKey().equals(45) && provider.getEndpointUrls().size() == 1)
                         .findAny()
                         .isPresent());
     }
@@ -91,14 +91,14 @@ public class CentreRegistryProvidersServiceTest {
     public void testFillInCentreDetails() throws Exception {
         List<EndpointProvider> providers = instance.parseEndpoints();
         instance.fillInCentreDetails(providers);
-        assertEquals(44, providers.size());
+        assertEquals(39, providers.size());
 
         //check content for all
         providers.forEach(provider -> {
             assertNotNull(provider.getCentreKey());
             assertNotNull(provider.getCentreName());
             assertNotNull(provider.getCentreWebsiteUrl());
-            assertNotNull(provider.getEndpointUrl());
+            assertNotNull(provider.getEndpointUrls());
         });
 
         //check one example
@@ -107,7 +107,7 @@ public class CentreRegistryProvidersServiceTest {
                         .filter(provider -> (provider.getCentreKey().equals(4)
                         && provider.getCentreName().equals("ASV Leipzig")
                         && provider.getCentreWebsiteUrl().equals("http://asv.informatik.uni-leipzig.de/")
-                        && provider.getEndpointUrl().equals("http://openscience.uni-leipzig.de/index.php/mr2/oai")))
+                        && provider.getEndpointUrls().size() == 2))
                         .findAny()
                         .isPresent());
     }
@@ -121,14 +121,14 @@ public class CentreRegistryProvidersServiceTest {
     @Test
     public void testRetrieveCentreEndpoints() throws Exception {
         List<EndpointProvider> providers = instance.retrieveCentreEndpoints();
-        assertEquals(44, providers.size());
+        assertEquals(39, providers.size());
 
         //check content for all
         providers.forEach(provider -> {
             assertNotNull(provider.getCentreKey());
             assertNotNull(provider.getCentreName());
             assertNotNull(provider.getCentreWebsiteUrl());
-            assertNotNull(provider.getEndpointUrl());
+            assertNotNull(provider.getEndpointUrls());
         });
 
         //check one example
@@ -137,7 +137,7 @@ public class CentreRegistryProvidersServiceTest {
                         .filter(provider -> (provider.getCentreKey().equals(5)
                         && provider.getCentreName().equals("Bayerisches Archiv für Sprachsignale")
                         && provider.getCentreWebsiteUrl().equals("http://hdl.handle.net/11858/00-1779-0000-000C-DAAF-B")
-                        && provider.getEndpointUrl().equals("http://www.phonetik.uni-muenchen.de/cgi-bin/BASRepository/oaipmh/oai.pl")))
+                        && provider.getEndpointUrls().size() == 1))
                         .findAny()
                         .isPresent());
     }

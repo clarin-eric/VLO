@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.centreregistry;
 
+import com.google.common.collect.Lists;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -24,6 +25,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Collectors;
@@ -38,40 +40,54 @@ import org.json.JSONTokener;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class CentreRegistryProvidersService {
-    
+
     private final String centresJsonUrl;
     private final String endpointsJsonUrl;
-    
+
     public CentreRegistryProvidersService(String centresJsonUrl, String endpointsJsonUrl) {
         this.centresJsonUrl = centresJsonUrl;
         this.endpointsJsonUrl = endpointsJsonUrl;
     }
-    
+
     public List<EndpointProvider> retrieveCentreEndpoints() throws IOException {
         final List<EndpointProvider> endpoints = parseEndpoints();
-        fillInCentreDetails(endpoints);        
+        fillInCentreDetails(endpoints);
         endpoints.sort(Comparator.comparing(EndpointProvider::getCentreName));
         return endpoints;
     }
-    
+
     protected List<EndpointProvider> parseEndpoints() throws MalformedURLException, IOException {
         final URL url = new URL(endpointsJsonUrl);
         try (InputStream is = url.openStream()) {
             final JSONTokener tokener = new JSONTokener(is);
             final JSONArray jsonArray = new JSONArray(tokener);
-            return jsonArrayToObjectStream(jsonArray)
+            // make endpoint provider object for all endpoints
+            final Map<Integer, List<EndpointProvider>> groupedByCentre = jsonArrayToObjectStream(jsonArray)
                     .map(o -> o.getJSONObject("fields"))
                     .map(o
                             -> new EndpointProvider()
                             .setKey(o.getInt("centre"))
-                            .setEndpointUrl(o.getString("uri")))
+                            .setEndpointUrl(Lists.newArrayList(o.getString("uri"))))
+                    .collect(Collectors.groupingBy(EndpointProvider::getCentreKey));
+            
+            // merge all endpoint provider objects per centre
+            return groupedByCentre.entrySet().stream()
+                    .map(set -> {
+                        //take first endpoint from group and combine all endpoint URLs
+                        return set.getValue().get(0)
+                                .setEndpointUrl(
+                                        set.getValue().stream()
+                                                .flatMap(e -> e.getEndpointUrls().stream())
+                                                .collect(Collectors.toList())
+                                );
+                    })
                     .collect(Collectors.toList());
         }
     }
-    
+
     protected void fillInCentreDetails(List<EndpointProvider> providers) throws IOException {
         Collection<Integer> centreIds = providers.stream().map(EndpointProvider::getCentreKey).collect(Collectors.toSet());
-        
+
         final URL url = new URL(centresJsonUrl);
         try (InputStream is = url.openStream()) {
             final JSONTokener tokener = new JSONTokener(is);
@@ -81,7 +97,7 @@ public class CentreRegistryProvidersService {
             centres.forEach(o -> {
                 final Integer centreKey = o.getInt("pk");
                 final JSONObject fields = o.getJSONObject("fields");
-                
+
                 providers.stream()
                         .filter(e -> e.getCentreKey().equals(centreKey))
                         .forEach(e -> {
@@ -103,47 +119,47 @@ public class CentreRegistryProvidersService {
         return objStream.filter(o -> o instanceof JSONObject)
                 .map(o -> (JSONObject) o);
     }
-    
+
     public static class EndpointProvider implements Serializable {
-        
-        private String endpointUrl;
+
         private String centreName;
         private String centreWebsiteUrl;
         private Integer centreKey;
-        
+        private Collection<String> endpointUrls;
+
         public Integer getCentreKey() {
             return centreKey;
         }
-        
+
         public EndpointProvider setKey(Integer key) {
             this.centreKey = key;
             return this;
         }
-        
+
         public String getCentreName() {
             return centreName;
         }
-        
+
         public EndpointProvider setName(String name) {
             this.centreName = name;
             return this;
         }
-        
+
         public String getCentreWebsiteUrl() {
             return centreWebsiteUrl;
         }
-        
+
         public EndpointProvider setWebsiteUrl(String websiteUrl) {
             this.centreWebsiteUrl = websiteUrl;
             return this;
         }
-        
-        public String getEndpointUrl() {
-            return endpointUrl;
+
+        public Collection<String> getEndpointUrls() {
+            return endpointUrls;
         }
-        
-        public EndpointProvider setEndpointUrl(String endpointUrl) {
-            this.endpointUrl = endpointUrl;
+
+        public EndpointProvider setEndpointUrl(Collection<String> endpointUrl) {
+            this.endpointUrls = endpointUrl;
             return this;
         }
     }
