@@ -16,19 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.common.base.Strings;
 import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService;
 import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService.EndpointProvider;
+import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.include.Include;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,11 +40,15 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class ContributorsPage extends VloBasePage {
 
-    public static final String VLO_DOCKER_IMAGE_ENV_VAR = "VLO_DOCKER_IMAGE";
+    private final static Logger logger = LoggerFactory.getLogger(ContributorsPage.class);
 
-    //TOOD: get from config
+    //TODO: Spring bean
+    private final CentreRegistryProvidersService providersService = new CentreRegistryProvidersService(CENTRE_REGISTRY_CENTRES_LIST_JSON_URL, CENTRE_REGISTRY_ENDPOINTS_LIST_JSON_URL);
     private final static String CENTRE_REGISTRY_ENDPOINTS_LIST_JSON_URL = "https://centres.clarin.eu/api/model/OAIPMHEndpoint";
     private final static String CENTRE_REGISTRY_CENTRES_LIST_JSON_URL = "https://centres.clarin.eu/api/model/Centre";
+
+    //TOOD: get from config
+    private final static String OTHER_PROVIDERS_LIST_FILE = "/Users/twagoo/Desktop/ContributorsPageOtherDefault.html";
 
     public ContributorsPage() {
         add(new ListView<EndpointProvider>("centresList", new EndpointProvidersModel()) {
@@ -54,6 +62,14 @@ public class ContributorsPage extends VloBasePage {
 
         });
 
+        if (!Strings.isNullOrEmpty(OTHER_PROVIDERS_LIST_FILE) && new File(OTHER_PROVIDERS_LIST_FILE).canRead()) {
+            add(new Include("othersList", "file://" + OTHER_PROVIDERS_LIST_FILE));
+        } else {
+            logger.warn("Could not load list of 'other' metadata providers from {}", OTHER_PROVIDERS_LIST_FILE);
+            error("List of other metadata providers could not be loaded");
+            add(new Label("othersList", ""));
+        }
+
     }
 
     private class EndpointProvidersModel extends LoadableDetachableModel<List<EndpointProvider>> {
@@ -61,10 +77,10 @@ public class ContributorsPage extends VloBasePage {
         @Override
         protected List<EndpointProvider> load() {
             try {
-                final CentreRegistryProvidersService providersService = new CentreRegistryProvidersService(CENTRE_REGISTRY_CENTRES_LIST_JSON_URL, CENTRE_REGISTRY_ENDPOINTS_LIST_JSON_URL);
                 return providersService.retrieveCentreEndpoints();
             } catch (IOException ex) {
-                error("Failed to retrieve endpoint information from centre registry:" + ex.getMessage());
+                logger.error("Failed to retrieve endpoint information from centre registry", ex);
+                error("Failed to retrieve endpoint information from the CLARIN Centre Registry");
                 return Collections.emptyList();
             }
         }
