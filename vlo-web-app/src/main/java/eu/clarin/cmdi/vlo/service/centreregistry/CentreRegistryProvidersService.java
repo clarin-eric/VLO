@@ -18,9 +18,11 @@ package eu.clarin.cmdi.vlo.service.centreregistry;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -30,29 +32,29 @@ import java.util.stream.StreamSupport;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.json.simple.parser.ParseException;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class CentreRegistryProvidersService {
-
+    
     private final String centresJsonUrl;
     private final String endpointsJsonUrl;
-
+    
     public CentreRegistryProvidersService(String centresJsonUrl, String endpointsJsonUrl) {
         this.centresJsonUrl = centresJsonUrl;
         this.endpointsJsonUrl = endpointsJsonUrl;
     }
-
-    public List<EndpointProvider> retrieveCentreEndpoints() throws IOException, ParseException {
+    
+    public List<EndpointProvider> retrieveCentreEndpoints() throws IOException {
         final List<EndpointProvider> endpoints = parseEndpoints();
-        fillInCentreDetails(endpoints);
+        fillInCentreDetails(endpoints);        
+        endpoints.sort(Comparator.comparing(EndpointProvider::getCentreName));
         return endpoints;
     }
-
-    protected List<EndpointProvider> parseEndpoints() throws MalformedURLException, IOException, ParseException {
+    
+    protected List<EndpointProvider> parseEndpoints() throws MalformedURLException, IOException {
         final URL url = new URL(endpointsJsonUrl);
         try (InputStream is = url.openStream()) {
             final JSONTokener tokener = new JSONTokener(is);
@@ -66,10 +68,10 @@ public class CentreRegistryProvidersService {
                     .collect(Collectors.toList());
         }
     }
-
+    
     protected void fillInCentreDetails(List<EndpointProvider> providers) throws IOException {
         Collection<Integer> centreIds = providers.stream().map(EndpointProvider::getCentreKey).collect(Collectors.toSet());
-
+        
         final URL url = new URL(centresJsonUrl);
         try (InputStream is = url.openStream()) {
             final JSONTokener tokener = new JSONTokener(is);
@@ -79,7 +81,7 @@ public class CentreRegistryProvidersService {
             centres.forEach(o -> {
                 final Integer centreKey = o.getInt("pk");
                 final JSONObject fields = o.getJSONObject("fields");
-
+                
                 providers.stream()
                         .filter(e -> e.getCentreKey().equals(centreKey))
                         .forEach(e -> {
@@ -101,45 +103,45 @@ public class CentreRegistryProvidersService {
         return objStream.filter(o -> o instanceof JSONObject)
                 .map(o -> (JSONObject) o);
     }
-
-    public static class EndpointProvider {
-
+    
+    public static class EndpointProvider implements Serializable {
+        
         private String endpointUrl;
         private String centreName;
         private String centreWebsiteUrl;
         private Integer centreKey;
-
+        
         public Integer getCentreKey() {
             return centreKey;
         }
-
+        
         public EndpointProvider setKey(Integer key) {
             this.centreKey = key;
             return this;
         }
-
+        
         public String getCentreName() {
             return centreName;
         }
-
+        
         public EndpointProvider setName(String name) {
             this.centreName = name;
             return this;
         }
-
+        
         public String getCentreWebsiteUrl() {
             return centreWebsiteUrl;
         }
-
+        
         public EndpointProvider setWebsiteUrl(String websiteUrl) {
             this.centreWebsiteUrl = websiteUrl;
             return this;
         }
-
+        
         public String getEndpointUrl() {
             return endpointUrl;
         }
-
+        
         public EndpointProvider setEndpointUrl(String endpointUrl) {
             this.endpointUrl = endpointUrl;
             return this;
