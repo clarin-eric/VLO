@@ -16,9 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import com.carrotsearch.ant.tasks.junit4.dependencies.com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.xml.transform.TransformerException;
@@ -37,23 +39,23 @@ import static org.junit.Assert.*;
  * @author twagoo
  */
 public class XsltModelTest {
-    
+
     private final Mockery context = new JUnit4Mockery();
     private IModel<List<URL>> urlModel;
     private XsltModel instance;
     private XmlTransformationService service;
-    
+
     @Before
     public void setUp() {
         service = context.mock(XmlTransformationService.class);
         urlModel = new ListModel<>();
         instance = new XsltModel(urlModel) {
-            
+
             @Override
             protected XmlTransformationService getTransformationService() {
                 return service;
             }
-            
+
         };
     }
 
@@ -61,10 +63,20 @@ public class XsltModelTest {
      * Test of load method, of class XsltModel.
      */
     @Test
-    public void testLoadNull() {
+    public void testLoadNullModelObject() {
         urlModel.setObject(null);
         String result = instance.load();
         assertEquals("", result);
+    }
+
+    /**
+     * Test of load method, of class XsltModel.
+     */
+    @Test
+    public void testLoadNullValue() {
+        urlModel.setObject(Lists.newArrayList((URL) null));
+        String result = instance.load();
+        assertTrue(result.contains("Could not load"));
     }
 
     /**
@@ -76,11 +88,28 @@ public class XsltModelTest {
     public void testLoad() throws Exception {
         final URL url = new URL("http://document/to/transform.xml");
         urlModel.setObject(Arrays.asList(url));
-        
+
         context.checking(new Expectations() {
             {
                 oneOf(service).transformXml(url);
                 will(returnValue("transformation output"));
+            }
+        });
+        final String result = instance.load();
+        assertEquals("transformation output", result);
+    }
+
+    @Test
+    public void testLoadMultiple() throws Exception {
+        final URL url1 = new URL("http://document/to/transform.xml");
+        final URL url2 = new URL("http://document/to/transform2.xml");
+        urlModel.setObject(Arrays.asList(url1, url2));
+
+        context.checking(new Expectations() {
+            {
+                oneOf(service).transformXml(url1);
+                will(returnValue("transformation output"));
+                never(service).transformXml(url2); // should terminate after successful transformation
             }
         });
         final String result = instance.load();
@@ -96,7 +125,7 @@ public class XsltModelTest {
     public void testLoadTransformerException() throws Exception {
         final URL url = new URL("http://document/to/transform.xml");
         urlModel.setObject(Arrays.asList(url));
-        
+
         context.checking(new Expectations() {
             {
                 oneOf(service).transformXml(url);
@@ -105,5 +134,28 @@ public class XsltModelTest {
         });
         final String result = instance.load();
         assertTrue(result.contains("Could not load"));
+    }
+
+    /**
+     * Test of load method, of class XsltModel.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testLoadTransformerExceptionMultiple() throws Exception {
+        final URL url1 = new URL("http://document/to/transform.xml");
+        final URL url2 = new URL("http://document/to/transform2.xml");
+        urlModel.setObject(Arrays.asList(url1, url2));
+
+        context.checking(new Expectations() {
+            {
+                oneOf(service).transformXml(url1);
+                will(throwException(new TransformerException("intentional testing exception")));
+                oneOf(service).transformXml(url2);
+                will(returnValue("transformation output"));
+            }
+        });
+        final String result = instance.load();
+        assertEquals("transformation output", result);
     }
 }
