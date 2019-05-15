@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.xml.transform.TransformerException;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -67,26 +68,29 @@ public class XsltModel extends LoadableDetachableModel<String> {
 
         //try the provided URLs in order
         return urls.stream()
-                .filter(Objects::nonNull)
-                .map(url -> {
-                    try {
-                        final String transformed = getTransformationService().transformXml(url);
-                        if (transformed != null && !transformed.isEmpty()) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("Successful transformation using URL {} out of {}: {}", 1 + urls.indexOf(url), urls.size(), url);
-                            }
-
-                            //transformation was successful, ignore remaining items if any
-                            return transformed;
-                        }
-                    } catch (TransformerException ex) {
-                        logger.warn("Could not transform {}", url, ex);
-                    }
-                    return null;
+                .filter(Objects::nonNull) // in cases null objects somehow ended up in the collection
+                .flatMap(url -> {
+                    return tryTransform(url, urls); // returns empty stream if transformation fails
                 })
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse("<b>Could not load complete CMDI metadata</b>");
+                .findFirst() // only one successful transformation is needed
+                .orElse("<b>Could not load complete CMDI metadata</b>"); // in case none succeeded
+    }
+
+    private Stream<String> tryTransform(URL url, final List<URL> urls) {
+        try {
+            final String transformed = getTransformationService().transformXml(url);
+            if (transformed != null && !transformed.isEmpty()) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Successful transformation using URL {} out of {}: {}", 1 + urls.indexOf(url), urls.size(), url);
+                }
+
+                //transformation was successful, ignore remaining items if any
+                return Stream.of(transformed);
+            }
+        } catch (TransformerException ex) {
+            logger.warn("Could not transform {}", url, ex);
+        }
+        return Stream.empty();
     }
 
     protected XmlTransformationService getTransformationService() {
