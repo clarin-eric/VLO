@@ -12,8 +12,8 @@ import java.util.Set;
  * languages that are included in or described/supported by the resource
  */
 public class MultilingualPostNormalizer extends AbstractPostNormalizer {
-    public final static String VALUE_MULTILINGUAL = "yes";
-    public final static String VALUE_NOT_MULTILINGUAL = "no";
+    public final static String VALUE_MULTILINGUAL = "Yes";
+    public final static String VALUE_NOT_MULTILINGUAL = "No";
     
     private final String monolingualIndicatorValue = "monolingual";
     private final Set<String> multilingualityIndicatorValues = new HashSet<>();    

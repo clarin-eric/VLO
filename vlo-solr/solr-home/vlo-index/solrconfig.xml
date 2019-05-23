@@ -750,7 +750,8 @@
             <str name="qf">modality^1</str>
             <str name="qf">genre^1</str>
             <str name="qf">continent^.5</str>
-            <str name="qf">id^.1</str>
+            <str name="qf">dataProvider^.5</str>
+            <str name="qf">id^.1</str>    
         
             <!-- alias: language = _languageName -->
             <str name="f.language.qf">
