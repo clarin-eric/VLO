@@ -85,6 +85,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
+import java.util.Collection;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  *
@@ -165,7 +167,24 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             setModel(new SolrDocumentModel(document, fieldNameService));
         }
 
-        linksCountLabelModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
+        linksCountLabelModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                final SolrDocument document = RecordPage.this.getModelObject();
+                if (document != null) {
+                    final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
+                    if (countValue instanceof Integer) {
+                        Collection<Object> fieldValues = document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+                        if (fieldValues == null) {
+                            return ((Integer) countValue).toString();
+                        } else {
+                            return Integer.toString(fieldValues.size() + (Integer) countValue);
+                        }
+                    }
+                }
+                return null;
+            }
+        };
 
         addComponents(params);
     }
