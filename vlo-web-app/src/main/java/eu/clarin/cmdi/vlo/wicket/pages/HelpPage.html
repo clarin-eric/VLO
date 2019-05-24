@@ -241,7 +241,7 @@
                         </div>
 
                         <div class="help-section">
-                            <h2 id="accessing-resources">Accessing resources</h2>
+                            <h2 id="accessing-resources">Accessing resources and other links</h2>
                             <p>
                                 <wicket:link><img src="res/images/record-availability.png" class="img-responsive pull-right" alt="Availability information" style="clear: right;" /></wicket:link>
                                 Clicking the title of a search result (or <em>record</em>) brings you to a new page that can we will refer to as the <strong>record page</strong>.
@@ -253,15 +253,15 @@
                                 need to know more and no contact information whatsoever is available in relation to a record, please <a href="mailto:vlo@clarin.eu">contact CLARIN</a>.
                             </p>
                             <p>
-                                <wicket:link><img src="res/images/record-resources.png" class="img-responsive pull-right" alt="Resources table"  style="clear: right;" /></wicket:link>
-                                A list of all linked resource(s) can be found by selecting the <strong><em>Resources</em> tab</strong>. This list is presented as a table, which shows the 
+                                <wicket:link><img src="res/images/record-resources.png" class="img-responsive pull-right" alt="Links table"  style="clear: right;" /></wicket:link>
+                                A list of all linked resource(s) can be found by selecting the <strong><em>Links</em> tab</strong>. This list is presented as a table, which shows the 
                                 <strong>file names</strong> of all resources along with their <strong>type</strong>. Additional <strong>details</strong> for an individual resource can 
                                 be found by expanding a row (by clicking <span class="glyphicon glyphicon-chevron-right"></span>). Click a <strong>file name</strong> of a resource to access it
                                 directly. You may be presented with a request to authenticate depending on the accessibility of the file. Be aware that not all files within a record may have 
                                 the same level of accessibility, and different licences may apply.
                             </p>
                             <p>
-                                Some records have no resources listed under the <em>Resources</em> tab, for example because the record does not represent individually accessible files
+                                Some records have no resources listed under the <em>Links</em> tab, for example because the record does not represent individually accessible files
                                 but rather an online tool, service or website. In these cases generally there should be a landing page that can be accessed via a link next to the
                                 resource details table ('Record details' tab). There may also be one or more of the following <strong>links</strong> below the title of 
                                 the record (above the tabs):
@@ -273,8 +273,8 @@
                             </p>
                             <p style="clear: both;">
                                 <wicket:link><img src="res/images/resources-restricted-detail.png" class="img-responsive pull-right" alt="A resource with restricted access indication"  style="clear: right;" /></wicket:link>
-                                All resources linked to from records that appear in the VLO are <strong>checked for accessibility</strong> at a regular basis as part of the processing by the
-                                <a href="http://curate.acdh.oeaw.ac.at/">CLARIN Curation Module</a>. Resources that have recently been checked and were found to either be
+                                All resources, pages and services linked to from records that appear in the VLO are <strong>checked for accessibility</strong> at a regular basis as part of the processing by the
+                                <a href="http://curate.acdh.oeaw.ac.at/">CLARIN Curation Module</a>. Links that have recently been checked and were found to either be
                                 unavailable or require special permissions to access are marked with an icon, either <span class="badge badge-warning"><span class="glyphicon glyphicon-exclamation-sign"></span></span> to
                                 indicate unavailability or <span class="badge badge-warning"><span class="glyphicon glyphicon-lock"></span></span> for restricted access. You can click
                                 this icon to expand the resource details and find more specific information about the checking result and the time of checking. 
@@ -291,7 +291,7 @@
                                 contains a tree that allows you to browse through this hierarchy and discover underlying records that may contain links to concrete resources or pages.
                             </p>
                             <p>
-                                If you encounter a record that contains no listed resources, no links to pages and is not part of a hierarchy either you can have a look at the content
+                                If you encounter a record that contains no no links to resources or pages and is not part of a hierarchy either you can have a look at the content
                                 under the <strong><em>All metadata</em> tab</strong> to see if the metadata contains any pointers to resources. If this is not the case either, you may
                                 want to report the page (using the <span class="glyphicon glyphicon-flag" aria-hidden="true" title="Report an issue"></span> button) or send a report by e-mail
                                 to <a href="mailto:vlo@clarin.eu">vlo@clarin.eu</a>.
@@ -305,7 +305,7 @@
                                 tools. The <em>Language Resource Inventory</em> provides an 
                                 <a href="https://lindat.mff.cuni.cz/repository/xmlui/discover?filtertype=type&filter_relational_operator=equals&filter=toolService">overview </a>
                                 of tools an services available in or collected by CLARIN. You can obtain (handles to) the resources that you are interested in from the record's page in the 
-                                VLO or from the original provider (see <a href="#accessing-resources">Accessing resources</a>) and then manually use them as input for the tool or service
+                                VLO or from the original provider (see <a href="#accessing-resources">Accessing resources and other links</a>) and then manually use them as input for the tool or service
                                 provided that you are granted access to both the resources and the tool or service, and that the former supports the exact type of resource at hand.
                             </p>
                             <p>
@@ -316,8 +316,9 @@
                             <h3 id="lrs">The Language Resource Switchboard</h3>
                             <p>
                                 <wicket:link><img src="res/images/resources-lrs.png" class="img-responsive pull-right" alt="Connecting to the Language Resource Switchboard" /></wicket:link>
-                                The <em>Resources</em> of a record page (the page to which the title of a search results links) shows a table of individual resources collectively described
-                                by a record's metadata. All resources in this table have an 'options' menu (triggered by clicking the "<span class="glyphicon glyphicon-option-horizontal"></span>" area).
+                                The <em>Links</em> section of a record page (the page to which the title of a search results links) shows a table of individual resources collectively described
+                                by a record's metadata. All resources in this table (except for the landing page, which is also shown if linked)
+                                have an 'options' menu (triggered by clicking the "<span class="glyphicon glyphicon-option-horizontal"></span>" area).
                                 From this menu, select the option <em>Process with Language Resource Switchboard</em>. This will take you to the <strong>Language Resource Switchboard (LRS)</strong>. Here you can
                                 either adjust the file type and content language values or go with the values detected by the LRS. Then click <em>Show Tools</em>, and if any tools supporting the
                                 chosen file type and language are known to the LRS, they will appear on the page in a categorised list. For each tool a description and some general information 

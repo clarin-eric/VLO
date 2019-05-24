@@ -125,6 +125,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
+    private final IModel<String> linksCountLabelModel;
 
     /**
      * Constructor that derives document and selection models from page
@@ -163,6 +164,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         } else {
             setModel(new SolrDocumentModel(document, fieldNameService));
         }
+
+        linksCountLabelModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
 
         addComponents(params);
     }
@@ -236,8 +239,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 return availabilityPanel;
             }
         });
-        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.resources", // model to include resource count in tab title
-                new NullFallbackModel(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT)), "?"))) {
+        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION),
+                new AbstractTab(
+                        new StringResourceModel("recordpage.tabs.links", new NullFallbackModel(linksCountLabelModel, "?"))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {

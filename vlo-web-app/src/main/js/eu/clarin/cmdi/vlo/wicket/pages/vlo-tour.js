@@ -171,8 +171,8 @@ function createTourSteps() {
             onShown: disablePrev
         }, {
             element: ".record-tabpanel .tab1",
-            title: "Resources tab",
-            content: "This tab lists the described resource(s). If present, you can click any of the links to click it. Note that not all records link directly to the described resources. In such cases, look for a landing page or search link.",
+            title: "Links tab",
+            content: "This tab lists the described resource(s) and/or a linked landing page. If present, you can click any of the links to click it. Note that not all records link directly to the described resources. In such cases, look for a search link or browse the hierarchy if applicable.",
             placement: "auto top",
             path: RegExp(/.*\/record.*/i),
             onShow: function () {
