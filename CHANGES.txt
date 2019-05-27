@@ -1,6 +1,26 @@
 Bug fixes and new features
 --------------------------
-VLO 4.6.0 (December 2018)
+VLO 4.7.0 (May 2019)
+
+VLO 4.7
+* Landing page link in results should get 'home' icon
+    <https://github.com/clarin-eric/VLO/issues/228>
+* A page listing all actual contributors to the VLO, i.e. all metadata providers 
+registered in the centre registry (accessible via the main menu on the top of the page)
+    <https://github.com/clarin-eric/VLO/issues/223>
+* Visual indication of (possibly) inaccessible or unavailable resources in search results and record pages
+    <https://github.com/clarin-eric/VLO/issues/220>
+* Make data provider (CLARIN centre) a facet
+    <https://github.com/clarin-eric/VLO/issues/217>
+*  A new facet 'multilingual: yes/no'
+    <https://github.com/clarin-eric/VLO/issues/212>
+* Title of 'resources' tab was changed to 'links'
+    <https://github.com/clarin-eric/VLO/issues/244>
+* Bugfix: null URL causes NPE in XsltModel
+    <https://github.com/clarin-eric/VLO/issues/242>
+
+
+VLO 4.6.0 (February 2019)
 
 * 'Collapsing' of (near) duplicate search results (based on configurable 'signature')
 	<https://github.com/clarin-eric/VLO/issues/113>

@@ -38,7 +38,8 @@ require your attention at this point!
 5. Stop 
 	1) the Tomcat (or at least the VLO web app), and 
 	2) the Solr server.
-	3) jmxtrans, if applicable
+	3) the MongoDB server, if applicable
+	4) jmxtrans, if applicable
 
 6. Replace the 'current' symlink with a link to location of the new VLO directory.
 
@@ -70,13 +71,53 @@ which configures the location of the Solr data directory.
 
 9. Start
 	1) the Solr server, and
-	2) the Tomcat server
-	3) jmxtrans, if applicable
+	2) the MongoDB server, if applicable
+	3) the Tomcat server
+	4) jmxtrans, if applicable
 
 10. If you want to run an import straight away (discuss this with the person responsible
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
+
+-----------------------------
+Upgrading from 4.6.x to 4.7.0
+-----------------------------
+* There have been changes to the index. Upgrading requires flushing of the Solr index
+(step 8)
+
+* Take note of the following changes in VloConfig.xml:
+
+  - New fields:
+		<field key="RESOURCE_AVAILABILITY_SCORE">_resourceAvailabilityScore</field>
+		<field key="LANGUAGE_COUNT">_languageCount</field>
+		<field key="MULTILINGUAL">multilingual</field>
+		<field key="HARVESTER_ROOT">_harvesterRoot</field>
+  - Removed fields:
+		<field key="DATA_PROVIDER_NAME">dataProviderName</field>
+		<field key="COMPLETE_METADATA">metadataSource</field>
+  - New configuration properties
+		<centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</centreRegistryCentresListJsonUrl>
+		<centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</centreRegistryOaiPmhEndpointsListJsonUrl>
+		<otherProvidersMarkupFile></otherProvidersMarkupFile>
+  		<linkCheckerMongoDbName></linkCheckerMongoDbName>
+  		<linkCheckerMongoConnectionString></linkCheckerMongoConnectionString>
+	  * The provided values for the centre registry locations should normally be kept. 
+	  * A value for otherProvidersMarkupFile can be set to an absolute path (not a URL) to a
+	  location that provides markup for 'other' contributors on the contributions page. If
+	  left blank, no 'others' section will be shown.
+	  * The link checker mongo settings can be provided to store link checking information
+	  in the index on update. If left blank, no such information will be stored in the 
+	  index.
+
+* Link checking information is included in the index if a connection to a Mongo DB 
+instance containing the collections as inserted by the link checker of the CLARIN Curation
+Module (http://curate.acdh.oeaw.ac.at/) is provided. See properties above. A script is
+provided to update the link checking information without importing all new data into the
+VLO. It can be found in the 'bin' directory of the VLO distribution package and takes
+the location of a `VloConfig.xml` as parameter. For example:
+
+	bash ./bin/vlo_link_availability_status_updater.sh ./config/VloConfig.xml
 
 -----------------------------
 Upgrading from 4.5.x to 4.6.0
