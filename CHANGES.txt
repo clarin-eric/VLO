@@ -2,7 +2,6 @@ Bug fixes and new features
 --------------------------
 VLO 4.7.0 (May 2019)
 
-VLO 4.7
 * Landing page link in results should get 'home' icon
     <https://github.com/clarin-eric/VLO/issues/228>
 * A page listing all actual contributors to the VLO, i.e. all metadata providers 
