@@ -64,6 +64,15 @@ public class VloConfig {
     private String solrUserReadWrite;
     private String solrUserReadWritePass;
 
+    // Postgresql authentication
+    private String pgDbName;
+    private String pgPort;
+    private String pgUrl;
+    private String pgHost;
+    private String pgUsername;
+    private String pgPassword;
+    
+    
     @XmlElementWrapper(name = "dataRoots")
     @XmlElement(name = "DataRoot")
     private List<DataRoot> dataRoot;
@@ -405,7 +414,92 @@ public class VloConfig {
     public void setUserReadWritePass(String solrUserReadWritePass) {
         this.solrUserReadWritePass = solrUserReadWritePass;
     }
+    
+	 /**
+	 * @return the pgDbName
+	 */
+	public String getPgDbName() {
+	    return pgDbName;
+	}
+	
+	/**
+	 * @param pgDbName the pgDbName to set
+	 */
+	public void setPgDbName(String pgDbName) {
+	    this.pgDbName = pgDbName;
+	}
+    
+	 /**
+	 * @return the pgPort
+	 */
+	public String getPgPort() {
+	    return pgPort;
+	}
+	
+	/**
+	 * @param pgPort the pgPort to set
+	 */
+	public void setPgPort(String pgPort) {
+	    this.pgPort = pgPort;
+	}
+	
+	 /**
+	 * @return the pgUrl
+	 */
+	public String getPgUrl() {
+	    return pgUrl;
+	}
+	
+	/**
+	 * @param pgUrl the pgUrl to set
+	 */
+	public void setPgUrl(String pgUrl) {
+	    this.pgUrl = pgUrl;
+	}
+   
+	 /**
+	 * @return the pgHost
+	 */
+	public String getPgHost() {
+	    return pgHost;
+	}
+	
+	/**
+	 * @param pgHost the pgHost to set
+	 */
+	public void setPgHost(String pgHost) {
+	    this.pgHost = pgHost;
+	}
+	
+	/**
+	 * @return the pgUsername
+	 */
+	public String getPgUsername() {
+	    return pgUsername;
+	}
+	
+	/**
+	 * @param pgUsername the pgUsername to set
+	 */
+	public void setPgUsername(String pgUsername) {
+	    this.pgUsername = pgUsername;
+	}
+   
+	 /**
+	 * @return the pgPassword
+	 */
+	public String getPgPassword() {
+	    return pgPassword;
+	}
+	
 
+	/**
+	 * @param pgPassword the pgPassword to set
+	 */
+	public void setPgPassword(String pgPassword) {
+	    this.pgPassword = pgPassword;
+	}
+	
     /**
      * Get the value of the maxFileSize parameter<br><br>
      *

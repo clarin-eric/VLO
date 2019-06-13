@@ -76,9 +76,15 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -86,11 +92,19 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 
+import eu.clarin.cmdi.vlo.VloWebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.request.cycle.RequestCycle;
+import javax.servlet.http.HttpServletRequest;
+import eu.clarin.cmdi.vlo.exposure.models.PageView;
+import eu.clarin.cmdi.vlo.exposure.postgresql.VloExposureException;
+
 /**
  *
  * @author twagoo
  */
 public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiAware {
+	private final static Logger logger = LoggerFactory.getLogger(RecordPage.class);
 
     /**
      *
@@ -161,6 +175,21 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                     .remove(VloWebAppParameters.DOCUMENT_ID);
             ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
         } else {
+        	try {
+	        	// save these information (id, ip, url, referer) in postgresql DB for record exposures
+	        	String id = document.get("id").toString();
+	        	HttpServletRequest httpRequest = ((ServletWebRequest)RequestCycle.get().getRequest()).getContainerRequest();
+	        	String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
+	         	// get user ip address
+	         	String ip = ((WebClientInfo)VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
+	         	String referer = httpRequest.getHeader("referer");
+	         	// create PageView object and save it in the DB
+	         	PageView pageView = new PageView(id, ip, pageUrl, referer);
+	         	pageView.save(config);
+        	}catch(VloExposureException e) {
+        		logger.error(e.getMessage());
+        	}
+         	
             setModel(new SolrDocumentModel(document, fieldNameService));
         }
 

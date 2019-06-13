@@ -22,18 +22,38 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
+import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentExpansionPairImpl;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
+
+import eu.clarin.cmdi.vlo.VloWebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.slf4j.LoggerFactory;
+
+import com.sun.istack.logging.Logger;
+
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
+import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
+import eu.clarin.cmdi.vlo.config.ServletVloConfigFactory;
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.exposure.postgresql.VloExposureException;
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocumentExpansionPair> {
+	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(SolrDocumentExpansionPairProvider.class);
 
     private final FieldNameService fieldNameService;
 
@@ -52,6 +72,31 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
                 BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact(),
                 FacetConstants.COLLAPSE_FIELD_NAME); // safe long->int conversion
+        try {
+        	
+             VloConfig vloConfig = VloWicketApplication.get().getVloConfig();
+             // these values to be saved in postgresql to calculate record-exposure
+             // get page url
+         	String pageUrl = ((ServletWebRequest)RequestCycle.get().getRequest()).getContainerRequest().getRequestURL().toString();
+         	// get user ip address
+         	String ip = ((WebClientInfo)VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
+         	QueryFacetsSelection selection = this.selectionModel.getObject();    	
+         	// get search term
+         	String searchTerm = this.selectionModel.getObject().getQuery();
+         	List<SearchResult> res = new ArrayList<SearchResult>();
+         	// get search results record ids 
+             for(int i=0; i < documents.getDocuments().size(); i++) {
+             	String id = ((SolrDocumentExpansionPairImpl) documents.getDocuments().get(i)).getDocument().get("id").toString();
+             	res.add(new SearchResult(id, i+1, 0));
+             }        	     
+             // create SearchQuery object and save it to DB
+         	SearchQuery sq = new SearchQuery(searchTerm, selection.getSelection().toString(), res, ip, pageUrl);
+         	sq.save(vloConfig); 
+        }catch(VloExposureException e) {
+        	logger.error(e.getMessage());
+        }
+        	
+    	
         return documents.iterator();
     }
 
