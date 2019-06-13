@@ -61,7 +61,7 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-<!-- Added by Tariq -->
+
 	<dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-tomcat</artifactId>
@@ -95,7 +95,7 @@
 	</dependency>
  
 
-<!-- /Added by Tariq -->
+
     	
     </dependencies>
     
