@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <parent>
+    <groupId>eu.clarin.cmdi</groupId>
+    <artifactId>vlo</artifactId>
+    <version>4.7-SNAPSHOT</version>
+  </parent>
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>eu.clarin.cmdi</groupId>
+  <artifactId>vlo-exposure</artifactId>
+  <version>4.7-SNAPSHOT</version>
+  <name>vlo-exposure</name>
+  <url>http://maven.apache.org</url>
+  <properties>
+  	<log4j.version>2.6.2</log4j.version>
+	<junit.version>4.12</junit.version>
+	<postgresql.version>42.2.5.jre7</postgresql.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <dependencies>
+     <!-- Intra-project dependencies -->
+     <dependency>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>vlo-commons</artifactId>
+         <version>${project.version}</version>
+     </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+   	    
+    
+   		<!-- LOGGING DEPENDENCIES - LOG4J -->
+   	<!-- 
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-slf4j-impl</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.apache.logging.log4j</groupId>
+		<artifactId>log4j-core</artifactId>
+		<version>${log4j.version}</version>
+	</dependency>-->
+	
+	
+		<!-- Postgresql	https://mvnrepository.com/artifact/org.postgresql/postgresql	  -->
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>${postgresql.version}</version>
+	</dependency>
+   
+  </dependencies>
+</project>
