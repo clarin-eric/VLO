@@ -297,6 +297,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         return mapper;
     }
 
+    public VloConfig getVloConfig() {
+    	return vloConfig;
+    }
+    
     private void initBootstrap() {
         Bootstrap.install(this,
                 new BootstrapSettings()

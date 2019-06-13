@@ -9,8 +9,9 @@ import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import java.util.List;
-
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.Component;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -57,6 +58,11 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
+
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.Session;
+import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 /**
  * The main search page showing a search form, facets, and search results
  *
@@ -127,8 +133,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final IModel<QueryFacetsSelection> queryModel = new Model<>(selection);
-
+        
         setModel(queryModel);
+        
         createModels();
         this.simpleModeModel = simpleModeModel;
 
@@ -154,6 +161,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 super.setObject(object);
                 //persist in session
                 VloWebSession.get().setFacetSelectionTypeMode(object);
+                String ip = ((WebClientInfo)VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
             }
 
         };
@@ -171,7 +179,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private void addComponents() {
         documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService);
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
-
         searchContainer = new WebMarkupContainer("searchContainer");
         searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
             @Override
@@ -262,7 +269,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
-        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
+    	return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
             @Override
             protected void onChange(AjaxRequestTarget target) {
                 updateSelection(target);

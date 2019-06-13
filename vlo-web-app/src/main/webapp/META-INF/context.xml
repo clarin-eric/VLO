@@ -3,20 +3,20 @@
   <!-- 
         If set, configuration will get read from this external location 
 
-
+-->
     <Parameter 
         name="eu.carlin.cmdi.vlo.config.location" 
-        value="/Users/twagoo/vlo/vlo3/VloConfig.xml"/>
-    -->
+        value="/home/tariq/VLO-Dev/config/VloConfig.xml"/>
+    
   <!-- 
         If set, web app will connect to this SOLR server instead of the one 
         specified in the configuration file 
 
-
+ -->
     <Parameter 
         name="eu.carlin.cmdi.vlo.solr.serverUrl" 
-        value="http://alpha-vlo.clarin.eu/solr/vlo-index/"/>
-    -->
+        value="http://localhost:8983/solr/vlo-index/"/>
+   
   <!--
       <Parameter 
         name="eu.clarin.cmdi.vlo.snippets.bottom.file" 
