@@ -39,7 +39,7 @@
         <vloconfig.vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vloconfig.vcrSubmitEndpoint>
         <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
         <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
-        <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
+        <vloConfig.otherProvidersMarkupFile/>
     </properties>
     
     <build>
@@ -99,7 +99,7 @@
                 <!-- bundled mapping files (package resources, from the VLO-mapping project) -->
                 <vloconfig.mappingFilesLocation>/uniform-maps/</vloconfig.mappingFilesLocation> 
                 <!-- empty location uses bundled default facet concepts file (from the VLO-mapping project) -->
-                <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
+                <vloconfig.facetConceptsFileLocation/>
                 <!-- bundled value mappings definition -->
                 <vloconfig.valueMappingFile>/value-maps/dist/master.xml</vloconfig.valueMappingFile>
                 <!-- these credentials match the credentials in docker compose project .env template -->
@@ -185,7 +185,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>24.1.1-jre</version>
+            <version>26.0-jre</version>
         </dependency>
         <dependency>
             <groupId>com.ximpleware</groupId>
