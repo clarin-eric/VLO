@@ -15,7 +15,7 @@
     <packaging>war</packaging>
     <version>4.7.0</version>
     <name>VLO Web Application</name>
-    <description></description>
+    <description/>
 
     <properties>
         <wicket.version>7.13.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
@@ -163,7 +163,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>0.10.18</version>
+            <version>2.0.8</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
