@@ -67,6 +67,7 @@ public class TestFacetedSearchPage extends AbstractWicketTest {
                 atLeast(1).of(resultList).iterator();
                 will(returnIterator(resultItem));
                 allowing(any(SolrDocumentExpansionPair.class)).method(anything());
+                allowing(any(SolrDocumentExpansionList.class)).method(anything());
             }
         });
 

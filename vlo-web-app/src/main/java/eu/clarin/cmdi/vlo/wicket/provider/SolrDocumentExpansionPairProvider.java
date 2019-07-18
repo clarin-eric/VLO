@@ -72,31 +72,30 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
                 BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact(),
                 FacetConstants.COLLAPSE_FIELD_NAME); // safe long->int conversion
+        
         try {
         	
-             VloConfig vloConfig = VloWicketApplication.get().getVloConfig();
-             // these values to be saved in postgresql to calculate record-exposure
-             // get page url
-         	String pageUrl = ((ServletWebRequest)RequestCycle.get().getRequest()).getContainerRequest().getRequestURL().toString();
-         	// get user ip address
-         	String ip = ((WebClientInfo)VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
-         	QueryFacetsSelection selection = this.selectionModel.getObject();    	
-         	// get search term
-         	String searchTerm = this.selectionModel.getObject().getQuery();
-         	List<SearchResult> res = new ArrayList<SearchResult>();
-         	// get search results record ids 
-             for(int i=0; i < documents.getDocuments().size(); i++) {
-             	String id = ((SolrDocumentExpansionPairImpl) documents.getDocuments().get(i)).getDocument().get("id").toString();
-             	res.add(new SearchResult(id, i+1, 0));
-             }        	     
-             // create SearchQuery object and save it to DB
-         	SearchQuery sq = new SearchQuery(searchTerm, selection.getSelection().toString(), res, ip, pageUrl);
-         	sq.save(vloConfig); 
-        }catch(VloExposureException e) {
-        	logger.error(e.getMessage());
-        }
-        	
-    	
+            VloConfig vloConfig = VloWicketApplication.get().getVloConfig();
+            // these values to be saved in postgresql to calculate record-exposure
+            // get page url
+        	String pageUrl = ((ServletWebRequest)RequestCycle.get().getRequest()).getContainerRequest().getRequestURL().toString();
+        	// get user ip address
+        	String ip = ((WebClientInfo)VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
+        	QueryFacetsSelection selection = this.selectionModel.getObject();    	
+        	// get search term
+        	String searchTerm = this.selectionModel.getObject().getQuery();
+        	List<SearchResult> res = new ArrayList<SearchResult>();
+        	// get search results record ids 
+            for(int i=0; i < documents.getDocuments().size(); i++) {
+            	String id = ((SolrDocumentExpansionPairImpl) documents.getDocuments().get(i)).getDocument().get("id").toString();
+            	res.add(new SearchResult(id, i+1, 0));
+            }        	     
+            // create SearchQuery object and save it to DB
+        	SearchQuery sq = new SearchQuery(searchTerm, selection.getSelection().toString(), res, ip, pageUrl);
+        	sq.save(vloConfig); 
+       }catch(VloExposureException e) {
+       	logger.error(e.getMessage());
+       }       	    	
         return documents.iterator();
     }
 
