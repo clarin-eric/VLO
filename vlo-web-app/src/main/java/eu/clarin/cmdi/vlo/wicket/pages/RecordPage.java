@@ -174,7 +174,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             final PageParameters errorParams = new PageParameters(params)
                     .remove(VloWebAppParameters.DOCUMENT_ID);
             ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
-        } else {
+        } else {/*
         	try {
 	        	// save these information (id, ip, url, referer) in postgresql DB for record exposures
 	        	String id = document.get("id").toString();
@@ -188,7 +188,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 	         	pageView.save(config);
         	}catch(VloExposureException e) {
         		logger.error(e.getMessage());
-        	}
+        	}*/
          	
             setModel(new SolrDocumentModel(document, fieldNameService));
         }
