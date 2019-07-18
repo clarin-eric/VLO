@@ -22,6 +22,7 @@ import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
 import java.util.AbstractMap;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -63,12 +64,27 @@ public class RasaResourceAvailabilityStatusCheckerTest {
 
             @Override
             public CheckedLink get(String uri) {
-                return null; //not needed for test
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
 
             @Override
             public Stream<CheckedLink> getHistory(String uri, CheckedLinkResource.Order order, Optional<CheckedLinkFilter> filter) {
-                return null; //not needed for test
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl) {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public List<String> getCollectionNames() {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public Boolean save(CheckedLink cl) {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
         };
         instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
