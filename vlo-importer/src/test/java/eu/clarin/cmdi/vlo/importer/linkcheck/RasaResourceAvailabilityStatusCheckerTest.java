@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.google.common.collect.ImmutableMap;
-import eu.clarin.cmdi.rasa.helpers.CheckedLinkFilter;
+import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import eu.clarin.cmdi.rasa.links.CheckedLink;
 import java.util.AbstractMap;
@@ -84,6 +84,16 @@ public class RasaResourceAvailabilityStatusCheckerTest {
 
             @Override
             public Boolean save(CheckedLink cl) {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public CheckedLink get(String string, String string1) {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl, int i, int i1) {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
         };
