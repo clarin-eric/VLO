@@ -35,14 +35,21 @@ press_key_to_continue() {
 #### Compile & release source
 
 (cd "$VLO_SRC_PATH" && ( 
+
 	# show current version in pom
-	echo "Checking current version..."
+	echo "Checking current branch and version info..."
+	CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 	CURRENT_VERSION=$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)
+	echo "Current branch: ${CURRENT_BRANCH}"
 	echo "Current version: ${CURRENT_VERSION}"
 	
 	# ask version
 	echo -n "Version to release? "
 	read TARGET_VERSION
+
+	echo "Switching to release branch"
+	RELEASE_BRANCH="release-${TARGET_VERSION}"
+	git checkout -b "${RELEASE_BRANCH}"
 	
 	# set version
 	echo "Setting version to ${TARGET_VERSION} in pom files..."
@@ -53,16 +60,50 @@ press_key_to_continue() {
 		
 	# commit
 	echo "Committing..."
+	git commit -m "Project version to ${TARGET_VERSION}" pom.xml */pom.xml
 	# push
 	echo "Pushing..."
+	git push -u origin "${RELEASE_BRANCH}"
 	
-	echo "Check build output before continuing!"
+	echo "Check CI output before continuing!"
 	press_key_to_continue
 
 	# tag
 	echo "Creating and pushing tag..."
-	# push tag
+	# create & push tag
+	git tag -m "VLO ${TARGET_VERSION}" -a "${TARGET_VERSION}"
+	git push origin "${TARGET_VERSION}"
+	
+	echo "Check CI output before continuing!"
+	press_key_to_continue
+	
 	# check if expected file exists (curl)
+	
+	SUCCESS=-1
+	RETRY=0
+	while ( [ ${SUCCESS} -ne 0 ] && [ ${RETRY} -eq 0 ] ); do
+		REMOTE_RELEASE_URL="https://github.com/clarin-eric/VLO/releases/download/${TARGET_VERSION}/vlo-${TARGET_VERSION}-docker.tar.gz"
+		echo "Checking for distribution package at github.com"
+		RESPONSE_CODE=$(curl -IL ${REMOTE_RELEASE_URL}.z -o /dev/null -w '%{http_code}\n' -s)
+		if ( [ "${RESPONSE_CODE}" = "200" ] || [ "${RESPONSE_CODE}" = "403" ] ); then
+			SUCCESS=0
+		else
+			SUCCESS=-1
+			if ask_confirm "Failed to retrieve from ${REMOTE_RELEASE_URL}. Retry? "; then
+				RETRY=0
+			else
+				RETRY=1
+			fi
+		fi
+	done
+			
+	if ask_confirm "Merge into ${CURRENT_BRANCH} branch?"; then
+		git checkout "${CURRENT_BRANCH}"
+		git merge "${RELEASE_BRANCH}"
+		if ask_confirm "Done. Push branch?"; then
+			git push origin "${CURRENT_BRANCH}"
+		fi
+	fi
 ))
 
 ### Release docker
@@ -74,4 +115,3 @@ press_key_to_continue() {
 (cd "$COMPOSE_PROJECT_PATH" &&
 	(pwd)
 )
-
