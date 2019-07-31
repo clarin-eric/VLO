@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.3 (Ubuntu 11.3-1.pgdg18.04+1)
--- Dumped by pg_dump version 11.3 (Ubuntu 11.3-1.pgdg18.04+1)
+-- Dumped from database version 11.4 (Ubuntu 11.4-1.pgdg18.04+1)
+-- Dumped by pg_dump version 11.4 (Ubuntu 11.4-1.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,7 +21,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: PageViews; Type: TABLE; Schema: public; Owner: postgres
+-- Name: PageViews; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."PageViews" (
@@ -34,10 +34,8 @@ CREATE TABLE public."PageViews" (
 );
 
 
-ALTER TABLE public."PageViews" OWNER TO postgres;
-
 --
--- Name: PageViews_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: PageViews_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public."PageViews_id_seq"
@@ -49,17 +47,15 @@ CREATE SEQUENCE public."PageViews_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."PageViews_id_seq" OWNER TO postgres;
-
 --
--- Name: PageViews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: PageViews_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public."PageViews_id_seq" OWNED BY public."PageViews".id;
 
 
 --
--- Name: SearchQueries; Type: TABLE; Schema: public; Owner: postgres
+-- Name: SearchQueries; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."SearchQueries" (
@@ -72,10 +68,8 @@ CREATE TABLE public."SearchQueries" (
 );
 
 
-ALTER TABLE public."SearchQueries" OWNER TO postgres;
-
 --
--- Name: SearchResults; Type: TABLE; Schema: public; Owner: postgres
+-- Name: SearchResults; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public."SearchResults" (
@@ -87,10 +81,8 @@ CREATE TABLE public."SearchResults" (
 );
 
 
-ALTER TABLE public."SearchResults" OWNER TO postgres;
-
 --
--- Name: SearchResults_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: SearchResults_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public."SearchResults_id_seq"
@@ -102,17 +94,15 @@ CREATE SEQUENCE public."SearchResults_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."SearchResults_id_seq" OWNER TO postgres;
-
 --
--- Name: SearchResults_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: SearchResults_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public."SearchResults_id_seq" OWNED BY public."SearchQueries".id;
 
 
 --
--- Name: SearchResults_id_seq1; Type: SEQUENCE; Schema: public; Owner: postgres
+-- Name: SearchResults_id_seq1; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public."SearchResults_id_seq1"
@@ -124,38 +114,36 @@ CREATE SEQUENCE public."SearchResults_id_seq1"
     CACHE 1;
 
 
-ALTER TABLE public."SearchResults_id_seq1" OWNER TO postgres;
-
 --
--- Name: SearchResults_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+-- Name: SearchResults_id_seq1; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
 ALTER SEQUENCE public."SearchResults_id_seq1" OWNED BY public."SearchResults".id;
 
 
 --
--- Name: PageViews id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: PageViews id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."PageViews" ALTER COLUMN id SET DEFAULT nextval('public."PageViews_id_seq"'::regclass);
 
 
 --
--- Name: SearchQueries id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: SearchQueries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."SearchQueries" ALTER COLUMN id SET DEFAULT nextval('public."SearchResults_id_seq"'::regclass);
 
 
 --
--- Name: SearchResults id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: SearchResults id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."SearchResults" ALTER COLUMN id SET DEFAULT nextval('public."SearchResults_id_seq1"'::regclass);
 
 
 --
--- Name: PageViews PageViews_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: PageViews PageViews_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."PageViews"
@@ -163,7 +151,7 @@ ALTER TABLE ONLY public."PageViews"
 
 
 --
--- Name: SearchQueries SearchResults_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: SearchQueries SearchResults_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."SearchQueries"
@@ -171,7 +159,7 @@ ALTER TABLE ONLY public."SearchQueries"
 
 
 --
--- Name: SearchResults SearchResults_pkey1; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: SearchResults SearchResults_pkey1; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public."SearchResults"

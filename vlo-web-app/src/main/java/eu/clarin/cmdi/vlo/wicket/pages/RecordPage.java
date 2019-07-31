@@ -97,7 +97,6 @@ import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import javax.servlet.http.HttpServletRequest;
 import eu.clarin.cmdi.vlo.exposure.models.PageView;
-import eu.clarin.cmdi.vlo.exposure.postgresql.VloExposureException;
 
 /**
  *
@@ -174,7 +173,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             final PageParameters errorParams = new PageParameters(params)
                     .remove(VloWebAppParameters.DOCUMENT_ID);
             ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
-        } else {/*
+        } else {
         	try {
 	        	// save these information (id, ip, url, referer) in postgresql DB for record exposures
 	        	String id = document.get("id").toString();
@@ -186,9 +185,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 	         	// create PageView object and save it in the DB
 	         	PageView pageView = new PageView(id, ip, pageUrl, referer);
 	         	pageView.save(config);
-        	}catch(VloExposureException e) {
+        	}catch(Exception e) {
         		logger.error(e.getMessage());
-        	}*/
+        	}
          	
             setModel(new SolrDocumentModel(document, fieldNameService));
         }

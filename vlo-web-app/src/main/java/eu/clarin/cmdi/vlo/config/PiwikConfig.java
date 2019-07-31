@@ -27,13 +27,16 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class PiwikConfig {
 
-    @Value("${eu.clarin.cmdi.vlo.piwik.enableTracker:false}")
+    //@Value("${eu.clarin.cmdi.vlo.piwik.enableTracker:false}")
+	@Value("${eu.clarin.cmdi.vlo.piwik.enableTracker:true}")
     private boolean enabled;
     
-    @Value("${eu.clarin.cmdi.vlo.piwik.siteId:3}")
+    //@Value("${eu.clarin.cmdi.vlo.piwik.siteId:3}")
+    @Value("${eu.clarin.cmdi.vlo.piwik.siteId:9}")
     private String piwikSiteId;
 
-    @Value("${eu.clarin.cmdi.vlo.piwik.host:https://stats.clarin.eu/}")
+    //@Value("${eu.clarin.cmdi.vlo.piwik.host:https://stats.clarin.eu/}")
+    @Value("${eu.clarin.cmdi.vlo.piwik.host:https://asvanalytics.informatik.uni-leipzig.de/}")
     private String piwikHost;
 
     @Value("${eu.clarin.cmdi.vlo.piwik.domains:*.vlo.clarin.eu}")

@@ -21,9 +21,9 @@
 				<xs:element name="solrUserReadWrite" type="xs:string" />
 				<xs:element name="solrUserReadWritePass" type="xs:string" />
 				
+				<xs:element name="vloExposureEnabled" type="xs:string" />
 				<xs:element name="pgDbName" type="xs:string" />
 				<xs:element name="pgPort" type="xs:string" />
-				<xs:element name="pgUrl" type="xs:string" />
 				<xs:element name="pgHost" type="xs:string" />
 				<xs:element name="pgUsername" type="xs:string" />
 				<xs:element name="pgPassword" type="xs:string" />
