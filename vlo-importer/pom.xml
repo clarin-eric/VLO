@@ -41,7 +41,6 @@
 			</properties>
 		</profile>
 	</profiles>
-
 	<build>
 		<resources>
 			<resource>
@@ -62,11 +61,6 @@
 		</resources>
 
 		<plugins>
-
-			<!-- add the remote resources plugin to make the cmdi2xhtml.xsl file available 
-				to the web application. For more information on this plugin, please refer 
-				the Apache Maven Project website Check: this seems to be at archive level, 
-				not packaging -->
 			<plugin>
 				<artifactId>maven-remote-resources-plugin</artifactId>
 				<version>1.4</version>
@@ -223,5 +217,4 @@
 		</dependency>
 
 	</dependencies>
-
 </project>

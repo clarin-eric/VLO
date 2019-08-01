@@ -38,11 +38,11 @@
     <solrUserReadWrite>${vloconfig.solrUserReadWrite}</solrUserReadWrite>
     <solrUserReadWritePass>${vloconfig.solrUserReadWritePass}</solrUserReadWritePass>
 	
-	
+	<vloExposureEnabled>true</vloExposureEnabled>
+
 	<!-- Authentication for Postgresql DB (for vlo-exposure)     -->
 	<pgDbName>vloExposure</pgDbName>
 	<pgPort>5432</pgPort>
-	<pgUrl>jdbc:postgresql://localhost:5432/vloExposure</pgUrl>
 	<pgHost>localhost</pgHost>
 	<pgUsername>postgres</pgUsername>
 	<pgPassword>postgres</pgPassword>

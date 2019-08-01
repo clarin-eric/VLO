@@ -253,3 +253,10 @@ The importer logs information in `${VLO}/log`
 Because metadata is not static, it is recommended to run the importer a
 couple of times a week.
 
+### Record exposure
+This module is responsible for tracing how often records appear in the search results.
+- Install postgresql from here https://www.postgresql.org/download/
+- Import the tables from vlo-exposure/db/dump.sql
+- Enable record exposure tracking in vloConfig.xml	`<vloExposureEnabled>true</vloExposureEnabled>`
+- Change the postgresql settings in vloConfig.xml:
+	`dbname`, `port`, `host`, `username`-, `password`

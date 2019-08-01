@@ -65,10 +65,11 @@ public class VloConfig {
     private String solrUserReadWrite;
     private String solrUserReadWritePass;
 
+    
+    private boolean vloExposureEnabled;
     // Postgresql authentication
     private String pgDbName;
     private String pgPort;
-    private String pgUrl;
     private String pgHost;
     private String pgUsername;
     private String pgPassword;
@@ -422,7 +423,22 @@ public class VloConfig {
         this.solrUserReadWritePass = solrUserReadWritePass;
     }
     
-	 /**
+
+    /**
+	 * @return the vloExposureEnabled
+	 */
+    public boolean isVloExposureEnabled() {
+    	return vloExposureEnabled;
+    }
+    
+    /**
+	 * @param vloExposureEnabled the vloExposureEnabled to set
+	 */
+    public void isVloExposureEnabled(boolean vloExposureEnabled) {
+    	this.vloExposureEnabled = vloExposureEnabled;
+    }
+
+    /**
 	 * @return the pgDbName
 	 */
 	public String getPgDbName() {
@@ -450,20 +466,6 @@ public class VloConfig {
 	    this.pgPort = pgPort;
 	}
 	
-	 /**
-	 * @return the pgUrl
-	 */
-	public String getPgUrl() {
-	    return pgUrl;
-	}
-	
-	/**
-	 * @param pgUrl the pgUrl to set
-	 */
-	public void setPgUrl(String pgUrl) {
-	    this.pgUrl = pgUrl;
-	}
-   
 	 /**
 	 * @return the pgHost
 	 */
