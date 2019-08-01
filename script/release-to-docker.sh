@@ -217,7 +217,7 @@ press_key_to_continue() {
 	COMPOSE_FILE="clarin/docker-compose.yml"
 	echo "Setting new image version in ${COMPOSE_FILE}"
 	#image: &vlo_web_image registry.gitlab.com/clarin-eric/docker-vlo-beta:vlo-4.7.1-alpha3d-1
-	sed -e 's/\(.*docker-vlo-beta:\).*/\1'${IMAGE_NEW_VERSION}'/' "${COMPOSE_FILE}"
+	sed -i -e 's/\(.*docker-vlo-beta:\).*/\1'${IMAGE_NEW_VERSION}'/' "${COMPOSE_FILE}"
 
 	# user confirmation for changes...
 	git --no-pager diff "${COMPOSE_FILE}"
