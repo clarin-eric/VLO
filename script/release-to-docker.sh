@@ -10,7 +10,7 @@ CI_URL="https://travis-ci.org/clarin-eric/VLO/builds"
 DOCKER_CI_URL="https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/pipelines"
 
 VLO_NEW_VERSION=""
-NEW_DOCKER_VERSION=""
+IMAGE_NEW_VERSION=""
 
 ask_confirm() {
 	YN_ANSWER=""
@@ -39,15 +39,19 @@ press_key_to_continue() {
 
 #### Compile & release source
 
-(cd "$VLO_SRC_PATH" && ( 
-
+(
+	####
+	# VLO PROJECT
+	####
+	cd "$VLO_SRC_PATH"
+	
 	# show current version in pom
 	echo "Checking current branch and version info..."
 	CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 	CURRENT_VERSION=$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout)
 	echo "Current branch: ${CURRENT_BRANCH}"
 	echo "Current version: ${CURRENT_VERSION}"
-	
+
 	# ask version
 	echo -n "Version to release? "
 	read TARGET_VERSION
@@ -113,23 +117,24 @@ press_key_to_continue() {
 			git push origin ":${RELEASE_BRANCH}"
 		fi
 	fi
-	
-	VLO_NEW_VERSION="${TARGET_VERSION}"
-))
 
-### Release docker
-(cd "$DOCKER_PROJECT_PATH" && (
+	VLO_NEW_VERSION="${TARGET_VERSION}"
+
+	####
+	# DOCKER PROJECT
+	####
+
+	cd "$DOCKER_PROJECT_PATH"
 	DOCKER_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 	echo "Updating docker project. Current branch: ${DOCKER_CURRENT_BRANCH}"
 	
 	if [ "${VLO_NEW_VERSION}" = "" ]; then
-		echo "New VLO version not set. Something has gone wrong, aborting!"
+		echo "New VLO version not set (VLO_NEW_VERSION='${VLO_NEW_VERSION}'). Something has gone wrong, aborting!"
 		exit 1
 	fi
 
 	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
 	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
-
 
 	DOCKER_TARGET_VERSION_DEFAULT="vlo-${VLO_NEW_VERSION}-1"
 	echo -n "Docker image version to release? [${DOCKER_TARGET_VERSION_DEFAULT}]"
@@ -138,6 +143,8 @@ press_key_to_continue() {
 		DOCKER_TARGET_VERSION="${DOCKER_TARGET_VERSION_DEFAULT}"
 	fi
 	#TODO: check if a tag already exists - loop if necessary
+
+	cd "$DOCKER_PROJECT_PATH"
 
 	DOCKER_RELEASE_BRANCH="release-${DOCKER_TARGET_VERSION}"
 	git checkout -b "${DOCKER_RELEASE_BRANCH}"
@@ -160,6 +167,9 @@ press_key_to_continue() {
 	git tag -a -m "VLO image ${DOCKER_TARGET_VERSION}" -a "${DOCKER_TARGET_VERSION}"
 	git push origin "${DOCKER_TARGET_VERSION}"
 	
+	echo "Check CI output before continuing! (${DOCKER_CI_URL})"
+	ask_confirm_abort "Continue?"
+	
 	# merge if user wants to
 	if ask_confirm "Merge into '${DOCKER_CURRENT_BRANCH}' branch?"; then
 		git checkout "${DOCKER_CURRENT_BRANCH}"
@@ -171,16 +181,18 @@ press_key_to_continue() {
 			git branch -d "${DOCKER_RELEASE_BRANCH}"
 			git push origin ":${DOCKER_RELEASE_BRANCH}"
 		fi
-	fi
-	
-	NEW_DOCKER_VERSION="${DOCKER_TARGET_VERSION}"
-))
+	fi	
 
-### Update & tag compose
-(cd "$COMPOSE_PROJECT_PATH" && (
+	IMAGE_NEW_VERSION="${DOCKER_TARGET_VERSION}"
 
-	if [ "${NEW_DOCKER_VERSION}" = "" ]; then
-		echo "New VLO version not set. Something has gone wrong, aborting!"
+	####
+	# COMPOSE PROJECT
+	####
+
+	cd "$COMPOSE_PROJECT_PATH"
+
+	if [ "${IMAGE_NEW_VERSION}" = "" ]; then
+		echo "New docker version not set (IMAGE_NEW_VERSION='${IMAGE_NEW_VERSION}'). Something has gone wrong, aborting!"
 		exit 1
 	fi
 
@@ -190,8 +202,8 @@ press_key_to_continue() {
 	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
 	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
 
-	COMPOSE_TARGET_VERSION_DEFAULT="vlo-${VLO_NEW_VERSION}-1"
-	echo -n "Docker image version to release? [${COMPOSE_TARGET_VERSION_DEFAULT}]"
+	COMPOSE_TARGET_VERSION_DEFAULT="${DOCKER_TARGET_VERSION}"
+	echo -n "Compose project version to release? [${COMPOSE_TARGET_VERSION_DEFAULT}]"
 	read COMPOSE_TARGET_VERSION
 	if [ "${COMPOSE_TARGET_VERSION}" = "" ]; then
 		COMPOSE_TARGET_VERSION="${COMPOSE_TARGET_VERSION_DEFAULT}"
@@ -205,12 +217,12 @@ press_key_to_continue() {
 	COMPOSE_FILE="clarin/docker-compose.yml"
 	echo "Setting new image version in ${COMPOSE_FILE}"
 	#image: &vlo_web_image registry.gitlab.com/clarin-eric/docker-vlo-beta:vlo-4.7.1-alpha3d-1
-	sed -e 's/\(.*docker-vlo-beta:\).*/\1'${NEW_DOCKER_VERSION}'/' "${COMPOSE_FILE}"
+	sed -e 's/\(.*docker-vlo-beta:\).*/\1'${IMAGE_NEW_VERSION}'/' "${COMPOSE_FILE}"
 
 	# user confirmation for changes...
 	git --no-pager diff "${COMPOSE_FILE}"
 	ask_confirm_abort "Continue to commit and push?"
-	git commit -m "VLO image version to ${NEW_DOCKER_VERSION}" "${COMPOSE_FILE}"
+	git commit -m "VLO image version to ${IMAGE_NEW_VERSION}" "${COMPOSE_FILE}"
 	git push origin "${COMPOSE_RELEASE_BRANCH}"
 
 	ask_confirm_abort "Continue to tag?"
@@ -231,4 +243,12 @@ press_key_to_continue() {
 			git push origin ":${COMPOSE_RELEASE_BRANCH}"
 		fi
 	fi
-))
+	
+	COMPOSE_PROJECT_NEW_VERSION="${COMPOSE_TARGET_VERSION}"
+	
+	echo "New VLO version: ${VLO_NEW_VERSION}"
+	echo "New docker image version: ${IMAGE_NEW_VERSION}"
+	echo "New compose project version: ${COMPOSE_PROJECT_NEW_VERSION}"
+	
+	echo "Done!"
+)
