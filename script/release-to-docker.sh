@@ -6,6 +6,7 @@ SRC_BASE_DIR="${HOME}/git"
 VLO_SRC_PATH="${SRC_BASE_DIR}/vlo"
 DOCKER_PROJECT_PATH="${SRC_BASE_DIR}/docker-vlo"
 COMPOSE_PROJECT_PATH="${SRC_BASE_DIR}/compose_vlo"
+CI_URL="https://travis-ci.org/clarin-eric/VLO/builds"
 
 ask_confirm() {
 	YN_ANSWER=""
@@ -65,7 +66,7 @@ press_key_to_continue() {
 	echo "Pushing..."
 	git push -u origin "${RELEASE_BRANCH}"
 	
-	echo "Check CI output before continuing!"
+	echo "Check CI output before continuing! (${CI_URL})"
 	press_key_to_continue
 
 	# tag
@@ -74,7 +75,7 @@ press_key_to_continue() {
 	git tag -m "VLO ${TARGET_VERSION}" -a "${TARGET_VERSION}"
 	git push origin "${TARGET_VERSION}"
 	
-	echo "Check CI output before continuing!"
+	echo "Check CI output before continuing! (${CI_URL})"
 	press_key_to_continue
 	
 	# check if expected file exists (curl)
@@ -84,12 +85,12 @@ press_key_to_continue() {
 	while ( [ ${SUCCESS} -ne 0 ] && [ ${RETRY} -eq 0 ] ); do
 		REMOTE_RELEASE_URL="https://github.com/clarin-eric/VLO/releases/download/${TARGET_VERSION}/vlo-${TARGET_VERSION}-docker.tar.gz"
 		echo "Checking for distribution package at github.com"
-		RESPONSE_CODE=$(curl -IL ${REMOTE_RELEASE_URL}.z -o /dev/null -w '%{http_code}\n' -s)
+		RESPONSE_CODE=$(curl -IL ${REMOTE_RELEASE_URL} -o /dev/null -w '%{http_code}\n' -s)
 		if ( [ "${RESPONSE_CODE}" = "200" ] || [ "${RESPONSE_CODE}" = "403" ] ); then
 			SUCCESS=0
 		else
 			SUCCESS=-1
-			if ask_confirm "Failed to retrieve from ${REMOTE_RELEASE_URL}. Retry? "; then
+			if ask_confirm "Failed to retrieve from ${REMOTE_RELEASE_URL} (response code ${RESPONSE_CODE}) Retry? "; then
 				RETRY=0
 			else
 				RETRY=1
