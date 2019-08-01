@@ -7,6 +7,9 @@ VLO_SRC_PATH="${SRC_BASE_DIR}/vlo"
 DOCKER_PROJECT_PATH="${SRC_BASE_DIR}/docker-vlo"
 COMPOSE_PROJECT_PATH="${SRC_BASE_DIR}/compose_vlo"
 CI_URL="https://travis-ci.org/clarin-eric/VLO/builds"
+DOCKER_CI_URL="https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/pipelines"
+
+VLO_NEW_VERSION=""
 
 ask_confirm() {
 	YN_ANSWER=""
@@ -67,7 +70,7 @@ press_key_to_continue() {
 	git push -u origin "${RELEASE_BRANCH}"
 	
 	echo "Check CI output before continuing! (${CI_URL})"
-	press_key_to_continue
+	ask_confirm_abort "Continue?"
 
 	# tag
 	echo "Creating and pushing tag..."
@@ -76,7 +79,7 @@ press_key_to_continue() {
 	git push origin "${TARGET_VERSION}"
 	
 	echo "Check CI output before continuing! (${CI_URL})"
-	press_key_to_continue
+	ask_confirm_abort "Continue?"
 	
 	# check if expected file exists (curl)
 	
@@ -98,21 +101,70 @@ press_key_to_continue() {
 		fi
 	done
 			
-	if ask_confirm "Merge into ${CURRENT_BRANCH} branch?"; then
+	if ask_confirm "Merge into '${CURRENT_BRANCH}' branch?"; then
 		git checkout "${CURRENT_BRANCH}"
 		git merge "${RELEASE_BRANCH}"
-		if ask_confirm "Done. Push branch?"; then
+		if ask_confirm "Done. Push branch '${CURRENT_BRANCH}'?"; then
 			git push origin "${CURRENT_BRANCH}"
+		fi
+		if ask_confirm "Delete branch '${RELEASE_BRANCH}'?"; then
+			git branch -d "${RELEASE_BRANCH}"
+			git push origin ":${RELEASE_BRANCH}"
+		fi
+	fi
+	
+	VLO_NEW_VERSION="${TARGET_VERSION}"
+))
+
+VLO_NEW_VERSION="4.7.1-alpha3c"
+
+### Release docker
+(cd "$DOCKER_PROJECT_PATH" && (
+	DOCKER_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+	echo "Updating docker project. Current branch: ${DOCKER_CURRENT_BRANCH}"
+
+	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
+	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
+
+
+	DOCKER_TARGET_VERSION_DEFAULT="vlo-${VLO_NEW_VERSION}-1"
+	echo -n "Docker image version to release? [${DOCKER_TARGET_VERSION_DEFAULT}]"
+	read DOCKER_TARGET_VERSION
+	if [ "${DOCKER_TARGET_VERSION}" = "" ]; then
+		DOCKER_TARGET_VERSION="${DOCKER_TARGET_VERSION_DEFAULT}"
+	fi
+
+	DOCKER_RELEASE_BRANCH="release-${DOCKER_TARGET_VERSION}"
+	git checkout -b "${DOCKER_RELEASE_BRANCH}"
+
+	DATA_ENV_FILE="copy_data.env.sh"
+	echo "Setting new version in ${DATA_ENV_FILE}"
+	sed -i -e 's/VLO_VERSION=\".*\"/VLO_VERSION=\"'${VLO_NEW_VERSION}'\"/' "${DATA_ENV_FILE}"
+	git --no-pager diff "${DATA_ENV_FILE}"
+	ask_confirm_abort "Continue to commit and push?"
+	git commit -m "VLO version to ${VLO_NEW_VERSION}" copy_data.env.sh
+	git push origin "${DOCKER_RELEASE_BRANCH}"
+	
+	echo "Check CI output before continuing! (${DOCKER_CI_URL})"
+	ask_confirm_abort "Continue to tag?"
+	
+	git tag -a -m "VLO image ${DOCKER_TARGET_VERSION}" -a "${DOCKER_TARGET_VERSION}"
+	git push origin "${DOCKER_TARGET_VERSION}"
+	
+	if ask_confirm "Merge into '${DOCKER_CURRENT_BRANCH}' branch?"; then
+		git checkout "${DOCKER_CURRENT_BRANCH}"
+		git merge "${DOCKER_RELEASE_BRANCH}"
+		if ask_confirm "Done. Push branch '${DOCKER_CURRENT_BRANCH}'?"; then
+			git push origin "${DOCKER_CURRENT_BRANCH}"
+		fi
+		if ask_confirm "Delete branch '${DOCKER_RELEASE_BRANCH}'?"; then
+			git branch -d "${DOCKER_RELEASE_BRANCH}"
+			git push origin ":${DOCKER_RELEASE_BRANCH}"
 		fi
 	fi
 ))
 
-### Release docker
-(cd "$DOCKER_PROJECT_PATH" &&
-	(pwd)
-)
-
 ### Update & tag compose
-(cd "$COMPOSE_PROJECT_PATH" &&
-	(pwd)
-)
+(cd "$COMPOSE_PROJECT_PATH" && (
+	pwd
+))
