@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-statistics</artifactId>
-    <version>4.7.1-alpha3e</version>
+    <version>4.7.1-alpha3g</version>
     <name>VLO Report Generator</name>
     
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.7.1-alpha3e</version>
+        <version>4.7.1-alpha3g</version>
     </parent>
 
     <dependencies>
