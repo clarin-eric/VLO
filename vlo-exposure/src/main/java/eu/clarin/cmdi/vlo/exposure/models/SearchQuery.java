@@ -1,4 +1,5 @@
 package eu.clarin.cmdi.vlo.exposure.models;
+
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +9,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 
 // TODO: Auto-generated Javadoc
 public class SearchQuery {
-	private final  Logger logger = LoggerFactory.getLogger(SearchQuery.class);
+	private final Logger logger = LoggerFactory.getLogger(SearchQuery.class);
 	private String searchTerm;
 	private String Filter;
 	private List<SearchResult> results;
@@ -20,10 +21,10 @@ public class SearchQuery {
 	 * Instantiates a new search query.
 	 *
 	 * @param searchTerm the search term
-	 * @param filter the query filter
-	 * @param results the results
-	 * @param ip the ip
-	 * @param url the url
+	 * @param filter     the query filter
+	 * @param results    the results
+	 * @param ip         the ip
+	 * @param url        the url
 	 */
 	public SearchQuery(String searchTerm, String filter, List<SearchResult> results, String ip, String url) {
 		super();
@@ -39,11 +40,11 @@ public class SearchQuery {
 	 * Instantiates a new search query.
 	 *
 	 * @param searchTerm the search term
-	 * @param filter the query filter
-	 * @param results the results
-	 * @param timeStamp the time stamp
-	 * @param ip the ip
-	 * @param url the url
+	 * @param filter     the query filter
+	 * @param results    the results
+	 * @param timeStamp  the time stamp
+	 * @param ip         the ip
+	 * @param url        the url
 	 */
 	public SearchQuery(String searchTerm, String filter, List<SearchResult> results, Timestamp timeStamp, String ip,
 			String url) {
@@ -62,12 +63,12 @@ public class SearchQuery {
 	 * @param vloConfig the vlo config
 	 * @return true, if successful
 	 */
-	public boolean save(VloConfig vloConfig){
-		SearchQueryHandlerImpl sqh= new SearchQueryHandlerImpl();
+	public boolean save(VloConfig vloConfig) {
+		SearchQueryHandlerImpl sqh = new SearchQueryHandlerImpl();
 		boolean saved = false;
 		try {
-			saved = sqh.addSearchQuery(vloConfig, this);				
-		}catch(Exception ex) {
+			saved = sqh.addSearchQuery(vloConfig, this);
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 		}
 		return saved;
@@ -179,5 +180,5 @@ public class SearchQuery {
 	 */
 	public void setUrl(String url) {
 		this.url = url;
-	}	
+	}
 }

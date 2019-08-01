@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.exposure.postgresql.impl.PageViewsHandlerImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
-public class PageView{
+public class PageView {
 
 	private final static Logger logger = LoggerFactory.getLogger(PageView.class);
 	private int id;
@@ -21,11 +21,11 @@ public class PageView{
 	/**
 	 * Instantiates a new page view.
 	 *
-	 * @param recordId the record id
-	 * @param ip the ip
-	 * @param url the url
+	 * @param recordId    the record id
+	 * @param ip          the ip
+	 * @param url         the url
 	 * @param httpReferer the http referer
-	 * @param ts the Time Stamp
+	 * @param ts          the Time Stamp
 	 */
 	public PageView(String recordId, String ip, String url, String httpReferer, Timestamp ts) {
 		this.recordId = recordId;
@@ -38,9 +38,9 @@ public class PageView{
 	/**
 	 * Instantiates a new page view.
 	 *
-	 * @param recordId the record id
-	 * @param ip the ip
-	 * @param url the url
+	 * @param recordId    the record id
+	 * @param ip          the ip
+	 * @param url         the url
 	 * @param httpReferer the http referer
 	 */
 	public PageView(String recordId, String ip, String url, String httpReferer) {
@@ -54,15 +54,15 @@ public class PageView{
 	/**
 	 * Save the page view object to the DB.
 	 *
-	 * @param vloConfig the vlo project configuration 
+	 * @param vloConfig the vlo project configuration
 	 * @return true, if successful
 	 */
 	public boolean save(VloConfig vloConfig) {
-		PageViewsHandlerImpl pvh= new PageViewsHandlerImpl();
+		PageViewsHandlerImpl pvh = new PageViewsHandlerImpl();
 		boolean saved = false;
 		try {
-			saved = pvh.addPageView(vloConfig, this);				
-		}catch(Exception ex) {
+			saved = pvh.addPageView(vloConfig, this);
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 		}
 		return saved;

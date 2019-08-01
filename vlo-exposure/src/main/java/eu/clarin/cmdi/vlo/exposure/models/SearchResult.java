@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.exposure.models;
 
 import java.sql.Timestamp;
 
-
 public class SearchResult {
 	private String recordId;
 	private int position;
@@ -13,7 +12,7 @@ public class SearchResult {
 	 *
 	 * @param recordId the record id
 	 * @param position the position
-	 * @param page the page
+	 * @param page     the page
 	 */
 	public SearchResult(String recordId, int position, int page) {
 		this.recordId = recordId;

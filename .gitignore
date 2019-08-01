@@ -5,6 +5,8 @@
 /vlo-distribution/target/
 /vlo-web-app/target/
 *.log*
+*.classpath
+*.project
 nbactions*
 nbproject*
 .DS_Store
@@ -15,3 +17,11 @@ nbproject*
 /target/
 /vlo-distribution/target-old/
 /bin/
+
+/vlo-sitemap/.settings
+/vlo-statistics/.settings
+/vlo-vocabularies/.settings
+/vlo-importer/.settings
+/vlo-exposure/.settings
+/.settings
+
