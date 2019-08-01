@@ -5,11 +5,12 @@ set -e
 SRC_BASE_DIR="${HOME}/git"
 VLO_SRC_PATH="${SRC_BASE_DIR}/vlo"
 DOCKER_PROJECT_PATH="${SRC_BASE_DIR}/docker-vlo"
-COMPOSE_PROJECT_PATH="${SRC_BASE_DIR}/compose_vlo"
+COMPOSE_PROJECT_PATH="${SRC_BASE_DIR}/compose_vlo/compose_vlo"
 CI_URL="https://travis-ci.org/clarin-eric/VLO/builds"
 DOCKER_CI_URL="https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/pipelines"
 
 VLO_NEW_VERSION=""
+NEW_DOCKER_VERSION=""
 
 ask_confirm() {
 	YN_ANSWER=""
@@ -120,6 +121,11 @@ press_key_to_continue() {
 (cd "$DOCKER_PROJECT_PATH" && (
 	DOCKER_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 	echo "Updating docker project. Current branch: ${DOCKER_CURRENT_BRANCH}"
+	
+	if [ "${VLO_NEW_VERSION}" = "" ]; then
+		echo "New VLO version not set. Something has gone wrong, aborting!"
+		exit 1
+	fi
 
 	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
 	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
@@ -136,20 +142,25 @@ press_key_to_continue() {
 	DOCKER_RELEASE_BRANCH="release-${DOCKER_TARGET_VERSION}"
 	git checkout -b "${DOCKER_RELEASE_BRANCH}"
 
+	# change VLO version for build process
 	DATA_ENV_FILE="copy_data.env.sh"
 	echo "Setting new version in ${DATA_ENV_FILE}"
 	sed -i -e 's/VLO_VERSION=\".*\"/VLO_VERSION=\"'${VLO_NEW_VERSION}'\"/' "${DATA_ENV_FILE}"
+	
+	# user confirmation for changes...
 	git --no-pager diff "${DATA_ENV_FILE}"
 	ask_confirm_abort "Continue to commit and push?"
-	git commit -m "VLO version to ${VLO_NEW_VERSION}" copy_data.env.sh
+	git commit -m "VLO version to ${VLO_NEW_VERSION}" "${DATA_ENV_FILE}"
 	git push origin "${DOCKER_RELEASE_BRANCH}"
 	
 	echo "Check CI output before continuing! (${DOCKER_CI_URL})"
 	ask_confirm_abort "Continue to tag?"
 	
+	# tag and push
 	git tag -a -m "VLO image ${DOCKER_TARGET_VERSION}" -a "${DOCKER_TARGET_VERSION}"
 	git push origin "${DOCKER_TARGET_VERSION}"
 	
+	# merge if user wants to
 	if ask_confirm "Merge into '${DOCKER_CURRENT_BRANCH}' branch?"; then
 		git checkout "${DOCKER_CURRENT_BRANCH}"
 		git merge "${DOCKER_RELEASE_BRANCH}"
@@ -161,9 +172,63 @@ press_key_to_continue() {
 			git push origin ":${DOCKER_RELEASE_BRANCH}"
 		fi
 	fi
+	
+	NEW_DOCKER_VERSION="${DOCKER_TARGET_VERSION}"
 ))
 
 ### Update & tag compose
 (cd "$COMPOSE_PROJECT_PATH" && (
-	pwd
+
+	if [ "${NEW_DOCKER_VERSION}" = "" ]; then
+		echo "New VLO version not set. Something has gone wrong, aborting!"
+		exit 1
+	fi
+
+	COMPOSE_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+	echo "Updating compose project. Current branch: ${COMPOSE_CURRENT_BRANCH}"
+
+	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
+	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
+
+	COMPOSE_TARGET_VERSION_DEFAULT="vlo-${VLO_NEW_VERSION}-1"
+	echo -n "Docker image version to release? [${COMPOSE_TARGET_VERSION_DEFAULT}]"
+	read COMPOSE_TARGET_VERSION
+	if [ "${COMPOSE_TARGET_VERSION}" = "" ]; then
+		COMPOSE_TARGET_VERSION="${COMPOSE_TARGET_VERSION_DEFAULT}"
+	fi
+	#TODO: check if a tag already exists - loop if necessary
+
+	COMPOSE_RELEASE_BRANCH="release-${COMPOSE_TARGET_VERSION}"
+	git checkout -b "${COMPOSE_RELEASE_BRANCH}"
+	
+	# change VLO image version for build process
+	COMPOSE_FILE="clarin/docker-compose.yml"
+	echo "Setting new image version in ${COMPOSE_FILE}"
+	#image: &vlo_web_image registry.gitlab.com/clarin-eric/docker-vlo-beta:vlo-4.7.1-alpha3d-1
+	sed -e 's/\(.*docker-vlo-beta:\).*/\1'${NEW_DOCKER_VERSION}'/' "${COMPOSE_FILE}"
+
+	# user confirmation for changes...
+	git --no-pager diff "${COMPOSE_FILE}"
+	ask_confirm_abort "Continue to commit and push?"
+	git commit -m "VLO image version to ${NEW_DOCKER_VERSION}" "${COMPOSE_FILE}"
+	git push origin "${COMPOSE_RELEASE_BRANCH}"
+
+	ask_confirm_abort "Continue to tag?"
+	
+	# tag and push
+	git tag -a -m "VLO compose project ${COMPOSE_TARGET_VERSION}" -a "${COMPOSE_TARGET_VERSION}"
+	git push origin "${COMPOSE_TARGET_VERSION}"
+	
+	# merge if user wants to
+	if ask_confirm "Merge into '${COMPOSE_CURRENT_BRANCH}' branch?"; then
+		git checkout "${COMPOSE_CURRENT_BRANCH}"
+		git merge "${COMPOSE_RELEASE_BRANCH}"
+		if ask_confirm "Done. Push branch '${COMPOSE_CURRENT_BRANCH}'?"; then
+			git push origin "${COMPOSE_CURRENT_BRANCH}"
+		fi
+		if ask_confirm "Delete branch '${COMPOSE_RELEASE_BRANCH}'?"; then
+			git branch -d "${COMPOSE_RELEASE_BRANCH}"
+			git push origin ":${COMPOSE_RELEASE_BRANCH}"
+		fi
+	fi
 ))
