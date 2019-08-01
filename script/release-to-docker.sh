@@ -116,8 +116,6 @@ press_key_to_continue() {
 	VLO_NEW_VERSION="${TARGET_VERSION}"
 ))
 
-VLO_NEW_VERSION="4.7.1-alpha3c"
-
 ### Release docker
 (cd "$DOCKER_PROJECT_PATH" && (
 	DOCKER_CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -133,6 +131,7 @@ VLO_NEW_VERSION="4.7.1-alpha3c"
 	if [ "${DOCKER_TARGET_VERSION}" = "" ]; then
 		DOCKER_TARGET_VERSION="${DOCKER_TARGET_VERSION_DEFAULT}"
 	fi
+	#TODO: check if a tag already exists - loop if necessary
 
 	DOCKER_RELEASE_BRANCH="release-${DOCKER_TARGET_VERSION}"
 	git checkout -b "${DOCKER_RELEASE_BRANCH}"
