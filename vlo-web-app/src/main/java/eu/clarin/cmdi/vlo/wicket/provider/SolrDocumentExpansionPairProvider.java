@@ -47,7 +47,6 @@ import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
 import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
 import eu.clarin.cmdi.vlo.config.ServletVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.exposure.postgresql.VloExposureException;
 /**
  *
  * @author twagoo
@@ -93,7 +92,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
             // create SearchQuery object and save it to DB
         	SearchQuery sq = new SearchQuery(searchTerm, selection.getSelection().toString(), res, ip, pageUrl);
         	sq.save(vloConfig); 
-       }catch(VloExposureException e) {
+       }catch(Exception e) {
        	logger.error(e.getMessage());
        }       	    	
         return documents.iterator();

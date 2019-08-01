@@ -99,7 +99,6 @@ import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import javax.servlet.http.HttpServletRequest;
 import eu.clarin.cmdi.vlo.exposure.models.PageView;
-import eu.clarin.cmdi.vlo.exposure.postgresql.VloExposureException;
 
 /**
  *
