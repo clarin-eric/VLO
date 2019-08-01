@@ -6,21 +6,36 @@
 	<parent>
 		<groupId>eu.clarin.cmdi</groupId>
 		<artifactId>vlo</artifactId>
+<<<<<<< HEAD
 		<version>4.8-SNAPSHOT</version>
+=======
+		<version>4.7-SNAPSHOT</version>
+>>>>>>> code cleaning
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.clarin.cmdi</groupId>
 	<artifactId>vlo-web-app</artifactId>
 	<packaging>war</packaging>
+<<<<<<< HEAD
 	<version>4.8-SNAPSHOT</version>
+=======
+	<version>4.7-SNAPSHOT</version>
+>>>>>>> code cleaning
 	<name>VLO Web Application</name>
 	<description></description>
 
 	<properties>
+<<<<<<< HEAD
 		<wicket.version>7.14.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
 		<spring.version>4.3.23.RELEASE</spring.version>
 		<jetty.version>8.1.17.v20150415</jetty.version>
+=======
+		<wicket.version>7.13.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+		<spring.version>4.3.21.RELEASE</spring.version>
+		<jetty.version>8.1.17.v20150415</jetty.version>
+		<jackson.version>2.9.8</jackson.version>
+>>>>>>> code cleaning
 		<clarin-basestyle.version>0.3.0</clarin-basestyle.version>
 		<!-- selects the appender for the log4j root logger -->
 		<log4j.appender>File</log4j.appender>
@@ -204,11 +219,14 @@
 			<artifactId>json-simple</artifactId>
 			<version>1.1.1</version>
 		</dependency>
+<<<<<<< HEAD
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20180813</version>
 		</dependency>
+=======
+>>>>>>> code cleaning
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -221,6 +239,13 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.2.7</version>
 		</dependency>
+<<<<<<< HEAD
+=======
+		<!-- <dependency> <groupId>javax.xml.bind</groupId> <artifactId>jaxb-api</artifactId> 
+			<version>2.3.0</version> </dependency> <dependency> <groupId>com.sun.xml.bind</groupId> 
+			<artifactId>jaxb-core</artifactId> <version>2.3.0</version> </dependency> -->
+
+>>>>>>> code cleaning
 	</dependencies>
 
 	<build>
