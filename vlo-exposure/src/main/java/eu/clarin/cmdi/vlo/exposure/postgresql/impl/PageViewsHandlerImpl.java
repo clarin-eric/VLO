@@ -34,8 +34,7 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
 		boolean added = false;
 		long id = 0;
 		int affectedRows = -1;
-		PgDaoImp PgConn = new PgDaoImp(vloConfig);
-		Connection conn = PgConn.connect();
+		Connection conn = PgConnection.getConnection(vloConfig);
 		if (null != conn) {
 			try {
 				PreparedStatement pstmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);

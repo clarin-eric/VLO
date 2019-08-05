@@ -15,9 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
 import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
-import eu.clarin.cmdi.vlo.exposure.postgresql.impl.PgDaoImp;
 import eu.clarin.cmdi.vlo.exposure.postgresql.SearchQueryHandler;
-import eu.clarin.cmdi.vlo.exposure.postgresql.impl.SearchResultHandlerImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
 public class SearchQueryHandlerImpl implements SearchQueryHandler {
@@ -32,8 +30,7 @@ public class SearchQueryHandlerImpl implements SearchQueryHandler {
 		SearchResultHandlerImpl srh = new SearchResultHandlerImpl();
 		long id = 0;
 		int affectedRows = -1;
-		PgDaoImp PgConn = new PgDaoImp(vloConfig);
-		Connection conn = PgConn.connect();
+		Connection conn = PgConnection.getConnection(vloConfig);
 		if (null != conn) {
 			try {
 				PreparedStatement pstmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
