@@ -29,12 +29,12 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
 	 */
 	@Override
 	public boolean addPageView(VloConfig vloConfig, PageView pv) {
+		Connection conn = PgConnection.getConnection(vloConfig);
+		boolean added = false;
 		String sqlQuery = "INSERT INTO " + table + "(record_id, ip, url, http_referer, \"timeSt\") "
 				+ "VALUES(?,?,?,?,?)";
-		boolean added = false;
 		long id = 0;
 		int affectedRows = -1;
-		Connection conn = PgConnection.getConnection(vloConfig);
 		if (null != conn) {
 			try {
 				PreparedStatement pstmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
