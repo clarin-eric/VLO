@@ -193,6 +193,14 @@
             <artifactId>opencsv</artifactId>
             <version>4.6</version>
         </dependency>
+        
+        <!-- Override com.opencsv:4.6 dependency which has a vulnerability see https://snyk.io/vuln/SNYK-JAVA-COMMONSBEANUTILS-460111 -->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.9.4</version>
+        </dependency>
+        
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
