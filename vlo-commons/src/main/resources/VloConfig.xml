@@ -37,16 +37,15 @@
     <!-- Read-Write user (Importer) -->
     <solrUserReadWrite>${vloconfig.solrUserReadWrite}</solrUserReadWrite>
     <solrUserReadWritePass>${vloconfig.solrUserReadWritePass}</solrUserReadWritePass>
-	
-	<vloExposureEnabled>true</vloExposureEnabled>
 
-	<!-- Authentication for Postgresql DB (for vlo-exposure)     -->
-	<pgDbName>vloExposure</pgDbName>
-	<pgPort>5432</pgPort>
-	<pgHost>localhost</pgHost>
-	<pgUsername>postgres</pgUsername>
-	<pgPassword>postgres</pgPassword>
-	
+    <vloExposureEnabled>${vloconfig.vloExposureEnabled}</vloExposureEnabled>
+    <!-- Authentication for Postgresql DB (for vlo-exposure)     -->
+    <vloExposureDbName>${vloconfig.vloExposureDbName}</vloExposureDbName>
+    <vloExposurePort>${vloconfig.vloExposurePort}</vloExposurePort>
+    <vloExposureHost>${vloconfig.vloExposureHost}</vloExposureHost>
+    <vloExposureUsername>${vloconfig.vloExposureUsername}</vloExposureUsername>
+    <vloExposurePassword>${vloconfig.vloExposurePassword}</vloExposurePassword>
+
     <!-- Max record file size to accept in bytes -->
     <maxFileSize>50000000</maxFileSize>
 

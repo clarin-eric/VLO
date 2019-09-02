@@ -8,5 +8,5 @@ import eu.clarin.cmdi.vlo.exposure.models.PageView;
 
 public interface PageViewsHandler {
 
-	public boolean addPageView(VloConfig vloConfig, PageView pv);
+    public boolean addPageView(VloConfig vloConfig, PageView pv);
 }

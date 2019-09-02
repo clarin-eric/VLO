@@ -161,7 +161,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 super.setObject(object);
                 //persist in session
                 VloWebSession.get().setFacetSelectionTypeMode(object);
-                String ip = ((WebClientInfo)VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
             }
 
         };
@@ -269,7 +268,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
-    	return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
+        return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
             @Override
             protected void onChange(AjaxRequestTarget target) {
                 updateSelection(target);

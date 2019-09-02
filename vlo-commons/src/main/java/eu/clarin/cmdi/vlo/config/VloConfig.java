@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 /**
  * @author @author Wolfgang Walter SAUER (wowasa)
- * &lt;wolfgang.sauer@oeaw.ac.at&gt;
+ *         &lt;wolfgang.sauer@oeaw.ac.at&gt;
  *
  */
 @XmlRootElement(name = "VloConfig")
@@ -30,16 +30,20 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class VloConfig {
 
     public static final String LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER = "{}";
-    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/mapping/facetConcepts.xml"; //resource included into vlo-commons during build from vlo-mapping project
+    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/mapping/facetConcepts.xml"; // resource included
+                                                                                                    // into vlo-commons
+                                                                                                    // during build from
+                                                                                                    // vlo-mapping
+                                                                                                    // project
 
     /*
      * VLO application parameter members<br><br>
      *
-     * Please Initialise the annotated members in a proper way. This will allow 
-     * them to be linearised to corresponding elements in an XML file.
+     * Please Initialise the annotated members in a proper way. This will allow them
+     * to be linearised to corresponding elements in an XML file.
      * 
-     * Please refer to the general VLO documentation for a description of the
-     * member parameters.
+     * Please refer to the general VLO documentation for a description of the member
+     * parameters.
      */
     // page cache related parameters
     private int pagesInApplicationCache = 0;
@@ -56,7 +60,7 @@ public class VloConfig {
 
     private int minDocsInSolrQueue = 0;
 
-    //(required = false)
+    // (required = false)
     private int solrTimeOut = 0;
 
     // Solr authentication
@@ -65,16 +69,14 @@ public class VloConfig {
     private String solrUserReadWrite;
     private String solrUserReadWritePass;
 
-    
     private boolean vloExposureEnabled;
     // Postgresql authentication
-    private String pgDbName;
-    private String pgPort;
-    private String pgHost;
-    private String pgUsername;
-    private String pgPassword;
-    
-    
+    private String vloExposureDbName;
+    private String vloExposurePort;
+    private String vloExposureHost;
+    private String vloExposureUsername;
+    private String vloExposurePassword;
+
     @XmlElementWrapper(name = "dataRoots")
     @XmlElement(name = "DataRoot")
     private List<DataRoot> dataRoot;
@@ -84,7 +86,7 @@ public class VloConfig {
     private int maxDaysInSolr = 0;
 
     // mapping
-    //(required = false)
+    // (required = false)
     private String facetConceptsFile = "";
 
     private boolean printMapping = false;
@@ -166,7 +168,8 @@ public class VloConfig {
     private Map<String, String> deprecatedFields;
 
     /**
-     * A set of fields to be excluded from display<br><br>
+     * A set of fields to be excluded from display<br>
+     * <br>
      *
      * To let JAXB know it has to interpret the element as an array, use the
      * XmlElementWrapper directive. Use the directive to let JAXB know that the
@@ -175,7 +178,8 @@ public class VloConfig {
     @XmlElementWrapper(name = "ignoredFields")
     private Set<String> ignoredField;
     /**
-     * An array of fields to be included as technical properties<br><br>
+     * An array of fields to be included as technical properties<br>
+     * <br>
      *
      * To let JAXB know it has to interpret the element as an array, use the
      * XmlElementWrapper directive. Use the directive to let JAXB know that the
@@ -189,11 +193,12 @@ public class VloConfig {
     private Set<String> searchResultField;
 
     /**
-     * An array of facetFields<br><br>
+     * An array of facetFields<br>
+     * <br>
      *
-     * To let JAXB know it has to interpret the facetFields element as an array,
-     * use the XmlElementWrapper directive. Use the directive to let JAXB know
-     * that the elements inside 'facetFields' are named 'facetField'.
+     * To let JAXB know it has to interpret the facetFields element as an array, use
+     * the XmlElementWrapper directive. Use the directive to let JAXB know that the
+     * elements inside 'facetFields' are named 'facetField'.
      */
     @XmlElementWrapper(name = "facetFields")
     private List<String> facetField = new ArrayList<String>();
@@ -208,10 +213,10 @@ public class VloConfig {
 
     private String collectionFacet;
 
-    //(required = false)
+    // (required = false)
     private String cqlEndpointFilter = "";
 
-    //(required = false)
+    // (required = false)
     private String cqlEndpointAlternative = "";
 
     private URI configLocation;
@@ -219,14 +224,15 @@ public class VloConfig {
     private String lrSwitchboardBaseUrl = "https://switchboard.clarin.eu/";
 
     /**
-     * Get and set methods for web application parameter members<br><br>
+     * Get and set methods for web application parameter members<br>
+     * <br>
      *
-     * By using a get or set method, you can apply an operation to a parameter
-     * here without the need to make changes in different parts of the
-     * application.
+     * By using a get or set method, you can apply an operation to a parameter here
+     * without the need to make changes in different parts of the application.
      */
     /**
-     * Get the value of the pagesInApplicationCache parameter<br><br>
+     * Get the value of the pagesInApplicationCache parameter<br>
+     * <br>
      *
      * The parameter represents the number of pages that Wicket will allow to be
      * stored in the application's cache.
@@ -238,7 +244,8 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the pagesInApplicationCache parameter<br><br>
+     * Set the value of the pagesInApplicationCache parameter<br>
+     * <br>
      *
      * The parameter represents the number of pages that Wicket will allow to be
      * stored in the application's cache.
@@ -250,7 +257,8 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the sessionCacheSize parameter<br><br>
+     * Get the value of the sessionCacheSize parameter<br>
+     * <br>
      *
      * The parameter represents the size in kilobytes of the session page cache.
      *
@@ -261,7 +269,8 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the sessionCacheSize parameter<br><br>
+     * Set the value of the sessionCacheSize parameter<br>
+     * <br>
      *
      * The parameter represents the size in megabytes of the session page cache.
      *
@@ -272,10 +281,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the deleteAllFirst parameter<br><br>
+     * Get the value of the deleteAllFirst parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -284,10 +293,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the deleteAllFirst parameter<br><br>
+     * Set the value of the deleteAllFirst parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -296,10 +305,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the maxDocsInList parameter<br><br>
+     * Get the value of the maxDocsInList parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -308,10 +317,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the maxDocsInList parameter<br><br>
+     * Set the value of the maxDocsInList parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -320,10 +329,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the minDocsInSolrQueue parameter<br><br>
+     * Get the value of the minDocsInSolrQueue parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -332,10 +341,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the minDocsInSolrQueue parameter<br><br>
+     * Set the value of the minDocsInSolrQueue parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -344,10 +353,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the solrTimeOut parameter<br><br>
+     * Get the value of the solrTimeOut parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -356,10 +365,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the solrTimeOut parameter<br><br>
+     * Set the value of the solrTimeOut parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -422,98 +431,96 @@ public class VloConfig {
     public void setUserReadWritePass(String solrUserReadWritePass) {
         this.solrUserReadWritePass = solrUserReadWritePass;
     }
-    
 
     /**
-	 * @return the vloExposureEnabled
-	 */
+     * @return the vloExposureEnabled
+     */
     public boolean isVloExposureEnabled() {
-    	return vloExposureEnabled;
+        return vloExposureEnabled;
     }
-    
+
     /**
-	 * @param vloExposureEnabled the vloExposureEnabled to set
-	 */
+     * @param vloExposureEnabled the vloExposureEnabled to set
+     */
     public void isVloExposureEnabled(boolean vloExposureEnabled) {
-    	this.vloExposureEnabled = vloExposureEnabled;
+        this.vloExposureEnabled = vloExposureEnabled;
     }
 
     /**
-	 * @return the pgDbName
-	 */
-	public String getPgDbName() {
-	    return pgDbName;
-	}
-	
-	/**
-	 * @param pgDbName the pgDbName to set
-	 */
-	public void setPgDbName(String pgDbName) {
-	    this.pgDbName = pgDbName;
-	}
-    
-	 /**
-	 * @return the pgPort
-	 */
-	public String getPgPort() {
-	    return pgPort;
-	}
-	
-	/**
-	 * @param pgPort the pgPort to set
-	 */
-	public void setPgPort(String pgPort) {
-	    this.pgPort = pgPort;
-	}
-	
-	 /**
-	 * @return the pgHost
-	 */
-	public String getPgHost() {
-	    return pgHost;
-	}
-	
-	/**
-	 * @param pgHost the pgHost to set
-	 */
-	public void setPgHost(String pgHost) {
-	    this.pgHost = pgHost;
-	}
-	
-	/**
-	 * @return the pgUsername
-	 */
-	public String getPgUsername() {
-	    return pgUsername;
-	}
-	
-	/**
-	 * @param pgUsername the pgUsername to set
-	 */
-	public void setPgUsername(String pgUsername) {
-	    this.pgUsername = pgUsername;
-	}
-   
-	 /**
-	 * @return the pgPassword
-	 */
-	public String getPgPassword() {
-	    return pgPassword;
-	}
-	
+     * @return the vloExposureDbName
+     */
+    public String getVloExposureDbName() {
+        return this.vloExposureDbName;
+    }
 
-	/**
-	 * @param pgPassword the pgPassword to set
-	 */
-	public void setPgPassword(String pgPassword) {
-	    this.pgPassword = pgPassword;
-	}
-	
     /**
-     * Get the value of the maxFileSize parameter<br><br>
+     * @param vloExposureDbName the vloExposureDbName to set
+     */
+    public void setVloExposureDbName(String vloExposureDbName) {
+        this.vloExposureDbName = vloExposureDbName;
+    }
+
+    /**
+     * @return the vloExposurePort
+     */
+    public String getVloExposurePort() {
+        return vloExposurePort;
+    }
+
+    /**
+     * @param vloExposurePort the vloExposurePort to set
+     */
+    public void setVloExposurePort(String vloExposurePort) {
+        this.vloExposurePort = vloExposurePort;
+    }
+
+    /**
+     * @return the vloExposureHost
+     */
+    public String getVloExposureHost() {
+        return vloExposureHost;
+    }
+
+    /**
+     * @param vloExposureHost the vloExposureHost to set
+     */
+    public void setVloExposureHost(String vloExposureHost) {
+        this.vloExposureHost = vloExposureHost;
+    }
+
+    /**
+     * @return the vloExposureUsername
+     */
+    public String getVloExposureUsername() {
+        return vloExposureUsername;
+    }
+
+    /**
+     * @param vloExposureUsername the vloExposureUsername to set
+     */
+    public void setVloExposureUsername(String vloExposureUsername) {
+        this.vloExposureUsername = vloExposureUsername;
+    }
+
+    /**
+     * @return the vloExposurePassword
+     */
+    public String getVloExposurePassword() {
+        return vloExposurePassword;
+    }
+
+    /**
+     * @param vloExposurePassword the vloExposurePassword to set
+     */
+    public void setVloExposurePassword(String vloExposurePassword) {
+        this.vloExposurePassword = vloExposurePassword;
+    }
+
+    /**
+     * Get the value of the maxFileSize parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -522,10 +529,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the maxFileSize parameter<br><br>
+     * Set the value of the maxFileSize parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -534,10 +541,11 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the maxDaysInSolr parameter<br><br>
+     * Get the value of the maxDaysInSolr parameter<br>
+     * <br>
      *
-     * If the parameter is larger than 0, it denotes the maximal number of days
-     * that a document can remain in the database.
+     * If the parameter is larger than 0, it denotes the maximal number of days that
+     * a document can remain in the database.
      *
      * @return the value
      */
@@ -546,10 +554,11 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the maxDaysInSolr parameter<br><br>
+     * Set the value of the maxDaysInSolr parameter<br>
+     * <br>
      *
-     * If the parameter is larger than 0, it denotes the maximal number of days
-     * that a document can remain in the database.
+     * If the parameter is larger than 0, it denotes the maximal number of days that
+     * a document can remain in the database.
      *
      * @param param the value
      */
@@ -558,10 +567,11 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the useHandleResolver parameter<br><br>
+     * Get the value of the useHandleResolver parameter<br>
+     * <br>
      *
-     * The parameter can be used to reject meta data files that exceed some
-     * maximum size.
+     * The parameter can be used to reject meta data files that exceed some maximum
+     * size.
      *
      * @return the value
      */
@@ -570,10 +580,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the useHandleResolver parameter<br><br>
+     * Set the value of the useHandleResolver parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -582,10 +592,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the list of dataRoots parameters<br><br>
+     * Get the list of dataRoots parameters<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -594,10 +604,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of a list of dataRoots parameters<br><br>
+     * Set the value of a list of dataRoots parameters<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -606,10 +616,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the printMapping parameter<br><br>
+     * Get the value of the printMapping parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -618,10 +628,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the printMapping parameter<br><br>
+     * Set the value of the printMapping parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -630,10 +640,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the VloHomeLink parameter<br><br>
+     * Get the value of the VloHomeLink parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -642,10 +652,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the VloHomeLink parameter<br><br>
+     * Set the value of the VloHomeLink parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -654,10 +664,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the helpUrl parameter<br><br>
+     * Get the value of the helpUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -666,10 +676,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the helpUrl parameter<br><br>
+     * Set the value of the helpUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -678,10 +688,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the SolrUrl parameter<br><br>
+     * Get the value of the SolrUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -690,10 +700,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the SolrUrl parameter<br><br>
+     * Set the value of the SolrUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -702,10 +712,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the facetConceptsFile parameter<br><br>
+     * Get the value of the facetConceptsFile parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -714,10 +724,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the facetConceptsFile parameter<br><br>
+     * Set the value of the facetConceptsFile parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -726,7 +736,8 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the ProfileSchemaUrl by profileId parameter<br><br>
+     * Get the value of the ProfileSchemaUrl by profileId parameter<br>
+     * <br>
      *
      * For a description of the schema, refer to the general VLO documentation.
      * Note: the profileId needs to be expanded.
@@ -738,7 +749,8 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the ProfileSchemaUrl parameter<br><br>
+     * Set the value of the ProfileSchemaUrl parameter<br>
+     * <br>
      *
      * For a description of the schema, refer to the general VLO documentation.
      * Note: the profileId needs to be expanded.
@@ -750,10 +762,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the ComponentRegisteryRESTURL parameter<br><br>
+     * Get the value of the ComponentRegisteryRESTURL parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -762,10 +774,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the ComponentRegisteryRESTURL parameter<br><br>
+     * Set the value of the ComponentRegisteryRESTURL parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -774,10 +786,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the HandleServerUrl parameter<br><br>
+     * Get the value of the HandleServerUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -786,10 +798,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the HandleServerUrl parameter<br><br>
+     * Set the value of the HandleServerUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -798,10 +810,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the ConceptRegistryUrl parameter<br><br>
+     * Set the value of the ConceptRegistryUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -810,10 +822,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the ConceptRegistryUrl parameter<br><br>
+     * Get the value of the ConceptRegistryUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -822,10 +834,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the VocabularyRegistryUrl parameter<br><br>
+     * Set the value of the VocabularyRegistryUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -834,10 +846,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the VocabularyRegistryUrl parameter<br><br>
+     * Get the value of the VocabularyRegistryUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -846,10 +858,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the languageLinkPrefix parameter<br><br>
+     * Get the value of the languageLinkPrefix parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      * @see #LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER
@@ -859,10 +871,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the languageLinkPrefix parameter<br><br>
+     * Set the value of the languageLinkPrefix parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      * @see #LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER
@@ -872,10 +884,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the feedbackFromUrl parameter<br><br>
+     * Get the value of the feedbackFromUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -884,10 +896,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the feedbackFromUrl parameter<br><br>
+     * Set the value of the feedbackFromUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -912,10 +924,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the FederatedContentSearchUrl parameter<br><br>
+     * Get the value of the FederatedContentSearchUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -924,10 +936,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the FederatedContentSearchUrl parameter<br><br>
+     * Set the value of the FederatedContentSearchUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -936,10 +948,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the FacetFields parameter<br><br>
+     * Get the value of the FacetFields parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return List of field-keys
      */
@@ -987,7 +999,7 @@ public class VloConfig {
     /**
      *
      * @return all facet fields, including collection facet (arbitrary order
-     * unspecified)
+     *         unspecified)
      * @see #getFacetFieldNames()
      * @see #getCollectionFacet()
      */
@@ -1001,10 +1013,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the FacetFields parameter<br><br>
+     * Set the value of the FacetFields parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value, a list of facet field-keys
      */
@@ -1033,7 +1045,7 @@ public class VloConfig {
     /**
      *
      * @return the name of the facet that represents the collection a resource
-     * belongs to
+     *         belongs to
      */
     public String getCollectionFacet() {
         return collectionFacet;
@@ -1041,8 +1053,8 @@ public class VloConfig {
 
     /**
      *
-     * @param collectionFacet the name of the facet that represents the
-     * collection a resource belongs to
+     * @param collectionFacet the name of the facet that represents the collection a
+     *                        resource belongs to
      */
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
@@ -1085,10 +1097,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the CountryComponentUrl parameter<br><br>
+     * Get the value of the CountryComponentUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1097,10 +1109,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the CountryComponentUrl parameter<br><br>
+     * Set the value of the CountryComponentUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1109,10 +1121,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the Language2LetterCodeComponentUrl parameter<br><br>
+     * Get the value of the Language2LetterCodeComponentUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1121,10 +1133,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the Language2LetterCodeComponentUrl parameter<br><br>
+     * Set the value of the Language2LetterCodeComponentUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1133,10 +1145,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the Language3LetterCodeComponentUrl parameter<br><br>
+     * Get the value of the Language3LetterCodeComponentUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1145,10 +1157,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the Language3LetterCodeComponentUrl parameter<br><br>
+     * Set the value of the Language3LetterCodeComponentUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1157,10 +1169,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the SilToISO639CodesUrl parameter<br><br>
+     * Get the value of the SilToISO639CodesUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1169,10 +1181,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the SilToISO639CodesUrl parameter<br><br>
+     * Set the value of the SilToISO639CodesUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1181,10 +1193,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the organisationNamesUrl parameter<br><br>
+     * Get the value of the organisationNamesUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1193,10 +1205,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the organisationNamesUrl parameter<br><br>
+     * Set the value of the organisationNamesUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1205,10 +1217,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the languageNameVariantsUrl parameter<br><br>
+     * Get the value of the languageNameVariantsUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1217,10 +1229,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the languageNameVariantsUrl parameter<br><br>
+     * Set the value of the languageNameVariantsUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1229,10 +1241,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the licenseAvailabilityMapUrl parameter<br><br>
+     * Get the value of the licenseAvailabilityMapUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1241,10 +1253,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the licenseAvailabilityMapUrl parameter<br><br>
+     * Set the value of the licenseAvailabilityMapUrl parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1269,10 +1281,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the cqlEndpointFilter parameter<br><br>
+     * Get the value of the cqlEndpointFilter parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1281,10 +1293,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the cqlEndpointFilter parameter<br><br>
+     * Set the value of the cqlEndpointFilter parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
@@ -1293,10 +1305,10 @@ public class VloConfig {
     }
 
     /**
-     * Get the value of the cqlEndpointAlternative parameter<br><br>
+     * Get the value of the cqlEndpointAlternative parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @return the value
      */
@@ -1305,10 +1317,10 @@ public class VloConfig {
     }
 
     /**
-     * Set the value of the cqlEndpointAlternative parameter<br><br>
+     * Set the value of the cqlEndpointAlternative parameter<br>
+     * <br>
      *
-     * For a description of the parameter, refer to the general VLO
-     * documentation.
+     * For a description of the parameter, refer to the general VLO documentation.
      *
      * @param param the value
      */
