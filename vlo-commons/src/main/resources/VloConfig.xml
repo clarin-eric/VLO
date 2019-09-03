@@ -188,6 +188,7 @@
         <ignoredField>DAYS_SINCE_LAST_SEEN</ignoredField>
         <ignoredField>HAS_PART_COUNT_WEIGHT</ignoredField>
         <ignoredField>LANGUAGE_NAME</ignoredField>
+        <ignoredField>MULTILINGUAL</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->

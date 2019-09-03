@@ -12,7 +12,7 @@
     <!-- When updating the version number here, also update the version number
          in each module's pom.xml
     -->
-    <version>4.8-SNAPSHOT</version>
+    <version>4.7.1-alpha3h</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
@@ -40,6 +40,7 @@
         <slf4j.version>1.7.26</slf4j.version>
         <saxon.version>9.8.0-15</saxon.version>
         <jackson.version>2.9.9</jackson.version>
+        <jackson.databind.version>2.9.9.2</jackson.databind.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
