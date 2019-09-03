@@ -1,7 +1,7 @@
 sudo: false
 language: java
 jdk:
-- oraclejdk11
+- openjdk11
 
 before_install:
 - echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
