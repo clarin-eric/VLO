@@ -60,7 +60,7 @@ public class AvailabilityStatusUpdater {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
 
-    public final static int SOLR_REQUEST_PAGE_SIZE = 1000;
+    public final static int SOLR_REQUEST_PAGE_SIZE = 250;
 
     private final SolrBridge solrBridge;
     private final ResourceAvailabilityStatusChecker statusChecker;

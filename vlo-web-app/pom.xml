@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
@@ -74,7 +74,7 @@
             <version>${spring.version}</version>
             <exclusions>
                 <!-- We want Spring to use SLF4J instead (using jcl-over-slf4j, 
-                    see below) -->
+                see below) -->
                 <exclusion>
                     <groupId>commons-logging</groupId> <!-- aka JCL -->
                     <artifactId>commons-logging</artifactId>
@@ -187,16 +187,6 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>${jackson.version}</version>
         </dependency>
@@ -267,10 +257,18 @@
             </testResource>
         </testResources>
         <plugins>
-            <!-- <plugin> <inherited>true</inherited> <groupId>org.apache.maven.plugins</groupId> 
-                <artifactId>maven-compiler-plugin</artifactId> <version>2.5.1</version> <configuration> 
-                <source>1.8</source> <target>1.8</target> <encoding>UTF-8</encoding> <showWarnings>true</showWarnings> 
-                <showDeprecation>true</showDeprecation> </configuration> </plugin> -->
+            <plugin> 
+                <inherited>true</inherited> 
+                <groupId>org.apache.maven.plugins</groupId> 
+                <artifactId>maven-compiler-plugin</artifactId> 
+                <version>2.5.1</version> 
+                <configuration> 
+                    <release>11</release>
+                    <encoding>UTF-8</encoding>
+                    <showWarnings>true</showWarnings>
+                    <showDeprecation>true</showDeprecation>
+                </configuration> 
+            </plugin> 
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
