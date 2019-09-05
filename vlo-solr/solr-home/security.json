@@ -3,9 +3,9 @@
     "blockUnknown":true,
     "class":"solr.BasicAuthPlugin",
     "credentials":{
-        "user_admin":"lTy4WnIcoTfe5XQbGfloLD2PwZMGhz1oZt/9MzuxW/A= Tja46WGq9uKdVxKv8JfpdkJcZsngmGmow4+x+NJfD6M=",
-        "docker_user_rw":"+4wb3RD3WykNDSHwkA8mNo12n+Ki5JVBOFqsz/QZqnM= l0G4pdHqx3mfr3YUJoY2cNu5SEh4M7k8RzAKNDrSbvQ=",
-        "docker_user_read":"eaK+68dUYBOjp+SwhAUbXXcsf+KGXhcjnpNqoo23hD4= pIBpGRTji7x3q06SivoJu+WwUagm0u/R9t2FvxwJjbA="
+        "user_admin":"${VLO_DOCKER_SOLR_PASSWORD_ADMIN_HASH}",
+        "${VLO_DOCKER_SOLR_USER_READ_WRITE}":"${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE_HASH}",
+        "${VLO_DOCKER_SOLR_USER_READ_ONLY}":"${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY_HASH}"
     },
     "":{"v":0}
 },
@@ -27,8 +27,8 @@
    ],
    "user-role":{
        "user_admin":["role_admin", "role_write", "role_read"],
-       "docker_user_rw":["role_write", "role_read"],
-       "docker_user_read":"role_read"
+       "${VLO_DOCKER_SOLR_USER_READ_WRITE}":["role_write", "role_read"],
+       "${VLO_DOCKER_SOLR_USER_READ_ONLY}":"role_read"
    }
 }
 }
