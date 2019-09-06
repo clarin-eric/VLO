@@ -1,5 +1,11 @@
 Bug fixes and new features
 --------------------------
+VLO 4.7.1 (September 2019)
+
+* Removed 'multilingual' from the record details view
+* New version of resource availability status API 
+* Updated several other dependencies
+
 VLO 4.7.0 (May 2019)
 
 * Landing page link in results should get 'home' icon
