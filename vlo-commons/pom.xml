@@ -110,19 +110,27 @@
                 <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
                 <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
                 <!-- bundled mapping files (package resources, from the VLO-mapping 
-                    project) -->
+                project) -->
                 <vloconfig.mappingFilesLocation>/uniform-maps/</vloconfig.mappingFilesLocation>
                 <!-- empty location uses bundled default facet concepts file 
-                    (from the VLO-mapping project) -->
+                (from the VLO-mapping project) -->
                 <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
                 <!-- bundled value mappings definition -->
                 <vloconfig.valueMappingFile>/value-maps/dist/master.xml</vloconfig.valueMappingFile>
                 <!-- these credentials match the credentials in docker compose 
-                    project .env template -->
+                project .env template -->
                 <vloconfig.solrUserReadOnly>docker_user_read</vloconfig.solrUserReadOnly>
                 <vloconfig.solrUserReadOnlyPass>docker_secret</vloconfig.solrUserReadOnlyPass>
                 <vloconfig.solrUserReadWrite>docker_user_rw</vloconfig.solrUserReadWrite>
                 <vloconfig.solrUserReadWritePass>docker_secret</vloconfig.solrUserReadWritePass>
+                
+                <vloconfig.vloExposureEnabled>true</vloconfig.vloExposureEnabled>
+                <vloconfig.vloExposureDbName>exposure</vloconfig.vloExposureDbName>
+                <vloconfig.vloExposurePort>5432</vloconfig.vloExposurePort>
+                <vloconfig.vloExposureHost>localhost</vloconfig.vloExposureHost>
+                <vloconfig.vloExposureUsername>vlo_exposure</vloconfig.vloExposureUsername>
+                <vloconfig.vloExposurePassword>vlo_exposure</vloconfig.vloExposurePassword>
+                
             </properties>
         </profile>
 
