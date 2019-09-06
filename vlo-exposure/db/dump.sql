@@ -39,7 +39,6 @@ CREATE TABLE public."PageViews" (
 --
 
 CREATE SEQUENCE public."PageViews_id_seq"
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -86,7 +85,6 @@ CREATE TABLE public."SearchResults" (
 --
 
 CREATE SEQUENCE public."SearchResults_id_seq"
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -106,7 +104,6 @@ ALTER SEQUENCE public."SearchResults_id_seq" OWNED BY public."SearchQueries".id;
 --
 
 CREATE SEQUENCE public."SearchResults_id_seq1"
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
