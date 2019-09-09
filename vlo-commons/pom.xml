@@ -181,6 +181,12 @@
                 <vloconfig.centreRegistryCentresListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_CENTRES_LIST_JSON_URL}</vloconfig.centreRegistryCentresListJsonUrl>
                 <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_OAI_PMH_ENDPOINTS_LIST_JSON_URL}</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
                 <vloConfig.otherProvidersMarkupFile>${VLO_DOCKER_OTHER_PROVIDERS_MARKUP_FILE}</vloConfig.otherProvidersMarkupFile>
+                <vloconfig.vloExposureEnabled>${VLO_DOCKER_EXPOSURE_ENABLED}</vloconfig.vloExposureEnabled>
+                <vloconfig.vloExposureDbName>${VLO_DOCKER_EXPOSURE_DB_NAME}</vloconfig.vloExposureDbName>
+                <vloconfig.vloExposureHost>${VLO_DOCKER_EXPOSURE_DB_HOST}</vloconfig.vloExposureHost>
+                <vloconfig.vloExposurePort>${VLO_DOCKER_EXPOSURE_DB_PORT}</vloconfig.vloExposurePort>
+                <vloconfig.vloExposureUsername>${VLO_DOCKER_EXPOSURE_DB_USER}</vloconfig.vloExposureUsername>
+                <vloconfig.vloExposurePassword>${VLO_DOCKER_EXPOSURE_DB_PASSWORD}</vloconfig.vloExposurePassword>
             </properties>
         </profile>
     </profiles>
