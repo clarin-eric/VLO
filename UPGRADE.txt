@@ -80,6 +80,18 @@ for the upgraded VLO instance), go to the `bin` directory and run the importer u
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
+
+-----------------------------
+Upgrading from 4.7.0 to 4.7.1
+-----------------------------
+Maintenance release, no special actions required. If using on docker, make sure to also
+update the compose project and, if applicable, the VLO/harvester orchestration scripts.
+
+See:
+
+ * https://gitlab.com/CLARIN-ERIC/compose_vlo/
+ * https://gitlab.com/CLARIN-ERIC/vlo-harvesting-orchestration/
+
 -----------------------------
 Upgrading from 4.6.x to 4.7.0
 -----------------------------
