@@ -125,7 +125,7 @@
                 <vloconfig.solrUserReadWritePass>docker_secret</vloconfig.solrUserReadWritePass>
                 
                 <vloconfig.vloExposureEnabled>true</vloconfig.vloExposureEnabled>
-                <vloconfig.vloExposureDbName>exposure</vloconfig.vloExposureDbName>
+                <vloconfig.vloExposureDbName>vlo_exposure</vloconfig.vloExposureDbName>
                 <vloconfig.vloExposurePort>5432</vloconfig.vloExposurePort>
                 <vloconfig.vloExposureHost>localhost</vloconfig.vloExposureHost>
                 <vloconfig.vloExposureUsername>vlo_exposure</vloconfig.vloExposureUsername>
