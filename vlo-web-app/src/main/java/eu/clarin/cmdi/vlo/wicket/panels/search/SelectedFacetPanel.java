@@ -36,6 +36,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import java.util.Optional;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -139,7 +140,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
         }
 
         @Override
-        public void onClick(AjaxRequestTarget target) {
+        public void onClick(Optional<AjaxRequestTarget> target) {
             // Remove a single value
             // Call callback
             onValuesUnselected(Collections.singleton(valueModel.getObject()), target);

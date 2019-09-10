@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -51,7 +52,7 @@ public abstract class TogglePanel extends Panel {
         // add the actual toggle link
         final Component toggler = new ToggleLink("toggler", visibilityModel, showTextModel, hideTextModel) {
             @Override
-            protected void onClick(AjaxRequestTarget target) {
+            protected void onClick(Optional<AjaxRequestTarget> target) {
                 if (target != null) {
                     target.add(TogglePanel.this);
                 }

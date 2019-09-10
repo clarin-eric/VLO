@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import java.util.Optional;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -114,12 +115,12 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         if (piwikConfig.isEnabled()) {
             link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_EXPANDCOLLAPSE) {
                 @Override
-                protected String getName(AjaxRequestTarget target) {
+                protected String getName(Optional<AjaxRequestTarget> target) {
                     return FacetPanel.this.getModelObject();
                 }
 
                 @Override
-                protected String getValue(AjaxRequestTarget target) {
+                protected String getValue(Optional<AjaxRequestTarget> target) {
                     return getExpansionModel().getObject().toString().toLowerCase();
                 }
 
@@ -141,7 +142,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                 //update values
                 target.add(facetValuesPanel);
             }
@@ -213,7 +214,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     @Override
-    protected void onExpansionToggle(AjaxRequestTarget target) {
+    protected void onExpansionToggle(Optional<AjaxRequestTarget> target) {
         super.onExpansionToggle(target);
         if (target != null) {
             target.appendJavaScript("applyFacetTooltips();");
@@ -232,7 +233,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         }
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 
 
 }

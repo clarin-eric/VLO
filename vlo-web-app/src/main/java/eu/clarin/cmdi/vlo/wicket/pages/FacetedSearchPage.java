@@ -44,6 +44,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
@@ -214,7 +215,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final IModel<Boolean> selectionsExpandedModel = Model.of(false);
         searchContainer.add(new IndicatingAjaxFallbackLink("toggleSelections") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());
                 if (target != null) {
                     target.add(selections);
@@ -244,7 +245,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             }
 
             @Override
-            protected void onAjaxSearchPagination(AjaxRequestTarget target) {
+            protected void onAjaxSearchPagination(Optional<AjaxRequestTarget> target) {
                 super.onAjaxSearchPagination(target);
                 if (target != null) {
                     //updating record offset in search result header
@@ -264,7 +265,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
         return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
             @Override
-            protected void onChange(AjaxRequestTarget target) {
+            protected void onChange(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
 
@@ -284,7 +285,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         container.add(new TopLinksPanel("permalink", new PermaLinkModel(getPageClass(), getModel()), getTitleModel()) {
 
             @Override
-            protected void onChange(AjaxRequestTarget target) {
+            protected void onChange(Optional<AjaxRequestTarget> target) {
                 if (target != null) {
                     target.add(container);
                 }
@@ -298,7 +299,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel, solrDocumentsProvider) {
 
             @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
         };
@@ -310,7 +311,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final Panel availabilityPanel = new AvailabilityFacetPanel(id, getModel(), fieldsModel) {
 
             @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
         };
@@ -322,7 +323,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final SearchFormPanel form = new SearchFormPanel(id, getModel(), recordCountModel) {
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target) {
+            protected void onSubmit(Optional<AjaxRequestTarget> target) {
                 // reset expansion state of search results
                 searchResultsPanel.resetExpansion();
 
@@ -346,7 +347,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel(), facetSelectionTypeModeModel) {
 
             @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
 
@@ -355,7 +356,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         return panel;
     }
 
-    private void updateSelection(AjaxRequestTarget target) {
+    private void updateSelection(Optional<AjaxRequestTarget> target) {
         //detach facetFieldsModel when selection is changed
         fieldsModel.detach();
 

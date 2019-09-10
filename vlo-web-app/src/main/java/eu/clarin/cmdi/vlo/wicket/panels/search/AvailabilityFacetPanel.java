@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import java.util.List;
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -44,6 +43,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -134,7 +134,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
         });
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 
     private class AvailabilityDataView extends DataView<Count> {
 
@@ -185,7 +185,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                     .add(new OnChangeAjaxBehavior() {
 
                         @Override
-                        protected void onUpdate(AjaxRequestTarget target) {
+                        protected void onUpdate(Optional<AjaxRequestTarget> target) {
                             selectionChanged(target);
                         }
 

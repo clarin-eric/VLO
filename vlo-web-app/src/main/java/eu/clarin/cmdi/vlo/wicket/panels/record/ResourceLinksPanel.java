@@ -47,6 +47,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 
@@ -180,7 +181,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
         }.add(new AjaxFallbackLink("hierarchyLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(HIERARCHY_SECTION, target);
             }
         }));

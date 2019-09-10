@@ -36,6 +36,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -208,7 +209,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 final Link selectLink = new AjaxFallbackLink("facetSelect") {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         selectionModel.getObject().addNewFacetValue(fieldNameModel.getObject(), selectionTypeModeModel.getObject(), Collections.singleton(item.getModelObject().getName()));
                         //detach models to make sure that facet field values get re-evaluated upon rendering
                         AllFacetValuesPanel.this.detachModels();
@@ -266,7 +267,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                 target.add(valuesContainer);
             }
 
@@ -304,7 +305,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         .add(new UpdateOptionsFormBehavior(options) {
 
                             @Override
-                            protected void onUpdate(AjaxRequestTarget target) {
+                            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                                 super.onUpdate(target);
                             }
 
@@ -328,7 +329,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         .add(new UpdateOptionsFormBehavior(form) {
 
                             @Override
-                            protected void onUpdate(AjaxRequestTarget target) {
+                            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                                 super.onUpdate(target);
                             }
 
@@ -345,14 +346,14 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         }
 
         @Override
-        protected void onUpdate(AjaxRequestTarget target) {
+        protected void onUpdate(Optional<AjaxRequestTarget> target) {
             target.add(options);
             target.add(valuesContainer);
         }
 
     }
 
-    protected void onSelectionChanged(AjaxRequestTarget target) {
+    protected void onSelectionChanged(Optional<AjaxRequestTarget> target) {
 
     }
 

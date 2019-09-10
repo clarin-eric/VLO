@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -177,7 +178,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final AjaxFallbackLink<QueryFacetsSelection> removeLink = new IndicatingAjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 // get a copy of the current selection
                 final QueryFacetsSelection newSelection = getModelObject().copy();
                 newSelection.setQuery(null);
@@ -237,7 +238,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 item.add(new IndicatingAjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         // get a copy of the current selection
                         final QueryFacetsSelection newSelection = getModelObject().copy();
                         final String facet = selectionModel.getObject().getKey();
@@ -268,7 +269,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                 onChange(target);
             }
         });
@@ -283,7 +284,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         solrDocumentProvider.detach();
     }
 
-    protected void onChange(AjaxRequestTarget target) {
+    protected void onChange(Optional<AjaxRequestTarget> target) {
         //noop - may be overridden
     }
 

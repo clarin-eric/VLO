@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import java.util.Optional;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -85,7 +86,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink("titleToggle") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 final ExpansionState expansionState = expansionModel.getObject();
                 if (expansionState == ExpansionState.COLLAPSED) {
                     expansionModel.setObject(ExpansionState.EXPANDED);
@@ -159,7 +160,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
      * Override to apply logic when expansion state is toggled
      * @param target 
      */
-    protected void onExpansionToggle(AjaxRequestTarget target) {
+    protected void onExpansionToggle(Optional<AjaxRequestTarget> target) {
        //NOOP 
     }
 

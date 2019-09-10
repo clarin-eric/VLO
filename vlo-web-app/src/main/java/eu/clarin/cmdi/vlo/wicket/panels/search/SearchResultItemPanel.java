@@ -233,7 +233,7 @@ public class SearchResultItemPanel extends Panel {
         final Link expansionStateToggle = new IndicatingAjaxFallbackLink(id) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 // toggle the expansion state
                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
                     expansionStateModel.setObject(ExpansionState.EXPANDED);

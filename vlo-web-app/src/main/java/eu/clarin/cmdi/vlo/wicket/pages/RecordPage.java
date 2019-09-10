@@ -86,6 +86,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import java.util.Collection;
+import java.util.Optional;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
@@ -226,7 +227,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             protected WebMarkupContainer createLink(String id) {
                 return new AjaxFallbackLink(id) {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(AVAILABILITY_SECTION, target);
                     }
                 };
@@ -318,7 +319,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 if (piwikConfig.isEnabled()) {
                     link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE, PiwikEventConstants.PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH) {
                         @Override
-                        protected String getName(AjaxRequestTarget target) {
+                        protected String getName(Optional<AjaxRequestTarget> target) {
                             return TABS_ORDER.get(index);
                         }
                     });
@@ -362,7 +363,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
 
             @Override
-            protected void onChange(AjaxRequestTarget target) {
+            protected void onChange(Optional<AjaxRequestTarget> target) {
                 if (target != null) {
                     target.add(topNavigation);
                 }

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -35,7 +36,7 @@ public abstract class ToggleLink extends GenericPanel<Boolean> {
         final Link<Boolean> link = new IndicatingAjaxFallbackLink<Boolean>("link", model) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 getModel().setObject(!getModelObject());
                 if (target != null) {
                     target.add(ToggleLink.this);
@@ -65,6 +66,6 @@ public abstract class ToggleLink extends GenericPanel<Boolean> {
         setOutputMarkupId(true);
     }
 
-    protected abstract void onClick(AjaxRequestTarget target);
+    protected abstract void onClick(Optional<AjaxRequestTarget> target);
 
 }

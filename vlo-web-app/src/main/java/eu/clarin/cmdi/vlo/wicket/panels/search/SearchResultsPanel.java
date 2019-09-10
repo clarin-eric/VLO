@@ -33,6 +33,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -118,7 +119,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         // pagination navigators
         navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView) {
             @Override
-            protected void onAjaxEvent(AjaxRequestTarget target) {
+            protected void onAjaxEvent(Optional<AjaxRequestTarget> target) {
                 super.onAjaxEvent(target);
                 onAjaxSearchPagination(target);
             }
@@ -127,7 +128,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView) {
 
             @Override
-            protected void onAjaxEvent(AjaxRequestTarget target) {
+            protected void onAjaxEvent(Optional<AjaxRequestTarget> target) {
                 super.onAjaxEvent(target);
                 onAjaxSearchPagination(target);
                 //bottom navigator action should trigger scroll to top navigator
@@ -169,7 +170,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         navigatorBottom.setVisible(multiplePages);
     }
 
-    protected void onAjaxSearchPagination(AjaxRequestTarget target) {
+    protected void onAjaxSearchPagination(Optional<AjaxRequestTarget> target) {
 
     }
 

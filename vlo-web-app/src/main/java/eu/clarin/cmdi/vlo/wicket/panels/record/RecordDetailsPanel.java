@@ -51,6 +51,7 @@ import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import java.util.Optional;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.Model;
 
@@ -173,7 +174,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(RESOURCES_SECTION, target);
             }
         };
@@ -220,13 +221,13 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         resourceInfo.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                 target.add(resourceInfo);
             }
         });
         final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(RESOURCES_SECTION, target);
             }
         };
@@ -249,7 +250,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         return new WebMarkupContainer(id)
                 .add(new AjaxFallbackLink("showResources") {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(RESOURCES_SECTION, target);
                     }
                 }.add(new Label("resourcesCount", new PropertyModel<String>(resourcesModel, "size"))));

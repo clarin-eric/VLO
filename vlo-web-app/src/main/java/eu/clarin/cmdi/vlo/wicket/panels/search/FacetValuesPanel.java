@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
-import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.EventTrackingBehavior;
@@ -37,6 +36,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
 import org.apache.wicket.Component;
@@ -188,7 +188,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final Link selectLink = new IndicatingAjaxFallbackLink(id) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 // call callback
                 onValuesSelected(
                         //TODO: get type injected via model
@@ -223,7 +223,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         if (piwikConfig.isEnabled()) {
             allValuesTrackingBehaviour = new EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_ALLVALUES) {
                 @Override
-                protected String getName(AjaxRequestTarget target) {
+                protected String getName(Optional<AjaxRequestTarget> target) {
                     return getModel().getObject().getName();
                 }
 
@@ -235,7 +235,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         final Link link = new IndicatingAjaxFallbackLink<FacetField>(id, getModel()) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 if (target == null) {
                     // no JavaScript, open a new page with values
                     setResponsePage(new AllFacetValuesPage(getModel(), selectionModel, selectionTypeModeModel));
@@ -289,12 +289,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                 return Model.of("Cancel");
             }
 
-            private void updateAfterClose(AjaxRequestTarget target) {
+            private void updateAfterClose(Optional<AjaxRequestTarget> target) {
                 onValuesSelected(null, null, target);
             }
 
             @Override
-            protected void onDismiss(AjaxRequestTarget target) {
+            protected void onDismiss(Optional<AjaxRequestTarget> target) {
                 final QueryFacetsSelection previousSelection = beforeAllValuesSelection.getObject();
                 if (previousSelection != null) {
                     selectionModel.setObject(previousSelection);
@@ -305,7 +305,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
 
             @Override
-            protected void onClose(AjaxRequestTarget target) {
+            protected void onClose(Optional<AjaxRequestTarget> target) {
                 close(target);
                 filterModel.setObject(beforeAllValuesFilter.getObject());
                 updateAfterClose(target);
@@ -315,7 +315,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
             @Override
-            protected void onSelectionChanged(AjaxRequestTarget target) {
+            protected void onSelectionChanged(Optional<AjaxRequestTarget> target) {
                 if (target != null) {
                     // Special case: update search results only so as to provide some visual feedback. 
                     // (calling onValuesSelected would be nice but may re-render the facet panels which would break the modal window)

@@ -35,6 +35,7 @@ import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import static java.lang.Math.toIntExact;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -96,7 +97,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         // header contains link to expand/collapse duplicates list
         final IndicatingAjaxFallbackLink toggleHeaderLink = new IndicatingAjaxFallbackLink("toggleExpansion") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 expandedModel.setObject(isExpandedModel.getObject() ? ExpansionState.COLLAPSED : ExpansionState.EXPANDED);
                 if (target != null) {
                     target.add(container);

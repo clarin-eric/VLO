@@ -31,6 +31,7 @@ import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -92,7 +93,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         final DropDownChoice<FacetSelectionType> selectionType = new DropDownChoice<>("selectionType", selectionTypeModeModel, Lists.newArrayList(FacetSelectionType.AND, FacetSelectionType.OR));
         selectionType.add(new OnChangeAjaxBehavior() {
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                 selectionChanged(target);
             }
         });
@@ -161,7 +162,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         checkBox.add(new OnChangeAjaxBehavior() {
 
             @Override
-            protected void onUpdate(AjaxRequestTarget target) {
+            protected void onUpdate(Optional<AjaxRequestTarget> target) {
                 selectionChanged(target);
             }
 
@@ -199,6 +200,6 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         documentProvider.detach();
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 
 }

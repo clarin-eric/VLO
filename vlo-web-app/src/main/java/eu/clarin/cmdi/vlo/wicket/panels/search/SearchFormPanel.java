@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import java.util.Iterator;
+import java.util.Optional;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -81,7 +82,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         final AjaxFallbackButton submitButton = new AjaxFallbackButton("searchSubmit", form) {
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(Optional<AjaxRequestTarget> target, Form<?> form) {
                 SearchFormPanel.this.onSubmit(target);
             }
 
@@ -117,7 +118,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
             submitButton.add(new AjaxPiwikTrackingBehavior.SearchTrackingBehavior("click") {
 
                 @Override
-                protected String getKeywords(AjaxRequestTarget target) {
+                protected String getKeywords(Optional<AjaxRequestTarget> target) {
                     return model.getObject().getQuery();
                 }
             });
@@ -133,7 +134,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         recordCountModel.detach();
     }
 
-    protected abstract void onSubmit(AjaxRequestTarget target);
+    protected abstract void onSubmit(Optional<AjaxRequestTarget> target);
 
     @Override
     public void renderHead(IHeaderResponse response) {

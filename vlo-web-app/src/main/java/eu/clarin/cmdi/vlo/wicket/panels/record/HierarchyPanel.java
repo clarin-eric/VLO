@@ -41,7 +41,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
-import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -58,6 +57,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import java.util.Optional;
 
 /**
  *
@@ -118,7 +118,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                 final IndicatingAjaxFallbackLink upLink = new IndicatingAjaxFallbackLink("up") {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         logger.debug("Expand up: {}", item.getModelObject().get(fieldNameService.getFieldName(FieldKey.ID)));
 
                         // tree root up one level, expand root for traceability by user                        
@@ -179,7 +179,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         final Link showAllLink = new IndicatingAjaxFallbackLink("showAll") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 parentsView.setItemsPerPage(parentsProvider.size());
                 if (target != null) {
                     target.add(container);
@@ -222,7 +222,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                             return new AjaxFallbackLinkLabel(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
 
                                 @Override
-                                public void onClick(AjaxRequestTarget target) {
+                                public void onClick(Optional<AjaxRequestTarget> target) {
                                     treeProvider.setChildrenShown(null);
                                     target.add(treeContainer);
                                 }

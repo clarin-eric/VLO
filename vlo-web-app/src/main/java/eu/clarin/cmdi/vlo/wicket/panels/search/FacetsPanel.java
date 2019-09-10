@@ -42,6 +42,7 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import java.util.Collection;
+import java.util.Optional;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -116,7 +117,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                                 new FacetExpansionStateModel(item.getModel(), expansionModel)) {
 
                             @Override
-                            protected void selectionChanged(AjaxRequestTarget target) {
+                            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                                 FacetsPanel.this.selectionChanged(target);
                             }
                         }.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
@@ -144,7 +145,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         //toggler for showing/hiding secondary facets
         container.add(new AjaxFallbackLink("more") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 allFacetsShown.setObject(Boolean.TRUE);
                 if (target != null) {
                     target.add(container);
@@ -156,7 +157,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
         container.add(new AjaxFallbackLink("fewer") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 allFacetsShown.setObject(Boolean.FALSE);
                 if (target != null) {
                     target.add(container);
@@ -193,5 +194,5 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 }

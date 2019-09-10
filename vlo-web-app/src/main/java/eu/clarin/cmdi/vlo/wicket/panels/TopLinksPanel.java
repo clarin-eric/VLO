@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -96,7 +97,7 @@ public class TopLinksPanel extends Panel {
         });
     }
 
-    protected void onChange(AjaxRequestTarget target) {
+    protected void onChange(Optional<AjaxRequestTarget> target) {
         if (target != null) {
             target.add(getPage());
         }

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -53,20 +54,20 @@ public abstract class BootstrapModal extends Panel {
         add(new Label("title", getTitle()));
         add(new AjaxLink("closeCross") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 onDismiss(target);
             }
         });
         add(new AjaxLink("closeButton") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 onClose(target);
             }
         }.add(new Label("closeButtonLabel", getCloseButtonLabelModel())));
 
         add(new AjaxLink("dismissButton") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 onDismiss(target);
             }
         }.add(new Label("dismissButtonLabel", getDismissButtonLabelModel())));
@@ -83,7 +84,7 @@ public abstract class BootstrapModal extends Panel {
 
     protected abstract IModel<String> getTitle();
 
-    public void close(AjaxRequestTarget target) {
+    public void close(Optional<AjaxRequestTarget> target) {
         if (visibilityModel.getObject()) {
             visibilityModel.setObject(false);
             target.add(this);
@@ -91,7 +92,7 @@ public abstract class BootstrapModal extends Panel {
         }
     }
 
-    public void show(AjaxRequestTarget target) {
+    public void show(Optional<AjaxRequestTarget> target) {
         if (!visibilityModel.getObject()) {
             visibilityModel.setObject(true);
             target.add(this);
@@ -119,7 +120,7 @@ public abstract class BootstrapModal extends Panel {
      *
      * @param target
      */
-    protected void onDismiss(AjaxRequestTarget target) {
+    protected void onDismiss(Optional<AjaxRequestTarget> target) {
         close(target);
     }
 
@@ -130,7 +131,7 @@ public abstract class BootstrapModal extends Panel {
      *
      * @param target
      */
-    protected void onClose(AjaxRequestTarget target) {
+    protected void onClose(Optional<AjaxRequestTarget> target) {
         close(target);
     }
 

@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -42,6 +41,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
+import java.util.Optional;
 
 /**
  *
@@ -155,7 +155,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
                 item.add(new AjaxLink("remove") {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         keywordsModel.getObject().remove(item.getModelObject());
                         target.add(keywords);
                     }

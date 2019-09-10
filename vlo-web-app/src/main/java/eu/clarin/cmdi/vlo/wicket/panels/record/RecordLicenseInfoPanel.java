@@ -53,6 +53,7 @@ import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
+import java.util.Optional;
 
 /**
  *
@@ -187,7 +188,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 Model.of("Show all available licence/availabilty information"),
                 Model.of("Hide detailed licence/availabilty information")) {
             @Override
-            protected void onClick(AjaxRequestTarget target) {
+            protected void onClick(Optional<AjaxRequestTarget> target) {
                 if (target != null) {
                     target.add(accessInfoContainer);
                 }

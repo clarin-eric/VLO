@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import java.util.Optional;
 import java.util.Set;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -76,7 +77,7 @@ public abstract class IndicatingNestedTree<T> extends DefaultNestedTree<T> {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public void onClick(AjaxRequestTarget target) {
+                public void onClick(Optional<AjaxRequestTarget> target) {
                     toggle();
                 }
 
