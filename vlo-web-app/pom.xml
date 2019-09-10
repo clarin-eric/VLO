@@ -19,7 +19,7 @@
 
     <properties>
         <wicket.version>7.15.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>4.3.25.RELEASE</spring.version>
+        <spring.version>5.1.9.RELEASE</spring.version>
         <jetty.version>8.1.17.v20150415</jetty.version>
         <clarin-basestyle.version>0.3.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
@@ -66,16 +66,6 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
-            <exclusions>
-                <!-- 
-                    We want Spring to use SLF4J instead (using
-                    jcl-over-slf4j, see below) 
-                -->
-                <exclusion>
-                    <groupId>commons-logging</groupId> <!-- aka JCL -->
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
