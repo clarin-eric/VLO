@@ -18,9 +18,8 @@
     <description></description>
 
     <properties>
-        <wicket.version>7.15.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>8.5.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>5.1.9.RELEASE</spring.version>
-        <jetty.version>8.1.17.v20150415</jetty.version>
         <clarin-basestyle.version>0.3.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
@@ -157,7 +156,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>0.10.18</version>
+            <version>2.0.10</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
@@ -343,26 +342,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.mortbay.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>${jetty.version}</version>
-                <configuration>
-                    <connectors>
-                        <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                            <port>8080</port>
-                            <maxIdleTime>3600000</maxIdleTime>
-                        </connector>
-                        <connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
-                            <port>8443</port>
-                            <maxIdleTime>3600000</maxIdleTime>
-                            <keystore>${project.build.directory}/test-classes/keystore</keystore>
-                            <password>wicket</password>
-                            <keyPassword>wicket</keyPassword>
-                        </connector>
-                    </connectors>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
