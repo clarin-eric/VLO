@@ -38,9 +38,9 @@ public abstract class ToggleLink extends GenericPanel<Boolean> {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 getModel().setObject(!getModelObject());
-                if (target != null) {
-                    target.add(ToggleLink.this);
-                }
+                target.ifPresent(t -> {
+                    t.add(ToggleLink.this);
+                });
                 ToggleLink.this.onClick(target);
             }
         };

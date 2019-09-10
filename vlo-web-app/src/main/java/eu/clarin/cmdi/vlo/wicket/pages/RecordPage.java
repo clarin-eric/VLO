@@ -244,7 +244,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             public Panel getPanel(String panelId) {
                 return new RecordDetailsPanel(panelId, getModel()) {
                     @Override
-                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                    protected void switchToTab(String tab, Optional<AjaxRequestTarget> target) {
                         RecordPage.this.switchToTab(tab, target);
                     }
 
@@ -266,7 +266,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
                     @Override
-                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                    protected void switchToTab(String tab, Optional<AjaxRequestTarget> target) {
                         RecordPage.this.switchToTab(tab, target);
                     }
 
@@ -319,7 +319,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 if (piwikConfig.isEnabled()) {
                     link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE, PiwikEventConstants.PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH) {
                         @Override
-                        protected String getName(Optional<AjaxRequestTarget> target) {
+                        protected String getName(AjaxRequestTarget target) {
                             return TABS_ORDER.get(index);
                         }
                     });
@@ -364,9 +364,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
             @Override
             protected void onChange(Optional<AjaxRequestTarget> target) {
-                if (target != null) {
-                    target.add(topNavigation);
-                }
+                target.ifPresent(t -> {
+                    t.add(topNavigation);
+                });
             }
 
         };
@@ -406,13 +406,13 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         };
     }
 
-    private void switchToTab(String tab, AjaxRequestTarget target) {
+    private void switchToTab(String tab, Optional<AjaxRequestTarget> target) {
         final int tabIndex = TABS_ORDER.indexOf(tab);
         if (tabIndex >= 0) {
             RecordPage.this.tabs.setSelectedTab(tabIndex);
-            if (target != null) {
-                target.add(RecordPage.this.tabs);
-            }
+            target.ifPresent(t -> {
+                t.add(RecordPage.this.tabs);
+            });
         }
     }
 

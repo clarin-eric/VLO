@@ -48,7 +48,7 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
     }
     
     @Override
-    protected void onTimer(Optional<AjaxRequestTarget> target) {
+    protected void onTimer(AjaxRequestTarget target) {
         // stop timer so that it gets called only once
         this.stop(target);
 
@@ -64,6 +64,6 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
      *
      * @param target the request target
      */
-    protected abstract void onUpdate(Optional<AjaxRequestTarget> target);
+    protected abstract void onUpdate(AjaxRequestTarget target);
     
 }

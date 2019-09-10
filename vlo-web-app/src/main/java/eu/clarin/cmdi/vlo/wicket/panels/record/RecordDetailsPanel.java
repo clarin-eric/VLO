@@ -256,7 +256,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 }.add(new Label("resourcesCount", new PropertyModel<String>(resourcesModel, "size"))));
     }
 
-    protected abstract void switchToTab(String tab, AjaxRequestTarget target);
+    protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
 
     @Override
     public void detachModels() {

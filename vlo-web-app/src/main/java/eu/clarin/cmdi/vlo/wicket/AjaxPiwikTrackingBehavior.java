@@ -49,13 +49,13 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
     }
 
     @Override
-    protected void onEvent(Optional<AjaxRequestTarget> target) {
+    protected void onEvent(AjaxRequestTarget target) {
         String js = generatePiwikJs(target);
         log.debug("Calling Piwik API: {}", js);
         target.appendJavaScript(js);
     }
 
-    public final String generatePiwikJs(Optional<AjaxRequestTarget> target) {
+    public final String generatePiwikJs(AjaxRequestTarget target) {
         String js = "if(typeof Piwik == 'object' && Piwik != null) { ";
         if (async) {
             js += "var tracker = Piwik.getAsyncTracker(); ";
@@ -66,7 +66,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
         return js;
     }
 
-    protected String getTrackerCommand(Optional<AjaxRequestTarget> target) {
+    protected String getTrackerCommand(AjaxRequestTarget target) {
         return trackerCommand;
     }
 
@@ -96,11 +96,11 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
         }
 
         @Override
-        protected String getTrackerCommand(Optional<AjaxRequestTarget> target) {
+        protected String getTrackerCommand(AjaxRequestTarget target) {
             return "trackSiteSearch('" + JavaScriptUtils.escapeQuotes(getKeywords(target)) + "')";
         }
 
-        protected abstract String getKeywords(Optional<AjaxRequestTarget> target);
+        protected abstract String getKeywords(AjaxRequestTarget target);
 
     }
 
@@ -116,7 +116,7 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
         }
 
         @Override
-        protected String getTrackerCommand(Optional<AjaxRequestTarget> target) {
+        protected String getTrackerCommand(AjaxRequestTarget target) {
             //trackEvent(category, action, [name], [value])
             final String name = getName(target);
             final String value = getValue(target);
@@ -134,11 +134,11 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
             return command.toString();
         }
 
-        protected String getName(Optional<AjaxRequestTarget> target) {
+        protected String getName(AjaxRequestTarget target) {
             return null;
         }
 
-        protected String getValue(Optional<AjaxRequestTarget> target) {
+        protected String getValue(AjaxRequestTarget target) {
             return null;
         }
 
@@ -156,12 +156,12 @@ public class AjaxPiwikTrackingBehavior extends AjaxEventBehavior {
         }
 
         @Override
-        protected String getName(Optional<AjaxRequestTarget> target) {
+        protected String getName(AjaxRequestTarget target) {
             return facetNameModel.getObject();
         }
 
         @Override
-        protected String getValue(Optional<AjaxRequestTarget> target) {
+        protected String getValue(AjaxRequestTarget target) {
             return valueModel.getObject();
         }
 

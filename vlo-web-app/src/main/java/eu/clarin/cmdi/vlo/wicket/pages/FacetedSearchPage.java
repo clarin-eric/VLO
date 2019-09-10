@@ -68,7 +68,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private static final long serialVersionUID = 1L;
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
     private final static FieldKey ADDITIONAL_FACETS = FieldKey.LICENSE_TYPE;
-    
+
     @SpringBean
     private FacetFieldsService facetFieldsService;
     @SpringBean
@@ -81,10 +81,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private FieldNameService fieldNameService;
 
     /**
-     * Provider of search results including 'expansion' of collapsed (very similar) records
+     * Provider of search results including 'expansion' of collapsed (very
+     * similar) records
      */
     private IDataProvider<SolrDocumentExpansionPair> documentsProvider;
-    
+
     /**
      * Provider of search results without expansion of collapsed records
      */
@@ -147,7 +148,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
         recordCountModel = new RecordCountModel(getModel());
-        
+
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
         facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
             @Override
@@ -217,10 +218,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());
-                if (target != null) {
-                    target.add(selections);
-                    target.add(this);
-                }
+                target.ifPresent(t -> {
+                    t.add(selections);
+                    t.add(this);
+                });
             }
         }
                 .add(new Label("toggleSelectionsLabel", // dynamic button label 
@@ -247,10 +248,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             @Override
             protected void onAjaxSearchPagination(Optional<AjaxRequestTarget> target) {
                 super.onAjaxSearchPagination(target);
-                if (target != null) {
+                target.ifPresent(t -> {
                     //updating record offset in search result header
-                    target.add(resultsHeader);
-                }
+                    t.add(resultsHeader);
+                });
             }
 
         };
@@ -270,7 +271,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             }
 
             @Override
-            protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+            protected void onSelectionChanged(QueryFacetsSelection selection, Optional<AjaxRequestTarget> target) {
                 setModelObject(selection);
                 updateSelection(target);
             }
@@ -286,9 +287,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
             @Override
             protected void onChange(Optional<AjaxRequestTarget> target) {
-                if (target != null) {
-                    target.add(container);
-                }
+                target.ifPresent(t -> {
+                    t.add(container);
+                });
             }
 
         });
@@ -329,10 +330,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
                 //transition from simple
                 simpleModeModel.setObject(false);
-                if (target != null) {
-                    target.prependJavaScript("cb|transitionFromSimple(cb);");
-                    target.add(searchContainer); //update everything within container
-                }
+                target.ifPresent(t -> {
+                    t.prependJavaScript("cb|transitionFromSimple(cb);");
+                    t.add(searchContainer); //update everything within container
+                });
 
                 updateSelection(target);
             }
@@ -361,16 +362,16 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         fieldsModel.detach();
 
         // selection changed, update facets and search results
-        if (target != null) { // null if JavaScript disabled
-            target.add(navigation);
-            target.add(searchForm);
-            target.add(resultsHeader);
-            target.add(searchResultsPanel);
-            target.add(selections);
+        target.ifPresent(t -> {
+            t.add(navigation);
+            t.add(searchForm);
+            t.add(resultsHeader);
+            t.add(searchResultsPanel);
+            t.add(selections);
 
             //reapply js for nice tooltips
-            target.appendJavaScript("applyFacetTooltips();");
-        }
+            t.appendJavaScript("applyFacetTooltips();");
+        });
     }
 
     @Override

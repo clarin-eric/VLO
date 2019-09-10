@@ -54,21 +54,21 @@ public abstract class BootstrapModal extends Panel {
         add(new Label("title", getTitle()));
         add(new AjaxLink("closeCross") {
             @Override
-            public void onClick(Optional<AjaxRequestTarget> target) {
-                onDismiss(target);
+            public void onClick(AjaxRequestTarget target) {
+                onDismiss(Optional.of(target));
             }
         });
         add(new AjaxLink("closeButton") {
             @Override
-            public void onClick(Optional<AjaxRequestTarget> target) {
-                onClose(target);
+            public void onClick(AjaxRequestTarget target) {
+                onClose(Optional.of(target));
             }
         }.add(new Label("closeButtonLabel", getCloseButtonLabelModel())));
 
         add(new AjaxLink("dismissButton") {
             @Override
-            public void onClick(Optional<AjaxRequestTarget> target) {
-                onDismiss(target);
+            public void onClick(AjaxRequestTarget target) {
+                onDismiss(Optional.of(target));
             }
         }.add(new Label("dismissButtonLabel", getDismissButtonLabelModel())));
         setOutputMarkupId(true);
@@ -87,16 +87,20 @@ public abstract class BootstrapModal extends Panel {
     public void close(Optional<AjaxRequestTarget> target) {
         if (visibilityModel.getObject()) {
             visibilityModel.setObject(false);
-            target.add(this);
-            target.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+            target.ifPresent(t -> {
+                t.add(this);
+                t.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+            });
         }
     }
 
     public void show(Optional<AjaxRequestTarget> target) {
         if (!visibilityModel.getObject()) {
             visibilityModel.setObject(true);
-            target.add(this);
-            target.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
+            target.ifPresent(t -> {
+                t.add(this);
+                t.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
+            });
         }
     }
 

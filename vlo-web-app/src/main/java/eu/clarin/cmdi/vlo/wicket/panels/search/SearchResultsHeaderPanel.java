@@ -269,8 +269,8 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
-            protected void onUpdate(Optional<AjaxRequestTarget> target) {
-                onChange(target);
+            protected void onUpdate(AjaxRequestTarget target) {
+                onChange(Optional.of(target));
             }
         });
         resultPageSizeForm.add(pageSizeDropDown);
@@ -296,7 +296,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
      * @param selection new selection
      * @param target AJAX target, may be null
      */
-    protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+    protected void onSelectionChanged(QueryFacetsSelection selection, Optional<AjaxRequestTarget> target) {
         setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
     }
 

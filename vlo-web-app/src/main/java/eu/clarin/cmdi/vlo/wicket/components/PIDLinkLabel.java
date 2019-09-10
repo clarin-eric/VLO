@@ -82,7 +82,7 @@ public class PIDLinkLabel extends GenericPanel<String> {
     }
 
     protected void onClick(Optional<AjaxRequestTarget> target) {
-        if (target != null) {
+        if (target.isPresent()) {
             pidInfoModal.show(target);
         } else {
             //no JS - redirect to PID (resolver) URL
