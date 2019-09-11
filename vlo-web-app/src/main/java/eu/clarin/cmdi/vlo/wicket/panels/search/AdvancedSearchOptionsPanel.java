@@ -93,8 +93,8 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         final DropDownChoice<FacetSelectionType> selectionType = new DropDownChoice<>("selectionType", selectionTypeModeModel, Lists.newArrayList(FacetSelectionType.AND, FacetSelectionType.OR));
         selectionType.add(new OnChangeAjaxBehavior() {
             @Override
-            protected void onUpdate(Optional<AjaxRequestTarget> target) {
-                selectionChanged(target);
+            protected void onUpdate(AjaxRequestTarget target) {
+                selectionChanged(Optional.of(target));
             }
         });
         optionsForm.add(selectionType);
@@ -162,8 +162,8 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         checkBox.add(new OnChangeAjaxBehavior() {
 
             @Override
-            protected void onUpdate(Optional<AjaxRequestTarget> target) {
-                selectionChanged(target);
+            protected void onUpdate(AjaxRequestTarget target) {
+                selectionChanged(Optional.of(target));
             }
 
             @Override

@@ -189,9 +189,9 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 Model.of("Hide detailed licence/availabilty information")) {
             @Override
             protected void onClick(Optional<AjaxRequestTarget> target) {
-                if (target != null) {
-                    target.add(accessInfoContainer);
-                }
+                target.ifPresent(t -> {
+                    t.add(accessInfoContainer);
+                });
             }
 
             @Override

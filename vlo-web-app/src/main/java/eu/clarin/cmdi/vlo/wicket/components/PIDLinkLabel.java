@@ -59,7 +59,7 @@ public class PIDLinkLabel extends GenericPanel<String> {
         super(id, model);
 
         this.pidLabel = new PIDLabel("label", model, maxLinkLength);
-        final Link link = new IndicatingAjaxFallbackLink("link", PIDLinkModel.wrapLinkModel(model)) {
+        final Link link = new IndicatingAjaxFallbackLink<>("link", PIDLinkModel.wrapLinkModel(model)) {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 PIDLinkLabel.this.onClick(target);

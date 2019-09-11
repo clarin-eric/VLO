@@ -230,10 +230,10 @@ public class SearchResultItemPanel extends Panel {
     }
 
     private Link createExpansionStateToggle(String id) {
-        final Link expansionStateToggle = new IndicatingAjaxFallbackLink(id) {
+        final Link expansionStateToggle = new IndicatingAjaxFallbackLink<Void>(id) {
 
             @Override
-            public void onClick(Optional<AjaxRequestTarget> target) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 // toggle the expansion state
                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
                     expansionStateModel.setObject(ExpansionState.EXPANDED);
@@ -241,7 +241,7 @@ public class SearchResultItemPanel extends Panel {
                     expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 }
 
-                if (target != null) {
+                t.ifPresent(target ->{
                     // parial update (just this search result item)
                     target.add(SearchResultItemPanel.this);
 
@@ -252,7 +252,7 @@ public class SearchResultItemPanel extends Panel {
                         final String selector = "#" + SearchResultItemPanel.this.getMarkupId();
                         target.appendJavaScript(scriptFactory.createScript(selector, query));
                     }
-                }
+                });
             }
         };
         expansionStateToggle.add(

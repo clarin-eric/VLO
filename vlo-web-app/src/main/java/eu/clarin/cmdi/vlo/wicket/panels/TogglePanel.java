@@ -53,9 +53,9 @@ public abstract class TogglePanel extends Panel {
         final Component toggler = new ToggleLink("toggler", visibilityModel, showTextModel, hideTextModel) {
             @Override
             protected void onClick(Optional<AjaxRequestTarget> target) {
-                if (target != null) {
-                    target.add(TogglePanel.this);
-                }
+                target.ifPresent(t -> {
+                    t.add(TogglePanel.this);
+                });
             }
         };
         add(toggler);

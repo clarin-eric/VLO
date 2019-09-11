@@ -179,12 +179,12 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         final String facet = fieldNameModel.getObject();
         return new SelectedFacetPanel(id, facet, new SelectionModel(facet, selectionModel)) {
             @Override
-            protected void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target) {
+            protected void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target) {
                 // Values have been removed, calculate remainder
                 selectionModel.getObject().removeFacetValue(facet, valuesRemoved);
-                if (target != null) {
-                    target.add(valuesContainer);
-                }
+                target.ifPresent(t -> {
+                    t.add(valuesContainer);
+                });
                 onSelectionChanged(target);
             }
 
@@ -206,19 +206,19 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 }
 
                 // link to select an individual facet value
-                final Link selectLink = new AjaxFallbackLink("facetSelect") {
+                final Link selectLink = new AjaxFallbackLink<Void>("facetSelect") {
 
                     @Override
                     public void onClick(Optional<AjaxRequestTarget> target) {
                         selectionModel.getObject().addNewFacetValue(fieldNameModel.getObject(), selectionTypeModeModel.getObject(), Collections.singleton(item.getModelObject().getName()));
                         //detach models to make sure that facet field values get re-evaluated upon rendering
                         AllFacetValuesPanel.this.detachModels();
-                        if (target != null) {
-                            target.add(valuesContainer);
+                        target.ifPresent(t -> {
+                            t.add(valuesContainer);
                             if (selectionTrackingBehavior != null) {
-                                target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
+                                t.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(t));
                             }
-                        }
+                        });
                         onSelectionChanged(target);
                     }
                 };
@@ -267,7 +267,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override
-            protected void onUpdate(Optional<AjaxRequestTarget> target) {
+            protected void onUpdate(AjaxRequestTarget target) {
                 target.add(valuesContainer);
             }
 
@@ -305,7 +305,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         .add(new UpdateOptionsFormBehavior(options) {
 
                             @Override
-                            protected void onUpdate(Optional<AjaxRequestTarget> target) {
+                            protected void onUpdate(AjaxRequestTarget target) {
                                 super.onUpdate(target);
                             }
 
@@ -329,7 +329,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                         .add(new UpdateOptionsFormBehavior(form) {
 
                             @Override
-                            protected void onUpdate(Optional<AjaxRequestTarget> target) {
+                            protected void onUpdate(AjaxRequestTarget target) {
                                 super.onUpdate(target);
                             }
 
@@ -346,7 +346,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         }
 
         @Override
-        protected void onUpdate(Optional<AjaxRequestTarget> target) {
+        protected void onUpdate(AjaxRequestTarget target) {
             target.add(options);
             target.add(valuesContainer);
         }

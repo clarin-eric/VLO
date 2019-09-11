@@ -115,7 +115,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(final Item<SolrDocument> item) {
                 item.add(new NamedRecordPageLink("link", item.getModel(), RecordPage.DETAILS_SECTION));
-                final IndicatingAjaxFallbackLink upLink = new IndicatingAjaxFallbackLink("up") {
+                final IndicatingAjaxFallbackLink upLink = new IndicatingAjaxFallbackLink<Void>("up") {
 
                     @Override
                     public void onClick(Optional<AjaxRequestTarget> target) {
@@ -133,9 +133,9 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                             logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)));
                         }
 
-                        if (target != null) {
-                            target.add(HierarchyPanel.this);
-                        }
+                        target.ifPresent(t -> {
+                            t.add(HierarchyPanel.this);
+                        });
                     }
 
                     protected void updateCurrentExpansion() {
@@ -176,14 +176,14 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         };
 
         // ajax link to load the entire list, only shown if applicable
-        final Link showAllLink = new IndicatingAjaxFallbackLink("showAll") {
+        final Link showAllLink = new IndicatingAjaxFallbackLink<Void>("showAll") {
 
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 parentsView.setItemsPerPage(parentsProvider.size());
-                if (target != null) {
-                    target.add(container);
-                }
+                target.ifPresent(t -> {
+                    t.add(container);
+                });
             }
 
             @Override
@@ -219,12 +219,14 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     @Override
                     protected Component createContent(String id, final IModel<ModelWrapper<SolrDocument>> node) {
                         if (node.getObject().isLimit()) {
-                            return new AjaxFallbackLinkLabel(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
+                            return new AjaxFallbackLinkLabel<>(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
 
                                 @Override
                                 public void onClick(Optional<AjaxRequestTarget> target) {
                                     treeProvider.setChildrenShown(null);
-                                    target.add(treeContainer);
+                                    target.ifPresent(t -> {
+                                        t.add(treeContainer);
+                                    });
                                 }
 
                             };

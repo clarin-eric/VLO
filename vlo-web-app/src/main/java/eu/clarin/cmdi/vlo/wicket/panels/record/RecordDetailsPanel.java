@@ -172,7 +172,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         final IsPidModel isPidModel = new IsPidModel(linkModel);
         final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
 
-        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
+        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink<Void>("showResources") {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(RESOURCES_SECTION, target);
@@ -221,11 +221,11 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         resourceInfo.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
             @Override
-            protected void onUpdate(Optional<AjaxRequestTarget> target) {
+            protected void onUpdate(AjaxRequestTarget target) {
                 target.add(resourceInfo);
             }
         });
-        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
+        final AjaxFallbackLink<Void> showResourcesLink = new AjaxFallbackLink<>("showResources") {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(RESOURCES_SECTION, target);
@@ -248,7 +248,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
     private Component createMultipleResourceLink(String id) {
         return new WebMarkupContainer(id)
-                .add(new AjaxFallbackLink("showResources") {
+                .add(new AjaxFallbackLink<Void>("showResources") {
                     @Override
                     public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(RESOURCES_SECTION, target);

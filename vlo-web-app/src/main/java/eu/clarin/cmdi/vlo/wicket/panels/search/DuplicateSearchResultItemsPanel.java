@@ -95,13 +95,13 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         final WebMarkupContainer container = new WebMarkupContainer("duplicatesViewContainer");
 
         // header contains link to expand/collapse duplicates list
-        final IndicatingAjaxFallbackLink toggleHeaderLink = new IndicatingAjaxFallbackLink("toggleExpansion") {
+        final IndicatingAjaxFallbackLink toggleHeaderLink = new IndicatingAjaxFallbackLink<Void>("toggleExpansion") {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 expandedModel.setObject(isExpandedModel.getObject() ? ExpansionState.COLLAPSED : ExpansionState.EXPANDED);
-                if (target != null) {
-                    target.add(container);
-                }
+                target.ifPresent(t -> {
+                    t.add(container);
+                });
             }
         };
 

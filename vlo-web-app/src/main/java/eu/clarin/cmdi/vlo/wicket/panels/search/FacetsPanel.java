@@ -143,25 +143,25 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         container.add(facetsView);
 
         //toggler for showing/hiding secondary facets
-        container.add(new AjaxFallbackLink("more") {
+        container.add(new AjaxFallbackLink<Void>("more") {
             @Override
-            public void onClick(Optional<AjaxRequestTarget> target) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 allFacetsShown.setObject(Boolean.TRUE);
-                if (target != null) {
+                t.ifPresent(target -> {
                     target.add(container);
                     target.appendJavaScript("$('[data-toggle=\"tooltip\"]').tooltip();");
-                }
+                });
             }
 
         }.add(BooleanVisibilityBehavior.visibleOnFalse(allFacetsShown)));
 
-        container.add(new AjaxFallbackLink("fewer") {
+        container.add(new AjaxFallbackLink<Void>("fewer") {
             @Override
-            public void onClick(Optional<AjaxRequestTarget> target) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 allFacetsShown.setObject(Boolean.FALSE);
-                if (target != null) {
+                t.ifPresent(target -> {
                     target.add(container);
-                }
+                });
             }
         }.add(BooleanVisibilityBehavior.visibleOnTrue(allFacetsShown)));
     }

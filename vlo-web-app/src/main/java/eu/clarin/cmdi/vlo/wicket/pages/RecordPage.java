@@ -225,7 +225,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering) {
             @Override
             protected WebMarkupContainer createLink(String id) {
-                return new AjaxFallbackLink(id) {
+                return new AjaxFallbackLink<Void>(id) {
                     @Override
                     public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(AVAILABILITY_SECTION, target);

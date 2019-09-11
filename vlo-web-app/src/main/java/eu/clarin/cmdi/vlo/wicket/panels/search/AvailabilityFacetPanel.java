@@ -185,8 +185,8 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
                     .add(new OnChangeAjaxBehavior() {
 
                         @Override
-                        protected void onUpdate(Optional<AjaxRequestTarget> target) {
-                            selectionChanged(target);
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            selectionChanged(Optional.of(target));
                         }
 
                         @Override

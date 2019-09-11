@@ -214,7 +214,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         // make "selections" panel collapsable on smaller screens
         final IModel<Boolean> selectionsExpandedModel = Model.of(false);
-        searchContainer.add(new IndicatingAjaxFallbackLink("toggleSelections") {
+        searchContainer.add(new IndicatingAjaxFallbackLink<Void>("toggleSelections") {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());
@@ -246,12 +246,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             }
 
             @Override
-            protected void onAjaxSearchPagination(Optional<AjaxRequestTarget> target) {
+            protected void onAjaxSearchPagination(AjaxRequestTarget target) {
                 super.onAjaxSearchPagination(target);
-                target.ifPresent(t -> {
-                    //updating record offset in search result header
-                    t.add(resultsHeader);
-                });
+                //updating record offset in search result header
+                target.add(resultsHeader);
             }
 
         };

@@ -82,7 +82,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         final AjaxFallbackButton submitButton = new AjaxFallbackButton("searchSubmit", form) {
 
             @Override
-            protected void onSubmit(Optional<AjaxRequestTarget> target, Form<?> form) {
+            protected void onSubmit(Optional<AjaxRequestTarget> target) {
                 SearchFormPanel.this.onSubmit(target);
             }
 
@@ -118,7 +118,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
             submitButton.add(new AjaxPiwikTrackingBehavior.SearchTrackingBehavior("click") {
 
                 @Override
-                protected String getKeywords(Optional<AjaxRequestTarget> target) {
+                protected String getKeywords(AjaxRequestTarget target) {
                     return model.getObject().getQuery();
                 }
             });

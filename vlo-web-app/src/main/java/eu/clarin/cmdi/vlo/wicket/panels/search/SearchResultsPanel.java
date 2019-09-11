@@ -119,7 +119,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         // pagination navigators
         navigatorTop = new BootstrapAjaxPagingNavigator("pagingTop", resultsView) {
             @Override
-            protected void onAjaxEvent(Optional<AjaxRequestTarget> target) {
+            protected void onAjaxEvent(AjaxRequestTarget target) {
                 super.onAjaxEvent(target);
                 onAjaxSearchPagination(target);
             }
@@ -128,7 +128,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         navigatorBottom = new BootstrapAjaxPagingNavigator("pagingBottom", resultsView) {
 
             @Override
-            protected void onAjaxEvent(Optional<AjaxRequestTarget> target) {
+            protected void onAjaxEvent(AjaxRequestTarget target) {
                 super.onAjaxEvent(target);
                 onAjaxSearchPagination(target);
                 //bottom navigator action should trigger scroll to top navigator
@@ -170,7 +170,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         navigatorBottom.setVisible(multiplePages);
     }
 
-    protected void onAjaxSearchPagination(Optional<AjaxRequestTarget> target) {
+    protected void onAjaxSearchPagination(AjaxRequestTarget target) {
 
     }
 

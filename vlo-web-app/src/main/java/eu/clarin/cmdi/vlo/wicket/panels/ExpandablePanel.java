@@ -83,7 +83,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
     protected Link createTitleToggler() {
         // title is also a link that toggles expansion state
-        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink("titleToggle") {
+        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink<Void>("titleToggle") {
 
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
@@ -93,9 +93,9 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
                 } else {
                     expansionModel.setObject(ExpansionState.COLLAPSED);
                 }
-                if (target != null) {
-                    target.add(ExpandablePanel.this);
-                }
+                target.ifPresent(t -> {
+                    t.add(ExpandablePanel.this);
+                });
                 onExpansionToggle(target);
             }
         };
@@ -155,13 +155,14 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
     protected String getCollapsedClass() {
         return "facet collapsedfacet";
     }
-    
+
     /**
      * Override to apply logic when expansion state is toggled
-     * @param target 
+     *
+     * @param target
      */
     protected void onExpansionToggle(Optional<AjaxRequestTarget> target) {
-       //NOOP 
+        //NOOP 
     }
 
     private static class ExpansionStateRepresentationModel extends AbstractReadOnlyModel<String> {

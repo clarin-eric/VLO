@@ -98,9 +98,9 @@ public class TopLinksPanel extends Panel {
     }
 
     protected void onChange(Optional<AjaxRequestTarget> target) {
-        if (target != null) {
-            target.add(getPage());
-        }
+        target.ifPresent(t -> {
+            t.add(getPage());
+        });
     }
 
     @Override

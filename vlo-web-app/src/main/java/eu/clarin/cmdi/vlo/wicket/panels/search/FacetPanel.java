@@ -115,12 +115,12 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         if (piwikConfig.isEnabled()) {
             link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_EXPANDCOLLAPSE) {
                 @Override
-                protected String getName(Optional<AjaxRequestTarget> target) {
+                protected String getName(AjaxRequestTarget target) {
                     return FacetPanel.this.getModelObject();
                 }
 
                 @Override
-                protected String getValue(Optional<AjaxRequestTarget> target) {
+                protected String getValue(AjaxRequestTarget target) {
                     return getExpansionModel().getObject().toString().toLowerCase();
                 }
 
@@ -142,7 +142,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override
-            protected void onUpdate(Optional<AjaxRequestTarget> target) {
+            protected void onUpdate(AjaxRequestTarget target) {
                 //update values
                 target.add(facetValuesPanel);
             }
@@ -185,7 +185,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
         return (FacetValuesPanel) new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, filterModel, subListSize) {
             @Override
-            public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
+            public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, Optional<AjaxRequestTarget> target) {
                 if (selectionType != null && values != null) {
                     // A value has been selected on this facet's panel, update the model!
                     selectionModel.getObject().addNewFacetValue(facetName, selectionType, values);
@@ -202,13 +202,11 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private SelectedFacetPanel createSelectedFacetPanel(String id, final String facetName, final IModel<QueryFacetsSelection> selectionModel) {
         return new SelectedFacetPanel(id, facetName, new SelectionModel(facetName, selectionModel)) {
             @Override
-            public void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target) {
+            public void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target) {
                 // Values have been removed, calculate remainder
                 selectionModel.getObject().removeFacetValue(facetName, valuesRemoved);
 
-                if (target != null) {
-                    selectionChanged(target);
-                }
+                selectionChanged(target);
             }
         };
     }
@@ -216,9 +214,9 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     @Override
     protected void onExpansionToggle(Optional<AjaxRequestTarget> target) {
         super.onExpansionToggle(target);
-        if (target != null) {
-            target.appendJavaScript("applyFacetTooltips();");
-        }
+        target.ifPresent(t -> {
+            t.appendJavaScript("applyFacetTooltips();");
+        });
     }
 
     @Override
@@ -234,6 +232,5 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
-
 
 }

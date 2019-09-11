@@ -127,7 +127,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
             link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
 
                 @Override
-                protected void onUpdate(Optional<AjaxRequestTarget> target) {
+                protected void onUpdate(AjaxRequestTarget target) {
                     target.add(link);
                 }
             });
@@ -225,12 +225,12 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
         final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
             @Override
-            protected String getName(Optional<AjaxRequestTarget> target) {
+            protected String getName(AjaxRequestTarget target) {
                 return "ResourceDropdown";
             }
 
             @Override
-            protected String getValue(Optional<AjaxRequestTarget> target) {
+            protected String getValue(AjaxRequestTarget target) {
                 return resourceInfoModel.getObject().getHref();
             }
 
@@ -350,7 +350,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         }
     }
 
-    protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
+    protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
 
     }
 

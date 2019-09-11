@@ -121,9 +121,9 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target);
+    protected abstract void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target);
 
-    public class RemoveLink extends IndicatingAjaxFallbackLink {
+    public class RemoveLink extends IndicatingAjaxFallbackLink<Void> {
 
         private final IModel<String> valueModel;
         private final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
@@ -144,9 +144,11 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
             // Remove a single value
             // Call callback
             onValuesUnselected(Collections.singleton(valueModel.getObject()), target);
-            if (target != null && selectionTrackingBehavior != null) {
-                target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
-            }
+            target.ifPresent(t -> {
+                if (selectionTrackingBehavior != null) {
+                    t.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(t));
+                }
+            });
         }
 
     }

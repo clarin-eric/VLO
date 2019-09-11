@@ -155,7 +155,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
                 item.add(new AjaxLink("remove") {
 
                     @Override
-                    public void onClick(Optional<AjaxRequestTarget> target) {
+                    public void onClick(AjaxRequestTarget target) {
                         keywordsModel.getObject().remove(item.getModelObject());
                         target.add(keywords);
                     }

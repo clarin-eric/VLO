@@ -138,12 +138,12 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
         final ResourceLinksPanelItem landingPageItem = new ResourceLinksLandingPageItem(id, landingPageInfoModel, getModel(), landingPageDetailsModel) {
             @Override
-            protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
+            protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
                 landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
 
-                if (target != null) {
-                    target.add(resourcesTable);
-                }
+                target.ifPresent(t -> {
+                    t.add(resourcesTable);
+                });
             }
 
         };
@@ -179,7 +179,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             protected void onConfigure() {
                 setVisible(partCountModel.getObject() != null);
             }
-        }.add(new AjaxFallbackLink("hierarchyLink") {
+        }.add(new AjaxFallbackLink<Void>("hierarchyLink") {
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(HIERARCHY_SECTION, target);
@@ -213,7 +213,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             item.add(new ResourceLinksPanelItem("resourceItem", resourceInfoModel, ResourceLinksPanel.this.getModel(), itemDetailsShownModel) {
                 @Override
-                protected void onDetailsToggleClick(String id, AjaxRequestTarget target) {
+                protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
                     final List<String> visible = detailsVisibleModel.getObject();
                     if (visible.contains(id)) {
                         visible.remove(id);
@@ -221,9 +221,9 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                         visible.add(id);
                     }
 
-                    if (target != null) {
-                        target.add(resourcesTable);
-                    }
+                    target.ifPresent(t->{
+                        t.add(resourcesTable);
+                    });
                 }
 
             });

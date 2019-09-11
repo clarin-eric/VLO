@@ -185,7 +185,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         }
 
         // link to select an individual facet value
-        final Link selectLink = new IndicatingAjaxFallbackLink(id) {
+        final Link selectLink = new IndicatingAjaxFallbackLink<Void>(id) {
 
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
@@ -197,9 +197,11 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                         Collections.singleton(item.getModelObject().getName()),
                         target);
 
-                if (target != null && selectionTrackingBehavior != null) {
-                    target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
-                }
+                target.ifPresent(t -> {
+                    if (selectionTrackingBehavior != null) {
+                        t.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(t));
+                    }
+                });
             }
         };
         item.add(selectLink);
@@ -223,7 +225,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         if (piwikConfig.isEnabled()) {
             allValuesTrackingBehaviour = new EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_FACET, PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_ALLVALUES) {
                 @Override
-                protected String getName(Optional<AjaxRequestTarget> target) {
+                protected String getName(AjaxRequestTarget target) {
                     return getModel().getObject().getName();
                 }
 
@@ -236,10 +238,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
             @Override
             public void onClick(Optional<AjaxRequestTarget> target) {
-                if (target == null) {
-                    // no JavaScript, open a new page with values
-                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel, selectionTypeModeModel));
-                } else {
+                target.ifPresentOrElse(t -> {
                     // JavaScript enabled, show values in a modal popup. First store copy of current selection to allow the user to cancel.
                     beforeAllValuesSelection.setObject(selectionModel.getObject().copy());
                     if (filterModel.getObject() == null) {
@@ -249,9 +248,12 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
                     }
                     valuesWindow.show(target);
                     if (allValuesTrackingBehaviour != null) {
-                        target.appendJavaScript(allValuesTrackingBehaviour.generatePiwikJs(target));
+                        t.appendJavaScript(allValuesTrackingBehaviour.generatePiwikJs(t));
                     }
-                }
+                }, () -> {
+                    // no JavaScript, open a new page with values
+                    setResponsePage(new AllFacetValuesPage(getModel(), selectionModel, selectionTypeModeModel));
+                });
             }
 
             @Override
@@ -284,6 +286,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             protected IModel<?> getCloseButtonLabelModel() {
                 return Model.of("Apply");
             }
+
             @Override
             protected IModel<?> getDismissButtonLabelModel() {
                 return Model.of("Cancel");
@@ -315,18 +318,18 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
             @Override
-            protected void onSelectionChanged(Optional<AjaxRequestTarget> target) {
-                if (target != null) {
+            protected void onSelectionChanged(Optional<AjaxRequestTarget> t) {
+                t.ifPresent(target -> {
                     // Special case: update search results only so as to provide some visual feedback. 
                     // (calling onValuesSelected would be nice but may re-render the facet panels which would break the modal window)
                     final Page page = getPage();
                     if (page instanceof FacetedSearchPage) {
-                        final Component resultsPanel = ((FacetedSearchPage)page).getSearchResultsPanel();
+                        final Component resultsPanel = ((FacetedSearchPage) page).getSearchResultsPanel();
                         if (resultsPanel != null) {
                             target.add(resultsPanel);
                         }
                     }
-                }
+                });
             }
 
         };
@@ -362,5 +365,5 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target);
+    protected abstract void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, Optional<AjaxRequestTarget> target);
 }
