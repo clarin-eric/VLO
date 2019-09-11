@@ -212,7 +212,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
         if (!initialTab.isEmpty()) {
-            switchToTab(initialTab.toString(), null);
+            switchToTab(initialTab.toString(), Optional.empty());
         }
         add(tabs);
 
