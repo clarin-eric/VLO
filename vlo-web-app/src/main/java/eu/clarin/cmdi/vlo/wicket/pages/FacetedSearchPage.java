@@ -196,6 +196,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 final Map<String, FacetSelection> facetSelection = FacetedSearchPage.this.getModel().getObject().getSelection();
                 setVisible(documentsProvider.size() > 0
                         || (facetSelection != null && !facetSelection.isEmpty()));

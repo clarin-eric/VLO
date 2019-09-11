@@ -84,6 +84,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         resourcesTable = new WebMarkupContainer("resources") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(resourceListing.getPageCount() > 0);
             }
 
@@ -106,6 +107,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(resourceListing.getPageCount() > 1);
             }
 
@@ -166,6 +168,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         container.add(new WebMarkupContainer("landingPageContainer") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(landingPageModel.getObject() != null);
             }
 
@@ -177,6 +180,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         container.add(new WebMarkupContainer("hierarchyLinkContainer") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(partCountModel.getObject() != null);
             }
         }.add(new AjaxFallbackLink<Void>("hierarchyLink") {

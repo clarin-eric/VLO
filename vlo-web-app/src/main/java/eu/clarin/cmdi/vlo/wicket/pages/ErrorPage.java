@@ -57,6 +57,7 @@ public class ErrorPage extends VloBasePage {
         add(new Label("description", errorDescriptionModel) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(errorDescriptionModel.getObject() != null);
             }
 

@@ -76,6 +76,7 @@ public abstract class BootstrapModal extends Panel {
 
     @Override
     protected void onConfigure() {
+        super.onConfigure();
         get("title").setVisible(visibilityModel.getObject());
         get("bodyContent").setVisible(visibilityModel.getObject());
         get("closeCross").setVisible(showDismissIcon);

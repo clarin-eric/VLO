@@ -170,6 +170,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 // hide if there are no parents to show
                 setVisible(parentsProvider.size() > 0);
             }
@@ -188,6 +189,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 // hide if there are no more parents to load
                 setVisible(parentsView.getItemCount() > parentsView.getItemsPerPage());
             }

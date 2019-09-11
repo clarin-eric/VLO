@@ -152,6 +152,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 final String queryString = getModelObject().getQuery();
                 final Map<String, FacetSelection> selection = getModelObject().getSelection();
                 final boolean hasQuery = queryString != null && !queryString.isEmpty();

@@ -104,11 +104,6 @@ public class TopLinksPanel extends Panel {
     }
 
     @Override
-    protected void onConfigure() {
-        LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
-    }
-
-    @Override
     public void detachModels() {
         super.detachModels();
         if (linkModel != null) {

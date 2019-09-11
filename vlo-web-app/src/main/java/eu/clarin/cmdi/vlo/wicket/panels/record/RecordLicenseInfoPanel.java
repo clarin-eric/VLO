@@ -88,6 +88,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(isInfoAvailable());
             }
 
@@ -176,6 +177,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(accessInfoModel.getObject() != null);
             }
         };
@@ -196,6 +198,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 //if availability and license are both null, disable toggling
                 setVisible(availabilityModel.getObject() != null || licensesModel.getObject() != null);
             }
@@ -206,6 +209,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         accessInfoContainer.add(new WebMarkupContainer("accessInfoTable") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(showDetailsModel.getObject()
                         //if availability and license are both null, always display
                         || (availabilityModel.getObject() == null && licensesModel.getObject() == null)
@@ -224,6 +228,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(!isInfoAvailable());
             }
         };
@@ -242,6 +247,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(landingPageHrefModel.getObject() != null);
             }
         };

@@ -345,6 +345,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                 @Override
                 protected void onConfigure() {
+                    super.onConfigure();
                     final SearchContext context = navigationModel.getObject();
                     setVisible(context != null && (context.hasNext() || context.hasPrevious()));
                 }

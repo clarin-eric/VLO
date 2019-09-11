@@ -77,6 +77,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         final WebMarkupContainer results = new WebMarkupContainer("results") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 final String queryString = getModelObject().getQuery();
                 final Map<String, FacetSelection> selection = getModelObject().getSelection();
 
@@ -92,6 +93,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         final WebMarkupContainer document = new WebMarkupContainer("document") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(BreadCrumbPanel.this.documentModel.getObject() != null);
             }
 
@@ -103,6 +105,7 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
         final WebMarkupContainer facet = new WebMarkupContainer("facet") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(BreadCrumbPanel.this.facetModel.getObject() != null);
             }
         };

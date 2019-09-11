@@ -80,6 +80,7 @@ public class LanguageInfoLink extends GenericPanel<String> {
 
     @Override
     protected void onConfigure() {
+        super.onConfigure();
         // when a link can be generated (i.e. wehen a language code is 
         // available) show the link; otherwise show the fallback label
         final boolean linkAvailable = newLanguageCodeMatcher().matches();

@@ -130,6 +130,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 // hide keywords section if none are set
                 setVisible(!keywordsList.isEmpty());
             }
