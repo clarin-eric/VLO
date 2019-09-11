@@ -52,7 +52,6 @@ import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -119,7 +118,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     }
 
     private Label createSearchInfoLabel(String id) {
-        return new Label(id, new AbstractReadOnlyModel<String>() {
+        return new Label(id, new IModel<>() {
             @Override
             public String getObject() {
                 final QueryFacetsSelection selection = getModel().getObject();
@@ -195,13 +194,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final Component query = new WebMarkupContainer(id)
                 .add(label)
                 .add(removeLink)
-                .add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
-                    @Override
-                    public String getObject() {
-                        return "Search through 100,000 records";
-                    }
-
-                }));
+                .add(new AttributeModifier("placeholder", () -> "Search through 100,000 records"));
         return query;
     }
 
@@ -263,9 +256,9 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final Form resultPageSizeForm = new Form(id);
 
         final DropDownChoice<Long> pageSizeDropDown
-                = new DropDownChoice<Long>("resultPageSize",
+                = new DropDownChoice<>("resultPageSize",
                         // bind to items per page property of pageable
-                        new PropertyModel<Long>(resultsView, "itemsPerPage"),
+                        new PropertyModel<>(resultsView, "itemsPerPage"),
                         ITEMS_PER_PAGE_OPTIONS);
         pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
 

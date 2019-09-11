@@ -34,7 +34,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -66,15 +65,12 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
             protected Iterator<String> getChoices(String input) {
                 return autoCompleteDao.getChoices(input);
             }
-        }.add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                final Long recordCount = recordCountModel.getObject();
-                if (recordCount == null || recordCount < 1) {
-                    return "Search";
-                } else {
-                    return String.format("Search through %,d records", recordCount);
-                }
+        }.add(new AttributeModifier("placeholder", () -> {
+            final Long recordCount = recordCountModel.getObject();
+            if (recordCount == null || recordCount < 1) {
+                return "Search";
+            } else {
+                return String.format("Search through %,d records", recordCount);
             }
         })));
 

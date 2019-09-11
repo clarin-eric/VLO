@@ -57,7 +57,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -235,7 +234,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private static final int ITEMS_PER_PAGE = 50;
 
     private Component createValuesInfo(String id, final DataView<FacetField.Count> view) {
-        return new Label(id, new AbstractReadOnlyModel<String>() {
+        return new Label(id, new IModel<String>() {
             @Override
             public String getObject() {
                 if (view.getItemCount() == 0) {

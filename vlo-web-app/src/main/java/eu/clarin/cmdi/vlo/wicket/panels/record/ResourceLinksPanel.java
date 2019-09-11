@@ -35,7 +35,6 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -208,7 +207,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
 
             //detailed properties?
-            final IModel<Boolean> itemDetailsShownModel = new AbstractReadOnlyModel<Boolean>() {
+            final IModel<Boolean> itemDetailsShownModel = new IModel<>() {
                 @Override
                 public Boolean getObject() {
                     return detailsVisibleModel.getObject().contains(resourceInfoModel.getObject().getHref());

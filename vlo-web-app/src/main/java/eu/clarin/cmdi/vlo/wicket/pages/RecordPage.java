@@ -71,7 +71,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -332,7 +331,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
     private Component createNavigation(final String id) {
         if (navigationModel != null) {
-            final IModel<String> tabModel = new AbstractReadOnlyModel<String>() {
+            final IModel<String> tabModel = new IModel<String>() {
                 @Override
                 public String getObject() {
                     return TABS_ORDER.get(tabs.getSelectedTab());

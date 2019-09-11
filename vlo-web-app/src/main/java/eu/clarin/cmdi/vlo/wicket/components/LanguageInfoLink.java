@@ -25,7 +25,6 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -56,7 +55,7 @@ public class LanguageInfoLink extends GenericPanel<String> {
         // link to language info page
         link = new WebMarkupContainer("link");
         // make it an external link to the language info page
-        link.add(new AttributeModifier("href", new AbstractReadOnlyModel<String>() {
+        link.add(new AttributeModifier("href", new IModel<>() {
 
             @Override
             public String getObject() {

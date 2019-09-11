@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -26,7 +25,7 @@ import org.apache.wicket.model.Model;
  *
  * @author twagoo
  */
-public class SearchContextModel extends AbstractReadOnlyModel<SearchContext> implements SearchContext {
+public class SearchContextModel implements IModel<SearchContext>, SearchContext {
 
     private final Long index;
     private final Long resultCount;

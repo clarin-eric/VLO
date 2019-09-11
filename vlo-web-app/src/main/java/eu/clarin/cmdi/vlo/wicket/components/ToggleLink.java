@@ -22,7 +22,6 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -44,7 +43,7 @@ public abstract class ToggleLink extends GenericPanel<Boolean> {
                 ToggleLink.this.onClick(target);
             }
         };
-        link.add(new Label("label", new AbstractReadOnlyModel<String>() {
+        link.add(new Label("label", new IModel<>() {
             @Override
             public String getObject() {
                 if (ToggleLink.this.getModelObject()) {

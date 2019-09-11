@@ -59,7 +59,6 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -260,14 +259,14 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                 .add(new WebMarkupContainer("unknownStatusDetails")
                         .add(BooleanVisibilityBehavior.visibleOnFalse(knownAvailabilityModel)))
                 .add(new WebMarkupContainer("availableStatusDetails")
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(new AbstractReadOnlyModel<Boolean>() {
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(new IModel<>() {
                             @Override
                             public Boolean getObject() {
                                 final ResourceInfo info = resourceInfoModel.getObject();
                                 return info.getAvailabilityKnown() && !info.getAvailabilityWarning();
                             }
                         })))
-                .add(new Label("unavailableStatusDetail", new AbstractReadOnlyModel<String>() {
+                .add(new Label("unavailableStatusDetail", new IModel<>() {
                     @Override
                     public String getObject() {
                         return Optional.ofNullable(resourceInfoModel.getObject().getStatus())
@@ -294,7 +293,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                     }
                 })
                         .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
-                .add(new Label("unavailableStatusMessage", new AbstractReadOnlyModel<String>() {
+                .add(new Label("unavailableStatusMessage", new IModel<>() {
                     @Override
                     public String getObject() {
                         if (resourceInfoModel.getObject().getRestrictedAccessWarning()) {
@@ -306,7 +305,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
 
                 })
                         .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
-                .add(new Label("lastCheckTime", new AbstractReadOnlyModel<String>() {
+                .add(new Label("lastCheckTime", new IModel<>() {
                     @Override
                     public String getObject() {
                         Optional<Long> lastCheckTimestamp = Optional.ofNullable(resourceInfoModel.getObject().getLastCheckTimestamp());
@@ -319,7 +318,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
 
                 })
                         .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)))
-                .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                .add(new AttributeAppender("class", new IModel<>() {
                     @Override
                     public String getObject() {
                         final ResourceInfo info = resourceInfoModel.getObject();

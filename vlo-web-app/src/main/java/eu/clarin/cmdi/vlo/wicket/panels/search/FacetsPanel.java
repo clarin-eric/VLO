@@ -48,7 +48,6 @@ import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -84,7 +83,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
         expansionModel = new MapModel<>(expansionStateMap);
-        final IModel<Boolean> conditionalFacetDisplayModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> conditionalFacetDisplayModel = new IModel<Boolean>() {
 
             @Override
             public Boolean getObject() {
@@ -120,7 +119,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                             protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                                 FacetsPanel.this.selectionChanged(target);
                             }
-                        }.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                        }.add(new AttributeAppender("class", new IModel<String>() {
                             //class appender that differentiates between primary and secondary facets (based on configuration)
                             @Override
                             public String getObject() {

@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
@@ -88,7 +88,7 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
      * Model that shifts the value provided by the wrapped model with a fixed
      * amount
      */
-    public static class ShiftedIndexModel extends AbstractReadOnlyModel<Long> {
+    public static class ShiftedIndexModel implements IModel<Long> {
 
         private final IModel<Long> wrappedModel;
         private final long shift;

@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import java.util.Collection;
 import java.util.Iterator;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 
@@ -32,7 +31,7 @@ import org.apache.wicket.util.convert.IConverter;
  *
  * @author twagoo
  */
-public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
+public class SolrFieldStringModel implements IModel<String> {
 
     private final IModel<Collection<Object>> fieldModel;
     private final String field;
@@ -109,7 +108,6 @@ public class SolrFieldStringModel extends AbstractReadOnlyModel<String> {
 
     @Override
     public void detach() {
-        super.detach();
         fieldModel.detach();
     }
 

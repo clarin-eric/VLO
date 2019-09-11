@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.Session;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -29,7 +28,7 @@ import org.apache.wicket.model.Model;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-public class FormattedStringModel<T> extends AbstractReadOnlyModel<String> {
+public class FormattedStringModel<T> implements IModel<String> {
     
     private final IModel<T> valueModel;
     private final IModel<String> formattingModel;

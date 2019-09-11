@@ -28,7 +28,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -165,7 +164,7 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
         //NOOP 
     }
 
-    private static class ExpansionStateRepresentationModel extends AbstractReadOnlyModel<String> {
+    private static class ExpansionStateRepresentationModel implements IModel<String> {
 
         private final IModel<ExpansionState> stateModel;
         private final String expanded;

@@ -55,7 +55,6 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
@@ -175,7 +174,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
 
         searchContainer = new WebMarkupContainer("searchContainer");
-        searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+        searchContainer.add(new AttributeModifier("class", new IModel<>() {
             @Override
             public String getObject() {
                 return simpleModeModel.getObject() ? "simple" : "";

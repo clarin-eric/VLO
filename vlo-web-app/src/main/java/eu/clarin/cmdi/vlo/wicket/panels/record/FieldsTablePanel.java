@@ -56,7 +56,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -196,7 +195,7 @@ public class FieldsTablePanel extends Panel {
                 });
 
                 // if field has multiple values, set 'multiple' class on markup element
-                item.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+                item.add(new AttributeModifier("class", new IModel<>() {
 
                     @Override
                     public String getObject() {
@@ -210,7 +209,7 @@ public class FieldsTablePanel extends Panel {
 
                 //only show PID line if self link is PID
                 if (fieldNameModel.getObject().equals(fieldNameService.getFieldName(FieldKey.RECORD_PID))) {
-                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new AbstractReadOnlyModel<String>() {
+                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new IModel<>() {
                         @Override
                         public String getObject() {
                             if (valuesModel.getObject().size() > 0) {

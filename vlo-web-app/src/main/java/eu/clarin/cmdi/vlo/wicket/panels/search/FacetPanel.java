@@ -46,7 +46,6 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -94,7 +93,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         selectedFacetPanel = createSelectedFacetPanel("facetSelection", facetNameModel.getObject(), selectionModel);
         add(selectedFacetPanel);
 
-        add(new AttributeAppender("class", new AbstractReadOnlyModel() {
+        add(new AttributeAppender("class", new IModel() {
             @Override
             public Object getObject() {
                 return (selectedFacetPanel.getModelObject().isEmpty()) ? "unselected" : "selected";

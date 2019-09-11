@@ -60,7 +60,6 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.migrate.StringResourceModelMigration;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -257,7 +256,7 @@ public class SearchResultItemPanel extends Panel {
         };
         expansionStateToggle.add(
                 new WebMarkupContainer("state").add(
-                        new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+                        new AttributeModifier("class", new IModel<>() {
 
                             @Override
                             public String getObject() {

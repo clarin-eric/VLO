@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Page;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -30,7 +29,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-public class PermaLinkModel extends AbstractReadOnlyModel<String> {
+public class PermaLinkModel implements IModel<String> {
 
     private final IModel<QueryFacetsSelection> selectionmodel;
     private final IModel<SolrDocument> documentModel;

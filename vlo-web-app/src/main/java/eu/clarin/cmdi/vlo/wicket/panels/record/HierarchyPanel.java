@@ -49,7 +49,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -235,13 +235,14 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                         } else {
 
                             return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.DETAILS_SECTION)
-                                    .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
-                                        @Override
-                                        public String getObject() {
-                                            final boolean isCurrent = node.getObject().getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID))
-                                                    .equals(pageDocumentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
-                                            return isCurrent ? "current" : "";
-                                        }
+                                    .add(new AttributeAppender("class", () -> {
+                                        final boolean isCurrent
+                                                = node.getObject().getModelObject()
+                                                        .getFieldValue(fieldNameService.getFieldName(FieldKey.ID))
+                                                        .equals(
+                                                                pageDocumentModel.getObject()
+                                                                        .getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+                                        return isCurrent ? "current" : "";
                                     }, " "));
                         }
                     }
@@ -250,7 +251,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         };
         // style of tree depends on presence of parent nodes
-        result.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+        result.add(new AttributeAppender("class", new IModel<>() {
 
             @Override
             public String getObject() {
@@ -389,7 +390,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         }
     }
 
-    private class ModelWrapper<T> extends AbstractReadOnlyModel<ModelWrapper<T>> implements Serializable {
+    private class ModelWrapper<T> implements IModel<ModelWrapper<T>>, Serializable {
 
         /**
          * Path to distinguish between nodes with the same id (parallel

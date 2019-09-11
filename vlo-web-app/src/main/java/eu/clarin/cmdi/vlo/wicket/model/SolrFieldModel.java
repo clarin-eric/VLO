@@ -20,7 +20,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import java.util.Collection;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -32,7 +32,7 @@ import org.apache.wicket.model.Model;
  * be cast on the fly, so specifying a non-matching type here might result in
  * runtime errors!
  */
-public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
+public class SolrFieldModel<T> implements IModel<Collection<T>> {
 
     private final IModel<SolrDocument> documentModel;
     private final IModel<String> fieldNameModel;
@@ -87,7 +87,6 @@ public class SolrFieldModel<T> extends AbstractReadOnlyModel<Collection<T>> {
 
     @Override
     public void detach() {
-        super.detach();
         documentModel.detach();
     }
 

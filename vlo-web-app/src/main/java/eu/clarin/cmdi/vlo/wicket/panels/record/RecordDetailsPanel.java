@@ -39,7 +39,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -108,7 +108,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         final ResourceInfoModel landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
 
-        final IModel<Boolean> landingPageVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> landingPageVisibilityModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return landingPageResourceInfoModel.getObject() != null
@@ -122,7 +122,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         // resource info for single resource
         final ResolvingLinkModel resourceInfoLinkModel = ResolvingLinkModel.modelFor(resourceInfoModel, getModel());
-        final IModel<Boolean> resourceInfoVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> resourceInfoVisibilityModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return (resourcesModel.getObject() != null
@@ -134,7 +134,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(createSingleResourceInfo("resourceInfo", resourceInfoLinkModel)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
 
-        final AbstractReadOnlyModel<Boolean> resourcesLinkVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> resourcesLinkVisibilityModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return resourcesModel.getObject() != null
@@ -146,7 +146,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
 
         coreLinksContainer.add(
-                new Label("resourcesTitle", new AbstractReadOnlyModel() {
+                new Label("resourcesTitle", new IModel<>() {
                     @Override
                     public Object getObject() {
                         return (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1)

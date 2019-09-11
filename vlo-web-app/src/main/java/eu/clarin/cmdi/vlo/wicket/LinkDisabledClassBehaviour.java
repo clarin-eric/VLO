@@ -21,7 +21,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 
 /**
  * Behaviour that adds the "disabled" class to a markup element and sets the
@@ -37,7 +37,7 @@ public class LinkDisabledClassBehaviour extends Behavior {
         super.bind(component);
         if (component instanceof Link) {
             final Link link = (Link) component;
-            final AbstractReadOnlyModel<String> disabledModel = new AbstractReadOnlyModel<String>() {
+            final IModel<String> disabledModel = new IModel<>() {
                 @Override
                 public String getObject() {
                     return link.isEnabled() ? null : "disabled";

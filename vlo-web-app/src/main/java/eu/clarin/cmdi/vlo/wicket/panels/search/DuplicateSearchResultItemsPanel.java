@@ -48,7 +48,6 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -84,7 +83,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
     public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
 
-        final IModel<Boolean> isExpandedModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> isExpandedModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return expandedModel.getObject() == ExpansionState.EXPANDED;
