@@ -59,7 +59,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -240,7 +239,7 @@ public class SearchResultItemPanel extends Panel {
                     expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 }
 
-                t.ifPresent(target ->{
+                t.ifPresent(target -> {
                     // parial update (just this search result item)
                     target.add(SearchResultItemPanel.this);
 
@@ -359,11 +358,13 @@ public class SearchResultItemPanel extends Panel {
          * of instances
          */
         private IModel<String> getResourceCountModel(final IModel<ResourceTypeCount> resourceTypeCountModel) {
-            // first create a string model that provides the type of resources 
-            // in the right number (plural or singular, conveniently supplied by ResourceTypeCount)
-            final StringResourceModel resourceTypeModel = StringResourceModelMigration.of("resourcetype.${resourceType}.${number}", resourceTypeCountModel, "?");
             // inject this into the resource string that combines it with count
-            return StringResourceModelMigration.of("resources.typecount", this, resourceTypeCountModel, resourceTypeModel);
+            return new StringResourceModel("resources.typecount", this, resourceTypeCountModel)
+                    .setParameters(
+                            //wrap inside a string model that provides the type of resources in the
+                            //right number (plural or singular, conveniently supplied by ResourceTypeCount)
+                            new StringResourceModel("resourcetype.${resourceType}.${number}", resourceTypeCountModel)
+                                    .setDefaultValue("?"));
         }
     }
 }

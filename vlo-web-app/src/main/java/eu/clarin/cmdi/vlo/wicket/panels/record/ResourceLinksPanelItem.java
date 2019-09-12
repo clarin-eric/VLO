@@ -58,11 +58,11 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -178,7 +178,11 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     }
 
     protected Label createResourceTypeLabel(String id) {
-        return new Label(id, StringResourceModelMigration.of("resourcetype.${resourceType}.singular", resourceInfoModel, resourceInfoModel.getObject().getResourceType()));
+        return new Label(id,
+                new StringResourceModel("resourcetype.${resourceType}.singular", resourceInfoModel)
+                        .setDefaultValue(resourceInfoModel.getObject().getResourceType().toString())
+        );
+
     }
 
     protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
