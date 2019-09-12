@@ -25,7 +25,7 @@ public class SelectionModel implements IModel<FacetSelection> {
     @Override
     public FacetSelection getObject() {
         final FacetSelection facetSelection = selectionModel.getObject().getSelectionValues(facetName);
-        return facetSelection != null ? facetSelection : new FacetSelection(FacetSelectionType.AND, Collections.EMPTY_LIST);
+        return facetSelection != null ? facetSelection : new FacetSelection(FacetSelectionType.AND, Collections.emptyList());
     }
 
     @Override

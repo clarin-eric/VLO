@@ -75,7 +75,7 @@ public class SolrFieldStringModel implements IModel<String> {
     private String getValueString(final Collection<Object> fieldValues) {
         // apply ordering if available and applicable
         final Ordering ordering = getFieldValueOrdering();
-        final Iterator<Object> iterator;
+        final Iterator<?> iterator;
         if (ordering == null || fieldValues.size() <= 1) {
             iterator = fieldValues.iterator();
         } else {
@@ -94,7 +94,7 @@ public class SolrFieldStringModel implements IModel<String> {
         }
     }
 
-    protected String getMultipleValuesString(final String firstValue, final Iterator<Object> iterator) {
+    protected String getMultipleValuesString(final String firstValue, final Iterator<?> iterator) {
         // for multiple value strings, run every individual value through the converter
         final StringBuilder valuesBuilder = new StringBuilder(postprocessValue(firstValue)).append("; ");
         while (iterator.hasNext()) {

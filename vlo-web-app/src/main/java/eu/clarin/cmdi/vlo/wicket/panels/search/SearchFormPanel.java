@@ -59,7 +59,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         final Form<QueryFacetsSelection> form = new Form<>("search", model);
 
         // Bind search field to 'query' property of model
-        form.add(new AutoCompleteTextField("query", new PropertyModel<String>(model, "query")) {
+        form.add(new AutoCompleteTextField<>("query", new PropertyModel<String>(model, "query")) {
 
             @Override
             protected Iterator<String> getChoices(String input) {

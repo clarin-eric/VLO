@@ -52,7 +52,7 @@ public class DocumentFieldModel<T> implements IModel<DocumentField<T>>, Document
     }
     
     @Override
-    public DocumentField getObject() {
+    public DocumentField<T> getObject() {
         return this;
     }
     

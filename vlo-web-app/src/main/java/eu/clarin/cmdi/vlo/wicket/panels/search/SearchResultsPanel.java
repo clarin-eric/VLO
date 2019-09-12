@@ -77,7 +77,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         this.duplicateItemsExpansionsModel = new Model(new HashSet<>());
 
         //define the order for availability values
-        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
+        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
 

@@ -127,7 +127,7 @@ public class FieldsTablePanel extends Panel {
         } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
             return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
         } else if (fieldNameService.getFieldName(FieldKey.LANDINGPAGE).equals(facetNameModel.getObject())) {
-            return new SmartLinkLabel(id, new PropertyModel(new ResourceInfoObjectModel(valueModel), "url"));
+            return new SmartLinkLabel(id, new PropertyModel<>(new ResourceInfoObjectModel(valueModel), "url"));
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
@@ -183,10 +183,10 @@ public class FieldsTablePanel extends Panel {
                 //wrapper for sorted model (if ordering is available)
                 final IModel<List<String>> sortedValuesModel = createOrderedFieldValuesModel(valuesModel, fieldNameModel);
 
-                item.add(new ListView("values", sortedValuesModel) {
+                item.add(new ListView<>("values", sortedValuesModel) {
 
                     @Override
-                    protected void populateItem(final ListItem fieldValueItem) {
+                    protected void populateItem(final ListItem<String> fieldValueItem) {
                         // add a label that holds the field value
                         fieldValueItem.add(createValueLabel("value", fieldNameModel, fieldValueItem.getModel()));
                         // add a link for selecting the value in the search

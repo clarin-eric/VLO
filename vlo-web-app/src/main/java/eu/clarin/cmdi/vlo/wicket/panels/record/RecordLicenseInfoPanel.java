@@ -149,7 +149,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
 
         //define the order for availability values
-        final Ordering<String> availabilityOrder = new PreferredExplicitOrdering(
+        final Ordering<String> availabilityOrder = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
 
@@ -238,7 +238,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
     public MarkupContainer createOriginalContextContainer(final String id) {
         // get landing page from document
-        final IModel<String> valueModel = new PropertyModel(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url");
+        final IModel<String> valueModel = new PropertyModel<>(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url");
         // wrap in model that transforms handle links
         final IModel<String> landingPageHrefModel = new PIDLinkModel(valueModel);
 

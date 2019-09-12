@@ -168,7 +168,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createLandingPageLink(String id, ResourceInfoModel resourceModel) {
-        final IModel<String> linkModel = new PropertyModel(resourceModel, "href");
+        final IModel<String> linkModel = new PropertyModel<>(resourceModel, "href");
         final IsPidModel isPidModel = new IsPidModel(linkModel);
         final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
 
@@ -206,9 +206,10 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         // Resource info for single resource (should not appear if there are more or fewer resources)
         resourceInfo.add(new ExternalLink("resourceLink", new PIDLinkModel(ResolvingLinkModel.modelFor(resourceInfoModel, getModel())))
                 //resource type icon
-                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
+                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<>(resourceInfoModel, "resourceType"))
                         //with type name tooltip
-                        .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
+                        .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel)
+                                .setDefaultValue(new PropertyModel<>(resourceInfoModel, "resourceType")))))
                 //resource name below icon
                 .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
         );

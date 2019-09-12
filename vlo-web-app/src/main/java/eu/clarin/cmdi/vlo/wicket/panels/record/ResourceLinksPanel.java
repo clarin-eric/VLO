@@ -148,7 +148,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
 
         };
-        landingPageItem.add(new InvisibleIfNullBehaviour(landingPageModel));
+        landingPageItem.add(new InvisibleIfNullBehaviour<>(landingPageModel));
         return landingPageItem;
     }
 
@@ -163,7 +163,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         //landing page link
         final IModel<String> landingPageModel = new PIDLinkModel( // wrap in model that transforms handle links
-                new PropertyModel(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url")); // get landing page from document
+                new PropertyModel<>(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url")); // get landing page from document
         container.add(new WebMarkupContainer("landingPageContainer") {
             @Override
             protected void onConfigure() {

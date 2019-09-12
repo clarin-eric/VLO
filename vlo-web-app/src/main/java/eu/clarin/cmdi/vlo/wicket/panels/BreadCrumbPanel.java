@@ -70,8 +70,8 @@ public class BreadCrumbPanel extends GenericPanel<QueryFacetsSelection> {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new BookmarkablePageLink("home", getApplication().getHomePage()));
-        add(new BookmarkablePageLink("searchPage", FacetedSearchPage.class));
+        add(new BookmarkablePageLink<>("home", getApplication().getHomePage()));
+        add(new BookmarkablePageLink<>("searchPage", FacetedSearchPage.class));
 
         // add 'search results' item
         final WebMarkupContainer results = new WebMarkupContainer("results") {

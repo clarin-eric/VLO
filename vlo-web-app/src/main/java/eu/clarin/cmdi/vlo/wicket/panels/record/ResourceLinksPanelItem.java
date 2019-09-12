@@ -174,7 +174,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     }
 
     protected ResourceTypeIcon createResourceTypeIcon(String id) {
-        return new ResourceTypeIcon(id, new PropertyModel(resourceInfoModel, "resourceType"));
+        return new ResourceTypeIcon(id, new PropertyModel<>(resourceInfoModel, "resourceType"));
     }
 
     protected Label createResourceTypeLabel(String id) {
@@ -188,7 +188,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
         final List<BootstrapDropdown.DropdownMenuItem> options = createDropDownOptions(linkModel, resourceInfoModel);
 
-        return new BootstrapDropdown("dropdown", new ListModel(options)) {
+        return new BootstrapDropdown("dropdown", new ListModel<>(options)) {
             @Override
             protected Serializable getButtonClass() {
                 return null; //render as link, not button

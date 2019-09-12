@@ -127,7 +127,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                         .add(new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
                                 .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))))
                         .add(new Label("duplicateItemDescription", descriptionModel)
-                                .add(new InvisibleIfNullBehaviour(descriptionModel)));
+                                .add(new InvisibleIfNullBehaviour<>(descriptionModel)));
             }
 
         };

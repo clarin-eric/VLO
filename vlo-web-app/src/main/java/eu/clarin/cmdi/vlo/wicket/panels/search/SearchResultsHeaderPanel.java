@@ -220,7 +220,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 };
                 // add facet name as title attribute so that it becomes available through a tooltip
                 valueLabel.add(new AttributeModifier("title",
-                        new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
+                        new SolrFieldNameModel(new PropertyModel<>(selectionModel, "key"))));
 
                 //ajax indicator should go behind label even though behaviour is triggered by remove link...
                 final AjaxIndicatorAppender ajaxIndicatorAppender = new AjaxIndicatorAppender();

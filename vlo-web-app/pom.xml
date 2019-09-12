@@ -237,7 +237,7 @@
                 <!-- Unpacks CLARIN flavoured bootstrap LESS sources -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>unpack</id>
@@ -264,7 +264,7 @@
             <plugin>
                 <!-- Copies 'local' LESS sources and fonts to the right destination -->
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.0.2</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <!-- copy less sources -->

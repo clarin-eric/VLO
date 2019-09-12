@@ -27,7 +27,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class AjaxIndicatingForm extends Form implements IAjaxIndicatorAware {
+public class AjaxIndicatingForm<T> extends Form<T> implements IAjaxIndicatorAware {
 
     private final AjaxIndicatorAppender ajaxIndicatorAppender;
 
@@ -36,7 +36,7 @@ public class AjaxIndicatingForm extends Form implements IAjaxIndicatorAware {
         add(ajaxIndicatorAppender = new AjaxIndicatorAppender());
     }
 
-    public AjaxIndicatingForm(String id, IModel model) {
+    public AjaxIndicatingForm(String id, IModel<T> model) {
         super(id, model);
         add(ajaxIndicatorAppender = new AjaxIndicatorAppender());
     }

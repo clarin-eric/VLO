@@ -153,7 +153,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
             selectionModel = Model.of(selection);
         } else {
-            selectionModel = new PropertyModel(navigationModel, "selection");
+            selectionModel = new PropertyModel<>(navigationModel, "selection");
         }
 
         // get document from parameters
@@ -218,7 +218,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
         add(createSearchLinks("searchlinks"));
         //define the order for availability values
-        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
+        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(config.getAvailabilityValues()));
         add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering) {
@@ -237,7 +237,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private TabbedPanel tabs;
 
     private TabbedPanel createTabs(String id) {
-        final List<ITab> tabs = new ArrayList(Collections.nCopies(TABS_ORDER.size(), null));
+        final List<ITab> tabs = new ArrayList<>(Collections.nCopies(TABS_ORDER.size(), null));
         tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
             @Override
             public Panel getPanel(String panelId) {
@@ -311,7 +311,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             tabs.remove(TABS_ORDER.indexOf(HIERARCHY_SECTION));
         }
 
-        return new AjaxBootstrapTabbedPanel(id, tabs) {
+        return new AjaxBootstrapTabbedPanel<>(id, tabs) {
             @Override
             protected WebMarkupContainer newLink(String linkId, final int index) {
                 final WebMarkupContainer link = super.newLink(linkId, index);
@@ -381,7 +381,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
 
                     @Override
-                    protected void populateItem(ListItem item) {
+                    protected void populateItem(ListItem<String> item) {
                         item.add(new ExternalLink("searchLink", new PIDLinkModel(item.getModel())));
                     }
                 });

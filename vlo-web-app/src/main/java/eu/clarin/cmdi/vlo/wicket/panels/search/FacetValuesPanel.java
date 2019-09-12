@@ -156,10 +156,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             @Override
             protected void populateItem(Item<List<Count>> item) {
                 // create a list view for the values in this partition
-                item.add(new ListView("facetValues", item.getModel()) {
+                item.add(new ListView<>("facetValues", item.getModel()) {
 
                     @Override
-                    protected void populateItem(ListItem item) {
+                    protected void populateItem(ListItem<Count> item) {
                         addFacetValue("facetSelect", item);
                     }
                 });

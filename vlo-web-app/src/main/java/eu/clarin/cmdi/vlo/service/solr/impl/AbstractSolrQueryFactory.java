@@ -52,7 +52,7 @@ public abstract class AbstractSolrQueryFactory {
         }
         final Map<String, FacetSelection> selections = queryFacetsSelections.getSelection();
         if (selections != null) {
-            final List<String> encodedQueries = new ArrayList(selections.size()); // assuming every facet has one selection, most common scenario
+            final List<String> encodedQueries = new ArrayList<>(selections.size()); // assuming every facet has one selection, most common scenario
             for (Map.Entry<String, FacetSelection> selectionEntry : selections.entrySet()) {
                 final String facetName = selectionEntry.getKey();
                 final FacetSelection selection = selectionEntry.getValue();

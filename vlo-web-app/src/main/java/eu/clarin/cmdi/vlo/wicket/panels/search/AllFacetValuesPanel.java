@@ -262,7 +262,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         sortSelect.add(new UpdateOptionsFormBehavior(options));
         options.add(sortSelect);
 
-        final TextField filterField = new TextField<>("filter", new PropertyModel(filterModel, "name"));
+        final TextField<FieldValuesFilter> filterField = new TextField<>("filter", new PropertyModel<>(filterModel, "name"));
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override

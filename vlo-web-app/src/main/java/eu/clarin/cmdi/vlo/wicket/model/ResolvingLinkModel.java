@@ -93,7 +93,7 @@ public class ResolvingLinkModel implements IModel<String> {
                 //URI to resolve against
                 new SolrFieldStringModel(documentModel, VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.SELF_LINK)),
                 //URI of link to resolve (potentially)
-                new PIDLinkModel(new PropertyModel(resourceInfoModel, "href")));
+                new PIDLinkModel(new PropertyModel<>(resourceInfoModel, "href")));
     }
 
     @Override

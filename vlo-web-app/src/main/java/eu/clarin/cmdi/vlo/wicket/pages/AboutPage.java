@@ -33,7 +33,7 @@ public class AboutPage extends VloBasePage {
         final IModel<String> containedIdModel = new EnvironmentVariableModel(VLO_DOCKER_IMAGE_ENV_VAR);
 
         add(new Label("containerId", containedIdModel)
-                .add(new InvisibleIfNullBehaviour(containedIdModel))
+                .add(new InvisibleIfNullBehaviour<>(containedIdModel))
         );
     }
 

@@ -67,7 +67,7 @@ public class TopLinksPanel extends Panel {
                     }
 
                 })
-                .add(new TextField("urlInputField", linkModel))
+                .add(new TextField<>("urlInputField", linkModel))
                 .add(new Link("emailLink") {
                     @Override
                     public void onClick() {

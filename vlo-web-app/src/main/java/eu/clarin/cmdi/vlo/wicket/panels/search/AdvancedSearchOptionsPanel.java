@@ -125,7 +125,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
             }
         };
 
-        final Link submitLink = new Link(id, vcrSubmitEnabledModel) {
+        final Link submitLink = new Link<>(id, vcrSubmitEnabledModel) {
             @Override
             public void onClick() {
                 setResponsePage(new VirtualCollectionSubmissionPage(AdvancedSearchOptionsPanel.this.getModel(), documentProvider));
@@ -139,15 +139,15 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
         return submitLink
                 .add(new AttributeAppender("class",
-                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
                                 new Model<String>(null), //enabled
                                 Model.of("disabled")), " "))
                 .add(new AttributeModifier("target",
-                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
                                 Model.of("_blank"),
                                 new Model<String>(null))))
                 .add(new AttributeModifier("title",
-                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
                                 Model.of("Create a new collection in the Virtual Collection Registry containing the records included in the current search result"),
                                 Model.of(String.format("Only available for search results containing %s items or less", config.getVcrMaximumItemsCount())))));
     }

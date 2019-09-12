@@ -58,7 +58,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         final IModel<String> pidLinkModel = getModel();
         final PIDTypeModel pidTypeModel = new PIDTypeModel(pidLinkModel);
 
-        add(new TextField("pidInputField", pidLinkModel));
+        add(new TextField<>("pidInputField", pidLinkModel));
 
         final StringResourceModel pidContextLabelModel = new StringResourceModel("pidContext.${}", this, pidContextModel);
         add(new Label("pidContextLabel1", pidContextLabelModel));
