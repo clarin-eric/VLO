@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 
 import org.apache.solr.common.SolrDocument;

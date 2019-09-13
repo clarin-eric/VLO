@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -66,7 +67,7 @@ public class TopLinksPanel extends Panel {
                     }
 
                 })
-                .add(new TextField("urlInputField", linkModel))
+                .add(new TextField<>("urlInputField", linkModel))
                 .add(new Link("emailLink") {
                     @Override
                     public void onClick() {
@@ -96,15 +97,10 @@ public class TopLinksPanel extends Panel {
         });
     }
 
-    protected void onChange(AjaxRequestTarget target) {
-        if (target != null) {
-            target.add(getPage());
-        }
-    }
-
-    @Override
-    protected void onConfigure() {
-        LoggerFactory.getLogger(getClass()).debug("top links panel onconfigure");
+    protected void onChange(Optional<AjaxRequestTarget> target) {
+        target.ifPresent(t -> {
+            t.add(getPage());
+        });
     }
 
     @Override

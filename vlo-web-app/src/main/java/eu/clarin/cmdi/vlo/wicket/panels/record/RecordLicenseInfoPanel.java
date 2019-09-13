@@ -53,6 +53,7 @@ import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
+import java.util.Optional;
 
 /**
  *
@@ -87,6 +88,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(isInfoAvailable());
             }
 
@@ -147,7 +149,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 = new MapModel<>(ImmutableMap.copyOf(FieldValueDescriptor.toMap(vloConfig.getAvailabilityValues())));
 
         //define the order for availability values
-        final Ordering<String> availabilityOrder = new PreferredExplicitOrdering(
+        final Ordering<String> availabilityOrder = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
 
@@ -175,6 +177,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(accessInfoModel.getObject() != null);
             }
         };
@@ -187,14 +190,15 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 Model.of("Show all available licence/availabilty information"),
                 Model.of("Hide detailed licence/availabilty information")) {
             @Override
-            protected void onClick(AjaxRequestTarget target) {
-                if (target != null) {
-                    target.add(accessInfoContainer);
-                }
+            protected void onClick(Optional<AjaxRequestTarget> target) {
+                target.ifPresent(t -> {
+                    t.add(accessInfoContainer);
+                });
             }
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 //if availability and license are both null, disable toggling
                 setVisible(availabilityModel.getObject() != null || licensesModel.getObject() != null);
             }
@@ -205,6 +209,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         accessInfoContainer.add(new WebMarkupContainer("accessInfoTable") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(showDetailsModel.getObject()
                         //if availability and license are both null, always display
                         || (availabilityModel.getObject() == null && licensesModel.getObject() == null)
@@ -223,6 +228,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(!isInfoAvailable());
             }
         };
@@ -232,7 +238,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
     public MarkupContainer createOriginalContextContainer(final String id) {
         // get landing page from document
-        final IModel<String> valueModel = new PropertyModel(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url");
+        final IModel<String> valueModel = new PropertyModel<>(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url");
         // wrap in model that transforms handle links
         final IModel<String> landingPageHrefModel = new PIDLinkModel(valueModel);
 
@@ -241,6 +247,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(landingPageHrefModel.getObject() != null);
             }
         };

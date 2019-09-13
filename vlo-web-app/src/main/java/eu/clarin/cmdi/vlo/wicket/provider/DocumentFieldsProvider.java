@@ -65,7 +65,7 @@ public class DocumentFieldsProvider implements IDataProvider<DocumentField> {
             fields = new ArrayList<DocumentFieldModel>(allFields.size());
             for (String field : allFields) {
                 if (fieldFilter.allowField(field)) {
-                    fields.add(new DocumentFieldModel(documentModel, field));
+                    fields.add(new DocumentFieldModel<>(documentModel, field));
                 }
             }
         }

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -54,20 +55,20 @@ public abstract class BootstrapModal extends Panel {
         add(new AjaxLink("closeCross") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onDismiss(target);
+                onDismiss(Optional.of(target));
             }
         });
         add(new AjaxLink("closeButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onClose(target);
+                onClose(Optional.of(target));
             }
         }.add(new Label("closeButtonLabel", getCloseButtonLabelModel())));
 
         add(new AjaxLink("dismissButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                onDismiss(target);
+                onDismiss(Optional.of(target));
             }
         }.add(new Label("dismissButtonLabel", getDismissButtonLabelModel())));
         setOutputMarkupId(true);
@@ -75,6 +76,7 @@ public abstract class BootstrapModal extends Panel {
 
     @Override
     protected void onConfigure() {
+        super.onConfigure();
         get("title").setVisible(visibilityModel.getObject());
         get("bodyContent").setVisible(visibilityModel.getObject());
         get("closeCross").setVisible(showDismissIcon);
@@ -83,19 +85,23 @@ public abstract class BootstrapModal extends Panel {
 
     protected abstract IModel<String> getTitle();
 
-    public void close(AjaxRequestTarget target) {
+    public void close(Optional<AjaxRequestTarget> target) {
         if (visibilityModel.getObject()) {
             visibilityModel.setObject(false);
-            target.add(this);
-            target.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+            target.ifPresent(t -> {
+                t.add(this);
+                t.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+            });
         }
     }
 
-    public void show(AjaxRequestTarget target) {
+    public void show(Optional<AjaxRequestTarget> target) {
         if (!visibilityModel.getObject()) {
             visibilityModel.setObject(true);
-            target.add(this);
-            target.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
+            target.ifPresent(t -> {
+                t.add(this);
+                t.appendJavaScript(String.format("showModal($('#%s .modal'));", getMarkupId(true)));
+            });
         }
     }
 
@@ -119,7 +125,7 @@ public abstract class BootstrapModal extends Panel {
      *
      * @param target
      */
-    protected void onDismiss(AjaxRequestTarget target) {
+    protected void onDismiss(Optional<AjaxRequestTarget> target) {
         close(target);
     }
 
@@ -130,7 +136,7 @@ public abstract class BootstrapModal extends Panel {
      *
      * @param target
      */
-    protected void onClose(AjaxRequestTarget target) {
+    protected void onClose(Optional<AjaxRequestTarget> target) {
         close(target);
     }
 

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import java.util.Optional;
 import java.util.Set;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -47,7 +48,7 @@ public abstract class IndicatingNestedTree<T> extends DefaultNestedTree<T> {
     @Override
     public Component newNodeComponent(String id, final IModel<T> model) {
         // when aksed to create a node, return an instance that provides an indicating link for junctions
-        final Node node = new IndicatingNode(id, this, model);
+        final Node<T> node = new IndicatingNode<>(id, this, model);
         node.setOutputMarkupId(true);
         return node;
     }
@@ -66,7 +67,7 @@ public abstract class IndicatingNestedTree<T> extends DefaultNestedTree<T> {
 
         @Override
         protected Component createContent(String id, IModel<U> model) {
-            return ((IndicatingNestedTree) tree).newContentComponent(id, model);
+            return ((IndicatingNestedTree<U>) tree).newContentComponent(id, model);
         }
 
         @Override
@@ -76,7 +77,7 @@ public abstract class IndicatingNestedTree<T> extends DefaultNestedTree<T> {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                public void onClick(AjaxRequestTarget target) {
+                public void onClick(Optional<AjaxRequestTarget> target) {
                     toggle();
                 }
 

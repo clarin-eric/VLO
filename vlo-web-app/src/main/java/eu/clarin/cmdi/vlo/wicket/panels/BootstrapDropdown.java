@@ -49,7 +49,7 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
     protected void onInitialize() {
         super.onInitialize();
 
-        add(new AttributeAppender("class", new BooleanOptionsModel(openStateModel, Model.of("dropdown open"), Model.of("dropdown")), " "));
+        add(new AttributeAppender("class", new BooleanOptionsModel<>(openStateModel, Model.of("dropdown open"), Model.of("dropdown")), " "));
 
         add(createDropDownLink("button"));
         add(createMenu("menu"));

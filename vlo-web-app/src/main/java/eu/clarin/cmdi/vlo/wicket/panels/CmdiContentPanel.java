@@ -40,7 +40,7 @@ public class CmdiContentPanel extends GenericPanel<SolrDocument> {
     @SpringBean
     private FieldNameService fieldNameService;
 
-    private final CompoundListModel cmdiUrlsModel;
+    private final CompoundListModel<URL> cmdiUrlsModel;
 
     public CmdiContentPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -50,7 +50,7 @@ public class CmdiContentPanel extends GenericPanel<SolrDocument> {
                 //self link as fallback
                 new UrlFromStringModel(new PIDLinkModel(new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.SELF_LINK)))));
 
-        this.cmdiUrlsModel = new CompoundListModel(locationModels);
+        this.cmdiUrlsModel = new CompoundListModel<>(locationModels);
     }
 
     @Override

@@ -18,14 +18,14 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 
 /**
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-public class StringReplaceModel extends AbstractReadOnlyModel<String> {
+public class StringReplaceModel implements IModel<String> {
 
     private final IModel<String> stringModel;
     private final IModel<Pattern> patternModel;

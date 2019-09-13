@@ -56,7 +56,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -128,7 +127,7 @@ public class FieldsTablePanel extends Panel {
         } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
             return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
         } else if (fieldNameService.getFieldName(FieldKey.LANDINGPAGE).equals(facetNameModel.getObject())) {
-            return new SmartLinkLabel(id, new PropertyModel(new ResourceInfoObjectModel(valueModel), "url"));
+            return new SmartLinkLabel(id, new PropertyModel<>(new ResourceInfoObjectModel(valueModel), "url"));
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
@@ -184,10 +183,10 @@ public class FieldsTablePanel extends Panel {
                 //wrapper for sorted model (if ordering is available)
                 final IModel<List<String>> sortedValuesModel = createOrderedFieldValuesModel(valuesModel, fieldNameModel);
 
-                item.add(new ListView("values", sortedValuesModel) {
+                item.add(new ListView<>("values", sortedValuesModel) {
 
                     @Override
-                    protected void populateItem(final ListItem fieldValueItem) {
+                    protected void populateItem(final ListItem<String> fieldValueItem) {
                         // add a label that holds the field value
                         fieldValueItem.add(createValueLabel("value", fieldNameModel, fieldValueItem.getModel()));
                         // add a link for selecting the value in the search
@@ -196,7 +195,7 @@ public class FieldsTablePanel extends Panel {
                 });
 
                 // if field has multiple values, set 'multiple' class on markup element
-                item.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+                item.add(new AttributeModifier("class", new IModel<>() {
 
                     @Override
                     public String getObject() {
@@ -210,7 +209,7 @@ public class FieldsTablePanel extends Panel {
 
                 //only show PID line if self link is PID
                 if (fieldNameModel.getObject().equals(fieldNameService.getFieldName(FieldKey.RECORD_PID))) {
-                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new AbstractReadOnlyModel<String>() {
+                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new IModel<>() {
                         @Override
                         public String getObject() {
                             if (valuesModel.getObject().size() > 0) {

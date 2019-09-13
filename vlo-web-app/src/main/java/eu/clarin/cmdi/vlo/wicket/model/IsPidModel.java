@@ -17,14 +17,14 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.PIDUtils;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class IsPidModel extends AbstractReadOnlyModel<Boolean> {
+public class IsPidModel implements IModel<Boolean> {
 
     private final IModel<String> uriModel;
 

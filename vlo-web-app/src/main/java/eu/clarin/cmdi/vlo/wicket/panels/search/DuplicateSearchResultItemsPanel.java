@@ -35,6 +35,7 @@ import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import static java.lang.Math.toIntExact;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -47,7 +48,6 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -83,7 +83,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
     public DuplicateSearchResultItemsPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<QueryFacetsSelection> selectionModel, IModel<ExpansionState> expandedModel) {
         super(id, documentExpansionPairModel);
 
-        final IModel<Boolean> isExpandedModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> isExpandedModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return expandedModel.getObject() == ExpansionState.EXPANDED;
@@ -94,13 +94,13 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
         final WebMarkupContainer container = new WebMarkupContainer("duplicatesViewContainer");
 
         // header contains link to expand/collapse duplicates list
-        final IndicatingAjaxFallbackLink toggleHeaderLink = new IndicatingAjaxFallbackLink("toggleExpansion") {
+        final IndicatingAjaxFallbackLink toggleHeaderLink = new IndicatingAjaxFallbackLink<Void>("toggleExpansion") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 expandedModel.setObject(isExpandedModel.getObject() ? ExpansionState.COLLAPSED : ExpansionState.EXPANDED);
-                if (target != null) {
-                    target.add(container);
-                }
+                target.ifPresent(t -> {
+                    t.add(container);
+                });
             }
         };
 
@@ -127,7 +127,7 @@ public class DuplicateSearchResultItemsPanel extends GenericPanel<SolrDocumentEx
                         .add(new RecordPageLink("duplicateItemLink", item.getModel(), new SearchContextModel(selectionModel))
                                 .add(new SingleValueSolrFieldLabel("duplicateItemName", item.getModel(), fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this))))
                         .add(new Label("duplicateItemDescription", descriptionModel)
-                                .add(new InvisibleIfNullBehaviour(descriptionModel)));
+                                .add(new InvisibleIfNullBehaviour<>(descriptionModel)));
             }
 
         };

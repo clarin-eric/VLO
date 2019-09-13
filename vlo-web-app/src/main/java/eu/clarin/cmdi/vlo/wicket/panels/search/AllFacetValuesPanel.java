@@ -36,6 +36,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -56,7 +57,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -178,12 +178,12 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         final String facet = fieldNameModel.getObject();
         return new SelectedFacetPanel(id, facet, new SelectionModel(facet, selectionModel)) {
             @Override
-            protected void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target) {
+            protected void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target) {
                 // Values have been removed, calculate remainder
                 selectionModel.getObject().removeFacetValue(facet, valuesRemoved);
-                if (target != null) {
-                    target.add(valuesContainer);
-                }
+                target.ifPresent(t -> {
+                    t.add(valuesContainer);
+                });
                 onSelectionChanged(target);
             }
 
@@ -205,19 +205,19 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 }
 
                 // link to select an individual facet value
-                final Link selectLink = new AjaxFallbackLink("facetSelect") {
+                final Link selectLink = new AjaxFallbackLink<Void>("facetSelect") {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         selectionModel.getObject().addNewFacetValue(fieldNameModel.getObject(), selectionTypeModeModel.getObject(), Collections.singleton(item.getModelObject().getName()));
                         //detach models to make sure that facet field values get re-evaluated upon rendering
                         AllFacetValuesPanel.this.detachModels();
-                        if (target != null) {
-                            target.add(valuesContainer);
+                        target.ifPresent(t -> {
+                            t.add(valuesContainer);
                             if (selectionTrackingBehavior != null) {
-                                target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
+                                t.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(t));
                             }
-                        }
+                        });
                         onSelectionChanged(target);
                     }
                 };
@@ -234,7 +234,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     private static final int ITEMS_PER_PAGE = 50;
 
     private Component createValuesInfo(String id, final DataView<FacetField.Count> view) {
-        return new Label(id, new AbstractReadOnlyModel<String>() {
+        return new Label(id, new IModel<String>() {
             @Override
             public String getObject() {
                 if (view.getItemCount() == 0) {
@@ -262,7 +262,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
         sortSelect.add(new UpdateOptionsFormBehavior(options));
         options.add(sortSelect);
 
-        final TextField filterField = new TextField<>("filter", new PropertyModel(filterModel, "name"));
+        final TextField<FieldValuesFilter> filterField = new TextField<>("filter", new PropertyModel<>(filterModel, "name"));
         filterField.add(new AjaxFormComponentUpdatingBehavior("keyup") {
 
             @Override
@@ -352,7 +352,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
 
     }
 
-    protected void onSelectionChanged(AjaxRequestTarget target) {
+    protected void onSelectionChanged(Optional<AjaxRequestTarget> target) {
 
     }
 

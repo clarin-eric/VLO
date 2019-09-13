@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -36,7 +35,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class FacetFieldModel extends AbstractReadOnlyModel<FacetField> {
+public class FacetFieldModel implements IModel<FacetField> {
 
     private final FacetFieldsModel fieldsModel;
     private final String facetName;

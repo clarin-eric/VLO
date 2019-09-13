@@ -41,7 +41,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.tree.AbstractTree;
-import org.apache.wicket.extensions.markup.html.repeater.tree.Node;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortableTreeProvider;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -50,7 +49,7 @@ import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -58,6 +57,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import java.util.Optional;
 
 /**
  *
@@ -115,10 +115,10 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
             @Override
             protected void populateItem(final Item<SolrDocument> item) {
                 item.add(new NamedRecordPageLink("link", item.getModel(), RecordPage.DETAILS_SECTION));
-                final IndicatingAjaxFallbackLink upLink = new IndicatingAjaxFallbackLink("up") {
+                final IndicatingAjaxFallbackLink upLink = new IndicatingAjaxFallbackLink<Void>("up") {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         logger.debug("Expand up: {}", item.getModelObject().get(fieldNameService.getFieldName(FieldKey.ID)));
 
                         // tree root up one level, expand root for traceability by user                        
@@ -133,9 +133,9 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                             logger.debug("Expand {} -> {}", PARENTS_ROOT_PATH, item.getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)));
                         }
 
-                        if (target != null) {
-                            target.add(HierarchyPanel.this);
-                        }
+                        target.ifPresent(t -> {
+                            t.add(HierarchyPanel.this);
+                        });
                     }
 
                     protected void updateCurrentExpansion() {
@@ -170,24 +170,26 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 // hide if there are no parents to show
                 setVisible(parentsProvider.size() > 0);
             }
         };
 
         // ajax link to load the entire list, only shown if applicable
-        final Link showAllLink = new IndicatingAjaxFallbackLink("showAll") {
+        final Link showAllLink = new IndicatingAjaxFallbackLink<Void>("showAll") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 parentsView.setItemsPerPage(parentsProvider.size());
-                if (target != null) {
-                    target.add(container);
-                }
+                target.ifPresent(t -> {
+                    t.add(container);
+                });
             }
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 // hide if there are no more parents to load
                 setVisible(parentsView.getItemCount() > parentsView.getItemsPerPage());
             }
@@ -219,25 +221,28 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
                     @Override
                     protected Component createContent(String id, final IModel<ModelWrapper<SolrDocument>> node) {
                         if (node.getObject().isLimit()) {
-                            return new AjaxFallbackLinkLabel(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
+                            return new AjaxFallbackLinkLabel<>(id, node, Model.of("Show all... (" + node.getObject().getCount() + ")")) {
 
                                 @Override
-                                public void onClick(AjaxRequestTarget target) {
+                                public void onClick(Optional<AjaxRequestTarget> target) {
                                     treeProvider.setChildrenShown(null);
-                                    target.add(treeContainer);
+                                    target.ifPresent(t -> {
+                                        t.add(treeContainer);
+                                    });
                                 }
 
                             };
                         } else {
 
                             return new NamedRecordPageLink(id, node.getObject().getModel(), RecordPage.DETAILS_SECTION)
-                                    .add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
-                                        @Override
-                                        public String getObject() {
-                                            final boolean isCurrent = node.getObject().getModelObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID))
-                                                    .equals(pageDocumentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
-                                            return isCurrent ? "current" : "";
-                                        }
+                                    .add(new AttributeAppender("class", () -> {
+                                        final boolean isCurrent
+                                                = node.getObject().getModelObject()
+                                                        .getFieldValue(fieldNameService.getFieldName(FieldKey.ID))
+                                                        .equals(
+                                                                pageDocumentModel.getObject()
+                                                                        .getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+                                        return isCurrent ? "current" : "";
                                     }, " "));
                         }
                     }
@@ -246,7 +251,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
 
         };
         // style of tree depends on presence of parent nodes
-        result.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+        result.add(new AttributeAppender("class", new IModel<>() {
 
             @Override
             public String getObject() {
@@ -385,7 +390,7 @@ public class HierarchyPanel extends GenericPanel<SolrDocument> {
         }
     }
 
-    private class ModelWrapper<T> extends AbstractReadOnlyModel<ModelWrapper<T>> implements Serializable {
+    private class ModelWrapper<T> implements IModel<ModelWrapper<T>>, Serializable {
 
         /**
          * Path to distinguish between nodes with the same id (parallel

@@ -44,7 +44,7 @@ public class ErrorPage extends VloBasePage {
 
         final PageParameters queryParams = new PageParameters(parameters).remove(PAGE_PARAMETER_RESPONSE_CODE);
         final boolean hasQuery = !queryParams.get(VloWebAppParameters.QUERY).isEmpty() || !queryParams.get(VloWebAppParameters.FILTER_QUERY).isEmpty();
-        add(new BookmarkablePageLink("searchPage", FacetedSearchPage.class, queryParams)
+        add(new BookmarkablePageLink<>("searchPage", FacetedSearchPage.class, queryParams)
                 .add(new Label("label", hasQuery ? "Return to query" : "Go to the search page"))
         );
 
@@ -57,6 +57,7 @@ public class ErrorPage extends VloBasePage {
         add(new Label("description", errorDescriptionModel) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(errorDescriptionModel.getObject() != null);
             }
 

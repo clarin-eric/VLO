@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import org.apache.wicket.Session;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-public class ConvertedFieldValueModel extends AbstractReadOnlyModel<String> {
+public class ConvertedFieldValueModel implements IModel<String> {
     
     private final static Logger logger = LoggerFactory.getLogger(ConvertedFieldValueModel.class);
     

@@ -21,7 +21,6 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.component.IRequestablePage;
 import org.apache.wicket.request.mapper.parameter.IPageParametersEncoder;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.IProvider;
 import org.apache.wicket.util.string.StringValue;
 
 /**
@@ -42,16 +41,8 @@ public class FragmentEncodingMountedMapper extends MountedMapper {
         super(mountPath, pageClass);
     }
 
-    public FragmentEncodingMountedMapper(String mountPath, IProvider<Class<? extends IRequestablePage>> pageClassProvider) {
-        super(mountPath, pageClassProvider);
-    }
-
     public FragmentEncodingMountedMapper(String mountPath, Class<? extends IRequestablePage> pageClass, IPageParametersEncoder pageParametersEncoder) {
         super(mountPath, pageClass, pageParametersEncoder);
-    }
-
-    public FragmentEncodingMountedMapper(String mountPath, IProvider<Class<? extends IRequestablePage>> pageClassProvider, IPageParametersEncoder pageParametersEncoder) {
-        super(mountPath, pageClassProvider, pageParametersEncoder);
     }
 
     @Override

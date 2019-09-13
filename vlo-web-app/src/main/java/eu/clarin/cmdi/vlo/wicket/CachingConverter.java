@@ -80,7 +80,7 @@ public class CachingConverter<C> implements IConverter<C> {
         if (inner == null) {
             return null;
         } else {
-            return new CachingConverter(inner);
+            return new CachingConverter<C>(inner);
         }
     }
 

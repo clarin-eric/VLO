@@ -36,6 +36,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import java.util.Optional;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -120,9 +121,9 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
      * @param target Ajax target allowing for a partial update. May be null
      * (fallback)!
      */
-    protected abstract void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target);
+    protected abstract void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target);
 
-    public class RemoveLink extends IndicatingAjaxFallbackLink {
+    public class RemoveLink extends IndicatingAjaxFallbackLink<Void> {
 
         private final IModel<String> valueModel;
         private final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
@@ -139,13 +140,15 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
         }
 
         @Override
-        public void onClick(AjaxRequestTarget target) {
+        public void onClick(Optional<AjaxRequestTarget> target) {
             // Remove a single value
             // Call callback
             onValuesUnselected(Collections.singleton(valueModel.getObject()), target);
-            if (target != null && selectionTrackingBehavior != null) {
-                target.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(target));
-            }
+            target.ifPresent(t -> {
+                if (selectionTrackingBehavior != null) {
+                    t.appendJavaScript(selectionTrackingBehavior.generatePiwikJs(t));
+                }
+            });
         }
 
     }

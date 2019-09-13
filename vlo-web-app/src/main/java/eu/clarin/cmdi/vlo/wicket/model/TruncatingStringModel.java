@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -26,7 +25,7 @@ import org.apache.wicket.model.IModel;
  *
  * @author twagoo
  */
-public class TruncatingStringModel extends AbstractReadOnlyModel<String> {
+public class TruncatingStringModel implements IModel<String> {
 
     private final static String ELLIPSIS = "\u2026";
     private final IModel<String> model;

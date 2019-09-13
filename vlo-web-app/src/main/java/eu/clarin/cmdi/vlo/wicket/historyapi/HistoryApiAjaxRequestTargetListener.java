@@ -17,10 +17,10 @@
 package eu.clarin.cmdi.vlo.wicket.historyapi;
 
 import java.util.Map;
-import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxRequestTarget.IListener;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.encoding.UrlEncoder;
 import org.springframework.web.util.JavaScriptUtils;
@@ -33,11 +33,10 @@ import org.springframework.web.util.JavaScriptUtils;
  * @author Twan Goosen <twan@clarin.eu>
  * @see HistoryApiAware
  */
-public class HistoryApiAjaxRequestTargetListener extends AjaxRequestTarget.AbstractListener {
+public class HistoryApiAjaxRequestTargetListener implements IListener {
 
     @Override
     public void onBeforeRespond(Map<String, Component> map, AjaxRequestTarget target) {
-        super.onBeforeRespond(map, target);
         final Page page = target.getPage();
         if (page instanceof HistoryApiAware) {
             target.appendJavaScript(createParamsScript((HistoryApiAware) page));

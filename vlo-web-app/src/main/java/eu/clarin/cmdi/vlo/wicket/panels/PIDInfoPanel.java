@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
@@ -57,7 +58,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         final IModel<String> pidLinkModel = getModel();
         final PIDTypeModel pidTypeModel = new PIDTypeModel(pidLinkModel);
 
-        add(new TextField("pidInputField", pidLinkModel));
+        add(new TextField<>("pidInputField", pidLinkModel));
 
         final StringResourceModel pidContextLabelModel = new StringResourceModel("pidContext.${}", this, pidContextModel);
         add(new Label("pidContextLabel1", pidContextLabelModel));
@@ -75,20 +76,21 @@ public class PIDInfoPanel extends GenericPanel<String> {
         //container for resolved link
         final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel");
         //lazy panel for async resolving (link is not added initially)
-        final AjaxLazyLoadPanel lazyResolvedUrlLink = new AjaxLazyLoadPanel("resolvedLink") {
+        final AjaxLazyLoadPanel lazyResolvedUrlLink = new AjaxLazyLoadPanel<ResolvedPidLink>("resolvedLink") {
             @Override
-            public Component getLazyLoadComponent(String markupId) {
+            public ResolvedPidLink getLazyLoadComponent(String markupId) {
                 return new ResolvedPidLink(markupId, pidLinkModel);
             }
 
             @Override
-            protected void onComponentLoaded(Component component, AjaxRequestTarget target) {
-                super.onComponentLoaded(component, target);
-                //re-render all panel after loading to fix glitch
-                target.add(resolvedLinkPanel);
+            protected void onContentLoaded(ResolvedPidLink content, Optional<AjaxRequestTarget> target) {
+                super.onContentLoaded(content, target);
+                target.ifPresent(t -> {
+                    t.add(resolvedLinkPanel);
+                });
             }
-
         };
+
         add(resolvedLinkPanel
                 .add(lazyResolvedUrlLink)
                 //has to be ajax updateable

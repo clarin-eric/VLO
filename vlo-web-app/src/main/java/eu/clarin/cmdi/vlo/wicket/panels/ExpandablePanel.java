@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import java.util.Optional;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,7 +28,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -82,19 +82,19 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
 
     protected Link createTitleToggler() {
         // title is also a link that toggles expansion state
-        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink("titleToggle") {
+        final AjaxFallbackLink titleLink = new IndicatingAjaxFallbackLink<Void>("titleToggle") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 final ExpansionState expansionState = expansionModel.getObject();
                 if (expansionState == ExpansionState.COLLAPSED) {
                     expansionModel.setObject(ExpansionState.EXPANDED);
                 } else {
                     expansionModel.setObject(ExpansionState.COLLAPSED);
                 }
-                if (target != null) {
-                    target.add(ExpandablePanel.this);
-                }
+                target.ifPresent(t -> {
+                    t.add(ExpandablePanel.this);
+                });
                 onExpansionToggle(target);
             }
         };
@@ -154,16 +154,17 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
     protected String getCollapsedClass() {
         return "facet collapsedfacet";
     }
-    
+
     /**
      * Override to apply logic when expansion state is toggled
-     * @param target 
+     *
+     * @param target
      */
-    protected void onExpansionToggle(AjaxRequestTarget target) {
-       //NOOP 
+    protected void onExpansionToggle(Optional<AjaxRequestTarget> target) {
+        //NOOP 
     }
 
-    private static class ExpansionStateRepresentationModel extends AbstractReadOnlyModel<String> {
+    private static class ExpansionStateRepresentationModel implements IModel<String> {
 
         private final IModel<ExpansionState> stateModel;
         private final String expanded;

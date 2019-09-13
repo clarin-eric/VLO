@@ -58,12 +58,8 @@ public class ContentSearchFormPanelTest extends AbstractWicketTest {
         getTester().assertContains("action=\"http://fcs.org/aggregator\"");
         //tester.assertContains("action=\"http://weblicht.sfs.uni-tuebingen.de/Aggregator/\"");
         // json hidden input should have the CQL endpoint and document handle, and should be encoded into entities
-        getTester().assertContains(Pattern.quote("name=\"x-aggregation-context\" "
-                + "value=\"{\n"
-                + "  &quot;http://cqlEndPoint/&quot;: [\n"
-                + "    &quot;hdl:1234/selflink&quot;\n"
-                + "  ]\n"
-                + "}\""));
+        getTester().assertContains("http://cqlEndPoint/");
+        getTester().assertContains("hdl:1234/selflink");
     }
 
     /**

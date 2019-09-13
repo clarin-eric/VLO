@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -35,7 +34,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -79,7 +77,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
     }
 
     private WebMarkupContainer createCollectionNameField(String id) {
-        final IModel<String> nameModel = new AbstractReadOnlyModel<String>() {
+        final IModel<String> nameModel = new IModel<>() {
 
             @Override
             public String getObject() {
@@ -130,6 +128,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 // hide keywords section if none are set
                 setVisible(!keywordsList.isEmpty());
             }

@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import java.util.Iterator;
+import java.util.Optional;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,7 +34,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -61,21 +61,18 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         final Form<QueryFacetsSelection> form = new Form<>("search", model);
 
         // Bind search field to 'query' property of model
-        form.add(new AutoCompleteTextField("query", new PropertyModel<String>(model, "query")) {
+        form.add(new AutoCompleteTextField<>("query", new PropertyModel<String>(model, "query")) {
 
             @Override
             protected Iterator<String> getChoices(String input) {
                 return autoCompleteDao.getChoices(input);
             }
-        }.add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
-            @Override
-            public String getObject() {
-                final Long recordCount = recordCountModel.getObject();
-                if (recordCount == null || recordCount < 1) {
-                    return "Search";
-                } else {
-                    return String.format("Search through %,d records", recordCount);
-                }
+        }.add(new AttributeModifier("placeholder", () -> {
+            final Long recordCount = recordCountModel.getObject();
+            if (recordCount == null || recordCount < 1) {
+                return "Search";
+            } else {
+                return String.format("Search through %,d records", recordCount);
             }
         })));
 
@@ -83,7 +80,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         final AjaxFallbackButton submitButton = new AjaxFallbackButton("searchSubmit", form) {
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            protected void onSubmit(Optional<AjaxRequestTarget> target) {
                 SearchFormPanel.this.onSubmit(target);
             }
 
@@ -135,7 +132,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
         recordCountModel.detach();
     }
 
-    protected abstract void onSubmit(AjaxRequestTarget target);
+    protected abstract void onSubmit(Optional<AjaxRequestTarget> target);
 
     @Override
     public void renderHead(IHeaderResponse response) {

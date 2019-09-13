@@ -71,14 +71,11 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
@@ -92,13 +89,9 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import java.util.Collection;
+import java.util.Optional;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import eu.clarin.cmdi.vlo.VloWebSession;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.request.cycle.RequestCycle;
-import javax.servlet.http.HttpServletRequest;
-import eu.clarin.cmdi.vlo.exposure.models.PageView;
 
 import eu.clarin.cmdi.vlo.VloWebSession;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
@@ -172,7 +165,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             final QueryFacetsSelection selection = selectionParametersConverter.fromParameters(params);
             selectionModel = Model.of(selection);
         } else {
-            selectionModel = new PropertyModel(navigationModel, "selection");
+            selectionModel = new PropertyModel<>(navigationModel, "selection");
         }
 
         // get document from parameters
@@ -248,21 +241,21 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
         if (!initialTab.isEmpty()) {
-            switchToTab(initialTab.toString(), null);
+            switchToTab(initialTab.toString(), Optional.empty());
         }
         add(tabs);
 
         add(createSearchLinks("searchlinks"));
-        // define the order for availability values
-        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
-                // extract the 'primary' availability values from the configuration
+        //define the order for availability values
+        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
+                //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(config.getAvailabilityValues()));
         add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering) {
             @Override
             protected WebMarkupContainer createLink(String id) {
-                return new AjaxFallbackLink(id) {
+                return new AjaxFallbackLink<Void>(id) {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(AVAILABILITY_SECTION, target);
                     }
                 };
@@ -274,13 +267,13 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private TabbedPanel tabs;
 
     private TabbedPanel createTabs(String id) {
-        final List<ITab> tabs = new ArrayList(Collections.nCopies(TABS_ORDER.size(), null));
+        final List<ITab> tabs = new ArrayList<>(Collections.nCopies(TABS_ORDER.size(), null));
         tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
             @Override
             public Panel getPanel(String panelId) {
                 return new RecordDetailsPanel(panelId, getModel()) {
                     @Override
-                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                    protected void switchToTab(String tab, Optional<AjaxRequestTarget> target) {
                         RecordPage.this.switchToTab(tab, target);
                     }
 
@@ -302,7 +295,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
                     @Override
-                    protected void switchToTab(String tab, AjaxRequestTarget target) {
+                    protected void switchToTab(String tab, Optional<AjaxRequestTarget> target) {
                         RecordPage.this.switchToTab(tab, target);
                     }
 
@@ -350,7 +343,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             tabs.remove(TABS_ORDER.indexOf(HIERARCHY_SECTION));
         }
 
-        return new AjaxBootstrapTabbedPanel(id, tabs) {
+        return new AjaxBootstrapTabbedPanel<>(id, tabs) {
             @Override
             protected WebMarkupContainer newLink(String linkId, final int index) {
                 final WebMarkupContainer link = super.newLink(linkId, index);
@@ -372,7 +365,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
     private Component createNavigation(final String id) {
         if (navigationModel != null) {
-            final IModel<String> tabModel = new AbstractReadOnlyModel<String>() {
+            final IModel<String> tabModel = new IModel<String>() {
                 @Override
                 public String getObject() {
                     return TABS_ORDER.get(tabs.getSelectedTab());
@@ -385,6 +378,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                 @Override
                 protected void onConfigure() {
+                    super.onConfigure();
                     final SearchContext context = navigationModel.getObject();
                     setVisible(context != null && (context.hasNext() || context.hasPrevious()));
                 }
@@ -403,10 +397,10 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
 
             @Override
-            protected void onChange(AjaxRequestTarget target) {
-                if (target != null) {
-                    target.add(topNavigation);
-                }
+            protected void onChange(Optional<AjaxRequestTarget> target) {
+                target.ifPresent(t -> {
+                    t.add(topNavigation);
+                });
             }
 
         };
@@ -423,7 +417,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
 
                     @Override
-                    protected void populateItem(ListItem item) {
+                    protected void populateItem(ListItem<String> item) {
                         item.add(new ExternalLink("searchLink", new PIDLinkModel(item.getModel())));
                     }
                 });
@@ -448,13 +442,13 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         };
     }
 
-    private void switchToTab(String tab, AjaxRequestTarget target) {
+    private void switchToTab(String tab, Optional<AjaxRequestTarget> target) {
         final int tabIndex = TABS_ORDER.indexOf(tab);
         if (tabIndex >= 0) {
             RecordPage.this.tabs.setSelectedTab(tabIndex);
-            if (target != null) {
-                target.add(RecordPage.this.tabs);
-            }
+            target.ifPresent(t -> {
+                t.add(RecordPage.this.tabs);
+            });
         }
     }
 

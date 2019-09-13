@@ -59,8 +59,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.migrate.StringResourceModelMigration;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -230,10 +228,10 @@ public class SearchResultItemPanel extends Panel {
     }
 
     private Link createExpansionStateToggle(String id) {
-        final Link expansionStateToggle = new IndicatingAjaxFallbackLink(id) {
+        final Link expansionStateToggle = new IndicatingAjaxFallbackLink<Void>(id) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 // toggle the expansion state
                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
                     expansionStateModel.setObject(ExpansionState.EXPANDED);
@@ -241,7 +239,7 @@ public class SearchResultItemPanel extends Panel {
                     expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 }
 
-                if (target != null) {
+                t.ifPresent(target -> {
                     // parial update (just this search result item)
                     target.add(SearchResultItemPanel.this);
 
@@ -252,12 +250,12 @@ public class SearchResultItemPanel extends Panel {
                         final String selector = "#" + SearchResultItemPanel.this.getMarkupId();
                         target.appendJavaScript(scriptFactory.createScript(selector, query));
                     }
-                }
+                });
             }
         };
         expansionStateToggle.add(
                 new WebMarkupContainer("state").add(
-                        new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+                        new AttributeModifier("class", new IModel<>() {
 
                             @Override
                             public String getObject() {
@@ -360,11 +358,13 @@ public class SearchResultItemPanel extends Panel {
          * of instances
          */
         private IModel<String> getResourceCountModel(final IModel<ResourceTypeCount> resourceTypeCountModel) {
-            // first create a string model that provides the type of resources 
-            // in the right number (plural or singular, conveniently supplied by ResourceTypeCount)
-            final StringResourceModel resourceTypeModel = StringResourceModelMigration.of("resourcetype.${resourceType}.${number}", resourceTypeCountModel, "?");
             // inject this into the resource string that combines it with count
-            return StringResourceModelMigration.of("resources.typecount", this, resourceTypeCountModel, resourceTypeModel);
+            return new StringResourceModel("resources.typecount", this, resourceTypeCountModel)
+                    .setParameters(
+                            //wrap inside a string model that provides the type of resources in the
+                            //right number (plural or singular, conveniently supplied by ResourceTypeCount)
+                            new StringResourceModel("resourcetype.${resourceType}.${number}", resourceTypeCountModel)
+                                    .setDefaultValue("?"));
         }
     }
 }

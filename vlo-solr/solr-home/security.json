@@ -1,0 +1,34 @@
+{
+"authentication":{
+    "blockUnknown":true,
+    "class":"solr.BasicAuthPlugin",
+    "credentials":{
+        "user_admin":"bo8SoNiWXKlWXTpmxPLBXBoWVEdx968b5/lpENmHh4s= JSj/0vFzWuyJxTwkPCt4euQts/MZVDVRmAGfu39CfSc=",
+        "docker_user_rw":"Hk7fpN4/pRUaWoUqMHrZPvL0zM+vE0NIi37fNRQbLhE= SfrJDZHIGqE2ezBox9sRXvVzbjDk0r+Npqtm53UlgYo=",
+        "docker_user_read":"2VeTCdJPAvI13EiH/xE2pVKX9ASIOcahbYzPzkH4Mq4= lInQbfT69X0BiA/Gu8fl0kEwgn5r8J0/0S7bkOitJxI="
+    },
+    "":{"v":0}
+},
+"authorization":{
+   "class":"solr.RuleBasedAuthorizationPlugin",
+   "permissions":[
+        {"index": 1, "name":"update","role":"role_write"},
+        {"index": 2, "name":"config-edit","role":"role_admin"},
+        {"index": 3, "name":"config-read","role":"role_admin"},
+        {"index": 4, "name":"security-read","role":"role_admin"},
+        {"index": 5, "name":"security-edit","role":"role_admin"},
+        {"index": 6, "name":"schema-read","role":"role_read"},
+        {"index": 7, "name":"schema-edit","role":"role_admin"},
+        {"index": 8, "name":"core-admin-read","role":"role_admin"},
+        {"index": 9, "name":"core-admin-edit","role":"role_admin"},
+        {"index": 10, "name":"collection-admin-read","role":"role_admin"},
+        {"index": 11, "name":"collection-admin-edit","role":"role_admin"},
+        {"index": 12, "name":"read","role":"role_read"}
+   ],
+   "user-role":{
+       "user_admin":["role_admin", "role_write", "role_read"],
+       "docker_user_rw":["role_write", "role_read"],
+       "docker_user_read":"role_read"
+   }
+}
+}

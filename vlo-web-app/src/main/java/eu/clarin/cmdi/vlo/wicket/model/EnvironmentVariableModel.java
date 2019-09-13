@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -26,7 +25,7 @@ import org.apache.wicket.model.Model;
  * @see System#getenv(java.lang.String)
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class EnvironmentVariableModel extends AbstractReadOnlyModel<String> {
+public class EnvironmentVariableModel implements IModel<String> {
 
     private final IModel<String> variableNameModel;
 
@@ -45,7 +44,6 @@ public class EnvironmentVariableModel extends AbstractReadOnlyModel<String> {
 
     @Override
     public void detach() {
-        super.detach();
         variableNameModel.detach();
     }
 
