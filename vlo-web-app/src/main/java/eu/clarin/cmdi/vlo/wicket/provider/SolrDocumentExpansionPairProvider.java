@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.provider;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentExpansionPairImpl;
@@ -38,13 +37,11 @@ import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.slf4j.LoggerFactory;
 
-import com.sun.istack.logging.Logger;
 
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
 import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
-import eu.clarin.cmdi.vlo.config.ServletVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 
 /**
@@ -85,7 +82,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
                 QueryFacetsSelection selection = this.selectionModel.getObject();
                 // get search term
                 String searchTerm = this.selectionModel.getObject().getQuery();
-                List<SearchResult> res = new ArrayList<SearchResult>();
+                List<SearchResult> res = new ArrayList<>();
                 // get search results record ids
                 for (int i = 0; i < documents.getDocuments().size(); i++) {
                     String id = ((SolrDocumentExpansionPairImpl) documents.getDocuments().get(i)).getDocument()
