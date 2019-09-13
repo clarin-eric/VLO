@@ -18,9 +18,9 @@
     <description></description>
 
     <properties>
-        <wicket.version>8.5.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>8.6.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>5.1.9.RELEASE</spring.version>
-        <clarin-basestyle.version>0.3.0</clarin-basestyle.version>
+        <clarin-basestyle.version>0.4.0-alpha1</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
