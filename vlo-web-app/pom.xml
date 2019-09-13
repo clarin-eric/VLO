@@ -84,12 +84,6 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <!-- Make Spring log to SLF4J, too (drop-in replacement for JCL) -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>org.apache.solr</groupId>
