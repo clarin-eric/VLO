@@ -138,9 +138,7 @@ public class MetadataImporter {
 
             if (!Strings.isNullOrEmpty(mongoConnectionString) && !Strings.isNullOrEmpty(mongoDbName)) {
                 LOG.debug("Connecting to Mongo database '{}' for link checker information", mongoDbName);
-                final MongoClient mongoClient = MongoClients.create(mongoConnectionString);
-                final MongoDatabase database = mongoClient.getDatabase(mongoDbName);
-                final ACDHRasaFactory factory = new ACDHRasaFactory(database);
+                final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
                 final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
                 return new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
             } else {
