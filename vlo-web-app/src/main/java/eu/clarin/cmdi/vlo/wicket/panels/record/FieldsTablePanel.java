@@ -48,6 +48,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -62,6 +64,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 
 /**
  *
@@ -89,6 +92,7 @@ public class FieldsTablePanel extends Panel {
     private FieldNameService fieldNameService;
 
     private final Collection<String> SMART_LINK_FIELDS;
+    private final Collection<String> LINK_FIELDS;
 
     private IDataProvider<DocumentField> fieldProvider;
 
@@ -97,8 +101,15 @@ public class FieldsTablePanel extends Panel {
 
         this.SMART_LINK_FIELDS = Stream.of(
                 FieldKey.DESCRIPTION,
+                FieldKey.COMPLETE_METADATA
+        )
+                //existing fields (check) into a set
+                .map(fieldNameService::getFieldName).filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+
+        this.LINK_FIELDS = Stream.of(
                 FieldKey.SEARCHPAGE,
-                FieldKey.COMPLETE_METADATA,
+                FieldKey.SEARCH_SERVICE,
                 FieldKey.SELF_LINK
         )
                 //existing fields (check) into a set
@@ -129,6 +140,16 @@ public class FieldsTablePanel extends Panel {
             return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
         } else if (fieldNameService.getFieldName(FieldKey.LANDINGPAGE).equals(facetNameModel.getObject())) {
             return new SmartLinkLabel(id, new PropertyModel(new ResourceInfoObjectModel(valueModel), "url"));
+        } else if (LINK_FIELDS.contains(fieldName)) {
+            return new Label(id, new PIDLinkModel(valueModel)) {
+                @Override
+                public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+                    final CharSequence link = Strings.escapeMarkup(getDefaultModelObjectAsString());
+                    replaceComponentTagBody(markupStream, openTag,
+                            "<a href=\"" +  link + "\">" + link + "</a>");
+                }
+
+            }.setEscapeModelStrings(false);
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
