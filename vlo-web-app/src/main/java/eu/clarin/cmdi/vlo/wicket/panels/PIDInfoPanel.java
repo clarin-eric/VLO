@@ -45,9 +45,11 @@ public class PIDInfoPanel extends GenericPanel<String> {
     private UriResolver uriResolver;
 
     private final IModel<PIDContext> pidContextModel;
+    private final PIDLinkModel pidLinkModel;
 
     public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContextModel) {
-        super(id, PIDLinkModel.wrapLinkModel(model));
+        super(id, model);
+        pidLinkModel = PIDLinkModel.wrapLinkModel(model);
         this.pidContextModel = pidContextModel;
         setOutputMarkupId(true);
     }
@@ -56,8 +58,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
     protected void onInitialize() {
         super.onInitialize();
 
-        final IModel<String> pidLinkModel = getModel();
-        final IModel<PIDType> pidTypeModel = new NullFallbackModel<>(new PIDTypeModel(pidLinkModel), PIDType.OTHER);
+        final IModel<PIDType> pidTypeModel = new NullFallbackModel<>(new PIDTypeModel(getModel()), PIDType.OTHER);
 
         add(new TextField("pidInputField", pidLinkModel));
 
@@ -104,6 +105,12 @@ public class PIDInfoPanel extends GenericPanel<String> {
 
                 })
         );
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        pidLinkModel.detach();
     }
 
 }
