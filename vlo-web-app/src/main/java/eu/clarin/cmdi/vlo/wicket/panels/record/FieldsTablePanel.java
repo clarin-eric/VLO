@@ -46,8 +46,6 @@ import java.util.stream.Stream;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
-import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
@@ -79,11 +77,6 @@ public class FieldsTablePanel extends Panel {
     private final static Collection<String> UNESCAPED_VALUE_FIELDS
             = Collections.emptySet(); // ImmutableSet.of(FacetConstants.FIELD_LANGUAGE_CODE);
 
-    /**
-     * List of fields that should be rendered in a
-     * {@link SmartLinkMultiLineLabel}, which detects URLs and turns them into
-     * links
-     */
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean(name = "fieldValueSorters")
@@ -91,7 +84,17 @@ public class FieldsTablePanel extends Panel {
     @SpringBean
     private FieldNameService fieldNameService;
 
+    /**
+     * List of fields that should be rendered in a
+     * {@link SmartLinkFieldValueLabel}, which detects URLs within the text and turns
+     * them into links
+     */
     private final Collection<String> SMART_LINK_FIELDS;
+
+    /**
+     * List of fields that can be assumed to have a URL value and should be
+     * rendered as a link
+     */
     private final Collection<String> LINK_FIELDS;
 
     private IDataProvider<DocumentField> fieldProvider;
@@ -139,17 +142,9 @@ public class FieldsTablePanel extends Panel {
         } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
             return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
         } else if (fieldNameService.getFieldName(FieldKey.LANDINGPAGE).equals(facetNameModel.getObject())) {
-            return new SmartLinkLabel(id, new PropertyModel(new ResourceInfoObjectModel(valueModel), "url"));
+            return new LinkLabel(id, new PIDLinkModel(new PropertyModel(new ResourceInfoObjectModel(valueModel), "url")));
         } else if (LINK_FIELDS.contains(fieldName)) {
-            return new Label(id, new PIDLinkModel(valueModel)) {
-                @Override
-                public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
-                    final CharSequence link = Strings.escapeMarkup(getDefaultModelObjectAsString());
-                    replaceComponentTagBody(markupStream, openTag,
-                            "<a href=\"" +  link + "\">" + link + "</a>");
-                }
-
-            }.setEscapeModelStrings(false);
+            return new LinkLabel(id, new PIDLinkModel(valueModel));
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
@@ -254,4 +249,18 @@ public class FieldsTablePanel extends Panel {
 //        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
 //        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getFieldsTableJS()));
 //    }
+    private static class LinkLabel extends Label {
+
+        public LinkLabel(String id, IModel<?> model) {
+            super(id, model);
+            setEscapeModelStrings(false);
+        }
+
+        @Override
+        public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+            final CharSequence link = Strings.escapeMarkup(getDefaultModelObjectAsString());
+            replaceComponentTagBody(markupStream, openTag,
+                    "<a href=\"" + link + "\">" + link + "</a>");
+        }
+    }
 }
