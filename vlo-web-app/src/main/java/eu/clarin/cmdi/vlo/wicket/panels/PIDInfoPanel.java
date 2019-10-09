@@ -16,7 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.PIDType;
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
@@ -55,7 +57,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         super.onInitialize();
 
         final IModel<String> pidLinkModel = getModel();
-        final PIDTypeModel pidTypeModel = new PIDTypeModel(pidLinkModel);
+        final IModel<PIDType> pidTypeModel = new NullFallbackModel<>(new PIDTypeModel(pidLinkModel), PIDType.OTHER);
 
         add(new TextField("pidInputField", pidLinkModel));
 
@@ -66,7 +68,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         add(new ExternalLink("pidLink", pidLinkModel)
                 .add(new Label("pidContextLabel3", pidContextLabelModel)));
 
-        final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
+        final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel).setDefaultValue("???");
         add(new Label("pidTypeLabel", pidTypeLabelModel));
 
         final StringResourceModel pidTypeLabelPluralModel = new StringResourceModel("pidType.${}.plural", this, pidTypeModel);
