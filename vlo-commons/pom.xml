@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.7.2-alpha2</version>
+        <version>4.7.2-SNAPSHOT</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.7.2-alpha2</version>
+    <version>4.7.2-SNAPSHOT</version>
     <name>VLO Commons</name>
     <url>http://maven.apache.org</url>
     <properties>
@@ -22,6 +22,7 @@
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
+        <vloconfig.availabilityStatusUpdaterBatchSize>25</vloconfig.availabilityStatusUpdaterBatchSize>
         <vloconfig.vcrMaximumItemsCount>1000</vloconfig.vcrMaximumItemsCount>
         <vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
         <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
@@ -141,6 +142,7 @@
                 <vloconfig.valueMappingFile>${VLO_DOCKER_VALUE_MAPPING_URI}</vloconfig.valueMappingFile>
                 <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
                 <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
+                <vloconfig.availabilityStatusUpdaterBatchSize>${VLO_DOCKER_AVAILABILITY_STATUS_UPDATE_BATCH_SIZE}</vloconfig.availabilityStatusUpdaterBatchSize>
                 <vloconfig.vcrMaximumItemsCount>${VLO_DOCKER_VCR_MAXIMUM_ITEMS_COUNT}</vloconfig.vcrMaximumItemsCount>
                 <vloconfig.conceptRegistryUrl>${VLO_DOCKER_CONCEPT_REGISTRY_URL}</vloconfig.conceptRegistryUrl>
                 <vloconfig.vocabularyRegistryUrl>${VLO_DOCKER_VOCABULARY_REGISTRY_URL}</vloconfig.vocabularyRegistryUrl>
