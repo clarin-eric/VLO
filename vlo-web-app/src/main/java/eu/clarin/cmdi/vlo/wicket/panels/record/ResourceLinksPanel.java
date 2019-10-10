@@ -41,6 +41,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
@@ -142,7 +143,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
 
         };
-        //landingPageItem.add(new InvisibleIfNullBehaviour(landingPageModel));
+        landingPageItem.add(new InvisibleIfNullBehaviour<>(landingPageModel));
         return landingPageItem;
     }
 
