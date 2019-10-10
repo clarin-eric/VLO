@@ -6,14 +6,14 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.7.2-SNAPSHOT</version>
+        <version>4.7.2-alpha4</version>
     </parent>
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.7.2-SNAPSHOT</version>
+    <version>4.7.2-alpha4</version>
     <name>VLO Web Application</name>
     <description></description>
 
