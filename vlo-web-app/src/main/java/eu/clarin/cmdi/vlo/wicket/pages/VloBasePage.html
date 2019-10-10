@@ -59,15 +59,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div class="col-sm-6 col-sm-push-3 col-xs-12">
                         <!-- CLARIN logo and copyright (center column on larger screens) -->
                         <div class="text-center">
-                            <p wicket:id="vloFooter.serviceBy" class="footer-fineprint">
-                                [Service provided by <a href="https://www.clarin.eu">CLARIN</a>]
+                            <p class="footer-fineprint">
+                                <wicket:message key="vloFooter.serviceBy" escape="false">[Service provided by <a href="https://www.clarin.eu">CLARIN</a>]</wicket:message>
                             </p>
                         </div>
                     </div>
                     <div class="col-sm-3 col-sm-pull-6 col-xs-12">
                         <div class="hidden-xs">
                             <!-- On smaller screen, show about link with contact link -->
-                            <wicket:link><a wicket:id="vloFooter.about1" href="AboutPage.html">[About]</a></wicket:link>
+                            <wicket:link><a href="AboutPage.html"><wicket:message key="vloFooter.about">[About]</wicket:message></a></wicket:link>
                         </div>
                         <div class="version-info text-center-xs">
                             <!-- Center version on mobile -->
@@ -81,12 +81,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                     <div class="col-sm-3 hidden-xs text-right">
                         <!-- Contact link in right column on larger screens -->
-                        <a wicket:id="contactLink1" href="mailto:vlo@clarin.eu">[Contact]</a>
+                        <a wicket:message="href:vloFooter.contactMail"><wicket:message key="vloFooter.contact" /></a>
                     </div>
                     <div class="visible-xs-block text-center">
                         <!-- Both links in centered div on mobile -->
-                        <wicket:link><a wicket:id="vloFooter.about2" href="AboutPage.html">[About]</a></wicket:link>
-                        &nbsp;<a wicket:id="contactLink2" href="[mailto:vlo@clarin.eu]">[Contact]</a>
+                        <wicket:link><a href="AboutPage.html"><wicket:message key="vloFooter.about">[About]</wicket:message></a></wicket:link>
+                        &nbsp;<a wicket:message="href:vloFooter.contactMail"><wicket:message key="vloFooter.contact" /></a>
                     </div>
                 </div>
             </div>

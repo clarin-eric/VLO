@@ -55,7 +55,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.model.StringResourceModel;
+
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -188,12 +188,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         navigation = createNavigation("navigation");
         searchContainer.add(navigation);
-
-        // greetings/introduction texts and labels
-        searchContainer.add(new Label("searchpage.greeting.title", new StringResourceModel("searchpage.greeting.title", this)));
-        searchContainer.add(new Label("searchpage.greeting.welcome", new StringResourceModel("searchpage.greeting.welcome", this)));
-        searchContainer.add(new Label("searchpage.allrecords", new StringResourceModel("searchpage.allrecords", this)));
-        searchContainer.add(new Label("searchpage.tour.label", new StringResourceModel("searchpage.tour.label", this)));
 
         searchForm = createSearchForm("search");
         searchContainer.add(searchForm);

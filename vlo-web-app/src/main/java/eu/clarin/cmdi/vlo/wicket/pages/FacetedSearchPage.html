@@ -46,9 +46,9 @@
 
                 <div id="simple-jumbotron" class="simple-only">
                     <div class="jumbotron">
-                        <h1 wicket:id="searchpage.greeting.title">[CLARIN Virtual Language Observatory]</h1>
-                        <p wicket:id="searchpage.greeting.welcome">
-                            [Welcome to the VLO!]
+                        <h1><wicket:message key="searchpage.greeting.title">[CLARIN Virtual Language Observatory]</wicket:message></h1>
+                        <p>
+                            <wicket:message key="searchpage.greeting.welcome">[Welcome to the VLO!]</wicket:message>
                         </p>
                         <p>
                             Use the <strong>search bar</strong> below to start searching through hundreds of thousands of language resources, 
@@ -56,12 +56,12 @@
                             and use <strong>facets</strong> to narrow down to your area of interest or discover new resources.
                         </p>
                         <wicket:link>
-                            <a wicket:id="searchpage.allrecords" href="FacetedSearchPage.html" class="btn btn-primary btn-lg switch-from-simple">[See all records]</a>
+                            <a href="FacetedSearchPage.html" class="btn btn-primary btn-lg switch-from-simple"><wicket:message key="searchpage.allrecords">[See all records]</wicket:message></a>
                         </wicket:link>
                         <wicket:link>
-                            <span id="learn-more">&nbsp;<a href="HelpPage.html" class="btn btn-default btn-lg">Learn more</a></span>
+                            <span id="learn-more">&nbsp;<a href="HelpPage.html" class="btn btn-default btn-lg"><wicket:message key="searchpage.learnmore">[Learn more]</wicket:message></a></span>
                         </wicket:link>
-                        <span id="take-tour" class="hidden hidden-xs">&nbsp;<a wicket:id="searchpage.tour.label" href="#" class="btn btn-default btn-lg">[Take a quick tour]</a></span>
+                        <span id="take-tour" class="hidden hidden-xs">&nbsp;<a href="#" class="btn btn-default btn-lg"><wicket:message key="searchpage.tour.label">[Take a quick tour]</wicket:message></a></span>
                     </div>
                 </div>
 

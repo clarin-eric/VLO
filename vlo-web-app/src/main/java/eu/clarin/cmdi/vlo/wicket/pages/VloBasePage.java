@@ -29,7 +29,6 @@ import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.SnippetConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
-import eu.clarin.cmdi.vlo.wicket.components.UnescapedLabel;
 import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import org.apache.wicket.AttributeModifier;
@@ -43,7 +42,6 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.include.Include;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -231,14 +229,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
                 .add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
-        add(new Label("vloFooter.about1", new StringResourceModel("vloFooter.about", this)));
-        add(new Label("vloFooter.about2", new StringResourceModel("vloFooter.about", this)));
-        add(new ExternalLink("contactLink1", new StringResourceModel("vloFooter.contactMail", this), new StringResourceModel("vloFooter.contact", this)));
-        add(new ExternalLink("contactLink2", new StringResourceModel("vloFooter.contactMail", this), new StringResourceModel("vloFooter.contact", this)));
-        add(new UnescapedLabel("vloFooter.serviceBy", new StringResourceModel("vloFooter.serviceBy", this)));
-
-        add(new Label("instanceInfo", instanceInfoModel).add(new InvisibleIfNullBehaviour(instanceInfoModel)));
-
+        add(new Label("instanceInfo", instanceInfoModel).add(new InvisibleIfNullBehaviour(instanceInfoModel)));        
+        
         add(new HideJavascriptFallbackControlsBehavior());
 
         // add Piwik tracker (if enabled)
