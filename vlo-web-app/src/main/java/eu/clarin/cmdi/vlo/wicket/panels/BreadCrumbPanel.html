@@ -24,15 +24,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
             <li class="breadcrumbs-home"><a wicket:id="home">VLO</a></li>
-            <li class="breadcrumbs-searchpage"><a wicket:id="searchPage">Faceted search</a></li>
+            <li class="breadcrumbs-searchpage"><a wicket:id="searchPage"><wicket:message key="breadcrumbs.facetedSearch">[Faceted search]</wicket:message></a></li>
             <wicket:container wicket:id="results">
                 <li class="breadcrumbs-searchresults">
-                    <a wicket:id="resultsLink">Search results</a>
+                    <a wicket:id="resultsLink"><wicket:message key="breadcrumbs.searchResults">[Search results]</wicket:message></a>
                 </li>
             </wicket:container>
             <wicket:container wicket:id="document">
                 <li class="breadcrumbs-document">
-                    <a wicket:id="documentLink">Record: <span wicket:id="documentTitle">[Title]</span></a>
+                    <a wicket:id="documentLink"><wicket:message key="breadcrumbs.record">[Record:]</wicket:message> <span wicket:id="documentTitle">[Title]</span></a>
                 </li>
             </wicket:container>
             <wicket:container wicket:id="facet">
