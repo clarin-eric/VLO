@@ -51,9 +51,11 @@
                             <wicket:message key="searchpage.greeting.welcome">[Welcome to the VLO!]</wicket:message>
                         </p>
                         <p>
-                            Use the <strong>search bar</strong> below to start searching through hundreds of thousands of language resources, 
-                            or <wicket:link><a href="FacetedSearchPage.html" class="switch-from-simple">continue</a></wicket:link> to browse everything 
-                            and use <strong>facets</strong> to narrow down to your area of interest or discover new resources.
+                            <wicket:message key="searchpage.greeting.description">
+                                [Use the <strong>search bar</strong> below to start searching through hundreds of thousands of language resources,
+                                or continue to browse everything and use <strong>facets</strong> to narrow down to your area of interest or discover new resources.]
+                                <a wicket:id="searchpage.greeting.description.link" class="switch-from-simple"><wicket:message key="searchpage.greeting.description.linkText"/></a>
+                            </wicket:message>
                         </p>
                         <wicket:link>
                             <a href="FacetedSearchPage.html" class="btn btn-primary btn-lg switch-from-simple"><wicket:message key="searchpage.allrecords">[See all records]</wicket:message></a>

@@ -50,6 +50,7 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
@@ -188,6 +189,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         navigation = createNavigation("navigation");
         searchContainer.add(navigation);
+
+        searchContainer.add(new BookmarkablePageLink<Void>("searchpage.greeting.description.link", FacetedSearchPage.class, new PageParameters()));
 
         searchForm = createSearchForm("search");
         searchContainer.add(searchForm);
