@@ -260,7 +260,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         });
         tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION),
                 new AbstractTab(
-                        new StringResourceModel("recordpage.tabs.links", new NullFallbackModel(linksCountLabelModel, "?"))) {
+                        new StringResourceModel("recordpage.tabs.links", new NullFallbackModel<>(linksCountLabelModel, "?"))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
@@ -448,7 +448,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new NullFallbackModel(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord")))
+                new NullFallbackModel<>(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord")))
                 .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
 

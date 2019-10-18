@@ -77,7 +77,7 @@ public class SearchResultItemExpandedPanel extends GenericPanel<SolrDocument> {
         this.searchContextModel = searchContextModel;
 
         // add untruncated description
-        final NullFallbackModel descriptionModel = new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), new StringResourceModel("searchresult.nodescription", this));
+        final NullFallbackModel descriptionModel = new NullFallbackModel<>(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), new StringResourceModel("searchresult.nodescription", this));
         add(new SmartLinkFieldValueLabel("description", descriptionModel, Model.of(fieldNameService.getFieldName(FieldKey.DESCRIPTION))));
 
         // add link to record

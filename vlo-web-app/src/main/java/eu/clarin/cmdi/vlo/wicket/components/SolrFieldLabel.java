@@ -46,11 +46,11 @@ public class SolrFieldLabel extends Label {
     }
 
     protected SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback, boolean forceSingleValue) {
-        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), nullFallback));
+        super(id, new NullFallbackModel<>(new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), nullFallback));
     }
 
     protected SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, String nullFallback, boolean forceSingleValue) {
-        super(id, new NullFallbackModel(new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), nullFallback));
+        super(id, new NullFallbackModel<>(new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), nullFallback));
     }
 
     /**
@@ -84,7 +84,7 @@ public class SolrFieldLabel extends Label {
     }
 
     public SolrFieldLabel(String id, IModel<SolrDocument> documentModel, String fieldName, IModel<String> nullFallback, int maxLength, int truncatePoint, boolean forceSingleValue) {
-        super(id, new NullFallbackModel(
+        super(id, new NullFallbackModel<>(
                 new TruncatingStringModel(
                         new SolrFieldStringModel(documentModel, fieldName, forceSingleValue), maxLength, truncatePoint), nullFallback));
     }
