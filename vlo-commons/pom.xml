@@ -22,6 +22,7 @@
         <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
+        <vloconfig.availabilityStatusUpdaterBatchSize>25</vloconfig.availabilityStatusUpdaterBatchSize>
         <vloconfig.vcrMaximumItemsCount>1000</vloconfig.vcrMaximumItemsCount>
         <vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
         <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
