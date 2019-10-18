@@ -60,7 +60,7 @@ public class AvailabilityStatusUpdater {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
 
-    public final static int SOLR_REQUEST_PAGE_SIZE = 250;
+    private final int solrRequestPageSize;
 
     private final SolrBridge solrBridge;
     private final ResourceAvailabilityStatusChecker statusChecker;
@@ -77,6 +77,7 @@ public class AvailabilityStatusUpdater {
     public AvailabilityStatusUpdater(VloConfig config, SolrBridge solrBridge, ResourceAvailabilityStatusChecker statusChecker) {
         this.solrBridge = solrBridge;
         this.statusChecker = statusChecker;
+        this.solrRequestPageSize = config.getAvailabilityStatusUpdaterBatchSize();
 
         final FieldNameServiceImpl fieldNameService = new FieldNameServiceImpl(config);
         RESOURCE_REF_FIELD = fieldNameService.getFieldName(FieldKey.RESOURCE);
@@ -98,6 +99,10 @@ public class AvailabilityStatusUpdater {
         final SolrQuery recordsQuery = new SolrQuery("*:*");
         recordsQuery.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
 
+        if(solrRequestPageSize <= 0) {
+            throw new IllegalArgumentException("AvailabilityStatusUpdaterBatchSize parameter must have a positive non-zero value!");
+        }
+        
         if (logger.isInfoEnabled()) {
             // Get result count
             recordsQuery.setRows(0);
@@ -105,7 +110,7 @@ public class AvailabilityStatusUpdater {
         }
 
         // Prepare query for processing
-        recordsQuery.setRows(SOLR_REQUEST_PAGE_SIZE);
+        recordsQuery.setRows(solrRequestPageSize);
         recordsQuery.setFields(ID_FIELD, RESOURCE_REF_FIELD, RESOURCE_AVAILABILITY_SCORE_FIELD, LANDING_PAGE_FIELD);
         recordsQuery.setSort(SolrQuery.SortClause.asc(ID_FIELD));
 
@@ -219,7 +224,7 @@ public class AvailabilityStatusUpdater {
 
     private Set<ResourceInfo> fieldToResourceInfos(final Optional<Collection<Object>> landingPageValues) {
         return landingPageValues
-                .map(Collection::parallelStream)
+                .map(Collection::stream)
                 .orElse(Stream.empty())
                 .filter(r -> (r instanceof String)) // filter out null and non-String values
                 .map(r -> ResourceInfo.fromJson(objectMapper, (String) r)) // deserialise
@@ -259,10 +264,10 @@ public class AvailabilityStatusUpdater {
 
     public void updateDocument(final Object docId, final ResourceAvailabilityScore score, final List<ResourceInfo> newResourceRefInfos, final List<ResourceInfo> newLandingPageInfos) {
         // serialize new resource ref values
-        final List<String> newResourceRefValue = newResourceRefInfos.parallelStream()
+        final List<String> newResourceRefValue = newResourceRefInfos.stream()
                 .map((info) -> info.toJson(objectMapper))
                 .collect(Collectors.toList());
-        final List<String> newLandingPageRefValue = newLandingPageInfos.parallelStream()
+        final List<String> newLandingPageRefValue = newLandingPageInfos.stream()
                 .map((info) -> info.toJson(objectMapper))
                 .collect(Collectors.toList());
 

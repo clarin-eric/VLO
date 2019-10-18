@@ -148,6 +148,8 @@ public class VloConfig {
 
     private String otherProvidersMarkupFile;
 
+    private int availabilityStatusUpdaterBatchSize = 50;
+
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String, String> fields;
 
@@ -1381,6 +1383,14 @@ public class VloConfig {
 
     public void setOtherProvidersMarkupFile(String otherProvidersMarkupFile) {
         this.otherProvidersMarkupFile = otherProvidersMarkupFile;
+    }
+
+    public Integer getAvailabilityStatusUpdaterBatchSize() {
+        return availabilityStatusUpdaterBatchSize;
+    }
+
+    public void setAvailabilityStatusUpdaterBatchSize(Integer availabilityStatusUpdaterBatchSize) {
+        this.availabilityStatusUpdaterBatchSize = availabilityStatusUpdaterBatchSize;
     }
 
 }
