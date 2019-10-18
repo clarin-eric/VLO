@@ -37,13 +37,10 @@ import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.slf4j.LoggerFactory;
 
-
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
-import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
 /**
  *
  * @author twagoo
@@ -69,34 +66,8 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
                 selectionModel.getObject(), BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact(), FacetConstants.COLLAPSE_FIELD_NAME); // safe long->int
                                                                                                 // conversion
-
-        VloConfig vloConfig = VloWicketApplication.get().getVloConfig();
-        if (vloConfig.isVloExposureEnabled()) {
-            try {
-                // these values to be saved in postgresql to calculate record-exposure
-                // get page url
-                String pageUrl = ((ServletWebRequest) RequestCycle.get().getRequest()).getContainerRequest()
-                        .getRequestURL().toString();
-                // get user ip address
-                String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
-                QueryFacetsSelection selection = this.selectionModel.getObject();
-                // get search term
-                String searchTerm = this.selectionModel.getObject().getQuery();
-                List<SearchResult> res = new ArrayList<>();
-                // get search results record ids
-                for (int i = 0; i < documents.getDocuments().size(); i++) {
-                    String id = ((SolrDocumentExpansionPairImpl) documents.getDocuments().get(i)).getDocument()
-                            .get("id").toString();
-                    res.add(new SearchResult(id, i + 1, 0));
-                }
-                // create SearchQuery object and save it to DB
-                SearchQuery sq = new SearchQuery(searchTerm, selection.getSelection().toString(), res, ip, pageUrl);
-                sq.save(vloConfig);
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-        }
-
+        ExposureTrackerImpl exposureTracker = new ExposureTrackerImpl(this.selectionModel.getObject());
+        exposureTracker.track(documents, first, count);
         return documents.iterator();
     }
 

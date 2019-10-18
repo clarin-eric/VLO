@@ -33,8 +33,8 @@ public class SearchResultHandlerImpl implements SearchResultHandler {
                 // set query parameters
                 pstmt.setLong(1, queryId);
                 pstmt.setString(2, sr.getRecordId());
-                pstmt.setInt(3, sr.getPosition());
-                pstmt.setInt(4, sr.getPage());
+                pstmt.setLong(3, sr.getPosition());
+                pstmt.setLong(4, sr.getPage());
                 // run the query
                 affectedRows = pstmt.executeUpdate();
                 if (affectedRows > 0) {

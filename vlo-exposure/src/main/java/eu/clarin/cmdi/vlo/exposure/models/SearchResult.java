@@ -4,8 +4,8 @@ import java.sql.Timestamp;
 
 public class SearchResult {
     private String recordId;
-    private int position;
-    private int page;
+    private long position;
+    private long page;
 
     /**
      * Instantiates a new SearchResult instance.
@@ -14,7 +14,7 @@ public class SearchResult {
      * @param position the position
      * @param page     the page
      */
-    public SearchResult(String recordId, int position, int page) {
+    public SearchResult(String recordId, long position, long page) {
         this.recordId = recordId;
         this.position = position;
         this.page = page;
@@ -43,7 +43,7 @@ public class SearchResult {
      *
      * @return the position
      */
-    public int getPosition() {
+    public long getPosition() {
         return position;
     }
 
@@ -52,7 +52,7 @@ public class SearchResult {
      *
      * @param position the new position
      */
-    public void setPosition(int position) {
+    public void setPosition(long position) {
         this.position = position;
     }
 
@@ -61,7 +61,7 @@ public class SearchResult {
      *
      * @return the page
      */
-    public int getPage() {
+    public long getPage() {
         return page;
     }
 
@@ -70,7 +70,7 @@ public class SearchResult {
      *
      * @param page the new page
      */
-    public void setPage(int page) {
+    public void setPage(long page) {
         this.page = page;
     }
 }
