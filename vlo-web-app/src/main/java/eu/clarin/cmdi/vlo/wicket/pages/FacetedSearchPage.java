@@ -44,6 +44,8 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
+import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
+import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
@@ -76,6 +78,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
+    @SpringBean
+    private ExposureTracker exposureTracker;
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean
@@ -177,7 +181,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private void addComponents() {
-        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService);
+        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, exposureTracker);
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
         searchContainer = new WebMarkupContainer("searchContainer");
         searchContainer.add(new AttributeModifier("class", new IModel<>() {

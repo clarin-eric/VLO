@@ -20,6 +20,8 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import java.io.IOException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
+import eu.clarin.cmdi.vlo.service.ExposureTracker;
 
 /**
  * Main VLO web application beans
@@ -55,6 +57,11 @@ public class VloApplicationSpringConfig {
    @Bean
    public VloWicketApplication webApplication() {
        return new VloWicketApplication();
+   }
+   
+   @Bean
+   public ExposureTracker exposureTracker() {
+       return new ExposureTrackerImpl(vloConfig());
    }
 
 }

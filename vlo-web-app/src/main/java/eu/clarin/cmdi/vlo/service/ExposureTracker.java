@@ -18,9 +18,9 @@ package eu.clarin.cmdi.vlo.service;
 
 
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
-import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
+import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 
 public interface ExposureTracker {
 
-    public void track(SolrDocumentExpansionList documents, long first, long count);
+    public void track(QueryFacetsSelection selection, SolrDocumentExpansionList documents, long first, long count);
 }

@@ -41,6 +41,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
+import eu.clarin.cmdi.vlo.service.ExposureTracker;
 /**
  *
  * @author twagoo
@@ -49,15 +50,16 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
     private final static org.slf4j.Logger logger = LoggerFactory.getLogger(SolrDocumentExpansionPairProvider.class);
 
     private final FieldNameService fieldNameService;
-
+    private final ExposureTracker exposureTracker;
     private final IModel<QueryFacetsSelection> selectionModel;
 
     private Long size;
 
     public SolrDocumentExpansionPairProvider(IModel<QueryFacetsSelection> selection,
-            FieldNameService fieldNameService) {
+            FieldNameService fieldNameService, ExposureTracker exposureTracker) {
         this.selectionModel = selection;
         this.fieldNameService = fieldNameService;
+        this.exposureTracker = exposureTracker;
     }
 
     @Override
@@ -66,8 +68,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
                 selectionModel.getObject(), BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact(), FacetConstants.COLLAPSE_FIELD_NAME); // safe long->int
                                                                                                 // conversion
-        ExposureTrackerImpl exposureTracker = new ExposureTrackerImpl(this.selectionModel.getObject());
-        exposureTracker.track(documents, first, count);
+        exposureTracker.track(selectionModel.getObject(), documents, first, count);
         return documents.iterator();
     }
 

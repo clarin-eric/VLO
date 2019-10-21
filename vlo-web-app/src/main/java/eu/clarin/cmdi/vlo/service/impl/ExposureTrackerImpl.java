@@ -43,16 +43,27 @@ import java.util.List;
 public class ExposureTrackerImpl implements ExposureTracker {
 
     private final static Logger logger = LoggerFactory.getLogger(ExposureTrackerImpl.class);
-    private final QueryFacetsSelection selection;
     private final VloConfig vloConfig;
     
-    public ExposureTrackerImpl(QueryFacetsSelection selection) {
-        this.vloConfig = VloWicketApplication.get().getVloConfig();
-        this.selection = selection;
+    public ExposureTrackerImpl(VloConfig vloConfig) {
+        this.vloConfig = vloConfig;
     }
-
+    
+    private String anonymizeIP(String ip) {
+        System.out.println(ip);
+        int index = ip.length()-1;
+        if(ip.contains("."))
+            index = ip.lastIndexOf(".");
+        else if(ip.contains(":"))
+            index = ip.lastIndexOf(":");
+        System.out.println(index);
+        ip =ip.substring(0, index+1).concat("0");
+        System.out.println(ip);
+        return ip;
+    }
+    
     @Override
-    public void track(SolrDocumentExpansionList documents, long first, long count) {
+    public void track(QueryFacetsSelection selection, SolrDocumentExpansionList documents, long first, long count) {
         if (vloConfig.isVloExposureEnabled()) {
             try {
                 // these values to be saved in postgresql to calculate record-exposure
@@ -60,9 +71,9 @@ public class ExposureTrackerImpl implements ExposureTracker {
                 String pageUrl = ((ServletWebRequest) RequestCycle.get().getRequest()).getContainerRequest()
                         .getRequestURL().toString();
                 // get user ip address
-                String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
+                String ip = anonymizeIP(((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress());
                 // get search term
-                String searchTerm = this.selection.getQuery();
+                String searchTerm = selection.getQuery();
                 int documentsSize = documents.getDocuments().size();
                 List<SearchResult> res = new ArrayList<>(documentsSize);
                 // get search results record ids
