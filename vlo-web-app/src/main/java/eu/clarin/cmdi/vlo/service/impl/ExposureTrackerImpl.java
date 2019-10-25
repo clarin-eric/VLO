@@ -50,7 +50,6 @@ public class ExposureTrackerImpl implements ExposureTracker {
     }
     
     private String anonymizeIP(String ip) {
-        System.out.println(ip);
         int index = ip.length()-1;
         if(ip.contains("."))
             index = ip.lastIndexOf(".");
