@@ -56,9 +56,7 @@ public class ExposureTrackerImpl implements ExposureTracker {
             index = ip.lastIndexOf(".");
         else if(ip.contains(":"))
             index = ip.lastIndexOf(":");
-        System.out.println(index);
         ip =ip.substring(0, index+1).concat("0");
-        System.out.println(ip);
         return ip;
     }
     
