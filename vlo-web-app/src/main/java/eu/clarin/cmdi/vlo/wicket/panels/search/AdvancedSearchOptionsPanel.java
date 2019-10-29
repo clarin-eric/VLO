@@ -53,6 +53,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -186,7 +187,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
     @Override
     protected Label createTitleLabel(String id) {
-        return new Label(id, "Search options");
+        return new Label(id, new StringResourceModel("searchOptionsTitle"));
     }
 
     @Override
