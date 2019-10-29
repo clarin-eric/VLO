@@ -25,18 +25,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <div wicket:id="container" id="facets" class="panel panel-default sidebaritem">
                 <p>
-                    Use the categories below to limit the search results to those matching the selected value(s).
+                    <wicket:message key="facetUseDescription">[Use the categories below to limit the search results to those matching the selected value(s).]</wicket:message>
                 </p>
                 <wicket:container wicket:id="facets">
                     <div wicket:id="facet">[facet]</div>
                 </wicket:container>
                 <a wicket:id="more" href="#" class="btn btn-default show-all-facets-toggle">
                     <i class="fa fa-angle-double-down" aria-hidden="true"></i>
-                    <span class="button-text">Show more facets</span>
+                    <span class="button-text"><wicket:message key="showMoreFacets">[Show more facets]</wicket:message></span>
                 </a>
                 <a wicket:id="fewer" href="#" class="btn btn-default show-all-facets-toggle">
                     <i class="fa fa-angle-double-up" aria-hidden="true"></i>
-                    <span class="button-text">Show fewer facets</span>
+                    <span class="button-text"><wicket:message key="showFewerFacets">[Show fewer facets]</wicket:message></span>
                 </a>
             </div>
         </wicket:panel>
