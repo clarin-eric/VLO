@@ -149,6 +149,7 @@
     <field name="_suggester" type="textSuggest" multiValued="true" indexed="true" stored="true"/>
     <field name="_version_" type="long" indexed="true" stored="true"/>
     <field name="accessInfo" type="string" multiValued="true" indexed="true" stored="true"/>
+    <field name="author" type="string" multiValued="true" indexed="true" stored="true"/>
     <field name="availability" type="string" multiValued="true" indexed="true" stored="true"/>
     <field name="collection" type="string" multiValued="true" indexed="true" stored="true"/>
     <field name="continent" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
