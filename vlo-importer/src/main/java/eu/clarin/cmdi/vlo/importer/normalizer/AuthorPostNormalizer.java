@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
@@ -17,18 +18,42 @@ public class AuthorPostNormalizer extends AbstractPostNormalizer {
                     .add("unspecified")
                     .add("unknown")
                     .build();
-
-    /**
+    private final static List<String> AUTHORITY_FILES_LIST
+            = ImmutableList.<String>builder()
+                    .add("orcid.org")
+                    .add("d-nb.info/gnd")
+                    .add("viaf.org")
+                    .add("isni.org")
+                    .build();
+ 
+   /**
      * Filters invalid author information
      * @param value unfiltered author information
      * @param cmdiData
      * @return filtered author information
      */
     @Override
-    public List<String> process(final String value, DocFieldContainer cmdiData) {
+    public List<String> process(String value, DocFieldContainer cmdiData) {
         if (value == null || value.length() < MIN_LENGTH || INVALID_AUTHOR_SET.contains(value.toLowerCase())) {
             return Collections.singletonList(null);
         } else {
+            value = value.trim();
+            // treatment of input like "ROLE : NAME"
+            if(value.contains(":") && !value.startsWith("http")) {
+                value = value.substring(value.indexOf(":") + 1).trim();
+            }
+            // only accept links to common person authority files
+            if(value.startsWith("http")) {
+                Boolean acceptableUrl = false;
+                for(String authorityFile : AUTHORITY_FILES_LIST)
+                    if(value.contains(authorityFile)) {
+                        acceptableUrl = true;
+                        break;
+                    }
+                if(!acceptableUrl)
+                    return Collections.singletonList(null);
+            }
+
             return Collections.singletonList(value);
         }
     }
