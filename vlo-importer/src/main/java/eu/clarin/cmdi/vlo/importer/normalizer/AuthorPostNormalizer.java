@@ -26,7 +26,7 @@ public class AuthorPostNormalizer extends AbstractPostNormalizer {
      */
     @Override
     public List<String> process(final String value, DocFieldContainer cmdiData) {
-        if (value == null || value.length() < MIN_LENGTH || INVALID_AUTHOR_SET.contains(value)) {
+        if (value == null || value.length() < MIN_LENGTH || INVALID_AUTHOR_SET.contains(value.toLowerCase())) {
             return Collections.singletonList(null);
         } else {
             return Collections.singletonList(value);
