@@ -39,7 +39,7 @@ public class AuthorPostNormalizer extends AbstractPostNormalizer {
         } else {
             value = value.trim();
             // treatment of input like "ROLE : NAME"
-            if(value.contains(":") && !value.startsWith("http")) {
+            if(value.contains(":") && !value.contains("http")) {
                 value = value.substring(value.indexOf(":") + 1).trim();
             }
             // only accept links to common person authority files
