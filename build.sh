@@ -17,22 +17,24 @@
 #####################################################################################
 
 #configuration
-MAVEN_IMAGE="maven:3.6.2-jdk-8-slim"
+APP_NAME="vlo"
+MAVEN_IMAGE="maven:3.6.2-jdk-11-slim"
 CLEAN_CACHE=${CLEAN_CACHE:-false}
 
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
-MAVEN_CONFIG_IMAGE="vlo-maven-build-cache"
+MAVEN_CONFIG_IMAGE="${APP_NAME}-maven-build-cache"
 MAVEN_CONFIG_DIR="/root/.m2"
+BUILD_CONTAINER_NAME="${APP_NAME}-maven-build"
 
 MAVEN_OPTS="$@"
 MAVEN_CMD="mvn clean install ${MAVEN_OPTS}"
 
-if ! [ "${VLO_SRC_DIR}" ]; then
-  VLO_SRC_DIR="$( cd ${SCRIPT_DIR} ; pwd -P )"
+if ! [ "${JAVA_SRC_DIR}" ]; then
+  JAVA_SRC_DIR="$( cd ${SCRIPT_DIR} ; pwd -P )"
 fi
 
-if ! [ -d "${VLO_SRC_DIR}" ]; then
-	echo "VLO source directory ${VLO_SRC_DIR} not found"
+if ! [ -d "${JAVA_SRC_DIR}" ]; then
+	echo "Source directory ${JAVA_SRC_DIR} not found"
 	exit 1
 fi
 
@@ -43,7 +45,7 @@ main() {
 	pull_image
 	prepare_cache_volume
 
-	echo "Source dir: ${VLO_SRC_DIR}" 
+	echo "Source dir: ${JAVA_SRC_DIR}" 
 	echo "Maven command: ${MAVEN_CMD}"
 	echo "Build image: ${MAVEN_IMAGE}"
 
@@ -83,10 +85,10 @@ prepare_cache_volume() {
 docker_run() {
 	docker run \
 		--rm \
-		--name vlo-maven-build \
+		--name "${BUILD_CONTAINER_NAME}" \
 		-v "${MAVEN_CONFIG_IMAGE}":"${MAVEN_CONFIG_DIR}" \
 		-e MAVEN_CONFIG="${MAVEN_CONFIG_DIR}" \
-		-v "${VLO_SRC_DIR}":/var/src  \
+		-v "${JAVA_SRC_DIR}":/var/src  \
 		-w /var/src \
 		"${MAVEN_IMAGE}" mvn clean install ${MAVEN_OPTS}
 }
