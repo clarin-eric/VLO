@@ -18,16 +18,9 @@ public class AuthorPostNormalizer extends AbstractPostNormalizer {
                     .add("unspecified")
                     .add("unknown")
                     .build();
-    private final static List<String> AUTHORITY_FILES_LIST
-            = ImmutableList.<String>builder()
-                    .add("orcid.org")
-                    .add("d-nb.info/gnd")
-                    .add("viaf.org")
-                    .add("isni.org")
-                    .build();
  
    /**
-     * Filters invalid author information
+     * Filters/reformats invalid author information
      * @param value unfiltered author information
      * @param cmdiData
      * @return filtered author information
@@ -42,16 +35,9 @@ public class AuthorPostNormalizer extends AbstractPostNormalizer {
             if(value.contains(":") && !value.contains("http")) {
                 value = value.substring(value.indexOf(":") + 1).trim();
             }
-            // only accept links to common person authority files
+            // reject all links
             if(value.startsWith("http")) {
-                Boolean acceptableUrl = false;
-                for(String authorityFile : AUTHORITY_FILES_LIST)
-                    if(value.contains(authorityFile)) {
-                        acceptableUrl = true;
-                        break;
-                    }
-                if(!acceptableUrl)
-                    return Collections.singletonList(null);
+                return Collections.singletonList(null);
             }
 
             return Collections.singletonList(value);
