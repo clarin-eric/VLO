@@ -2,9 +2,9 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import java.util.List;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.IModel;
 
-public class FacetNamesModel extends AbstractReadOnlyModel<List<String>> {
+public class FacetNamesModel implements IModel<List<String>> {
 
     private final List<String> facets;
 

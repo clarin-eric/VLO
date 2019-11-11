@@ -16,10 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels;
 
+import eu.clarin.cmdi.vlo.PIDType;
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDTypeModel;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.Behavior;
@@ -43,9 +46,11 @@ public class PIDInfoPanel extends GenericPanel<String> {
     private UriResolver uriResolver;
 
     private final IModel<PIDContext> pidContextModel;
+    private final PIDLinkModel pidLinkModel;
 
     public PIDInfoPanel(String id, IModel<String> model, IModel<PIDContext> pidContextModel) {
-        super(id, PIDLinkModel.wrapLinkModel(model));
+        super(id, model);
+        pidLinkModel = PIDLinkModel.wrapLinkModel(model);
         this.pidContextModel = pidContextModel;
         setOutputMarkupId(true);
     }
@@ -54,10 +59,9 @@ public class PIDInfoPanel extends GenericPanel<String> {
     protected void onInitialize() {
         super.onInitialize();
 
-        final IModel<String> pidLinkModel = getModel();
-        final PIDTypeModel pidTypeModel = new PIDTypeModel(pidLinkModel);
+        final IModel<PIDType> pidTypeModel = new NullFallbackModel<>(new PIDTypeModel(getModel()), PIDType.OTHER);
 
-        add(new TextField("pidInputField", pidLinkModel));
+        add(new TextField<>("pidInputField", pidLinkModel));
 
         final StringResourceModel pidContextLabelModel = new StringResourceModel("pidContext.${}", this, pidContextModel);
         add(new Label("pidContextLabel1", pidContextLabelModel));
@@ -66,7 +70,7 @@ public class PIDInfoPanel extends GenericPanel<String> {
         add(new ExternalLink("pidLink", pidLinkModel)
                 .add(new Label("pidContextLabel3", pidContextLabelModel)));
 
-        final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel);
+        final StringResourceModel pidTypeLabelModel = new StringResourceModel("pidType.${}", this, pidTypeModel).setDefaultValue("???");
         add(new Label("pidTypeLabel", pidTypeLabelModel));
 
         final StringResourceModel pidTypeLabelPluralModel = new StringResourceModel("pidType.${}.plural", this, pidTypeModel);
@@ -75,20 +79,21 @@ public class PIDInfoPanel extends GenericPanel<String> {
         //container for resolved link
         final WebMarkupContainer resolvedLinkPanel = new WebMarkupContainer("resolvedLinkPanel");
         //lazy panel for async resolving (link is not added initially)
-        final AjaxLazyLoadPanel lazyResolvedUrlLink = new AjaxLazyLoadPanel("resolvedLink") {
+        final AjaxLazyLoadPanel lazyResolvedUrlLink = new AjaxLazyLoadPanel<ResolvedPidLink>("resolvedLink") {
             @Override
-            public Component getLazyLoadComponent(String markupId) {
+            public ResolvedPidLink getLazyLoadComponent(String markupId) {
                 return new ResolvedPidLink(markupId, pidLinkModel);
             }
 
             @Override
-            protected void onComponentLoaded(Component component, AjaxRequestTarget target) {
-                super.onComponentLoaded(component, target);
-                //re-render all panel after loading to fix glitch
-                target.add(resolvedLinkPanel);
+            protected void onContentLoaded(ResolvedPidLink content, Optional<AjaxRequestTarget> target) {
+                super.onContentLoaded(content, target);
+                target.ifPresent(t -> {
+                    t.add(resolvedLinkPanel);
+                });
             }
-
         };
+
         add(resolvedLinkPanel
                 .add(lazyResolvedUrlLink)
                 //has to be ajax updateable
@@ -102,6 +107,12 @@ public class PIDInfoPanel extends GenericPanel<String> {
 
                 })
         );
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        pidLinkModel.detach();
     }
 
 }

@@ -217,9 +217,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     private void addComponents() {
 
-        appTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
-        pageTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
-        final IModel<String> instanceInfoModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
+        appTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
+        pageTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
+        final IModel<String> instanceInfoModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
         
         add(new BootstrapFeedbackPanel("feedback"));
 
@@ -266,9 +266,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         //add all menu compoennts
         navbar.addComponents(
-                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, Model.of("Search")).add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(ContributorsPage.class, Model.of("Contributors")).add(new AttributeModifier("class", "contributors-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, Model.of("Help")).add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton<>(FacetedSearchPage.class, Model.of("Search")).add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton<>(ContributorsPage.class, Model.of("Contributors")).add(new AttributeModifier("class", "contributors-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton<>(HelpPage.class, Model.of("Help")).add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;

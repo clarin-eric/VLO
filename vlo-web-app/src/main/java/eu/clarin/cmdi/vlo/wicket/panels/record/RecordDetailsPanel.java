@@ -39,7 +39,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -51,6 +51,7 @@ import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import java.util.Optional;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.Model;
 
@@ -107,7 +108,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         final ResourceInfoModel landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
 
-        final IModel<Boolean> landingPageVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> landingPageVisibilityModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return landingPageResourceInfoModel.getObject() != null
@@ -121,7 +122,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         // resource info for single resource
         final ResolvingLinkModel resourceInfoLinkModel = ResolvingLinkModel.modelFor(resourceInfoModel, getModel());
-        final IModel<Boolean> resourceInfoVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> resourceInfoVisibilityModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return (resourcesModel.getObject() != null
@@ -133,7 +134,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 .add(createSingleResourceInfo("resourceInfo", resourceInfoLinkModel)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
 
-        final AbstractReadOnlyModel<Boolean> resourcesLinkVisibilityModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> resourcesLinkVisibilityModel = new IModel<>() {
             @Override
             public Boolean getObject() {
                 return resourcesModel.getObject() != null
@@ -145,7 +146,7 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                         .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
 
         coreLinksContainer.add(
-                new Label("resourcesTitle", new AbstractReadOnlyModel() {
+                new Label("resourcesTitle", new IModel<>() {
                     @Override
                     public Object getObject() {
                         return (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1)
@@ -167,13 +168,13 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
     }
 
     private Component createLandingPageLink(String id, ResourceInfoModel resourceModel) {
-        final IModel<String> linkModel = new PropertyModel(resourceModel, "href");
+        final IModel<String> linkModel = new PropertyModel<>(resourceModel, "href");
         final IsPidModel isPidModel = new IsPidModel(linkModel);
         final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
 
-        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
+        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink<Void>("showResources") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(RESOURCES_SECTION, target);
             }
         };
@@ -205,9 +206,10 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
         // Resource info for single resource (should not appear if there are more or fewer resources)
         resourceInfo.add(new ExternalLink("resourceLink", new PIDLinkModel(ResolvingLinkModel.modelFor(resourceInfoModel, getModel())))
                 //resource type icon
-                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(resourceInfoModel, "resourceType"))
+                .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<>(resourceInfoModel, "resourceType"))
                         //with type name tooltip
-                        .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel).setDefaultValue(new PropertyModel(resourceInfoModel, "resourceType")))))
+                        .add(new AttributeModifier("title", new StringResourceModel("resourcetype.${resourceType}.singular", this, resourceInfoModel)
+                                .setDefaultValue(new PropertyModel<>(resourceInfoModel, "resourceType")))))
                 //resource name below icon
                 .add(new Label("resourceName", new PropertyModel<>(resourceInfoModel, "fileName")))
         );
@@ -224,9 +226,9 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                 target.add(resourceInfo);
             }
         });
-        final AjaxFallbackLink showResourcesLink = new AjaxFallbackLink("showResources") {
+        final AjaxFallbackLink<Void> showResourcesLink = new AjaxFallbackLink<>("showResources") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 switchToTab(RESOURCES_SECTION, target);
             }
         };
@@ -247,15 +249,15 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
     private Component createMultipleResourceLink(String id) {
         return new WebMarkupContainer(id)
-                .add(new AjaxFallbackLink("showResources") {
+                .add(new AjaxFallbackLink<Void>("showResources") {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(RESOURCES_SECTION, target);
                     }
                 }.add(new Label("resourcesCount", new PropertyModel<String>(resourcesModel, "size"))));
     }
 
-    protected abstract void switchToTab(String tab, AjaxRequestTarget target);
+    protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
 
     @Override
     public void detachModels() {

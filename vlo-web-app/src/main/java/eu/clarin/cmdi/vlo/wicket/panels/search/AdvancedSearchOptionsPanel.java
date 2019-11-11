@@ -31,6 +31,7 @@ import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
 import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -93,7 +94,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         selectionType.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                selectionChanged(target);
+                selectionChanged(Optional.of(target));
             }
         });
         optionsForm.add(selectionType);
@@ -124,7 +125,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
             }
         };
 
-        final Link submitLink = new Link(id, vcrSubmitEnabledModel) {
+        final Link submitLink = new Link<>(id, vcrSubmitEnabledModel) {
             @Override
             public void onClick() {
                 setResponsePage(new VirtualCollectionSubmissionPage(AdvancedSearchOptionsPanel.this.getModel(), documentProvider));
@@ -138,15 +139,15 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
         return submitLink
                 .add(new AttributeAppender("class",
-                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
                                 new Model<String>(null), //enabled
                                 Model.of("disabled")), " "))
                 .add(new AttributeModifier("target",
-                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
                                 Model.of("_blank"),
                                 new Model<String>(null))))
                 .add(new AttributeModifier("title",
-                        new BooleanOptionsModel(vcrSubmitEnabledModel,
+                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
                                 Model.of("Create a new collection in the Virtual Collection Registry containing the records included in the current search result"),
                                 Model.of(String.format("Only available for search results containing %s items or less", config.getVcrMaximumItemsCount())))));
     }
@@ -162,7 +163,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                selectionChanged(target);
+                selectionChanged(Optional.of(target));
             }
 
             @Override
@@ -199,6 +200,6 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         documentProvider.detach();
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 
 }

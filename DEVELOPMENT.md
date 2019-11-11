@@ -29,8 +29,8 @@ configurations provided in [compose_vlo](https://gitlab.com/CLARIN-ERIC/compose_
 ```sh
 # Make sure to set these right!
 VLO_VERSION="4.3-SNAPSHOT"
-SOLR_IMAGE_VERSION="1.0.0-beta3"
-VLO_IMAGE_VERSION="1.3.0-beta2"
+SOLR_IMAGE_VERSION="solr7.6-1.0.0"
+VLO_IMAGE_VERSION="vlo-4.7.1-1"
 VLO_GIT_CHECKOUT="${HOME}/git/VLO"
 
 # Start the Solr server
@@ -110,6 +110,13 @@ and VLO-mapping versions as these are often developed in parallel to the VLO.
 
 	```
 	mvn clean install 		#do not skip unit tests ;)
+	```
+
+  OR use the provided build script which does the same thing inside a Docker container
+  with a compatible version of Java and Maven inside:
+
+	```
+	./build.sh
 	```
 	
   Unpack the tarball in vlo-distribution/target somehwere and check its

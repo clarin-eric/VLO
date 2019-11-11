@@ -17,11 +17,11 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.wicket.components.ToggleLink;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -51,16 +51,16 @@ public abstract class TogglePanel extends Panel {
         // add the actual toggle link
         final Component toggler = new ToggleLink("toggler", visibilityModel, showTextModel, hideTextModel) {
             @Override
-            protected void onClick(AjaxRequestTarget target) {
-                if (target != null) {
-                    target.add(TogglePanel.this);
-                }
+            protected void onClick(Optional<AjaxRequestTarget> target) {
+                target.ifPresent(t -> {
+                    t.add(TogglePanel.this);
+                });
             }
         };
         add(toggler);
 
         // make 'class' attribute depend on toggle state
-        add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+        add(new AttributeAppender("class", new IModel<>() {
 
             @Override
             public String getObject() {

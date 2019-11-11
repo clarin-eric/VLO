@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import java.util.Collection;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -31,7 +30,7 @@ import org.apache.wicket.model.Model;
  * @author twagoo
  * @param <T> type of the field
  */
-public class DocumentFieldModel<T> extends AbstractReadOnlyModel<DocumentField<T>> implements DocumentField {
+public class DocumentFieldModel<T> implements IModel<DocumentField<T>>, DocumentField {
     
     private final IModel<String> fieldName;
     private final IModel<Collection<T>> valueModel;
@@ -53,7 +52,7 @@ public class DocumentFieldModel<T> extends AbstractReadOnlyModel<DocumentField<T
     }
     
     @Override
-    public DocumentField getObject() {
+    public DocumentField<T> getObject() {
         return this;
     }
     

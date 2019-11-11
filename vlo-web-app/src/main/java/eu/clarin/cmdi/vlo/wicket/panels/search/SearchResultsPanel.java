@@ -33,6 +33,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -76,7 +77,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         this.duplicateItemsExpansionsModel = new Model(new HashSet<>());
 
         //define the order for availability values
-        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering(
+        final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(vloConfig.getAvailabilityValues()));
 

@@ -22,7 +22,7 @@ import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Collection;
 import java.util.Collections;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 
 /**
@@ -36,7 +36,7 @@ import org.apache.wicket.model.IModel;
  * @see FacetConstants#FIELD_AVAILABILITY
  * @see FacetConstants#FIELD_LICENSE_TYPE
  */
-public class CombinedLicenseTypeAvailabilityModel extends AbstractReadOnlyModel<Collection<String>> {
+public class CombinedLicenseTypeAvailabilityModel implements IModel<Collection<String>> {
 
     private final IModel<Collection<String>> licenseTypeModel;
     private final IModel<Collection<String>> availabilityModel;

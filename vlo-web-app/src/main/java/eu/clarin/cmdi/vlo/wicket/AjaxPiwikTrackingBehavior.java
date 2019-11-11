@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
+import java.util.Optional;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;

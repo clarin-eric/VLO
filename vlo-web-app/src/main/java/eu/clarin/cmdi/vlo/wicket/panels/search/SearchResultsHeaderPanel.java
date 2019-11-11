@@ -33,6 +33,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -51,7 +52,6 @@ import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -118,7 +118,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
     }
 
     private Label createSearchInfoLabel(String id) {
-        return new Label(id, new AbstractReadOnlyModel<String>() {
+        return new Label(id, new IModel<>() {
             @Override
             public String getObject() {
                 final QueryFacetsSelection selection = getModel().getObject();
@@ -151,6 +151,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final WebMarkupContainer container = new WebMarkupContainer(id) {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 final String queryString = getModelObject().getQuery();
                 final Map<String, FacetSelection> selection = getModelObject().getSelection();
                 final boolean hasQuery = queryString != null && !queryString.isEmpty();
@@ -177,7 +178,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final AjaxFallbackLink<QueryFacetsSelection> removeLink = new IndicatingAjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 // get a copy of the current selection
                 final QueryFacetsSelection newSelection = getModelObject().copy();
                 newSelection.setQuery(null);
@@ -193,13 +194,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final Component query = new WebMarkupContainer(id)
                 .add(label)
                 .add(removeLink)
-                .add(new AttributeModifier("placeholder", new AbstractReadOnlyModel<String>() {
-                    @Override
-                    public String getObject() {
-                        return "Search through 100,000 records";
-                    }
-
-                }));
+                .add(new AttributeModifier("placeholder", () -> "Search through 100,000 records"));
         return query;
     }
 
@@ -225,7 +220,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 };
                 // add facet name as title attribute so that it becomes available through a tooltip
                 valueLabel.add(new AttributeModifier("title",
-                        new SolrFieldNameModel(new PropertyModel(selectionModel, "key"))));
+                        new SolrFieldNameModel(new PropertyModel<>(selectionModel, "key"))));
 
                 //ajax indicator should go behind label even though behaviour is triggered by remove link...
                 final AjaxIndicatorAppender ajaxIndicatorAppender = new AjaxIndicatorAppender();
@@ -237,7 +232,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 item.add(new IndicatingAjaxFallbackLink<QueryFacetsSelection>("remove", getModel()) {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    public void onClick(Optional<AjaxRequestTarget> target) {
                         // get a copy of the current selection
                         final QueryFacetsSelection newSelection = getModelObject().copy();
                         final String facet = selectionModel.getObject().getKey();
@@ -261,15 +256,15 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final Form resultPageSizeForm = new Form(id);
 
         final DropDownChoice<Long> pageSizeDropDown
-                = new DropDownChoice<Long>("resultPageSize",
+                = new DropDownChoice<>("resultPageSize",
                         // bind to items per page property of pageable
-                        new PropertyModel<Long>(resultsView, "itemsPerPage"),
+                        new PropertyModel<>(resultsView, "itemsPerPage"),
                         ITEMS_PER_PAGE_OPTIONS);
         pageSizeDropDown.add(new AjaxFormComponentUpdatingBehavior("change") {
 
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                onChange(target);
+                onChange(Optional.of(target));
             }
         });
         resultPageSizeForm.add(pageSizeDropDown);
@@ -283,7 +278,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         solrDocumentProvider.detach();
     }
 
-    protected void onChange(AjaxRequestTarget target) {
+    protected void onChange(Optional<AjaxRequestTarget> target) {
         //noop - may be overridden
     }
 
@@ -295,7 +290,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
      * @param selection new selection
      * @param target AJAX target, may be null
      */
-    protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+    protected void onSelectionChanged(QueryFacetsSelection selection, Optional<AjaxRequestTarget> target) {
         setResponsePage(FacetedSearchPage.class, paramsConverter.toParameters(selection));
     }
 

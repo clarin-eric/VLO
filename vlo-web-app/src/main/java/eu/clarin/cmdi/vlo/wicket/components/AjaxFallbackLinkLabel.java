@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
+import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
@@ -41,7 +42,7 @@ public abstract class AjaxFallbackLinkLabel<T> extends Panel {
             link = new IndicatingAjaxFallbackLink<T>("link", linkModel) {
 
                 @Override
-                public void onClick(AjaxRequestTarget target) {
+                public void onClick(Optional<AjaxRequestTarget> target) {
                     AjaxFallbackLinkLabel.this.onClick(target);
                 }
             };
@@ -49,7 +50,7 @@ public abstract class AjaxFallbackLinkLabel<T> extends Panel {
             link = new AjaxFallbackLink<T>("link", linkModel) {
 
                 @Override
-                public void onClick(AjaxRequestTarget target) {
+                public void onClick(Optional<AjaxRequestTarget> target) {
                     AjaxFallbackLinkLabel.this.onClick(target);
                 }
             };
@@ -59,6 +60,6 @@ public abstract class AjaxFallbackLinkLabel<T> extends Panel {
         link.add(new Label("content", contentModel));
     }
 
-    protected abstract void onClick(AjaxRequestTarget target);
+    protected abstract void onClick(Optional<AjaxRequestTarget> target);
 
 }

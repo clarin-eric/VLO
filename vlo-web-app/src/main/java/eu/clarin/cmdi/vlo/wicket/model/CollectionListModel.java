@@ -52,10 +52,10 @@ public class CollectionListModel<T> implements IModel<List<T>> {
             if (object instanceof List) {
                 return (List<T>) object;
             } else {
-                return Lists.newArrayList(object);
+                return Lists.<T>newArrayList(object);
             }
         } else {
-            return ordering.sortedCopy(object);
+            return ordering.<T>sortedCopy(object);
         }
     }
 

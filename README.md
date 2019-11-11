@@ -28,6 +28,13 @@ For more information, see the [wiki page](https://trac.clarin.eu/wiki/CmdiVirtua
 	A list of changes per release
 - [COPYING](COPYING.txt)
 	Licensing information
+	
+# Building
+
+Build the project using Maven in the project root, or use the [build.sh](./build.sh)
+script, which will use a docker image with the correct version of Java and Maven to build.
+See the script source for more details.
+
 
 # Running the VLO 
 

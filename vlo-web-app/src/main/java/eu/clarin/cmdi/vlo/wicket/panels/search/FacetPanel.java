@@ -39,13 +39,13 @@ import eu.clarin.cmdi.vlo.wicket.model.SelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
+import java.util.Optional;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -93,7 +93,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         selectedFacetPanel = createSelectedFacetPanel("facetSelection", facetNameModel.getObject(), selectionModel);
         add(selectedFacetPanel);
 
-        add(new AttributeAppender("class", new AbstractReadOnlyModel() {
+        add(new AttributeAppender("class", new IModel() {
             @Override
             public Object getObject() {
                 return (selectedFacetPanel.getModelObject().isEmpty()) ? "unselected" : "selected";
@@ -184,7 +184,7 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
         return (FacetValuesPanel) new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, filterModel, subListSize) {
             @Override
-            public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, AjaxRequestTarget target) {
+            public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, Optional<AjaxRequestTarget> target) {
                 if (selectionType != null && values != null) {
                     // A value has been selected on this facet's panel, update the model!
                     selectionModel.getObject().addNewFacetValue(facetName, selectionType, values);
@@ -201,23 +201,21 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private SelectedFacetPanel createSelectedFacetPanel(String id, final String facetName, final IModel<QueryFacetsSelection> selectionModel) {
         return new SelectedFacetPanel(id, facetName, new SelectionModel(facetName, selectionModel)) {
             @Override
-            public void onValuesUnselected(Collection<String> valuesRemoved, AjaxRequestTarget target) {
+            public void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target) {
                 // Values have been removed, calculate remainder
                 selectionModel.getObject().removeFacetValue(facetName, valuesRemoved);
 
-                if (target != null) {
-                    selectionChanged(target);
-                }
+                selectionChanged(target);
             }
         };
     }
 
     @Override
-    protected void onExpansionToggle(AjaxRequestTarget target) {
+    protected void onExpansionToggle(Optional<AjaxRequestTarget> target) {
         super.onExpansionToggle(target);
-        if (target != null) {
-            target.appendJavaScript("applyFacetTooltips();");
-        }
+        target.ifPresent(t -> {
+            t.appendJavaScript("applyFacetTooltips();");
+        });
     }
 
     @Override
@@ -232,7 +230,6 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         }
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
-
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 
 }

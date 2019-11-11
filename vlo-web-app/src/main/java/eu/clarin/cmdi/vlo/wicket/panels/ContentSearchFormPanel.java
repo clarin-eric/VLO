@@ -20,12 +20,11 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.json.JSONArray;
-import org.apache.wicket.ajax.json.JSONException;
-import org.apache.wicket.ajax.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
@@ -72,7 +71,7 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
 
     private IModel<String> createJsonModel(final IModel<SolrDocument> model, final IModel<String> endpointModel) {
         // Prepare a JSON object that holds the CQL endpoint and the document self link
-        return new AbstractReadOnlyModel<String>() {
+        return new IModel<>() {
             @Override
             public String getObject() {
                 final String endPoint = endpointModel.getObject();
@@ -89,7 +88,6 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
 
             @Override
             public void detach() {
-                super.detach();
                 endpointModel.detach();
             }
 

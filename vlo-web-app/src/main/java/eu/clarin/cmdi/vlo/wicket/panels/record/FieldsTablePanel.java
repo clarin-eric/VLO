@@ -46,8 +46,8 @@ import java.util.stream.Stream;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
-import org.apache.wicket.extensions.markup.html.basic.SmartLinkMultiLineLabel;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -56,17 +56,18 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 
 /**
  *
  * @author twagoo
  */
+
 public class FieldsTablePanel extends Panel {
 
     /**
@@ -76,11 +77,6 @@ public class FieldsTablePanel extends Panel {
     private final static Collection<String> UNESCAPED_VALUE_FIELDS
             = Collections.emptySet(); // ImmutableSet.of(FacetConstants.FIELD_LANGUAGE_CODE);
 
-    /**
-     * List of fields that should be rendered in a
-     * {@link SmartLinkMultiLineLabel}, which detects URLs and turns them into
-     * links
-     */
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean(name = "fieldValueSorters")
@@ -88,7 +84,18 @@ public class FieldsTablePanel extends Panel {
     @SpringBean
     private FieldNameService fieldNameService;
 
+    /**
+     * List of fields that should be rendered in a
+     * {@link SmartLinkFieldValueLabel}, which detects URLs within the text and turns
+     * them into links
+     */
     private final Collection<String> SMART_LINK_FIELDS;
+
+    /**
+     * List of fields that can be assumed to have a URL value and should be
+     * rendered as a link
+     */
+    private final Collection<String> LINK_FIELDS;
 
     private IDataProvider<DocumentField> fieldProvider;
 
@@ -97,8 +104,15 @@ public class FieldsTablePanel extends Panel {
 
         this.SMART_LINK_FIELDS = Stream.of(
                 FieldKey.DESCRIPTION,
+                FieldKey.COMPLETE_METADATA
+        )
+                //existing fields (check) into a set
+                .map(fieldNameService::getFieldName).filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
+
+        this.LINK_FIELDS = Stream.of(
                 FieldKey.SEARCHPAGE,
-                FieldKey.COMPLETE_METADATA,
+                FieldKey.SEARCH_SERVICE,
                 FieldKey.SELF_LINK
         )
                 //existing fields (check) into a set
@@ -128,7 +142,9 @@ public class FieldsTablePanel extends Panel {
         } else if (fieldNameService.getFieldName(FieldKey.RECORD_PID).equals(facetNameModel.getObject())) {
             return new PIDLinkLabel(id, valueModel, Model.of(PIDContext.RECORD));
         } else if (fieldNameService.getFieldName(FieldKey.LANDINGPAGE).equals(facetNameModel.getObject())) {
-            return new SmartLinkLabel(id, new PropertyModel(new ResourceInfoObjectModel(valueModel), "url"));
+            return new LinkLabel(id, new PIDLinkModel(new PropertyModel(new ResourceInfoObjectModel(valueModel), "url")));
+        } else if (LINK_FIELDS.contains(fieldName)) {
+            return new LinkLabel(id, new PIDLinkModel(valueModel));
         } else if (SMART_LINK_FIELDS.contains(fieldName)) {
             // create label that generates links
             return new SmartLinkFieldValueLabel(id, new PIDLinkModel(valueModel), facetNameModel);
@@ -184,10 +200,10 @@ public class FieldsTablePanel extends Panel {
                 //wrapper for sorted model (if ordering is available)
                 final IModel<List<String>> sortedValuesModel = createOrderedFieldValuesModel(valuesModel, fieldNameModel);
 
-                item.add(new ListView("values", sortedValuesModel) {
+                item.add(new ListView<>("values", sortedValuesModel) {
 
                     @Override
-                    protected void populateItem(final ListItem fieldValueItem) {
+                    protected void populateItem(final ListItem<String> fieldValueItem) {
                         // add a label that holds the field value
                         fieldValueItem.add(createValueLabel("value", fieldNameModel, fieldValueItem.getModel()));
                         // add a link for selecting the value in the search
@@ -196,7 +212,7 @@ public class FieldsTablePanel extends Panel {
                 });
 
                 // if field has multiple values, set 'multiple' class on markup element
-                item.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+                item.add(new AttributeModifier("class", new IModel<>() {
 
                     @Override
                     public String getObject() {
@@ -210,7 +226,7 @@ public class FieldsTablePanel extends Panel {
 
                 //only show PID line if self link is PID
                 if (fieldNameModel.getObject().equals(fieldNameService.getFieldName(FieldKey.RECORD_PID))) {
-                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new AbstractReadOnlyModel<String>() {
+                    item.add(BooleanVisibilityBehavior.visibleOnTrue(new IsPidModel(new IModel<>() {
                         @Override
                         public String getObject() {
                             if (valuesModel.getObject().size() > 0) {
@@ -233,4 +249,18 @@ public class FieldsTablePanel extends Panel {
 //        response.render(CssHeaderItem.forReference(JavaScriptResources.getJQueryUICSS()));
 //        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getFieldsTableJS()));
 //    }
+    private static class LinkLabel extends Label {
+
+        public LinkLabel(String id, IModel<?> model) {
+            super(id, model);
+            setEscapeModelStrings(false);
+        }
+
+        @Override
+        public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+            final CharSequence link = Strings.escapeMarkup(getDefaultModelObjectAsString());
+            replaceComponentTagBody(markupStream, openTag,
+                    "<a href=\"" + link + "\">" + link + "</a>");
+        }
+    }
 }

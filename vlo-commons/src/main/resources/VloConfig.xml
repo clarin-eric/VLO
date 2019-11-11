@@ -15,6 +15,8 @@
     <fileProcessingThreads>${vloconfig.fileProcessingThreads}</fileProcessingThreads>
 
     <solrThreads>${vloconfig.solrThreads}</solrThreads>
+    
+    <availabilityStatusUpdaterBatchSize>${vloconfig.availabilityStatusUpdaterBatchSize}</availabilityStatusUpdaterBatchSize>
 
     <!-- Wicket: the maximum number of page instances which will be stored in 
     the application scoped second level cache for faster retrieval -->

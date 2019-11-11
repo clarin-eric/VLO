@@ -18,8 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.components;
 
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.migrate.StringResourceModelMigration;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Attach to a &lt;span&gt; element
@@ -35,7 +35,8 @@ public class ResourceTypeIcon extends WebMarkupContainer {
     public ResourceTypeIcon(String id, IModel<String> model) {
         super(id, model);
 
-        iconModel = StringResourceModelMigration.of("resourcetype.${}.fonticonclass", model, "glyphicon-question-sign");
+        iconModel = new StringResourceModel("resourcetype.${}.fonticonclass", model)
+                .setDefaultValue("glyphicon-question-sign");
         add(new AttributeAppender("class", "glyphicon", " "));
         add(new AttributeAppender("class", iconModel, " "));
     }

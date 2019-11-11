@@ -26,11 +26,8 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -106,14 +103,14 @@ public class FieldNameServiceImplTest {
 
         final long total = end - start;
         System.out.println("Total time: " + total);
-        final double avg = new Double(total) / BENCHMARK_RUNS;
+        final double avg = Double.valueOf(total) / BENCHMARK_RUNS;
         System.out.println("Average time: " + avg);
         return total;
     }
 
     public final class FieldNameServiceClassic implements FieldNameService {
 
-        private VloConfig vloConfig;
+        private final VloConfig vloConfig;
 
         public FieldNameServiceClassic(VloConfig vloConfig) {
             this.vloConfig = vloConfig;
@@ -124,6 +121,7 @@ public class FieldNameServiceImplTest {
             return this.vloConfig.getFields().get(key.toString());
         }
 
+        @Override
         public String getDeprecatedFieldName(FieldKey key) {
             return this.vloConfig.getDeprecatedFields().get(key.toString());
         }

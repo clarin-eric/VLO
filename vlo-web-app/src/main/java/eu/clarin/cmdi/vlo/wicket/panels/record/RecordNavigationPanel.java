@@ -22,9 +22,10 @@ import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.migrate.StringResourceModelMigration;
-import org.apache.wicket.model.AbstractReadOnlyModel;
+
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
  * Panel that shows the index of the current record and has forward/backward
@@ -34,24 +35,32 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class RecordNavigationPanel extends GenericPanel<SearchContext> {
 
+    private final IModel<String> tabModel;
+
     public RecordNavigationPanel(String id, final IModel<SearchContext> model, IModel<String> tabModel) {
         super(id, model);
+        this.tabModel = tabModel;
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
         // Add a label 'record X of Y'
-        add(new Label("recordIndex", StringResourceModelMigration.of("record.navigation.index", this, model,
-                new Object[]{
-                    // These values get inserted into the string
-                    // First: index shifted with +1 (because count starts at 0)
-                    new ShiftedIndexModel(new PropertyModel<Long>(model, "index"), +1),
-                    // Second: total result count, unmodified
-                    new PropertyModel<>(model, "resultCount")
-                }
-        )));
+        add(new Label("recordIndex",
+                new StringResourceModel("record.navigation.index", this, getModel()).setParameters(
+                        // These values get inserted into the string
+                        // First: index shifted with +1 (because count starts at 0)
+                        new ShiftedIndexModel(new PropertyModel<>(getModel(), "index"), +1),
+                        // Second: total result count, unmodified
+                        new PropertyModel<>(getModel(), "resultCount")
+                )
+        ));
 
         // Add a link to go to the previous record
-        add(createPreviousLink(model, tabModel));
+        add(createPreviousLink(getModel(), tabModel));
         // Add a link to go to the next record
-        add(createNextLink(model, tabModel));
+        add(createNextLink(getModel(), tabModel));
     }
 
     private RecordNavigationLink createPreviousLink(final IModel<SearchContext> model, IModel<String> tabModel) {
@@ -84,11 +93,17 @@ public class RecordNavigationPanel extends GenericPanel<SearchContext> {
         };
     }
 
+    @Override
+    protected void onDetach() {
+        super.onDetach();
+        tabModel.detach();
+    }
+
     /**
      * Model that shifts the value provided by the wrapped model with a fixed
      * amount
      */
-    public static class ShiftedIndexModel extends AbstractReadOnlyModel<Long> {
+    public static class ShiftedIndexModel implements IModel<Long> {
 
         private final IModel<Long> wrappedModel;
         private final long shift;

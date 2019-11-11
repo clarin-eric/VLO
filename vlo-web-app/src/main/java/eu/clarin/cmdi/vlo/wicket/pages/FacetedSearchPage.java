@@ -44,6 +44,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
@@ -54,7 +55,6 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
@@ -67,7 +67,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private static final long serialVersionUID = 1L;
     //private final static List<String> ADDITIONAL_FACETS = ImmutableList.of(FacetConstants.FIELD_LICENSE_TYPE);
     private final static FieldKey ADDITIONAL_FACETS = FieldKey.LICENSE_TYPE;
-    
+
     @SpringBean
     private FacetFieldsService facetFieldsService;
     @SpringBean
@@ -80,10 +80,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private FieldNameService fieldNameService;
 
     /**
-     * Provider of search results including 'expansion' of collapsed (very similar) records
+     * Provider of search results including 'expansion' of collapsed (very
+     * similar) records
      */
     private IDataProvider<SolrDocumentExpansionPair> documentsProvider;
-    
+
     /**
      * Provider of search results without expansion of collapsed records
      */
@@ -146,7 +147,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
         recordCountModel = new RecordCountModel(getModel());
-        
+
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
         facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
             @Override
@@ -173,7 +174,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
 
         searchContainer = new WebMarkupContainer("searchContainer");
-        searchContainer.add(new AttributeModifier("class", new AbstractReadOnlyModel<String>() {
+        searchContainer.add(new AttributeModifier("class", new IModel<>() {
             @Override
             public String getObject() {
                 return simpleModeModel.getObject() ? "simple" : "";
@@ -194,6 +195,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 final Map<String, FacetSelection> facetSelection = FacetedSearchPage.this.getModel().getObject().getSelection();
                 setVisible(documentsProvider.size() > 0
                         || (facetSelection != null && !facetSelection.isEmpty()));
@@ -212,14 +214,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         // make "selections" panel collapsable on smaller screens
         final IModel<Boolean> selectionsExpandedModel = Model.of(false);
-        searchContainer.add(new IndicatingAjaxFallbackLink("toggleSelections") {
+        searchContainer.add(new IndicatingAjaxFallbackLink<Void>("toggleSelections") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> target) {
                 selectionsExpandedModel.setObject(!selectionsExpandedModel.getObject());
-                if (target != null) {
-                    target.add(selections);
-                    target.add(this);
-                }
+                target.ifPresent(t -> {
+                    t.add(selections);
+                    t.add(this);
+                });
             }
         }
                 .add(new Label("toggleSelectionsLabel", // dynamic button label 
@@ -246,10 +248,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
             @Override
             protected void onAjaxSearchPagination(AjaxRequestTarget target) {
                 super.onAjaxSearchPagination(target);
-                if (target != null) {
-                    //updating record offset in search result header
-                    target.add(resultsHeader);
-                }
+                //updating record offset in search result header
+                target.add(resultsHeader);
             }
 
         };
@@ -264,12 +264,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private SearchResultsHeaderPanel createResultsHeader(String id, IModel<QueryFacetsSelection> model, AbstractPageableView<SolrDocumentExpansionPair> resultsView, IDataProvider<SolrDocument> solrDocumentProvider, IModel<Long> recordCountModel) {
         return new SearchResultsHeaderPanel(id, model, resultsView, solrDocumentProvider, recordCountModel) {
             @Override
-            protected void onChange(AjaxRequestTarget target) {
+            protected void onChange(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
 
             @Override
-            protected void onSelectionChanged(QueryFacetsSelection selection, AjaxRequestTarget target) {
+            protected void onSelectionChanged(QueryFacetsSelection selection, Optional<AjaxRequestTarget> target) {
                 setModelObject(selection);
                 updateSelection(target);
             }
@@ -284,10 +284,10 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         container.add(new TopLinksPanel("permalink", new PermaLinkModel(getPageClass(), getModel()), getTitleModel()) {
 
             @Override
-            protected void onChange(AjaxRequestTarget target) {
-                if (target != null) {
-                    target.add(container);
-                }
+            protected void onChange(Optional<AjaxRequestTarget> target) {
+                target.ifPresent(t -> {
+                    t.add(container);
+                });
             }
 
         });
@@ -298,7 +298,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final Panel panel = new AdvancedSearchOptionsPanel(id, getModel(), facetSelectionTypeModeModel, solrDocumentsProvider) {
 
             @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
         };
@@ -310,7 +310,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final Panel availabilityPanel = new AvailabilityFacetPanel(id, getModel(), fieldsModel) {
 
             @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
         };
@@ -322,16 +322,16 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final SearchFormPanel form = new SearchFormPanel(id, getModel(), recordCountModel) {
 
             @Override
-            protected void onSubmit(AjaxRequestTarget target) {
+            protected void onSubmit(Optional<AjaxRequestTarget> target) {
                 // reset expansion state of search results
                 searchResultsPanel.resetExpansion();
 
                 //transition from simple
                 simpleModeModel.setObject(false);
-                if (target != null) {
-                    target.prependJavaScript("cb|transitionFromSimple(cb);");
-                    target.add(searchContainer); //update everything within container
-                }
+                target.ifPresent(t -> {
+                    t.prependJavaScript("cb|transitionFromSimple(cb);");
+                    t.add(searchContainer); //update everything within container
+                });
 
                 updateSelection(target);
             }
@@ -346,7 +346,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel(), facetSelectionTypeModeModel) {
 
             @Override
-            protected void selectionChanged(AjaxRequestTarget target) {
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                 updateSelection(target);
             }
 
@@ -355,21 +355,21 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         return panel;
     }
 
-    private void updateSelection(AjaxRequestTarget target) {
+    private void updateSelection(Optional<AjaxRequestTarget> target) {
         //detach facetFieldsModel when selection is changed
         fieldsModel.detach();
 
         // selection changed, update facets and search results
-        if (target != null) { // null if JavaScript disabled
-            target.add(navigation);
-            target.add(searchForm);
-            target.add(resultsHeader);
-            target.add(searchResultsPanel);
-            target.add(selections);
+        target.ifPresent(t -> {
+            t.add(navigation);
+            t.add(searchForm);
+            t.add(resultsHeader);
+            t.add(searchResultsPanel);
+            t.add(selections);
 
             //reapply js for nice tooltips
-            target.appendJavaScript("applyFacetTooltips();");
-        }
+            t.appendJavaScript("applyFacetTooltips();");
+        });
     }
 
     @Override

@@ -42,12 +42,12 @@ import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import java.util.Collection;
+import java.util.Optional;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -83,7 +83,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
         expansionModel = new MapModel<>(expansionStateMap);
-        final IModel<Boolean> conditionalFacetDisplayModel = new AbstractReadOnlyModel<Boolean>() {
+        final IModel<Boolean> conditionalFacetDisplayModel = new IModel<Boolean>() {
 
             @Override
             public Boolean getObject() {
@@ -116,10 +116,10 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                                 new FacetExpansionStateModel(item.getModel(), expansionModel)) {
 
                             @Override
-                            protected void selectionChanged(AjaxRequestTarget target) {
+                            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                                 FacetsPanel.this.selectionChanged(target);
                             }
-                        }.add(new AttributeAppender("class", new AbstractReadOnlyModel<String>() {
+                        }.add(new AttributeAppender("class", new IModel<String>() {
                             //class appender that differentiates between primary and secondary facets (based on configuration)
                             @Override
                             public String getObject() {
@@ -142,25 +142,25 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         container.add(facetsView);
 
         //toggler for showing/hiding secondary facets
-        container.add(new AjaxFallbackLink("more") {
+        container.add(new AjaxFallbackLink<Void>("more") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 allFacetsShown.setObject(Boolean.TRUE);
-                if (target != null) {
+                t.ifPresent(target -> {
                     target.add(container);
                     target.appendJavaScript("$('[data-toggle=\"tooltip\"]').tooltip();");
-                }
+                });
             }
 
         }.add(BooleanVisibilityBehavior.visibleOnFalse(allFacetsShown)));
 
-        container.add(new AjaxFallbackLink("fewer") {
+        container.add(new AjaxFallbackLink<Void>("fewer") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 allFacetsShown.setObject(Boolean.FALSE);
-                if (target != null) {
+                t.ifPresent(target -> {
                     target.add(container);
-                }
+                });
             }
         }.add(BooleanVisibilityBehavior.visibleOnTrue(allFacetsShown)));
     }
@@ -193,5 +193,5 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
     }
 
-    protected abstract void selectionChanged(AjaxRequestTarget target);
+    protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 }

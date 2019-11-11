@@ -17,10 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import java.util.AbstractList;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 
 /**
@@ -29,7 +27,7 @@ import org.apache.wicket.model.IModel;
  * @author twagoo
  * @param <T> model type
  */
-public class CompoundListModel<T> extends AbstractReadOnlyModel<List<T>> {
+public class CompoundListModel<T> implements IModel<List<T>> {
 
     private final List<IModel<T>> modelsList;
 
