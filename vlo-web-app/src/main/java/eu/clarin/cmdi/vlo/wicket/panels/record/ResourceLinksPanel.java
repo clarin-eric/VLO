@@ -80,6 +80,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         resourcesTable = new WebMarkupContainer("resources") {
             @Override
             protected void onConfigure() {
+                super.onConfigure();
                 setVisible(resourceListing.getPageCount() > 0 || landingPageLinkModel.getObject() != null);
             }
 
@@ -114,6 +115,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 .add(new Behavior() {
                     @Override
                     public void onConfigure(Component component) {
+                        super.onConfigure(component);
                         component.setVisible(resourceListing.getPageCount() == 0 && landingPageLinkModel.getObject() == null);
                     }
                 })
