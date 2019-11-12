@@ -3,16 +3,16 @@ package eu.clarin.cmdi.vlo.importer;
 import org.junit.Test;
 
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.AuthorPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 
-public class AuthorPostNormalizerTest extends ImporterTestcase {
+public class CreatorPostNormalizerTest extends ImporterTestcase {
 
     @Test
-    public void testAuthorValues() {
-        AbstractPostNormalizer processor = new AuthorPostNormalizer();    
+    public void testCreatorValues() {
+        AbstractPostNormalizer processor = new CreatorPostNormalizer();
 
         // value extraction of format: "ROLE: PERSON"
         assertEquals("John Doe", processor.process("Author: John Doe", null).get(0));

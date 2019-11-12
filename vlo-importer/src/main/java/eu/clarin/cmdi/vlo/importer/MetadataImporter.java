@@ -44,7 +44,7 @@ import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.AuthorPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CMDIComponentProfileNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.ContinentNamePostNormalizer;
@@ -206,7 +206,7 @@ public class MetadataImporter {
         registerPostProcessor(fieldNameService, imb, FieldKey.RESOURCE_CLASS, () -> new ResourceClassPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());
-        registerPostProcessor(fieldNameService, imb, FieldKey.AUTHOR, () -> new AuthorPostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.CREATOR, () -> new CreatorPostNormalizer());
 
         return imb.build();
     }

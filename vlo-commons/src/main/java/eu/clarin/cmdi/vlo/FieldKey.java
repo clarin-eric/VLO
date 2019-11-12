@@ -14,6 +14,7 @@ public enum FieldKey {
     COMPLETE_METADATA,
     CONTINENT,
     COUNTRY,
+    CREATOR,
     DATA_PROVIDER,
     DESCRIPTION,
     FORMAT,
@@ -55,6 +56,5 @@ public enum FieldKey {
     SEARCHPAGE,
     DEPRECATED_LANGUAGE,
     SIGNATURE,
-    RECORD_PID,
-    AUTHOR
+    RECORD_PID
 }

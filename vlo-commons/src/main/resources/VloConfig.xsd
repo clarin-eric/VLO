@@ -241,7 +241,7 @@
 			<xs:enumeration value="DEPRECATED_LANGUAGE" />
 			<xs:enumeration value="SIGNATURE" />
 			<xs:enumeration value="RECORD_PID" />
-			<xs:enumeration value="AUTHOR" />
+			<xs:enumeration value="CREATOR" />
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

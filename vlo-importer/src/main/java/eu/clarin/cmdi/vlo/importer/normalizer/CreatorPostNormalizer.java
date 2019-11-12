@@ -10,9 +10,9 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class AuthorPostNormalizer extends AbstractPostNormalizer {
+public class CreatorPostNormalizer extends AbstractPostNormalizer {
     private final static Integer MIN_LENGTH = 6;
-    private final static Set<String> INVALID_AUTHOR_SET
+    private final static Set<String> INVALID_CREATOR_SET
             = ImmutableSet.<String>builder()
                     .add("nicht vorhanden")
                     .add("nicht dokumentiert")
@@ -22,14 +22,14 @@ public class AuthorPostNormalizer extends AbstractPostNormalizer {
     Pattern numberPattern = Pattern.compile("^[0-9].*");
  
    /**
-     * Filters/reformats invalid author information
-     * @param value unfiltered author information
+     * Filters/reformats invalid creator information
+     * @param value unfiltered creator information
      * @param cmdiData
-     * @return filtered author information
+     * @return filtered creator information
      */
     @Override
     public List<String> process(String value, DocFieldContainer cmdiData) {
-        if (value == null || value.length() < MIN_LENGTH || INVALID_AUTHOR_SET.contains(value.toLowerCase())) {
+        if (value == null || value.length() < MIN_LENGTH || INVALID_CREATOR_SET.contains(value.toLowerCase())) {
             return Collections.singletonList(null);
         } else {
             value = value.trim();
