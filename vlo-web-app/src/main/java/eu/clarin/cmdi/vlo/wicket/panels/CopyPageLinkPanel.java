@@ -41,7 +41,7 @@ import org.apache.wicket.util.encoding.UrlEncoder;
  *
  * @author twagoo
  */
-public class TopLinksPanel extends Panel {
+public class CopyPageLinkPanel extends Panel {
 
     @SpringBean
     private VloConfig vloConfig;
@@ -49,7 +49,7 @@ public class TopLinksPanel extends Panel {
     private final IModel<String> linkModel;
     private final IModel<String> pageTitleModel;
 
-    public TopLinksPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
+    public CopyPageLinkPanel(String id, final IModel<String> linkModel, final IModel<String> pageTitleModel) {
         super(id);
         this.linkModel = linkModel;
         this.pageTitleModel = pageTitleModel != null ? pageTitleModel : new Model<>(null);

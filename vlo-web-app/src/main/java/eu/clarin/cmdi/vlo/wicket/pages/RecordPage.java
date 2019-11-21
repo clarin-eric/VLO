@@ -19,8 +19,9 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
-import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -35,9 +36,11 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -46,18 +49,24 @@ import eu.clarin.cmdi.vlo.wicket.pages.ErrorPage.ErrorType;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.CmdiContentPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.CopyPageLinkPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordDetailsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+
 import org.apache.solr.common.SolrDocument;
+
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -65,6 +74,8 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -72,21 +83,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.JavaScriptResources;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
-import java.util.Collection;
-import java.util.Optional;
-import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  *
@@ -359,8 +363,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         }
     }
 
-    private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
-        return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
+    private CopyPageLinkPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
+        return new CopyPageLinkPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
 
             @Override
             protected void onChange(Optional<AjaxRequestTarget> target) {
