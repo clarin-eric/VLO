@@ -1,38 +1,22 @@
 package eu.clarin.cmdi.vlo;
 
 import com.google.common.collect.Ordering;
-import eu.clarin.cmdi.vlo.wicket.RobotAwareWebResponse;
+
 import de.agilecoders.wicket.core.Bootstrap;
 import de.agilecoders.wicket.core.settings.BootstrapSettings;
 import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
-import javax.inject.Inject;
-
-import org.apache.wicket.Application;
-import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.resource.loader.BundleStringResourceLoader;
-import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
-import org.apache.wicket.util.lang.Bytes;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigWicketResource;
-import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
+import eu.clarin.cmdi.vlo.wicket.RobotAwareWebResponse;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
 import eu.clarin.cmdi.vlo.wicket.pages.ContributorsPage;
@@ -43,14 +27,23 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.SimpleSearchPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.wicket.Application;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -58,6 +51,15 @@ import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.loader.BundleStringResourceLoader;
+import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.lang.Bytes;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  * Application object for your web application. If you want to run this
@@ -150,9 +152,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private void mountPages() {
         // Faceted search page (simple search is on root)
         mountPage("/search", FacetedSearchPage.class);
-        // Record (query result) page. E.g. /vlo/record?docId=abc123
-        // (cannot encode docId in path because it contains a slash)
-        mountPageWithFragmentSupport("/record", RecordPage.class);
+        // Record (query result) page. E.g. /vlo/record/abc123 or optionally /vlo/record?docId=abc123
+        mountPageWithFragmentSupport("/record/#{" + VloWebAppParameters.DOCUMENT_ID + "}", RecordPage.class);
         // All facet values page (kept for compatibility with old bookmarks)
         // E.g. /vlo/values/genre?facetMinOccurs=1 (min occurs not in path 
         // because it's a filter on the facet list)
