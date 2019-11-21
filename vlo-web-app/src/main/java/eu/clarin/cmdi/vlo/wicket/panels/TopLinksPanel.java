@@ -23,16 +23,13 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.encoding.UrlEncoder;
-import org.slf4j.LoggerFactory;
 
 /**
  * A panel with two components:
@@ -68,17 +65,6 @@ public class TopLinksPanel extends Panel {
 
                 })
                 .add(new TextField<>("urlInputField", linkModel))
-                .add(new Link("emailLink") {
-                    @Override
-                    public void onClick() {
-                        final String url
-                                = String.format("mailto:?subject=%s&body=%s",
-                                        encodeMailtoParamValue(pageTitleModel.getObject()),
-                                        encodeMailtoParamValue(linkModel.getObject()));
-                        throw new RedirectToUrlException(url);
-                    }
-                })
-                .add(new ExternalLink("bookmarkLink", linkModel))
                 .add(new AttributeAppender("class", new BooleanOptionsModel<String>(dropDownForcedOpen, Model.of("open"), Model.of("")), " "))
         );
 
@@ -112,17 +98,6 @@ public class TopLinksPanel extends Panel {
         if (pageTitleModel != null) {
             pageTitleModel.detach();
         }
-    }
-
-    private static String encodeMailtoParamValue(String param) {
-        //interestingly, for 'mailto' links it seems that the parameters need to be encoded using the path strategy...
-        //see http://stackoverflow.com/a/1211256 and https://en.wikipedia.org/wiki/Mailto
-        return UrlEncoder.PATH_INSTANCE.encode(param, "UTF-8")
-                //encode reserved characters (see https://github.com/clarin-eric/VLO/issues/180)
-                .replaceAll("\\?", UrlEncoder.QUERY_INSTANCE.encode("?", "UTF-8"))
-                .replaceAll("\\+", UrlEncoder.QUERY_INSTANCE.encode("+", "UTF-8"))
-                .replaceAll("\\:", UrlEncoder.QUERY_INSTANCE.encode(":", "UTF-8"))
-                .replaceAll("&", UrlEncoder.QUERY_INSTANCE.encode("&", "UTF-8"));
     }
 
 }
