@@ -258,7 +258,6 @@
             <plugin>
                 <!-- Copies 'local' LESS sources and fonts to the right destination -->
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <!-- copy less sources -->
@@ -335,7 +334,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>2.2.4</version>
+                <version>2.2.6</version>
                 <executions>
                     <execution>
                         <goals>
