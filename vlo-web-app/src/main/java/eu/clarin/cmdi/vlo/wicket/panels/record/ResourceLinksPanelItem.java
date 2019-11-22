@@ -76,12 +76,8 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
 
     private final DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.UK);
 
-    @SpringBean
-    private PiwikConfig piwikConfig;
     @SpringBean(name = "resolvingResourceStringConverter")
     private ResourceStringConverter resolvingResourceStringConverter;
-    @SpringBean
-    private FieldNameService fieldNameService;
 
     private final IModel<SolrDocument> documentModel;
     private final ResourceInfoModel resourceInfoModel;
@@ -186,68 +182,9 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     }
 
     protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
-        final List<BootstrapDropdown.DropdownMenuItem> options = createDropDownOptions(linkModel, resourceInfoModel);
-
-        return new BootstrapDropdown("dropdown", new ListModel<>(options)) {
-            @Override
-            protected Serializable getButtonClass() {
-                return null; //render as link, not button
-            }
-
-            @Override
-            protected Serializable getButtonIconClass() {
-                return "glyphicon glyphicon-option-horizontal";
-            }
-
-            @Override
-            protected boolean showCaret() {
-                return false;
-            }
-
-        };
+        return new ResourceLinkOptionsDropdown("dropdown", documentModel, linkModel, resourceInfoModel);
     }
-
-    private List<BootstrapDropdown.DropdownMenuItem> createDropDownOptions(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
-        return Lists.newArrayList(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
-            @Override
-            protected Link getLink(String id) {
-                final IModel<Collection<Object>> languageValuesModel
-                        = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
-
-                final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
-
-                if (piwikConfig.isEnabled()) {
-                    link.add(createLrsActionTrackingBehavior(resourceInfoModel));
-                }
-                return link;
-            }
-        }
-        );
-    }
-
-    private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
-        final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
-            @Override
-            protected String getName(AjaxRequestTarget target) {
-                return "ResourceDropdown";
-            }
-
-            @Override
-            protected String getValue(AjaxRequestTarget target) {
-                return resourceInfoModel.getObject().getHref();
-            }
-
-            @Override
-            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-                attributes.setAsynchronous(false);
-                super.updateAjaxAttributes(attributes);
-            }
-
-        };
-        eventBehavior.setAsync(false);
-        return eventBehavior;
-    }
-
+    
     private Component createDetailsColumns(String id) {
         final WebMarkupContainer detailsContainer = new WebMarkupContainer(id);
         detailsContainer.add(new Label("mimeType"));
@@ -392,5 +329,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         documentModel.detach();
         itemDetailsShownModel.detach();
     }
+
 
 }

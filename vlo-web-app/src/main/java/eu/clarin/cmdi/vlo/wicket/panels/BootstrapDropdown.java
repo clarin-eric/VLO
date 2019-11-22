@@ -40,6 +40,11 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
 
     private final IModel<Boolean> openStateModel;
 
+    public BootstrapDropdown(String id) {
+        super(id);
+        this.openStateModel = Model.of(false);
+    }
+    
     public BootstrapDropdown(String id, IModel<List<DropdownMenuItem>> itemsModel) {
         super(id, itemsModel);
         this.openStateModel = Model.of(false);
