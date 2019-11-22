@@ -2,6 +2,9 @@ package eu.clarin.cmdi.vlo;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public final class StringUtils {
 
@@ -51,7 +54,7 @@ public final class StringUtils {
 
     private static final Set<Character> RESERVED_CHARACTERS = ImmutableSet.of(
             '!', '*', '\'', '(', ')', ';', ':', '@', '&',
-            '=', '+', '$', ',', '/', '?', '#', '[', ']'
+            '=', '+', '$', ',', '/', '?', '#', '[', ']', ' '
     );
 
     /**
