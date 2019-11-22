@@ -25,6 +25,7 @@ import eu.clarin.cmdi.rasa.links.CheckedLink;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
+import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
@@ -99,8 +100,11 @@ public class CMDIRecordImporter<T> {
         try {
             cmdiData = processor.process(file, resourceStructureGraph.orElse(null));
             if (!idOk(cmdiData.getId())) {
-                cmdiData.setId(dataOrigin.orElse(NOOP_DATAROOT)
-                        .getOriginName() + "/" + file.getName()); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
+                cmdiData.setId(
+                        StringUtils.normalizeIdString(
+                                dataOrigin.orElse(NOOP_DATAROOT).getOriginName()
+                                + "/"
+                                + file.getName())); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
                 stats.nrOfFilesWithoutId().incrementAndGet();
             }
         } catch (Exception e) {
@@ -219,18 +223,18 @@ public class CMDIRecordImporter<T> {
 
         // set value for field languageCount based on the content of languageCode
         int languageCount;
-        if(cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) != null) {
+        if (cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) != null) {
             Collection<Object> docField = cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
             docField.remove("code:zxx");
             languageCount = docField.size();
             // special case "code:mul" (=one ISO 639-3 code for multiple languages)
-            if(languageCount == 1 && docField.contains("code:mul")) {
+            if (languageCount == 1 && docField.contains("code:mul")) {
                 languageCount = 2; // =arbitrary number larger than 1
             }
 
             // consequences if field 'multilingual' has no concept-based content
-            if(cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL)) == null) {
-                if(languageCount > 1) {
+            if (cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL)) == null) {
+                if (languageCount > 1) {
                     cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL), MultilingualPostNormalizer.VALUE_MULTILINGUAL, false);
                 } else {
                     cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.MULTILINGUAL), MultilingualPostNormalizer.VALUE_NOT_MULTILINGUAL, false);
