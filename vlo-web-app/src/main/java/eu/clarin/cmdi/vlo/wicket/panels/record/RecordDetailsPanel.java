@@ -243,6 +243,10 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
                         .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)));
         resourceInfo.add(showResourcesLink);
 
+        //dropdown menu for LRS connection
+        resourceInfo
+                .add(new ResourceLinkOptionsDropdown("dropdown", getModel(), linkModel, resourceInfoModel));
+
         resourceInfo.setOutputMarkupId(true);
         return resourceInfo;
     }
