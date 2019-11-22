@@ -123,6 +123,7 @@
         <field key="SIGNATURE">_signature</field>
         <field key="RECORD_PID">recordPid</field>
         <field key="RESOURCE_AVAILABILITY_SCORE">_resourceAvailabilityScore</field>
+        <field key="CREATOR">creator</field>
     </fields>
 
     <deprecatedFields>
@@ -170,6 +171,7 @@
         <searchResultField>ORGANISATION</searchResultField>
         <searchResultField>COLLECTION</searchResultField>
         <searchResultField>NATIONAL_PROJECT</searchResultField>
+        <searchResultField>CREATOR</searchResultField>
     </searchResultFields>
 
     <!-- KEYS of fields ignored in the record page -->
