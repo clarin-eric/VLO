@@ -16,44 +16,48 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import com.google.common.collect.ImmutableList;
+
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
-//import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
+import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
+import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
+import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.RESOURCES_SECTION;
+import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
+
 import java.util.List;
+import java.util.Optional;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
-import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
-import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
-import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
-import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
-import java.util.Optional;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.model.Model;
 
 /**
  * Panel that shows the "basic" (non-technical) property fields of a document
@@ -237,18 +241,37 @@ public abstract class RecordDetailsPanel extends GenericPanel<SolrDocument> {
 
         final PropertyModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
         showResourcesLink
-                .add(new WebMarkupContainer("infoSign")
-                        .add(BooleanVisibilityBehavior.visibleOnFalse(availabilityWarningModel)))
                 .add(availabilityWarning
                         .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)));
         resourceInfo.add(showResourcesLink);
 
         //dropdown menu for LRS connection
         resourceInfo
-                .add(new ResourceLinkOptionsDropdown("dropdown", getModel(), linkModel, resourceInfoModel));
+                .add(new ResourceLinkOptionsDropdown("dropdown", getModel(), linkModel, resourceInfoModel) {
+                    @Override
+                    protected void createDropdownOptions(ImmutableList.Builder<BootstrapDropdown.DropdownMenuItem> listBuilder) {
+                        listBuilder.add(createResourceInfoDropdownOption());
+                        super.createDropdownOptions(listBuilder);
+                    }
+                });
 
         resourceInfo.setOutputMarkupId(true);
         return resourceInfo;
+    }
+
+    private BootstrapDropdown.DropdownMenuItem createResourceInfoDropdownOption() {
+        return new BootstrapDropdown.DropdownMenuItem("Show resource details", "glyphicon glyphicon-info-sign") {
+            @Override
+            protected Link getLink(String id) {
+                return new Link<>(id) {
+
+                    @Override
+                    public void onClick() {
+                        switchToTab(RESOURCES_SECTION, Optional.empty());
+                    }
+                };
+            }
+        };
     }
 
     private Component createMultipleResourceLink(String id) {

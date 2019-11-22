@@ -62,20 +62,25 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         this.documentModel = documentModel;
         this.linkModel = linkModel;
         this.resourceInfoModel = resourceInfoModel;
-
-        setModel(new ListModel<>(createDropDownOptions()));
     }
 
-    private List<DropdownMenuItem> createDropDownOptions() {
-        return ImmutableList.<DropdownMenuItem>builder()
-                .add(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
-                    @Override
-                    protected Link getLink(String id) {
-                        return getResourceLink(id);
-                    }
-                })
-                //.add more options
-                .build();
+    @Override
+    protected final void onInitialize() {
+        final ImmutableList.Builder<DropdownMenuItem> optionsBuilder = ImmutableList.<DropdownMenuItem>builder();
+        createDropdownOptions(optionsBuilder);
+
+        setModel(new ListModel<>(optionsBuilder.build()));
+        super.onInitialize();
+    }
+
+    protected void createDropdownOptions(ImmutableList.Builder<DropdownMenuItem> listBuilder) {
+        listBuilder.add(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
+            @Override
+            protected Link getLink(String id) {
+                return getResourceLink(id);
+            }
+        });
+        //.add more options?
     }
 
     private Link getResourceLink(String id) {
@@ -122,6 +127,14 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     @Override
     protected boolean showCaret() {
         return false;
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        documentModel.detach();
+        resourceInfoModel.detach();
+        linkModel.detach();
     }
 
 }
