@@ -41,6 +41,7 @@ import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -293,6 +294,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
         if (config.isProcessHierarchies()) {
             //TODO: make hierarchy an optional side pane instead
+
+            final IModel<Boolean> hasHierarchyModel = new RecordHasHierarchyModel(getModel());
+
             tabs.set(TABS_ORDER.indexOf(HIERARCHY_SECTION), new AbstractTab(Model.of("Hierarchy")) {
                 @Override
                 public Panel getPanel(String panelId) {
@@ -301,13 +305,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                 @Override
                 public boolean isVisible() {
-                    // only show hierarchy panel if there's anything to show
-                    final SolrDocument document = getModel().getObject();
-                    final Object partCount = document.getFieldValue(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
-                    final boolean hasHierarchy // has known parent or children
-                            = null != document.getFieldValue(fieldNameService.getFieldName(FieldKey.IS_PART_OF)) // has parent
-                            || (null != partCount && !Integer.valueOf(0).equals(partCount)); // children count != 0
-                    return hasHierarchy;
+                    return hasHierarchyModel.getObject();
                 }
 
             });

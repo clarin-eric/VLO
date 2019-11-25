@@ -30,6 +30,7 @@ import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -113,7 +114,10 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                 = () -> (resourcesModel.getObject() != null
                 && resourcesModel.getObject().size() > 1);
 
-        hierarchyLinkVisibilityModel = Model.of(true); //TODO
+        final RecordHasHierarchyModel recordHasHierarchyModel = new RecordHasHierarchyModel(model);
+
+        hierarchyLinkVisibilityModel
+                = () -> ((resourcesModel.getObject() == null || resourcesModel.getObject().isEmpty()) && recordHasHierarchyModel.getObject());
     }
 
     @Override
@@ -129,8 +133,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
         add(createMultipleResourceLink("resourcesInfo")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
 
-        add(createHierarchyLink("hierarchyLink"))
-                .add(BooleanVisibilityBehavior.visibleOnTrue(hierarchyLinkVisibilityModel));
+        add(createHierarchyLink("hierarchyLink")
+                .add(BooleanVisibilityBehavior.visibleOnTrue(hierarchyLinkVisibilityModel)));
 
         add(createResourcesTitle("resourcesTitle"));
     }
@@ -147,7 +151,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
             public void onConfigure(Component component) {
                 component.setVisible(
                         landingPageVisibilityModel.getObject() // landing page link is visible
-                        && (resourceInfoVisibilityModel.getObject() || resourcesLinkVisibilityModel.getObject()) // and resource(s) info as well
+                        && (resourceInfoVisibilityModel.getObject() || resourcesLinkVisibilityModel.getObject() || hierarchyLinkVisibilityModel.getObject()) // and resource(s) info as well
                 );
             }
 
