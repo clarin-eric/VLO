@@ -35,6 +35,7 @@ import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.RESOURCES_SECTION;
+import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 
 import java.util.Optional;
@@ -81,6 +82,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     private final IModel<Boolean> landingPageVisibilityModel;
     private final IModel<Boolean> resourceInfoVisibilityModel;
     private final IModel<Boolean> resourcesLinkVisibilityModel;
+    private final IModel<Boolean> hierarchyLinkVisibilityModel;
 
     public RecordDetailsResourceInfoPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -110,6 +112,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
         resourcesLinkVisibilityModel
                 = () -> (resourcesModel.getObject() != null
                 && resourcesModel.getObject().size() > 1);
+
+        hierarchyLinkVisibilityModel = Model.of(true); //TODO
     }
 
     @Override
@@ -124,6 +128,9 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
         add(createMultipleResourceLink("resourcesInfo")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
+
+        add(createHierarchyLink("hierarchyLink"))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(hierarchyLinkVisibilityModel));
 
         add(createResourcesTitle("resourcesTitle"));
     }
@@ -257,6 +264,16 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                         switchToTab(RESOURCES_SECTION, target);
                     }
                 }.add(new Label("resourcesCount", new PropertyModel<String>(resourcesModel, "size"))));
+    }
+
+    private Component createHierarchyLink(String id) {
+        return new WebMarkupContainer(id)
+                .add(new AjaxFallbackLink<Void>("showHierarchy") {
+                    @Override
+                    public void onClick(Optional<AjaxRequestTarget> target) {
+                        switchToTab(HIERARCHY_SECTION, target);
+                    }
+                });
     }
 
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
