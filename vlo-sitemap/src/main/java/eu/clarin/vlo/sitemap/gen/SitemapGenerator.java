@@ -1,5 +1,12 @@
 package eu.clarin.vlo.sitemap.gen;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Streams;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningExecutorService;
+import com.google.common.util.concurrent.MoreExecutors;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -8,14 +15,9 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -27,101 +29,130 @@ import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 import eu.clarin.vlo.sitemap.services.SOLRService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class SitemapGenerator {
 
     static Logger _logger = LoggerFactory.getLogger(SitemapGenerator.class);
 
     public void generateVLOSitemap() {
-	try {
+        try {
 
-	    // clean sitemap output folder or create if it doesnt exist
-	    cleanOutputDir();
+            // clean sitemap output folder or create if it doesnt exist
+            cleanOutputDir();
 
-	    // create urls
-	    List<URL> urls = new LinkedList<>();
+            // create urls
+            final List<URL> urls
+                    = Streams.concat(
+                            Config.INCLUDE_URLS.stream().map(u -> new URL(u.trim())),
+                            new SOLRService().getRecordURLS().stream()
+                    ).collect(Collectors.toUnmodifiableList());
 
-	    for (String staticURL : Config.INCLUDE_URLS)
-		urls.add(new URL(staticURL.trim()));
-	    urls.addAll(new SOLRService().getRecordURLS());
+            _logger.info("Total number of URLs " + urls.size());
 
-	    _logger.info("Total number of URLs " + urls.size());
-
-	    createSitemapIndex(createSitemaps(urls));
-
-	} catch (Exception e) {
-	    _logger.error("Error while generating sitemaps", e);
-	    throw new RuntimeException(e);
-	}
-
+            final List<String> sitemaps = createSitemaps(urls);
+            createSitemapIndex(sitemaps);
+        } catch (Exception e) {
+            _logger.error("Error while generating sitemaps", e);
+            throw new RuntimeException(e);
+        }
     }
 
     private void cleanOutputDir() throws Exception {
-	Path outputDir = Paths.get(Config.OUTPUT_FOLDER);
-	if (!Files.exists(outputDir)) {// create folder if it doesnt exist
-	    Files.createDirectory(outputDir);
-	    _logger.info("Directory {} is created", outputDir);
-	} else {// if exists deelte existing sitemap files
-	    Files.walkFileTree(outputDir, new SimpleFileVisitor<Path>() {
+        Path outputDir = Paths.get(Config.OUTPUT_FOLDER);
+        if (!Files.exists(outputDir)) {// create folder if it doesnt exist
+            Files.createDirectory(outputDir);
+            _logger.info("Directory {} is created", outputDir);
+        } else {// if exists deelte existing sitemap files
+            Files.walkFileTree(outputDir, new SimpleFileVisitor<Path>() {
 
-		@Override
-		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-		    String fileName = file.getFileName().toString();
-		    if (fileName.startsWith(Config.SITEMAP_INDEX_NAME)
-			    || fileName.startsWith(Config.SITEMAP_NAME_PREFIX))
-			Files.delete(file);
-		    return FileVisitResult.CONTINUE;
-		}
-	    });
-	    _logger.info("Directory {} is cleaned", outputDir);
-	}
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    String fileName = file.getFileName().toString();
+                    if (fileName.startsWith(Config.SITEMAP_INDEX_NAME)
+                            || fileName.startsWith(Config.SITEMAP_NAME_PREFIX)) {
+                        Files.delete(file);
+                    }
+                    return FileVisitResult.CONTINUE;
+                }
+            });
+            _logger.info("Directory {} is cleaned", outputDir);
+        }
     }
 
     public void createSitemapIndex(List<String> maps) throws Exception {
 
-	SitemapIndex index = new SitemapIndex();
-	index.setMaps(maps.parallelStream()
-		.map(map -> new SitemapIndex.Sitemap(map, (new SimpleDateFormat("yyyy-MM-dd")).format(new Date())))
-		.collect(Collectors.toList()));
+        SitemapIndex index = new SitemapIndex();
+        index.setMaps(maps.parallelStream()
+                .map(map -> new SitemapIndex.Sitemap(map, (new SimpleDateFormat("yyyy-MM-dd")).format(new Date())))
+                .collect(Collectors.toList()));
 
-	new SitemapIndexMarshaller().marshall(index);
+        new SitemapIndexMarshaller().marshall(index);
     }
 
     private List<String> createSitemaps(List<URL> urls) throws Exception {
+        final int maxUrlsPerSitemap = Integer.parseInt(Config.MAX_URLS_PER_SITEMAP);
 
-	List<String> sitemaps = new LinkedList<String>();
-	List<Callable<Void>> tasks = new ArrayList<Callable<Void>>();
+        final ListeningExecutorService executor
+                = MoreExecutors.listeningDecorator(
+                        Executors.newFixedThreadPool(
+                                Runtime.getRuntime().availableProcessors()));
 
-	int ind = 0;
-	int sitemapCnt = 1;
+        try {
+            final Stream<List<URL>> urlListsStream
+                    = StreamSupport.stream(
+                            Iterables.partition(urls, maxUrlsPerSitemap).spliterator(),
+                            false);
 
-	while (true) {
-	    int maxUrlsPerSitemap = Integer.valueOf(Config.MAX_URLS_PER_SITEMAP);
+            final AtomicInteger sitemapCnt = new AtomicInteger(1);
+            final List<ListenableFuture<String>> futures = urlListsStream
+                    .map(subURLs -> submitSubmapTask(subURLs, sitemapCnt, executor))
+                    .collect(Collectors.toUnmodifiableList());
 
-	    List<URL> subURLs = urls.subList(ind, Math.min(ind + maxUrlsPerSitemap, urls.size()));
-	    ind += maxUrlsPerSitemap;
+            return Futures.getChecked(Futures.allAsList(futures), Exception.class);
+        } finally {
+            executor.shutdown();
+        }
+    }
 
-	    Sitemap sitemap = new Sitemap();
-	    sitemap.setUrls(subURLs);
+    private ListenableFuture<String> submitSubmapTask(List<URL> subURLs, AtomicInteger sitemapCnt, ListeningExecutorService executor) {
+        final String sitemapName = Config.SITEMAP_NAME_PREFIX + sitemapCnt.getAndIncrement();
 
-	    String sitemapName = Config.SITEMAP_NAME_PREFIX + sitemapCnt++;
-	    sitemaps.add(Config.SITEMAP_BASE_URL + sitemapName + ".xml");
+        final ListenableFuture<String> submapFuture = executor.submit(() -> {
+            Sitemap sitemap = new Sitemap();
+            sitemap.setUrls(subURLs);
 
-	    tasks.add(() -> new SitemapMarshaller().marshall(sitemap, sitemapName));
+            final String sitemapFilename = Config.SITEMAP_BASE_URL + sitemapName + ".xml";
+            new SitemapMarshaller().marshall(sitemap, sitemapName);
+            return sitemapFilename;
+        });
 
-	    if (ind >= urls.size())
-		break;
-	}
+        Futures.addCallback(submapFuture, new SitemapTaskCallback(sitemapName, subURLs), executor);
 
-	ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-	List<Future<Void>> results = executor.invokeAll(tasks);
+        return submapFuture;
+    }
 
-	for (Future res : results)
-	    res.get();
+    private static class SitemapTaskCallback implements FutureCallback<String> {
 
-	executor.shutdown();
+        private final String sitemapName;
+        private final List<URL> urls;
 
-	return sitemaps;
+        public SitemapTaskCallback(String sitemapName, List<URL> urls) {
+            this.sitemapName = sitemapName;
+            this.urls = urls;
+        }
+
+        @Override
+        public void onSuccess(String result) {
+            _logger.debug("Completed async generation of {} ({} URLs)", sitemapName, urls.size());
+        }
+
+        @Override
+        public void onFailure(Throwable t) {
+            _logger.error("Failure while generating {} ({} URLs)", sitemapName, urls.size(), t);
+        }
     }
 
 }
