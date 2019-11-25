@@ -151,7 +151,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
             public void onConfigure(Component component) {
                 component.setVisible(
                         landingPageVisibilityModel.getObject() // landing page link is visible
-                        && (resourceInfoVisibilityModel.getObject() || resourcesLinkVisibilityModel.getObject() || hierarchyLinkVisibilityModel.getObject()) // and resource(s) info as well
+                        && (resourceInfoVisibilityModel.getObject() || resourcesLinkVisibilityModel.getObject()) // and resource(s) info as well
                 );
             }
 
