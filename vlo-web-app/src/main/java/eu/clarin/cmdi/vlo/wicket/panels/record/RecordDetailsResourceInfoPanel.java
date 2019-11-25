@@ -26,6 +26,7 @@ import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
+import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
@@ -74,64 +75,67 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
     private final SolrFieldModel<String> resourcesModel;
     private final ResourceInfoModel resourceInfoModel;
+    private final ResourceInfoModel landingPageResourceInfoModel;
+    private final ResolvingLinkModel resourceInfoLinkModel;
+
+    private final IModel<Boolean> landingPageVisibilityModel;
+    private final IModel<Boolean> resourceInfoVisibilityModel;
+    private final IModel<Boolean> resourcesLinkVisibilityModel;
 
     public RecordDetailsResourceInfoPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
 
         resourcesModel = new SolrFieldModel<>(model, fieldNameService.getFieldName(FieldKey.RESOURCE));
         resourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(model, fieldNameService.getFieldName(FieldKey.RESOURCE)));
+
+        landingPageResourceInfoModel
+                = new ResourceInfoModel(
+                        resourceStringConverter,
+                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+
+        // resource info for single resource
+        resourceInfoLinkModel
+                = ResolvingLinkModel.modelFor(resourceInfoModel, getModel());
+
+        // visibility models
+        landingPageVisibilityModel
+                = () -> (landingPageResourceInfoModel.getObject() != null
+                && landingPageResourceInfoModel.getObject().getHref() != null);
+
+        resourceInfoVisibilityModel
+                = () -> (resourcesModel.getObject() != null
+                && resourcesModel.getObject().size() == 1
+                && resourceInfoLinkModel.getObject() != null);
+
+        resourcesLinkVisibilityModel
+                = () -> (resourcesModel.getObject() != null
+                && resourcesModel.getObject().size() > 1);
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize(); //To change body of generated methods, choose Tools | Templates.
 
-        final ResourceInfoModel landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter, new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+        add(createLandingPageLink("landingPage")
+                .add(BooleanVisibilityBehavior.visibleOnTrue(landingPageVisibilityModel)));
 
-        final IModel<Boolean> landingPageVisibilityModel = new IModel<>() {
-            @Override
-            public Boolean getObject() {
-                return landingPageResourceInfoModel.getObject() != null
-                        && landingPageResourceInfoModel.getObject().getHref() != null;
-            }
-        };
-
-        add(createLandingPageLink("landingPage", landingPageResourceInfoModel).
-                add(BooleanVisibilityBehavior.visibleOnTrue(landingPageVisibilityModel)));
-
-        // resource info for single resource
-        final ResolvingLinkModel resourceInfoLinkModel = ResolvingLinkModel.modelFor(resourceInfoModel, getModel());
-        final IModel<Boolean> resourceInfoVisibilityModel = new IModel<>() {
-            @Override
-            public Boolean getObject() {
-                return (resourcesModel.getObject() != null
-                        && resourcesModel.getObject().size() == 1
-                        && resourceInfoLinkModel.getObject() != null);
-            }
-        };
-
-        add(createSingleResourceInfo("resourceInfo", resourceInfoLinkModel)
+        add(createSingleResourceInfo("resourceInfo")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
-
-        final IModel<Boolean> resourcesLinkVisibilityModel = new IModel<>() {
-            @Override
-            public Boolean getObject() {
-                return resourcesModel.getObject() != null
-                        && resourcesModel.getObject().size() > 1;
-            }
-        };
 
         add(createMultipleResourceLink("resourcesInfo")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(resourcesLinkVisibilityModel)));
 
-        add(new Label("resourcesTitle", new IModel<>() {
-            @Override
-            public Object getObject() {
-                return (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1)
-                        ? "Linked resource"
-                        : "Linked resources";
-            }
-        }).add(new Behavior() {
+        add(createResourcesTitle("resourcesTitle"));
+    }
+
+    private Component createResourcesTitle(String id) {
+        final IModel<String> titleModel = new BooleanOptionsModel<>(
+                () -> (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1),
+                Model.of("Linked resource"),
+                Model.of("Linked resources")
+        );
+
+        return new Label(id, titleModel).add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
                 component.setVisible(
@@ -140,11 +144,11 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                 );
             }
 
-        }));
+        });
     }
 
-    private Component createLandingPageLink(String id, ResourceInfoModel resourceModel) {
-        final IModel<String> linkModel = new PropertyModel<>(resourceModel, "href");
+    private Component createLandingPageLink(String id) {
+        final IModel<String> linkModel = new PropertyModel<>(landingPageResourceInfoModel, "href");
         final IsPidModel isPidModel = new IsPidModel(linkModel);
         final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(linkModel);
 
@@ -155,7 +159,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
             }
         };
 
-        final WebMarkupContainer availabilityWarning = new ResourceAvailabilityWarningBadge("availabilityWarning", resourceModel);
+        final WebMarkupContainer availabilityWarning = new ResourceAvailabilityWarningBadge("availabilityWarning", landingPageResourceInfoModel);
         showResourcesLink.add(availabilityWarning);
 
         return new WebMarkupContainer(id)
@@ -174,9 +178,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
      * @param linkModel
      * @return
      */
-    private Component createSingleResourceInfo(String id, IModel<String> linkModel) {
-        final IsPidModel isPidModel = new IsPidModel(linkModel);
-
+    private Component createSingleResourceInfo(String id) {
         final WebMarkupContainer resourceInfo = new WebMarkupContainer(id);
 
         // Resource info for single resource (should not appear if there are more or fewer resources)
@@ -191,8 +193,9 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
         );
 
         resourceInfo
-                .add(new PIDLinkLabel("pidLabel", linkModel, Model.of(PIDContext.RESOURCE), PID_LABEL_TEXT_LENGTH)
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+                .add(new PIDLinkLabel("pidLabel", resourceInfoLinkModel, Model.of(PIDContext.RESOURCE), PID_LABEL_TEXT_LENGTH)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(
+                                new IsPidModel(resourceInfoLinkModel))));
 
         // Resource info gets async update to resolve any handle to a file name
         resourceInfo.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
@@ -219,7 +222,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
         //dropdown menu for LRS connection
         resourceInfo
-                .add(new ResourceLinkOptionsDropdown("dropdown", getModel(), linkModel, resourceInfoModel) {
+                .add(new ResourceLinkOptionsDropdown("dropdown", getModel(), resourceInfoLinkModel, resourceInfoModel) {
                     @Override
                     protected void createDropdownOptions(ImmutableList.Builder<BootstrapDropdown.DropdownMenuItem> listBuilder) {
                         listBuilder.add(createResourceInfoDropdownOption());
