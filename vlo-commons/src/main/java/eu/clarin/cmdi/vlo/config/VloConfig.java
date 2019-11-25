@@ -411,7 +411,7 @@ public class VloConfig {
     /**
      * @param solrUserReadWritePass the solrUserReadWritePass to set
      */
-    public void setUserReadWritePass(String solrUserReadWritePass) {
+    public void setSolrUserReadWritePass(String solrUserReadWritePass) {
         this.solrUserReadWritePass = solrUserReadWritePass;
     }
 
