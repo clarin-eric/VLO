@@ -58,15 +58,18 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
         // Populate attributes in form elements...
         // Outer <form> element
         final WebMarkupContainer fcsForm = new WebMarkupContainer("fcsForm");
+        add(fcsForm);
         // The action of the form should be the aggregator endpoint
         fcsForm.add(new AttributeModifier("action", vloConfig.getFederatedContentSearchUrl()));
-        add(fcsForm);
+        fcsForm.add(new AttributeModifier("name", fcsForm.getMarkupId()));
 
         // Hidden form field for aggregation context
         final WebMarkupContainer aggregationContext = new WebMarkupContainer("aggregationContent");
         // The value should be the JSON object
         aggregationContext.add(new AttributeModifier("value", jsonModel));
         fcsForm.add(aggregationContext);
+
+        add(new WebMarkupContainer("submitLink").add(new AttributeModifier("onclick", () -> "document." + fcsForm.getMarkupId() + ".submit();")));
     }
 
     private IModel<String> createJsonModel(final IModel<SolrDocument> model, final IModel<String> endpointModel) {
