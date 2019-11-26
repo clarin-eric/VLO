@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Streams;
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
 
 import eu.clarin.cmdi.vlo.FieldKey;
@@ -65,6 +66,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.solr.common.SolrDocument;
 
@@ -179,11 +182,16 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 if (document != null) {
                     final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
                     if (countValue instanceof Integer) {
-                        Collection<Object> fieldValues = document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-                        if (fieldValues == null) {
+                        Long fieldValuesCount
+                                = Streams.concat(
+                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty()))
+                                        .collect(Collectors.counting());
+                        if (fieldValuesCount == 0) {
                             return ((Integer) countValue).toString();
                         } else {
-                            return Integer.toString(fieldValues.size() + (Integer) countValue);
+                            return Long.toString(fieldValuesCount + (Integer) countValue);
                         }
                     }
                 }

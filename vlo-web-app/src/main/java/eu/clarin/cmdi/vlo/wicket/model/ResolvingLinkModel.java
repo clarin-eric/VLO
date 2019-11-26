@@ -24,6 +24,7 @@ import org.apache.wicket.model.PropertyModel;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 
 /**
  * Model that resolves a URI string (object) against another URI string
@@ -88,7 +89,7 @@ public class ResolvingLinkModel implements IModel<String> {
      * @param documentModel model of document to resolve any relative links to
      * @return
      */
-    public static ResolvingLinkModel modelFor(ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel) {
+    public static ResolvingLinkModel modelFor(IModel<ResourceInfo>  resourceInfoModel, IModel<SolrDocument> documentModel) {
         return new ResolvingLinkModel(
                 //URI to resolve against
                 new SolrFieldStringModel(documentModel, VloWicketApplication.get().getFieldNameService().getFieldName(FieldKey.SELF_LINK)),

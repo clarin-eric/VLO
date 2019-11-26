@@ -16,17 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
-import com.google.common.collect.Lists;
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.PiwikEventConstants;
-import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
-import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
-import eu.clarin.cmdi.vlo.wicket.components.LanguageResourceSwitchboardLink;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
@@ -34,13 +27,8 @@ import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
-import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import javax.ws.rs.core.Response;
@@ -49,21 +37,18 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
-import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -80,10 +65,10 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
     private ResourceStringConverter resolvingResourceStringConverter;
 
     private final IModel<SolrDocument> documentModel;
-    private final ResourceInfoModel resourceInfoModel;
+    private final IModel<ResourceInfo> resourceInfoModel;
     private final IModel<Boolean> itemDetailsShownModel;
 
-    public ResourceLinksPanelItem(String id, ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
+    public ResourceLinksPanelItem(String id, IModel<ResourceInfo> resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
         super(id, resourceInfoModel);
         this.resourceInfoModel = resourceInfoModel;
         this.documentModel = documentModel;
@@ -117,9 +102,11 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         link.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName")));
 
         // make the link update via AJAX with resolved location (in case of handle)
-        if (resolvingResourceStringConverter.getResolver() != null && resolvingResourceStringConverter.getResolver().canResolve(linkModel.getObject())) {
+        if (resourceInfoModel instanceof ResourceInfoModel
+                && resolvingResourceStringConverter.getResolver() != null
+                && resolvingResourceStringConverter.getResolver().canResolve(linkModel.getObject())) {
             resolvingResourceStringConverter.doPreflight(linkModel.getObject());
-            link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, resourceInfoModel) {
+            link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, (ResourceInfoModel) resourceInfoModel) {
 
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
@@ -181,10 +168,10 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
 
     }
 
-    protected Component createOptionsDropdown(final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
+    protected Component createOptionsDropdown(final IModel<String> linkModel, final IModel<ResourceInfo> resourceInfoModel) {
         return new ResourceLinkOptionsDropdown("dropdown", documentModel, linkModel, resourceInfoModel);
     }
-    
+
     private Component createDetailsColumns(String id) {
         final WebMarkupContainer detailsContainer = new WebMarkupContainer(id);
         detailsContainer.add(new Label("mimeType"));
@@ -193,7 +180,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         return detailsContainer;
     }
 
-    private Component createLinkCheckingResult(String id, ResourceInfoModel resourceInfoModel) {
+    private Component createLinkCheckingResult(String id, IModel<ResourceInfo> resourceInfoModel) {
         final IModel<Boolean> knownAvailabilityModel = new PropertyModel<>(resourceInfoModel, "availabilityKnown");
         final IModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
         return new WebMarkupContainer(id)
@@ -329,6 +316,5 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         documentModel.detach();
         itemDetailsShownModel.detach();
     }
-
 
 }

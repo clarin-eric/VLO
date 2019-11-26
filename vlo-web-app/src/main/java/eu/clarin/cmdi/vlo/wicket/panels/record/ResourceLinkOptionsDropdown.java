@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.LanguageResourceSwitchboardLink;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
@@ -37,6 +38,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -53,10 +55,10 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     private FieldNameService fieldNameService;
 
     private final IModel<SolrDocument> documentModel;
-    private final ResourceInfoModel resourceInfoModel;
+    private final IModel<ResourceInfo> resourceInfoModel;
     private final IModel<String> linkModel;
 
-    public ResourceLinkOptionsDropdown(String id, IModel<SolrDocument> documentModel, final IModel<String> linkModel, final ResourceInfoModel resourceInfoModel) {
+    public ResourceLinkOptionsDropdown(String id, IModel<SolrDocument> documentModel, final IModel<String> linkModel, final IModel<ResourceInfo> resourceInfoModel) {
         super(id);
 
         this.documentModel = documentModel;
@@ -92,7 +94,7 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         return link;
     }
 
-    private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final ResourceInfoModel resourceInfoModel) {
+    private AjaxPiwikTrackingBehavior.EventTrackingBehavior createLrsActionTrackingBehavior(final IModel<ResourceInfo>  resourceInfoModel) {
         final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE) {
             @Override
             protected String getName(AjaxRequestTarget target) {

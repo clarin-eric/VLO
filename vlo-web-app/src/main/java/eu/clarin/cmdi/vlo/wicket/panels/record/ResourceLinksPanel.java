@@ -93,12 +93,12 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         // special item in table for landing page 'resource'
         landingPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-        searchPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-        searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        searchPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
+        searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
         resourcesTable
-                .add(createLandingPageItem("landingPageItem", "landing page", ResourceTypeIcon.LANDING_PAGE, landingPageLinkModel))
-                .add(createLandingPageItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageLinkModel))
-                .add(createLandingPageItem("searchServiceItem", "search service", ResourceTypeIcon.SEARCH_SERVICE, searchServiceLinkModel));
+                .add(createSpecialLinkItem("landingPageItem", "landing page", ResourceTypeIcon.LANDING_PAGE, landingPageLinkModel, new ResourceInfoModel(resourceStringConverter, landingPageLinkModel)))
+                .add(createSpecialLinkItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageLinkModel, new ResourceInfoModel(resourceStringConverter, searchPageLinkModel)))
+                .add(createSpecialLinkItem("searchServiceItem", "search service", ResourceTypeIcon.SEARCH_SERVICE, searchServiceLinkModel, new ResourceInfoModel(resourceStringConverter, searchServiceLinkModel)));
 
         //add the 'actual' resources listing
         final SolrFieldModel<String> resourcesModel
@@ -139,13 +139,12 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
      * @param documentModel
      * @return
      */
-    private ResourceLinksPanelItem createLandingPageItem(final String id, String label, String icon, IModel<String> linkModel) {
-        final ResourceInfoModel landingPageInfoModel = new ResourceInfoModel(resourceStringConverter, linkModel);
-        final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
-        final ResourceLinksPanelItem landingPageItem = new ResourceLinksSpecialItem(id, Model.of(label), Model.of(icon), landingPageInfoModel, getModel(), landingPageDetailsModel) {
+    private ResourceLinksPanelItem createSpecialLinkItem(final String id, String label, String icon, IModel<String> linkModel, ResourceInfoModel pageInfoModel) {
+        final IModel<Boolean> detailsVisibilityModel = Model.of(Boolean.FALSE);
+        final ResourceLinksPanelItem linkItem = new ResourceLinksSpecialItem(id, Model.of(label), Model.of(icon), pageInfoModel, getModel(), detailsVisibilityModel) {
             @Override
             protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
-                landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
+                detailsVisibilityModel.setObject(!detailsVisibilityModel.getObject());
 
                 target.ifPresent(t -> {
                     t.add(resourcesTable);
@@ -153,10 +152,10 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
 
         };
-        landingPageItem.add(
+        linkItem.add(
                 BooleanVisibilityBehavior.visibleOnTrue(
                         () -> linkModel.getObject() != null && resourceListing.getCurrentPage() == 0));
-        return landingPageItem;
+        return linkItem;
     }
 
     /**

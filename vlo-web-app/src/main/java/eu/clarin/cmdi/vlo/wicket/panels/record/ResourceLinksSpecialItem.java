@@ -16,14 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  *
@@ -34,7 +33,7 @@ public class ResourceLinksSpecialItem extends ResourceLinksPanelItem {
     private final IModel<String> resourceTypeIconModel;
     private final IModel<String> resourceTypeLabelModel;
 
-    public ResourceLinksSpecialItem(String id, IModel<String> resourceTypeLabel, IModel<String> resourceTypeIcon, ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
+    public ResourceLinksSpecialItem(String id, IModel<String> resourceTypeLabel, IModel<String> resourceTypeIcon, IModel<ResourceInfo> resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
         super(id, resourceInfoModel, documentModel, detailsVisibleModel);
         this.resourceTypeLabelModel = resourceTypeLabel;
         this.resourceTypeIconModel = resourceTypeIcon;
@@ -53,7 +52,7 @@ public class ResourceLinksSpecialItem extends ResourceLinksPanelItem {
     }
 
     @Override
-    protected Component createOptionsDropdown(IModel<String> linkModel, ResourceInfoModel resourceInfoModel) {
+    protected Component createOptionsDropdown(IModel<String> linkModel, IModel<ResourceInfo> resourceInfoModel) {
         return super.createOptionsDropdown(linkModel, resourceInfoModel)
                 .add(BooleanVisibilityBehavior.visibleOnTrue(this::isOptionsDropdownEnabled));
     }
