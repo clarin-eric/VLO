@@ -40,7 +40,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import java.util.Optional;
@@ -54,16 +54,16 @@ import org.apache.wicket.behavior.Behavior;
  * @author twagoo
  */
 public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ResourceLinksPanel.class);
-    
+
     private static final int ITEMS_PER_PAGE = 12;
-    
+
     @SpringBean
     private FieldNameService fieldNameService;
     @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
-    
+
     private final IModel<List<String>> detailsVisibleModel = new ListModel<>(new ArrayList<>());
     private final WebMarkupContainer resourcesTable;
     private final ResourcesListView resourceListing;
@@ -86,15 +86,15 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 super.onConfigure();
                 setVisible(resourceListing.getPageCount() > 0 || landingPageLinkModel.getObject() != null);
             }
-            
+
         };
         resourcesTable.setOutputMarkupId(true);
         add(resourcesTable);
 
         // special item in table for landing page 'resource'
-        landingPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));        
-        searchPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));        
-        searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));        
+        landingPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        searchPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
+        searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
         resourcesTable
                 .add(createLandingPageItem("landingPageItem", "landing page", ResourceTypeIcon.LANDING_PAGE, landingPageLinkModel))
                 .add(createLandingPageItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageLinkModel))
@@ -108,13 +108,13 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
-            
+
             @Override
             protected void onConfigure() {
                 super.onConfigure();
                 setVisible(resourceListing.getPageCount() > 1);
             }
-            
+
         });
 
         // panel for records with no resources
@@ -146,14 +146,16 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             @Override
             protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
                 landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
-                
+
                 target.ifPresent(t -> {
                     t.add(resourcesTable);
                 });
             }
-            
+
         };
-        landingPageItem.add(new InvisibleIfNullBehaviour<>(linkModel));
+        landingPageItem.add(
+                BooleanVisibilityBehavior.visibleOnTrue(
+                        () -> linkModel.getObject() != null && resourceListing.getCurrentPage() == 0));
         return landingPageItem;
     }
 
@@ -181,7 +183,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 switchToTab(HIERARCHY_SECTION, target);
             }
         }));
-        
+
         return container;
     }
 
@@ -189,12 +191,12 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
      * View for a record's resource refs
      */
     private class ResourcesListView extends PageableListView<String> {
-        
+
         public ResourcesListView(String id, IModel<? extends List<String>> model) {
             super(id, model, ITEMS_PER_PAGE);
             setReuseItems(true);
         }
-        
+
         @Override
         protected void populateItem(ListItem<String> item) {
             final ResourceInfoModel resourceInfoModel = new ResourceInfoModel(resourceStringConverter, item.getModel());
@@ -206,7 +208,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     return detailsVisibleModel.getObject().contains(resourceInfoModel.getObject().getHref());
                 }
             };
-            
+
             item.add(new ResourceLinksPanelItem("resourceItem", resourceInfoModel, ResourceLinksPanel.this.getModel(), itemDetailsShownModel) {
                 @Override
                 protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
@@ -216,16 +218,16 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                     } else {
                         visible.add(id);
                     }
-                    
+
                     target.ifPresent(t -> {
                         t.add(resourcesTable);
                     });
                 }
-                
+
             });
         }
     }
-    
+
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
-    
+
 }
