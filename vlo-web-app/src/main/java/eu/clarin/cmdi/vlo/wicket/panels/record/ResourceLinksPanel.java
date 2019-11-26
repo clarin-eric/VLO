@@ -40,6 +40,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
+import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -96,9 +98,14 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         searchPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
         searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
         resourcesTable
-                .add(createSpecialLinkItem("landingPageItem", "landing page", ResourceTypeIcon.LANDING_PAGE, landingPageLinkModel, new ResourceInfoModel(resourceStringConverter, landingPageLinkModel)))
-                .add(createSpecialLinkItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageLinkModel, new ResourceInfoModel(resourceStringConverter, searchPageLinkModel)))
-                .add(createSpecialLinkItem("searchServiceItem", "search service", ResourceTypeIcon.SEARCH_SERVICE, searchServiceLinkModel, new ResourceInfoModel(resourceStringConverter, searchServiceLinkModel)));
+                .add(createSpecialLinkItem("landingPageItem", "landing page", ResourceTypeIcon.LANDING_PAGE, landingPageLinkModel,
+                        new ResourceInfoModel(resourceStringConverter, landingPageLinkModel)))
+                .add(createSpecialLinkItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageLinkModel,
+                        () -> new ResourceInfo(searchPageLinkModel.getObject(), "Search page for this record", null, null, null, ResourceType.OTHER))
+                        .setShowDetailsLink(false))
+                .add(createSpecialLinkItem("searchServiceItem", "search service", ResourceTypeIcon.SEARCH_SERVICE, searchServiceLinkModel,
+                        () -> new ResourceInfo(searchServiceLinkModel.getObject(), "Plain text search via Federated Content Search ", null, null, null, ResourceType.OTHER))
+                        .setShowDetailsLink(false));
 
         //add the 'actual' resources listing
         final SolrFieldModel<String> resourcesModel
@@ -139,9 +146,9 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
      * @param documentModel
      * @return
      */
-    private ResourceLinksPanelItem createSpecialLinkItem(final String id, String label, String icon, IModel<String> linkModel, ResourceInfoModel pageInfoModel) {
+    private ResourceLinksSpecialItem createSpecialLinkItem(final String id, String label, String icon, IModel<String> linkModel, IModel<ResourceInfo> pageInfoModel) {
         final IModel<Boolean> detailsVisibilityModel = Model.of(Boolean.FALSE);
-        final ResourceLinksPanelItem linkItem = new ResourceLinksSpecialItem(id, Model.of(label), Model.of(icon), pageInfoModel, getModel(), detailsVisibilityModel) {
+        final ResourceLinksSpecialItem linkItem = new ResourceLinksSpecialItem(id, Model.of(label), Model.of(icon), pageInfoModel, getModel(), detailsVisibilityModel) {
             @Override
             protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
                 detailsVisibilityModel.setObject(!detailsVisibilityModel.getObject());

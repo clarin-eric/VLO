@@ -58,23 +58,24 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  * @see ResourceLinksPanel
  */
 public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
-
+    
     private final DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, Locale.UK);
-
+    
     @SpringBean(name = "resolvingResourceStringConverter")
     private ResourceStringConverter resolvingResourceStringConverter;
-
+    
     private final IModel<SolrDocument> documentModel;
     private final IModel<ResourceInfo> resourceInfoModel;
     private final IModel<Boolean> itemDetailsShownModel;
-
+    private final IModel<Boolean> showDetailsLinkModel = Model.of(true);
+    
     public ResourceLinksPanelItem(String id, IModel<ResourceInfo> resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
         super(id, resourceInfoModel);
         this.resourceInfoModel = resourceInfoModel;
         this.documentModel = documentModel;
         this.itemDetailsShownModel = detailsVisibleModel;
     }
-
+    
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -87,7 +88,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         add(createDetailsColumns("detailsColumns")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)));
     }
-
+    
     private MarkupContainer createInfoColumns(String id) {
         final MarkupContainer columns = new WebMarkupContainer(id);
         // Resource type icon
@@ -107,14 +108,14 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                 && resolvingResourceStringConverter.getResolver().canResolve(linkModel.getObject())) {
             resolvingResourceStringConverter.doPreflight(linkModel.getObject());
             link.add(new LazyResourceInfoUpdateBehavior(resolvingResourceStringConverter, (ResourceInfoModel) resourceInfoModel) {
-
+                
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     target.add(link);
                 }
             });
         }
-
+        
         link.setOutputMarkupId(true);
         columns.add(link);
 
@@ -132,7 +133,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                 super.onConfigure();
                 setVisible(linkModel.getObject() == null);
             }
-
+            
         }.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName"))));
 
         // get the friendly name of the resource type dynamically from the resource bundle
@@ -142,36 +143,37 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<>(resourceInfoModel, "href"))
                 .add(new WebMarkupContainer("show").add(BooleanVisibilityBehavior.visibleOnFalse(itemDetailsShownModel)))
                 .add(new WebMarkupContainer("hide").add(BooleanVisibilityBehavior.visibleOnTrue(itemDetailsShownModel)))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(showDetailsLinkModel))
         );
-
+        
         columns.add(createOptionsDropdown(linkModel, resourceInfoModel));
-
+        
         final Component availabilityWarningDetailsLink
                 = new ResourceDetailsToggleLink("availabilityWarningDetailsLink", new PropertyModel<>(resourceInfoModel, "href"))
                         .add(new ResourceAvailabilityWarningBadge("badge", resourceInfoModel))
                         .add(BooleanVisibilityBehavior.visibleOnTrue(new PropertyModel<>(resourceInfoModel, "availabilityWarning")));
-
+        
         columns.add(availabilityWarningDetailsLink);
-
+        
         return columns;
     }
-
+    
     protected ResourceTypeIcon createResourceTypeIcon(String id) {
         return new ResourceTypeIcon(id, new PropertyModel<>(resourceInfoModel, "resourceType"));
     }
-
+    
     protected Label createResourceTypeLabel(String id) {
         return new Label(id,
                 new StringResourceModel("resourcetype.${resourceType}.singular", resourceInfoModel)
                         .setDefaultValue(resourceInfoModel.getObject().getResourceType().toString())
         );
-
+        
     }
-
+    
     protected Component createOptionsDropdown(final IModel<String> linkModel, final IModel<ResourceInfo> resourceInfoModel) {
         return new ResourceLinkOptionsDropdown("dropdown", documentModel, linkModel, resourceInfoModel);
     }
-
+    
     private Component createDetailsColumns(String id) {
         final WebMarkupContainer detailsContainer = new WebMarkupContainer(id);
         detailsContainer.add(new Label("mimeType"));
@@ -179,7 +181,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         detailsContainer.add(createLinkCheckingResult("linkCheckingResult", resourceInfoModel));
         return detailsContainer;
     }
-
+    
     private Component createLinkCheckingResult(String id, IModel<ResourceInfo> resourceInfoModel) {
         final IModel<Boolean> knownAvailabilityModel = new PropertyModel<>(resourceInfoModel, "availabilityKnown");
         final IModel<Boolean> availabilityWarningModel = new PropertyModel<>(resourceInfoModel, "availabilityWarning");
@@ -230,7 +232,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                             return "The resource may not be available at this location.";
                         }
                     }
-
+                    
                 })
                         .add(BooleanVisibilityBehavior.visibleOnTrue(availabilityWarningModel)))
                 .add(new Label("lastCheckTime", new IModel<>() {
@@ -243,7 +245,7 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                             return dateFormatter.format(calendar.getTime());
                         }).orElse("unknown");
                     }
-
+                    
                 })
                         .add(BooleanVisibilityBehavior.visibleOnTrue(knownAvailabilityModel)))
                 .add(new AttributeAppender("class", new IModel<>() {
@@ -263,22 +265,27 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                     }
                 }, " "));
     }
-
+    
     private class ResourceDetailsToggleLink extends AjaxFallbackLink<String> {
-
+        
         public ResourceDetailsToggleLink(String id, IModel<String> idModel) {
             super(id, idModel);
         }
-
+        
         @Override
         public void onClick(Optional<AjaxRequestTarget> target) {
             final String id = getModel().getObject();
             onDetailsToggleClick(id, target);
         }
     }
-
+    
     protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
-
+        
+    }
+    
+    public final ResourceLinksPanelItem setShowDetailsLink(boolean show) {
+        showDetailsLinkModel.setObject(show);
+        return this;
     }
 
     /**
@@ -287,34 +294,34 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
      * {@link LazyResourceInfoUpdateBehavior})
      */
     private static class ResourceExternalLink extends ExternalLink implements IAjaxIndicatorAware {
-
+        
         private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
         private final IModel<String> linkModel;
-
+        
         public ResourceExternalLink(String id, IModel<String> href, IModel<String> linkModel) {
             super(id, href);
             this.linkModel = linkModel;
             add(indicatorAppender);
         }
-
+        
         @Override
         protected void onConfigure() {
             super.onConfigure();
             //hide if no absolute link could be resolved for the resource (see label below for fallback)
             setVisible(linkModel.getObject() != null);
         }
-
+        
         @Override
         public String getAjaxIndicatorMarkupId() {
             return indicatorAppender.getMarkupId();
         }
     }
-
+    
     @Override
     protected void onDetach() {
         super.onDetach();
         documentModel.detach();
         itemDetailsShownModel.detach();
     }
-
+    
 }
