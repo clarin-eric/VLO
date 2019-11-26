@@ -38,18 +38,15 @@ import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
-import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.ErrorPage.ErrorType;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.CmdiContentPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.CopyPageLinkPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
@@ -80,8 +77,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -226,7 +221,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         }
         add(tabs);
 
-        add(createSearchLinks("searchlinks"));
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
@@ -374,29 +368,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 target.ifPresent(t -> {
                     t.add(topNavigation);
                 });
-            }
-
-        };
-    }
-
-    private Component createSearchLinks(String id) {
-        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
-        return new WebMarkupContainer(id) {
-            {
-                // We assume there can be multiple content search endpoints
-                add(new ListView<String>("contentSearch", new CollectionListModel<>(searchServiceModel)) {
-
-                    @Override
-                    protected void populateItem(ListItem<String> item) {
-                        item.add(new ContentSearchFormPanel("fcsForm", RecordPage.this.getModel(), item.getModel()));
-                    }
-                });
-            }
-
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(searchServiceModel.getObject() != null);
             }
 
         };

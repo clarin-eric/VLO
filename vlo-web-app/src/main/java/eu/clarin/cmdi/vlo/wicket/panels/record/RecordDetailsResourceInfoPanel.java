@@ -40,6 +40,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.RESOURCES_SECTION;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
+import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
 import java.util.Collection;
 
 import java.util.Optional;
@@ -85,6 +86,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     private final ResourceInfoModel landingPageResourceInfoModel;
     private final ResolvingLinkModel resourceInfoLinkModel;
     private final IModel<Collection<String>> searchPageLinksModel;
+    private final IModel<Collection<String>> searchServiceLinksModel;
 
     private final IModel<Boolean> landingPageVisibilityModel;
     private final IModel<Boolean> resourceInfoVisibilityModel;
@@ -103,6 +105,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                         new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
 
         searchPageLinksModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
+
+        searchServiceLinksModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
 
         // resource info for single resource
         resourceInfoLinkModel
@@ -137,6 +141,9 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
         add(createSearchPageLink("searchPage")
                 .add(new InvisibleIfNullBehaviour(searchPageLinksModel)));
+
+        add(createSearchServiceLink("searchService")
+                .add(new InvisibleIfNullBehaviour(searchServiceLinksModel)));
 
         add(createSingleResourceInfo("resourceInfo")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
@@ -200,10 +207,20 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
             protected void populateItem(ListItem<String> item) {
                 final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(item.getModel());
                 final IsPidModel isPidModel = new IsPidModel(item.getModel());
-                
+
                 item.add(new ExternalLink("searchLink", pidLinkModel));
                 item.add(new PIDLinkLabel("searchPagePidLabel", pidLinkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+            }
+        };
+    }
+
+    private Component createSearchServiceLink(String id) {
+        return new ListView<String>(id, new CollectionListModel<>(searchServiceLinksModel)) {
+
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                item.add(new ContentSearchFormPanel("fcsForm", RecordDetailsResourceInfoPanel.this.getModel(), item.getModel()));
             }
         };
     }

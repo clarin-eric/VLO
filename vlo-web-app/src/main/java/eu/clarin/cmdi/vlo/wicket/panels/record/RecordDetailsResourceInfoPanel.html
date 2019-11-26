@@ -54,6 +54,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </wicket:enclosure>
 
+            <wicket:enclosure child="searchService">
+                <div wicket:id="searchService" class="panel panel-default resource-info">
+                    <div class="resourcelink" title="Federated Content search">
+                        <span class="resource-type-icon">                         
+                            <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                        <div>
+                            <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
+                        </div>
+                    </div>
+                </div>
+            </wicket:enclosure>
+
+
+
             <h4 wicket:id="resourcesTitle" class="text-center">Linked resource</h4>
 
             <div class="panel panel-default resource-info" wicket:id="resourceInfo">
