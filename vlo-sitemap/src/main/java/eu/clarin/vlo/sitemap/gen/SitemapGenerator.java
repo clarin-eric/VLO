@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.vlo.sitemap.pojo.Sitemap;
 import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
 import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
-import eu.clarin.vlo.sitemap.services.SOLRService;
+import eu.clarin.vlo.sitemap.services.SolrRecordUrlsService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -45,9 +45,8 @@ public class SitemapGenerator {
 
             // create urls
             final List<URL> urls
-                    = Streams.concat(
-                            Config.INCLUDE_URLS.stream().map(u -> new URL(u.trim())),
-                            new SOLRService().getRecordURLS().stream()
+                    = Streams.concat(Config.INCLUDE_URLS.stream().map(u -> new URL(u.trim())),
+                            new SolrRecordUrlsService().getRecordURLS().stream()
                     ).collect(Collectors.toUnmodifiableList());
 
             _logger.info("Total number of URLs " + urls.size());
@@ -83,7 +82,6 @@ public class SitemapGenerator {
     }
 
     public void createSitemapIndex(List<String> maps) throws Exception {
-
         SitemapIndex index = new SitemapIndex();
         index.setMaps(maps.parallelStream()
                 .map(map -> new SitemapIndex.Sitemap(map, (new SimpleDateFormat("yyyy-MM-dd")).format(new Date())))
