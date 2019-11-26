@@ -40,7 +40,6 @@ import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
-import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
@@ -62,7 +61,6 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -81,7 +79,6 @@ import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -383,20 +380,10 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     }
 
     private Component createSearchLinks(String id) {
-        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
         final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
         return new WebMarkupContainer(id) {
             {
-                //Add search page links (can be multiple)
-                add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
-
-                    @Override
-                    protected void populateItem(ListItem<String> item) {
-                        item.add(new ExternalLink("searchLink", new PIDLinkModel(item.getModel())));
-                    }
-                });
-
-                // We assume there can be multiple content search endpoints too
+                // We assume there can be multiple content search endpoints
                 add(new ListView<String>("contentSearch", new CollectionListModel<>(searchServiceModel)) {
 
                     @Override
@@ -407,10 +394,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             }
 
             @Override
-
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(searchPageModel.getObject() != null || searchServiceModel.getObject() != null);
+                setVisible(searchServiceModel.getObject() != null);
             }
 
         };

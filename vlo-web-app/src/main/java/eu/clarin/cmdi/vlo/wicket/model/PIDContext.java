@@ -21,6 +21,6 @@ package eu.clarin.cmdi.vlo.wicket.model;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public enum PIDContext {
-    RECORD, LANDING_PAGE, RESOURCE
+    RECORD, LANDING_PAGE, SEARCH_PAGE, SEARCH_SERVICE, RESOURCE
     
 }

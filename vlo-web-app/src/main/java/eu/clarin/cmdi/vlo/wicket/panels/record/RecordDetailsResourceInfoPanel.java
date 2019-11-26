@@ -22,11 +22,13 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
@@ -38,6 +40,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.RESOURCES_SECTION;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
+import java.util.Collection;
 
 import java.util.Optional;
 
@@ -52,6 +55,8 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -79,6 +84,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     private final ResourceInfoModel resourceInfoModel;
     private final ResourceInfoModel landingPageResourceInfoModel;
     private final ResolvingLinkModel resourceInfoLinkModel;
+    private final IModel<Collection<String>> searchPageLinksModel;
 
     private final IModel<Boolean> landingPageVisibilityModel;
     private final IModel<Boolean> resourceInfoVisibilityModel;
@@ -95,6 +101,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                 = new ResourceInfoModel(
                         resourceStringConverter,
                         new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+
+        searchPageLinksModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
 
         // resource info for single resource
         resourceInfoLinkModel
@@ -126,6 +134,9 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
         add(createLandingPageLink("landingPage")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(landingPageVisibilityModel)));
+
+        add(createSearchPageLink("searchPage")
+                .add(new InvisibleIfNullBehaviour(searchPageLinksModel)));
 
         add(createSingleResourceInfo("resourceInfo")
                 .add(BooleanVisibilityBehavior.visibleOnTrue(resourceInfoVisibilityModel)));
@@ -180,6 +191,21 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                                 .add(BooleanVisibilityBehavior.visibleOnFalse(isPidModel))))
                 .add(new PIDLinkLabel("landingPagePidLabel", pidLinkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
                         .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+    }
+
+    private Component createSearchPageLink(String id) {
+        return new ListView<String>(id, new CollectionListModel<>(searchPageLinksModel)) {
+
+            @Override
+            protected void populateItem(ListItem<String> item) {
+                final PIDLinkModel pidLinkModel = PIDLinkModel.wrapLinkModel(item.getModel());
+                final IsPidModel isPidModel = new IsPidModel(item.getModel());
+                
+                item.add(new ExternalLink("searchLink", pidLinkModel));
+                item.add(new PIDLinkLabel("searchPagePidLabel", pidLinkModel, Model.of(PIDContext.LANDING_PAGE), PID_LABEL_TEXT_LENGTH)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(isPidModel)));
+            }
+        };
     }
 
     /**

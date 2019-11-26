@@ -39,9 +39,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </a>
                 <wicket:container wicket:id="landingPagePidLabel"></wicket:container>
             </div>
-            
+
+            <wicket:enclosure child="searchPage">
+                <div wicket:id="searchPage" class="panel panel-default resource-info">
+                    <a wicket:id="searchLink" class="resourcelink" title="Search page for this record">
+                        <span class="resource-type-icon">                         
+                            <span class="glyphicon glyphicon-search"></span>
+                        </span>
+                        <div>
+                            Search page for this record
+                        </div>
+                    </a>
+                    <wicket:container wicket:id="searchPagePidLabel"></wicket:container>
+                </div>
+            </wicket:enclosure>
+
             <h4 wicket:id="resourcesTitle" class="text-center">Linked resource</h4>
-            
+
             <div class="panel panel-default resource-info" wicket:id="resourceInfo">
                 <div wicket:id="dropdown" class="dropdown pull-right">[dropdown]</div>
                 <a wicket:id="showResources" class="detailslink pull-left"><span wicket:id="availabilityWarning"></span></a>
@@ -55,7 +69,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 </a>
                 <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
             </div>
-            
+
             <div class="panel panel-default resource-info" wicket:id="resourcesInfo">
                 <a wicket:id="showResources" class="resourcelink">
                     <span class="resource-type-icon">                            
@@ -64,7 +78,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <span><wicket:container wicket:id="resourcesCount"></wicket:container> resources</span>
                 </a>
             </div>
-            
+
             <div class="panel panel-default resource-info" wicket:id="hierarchyLink">
                 <a wicket:id="showHierarchy" class="resourcelink">
                     <span class="resource-type-icon">                            
