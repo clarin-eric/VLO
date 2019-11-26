@@ -93,7 +93,13 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         resourcesTable.setOutputMarkupId(true);
         add(resourcesTable);
 
-        // special item in table for landing page 'resource'
+        //add the 'actual' resources listing
+        final SolrFieldModel<String> resourcesModel
+                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
+        resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
+        resourcesTable.add(resourceListing);
+
+        // special items in table for landing page, search page and search service 'resources'
         landingPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
         searchPageLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
         searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
@@ -103,15 +109,10 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 .add(createSpecialLinkItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageLinkModel,
                         () -> new ResourceInfo(searchPageLinkModel.getObject(), "Search page for this record", null, null, null, ResourceType.OTHER))
                         .setShowDetailsLink(false))
-                .add(createSpecialLinkItem("searchServiceItem", "search service", ResourceTypeIcon.SEARCH_SERVICE, searchServiceLinkModel,
-                        () -> new ResourceInfo(searchServiceLinkModel.getObject(), "Plain text search via Federated Content Search ", null, null, null, ResourceType.OTHER))
-                        .setShowDetailsLink(false));
-
-        //add the 'actual' resources listing
-        final SolrFieldModel<String> resourcesModel
-                = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
-        resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
-        resourcesTable.add(resourceListing);
+                .add(new ResourceLinksPanelSearchServiceItem("searchServiceItem", searchServiceLinkModel, documentModel)
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(
+                                () -> searchServiceLinkModel.getObject() != null && resourceListing.getCurrentPage() == 0))
+                );
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
