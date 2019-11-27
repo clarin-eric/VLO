@@ -124,19 +124,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         });
 
         // panel for records with no resources
-        add(createNoResourcesContainer("noResources")
-                .add(new Behavior() {
-                    @Override
-                    public void onConfigure(Component component) {
-                        super.onConfigure(component);
-                        component.setVisible(resourceListing.getPageCount() == 0
-                                && landingPagesLinkModel.getObject() == null
-                                && searchPagesLinkModel.getObject() == null
-                                && searchServiceLinkModel.getObject() == null
-                        );
-                    }
-                })
-        );
+        add(createNoResourcesContainer("noResources"));
 
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
@@ -203,6 +191,18 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
         }));
 
+        container.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                super.onConfigure(component);
+                component.setVisible(resourceListing.getItemCount() == 0
+                        && landingPagesLinkModel.getObject() == null
+                        && searchPagesLinkModel.getObject() == null
+                        && searchServiceLinkModel.getObject() == null
+                );
+            }
+        });
+        
         return container;
     }
 
