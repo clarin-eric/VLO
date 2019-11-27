@@ -57,8 +57,6 @@ import org.apache.wicket.behavior.Behavior;
  */
 public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
 
-    private final static Logger logger = LoggerFactory.getLogger(ResourceLinksPanel.class);
-
     private static final int ITEMS_PER_PAGE = 12;
 
     @SpringBean
@@ -110,7 +108,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         resourcesTable
                 .add(createSpecialLinkItem("searchPageItem", "search page", ResourceTypeIcon.SEARCH_PAGE, searchPageResourceInfoModel)
                         .setShowDetailsLink(false)
-                        .add(newSpecialLinkVisibilityBehavior(landingPageLinkModel)))
+                        .add(newSpecialLinkVisibilityBehavior(searchPageLinkModel)))
                 .add(new ResourceLinksPanelSearchServiceItem("searchServiceItem", searchServiceLinkModel, documentModel)
                         .add(newSpecialLinkVisibilityBehavior(searchServiceLinkModel)))
                 .add(createSpecialLinkItem("landingPageItem", "landing page", ResourceTypeIcon.LANDING_PAGE,
