@@ -57,10 +57,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <wicket:enclosure child="searchService">
                 <div wicket:id="searchService" class="panel panel-default resource-info">
                     <div class="resourcelink" title="Federated Content search">
-                        <span class="resource-type-icon">                         
-                            <span class="glyphicon glyphicon-search"></span>
-                        </span>
-                        <div>
+                        <a href="#" onclick="$(this).siblings('.searchserviceform').find('form').submit()">
+                            <span class="resource-type-icon">                         
+                                <span class="glyphicon glyphicon-search"></span>
+                            </span>
+                        </a>
+                        <div class="searchserviceform">
                             <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
                         </div>
                     </div>
