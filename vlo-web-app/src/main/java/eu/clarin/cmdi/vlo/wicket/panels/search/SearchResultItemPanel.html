@@ -88,9 +88,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <a wicket:id="landingPageLink" href="http://hdl.handle.net/11022/0000-0000-8DE3-1">
                             <i class="fa fa-home" aria-hidden="true"></i>
                             <span wicket:id="warningBadge"></span>
-                            See this record and its resources at 
-                            <span wicket:id="landingPagePidLabel">the record's landing page</span>
-                            <span class="search-result-landing-page-link-location" wicket:id="landingPageLinkLabel">LINK</span></a>
+                            <span wicket:id="landingPagePidLabel"><wicket:message key="searchresult.landingpage.recordlandingpage">[LANDING PAGE FOR THIS RECORD]</wicket:message></span>
+                            <wicket:enclosure>
+                                <wicket:message key="searchresult.landingpage.recordlandingpageat">[LANDING PAGE FOR THIS RECORD AT]</wicket:message>
+                                <span class="search-result-landing-page-link-location" wicket:id="landingPageLinkLabel">LINK</span
+                                ></wicket:enclosure
+                            ></a>
                     </div>
                     <div class="search-results-duplicates well well-sm" wicket:id="duplicateResults"></div>
                 </div>
