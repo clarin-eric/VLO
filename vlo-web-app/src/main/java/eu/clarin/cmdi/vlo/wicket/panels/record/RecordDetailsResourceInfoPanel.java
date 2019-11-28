@@ -220,7 +220,9 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
             @Override
             protected void populateItem(ListItem<String> item) {
-                item.add(new ContentSearchFormPanel("fcsForm", RecordDetailsResourceInfoPanel.this.getModel(), item.getModel()));
+                item.add(new ContentSearchFormPanel("fcsForm", RecordDetailsResourceInfoPanel.this.getModel(), item.getModel())
+                        .setLinkVisible(false)
+                );
             }
         };
     }

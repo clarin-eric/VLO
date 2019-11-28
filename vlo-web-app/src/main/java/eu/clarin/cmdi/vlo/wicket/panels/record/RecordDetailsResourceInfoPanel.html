@@ -31,13 +31,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <span class="glyphicon glyphicon-home"></span>
                     </span>
                     <div>
-                        Landing page
-                    </div>
-                    <div>
                         <wicket:container wicket:id="landingPageLinkLabel">[HDL]1234/567-890</wicket:container>
                     </div>
+
                 </a>
                 <wicket:container wicket:id="landingPagePidLabel"></wicket:container>
+                <div><span class="badge clarin-centre-content">Landing page</span></div>
             </div>
 
             <wicket:enclosure child="searchPage">
@@ -46,11 +45,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <span class="resource-type-icon">                         
                             <span class="glyphicon glyphicon-search"></span>
                         </span>
-                        <div>
-                            Search page for this record
-                        </div>
                     </a>
                     <wicket:container wicket:id="searchPagePidLabel"></wicket:container>
+                    <div><span class="badge clarin-centre-content">Search page</span></div>
                 </div>
             </wicket:enclosure>
 
@@ -61,6 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <span class="resource-type-icon">                         
                                 <img src="images/icon-services-fcs.png" />
                             </span>
+                            <div><span class="badge clarin-core-service">Federated content search</span></div>
                         </a>
                         <div class="searchserviceform">
                             <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
@@ -83,6 +81,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div>
                         <span wicket:id="resourceName">[Resource name]</span>
                     </div>
+                    <!--                    <div><span class="badge clarin-centre-content">Linked resource</span></div>-->
                 </a>
                 <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
             </div>
@@ -92,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <span class="resource-type-icon">                            
                         <span class="glyphicon glyphicon-folder-open"></span>
                     </span>
-                    <span><wicket:container wicket:id="resourcesCount"></wicket:container> resources</span>
+                    <div><span class="badge"><wicket:container wicket:id="resourcesCount"></wicket:container> resources</span></div>
                 </a>
             </div>
 
@@ -101,7 +100,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <span class="resource-type-icon">                            
                         <span class="fa fa-sitemap"></span>
                     </span>
-                    <span>Linked records</span>
+                    <div><span class="badge">Linked records</span></div>
                 </a>
             </div>
 

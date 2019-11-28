@@ -22,6 +22,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @import "vlo-record-cmdi";
 
 @resource-info-icon-width: 100px;
+@clarin-core-service-badge-bg: @clarin-color-2;
+@clarin-centre-content-badge-bg: @badge-bg;
+
+.badge {
+    &.clarin-centre-content {
+        background-color: @clarin-centre-content-badge-bg;
+    }
+    &.clarin-core-service {
+        background-color: @clarin-core-service-badge-bg;
+    }
+}
 
 #recordprevnext {
     a.btn.disabled {
@@ -170,6 +181,12 @@ h1#recordtitle {
 
         .pid-label {
             line-height: 2;
+        }
+
+        .badge {
+            margin-top: .5em;
+            font-size: 105%;
+            font-weight: normal;
         }
     }
 
