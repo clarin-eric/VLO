@@ -16,6 +16,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.SitelinkSearchboxHeaderBehavior;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
@@ -140,6 +141,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         if (piwikConfig.isEnabled()) {
             resultsHeader.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
         }
+        
+        add(new SitelinkSearchboxHeaderBehavior());
     }
 
     private void createModels() {

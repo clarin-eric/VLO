@@ -96,7 +96,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      * @see org.apache.wicket.Application#getHomePage()
      */
     @Override
-    public Class<? extends WebPage> getHomePage() {
+    public Class<SimpleSearchPage> getHomePage() {
         return SimpleSearchPage.class;
     }
 
