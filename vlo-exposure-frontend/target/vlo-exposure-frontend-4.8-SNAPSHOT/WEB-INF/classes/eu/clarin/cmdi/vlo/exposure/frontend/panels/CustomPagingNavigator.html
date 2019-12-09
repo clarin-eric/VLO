@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<html xmlns:wicket>
+<body>
+<wicket:panel>
+
+    <div>
+        <div class="row" style="margin-top:10px ; font-size:12px">
+            <div wicket:id="summary" class="col-md-6">Showing 1 to 20 of 45</div>
+            <div class="col-md-6" style="float: right">
+                Items per page:
+                <span wicket:id="itemsPerPage">
+            <a wicket:id="itemPerPageLink"><span wicket:id="itemsValue"></span></a>
+        </span>
+            </div>
+        </div>
+
+        <ul wicket:id="pagingLinksContainer" class="pagination">
+
+                    <li class="page-item">
+                        <a wicket:id="first" href="">
+                            <span>First</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a wicket:id="prev"  href="">
+                            <span>Previous</span>
+                        </a>
+                    </li>
+                    <li wicket:id="navigation" class="page-item">
+                        <a wicket:id="pageLink"><span
+                                wicket:id="pageNumber">5</span></a>
+                    </li>
+
+                    <li class="page-item">
+                        <a wicket:id="next" href="#">
+                            <span>Next</span></a>
+                    </li>
+                    <li class="page-item">
+                        <a wicket:id="last" href="#">
+                            <span>Last</span></a>
+                    </li>
+
+        </ul>
+    </div>
+
+</wicket:panel>
+</body>
+</html>

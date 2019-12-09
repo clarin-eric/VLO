@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/vlo-web-app" sessionCookiePath="/">
-  <!-- 
-        If set, configuration will get read from this external location 
-    <Parameter 
-        name="eu.carlin.cmdi.vlo.config.location" 
-        value="/Users/twagoo/vlo/vlo3/VloConfig.xml"/>
+    <!--
+          If set, configuration will get read from this external location
+      <Parameter
+          name="eu.carlin.cmdi.vlo.config.location"
+          value="/Users/twagoo/vlo/vlo3/VloConfig.xml"/>
+      -->
+    <!--
+          If set, web app will connect to this SOLR server instead of the one
+          specified in the configuration file
+      <Parameter
+          name="eu.carlin.cmdi.vlo.solr.serverUrl"
+          value="http://alpha-vlo.clarin.eu/solr/vlo-index/"/>
+      -->
+    <!--
+        <Parameter
+          name="eu.clarin.cmdi.vlo.snippets.bottom.file"
+          description="File URL for bottom snippets content (below body tag) e.g. file:///my/vlo/snippets/bottom.html"
+          value="file:///tmp/snippets.html"/>
     -->
-  <!-- 
-        If set, web app will connect to this SOLR server instead of the one 
-        specified in the configuration file 
-    <Parameter 
-        name="eu.carlin.cmdi.vlo.solr.serverUrl" 
-        value="http://alpha-vlo.clarin.eu/solr/vlo-index/"/>
-    -->
-  <!--
-      <Parameter 
-        name="eu.clarin.cmdi.vlo.snippets.bottom.file" 
-        description="File URL for bottom snippets content (below body tag) e.g. file:///my/vlo/snippets/bottom.html"
-        value="file:///tmp/snippets.html"/>    
-  -->
-  <!-- Piwik configuration, see https://piwik.org and https://stats.clarin.eu -->
-  <!-- 
-    <Parameter 
-        name="eu.clarin.cmdi.vlo.piwik.enableTracker" 
-        description="'true' or 'false', defaults to 'false'"
-        value="true"/>
-    <Parameter 
-        name="eu.clarin.cmdi.vlo.piwik.siteId" 
-        description="defaults to '3'"
-        value="3"/>
-    <Parameter 
-        name="eu.clarin.cmdi.vlo.piwik.host" 
-        description="defaults to 'https://stats.clarin.eu/'"
-        value="https://stats.clarin.eu/"/>
-    <Parameter 
-        name="eu.clarin.cmdi.vlo.piwik.domains" 
-        description="defaults to '*.vlo.clarin.eu'"
-        value="*.vlo.clarin.eu"/>
-    -->
+    <!-- Piwik configuration, see https://piwik.org and https://stats.clarin.eu -->
+    <!--
+      <Parameter
+          name="eu.clarin.cmdi.vlo.piwik.enableTracker"
+          description="'true' or 'false', defaults to 'false'"
+          value="true"/>
+      <Parameter
+          name="eu.clarin.cmdi.vlo.piwik.siteId"
+          description="defaults to '3'"
+          value="3"/>
+      <Parameter
+          name="eu.clarin.cmdi.vlo.piwik.host"
+          description="defaults to 'https://stats.clarin.eu/'"
+          value="https://stats.clarin.eu/"/>
+      <Parameter
+          name="eu.clarin.cmdi.vlo.piwik.domains"
+          description="defaults to '*.vlo.clarin.eu'"
+          value="*.vlo.clarin.eu"/>
+      -->
 </Context>

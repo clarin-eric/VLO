@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-commons" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-distribution" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-exposure" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-exposure-frontend" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-importer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-sitemap" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-solr" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-statistics" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-vocabularies" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vlo-web-app" charset="UTF-8" />
+  </component>
+</project>

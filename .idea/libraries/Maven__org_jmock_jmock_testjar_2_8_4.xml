@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.jmock:jmock-testjar:2.8.4">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jmock/jmock-testjar/2.8.4/jmock-testjar-2.8.4.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jmock/jmock-testjar/2.8.4/jmock-testjar-2.8.4-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/jmock/jmock-testjar/2.8.4/jmock-testjar-2.8.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

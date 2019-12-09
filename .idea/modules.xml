@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/vlo.iml" filepath="$PROJECT_DIR$/vlo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-commons/vlo-commons.iml" filepath="$PROJECT_DIR$/vlo-commons/vlo-commons.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-distribution/vlo-distribution.iml" filepath="$PROJECT_DIR$/vlo-distribution/vlo-distribution.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-exposure/vlo-exposure.iml" filepath="$PROJECT_DIR$/vlo-exposure/vlo-exposure.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-exposure-frontend/vlo-exposure-frontend.iml" filepath="$PROJECT_DIR$/vlo-exposure-frontend/vlo-exposure-frontend.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-importer/vlo-importer.iml" filepath="$PROJECT_DIR$/vlo-importer/vlo-importer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-sitemap/vlo-sitemap.iml" filepath="$PROJECT_DIR$/vlo-sitemap/vlo-sitemap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-solr/vlo-solr.iml" filepath="$PROJECT_DIR$/vlo-solr/vlo-solr.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-statistics/vlo-statistics.iml" filepath="$PROJECT_DIR$/vlo-statistics/vlo-statistics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-vocabularies/vlo-vocabularies.iml" filepath="$PROJECT_DIR$/vlo-vocabularies/vlo-vocabularies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vlo-web-app/vlo-web-app.iml" filepath="$PROJECT_DIR$/vlo-web-app/vlo-web-app.iml" />
+    </modules>
+  </component>
+</project>

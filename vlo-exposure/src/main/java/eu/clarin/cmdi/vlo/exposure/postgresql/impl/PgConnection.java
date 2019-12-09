@@ -3,14 +3,8 @@ package eu.clarin.cmdi.vlo.exposure.postgresql.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.sym.Name;
-
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
-
-import javax.print.attribute.standard.MediaSize.NA;
 
 import org.postgresql.ds.PGConnectionPoolDataSource;
 import eu.clarin.cmdi.vlo.config.VloConfig;

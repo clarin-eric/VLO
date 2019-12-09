@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.wicket:wicket-extensions:9.0.0-M4-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/wicket/wicket-extensions/9.0.0-M4-SNAPSHOT/wicket-extensions-9.0.0-M4-20191207.224729-31.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/wicket/wicket-extensions/9.0.0-M4-SNAPSHOT/wicket-extensions-9.0.0-M4-20191207.224729-31-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apache/wicket/wicket-extensions/9.0.0-M4-SNAPSHOT/wicket-extensions-9.0.0-M4-20191207.224729-31-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
@@ -23,14 +21,14 @@
         <module>vlo-solr</module>
         <module>vlo-commons</module>
         <module>vlo-exposure</module>
+        <module>vlo-exposure-frontend</module>
         <module>vlo-web-app</module>
         <module>vlo-importer</module>
         <module>vlo-vocabularies</module>
         <module>vlo-sitemap</module>
         <module>vlo-statistics</module>
         <module>vlo-distribution</module>
-
-    </modules>
+  </modules>
 
     <properties>
         <!-- VLO-mapping project version to obtain default mappings from 
@@ -145,14 +143,30 @@
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
-
                 <plugin>
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
                     <version>2.2</version>
                     <configuration>
+                    <!-- 
+                        <webapps>
+                            <webapp>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>vlo-web-app</artifactId>
+                                <contextPath>/vlo-web-app</contextPath>
+                                <version>${project.version}</version>
+                                <asWebapp>true</asWebapp> 
+                            </webapp>
+                            <webapp>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>vlo-exposure-frontend</artifactId>
+                                <contextPath>/vlo-exposure-frontend</contextPath>
+                                <version>${project.version}</version>
+                                <asWebapp>true</asWebapp>
+                            </webapp>
+                        </webapps> -->
                         <port>8080</port>
-                        <path>/</path>
+                        <path>/vlo</path>
                     </configuration>
                 </plugin>
                 <plugin>
