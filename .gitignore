@@ -7,6 +7,7 @@
 *.log*
 *.classpath
 *.project
+*.iml
 nbactions*
 nbproject*
 .DS_Store
@@ -24,4 +25,4 @@ nbproject*
 /vlo-importer/.settings
 /vlo-exposure/.settings
 /.settings
-
+/.idea

@@ -16,15 +16,13 @@ import org.apache.wicket.markup.html.navigation.paging.IPagingLabelProvider;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigation;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigationIncrementLink;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigationLink;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 public class CustomPagingNavigator extends Panel {
-    public static final String NAVIGATION_ID = "navigation";
-    public static final List<Integer> DEFAULT_ITEMS_PER_PAGE_VALUES = Arrays.asList(5, 25, 50);
+    private static final String NAVIGATION_ID = "navigation";
+    private static final List<Integer> DEFAULT_ITEMS_PER_PAGE_VALUES = Arrays.asList(5, 25, 50);
 
     private PagingNavigation pagingNavigation;
     private final DataView<?> dataView;
@@ -32,7 +30,7 @@ public class CustomPagingNavigator extends Panel {
     private final List<Integer> itemsPerPageValues;
     private WebMarkupContainer pagingLinksContainer;
 
-    public CustomPagingNavigator(final String id, final DataView<?> dataView) {
+    CustomPagingNavigator(final String id, final DataView<?> dataView) {
         this(id, dataView, null, DEFAULT_ITEMS_PER_PAGE_VALUES);
     }
 
@@ -44,8 +42,8 @@ public class CustomPagingNavigator extends Panel {
         this(id, dataView, labelProvider, DEFAULT_ITEMS_PER_PAGE_VALUES);
     }
 
-    public CustomPagingNavigator(final String id, final DataView<?> dataView, final IPagingLabelProvider labelProvider,
-                                 List<Integer> itemsPerPageValues) {
+    private CustomPagingNavigator(final String id, final DataView<?> dataView, final IPagingLabelProvider labelProvider,
+                                  List<Integer> itemsPerPageValues) {
         super(id);
         this.dataView = dataView;
         this.labelProvider = labelProvider;
@@ -95,15 +93,15 @@ public class CustomPagingNavigator extends Panel {
         });
         add(currentPage);
     }
-    protected PagingNavigation newNavigation(final IPageable pageable, final IPagingLabelProvider labelProvider) {
+    private PagingNavigation newNavigation(final IPageable pageable, final IPagingLabelProvider labelProvider) {
         return new PagingNavigation(NAVIGATION_ID, pageable, labelProvider);
     }
 
-    protected AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
+    private AbstractLink newPagingNavigationIncrementLink(String id, IPageable pageable, int increment) {
         return new PagingNavigationIncrementLink<Void>(id, pageable, increment);
     }
 
-    protected AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
+    private AbstractLink newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
         return new PagingNavigationLink<Void>(id, pageable, pageNumber);
     }
 

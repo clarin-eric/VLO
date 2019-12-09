@@ -1,19 +1,12 @@
 package eu.clarin.cmdi.vlo.exposure.frontend.panels;
 
 import eu.clarin.cmdi.vlo.exposure.frontend.HomePage;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import java.sql.Timestamp;
 
 public class FilterForm extends Form<Filter> {
     private static final String WICKET_ID_WILDCARD = "recordIdWC";

@@ -1,17 +1,13 @@
 package eu.clarin.cmdi.vlo.exposure.frontend.panels;
 
 import eu.clarin.cmdi.vlo.exposure.frontend.service.LineChartData;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.googlecharts.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 public class LineChart extends Panel {
 

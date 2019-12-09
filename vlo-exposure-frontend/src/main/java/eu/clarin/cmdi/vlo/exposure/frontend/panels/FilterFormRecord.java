@@ -1,9 +1,7 @@
 package eu.clarin.cmdi.vlo.exposure.frontend.panels;
 
-import eu.clarin.cmdi.vlo.exposure.frontend.HomePage;
 import eu.clarin.cmdi.vlo.exposure.frontend.Record;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -26,8 +24,8 @@ public class FilterFormRecord extends Form<Filter> {
     private void init() {
         sDate = new TextField(WICKET_ID_STARTDATE, new PropertyModel(filter, "startDate"));
         eDate = new TextField(WICKET_ID_ENDDATE, new PropertyModel(filter, "endDate"));
-        add(sDate); //
-        add(eDate); //
+        add(sDate);
+        add(eDate);
 
     }
 

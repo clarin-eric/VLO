@@ -1,12 +1,10 @@
 package eu.clarin.cmdi.vlo.exposure.frontend.panels;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class Filter implements Serializable {
     private String startDate;
     private String endDate;
     private String recordIdWildCard;
-    //private int page;
 
     public Filter(String startDate, String endDate, String recordIdWildCard) {
         this.startDate = startDate;
@@ -15,7 +13,7 @@ public class Filter implements Serializable {
     }
 
 
-    public String getRecordIdWildCard() {
+    String getRecordIdWildCard() {
         return recordIdWildCard;
     }
 
