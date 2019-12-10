@@ -1,9 +1,5 @@
-/vlo-solr/target/
-/vlo-commons/target/
-/vlo-vocabularies/target/
-/vlo-importer/target/
-/vlo-distribution/target/
-/vlo-web-app/target/
+.DS_Store
+*~
 *.log*
 *.classpath
 *.project
@@ -13,14 +9,18 @@ nbproject*
 **/nbactions*
 **/nbproject*
 **/nb-configuration.xml
-.DS_Store
-*~
-/vlo-solr/solr-home/security.json
+/target/
+/vlo-solr/target/
+/vlo-commons/target/
+/vlo-vocabularies/target/
+/vlo-importer/target/
+/vlo-distribution/target/
+/vlo-web-app/target/
+/vlo-exposure/target/
+/vlo-exposure-frontend/target
 /vlo-sitemap/target/
 /vlo-statistics/target/
-/target/
-/vlo-distribution/target-old/
-/bin/
+/vlo-solr/solr-home/security.json
 
 /vlo-sitemap/.settings
 /vlo-statistics/.settings
