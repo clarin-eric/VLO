@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <thead>
                     <tr class="header">
                         <th class="recordresourcetypeicon"><!-- icon --></th>
-                        <th class="recordresourcename">Name</th>
-                        <th>Type</th>
+                        <th class="recordresourcename"><wicket:message key="resources.name">[Name]</wicket:message></th>
+                        <th><wicket:message key="resources.type">[Type]</wicket:message></th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -48,9 +48,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             </table>
             <p wicket:id="noResources">
-                This record does not provide any direct links to resources.
+                <wicket:message key="noResources.noLinksToResources">[This record does not provide any direct links to resources.]</wicket:message>
                 <p wicket:id="hierarchyLinkContainer">
-                    Resources may be present in the records within the (sub)collection described by this record. Browse the <strong><a wicket:id="hierarchyLink">hierarchy</a></strong> to find records in this collection.
+                    <wicket:message key="hierarchyLinkContainer.message">
+                        Resources may be present in the records within the (sub)collection described by this record. Browse the <strong>hierarchy</strong> to find records in this collection.
+                        <a wicket:id="hierarchyLink" class="switch-from-simple"><wicket:message key="hierarchyLink.linkText"/></a>
+                    </wicket:message>
                 </p>
             </p>
             <ul wicket:id="paging" id="resourcespagination" class="resultpagination">[paging]</ul>
