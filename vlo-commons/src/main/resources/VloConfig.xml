@@ -77,6 +77,7 @@
 
     <fields>
         <field key="NAME">name</field>
+        <field key="CREATOR">creator</field>
         <field key="DESCRIPTION">description</field>
         <field key="COLLECTION">collection</field>
         <field key="LANGUAGE_CODE">languageCode</field>
@@ -123,7 +124,6 @@
         <field key="SIGNATURE">_signature</field>
         <field key="RECORD_PID">recordPid</field>
         <field key="RESOURCE_AVAILABILITY_SCORE">_resourceAvailabilityScore</field>
-        <field key="CREATOR">creator</field>
     </fields>
 
     <deprecatedFields>
