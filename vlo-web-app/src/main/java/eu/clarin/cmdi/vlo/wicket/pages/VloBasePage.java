@@ -217,9 +217,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     private void addComponents() {
 
-        appTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
-        pageTitleModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
-        final IModel<String> instanceInfoModel = new NullFallbackModel(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
+        appTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
+        pageTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
+        final IModel<String> instanceInfoModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
         
         add(new BootstrapFeedbackPanel("feedback"));
 

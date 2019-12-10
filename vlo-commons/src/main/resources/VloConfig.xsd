@@ -1,4 +1,4 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="VloConfig">
         <xs:complexType>
@@ -11,6 +11,7 @@
                 <xs:element ref="dataRoots" />
                 <xs:element name="fileProcessingThreads" type="xs:string" />
                 <xs:element name="solrThreads" type="xs:string" />
+                <xs:element name="availabilityStatusUpdaterBatchSize" type="xs:string" />
                 <xs:element name="pagesInApplicationCache" type="xs:string" />
                 <xs:element name="sessionCacheSize" type="xs:string" />
                 <xs:element name="maxDocsInList" type="xs:string" />
@@ -119,7 +120,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="facetField" type="keyType"
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -127,7 +128,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="simpleSearchFacetField" type="keyType"
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -135,15 +136,15 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="primaryFacetField" type="keyType"
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-        <xs:element name="signatureFields">
+    <xs:element name="signatureFields">
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="signatureField" type="keyType"
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -151,7 +152,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="searchResultField" type="keyType"
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -159,7 +160,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="ignoredField" type="keyType"
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -167,7 +168,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element name="technicalField" type="keyType" 
-                    minOccurs="0" maxOccurs="unbounded" />
+                            minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -248,6 +249,7 @@
             <xs:enumeration value="DEPRECATED_LANGUAGE" />
             <xs:enumeration value="SIGNATURE" />
             <xs:enumeration value="RECORD_PID" />
+            <xs:enumeration value="CREATOR" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import java.io.Serializable;
 import java.util.MissingResourceException;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -26,25 +27,26 @@ import org.apache.wicket.model.Model;
  * null
  *
  * @author twagoo
+ * @param <T> Model type
  */
-public class NullFallbackModel implements IModel<String> {
+public class NullFallbackModel<T extends Serializable> implements IModel<T> {
 
-    private final IModel<String> wrappedModel;
-    private final IModel<String> fallbackModel;
+    private final IModel<T> wrappedModel;
+    private final IModel<T> fallbackModel;
 
-    public NullFallbackModel(IModel<String> wrappedModel, String fallbackValue) {
+    public NullFallbackModel(IModel<T> wrappedModel, T fallbackValue) {
         this(wrappedModel, Model.of(fallbackValue));
     }
 
-    public NullFallbackModel(IModel<String> wrappedModel, IModel<String> fallbackModel) {
+    public NullFallbackModel(IModel<T> wrappedModel, IModel<T> fallbackModel) {
         this.wrappedModel = wrappedModel;
         this.fallbackModel = fallbackModel;
     }
 
     @Override
-    public String getObject() {
+    public T getObject() {
         try {
-            final String wrappedValue = wrappedModel.getObject();
+            final T wrappedValue = wrappedModel.getObject();
             if (wrappedValue == null) {
                 return fallbackModel.getObject();
             } else {
@@ -57,7 +59,7 @@ public class NullFallbackModel implements IModel<String> {
     }
 
     @Override
-    public void setObject(String object) {
+    public void setObject(T object) {
         wrappedModel.setObject(object);
     }
 

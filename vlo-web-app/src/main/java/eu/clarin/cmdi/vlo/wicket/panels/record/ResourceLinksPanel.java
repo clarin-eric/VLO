@@ -17,38 +17,39 @@
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
 import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.BootstrapAjaxPagingNavigator;
+
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
+import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
-import java.util.Optional;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
 
 /**
  * Panel that shows all resources represented by a collection of resource
@@ -57,8 +58,6 @@ import org.apache.wicket.behavior.Behavior;
  * @author twagoo
  */
 public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
-
-    private final static Logger logger = LoggerFactory.getLogger(ResourceLinksPanel.class);
 
     private static final int ITEMS_PER_PAGE = 12;
 
@@ -70,6 +69,9 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     private final IModel<List<String>> detailsVisibleModel = new ListModel<>(new ArrayList<>());
     private final WebMarkupContainer resourcesTable;
     private final ResourcesListView resourceListing;
+    private final IModel<List<String>> landingPagesLinkModel;
+    private final IModel<List<String>> searchPagesLinkModel;
+    private final IModel<String> searchServiceLinkModel;
 
     /**
      *
@@ -84,22 +86,31 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             @Override
             protected void onConfigure() {
                 super.onConfigure();
-                setVisible(resourceListing.getPageCount() > 0);
+                setVisible(resourceListing.getPageCount() > 0
+                        || landingPagesLinkModel.getObject() != null
+                        || searchPagesLinkModel.getObject() != null
+                        || searchServiceLinkModel.getObject() != null);
             }
 
         };
         resourcesTable.setOutputMarkupId(true);
         add(resourcesTable);
 
-        // special item in table for landing page 'resource'
-        final ResourceLinksPanelItem landingPageItem = createLandingPageItem("landingPageItem");
-        resourcesTable.add(landingPageItem);
-
         //add the 'actual' resources listing
         final SolrFieldModel<String> resourcesModel
                 = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         resourceListing = new ResourcesListView("resource", new CollectionListModel<>(resourcesModel));
         resourcesTable.add(resourceListing);
+
+        // special items in table for landing page, search page and search service 'resources'
+        landingPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<String>(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+        searchPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<String>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE)));
+        searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
+
+        resourcesTable
+                .add(createSearchPageItems("searchPageItems").add(newSpecialLinkVisibilityBehavior(searchPagesLinkModel)))
+                .add(createSearchServiceItem(documentModel).add(newSpecialLinkVisibilityBehavior(searchServiceLinkModel)))
+                .add(createLandingPageItems("landingPageItems").add(newSpecialLinkVisibilityBehavior(landingPagesLinkModel)));
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
@@ -113,43 +124,46 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         });
 
         // panel for records with no resources
-        add(createNoResourcesContainer("noResources")
-                .add(new Behavior() {
-                    @Override
-                    public void onConfigure(Component component) {
-                        component.setVisible(resourceListing.getPageCount() == 0);
-                    }
-                })
-        );
+        add(createNoResourcesContainer("noResources"));
 
         //For Ajax updating of resource listing when paging
         setOutputMarkupId(true);
     }
 
-    /**
-     * Special item in the table for the landing page
-     *
-     * @param id
-     * @param documentModel
-     * @return
-     */
-    private ResourceLinksPanelItem createLandingPageItem(final String id) {
-        final IModel<String> landingPageModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-        final ResourceInfoModel landingPageInfoModel = new ResourceInfoModel(resourceStringConverter, landingPageModel);
-        final IModel<Boolean> landingPageDetailsModel = Model.of(Boolean.FALSE);
-        final ResourceLinksPanelItem landingPageItem = new ResourceLinksLandingPageItem(id, landingPageInfoModel, getModel(), landingPageDetailsModel) {
+    private SpecialLinkItemsView createSearchPageItems(String id) {
+        final SpecialLinkItemsView searchPageItems = new SpecialLinkItemsView(id, "search page", ResourceTypeIcon.SEARCH_PAGE, searchPagesLinkModel) {
             @Override
-            protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
-                landingPageDetailsModel.setObject(!landingPageDetailsModel.getObject());
+            protected IModel<ResourceInfo> createInfoModel(IModel<String> linkModel) {
+                return Model.of(new ResourceInfo(linkModel.getObject(), "Search page for this record", null, null, null, ResourceType.OTHER));
+            }
 
-                target.ifPresent(t -> {
-                    t.add(resourcesTable);
-                });
+            @Override
+            protected boolean showDetailsLink() {
+                return false;
             }
 
         };
-        landingPageItem.add(new InvisibleIfNullBehaviour<>(landingPageModel));
-        return landingPageItem;
+        return searchPageItems;
+    }
+
+    private ResourceLinksPanelSearchServiceItem createSearchServiceItem(IModel<SolrDocument> documentModel) {
+        return new ResourceLinksPanelSearchServiceItem("searchServiceItem", searchServiceLinkModel, documentModel);
+    }
+
+    private SpecialLinkItemsView createLandingPageItems(String id) {
+        final SpecialLinkItemsView landingPageItems = new SpecialLinkItemsView(id, "landing page", ResourceTypeIcon.LANDING_PAGE, landingPagesLinkModel) {
+            @Override
+            protected IModel<ResourceInfo> createInfoModel(IModel<String> linkModel) {
+                return new ResourceInfoModel(resourceStringConverter, linkModel);
+            }
+
+        };
+        return landingPageItems;
+    }
+
+    private Behavior newSpecialLinkVisibilityBehavior(final IModel<?> linkModel) {
+        return BooleanVisibilityBehavior.visibleOnTrue(
+                () -> linkModel.getObject() != null && resourceListing.getCurrentPage() == 0);
     }
 
     /**
@@ -160,18 +174,6 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
      */
     private MarkupContainer createNoResourcesContainer(String id) {
         final MarkupContainer container = new WebMarkupContainer(id);
-
-        //landing page link
-        final IModel<String> landingPageModel = new PIDLinkModel( // wrap in model that transforms handle links
-                new PropertyModel<>(new ResourceInfoObjectModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)), "url")); // get landing page from document
-        container.add(new WebMarkupContainer("landingPageContainer") {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(landingPageModel.getObject() != null);
-            }
-
-        }.add(new ExternalLink("landingPageLink", landingPageModel)));
 
         //hierarchy link
         final SolrFieldModel<String> partCountModel
@@ -189,6 +191,18 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             }
         }));
 
+        container.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                super.onConfigure(component);
+                component.setVisible(resourceListing.getItemCount() == 0
+                        && landingPagesLinkModel.getObject() == null
+                        && searchPagesLinkModel.getObject() == null
+                        && searchServiceLinkModel.getObject() == null
+                );
+            }
+        });
+        
         return container;
     }
 
@@ -224,7 +238,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                         visible.add(id);
                     }
 
-                    target.ifPresent(t->{
+                    target.ifPresent(t -> {
                         t.add(resourcesTable);
                     });
                 }
@@ -234,5 +248,40 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     }
 
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
+
+    private abstract class SpecialLinkItemsView extends ListView<String> {
+
+        private final String label;
+        private final String icon;
+
+        public SpecialLinkItemsView(final String id, final String label, final String icon, final IModel<List<String>> pageLinksModel) {
+            super(id, pageLinksModel);
+            this.label = label;
+            this.icon = icon;
+        }
+
+        @Override
+        protected void populateItem(ListItem<String> item) {
+            final IModel<ResourceInfo> pageInfoModel = createInfoModel(item.getModel());
+            final IModel<Boolean> detailsVisibilityModel = Model.of(Boolean.FALSE);
+            item.add(new ResourceLinksSpecialItem("item", Model.of(label), Model.of(icon), pageInfoModel, ResourceLinksPanel.this.getModel(), detailsVisibilityModel) {
+                @Override
+                protected void onDetailsToggleClick(String id, Optional<AjaxRequestTarget> target) {
+                    detailsVisibilityModel.setObject(!detailsVisibilityModel.getObject());
+
+                    target.ifPresent(t -> {
+                        t.add(resourcesTable);
+                    });
+                }
+
+            }.setShowDetailsLink(showDetailsLink()));
+        }
+
+        protected abstract IModel<ResourceInfo> createInfoModel(IModel<String> linkModel);
+
+        protected boolean showDetailsLink() {
+            return true;
+        }
+    }
 
 }

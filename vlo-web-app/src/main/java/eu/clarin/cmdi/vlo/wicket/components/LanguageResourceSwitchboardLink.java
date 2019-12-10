@@ -45,10 +45,10 @@ public class LanguageResourceSwitchboardLink extends Link {
     private LanguageCodeUtils languageCodeUtils;
 
     private final IModel<String> linkModel;
-    private final ResourceInfoModel resourceInfoModel;
+    private final IModel<ResourceInfo>  resourceInfoModel;
     private final IModel<Collection<Object>> languagesModel;
 
-    public LanguageResourceSwitchboardLink(String id, IModel<String> linkModel, IModel<Collection<Object>> languagesModel, ResourceInfoModel resourceInfoModel) {
+    public LanguageResourceSwitchboardLink(String id, IModel<String> linkModel, IModel<Collection<Object>> languagesModel, IModel<ResourceInfo> resourceInfoModel) {
         super(id);
         this.linkModel = linkModel;
         this.resourceInfoModel = resourceInfoModel;

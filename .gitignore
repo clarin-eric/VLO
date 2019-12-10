@@ -10,6 +10,9 @@
 *.iml
 nbactions*
 nbproject*
+**/nbactions*
+**/nbproject*
+**/nb-configuration.xml
 .DS_Store
 *~
 /vlo-solr/solr-home/security.json

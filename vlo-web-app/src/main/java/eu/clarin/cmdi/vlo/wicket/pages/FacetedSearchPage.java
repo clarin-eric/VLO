@@ -2,69 +2,65 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
-import java.util.List;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.SitelinkSearchboxHeaderBehavior;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordCountModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.CopyPageLinkPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
-import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
-import eu.clarin.cmdi.vlo.service.ExposureTracker;
+
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.Session;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 /**
  * The main search page showing a search form, facets, and search results
  *
@@ -150,6 +146,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         if (piwikConfig.isEnabled()) {
             resultsHeader.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
         }
+        
+        add(new SitelinkSearchboxHeaderBehavior());
     }
 
     private void createModels() {
@@ -291,7 +289,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final WebMarkupContainer container = new WebMarkupContainer(id);
         container.setOutputMarkupId(true);
         container.add(new BreadCrumbPanel("breadcrumbs", getModel()));
-        container.add(new TopLinksPanel("permalink", new PermaLinkModel(getPageClass(), getModel()), getTitleModel()) {
+        container.add(new CopyPageLinkPanel("permalink", new PermaLinkModel(getPageClass(), getModel()), getTitleModel()) {
 
             @Override
             protected void onChange(Optional<AjaxRequestTarget> target) {

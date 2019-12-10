@@ -18,15 +18,20 @@ package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Streams;
+
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
-import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.exposure.models.PageView;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -35,28 +40,34 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
-import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
-import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
+import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
+import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
-import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.ErrorPage.ErrorType;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.CmdiContentPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.TopLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.CopyPageLinkPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.FieldsTablePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.HierarchyPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordDetailsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
@@ -65,45 +76,33 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.JavaScriptResources;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.request.resource.JavaScriptResourceReference;
-import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
-import java.util.Collection;
-import java.util.Optional;
-import org.apache.wicket.model.LoadableDetachableModel;
-
-
-import eu.clarin.cmdi.vlo.VloWebSession;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.request.cycle.RequestCycle;
-import javax.servlet.http.HttpServletRequest;
-import eu.clarin.cmdi.vlo.exposure.models.PageView;
 
 /**
  *
  * @author twagoo
  */
 public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiAware {
+
     private final static Logger logger = LoggerFactory.getLogger(RecordPage.class);
 
     /**
@@ -142,8 +141,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private final IModel<String> linksCountLabelModel;
 
     /**
-     * Constructor that derives document and selection models from page parameters
-     * (external request or through the framework)
+     * Constructor that derives document and selection models from page
+     * parameters (external request or through the framework)
      *
      * @param params
      */
@@ -205,12 +204,16 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                     final Object countValue = document
                             .getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
                     if (countValue instanceof Integer) {
-                        Collection<Object> fieldValues = document
-                                .getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE));
-                        if (fieldValues == null) {
+                        Long fieldValuesCount
+                                = Streams.concat(
+                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty()))
+                                        .collect(Collectors.counting());
+                        if (fieldValuesCount == 0) {
                             return ((Integer) countValue).toString();
                         } else {
-                            return Integer.toString(fieldValues.size() + (Integer) countValue);
+                            return Long.toString(fieldValuesCount + (Integer) countValue);
                         }
                     }
                 }
@@ -228,11 +231,11 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         final WebMarkupContainer topNavigation = new WebMarkupContainer("navigation");
         add(topNavigation.add(new BreadCrumbPanel("breadcrumbs", selectionModel, getModel()))
                 .add(createPermalink("permalink", topNavigation)).add(new Link("backToSearch") {
-                    @Override
-                    public void onClick() {
-                        setResponsePage(new FacetedSearchPage(selectionModel));
-                    }
-                }).setOutputMarkupId(true));
+            @Override
+            public void onClick() {
+                setResponsePage(new FacetedSearchPage(selectionModel));
+            }
+        }).setOutputMarkupId(true));
 
         // General information section
         add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME),
@@ -245,7 +248,6 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         }
         add(tabs);
 
-        add(createSearchLinks("searchlinks"));
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
@@ -285,12 +287,13 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             public Panel getPanel(String panelId) {
                 final RecordLicenseInfoPanel availabilityPanel = new RecordLicenseInfoPanel(panelId, getModel());
                 availabilityPanel.setMarkupId(AVAILABILITY_SECTION); // TODO: make it possible to use this target to
-                                                                     // select license info
+                // select license info
                 return availabilityPanel;
             }
         });
-        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION), new AbstractTab(
-                new StringResourceModel("recordpage.tabs.links", new NullFallbackModel(linksCountLabelModel, "?"))) {
+        tabs.set(TABS_ORDER.indexOf(RESOURCES_SECTION),
+                new AbstractTab(
+                        new StringResourceModel("recordpage.tabs.links", new NullFallbackModel<>(linksCountLabelModel, "?"))) {
             @Override
             public Panel getPanel(String panelId) {
                 return (new ResourceLinksPanel(panelId, getModel()) {
@@ -319,7 +322,10 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         });
 
         if (config.isProcessHierarchies()) {
-            // TODO: make hierarchy an optional side pane instead
+            //TODO: make hierarchy an optional side pane instead
+
+            final IModel<Boolean> hasHierarchyModel = new RecordHasHierarchyModel(getModel());
+
             tabs.set(TABS_ORDER.indexOf(HIERARCHY_SECTION), new AbstractTab(Model.of("Hierarchy")) {
                 @Override
                 public Panel getPanel(String panelId) {
@@ -328,14 +334,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                 @Override
                 public boolean isVisible() {
-                    // only show hierarchy panel if there's anything to show
-                    final SolrDocument document = getModel().getObject();
-                    final Object partCount = document
-                            .getFieldValue(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
-                    final boolean hasHierarchy // has known parent or children
-                    = null != document.getFieldValue(fieldNameService.getFieldName(FieldKey.IS_PART_OF)) // has parent
-                            || (null != partCount && !Integer.valueOf(0).equals(partCount)); // children count != 0
-                    return hasHierarchy;
+                    return hasHierarchyModel.getObject();
                 }
 
             });
@@ -393,50 +392,14 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         }
     }
 
-    private TopLinksPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
-        return new TopLinksPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
+    private CopyPageLinkPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
+        return new CopyPageLinkPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
 
             @Override
             protected void onChange(Optional<AjaxRequestTarget> target) {
                 target.ifPresent(t -> {
                     t.add(topNavigation);
                 });
-            }
-
-        };
-    }
-
-    private Component createSearchLinks(String id) {
-        final SolrFieldModel<String> searchPageModel = new SolrFieldModel<>(getModel(),
-                fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
-        final SolrFieldModel<String> searchServiceModel = new SolrFieldModel<>(getModel(),
-                fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
-        return new WebMarkupContainer(id) {
-            {
-                // Add search page links (can be multiple)
-                add(new ListView<String>("searchPage", new CollectionListModel<>(searchPageModel)) {
-
-                    @Override
-                    protected void populateItem(ListItem<String> item) {
-                        item.add(new ExternalLink("searchLink", new PIDLinkModel(item.getModel())));
-                    }
-                });
-
-                // We assume there can be multiple content search endpoints too
-                add(new ListView<String>("contentSearch", new CollectionListModel<>(searchServiceModel)) {
-
-                    @Override
-                    protected void populateItem(ListItem<String> item) {
-                        item.add(new ContentSearchFormPanel("fcsForm", RecordPage.this.getModel(), item.getModel()));
-                    }
-                });
-            }
-
-            @Override
-
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(searchPageModel.getObject() != null || searchServiceModel.getObject() != null);
             }
 
         };
@@ -484,9 +447,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     public IModel<String> getTitleModel() {
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
-                new NullFallbackModel(
-                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true),
-                        getString("recordpage.unnamedrecord"))).setDefaultValue(DEFAULT_PAGE_TITLE);
+                new NullFallbackModel<>(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord")))
+                .setDefaultValue(DEFAULT_PAGE_TITLE);
     }
 
     @Override

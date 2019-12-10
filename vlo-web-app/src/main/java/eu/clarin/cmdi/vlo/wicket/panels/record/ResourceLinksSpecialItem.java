@@ -16,48 +16,49 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class ResourceLinksLandingPageItem extends ResourceLinksPanelItem {
+public class ResourceLinksSpecialItem extends ResourceLinksPanelItem {
 
-    public ResourceLinksLandingPageItem(String id, ResourceInfoModel resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
+    private final IModel<String> resourceTypeIconModel;
+    private final IModel<String> resourceTypeLabelModel;
+
+    public ResourceLinksSpecialItem(String id, IModel<String> resourceTypeLabel, IModel<String> resourceTypeIcon, IModel<ResourceInfo> resourceInfoModel, IModel<SolrDocument> documentModel, IModel<Boolean> detailsVisibleModel) {
         super(id, resourceInfoModel, documentModel, detailsVisibleModel);
+        this.resourceTypeLabelModel = resourceTypeLabel;
+        this.resourceTypeIconModel = resourceTypeIcon;
     }
 
     @Override
     protected ResourceTypeIcon createResourceTypeIcon(String id) {
         // always show landing page icon ('home' icon)
-        return new ResourceTypeIcon(id, Model.of(ResourceTypeIcon.LANDING_PAGE));
+        return new ResourceTypeIcon(id, resourceTypeIconModel);
     }
 
     @Override
     protected Label createResourceTypeLabel(String id) {
         // resource type: ignore mime type, always show as landing page
-        return new Label(id, "landing page");
+        return new Label(id, resourceTypeLabelModel);
     }
 
     @Override
-    protected Component createOptionsDropdown(IModel<String> linkModel, ResourceInfoModel resourceInfoModel) {
+    protected Component createOptionsDropdown(IModel<String> linkModel, IModel<ResourceInfo> resourceInfoModel) {
         return super.createOptionsDropdown(linkModel, resourceInfoModel)
-                // hide options menu
-                .add(new Behavior() {
-                    @Override
-                    public void onConfigure(Component component) {
-                        component.setVisible(false);
-                    }
+                .add(BooleanVisibilityBehavior.visibleOnTrue(this::isOptionsDropdownEnabled));
+    }
 
-                });
+    protected boolean isOptionsDropdownEnabled() {
+        return false;
     }
 
 }

@@ -29,7 +29,7 @@ public class BooleanVisibilityBehavior extends Behavior {
     private final IModel<Boolean> model;
     private final Boolean visibilityState;
 
-    private BooleanVisibilityBehavior(IModel<Boolean> model, Boolean visibilityState) {
+    protected BooleanVisibilityBehavior(IModel<Boolean> model, Boolean visibilityState) {
         this.model = model;
         this.visibilityState = visibilityState;
     }

@@ -18,9 +18,9 @@
     <description></description>
 
     <properties>
-        <wicket.version>8.6.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>8.6.1</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>5.1.9.RELEASE</spring.version>
-        <clarin-basestyle.version>0.4.0-alpha1</clarin-basestyle.version>
+        <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
@@ -87,12 +87,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <!-- Make Spring log to SLF4J, too (drop-in replacement for JCL) -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
 
@@ -163,7 +157,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>2.0.10</version>
+            <version>2.0.11</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
@@ -292,7 +286,6 @@
             <plugin>
                 <!-- Copies 'local' LESS sources and fonts to the right destination -->
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <!-- copy less sources -->
@@ -369,7 +362,7 @@
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <version>2.2.4</version>
+                <version>2.2.6</version>
                 <executions>
                     <execution>
                         <goals>

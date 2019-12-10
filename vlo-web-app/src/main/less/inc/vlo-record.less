@@ -21,6 +21,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 @import "vlo-record-cmdi";
 
+@resource-info-icon-width: 100px;
+@clarin-core-service-badge-bg: @clarin-color-2;
+@clarin-centre-content-badge-bg: @badge-bg;
+
+.badge {
+    &.clarin-centre-content {
+        background-color: @clarin-centre-content-badge-bg;
+    }
+    &.clarin-core-service {
+        background-color: @clarin-core-service-badge-bg;
+    }
+}
+
 #recordprevnext {
     a.btn.disabled {
         pointer-events: initial;
@@ -137,25 +150,43 @@ h1#recordtitle {
             text-decoration: none;
         }
 
-        a.resourcelink {
+        .resourcelink {
 
-            .resource-type-icon > span {
-                font-size: 100px;
-                padding: 4px;
-                color: @text-color;
+            .resource-type-icon {
+                & > span {
+                    font-size: @resource-info-icon-width;
+                    padding: 4px;
+                    color: @text-color;
 
-                &:hover {
-                    color: @link-hover-color;
+                    &:hover {
+                        color: @link-hover-color;
+                    }
                 }
-            }
+
+                & > img {
+                    width: @resource-info-icon-width;
+                    padding: 4px;
+                    text-align: center;
+
+                    &:hover {
+                        opacity: 0.7;
+                    }
+                }
+            } 
 
             & > span {
                 display: block;
             }
         }
-        
+
         .pid-label {
             line-height: 2;
+        }
+
+        .badge {
+            margin-top: .5em;
+            font-size: 105%;
+            font-weight: normal;
         }
     }
 
@@ -249,6 +280,10 @@ h1#recordtitle {
     }
 }
 
+form.contentSearchForm {
+    display: inline;
+}
+
 .similar-records {
     margin-top: .5em;
 
@@ -256,7 +291,7 @@ h1#recordtitle {
         padding: .2em;
         overflow-x: hidden;
         overflow-wrap: break-word;
-        
+
         .similar-record-title {
             font-weight: bold;
         }

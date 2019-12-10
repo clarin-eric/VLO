@@ -1,5 +1,15 @@
 Bug fixes and new features
 --------------------------
+VLO 4.7.2 (October 2019)
+
+* Fix for landing page not shown in "links" table for records with only a landing page
+    <https://github.com/clarin-eric/VLO/issues/260>
+* Fix for error on clicking PID info link for some record identifiers
+    <https://github.com/clarin-eric/VLO/issues/264>
+* Fix for rendering issues for links in technical details
+    <https://github.com/clarin-eric/VLO/issues/266>
+* Configurable 'batch size' for resource availability update
+
 VLO 4.7.1 (September 2019)
 
 * Removed 'multilingual' from the record details view

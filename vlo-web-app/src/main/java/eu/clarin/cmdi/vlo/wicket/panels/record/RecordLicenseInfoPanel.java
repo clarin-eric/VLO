@@ -115,7 +115,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 //Model for the license URL: URLs are taken from the license 
                 //URL property file. As a fallback, the URI is used as a link
                 //if no property has been defined for the license id at hand
-                final IModel<String> linkPageModel = new NullFallbackModel(
+                final IModel<String> linkPageModel = new NullFallbackModel<>(
                         new StringResourceModel("license.url.${}", this, item.getModel()), //see licenseUrls.properties
                         item.getModel());
 
@@ -163,7 +163,7 @@ public class RecordLicenseInfoPanel extends GenericPanel<SolrDocument> {
                 //descriptor model for the availability value - with fallback to 'plain' (converted) value
                 final IModel<FieldValueDescriptor> descriptorModel = new MapValueModel<>(descriptorsModel, item.getModel());
                 final IModel<String> descriptionModel = new PropertyModel<>(descriptorModel, "description");
-                final IModel<String> descriptionFallbackModel = new NullFallbackModel(descriptionModel, titleModel);
+                final IModel<String> descriptionFallbackModel = new NullFallbackModel<>(descriptionModel, titleModel);
 
                 item.add(new Label("availabilityDescription", descriptionFallbackModel));
                 item.add(new AttributeAppender("title", titleModel));

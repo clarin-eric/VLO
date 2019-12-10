@@ -14,6 +14,7 @@ public enum FieldKey {
     COMPLETE_METADATA,
     CONTINENT,
     COUNTRY,
+    CREATOR,
     DATA_PROVIDER,
     DESCRIPTION,
     FORMAT,

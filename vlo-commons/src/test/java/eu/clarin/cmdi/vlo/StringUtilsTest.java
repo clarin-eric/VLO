@@ -26,62 +26,14 @@ import static org.junit.Assert.*;
 public class StringUtilsTest {
 
     /**
-     * Test of toMultiLineHtml method, of class StringUtils.
-     */
-    @Test
-    public void testToMultiLineHtml() {
-        System.out.println("toMultiLineHtml");
-        String s = "what\nis\n\rthis\n\n\n\n\n\nlater";
-        String expResult = "what<br/>is<br/>this<br/><br/>later";
-        CharSequence result = StringUtils.toMultiLineHtml(s);
-        assertEquals(expResult, result.toString());
-    }
-
-    /**
      * Test of normalizeIdString method, of class StringUtils.
      */
     @Test
     public void testNormalizeIdString() {
         System.out.println("normalizeIdString");
-        String idString = "a!b*c\\d(e)f;g:h@i&j=k+l$m,n/o?p#q[r]s";
-        String expResult = "a_33_b_42_c\\d_40_e_41_f_59_g_58_h_64_i_38_j_61_k_43_l_36_m_44_n_47_o_63_p_35_q_91_r_93_s";
+        String idString = "a!b*c\\d(e)f; g:h@i&j=k+l$m,n/o?p#q[r]s";
+        String expResult = "a_33_b_42_c\\d_40_e_41_f_59__32_g_58_h_64_i_38_j_61_k_43_l_36_m_44_n_47_o_63_p_35_q_91_r_93_s";
         String result = StringUtils.normalizeIdString(idString);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of uncapitalizeFirstLetter method, of class StringUtils.
-     */
-    @Test
-    public void testUncapitalizeFirstLetter() {
-        System.out.println("uncapitalizeFirstLetter");
-        String value = "A quick brown fox";
-        String expResult = "a quick brown fox";
-        String result = StringUtils.uncapitalizeFirstLetter(value);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of capitalizeFirstLetter method, of class StringUtils.
-     */
-    @Test
-    public void testCapitalizeFirstLetter() {
-        System.out.println("capitalizeFirstLetter");
-        String value = "etaoin shrdlu";
-        String expResult = "Etaoin shrdlu";
-        String result = StringUtils.capitalizeFirstLetter(value);
-        assertEquals(expResult, result);
-    }
-
-    /**
-     * Test of createStringFromArray method, of class StringUtils.
-     */
-    @Test
-    public void testCreateStringFromArray() {
-        System.out.println("createStringFromArray");
-        String[] values = new String[]{"Lorem ipsum dolor sit amet, ", "consectetur adipiscing elit, ", "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."};
-        String expResult = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-        String result = StringUtils.createStringFromArray(values);
         assertEquals(expResult, result);
     }
 

@@ -27,46 +27,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="col-sm-9" wicket:id="fieldsTable">
                     [Fields table]
                 </div>
-                <div class="col-sm-3" wicket:id="coreLinks">
-                    <div class="panel panel-default resource-info" wicket:id="landingPage">
-                        <a wicket:id="showResources" class="pull-right detailslink"><span wicket:id="availabilityWarning"></span></a>
-                        <a wicket:id="landingPageLink" class="resourcelink" title="The original provider's page for this record">
-                            <span class="resource-type-icon">                         
-                                <span class="glyphicon glyphicon-home"></span>
-                            </span>
-                            <div>
-                                Landing page
-                            </div>
-                            <div>
-                                <wicket:container wicket:id="landingPageLinkLabel">[HDL]1234/567-890</wicket:container>
-                            </div>
-                        </a>
-                        <wicket:container wicket:id="landingPagePidLabel"></wicket:container>
+                <wicket:enclosure>
+                    <div class="col-sm-3" >
+                        <div wicket:id="coreLinks"></div>
                     </div>
-                    <h4 wicket:id="resourcesTitle" class="text-center">Linked resource</h4>
-                    <div class="panel panel-default resource-info" wicket:id="resourceInfo">
-                        <a wicket:id="showResources" class="pull-right detailslink"
-                           ><span wicket:id="infoSign" class="glyphicon glyphicon-info-sign"></span
-                            ><span wicket:id="availabilityWarning"></span></a>
-                        <a wicket:id="resourceLink" class="resourcelink">
-                            <span class="resource-type-icon">                            
-                                <span wicket:id="resourceTypeIcon"></span>
-                            </span>
-                            <div>
-                                <span wicket:id="resourceName">[Resource name]</span>
-                            </div>
-                        </a>
-                        <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
-                    </div>
-                    <div class="panel panel-default resource-info" wicket:id="resourcesInfo">
-                        <a wicket:id="showResources" class="resourcelink">
-                            <span class="resource-type-icon">                            
-                                <span class="glyphicon glyphicon-folder-open"></span>
-                            </span>
-                            <span><wicket:container wicket:id="resourcesCount"></wicket:container> resources</span>
-                        </a>
-                    </div>
-                </div>
+                </wicket:enclosure>
             </div>
 
             <div class="row no-gutter">

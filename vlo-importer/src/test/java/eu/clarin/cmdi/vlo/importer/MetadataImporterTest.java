@@ -210,7 +210,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         List<SolrInputDocument> docs = importData(sessionFile);
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
-        assertEquals("testRoot/" + sessionFile.getName(), getValue(doc, FieldKey.ID));
+        assertEquals("testRoot_47_" + sessionFile.getName(), getValue(doc, FieldKey.ID));
     }
 
     @Test

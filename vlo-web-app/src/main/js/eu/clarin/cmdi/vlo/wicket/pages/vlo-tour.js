@@ -16,10 +16,10 @@
  */
 
 /**
- * VLO guided tour definition based on Bootstrap Tour
- * <http://bootstraptour.com/>. Note that this was not designed to work on 
- * mobile devices, so screen sizes 'md' and up only.
- * 
+ * VLO guided tour definition based on Bootstrap Tourist
+ * <https://github.com/IGreatlyDislikeJavascript/bootstrap-tourist>. 
+ * Note that this was not designed to work on mobile devices, so screen sizes 'md' 
+ * and up only.
  */
 
 var TOUR_QUERY_EXAMPLE = "speech corpus";
@@ -27,20 +27,18 @@ var TOUR_QUERY_EXAMPLE = "speech corpus";
 function createTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
+        framework: 'bootstrap3',
+        debug: false,
         redirect: true,
+        showProgressBar: false,
         steps: createTourSteps()
     };
-    
-    Tour.prototype._onScroll = () => {}; // https://github.com/sorich87/bootstrap-tour/issues/658
 
     var tour = new Tour(opts);
 
     if (restart) {
         tour.restart();
     }
-
-    // Initialize the tour
-    tour.init();
 
     if (step !== undefined) {
         tour.goTo(step);
@@ -73,7 +71,7 @@ function typeValue(input, value) {
 
 function disablePrev(tour) {
     // disable 'prev' button on current step
-    $(".tour-vlo-tour-" + tour.getCurrentStep() + " .btn[data-role=prev]")
+    $(".tour-vlo-tour-" + tour.getCurrentStepIndex() + " .btn[data-role=prev]")
             .attr('disabled', 'disabled')
             .addClass('disabled');
 }
@@ -162,10 +160,8 @@ function createTourSteps() {
                     var newPath = resultLink.attr('href') + '#tour';
                     console.log("new path: " + newPath);
 
-                    if (this._inited === true) {
-                        document.location.href = newPath;
-                        return (new jQuery.Deferred()).promise();
-                    }
+                    document.location.href = newPath;
+                    return (new jQuery.Deferred()).promise();
                 }
             },
             onShown: disablePrev
@@ -269,8 +265,10 @@ function initTourRecordPage() {
     $(document).ready(function () {
         if (window.location.hash === '#tour') {
             var tour = createTour(false);
-            if (tour.getCurrentStep() !== null && !tour.ended()) {
+            if (tour && !tour.ended()) {
                 tour.start();
+            } else {
+                console.log('Tour not started (tour object: ', tour, ')');
             }
         }
     });

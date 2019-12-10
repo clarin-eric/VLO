@@ -30,6 +30,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
+import org.apache.wicket.model.Model;
 
 /**
  * A panel with an HTML form (not a Wicket form!) with a submit link that posts
@@ -40,14 +42,16 @@ import eu.clarin.cmdi.vlo.FieldKey;
  * @author twagoo
  */
 public class ContentSearchFormPanel extends GenericPanel<String> {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(ContentSearchFormPanel.class);
-
+    
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean
     private FieldNameService fieldNameService;
-
+    
+    private final IModel<Boolean> linkVisibilityModel = Model.of(true);
+    
     public ContentSearchFormPanel(String id, final IModel<SolrDocument> documentModel, final IModel<String> endpointModel) {
         super(id);
 
@@ -58,17 +62,22 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
         // Populate attributes in form elements...
         // Outer <form> element
         final WebMarkupContainer fcsForm = new WebMarkupContainer("fcsForm");
+        add(fcsForm);
         // The action of the form should be the aggregator endpoint
         fcsForm.add(new AttributeModifier("action", vloConfig.getFederatedContentSearchUrl()));
-        add(fcsForm);
+        fcsForm.add(new AttributeModifier("name", fcsForm.getMarkupId()));
 
         // Hidden form field for aggregation context
         final WebMarkupContainer aggregationContext = new WebMarkupContainer("aggregationContent");
         // The value should be the JSON object
         aggregationContext.add(new AttributeModifier("value", jsonModel));
         fcsForm.add(aggregationContext);
+        
+        add(new WebMarkupContainer("submitLink")
+                .add(new AttributeModifier("onclick", () -> "document." + fcsForm.getMarkupId() + ".submit();"))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(linkVisibilityModel)));
     }
-
+    
     private IModel<String> createJsonModel(final IModel<SolrDocument> model, final IModel<String> endpointModel) {
         // Prepare a JSON object that holds the CQL endpoint and the document self link
         return new IModel<>() {
@@ -85,13 +94,18 @@ public class ContentSearchFormPanel extends GenericPanel<String> {
                     return null;
                 }
             }
-
+            
             @Override
             public void detach() {
                 endpointModel.detach();
             }
-
+            
         };
     }
-
+    
+    public ContentSearchFormPanel setLinkVisible(boolean visible) {
+        linkVisibilityModel.setObject(visible);
+        return this;
+    }
+    
 }
