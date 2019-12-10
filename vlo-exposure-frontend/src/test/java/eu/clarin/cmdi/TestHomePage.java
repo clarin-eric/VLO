@@ -1,15 +1,17 @@
-package eu.clarin.cmdi.vlo.exposure.frontend.test;
+package eu.clarin.cmdi;
 
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
 import eu.clarin.cmdi.vlo.exposure.frontend.HomePage;
 import eu.clarin.cmdi.vlo.exposure.frontend.WicketApplication;
+import org.junit.Ignore;
 
 
 /**
  * Simple test using the WicketTester
  */
+@Ignore
 public class TestHomePage {
     private WicketTester tester;
 
