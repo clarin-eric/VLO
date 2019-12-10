@@ -34,13 +34,13 @@
         </license>
     </licenses>
     <properties>
-        <log4j.version>2.6.2</log4j.version>
         <wicket.version>8.6.1</wicket.version>
         <jetty9.version>9.4.18.v20190429</jetty9.version>
-        <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.12</junit.version>
         <spring.version>5.1.9.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <vlo.logging.level>INFO</vlo.logging.level>
+        <log4j.appender>Console</log4j.appender>
         <!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
         <wtp.version>none</wtp.version>
     </properties>
@@ -56,6 +56,14 @@
             <artifactId>vlo-exposure</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <!-- WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -109,7 +117,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
-            <scope>runtime</scope>
         </dependency>
 
         <!-- JUNIT DEPENDENCY FOR TESTING -->
@@ -148,6 +155,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
             <resource>
                 <directory>src/main/java</directory>
