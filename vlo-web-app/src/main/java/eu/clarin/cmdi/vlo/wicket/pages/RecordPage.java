@@ -170,9 +170,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         // get document from parameters
         final SolrDocument document = documentParamConverter.fromParameters(params);
         if (null == document) {
-            Session.get().error(String.format("Document with ID %s could not be found",
-                    params.get(VloWebAppParameters.DOCUMENT_ID)));
-            final PageParameters errorParams = new PageParameters(params).remove(VloWebAppParameters.DOCUMENT_ID);
+            Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
+            final PageParameters errorParams = new PageParameters(params)
+                    .remove(VloWebAppParameters.DOCUMENT_ID);
             ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
         } else {
             try {
@@ -201,8 +201,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             protected String load() {
                 final SolrDocument document = RecordPage.this.getModelObject();
                 if (document != null) {
-                    final Object countValue = document
-                            .getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
+                    final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
                     if (countValue instanceof Integer) {
                         Long fieldValuesCount
                                 = Streams.concat(
@@ -229,17 +228,18 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         add(createNavigation("recordNavigation"));
 
         final WebMarkupContainer topNavigation = new WebMarkupContainer("navigation");
-        add(topNavigation.add(new BreadCrumbPanel("breadcrumbs", selectionModel, getModel()))
-                .add(createPermalink("permalink", topNavigation)).add(new Link("backToSearch") {
-            @Override
-            public void onClick() {
-                setResponsePage(new FacetedSearchPage(selectionModel));
-            }
-        }).setOutputMarkupId(true));
+        add(topNavigation
+                .add(new BreadCrumbPanel("breadcrumbs", selectionModel, getModel()))
+                .add(createPermalink("permalink", topNavigation))
+                .add(new Link("backToSearch") {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(new FacetedSearchPage(selectionModel));
+                    }
+                }).setOutputMarkupId(true));
 
         // General information section
-        add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME),
-                getString("recordpage.unnamedrecord")));
+        add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME), getString("recordpage.unnamedrecord")));
 
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
@@ -316,8 +316,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         tabs.set(TABS_ORDER.indexOf(TECHNICAL_DETAILS_SECTION), new AbstractTab(Model.of("Technical details")) {
             @Override
             public Panel getPanel(String panelId) {
-                return new FieldsTablePanel(panelId,
-                        new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
+                return new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
             }
         });
 
@@ -347,9 +346,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             protected WebMarkupContainer newLink(String linkId, final int index) {
                 final WebMarkupContainer link = super.newLink(linkId, index);
                 if (piwikConfig.isEnabled()) {
-                    link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click",
-                            PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE,
-                            PiwikEventConstants.PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH) {
+                    link.add(new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_RECORDPAGE, PiwikEventConstants.PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH) {
                         @Override
                         protected String getName(AjaxRequestTarget target) {
                             return TABS_ORDER.get(index);
@@ -467,8 +464,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour()));
-        response.render(JavaScriptHeaderItem
-                .forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")));
         response.render(JavaScriptHeaderItem.forScript("initTourRecordPage();", "initTourRecordPage"));
     }
 }
