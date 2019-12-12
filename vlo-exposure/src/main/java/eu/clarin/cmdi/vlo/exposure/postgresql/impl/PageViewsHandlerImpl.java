@@ -160,7 +160,7 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
         String timeStampField = "\"timeSt\"";
         String query = "SELECT date_trunc('day', " + timeStampField + ") as day, count(*) as freq FROM "+ table
                 + " where " + timeStampField + " between ? and ? "
-                + "group by day order by day "; //limit ? offset ?
+                + "and record_id=?  group by day order by day "; //limit ? offset ?
 
         HashMap<String,Integer> chartData= new LinkedHashMap<>();
         try {
@@ -168,6 +168,8 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             pstmt.setTimestamp(1, qp.getStartDate());
             pstmt.setTimestamp(2, qp.getEndDate());
+            pstmt.setString(3, qp.getRecordIdWC());
+
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
             long interval = 1000 * 60 * 60 * 24; // 1 day in millis
