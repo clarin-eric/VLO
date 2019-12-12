@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <head>
+ <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
  <meta charset="utf-8" />
  <title>VLO Exposures</title>
  <link rel="stylesheet" href="style.css" type="text/css" media="screen"  title="Stylesheet" />
@@ -14,23 +16,16 @@
  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
- <style>
 
-
-.page-item:disabled {
-  background: #dddddd;
-}{background-color: #007bff;color: white;}
- </style>
 </head>
 <body>
-
-<div id="hd">
- <div id="logo">
-  <h3>
-   <a href="index">VLO Exposures</a>
-  </h3>
- </div>
-</div>
+  <div id="hd">
+   <div id="logo">
+    <h3>
+     <a href="index">VLO Exposures</a>
+    </h3>
+   </div>
+  </div>
 
   <div class="row" style="width:90%;margin:auto">
      <div class="col-md-8">
@@ -64,14 +59,12 @@
     <div class="panel panel-default">
      <div class="panel-heading">Queries per Day</div>
      <div class="panel-body">
-      <div style="width: 90%">
-       <div wicket:id="QueriesChart" >
+      <div style="width: 100%">
+       <div id="chart" style="width: 100%;position: relative; height: 400px">
        </div>
-
       </div>
      </div>
     </div>
-
    </div>
   </div>
 
@@ -81,7 +74,7 @@
     <div class="panel panel-default">
      <div class="panel-heading">Keywords</div>
      <div class="panel-body">
-      <div style="width: 90%">
+      <div style="width: 90%;">
        <div wicket:id="KEYWORDS_PANEL" class="btn">
 
        </div>
@@ -91,7 +84,7 @@
    </div>
   </div>
 
-  <!-- Third ROw -->
+  <!-- Third Row -->
   <div class="row" style="width: 90%; margin: auto">
    <div class="col-md-6">
     <div wicket:id="SEARCH_RESULTS_PANEL_PANEL"></div>
@@ -106,13 +99,34 @@
    </div>
   </div>
 
-<footer id="footer"> </footer>
+  <footer id="footer"> </footer>
 
 </body>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
   $( function() {
     $( "#startDate" ).datepicker();
     $( "#endDate" ).datepicker();
   } );
-  </script>
+
+   google.charts.load('current', {'packages':['corechart', 'line']});
+   google.charts.setOnLoadCallback(function() { drawChart(chartData); });
+
+   function drawChart(cData) {
+    console.log(chartData);
+    var data = google.visualization.arrayToDataTable(cData);
+    var options = {
+      title: 'Queries per Day',
+      legend: { position: 'bottom' },
+      hAxis: {
+      gridlines: {
+        count: -1
+      },
+      chartArea: {width: '80%'}
+    }
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('chart'));
+    chart.draw(data, options);
+  }
+ </script>
 </html>

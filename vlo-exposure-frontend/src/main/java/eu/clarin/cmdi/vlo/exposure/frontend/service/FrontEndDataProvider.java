@@ -7,10 +7,7 @@ import eu.clarin.cmdi.vlo.exposure.postgresql.impl.PageViewsHandlerImpl;
 import eu.clarin.cmdi.vlo.exposure.postgresql.impl.SearchQueryHandlerImpl;
 import eu.clarin.cmdi.vlo.exposure.postgresql.impl.SearchResultHandlerImpl;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FrontEndDataProvider {
     PageViewsHandlerImpl pageViewHandler;
@@ -63,27 +60,34 @@ public class FrontEndDataProvider {
         return searchQueryHandler.getKeywordsStat(vloConfig, queryParameters);
     }
 
-    public LineChartData getKeywordsStatisticsChartData() {
-        HashMap<String,Integer> searchQueries = searchQueryHandler.getSearchQueriesPerDay(vloConfig, queryParameters);
-
-        double[] freq = new double[searchQueries.values().size()];
-        double max = Collections.max(searchQueries.values());
-        String[] labels = new String[searchQueries.keySet().size()];
-
-        int step = searchQueries.values().size() / 5;
-        int i=0;
-
-        for (Map.Entry<String, Integer> entry : searchQueries.entrySet()) {
-            if (i%step!=0)
-                labels[i] = "";
-            else
-                labels[i] = entry.getKey();
-            freq[i] = (double) entry.getValue();
-            i++;
-        }
-        LineChartData chart = new LineChartData(max,labels,freq);
-        return chart;
+    public QueryParameters getQueryParameters() {
+        return queryParameters;
     }
 
+    public void setQueryParameters(QueryParameters queryParameters) {
+        this.queryParameters = queryParameters;
+    }
+
+    public String getKeywordsStatisticsChartData() {
+        HashMap<String,Integer> searchQueries = searchQueryHandler.getSearchQueriesPerDay(vloConfig, queryParameters);
+        StringBuilder sb = new StringBuilder("");
+        sb.append("[['Date','Queries'],");
+        for (Map.Entry<String, Integer> entry : searchQueries.entrySet()) {
+            sb.append("['").append(entry.getKey()).append("',").append(entry.getValue()).append("],");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public String getPageViewsChartData() {
+        HashMap<String,Integer> pageViews = pageViewHandler.getPageViewsPerDay(vloConfig, queryParameters);
+        StringBuilder sb = new StringBuilder("");
+        sb.append("[['Date','Visits'],");
+        for (Map.Entry<String, Integer> entry : pageViews.entrySet()) {
+            sb.append("['").append(entry.getKey()).append("',").append(entry.getValue()).append("],");
+        }
+        sb.append("]");
+        return sb.toString();
+    }
 
     }

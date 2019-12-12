@@ -14,6 +14,8 @@ import eu.clarin.cmdi.vlo.exposure.frontend.service.FrontEndDataProvider;
 import eu.clarin.cmdi.vlo.exposure.frontend.service.RecordStatistics;
 import eu.clarin.cmdi.vlo.exposure.postgresql.QueryParameters;
 import eu.clarin.cmdi.vlo.exposure.postgresql.impl.SearchResultHandlerImpl;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -35,20 +37,17 @@ public class Record extends WebPage {
 
     public Record(PageParameters parameters) {
         super(parameters);
-        VloConfig vloConfig = WicketApplication.get().getConfig();
         String recordId = "";
         try {
             getParameters(parameters);
-            FrontEndDataProvider frontEndDataProvider = new FrontEndDataProvider(vloConfig);
-            record = frontEndDataProvider.getRecordStatistics(queryParameters);
-
+            record = WicketApplication.get().getFrontendDataProvider().getRecordStatistics(queryParameters);
             addFilterForm();
             loadRecordStats();
             loadKeyWords();
         } catch (Exception ex) {
             logger.error(ex.getMessage());
             // redirect to main page
-            //getRequestCycle().setResponsePage(HomePage.class);
+            getRequestCycle().setResponsePage(HomePage.class);
         }
     }
 
@@ -130,4 +129,13 @@ public class Record extends WebPage {
         }
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        FrontEndDataProvider frontEndDataProvider = WicketApplication.get().getFrontendDataProvider();
+        frontEndDataProvider.setQueryParameters(queryParameters);
+        String chartData = frontEndDataProvider.getPageViewsChartData();
+
+        response.render(JavaScriptContentHeaderItem.forScript("chartData = " + chartData,"chart-data"));
+    }
 }

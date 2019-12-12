@@ -1,8 +1,9 @@
 package eu.clarin.cmdi.vlo.exposure.frontend.service;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class RecordStatistics {
+public class RecordStatistics implements Serializable {
     String recordId;
     int views;
     int numOfQueries;

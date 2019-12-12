@@ -11,10 +11,10 @@ import eu.clarin.cmdi.vlo.exposure.models.Record;
 import eu.clarin.cmdi.vlo.exposure.postgresql.QueryParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.List;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.ArrayList;
+
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.exposure.models.PageView;
 import eu.clarin.cmdi.vlo.exposure.postgresql.PageViewsHandler;
@@ -154,5 +154,40 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
             logger.error(ex.getMessage());
         }
         return map;
+    }
+
+    public HashMap<String,Integer> getPageViewsPerDay(VloConfig vloConfig, QueryParameters qp) {
+        String timeStampField = "\"timeSt\"";
+        String query = "SELECT date_trunc('day', " + timeStampField + ") as day, count(*) as freq FROM "+ table
+                + " where " + timeStampField + " between ? and ? "
+                + "group by day order by day "; //limit ? offset ?
+
+        HashMap<String,Integer> chartData= new LinkedHashMap<>();
+        try {
+            Connection conn = PgConnection.getConnection(vloConfig);
+            PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setTimestamp(1, qp.getStartDate());
+            pstmt.setTimestamp(2, qp.getEndDate());
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+
+            long interval = 1000 * 60 * 60 * 24; // 1 day in millis
+            long endTime = qp.getEndDate().getTime();
+            long curTime = qp.getStartDate().getTime();
+            while (curTime <= endTime) {
+                String day = formatter.format(new Date(curTime));
+                chartData.put(day, 0);
+                curTime += interval;
+            }
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                String day = formatter.format(new Date(rs.getTimestamp("day").getTime()));
+                int freq = rs.getInt("freq");
+                chartData.put(day, freq);
+            }
+            conn.close();
+        }catch(SQLException ex){
+            logger.error(ex.getMessage());
+        }
+        return chartData;
     }
 }

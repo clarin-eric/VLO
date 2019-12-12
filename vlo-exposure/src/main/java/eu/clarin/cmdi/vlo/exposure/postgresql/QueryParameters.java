@@ -1,8 +1,9 @@
 package eu.clarin.cmdi.vlo.exposure.postgresql;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class QueryParameters {
+public class QueryParameters implements Serializable {
     private Timestamp startDate;
     private Timestamp endDate;
     private String recordIdWC;

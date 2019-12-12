@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.exposure.frontend;
 
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import eu.clarin.cmdi.vlo.exposure.frontend.service.FrontEndDataProvider;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -23,7 +24,7 @@ public class WicketApplication extends WebApplication {
 
     private VloConfig vloConfig;
     private final String configProperties = "./vlo-exposure-frontend/config.properties"; //System.getProperty("user.dir")+
-
+    private FrontEndDataProvider frontEndDataProvider;
     private final static Logger logger = LoggerFactory.getLogger(WicketApplication.class);
 
     /**
@@ -63,6 +64,7 @@ public class WicketApplication extends WebApplication {
 
             final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configFile.toURI().toURL());
             this.vloConfig = configFactory.newConfig();
+            this.frontEndDataProvider = new FrontEndDataProvider(vloConfig);
         } catch (IOException ex) {
             logger.error("Failed to initialise", ex);
         }
@@ -77,6 +79,9 @@ public class WicketApplication extends WebApplication {
         return this.vloConfig;
     }
 
+    public FrontEndDataProvider getFrontendDataProvider(){
+        return this.frontEndDataProvider;
+    }
     private void mountPages() {
         // frontend
         mountPage("/index", HomePage.class);

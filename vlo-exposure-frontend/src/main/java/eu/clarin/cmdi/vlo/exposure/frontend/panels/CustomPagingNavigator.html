@@ -13,34 +13,35 @@
         </span>
             </div>
         </div>
+        <div class="col-xs-12">
+            <ul wicket:id="pagingLinksContainer" class="pagination">
 
-        <ul wicket:id="pagingLinksContainer" class="pagination">
+                        <li class="page-item">
+                            <a wicket:id="first" href="">
+                                <span>First</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a wicket:id="prev"  href="">
+                                <span>Previous</span>
+                            </a>
+                        </li>
+                        <li wicket:id="navigation" class="page-item">
+                            <a wicket:id="pageLink"><span
+                                    wicket:id="pageNumber">5</span></a>
+                        </li>
 
-                    <li class="page-item">
-                        <a wicket:id="first" href="">
-                            <span>First</span>
-                        </a>
-                    </li>
-                    <li class="page-item">
-                        <a wicket:id="prev"  href="">
-                            <span>Previous</span>
-                        </a>
-                    </li>
-                    <li wicket:id="navigation" class="page-item">
-                        <a wicket:id="pageLink"><span
-                                wicket:id="pageNumber">5</span></a>
-                    </li>
+                        <li class="page-item">
+                            <a wicket:id="next" href="#">
+                                <span>Next</span></a>
+                        </li>
+                        <li class="page-item">
+                            <a wicket:id="last" href="#">
+                                <span>Last</span></a>
+                        </li>
 
-                    <li class="page-item">
-                        <a wicket:id="next" href="#">
-                            <span>Next</span></a>
-                    </li>
-                    <li class="page-item">
-                        <a wicket:id="last" href="#">
-                            <span>Last</span></a>
-                    </li>
-
-        </ul>
+            </ul>
+        </div>
     </div>
 
 </wicket:panel>

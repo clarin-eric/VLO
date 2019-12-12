@@ -76,12 +76,43 @@
      </table>
     </div>
    </div>
+   <!-- PANEL 2 -->
+   <div class="col-md-6">
+    <div class="panel panel-default">
+     <div class="panel-heading">Queries per Day</div>
+     <div class="panel-body">
+      <div style="width: 100%">
+       <div id="chart" style="width: 100%;position: relative; height: 400px">
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
   </div>
 </body>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
   $( function() {
     $( "#startDate" ).datepicker();
     $( "#endDate" ).datepicker();
   } );
-  </script>
+   google.charts.load('current', {'packages':['corechart', 'line']});
+   google.charts.setOnLoadCallback(function() { drawChart(chartData); });
+
+   function drawChart(cData) {
+    console.log(chartData);
+    var data = google.visualization.arrayToDataTable(cData);
+    var options = {
+      title: 'Page Views',
+      legend: { position: 'bottom' },
+      hAxis: {
+      gridlines: {
+        count: -1
+      },
+    }
+    };
+    var chart = new google.visualization.LineChart(document.getElementById('chart'));
+    chart.draw(data, options);
+  }
+ </script>
 </html>

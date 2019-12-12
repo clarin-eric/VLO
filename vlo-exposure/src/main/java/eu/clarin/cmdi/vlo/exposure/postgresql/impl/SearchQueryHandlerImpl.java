@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.*;
-import java.sql.Timestamp;
 
 import eu.clarin.cmdi.vlo.exposure.postgresql.QueryParameters;
 import org.slf4j.Logger;
@@ -100,6 +100,8 @@ public class SearchQueryHandlerImpl implements SearchQueryHandler {
                 + "and " + searchTermField + " is not null group by day order by day "; //limit ? offset ?
 
         HashMap<String,Integer> chartData= new LinkedHashMap<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+
         try {
             Connection conn = PgConnection.getConnection(vloConfig);
             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -110,17 +112,15 @@ public class SearchQueryHandlerImpl implements SearchQueryHandler {
             long endTime = qp.getEndDate().getTime();
             long curTime = qp.getStartDate().getTime();
             while (curTime <= endTime) {
-                Timestamp d =new Timestamp(curTime);
-                String day = d.toString().split(" ")[0];
+                String day = formatter.format(new Date(curTime));
                 chartData.put(day, 0);
                 curTime += interval;
             }
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
-                Timestamp day = rs.getTimestamp("day");
+                String day = formatter.format(new Date(rs.getTimestamp("day").getTime()));
                 int freq = rs.getInt("freq");
-                String d = day.toString().split(" ")[0];
-                chartData.put(d, freq);
+                chartData.put(day, freq);
             }
             conn.close();
         }catch(SQLException ex){

@@ -2,6 +2,7 @@ package eu.clarin.cmdi.vlo.exposure.frontend.panels;
 
 
 import eu.clarin.cmdi.vlo.exposure.models.Record;
+import eu.clarin.cmdi.vlo.exposure.postgresql.QueryParameters;
 import org.apache.wicket.markup.html.basic.Label;
 
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -15,6 +16,8 @@ import org.apache.wicket.request.resource.ByteArrayResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class RecordsDataViewPanel extends Panel {
@@ -29,13 +32,13 @@ public class RecordsDataViewPanel extends Panel {
 
     private final static Logger logger = LoggerFactory.getLogger(RecordsDataViewPanel.class);
 
-    public RecordsDataViewPanel(String id, List<Record> records, String title, String[] tableHeaders)   {
+    public RecordsDataViewPanel(String id, List<Record> records, String title, String[] tableHeaders, QueryParameters queryParameters)   {
         super(id);
         generateCSV(records, tableHeaders);
-        createPanel(records, title, tableHeaders);
+        createPanel(records, title, tableHeaders, queryParameters);
     }
 
-    private void createPanel(List<Record> records, String title, String[] tableHeaders){
+    private void createPanel(List<Record> records, String title, String[] tableHeaders, QueryParameters queryParameters){
         try {
             add(new Label("PANEL_TITLE", title));
             add(new Label("HEADER_1", tableHeaders[0]));
@@ -45,7 +48,13 @@ public class RecordsDataViewPanel extends Panel {
                 @Override
                 protected void populateItem(Item item) {
                     Record record = (Record) item.getModelObject();
-                    item.add(new ExternalLink(RECORD_ID, record.getInternalUrl(), record.getRecordId()));
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+                    String startDate = formatter.format(new Date(queryParameters.getStartDate().getTime()));
+                    String endDate = formatter.format(new Date(queryParameters.getEndDate().getTime()));
+
+                    String internalUrl = record.getInternalUrl() + "&startDate=" + startDate + "&endDate=" + endDate;
+                    item.add(new ExternalLink(RECORD_ID, internalUrl, record.getRecordId()));
                     item.add(new ExternalLink(LINK_RECORD_PAGE_ID, record.getExternalUrl()));
                     item.add(new Label(FREQUENCY_ID, record.getFreq()));
                 }
