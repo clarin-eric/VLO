@@ -1,5 +1,36 @@
 Bug fixes and new features
 --------------------------
+VLO 4.8 (January 2020)
+
+* Creator information is displayed for records that provide this information
+    <https://github.com/clarin-eric/VLO/issues/152>
+* Improve record page 'sidebar' icons, including option to invoke the switchboard
+    <https://github.com/clarin-eric/VLO/issues/163>
+    <https://github.com/clarin-eric/VLO/issues/269>
+    <https://github.com/clarin-eric/VLO/issues/273>
+* Improvement to links table for a record: do not duplicate non-resource links on
+every page, and also include search page and service links
+    <https://github.com/clarin-eric/VLO/issues/267>
+    <https://github.com/clarin-eric/VLO/issues/268>
+* Widget to copy the link to a page has been simplified
+    <https://github.com/clarin-eric/VLO/issues/262>
+* Changed text of landing page links in search results
+    <https://github.com/clarin-eric/VLO/issues/246>
+* Technical improvements to the guided tour, and made visually more distinct
+    <https://github.com/clarin-eric/VLO/issues/216>
+* Document identifier now by default as a URL path parameter for the record page
+    <https://github.com/clarin-eric/VLO/issues/272>
+* Exposure/impression statistics are gathered
+    <https://github.com/clarin-eric/VLO/issues/203>
+* Extended options for VLO localization/branding
+    <https://github.com/clarin-eric/VLO/issues/263>
+* The front end's favicon is now the VLO icon
+    <https://github.com/clarin-eric/VLO/issues/197>
+* All VLO components are now running on Java 11
+    <https://github.com/clarin-eric/VLO/issues/132>
+* Upgraded the version of the CLARIN base style, now using v0.4.0 (Bootstrap 3.4.1)
+
+
 VLO 4.7.2 (October 2019)
 
 * Fix for landing page not shown in "links" table for records with only a landing page

@@ -80,6 +80,26 @@ for the upgraded VLO instance), go to the `bin` directory and run the importer u
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
+-----------------------------
+Upgrading from 4.7.x to 4.8.0
+-----------------------------
+
+This version of the VLO runs on Java 11. It has been tested on Tomcat 8.5.
+
+There are several new configuration properties that need to be set to enable gathering
+of exposure statistics:
+
+- vloExposureEnabled (set to `true` to enable)
+- vloExposureDbName (this and the following properties must define a connection to a postgres database)
+- vloExposureHost
+- vloExposurePort
+- vloExposureUsername
+- vloExposurePassword
+
+There is a new field 'creator' that has to be set in VloConfig.
+
+While upgrading, flush the index and run an import from scratch (or transfer one from
+another instance).
 
 -----------------------------
 Upgrading from 4.7.1 to 4.7.2
