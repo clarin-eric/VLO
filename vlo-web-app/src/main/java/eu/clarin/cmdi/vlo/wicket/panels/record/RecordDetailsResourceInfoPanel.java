@@ -160,8 +160,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     private Component createResourcesTitle(String id) {
         final IModel<String> titleModel = new BooleanOptionsModel<>(
                 () -> (resourcesModel.getObject() != null && resourcesModel.getObject().size() == 1),
-                Model.of("Linked resource"),
-                Model.of("Linked resources")
+                new StringResourceModel("linkedResource", this),
+                new StringResourceModel("linkedResources", this)
         );
 
         return new Label(id, titleModel).add(new Behavior() {
