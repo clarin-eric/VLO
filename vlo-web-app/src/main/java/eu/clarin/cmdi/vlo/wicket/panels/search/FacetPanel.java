@@ -40,6 +40,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldDescriptionModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Optional;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -48,6 +49,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 
@@ -156,7 +158,9 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
             }
 
         });
+        filterField.add(new AttributeModifier("placeholder", new StringResourceModel("typeToFilter")));
         filterForm.add(filterField);
+        filterForm.add(new AttributeModifier("title", new StringResourceModel("filterValues")));
         return filterForm;
     }
 
