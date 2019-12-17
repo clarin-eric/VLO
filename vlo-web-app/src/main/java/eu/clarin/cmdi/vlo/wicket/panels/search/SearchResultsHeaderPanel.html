@@ -25,8 +25,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <div role="navigation" class="search-results-header navbar navbar-default">
                 <div class="navbar-text">
-                    <span wicket:id="searchInfo">Showing 1 to 25 of 604056 results</span>
-                    <span class="query-selection" wicket:id="querySelection">for
+                    <span wicket:id="searchInfoAll">Showing all records</span>
+                    <span wicket:id="searchInfoNoResults">No results for</span>
+                    <span wicket:id="searchInfoResults">Showing 1 to 25 of 604056 results for</span>
+                    <span class="query-selection" wicket:id="querySelection">
                         <span wicket:id="query" class="query-item" title="Search term(s)">
                             <span class="query-item-label" wicket:id="label">test</span>
                             <a wicket:id="remove" class="close" title="Remove search term(s)"><span aria-hidden="true">&times;</span></a>
