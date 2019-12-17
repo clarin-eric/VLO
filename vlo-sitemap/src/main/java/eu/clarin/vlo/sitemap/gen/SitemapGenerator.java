@@ -32,34 +32,29 @@ import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+import javax.xml.bind.JAXBException;
 
 public class SitemapGenerator {
 
     static Logger _logger = LoggerFactory.getLogger(SitemapGenerator.class);
 
-    public void generateVLOSitemap() {
-        try {
+    public void generateVLOSitemap() throws IOException, JAXBException {
+        // clean sitemap output folder or create if it doesnt exist
+        cleanOutputDir();
 
-            // clean sitemap output folder or create if it doesnt exist
-            cleanOutputDir();
+        // create urls
+        final List<URL> urls
+                = Streams.concat(Config.INCLUDE_URLS.stream().map(u -> new URL(u.trim())),
+                        new SolrRecordUrlsService().getRecordURLS().stream()
+                ).collect(Collectors.toUnmodifiableList());
 
-            // create urls
-            final List<URL> urls
-                    = Streams.concat(Config.INCLUDE_URLS.stream().map(u -> new URL(u.trim())),
-                            new SolrRecordUrlsService().getRecordURLS().stream()
-                    ).collect(Collectors.toUnmodifiableList());
+        _logger.info("Total number of URLs " + urls.size());
 
-            _logger.info("Total number of URLs " + urls.size());
-
-            final List<String> sitemaps = createSitemaps(urls);
-            createSitemapIndex(sitemaps);
-        } catch (Exception e) {
-            _logger.error("Error while generating sitemaps", e);
-            throw new RuntimeException(e);
-        }
+        final List<String> sitemaps = createSitemaps(urls);
+        createSitemapIndex(sitemaps);
     }
 
-    private void cleanOutputDir() throws Exception {
+    private void cleanOutputDir() throws IOException {
         Path outputDir = Paths.get(Config.OUTPUT_FOLDER);
         if (!Files.exists(outputDir)) {// create folder if it doesnt exist
             Files.createDirectory(outputDir);
@@ -81,7 +76,7 @@ public class SitemapGenerator {
         }
     }
 
-    public void createSitemapIndex(List<String> maps) throws Exception {
+    public void createSitemapIndex(List<String> maps) throws IOException, JAXBException {
         SitemapIndex index = new SitemapIndex();
         index.setMaps(maps.parallelStream()
                 .map(map -> new SitemapIndex.Sitemap(map, (new SimpleDateFormat("yyyy-MM-dd")).format(new Date())))
@@ -90,7 +85,7 @@ public class SitemapGenerator {
         new SitemapIndexMarshaller().marshall(index);
     }
 
-    private List<String> createSitemaps(List<URL> urls) throws Exception {
+    private List<String> createSitemaps(List<URL> urls) {
         final int maxUrlsPerSitemap = Integer.parseInt(Config.MAX_URLS_PER_SITEMAP);
 
         final ListeningExecutorService executor
@@ -109,7 +104,7 @@ public class SitemapGenerator {
                     .map(subURLs -> submitSubmapTask(subURLs, sitemapCnt, executor))
                     .collect(Collectors.toUnmodifiableList());
 
-            return Futures.getChecked(Futures.allAsList(futures), Exception.class);
+            return Futures.getChecked(Futures.allAsList(futures), RuntimeException.class);
         } finally {
             executor.shutdown();
         }

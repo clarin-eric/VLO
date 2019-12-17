@@ -1,7 +1,6 @@
 package eu.clarin.vlo.sitemap.services;
 
 import com.google.common.collect.Lists;
-import com.ximpleware.VTDException;
 
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.vlo.sitemap.gen.Config;
@@ -9,8 +8,6 @@ import eu.clarin.vlo.sitemap.pojo.Sitemap.URL;
 import static eu.clarin.vlo.sitemap.services.SolrHelpers.createSolrClient;
 import static eu.clarin.vlo.sitemap.services.SolrHelpers.getSolrResult;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -39,12 +36,12 @@ public class SolrRecordUrlsService {
         solrClient = createSolrClient(Config.SOLR_URL);
     }
 
-    public List<URL> getRecordURLS() throws VTDException, MalformedURLException, IOException {
+    public List<URL> getRecordURLS() {
         final List<Stream<String>> idStreams = collectRecordIdentifiers();
         return createRecordURLs(idStreams);
     }
 
-    private List<Stream<String>> collectRecordIdentifiers() throws RuntimeException {
+    private List<Stream<String>> collectRecordIdentifiers() {
         // collect ids
         final List<Stream<String>> idStreams = Collections.synchronizedList(Lists.newArrayList());
         queryAndProcess(createIdsQuery(), (response) -> {

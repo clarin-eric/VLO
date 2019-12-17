@@ -2,6 +2,7 @@ package eu.clarin.vlo.sitemap.gen;
 
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class Main {
             _logger.info("reading properties from {}", proprtiesFile);
             prop = new PropertiesConfiguration(proprtiesFile);
             //prop.load(new FileInputStream(proprtiesFile));
-        } catch (Exception e) {
+        } catch (ConfigurationException e) {
             throw new RuntimeException("Unable to read configuration file: " + proprtiesFile, e);
         }
 
@@ -46,10 +47,12 @@ public class Main {
         _logger.info("Started generating maps ... ");
         long startTime = System.currentTimeMillis();
 
-        gen.generateVLOSitemap();
-
-        long endTime = System.currentTimeMillis();
-        _logger.info("Duration: " + (endTime - startTime) + "ms");
+        try {
+            gen.generateVLOSitemap();
+        } finally {
+            long endTime = System.currentTimeMillis();
+            _logger.info("Duration: " + (endTime - startTime) + "ms");
+        }
     }
 
 }
