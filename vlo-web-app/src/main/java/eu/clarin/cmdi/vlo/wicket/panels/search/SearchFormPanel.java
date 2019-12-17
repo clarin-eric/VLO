@@ -21,8 +21,10 @@ import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+
 import java.util.Iterator;
 import java.util.Optional;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,7 +38,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 
@@ -72,7 +74,8 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
             if (recordCount == null || recordCount < 1) {
                 return "Search";
             } else {
-                return String.format("Search through %,d records", recordCount);
+                return String.format((new StringResourceModel("searchForm.searchThrough",
+                        this, getModel()).getString()), recordCount);
             }
         })));
 

@@ -220,7 +220,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         appTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
         pageTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
         final IModel<String> instanceInfoModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
-        
+
         add(new BootstrapFeedbackPanel("feedback"));
 
         add(new WebMarkupContainer("header")
@@ -254,7 +254,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         navbar.setBrandName(new StringResourceModel("vloMenuTitle", this).setModel(appTitleModel));
 
         // link to CLARIN website
-        final Component clarinLink = new NavbarExternalLink(Model.of("http://www.clarin.eu/")) {
+        final Component clarinLink = new NavbarExternalLink(new StringResourceModel("vloNavigation.projectPageUrl", this)) {
             @Override
             protected Component newLabel(String markupId) {
                 return super.newLabel(markupId).setEscapeModelStrings(false);
@@ -266,9 +266,12 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
         //add all menu compoennts
         navbar.addComponents(
-                new ImmutableNavbarComponent(new NavbarButton<>(FacetedSearchPage.class, Model.of("Search")).add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton<>(ContributorsPage.class, Model.of("Contributors")).add(new AttributeModifier("class", "contributors-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton<>(HelpPage.class, Model.of("Help")).add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, new StringResourceModel("vloNavigation.search", this))
+                        .add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(ContributorsPage.class, new StringResourceModel("vloNavigation.contributors", this))
+                        .add(new AttributeModifier("class", "contributors-link")), ComponentPosition.LEFT),
+                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, new StringResourceModel("vloNavigation.help", this))
+                        .add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;

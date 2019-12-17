@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <form wicket:id="options" id="advancedoptions">
                     <div >
                         <label>
-                            Multiple value selection behaviour: 
+                            <wicket:message key="selectionBehaviour">[Multiple value selection behaviour: ]</wicket:message>
                             <select wicket:id="selectionType">
                                 <option value="AND">And</option>
                                 <option value="OR">Or</option>
@@ -36,17 +36,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </div>
                     <div class="checkbox">
                         <label>
-                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/>Only include resources that support content search
+                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/><wicket:message key="onlyContentSearch">[Only include resources that support content search]</wicket:message>
                         </label>
                     </div>
                     <div class="checkbox" wicket:id="collectionsSection">
                         <label>
-                            <input wicket:id="collection" type="checkbox" id="onlycollections"/>Only include collection resources
+                            <input wicket:id="collection" type="checkbox" id="onlycollections"/><wicket:message key="onlyCollections">[Only include collection resources]</wicket:message>
                         </label>
                     </div>
                     <input type="submit" value="Apply" class="btn btn-default nonjsfallback" />
                 </form>
-                <a class="btn btn-default create-virtual-collection" wicket:id="vcrSubmitTrigger"><span class="glyphicon glyphicon-paperclip"></span> Create virtual collection from search results</a>
+                <a class="btn btn-default create-virtual-collection" wicket:id="vcrSubmitTrigger"><span class="glyphicon glyphicon-paperclip"></span> <wicket:message key="createVirtualCollection">[Create virtual collection from search results]</wicket:message></a>
             </div>
         </wicket:extend>
     </body>

@@ -270,7 +270,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
     private TabbedPanel createTabs(String id) {
         final List<ITab> tabs = new ArrayList<>(Collections.nCopies(TABS_ORDER.size(), null));
-        tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(Model.of("Record details")) {
+        tabs.set(TABS_ORDER.indexOf(DETAILS_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.details")) {
             @Override
             public Panel getPanel(String panelId) {
                 return new RecordDetailsPanel(panelId, getModel()) {
@@ -282,7 +282,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 };
             }
         });
-        tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(Model.of("Availability")) {
+        tabs.set(TABS_ORDER.indexOf(AVAILABILITY_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.availability")) {
             @Override
             public Panel getPanel(String panelId) {
                 final RecordLicenseInfoPanel availabilityPanel = new RecordLicenseInfoPanel(panelId, getModel());
@@ -305,7 +305,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 });
             }
         });
-        tabs.set(TABS_ORDER.indexOf(ALL_METADATA_SECTION), new AbstractTab(Model.of("All metadata")) {
+        tabs.set(TABS_ORDER.indexOf(ALL_METADATA_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.allMetadata")) {
             @Override
             public Panel getPanel(String panelId) {
                 final CmdiContentPanel cmdiPanel = new CmdiContentPanel(panelId, getModel());
@@ -313,7 +313,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 return cmdiPanel;
             }
         });
-        tabs.set(TABS_ORDER.indexOf(TECHNICAL_DETAILS_SECTION), new AbstractTab(Model.of("Technical details")) {
+        tabs.set(TABS_ORDER.indexOf(TECHNICAL_DETAILS_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.technicalDetails")) {
             @Override
             public Panel getPanel(String panelId) {
                 return new FieldsTablePanel(panelId, new DocumentFieldsProvider(getModel(), technicalPropertiesFilter, fieldOrder));
@@ -325,7 +325,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
             final IModel<Boolean> hasHierarchyModel = new RecordHasHierarchyModel(getModel());
 
-            tabs.set(TABS_ORDER.indexOf(HIERARCHY_SECTION), new AbstractTab(Model.of("Hierarchy")) {
+            tabs.set(TABS_ORDER.indexOf(HIERARCHY_SECTION), new AbstractTab(new StringResourceModel("recordpage.tabs.hierarchy")) {
                 @Override
                 public Panel getPanel(String panelId) {
                     return new HierarchyPanel(panelId, getModel());

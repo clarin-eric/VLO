@@ -64,6 +64,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.model.util.MapModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -111,7 +112,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
 
     @Override
     protected Label createTitleLabel(String id) {
-        return new Label(id, "Availability");
+        return new Label(id, new StringResourceModel("availabilityTitle"));
     }
 
     @Override

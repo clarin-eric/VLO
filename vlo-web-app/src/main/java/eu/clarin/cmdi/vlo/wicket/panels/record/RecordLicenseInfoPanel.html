@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <div wicket:id="availableInfo" class="recordLicenseInfo">
                 <p>
-                    The following information regarding <strong>availability and/or 
+                    <wicket:message key="availableInfo.extracted">[The following information regarding <strong>availability and/or
                         licencing</strong> has been extracted from the information 
-                    offered by the original provider:
+                        offered by the original provider:]</wicket:message>
                 </p>
                 <ul class="licenseAvailability panel panel-default">
                     <li class="license" wicket:id="license">
@@ -44,32 +44,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </ul>
                 </div>
                 <p>
-                    Please <strong>verify this information</strong> 
+                    <wicket:message key="availableInfo.verify">[Please <strong>verify this information</strong>
                     at the original source or contact the original provider
                     before using any of the resources or tools described on this
-                    page.
+                    page.]</wicket:message>
 
                     <span wicket:id="originalContext">
-                        You can usually find this information, or contact 
+                        <wicket:message key="originalContext.message">
+                        [You can usually find this information, or contact 
                         information, at
-                        <strong><a href="" wicket:id="landingPage">the original provider's page for this record</a></strong>.
+                        <strong>the original provider's page for this record</strong>.]
+                        <a wicket:id="landingPage" class="switch-from-simple"><wicket:message key="landingPage.linkText"/></a>
+                        </wicket:message>
                     </span>
                 </p>
             </div>
             <div wicket:id="noInfo" class="noRecordLicenseInfo">
                 <p>
-                    <strong>No information regarding availability and/or 
+                    <wicket:message key="availableInfo.noInfo">[<strong>No information regarding availability and/or
                     licencing</strong> has been extracted from the information 
                     offered by the original provider.
                     Before using any of the resources or tools described on this page, 
                     record, please <strong>check the information</strong> 
-                    at the original source or contact the original provider.
+                    at the original source or contact the original provider.]</wicket:message>
                 </p>
                 <p wicket:id="originalContext">
-                    In most cases, the best place to start looking for legal
+                    <wicket:message key="originalContext.message">
+                    [In most cases, the best place to start looking for legal
                     information regarding the described resources and/or tools
                     is at
-                    <strong><a href="" wicket:id="landingPage">the original provider's page for this record</a></strong>.
+                    <strong>the original provider's page for this record</strong>.]
+                    <a wicket:id="landingPage" class="switch-from-simple"><wicket:message key="landingPage.linkText"/></a>
+                    </wicket:message>
                 </p>
             </div>
         </wicket:panel>
