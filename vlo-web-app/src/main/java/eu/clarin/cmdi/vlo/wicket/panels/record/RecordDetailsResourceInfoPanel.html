@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
                 </a>
                 <wicket:container wicket:id="landingPagePidLabel"></wicket:container>
-                <div><span class="badge clarin-centre-content">Landing page</span></div>
+                <div><span class="badge clarin-centre-content"><wicket:message key="textLandingPage">[Landing page]</wicket:message></span></div>
             </div>
 
             <wicket:enclosure child="searchPage">
@@ -47,7 +47,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </span>
                     </a>
                     <wicket:container wicket:id="searchPagePidLabel"></wicket:container>
-                    <div><span class="badge clarin-centre-content">Search page</span></div>
+                    <div><span class="badge clarin-centre-content"><wicket:message key="textSearchPage">[Search page]</wicket:message></span></div>
                 </div>
             </wicket:enclosure>
 
@@ -58,7 +58,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <span class="resource-type-icon">                         
                                 <img src="images/icon-services-fcs.png" />
                             </span>
-                            <div><span class="badge clarin-core-service">Federated content search</span></div>
+                            <div><span class="badge clarin-core-service"><wicket:message key="textFCS">[Federated content search]</wicket:message></span></div>
                         </a>
                         <div class="searchserviceform">
                             <wicket:container wicket:id="fcsForm">[FCS form]</wicket:container>
@@ -91,7 +91,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <span class="resource-type-icon">                            
                         <span class="glyphicon glyphicon-folder-open"></span>
                     </span>
-                    <div><span class="badge"><wicket:container wicket:id="resourcesCount"></wicket:container> resources</span></div>
+                    <div><span class="badge"><wicket:container wicket:id="resourcesCount"></wicket:container> <wicket:message key="textResources">[resources]</wicket:message></span></div>
                 </a>
             </div>
 
@@ -100,7 +100,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <span class="resource-type-icon">                            
                         <span class="fa fa-sitemap"></span>
                     </span>
-                    <div><span class="badge">Linked records</span></div>
+                    <div><span class="badge"><wicket:message key="textLinkedRecords">[Linked records]</wicket:message></span></div>
                 </a>
             </div>
 
