@@ -94,7 +94,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         final IModel<Boolean> queryWithResultsModel = () -> !noQueryOrSelectionModel.getObject() && resultCountModel.getObject() > 0;
 
         //Showing all records (${} results)
-        add(new Label("searchInfoAll", new StringResourceModel("searchresults.showingAll", this, resultCountModel))
+        add(new Label("searchInfoAll", new StringResourceModel("searchresults.showingAll", this, new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, resultCountModel)))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(noQueryOrSelectionModel))
         );
         //No results for
@@ -102,7 +102,8 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 .add(BooleanVisibilityBehavior.visibleOnTrue(queryWithNoResultsModel))
         );
         //Showing {} to {} of {} results {} for
-        add(new Label("searchInfoResults", new StringResourceModel("searchresults.results.${pageMode}.${singular}.${selectionMode}", this, () -> new ResultPaginationInfo(this.resultsView, resultCountModel, emptyFacetSelectionModelModel)))
+        add(new Label("searchInfoResults", new StringResourceModel("searchresults.results.${pageMode}.${singular}.${selectionMode}", this,
+                () -> new ResultPaginationInfo(this.resultsView, resultCountModel, emptyFacetSelectionModelModel)))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(queryWithResultsModel))
         );
 
@@ -123,16 +124,14 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
             }
 
         };
+        final IModel<Boolean> duplicateResultsModel = () -> duplicateCountModel.getObject() > 0;
 
-        add(new Label("recordCount", new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, recordCountModel)));
-        add(new Label("duplicateCount", new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, duplicateCountModel)) {
-            @Override
-            protected void onConfigure() {
-                super.onConfigure();
-                setVisible(duplicateCountModel.getObject() > 0);
-            }
-
-        }
+        //Search results include {} records
+        add(new Label("searchResultsInclude", new StringResourceModel("searchresults.searchresultsInclude", this, new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, recordCountModel)))
+        );
+        //, of which ${duplicateCount} hidden because of duplicate naming
+        add(new Label("searchResultsIncludeDuplicates", new StringResourceModel("searchresults.searchresultsIncludeDuplicates", this, new FormattedStringModel<>(RECORD_COUNT_NUMBER_FORMAT, duplicateCountModel)))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(duplicateResultsModel))
         );
 
         //For Ajax updating of search results
@@ -398,8 +397,8 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
             return to;
         }
 
-        public long getCount() {
-            return count;
+        public String getCount() {
+            return String.format(RECORD_COUNT_NUMBER_FORMAT, count);
         }
 
         public String getPageMode() {
