@@ -23,12 +23,14 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.FormattedStringModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import static eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel.ITEMS_PER_PAGE_OPTIONS;
 import eu.clarin.cmdi.vlo.wicket.provider.FacetSelectionProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Locale;
@@ -55,6 +57,7 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
@@ -83,7 +86,26 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
         this.solrDocumentProvider = solrDocumentProvider;
         this.resultsView = resultsView;
 
-        add(createSearchInfoLabel("searchInfo"));
+        final IModel<Boolean> emptyFacetSelectionModelModel = () -> getModelObject().getSelection() == null || getModelObject().getSelection().isEmpty();
+        final IModel<Boolean> emptyQueryModel = () -> getModel().getObject().getQuery() == null || getModel().getObject().getQuery().isEmpty();
+        final IModel<Boolean> noQueryOrSelectionModel = () -> emptyQueryModel.getObject() && emptyFacetSelectionModelModel.getObject();
+        final IModel<Long> resultCountModel = () -> solrDocumentProvider.size();
+        final IModel<Boolean> queryWithNoResultsModel = () -> !noQueryOrSelectionModel.getObject() && resultCountModel.getObject() == 0;
+        final IModel<Boolean> queryWithResultsModel = () -> !noQueryOrSelectionModel.getObject() && resultCountModel.getObject() > 0;
+
+        //Showing all records (${} results)
+        add(new Label("searchInfoAll", new StringResourceModel("searchresults.showingAll", this, resultCountModel))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(noQueryOrSelectionModel))
+        );
+        //No results for
+        add(new Label("searchInfoNoResults", new StringResourceModel("searchresults.noResults"))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(queryWithNoResultsModel))
+        );
+        //Showing {} to {} of {} results {} for
+        add(new Label("searchInfoResults", new StringResourceModel("searchresults.results.${pageMode}.${singular}.${selectionMode}", this, () -> new ResultPaginationInfo(this.resultsView, resultCountModel, emptyFacetSelectionModelModel)))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(queryWithResultsModel))
+        );
+
         add(createQuerySelectionItems("querySelection"));
 
         // form to select number of results per page
@@ -115,33 +137,6 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
 
         //For Ajax updating of search results
         setOutputMarkupId(true);
-    }
-
-    private Label createSearchInfoLabel(String id) {
-        return new Label(id, new IModel<>() {
-            @Override
-            public String getObject() {
-                final QueryFacetsSelection selection = getModel().getObject();
-                final Map<String, FacetSelection> facetSelection = selection.getSelection();
-                final boolean emptyFacetSelection = facetSelection == null || facetSelection.isEmpty();
-                final boolean emptyQuery = selection.getQuery() == null || selection.getQuery().isEmpty();
-                final long resultCount = solrDocumentProvider.size();
-
-                if (emptyQuery && emptyFacetSelection) {
-                    return String.format("Showing all records (%,d results)", resultCount);
-                } else {
-                    final long firstShown = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
-                    final long lastShown = Math.min(resultsView.getItemCount(), firstShown + resultsView.getItemsPerPage() - 1);
-                    return String.format(
-                            String.format("%s%s",
-                                    resultCount == 0 ? "No results"
-                                            : String.format("Showing %s %,d results",
-                                                    (resultsView.getPageCount() <= 1) ? "" : String.format("%,d to %,d of ", firstShown, lastShown), resultCount),
-                                    emptyFacetSelection ? "" : " within selection")
-                    );
-                }
-            }
-        });
     }
 
     private Component createQuerySelectionItems(String id) {
@@ -373,6 +368,50 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 }
             }
             return string;
+        }
+
+    };
+
+    public final class ResultPaginationInfo implements Serializable {
+
+        private final long from;
+        private final long to;
+        private final long count;
+        private final String pageMode;
+        private final String selectionMode;
+        private final String singular;
+
+        public ResultPaginationInfo(AbstractPageableView<SolrDocumentExpansionPair> resultsView, IModel<Long> resultSize, IModel<Boolean> emptyFacetSelectionModelModel) {
+            from = 1 + resultsView.getCurrentPage() * resultsView.getItemsPerPage();
+            to = Math.min(resultsView.getItemCount(), from + resultsView.getItemsPerPage() - 1);
+            this.count = resultSize.getObject();
+            this.pageMode = Optional.ofNullable(resultsView.getPageCount()).orElse(2L) > 1 ? "multipage" : "onepage";
+            this.selectionMode = Optional.ofNullable(emptyFacetSelectionModelModel.getObject()).orElse(true) ? "withoutselection" : "withinselection";
+            this.singular = count == 1 ? "singular" : "plural";
+        }
+
+        public long getFrom() {
+            return from;
+        }
+
+        public long getTo() {
+            return to;
+        }
+
+        public long getCount() {
+            return count;
+        }
+
+        public String getPageMode() {
+            return pageMode;
+        }
+
+        public String getSelectionMode() {
+            return selectionMode;
+        }
+
+        public String getSingular() {
+            return singular;
         }
 
     };
