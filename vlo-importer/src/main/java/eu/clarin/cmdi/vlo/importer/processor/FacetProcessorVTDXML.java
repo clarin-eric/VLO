@@ -279,19 +279,20 @@ public class FacetProcessorVTDXML implements FacetProcessor {
         boolean removeSourceValue = false;
 
         final List<String> postProcessed = postProcess(facetConfig.getName(), valueLanguagePair.getLeft(), facetValuesMap);
-        
+
         if (facetConfig.getConditionTargetSet() != null) {
 
             if (this.postProcessors.containsKey(facetConfig.getName()) && !(this.postProcessors
                     .get(facetConfig.getName()) instanceof AbstractPostNormalizerWithVocabularyMap)) {
                 for (String postProcessedValue : postProcessed) {
                     for (TargetFacet target : facetConfig.getConditionTargetSet().getTargetsFor(postProcessedValue)) {
-                        removeSourceValue |= target.getRemoveSourceValue();
+                        if (target != null) {
+                            removeSourceValue |= target.getRemoveSourceValue();
 
-                        ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), false, true);
+                            ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), false, true);
 
-                        setTargetValue(facetValuesMap, valueSet);
-
+                            setTargetValue(facetValuesMap, valueSet);
+                        }
                     }
 
                 }
@@ -338,8 +339,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
     private void setTargetValue(FacetValuesMap facetValuesMap, ValueSet valueSet) {
         if (valueSet.getTargetFacet().getOverrideExistingValues()) {
             facetValuesMap.put(valueSet.getTargetFacetName(), Lists.newArrayList(valueSet));
-        }
-        else {
+        } else {
             final List<ValueSet> existingValueSets = Optional.ofNullable(
                     facetValuesMap.get(valueSet.getTargetFacetName()))
                     .orElse(new ArrayList<>());
