@@ -29,6 +29,7 @@ import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 import eu.clarin.vlo.sitemap.services.SolrRecordUrlsService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -94,6 +95,8 @@ public class SitemapGenerator {
                         Executors.newFixedThreadPool(
                                 Runtime.getRuntime().availableProcessors()));
 
+        final Executor callbackExecutor = Executors.newSingleThreadExecutor();
+
         try {
             final Stream<List<URL>> urlListsStream
                     = StreamSupport.stream(
@@ -102,15 +105,18 @@ public class SitemapGenerator {
 
             final AtomicInteger sitemapCnt = new AtomicInteger(1);
             final List<ListenableFuture<String>> futures = urlListsStream
-                    .map(subURLs -> submitSubmapTask(subURLs, sitemapCnt, executor))
+                    .map(subURLs -> submitSubmapTask(subURLs, sitemapCnt, executor, callbackExecutor))
                     .collect(Collectors.toUnmodifiableList());
 
-            return Futures.getChecked(Futures.allAsList(futures), RuntimeException.class);
+            return Futures.getUnchecked(Futures.allAsList(futures));
         } finally {
             try {
-                if (!executor.awaitTermination(10, TimeUnit.MINUTES)) {
-                    _logger.warn("Timed out while waiting for executor to terminate");
-                    executor.shutdown();
+                executor.shutdown();
+                if (!executor.isTerminated()) {
+                    _logger.info("Waiting for sitemap generation to complete...");
+                    if (!executor.awaitTermination(5, TimeUnit.MINUTES)) {
+                        _logger.warn("Timed out while waiting for executor to terminate");
+                    }
                 }
             } catch (InterruptedException ex) {
                 _logger.warn("Interrupted while waiting for executor to terminate");
@@ -118,7 +124,7 @@ public class SitemapGenerator {
         }
     }
 
-    private ListenableFuture<String> submitSubmapTask(List<URL> subURLs, AtomicInteger sitemapCnt, ListeningExecutorService executor) {
+    private ListenableFuture<String> submitSubmapTask(List<URL> subURLs, AtomicInteger sitemapCnt, ListeningExecutorService executor, Executor callbackExecutor) {
         final String sitemapName = Config.SITEMAP_NAME_PREFIX + sitemapCnt.getAndIncrement();
 
         final ListenableFuture<String> submapFuture = executor.submit(() -> {
@@ -130,7 +136,7 @@ public class SitemapGenerator {
             return sitemapFilename;
         });
 
-        Futures.addCallback(submapFuture, new SitemapTaskCallback(sitemapName, subURLs), executor);
+        Futures.addCallback(submapFuture, new SitemapTaskCallback(sitemapName, subURLs), callbackExecutor);
 
         return submapFuture;
     }
