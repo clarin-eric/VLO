@@ -29,6 +29,7 @@ import eu.clarin.vlo.sitemap.pojo.SitemapIndex;
 import eu.clarin.vlo.sitemap.services.SolrRecordUrlsService;
 import eu.clarin.vlo.sitemap.services.SitemapIndexMarshaller;
 import eu.clarin.vlo.sitemap.services.SitemapMarshaller;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -106,7 +107,14 @@ public class SitemapGenerator {
 
             return Futures.getChecked(Futures.allAsList(futures), RuntimeException.class);
         } finally {
-            executor.shutdown();
+            try {
+                if (!executor.awaitTermination(10, TimeUnit.MINUTES)) {
+                    _logger.warn("Timed out while waiting for executor to terminate");
+                    executor.shutdown();
+                }
+            } catch (InterruptedException ex) {
+                _logger.warn("Interrupted while waiting for executor to terminate");
+            }
         }
     }
 
