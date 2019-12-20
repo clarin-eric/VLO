@@ -258,6 +258,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
             super(id, pageLinksModel);
             this.label = label;
             this.icon = icon;
+            setReuseItems(true);
         }
 
         @Override
