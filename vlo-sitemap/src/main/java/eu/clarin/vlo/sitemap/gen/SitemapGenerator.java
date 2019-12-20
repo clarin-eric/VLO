@@ -95,7 +95,7 @@ public class SitemapGenerator {
                         Executors.newFixedThreadPool(
                                 Runtime.getRuntime().availableProcessors()));
 
-        final Executor callbackExecutor = Executors.newSingleThreadExecutor();
+        final ListeningExecutorService callbackExecutor = MoreExecutors.listeningDecorator(Executors.newSingleThreadExecutor());
 
         try {
             final Stream<List<URL>> urlListsStream
@@ -118,6 +118,7 @@ public class SitemapGenerator {
                         _logger.warn("Timed out while waiting for executor to terminate");
                     }
                 }
+                callbackExecutor.shutdownNow();
             } catch (InterruptedException ex) {
                 _logger.warn("Interrupted while waiting for executor to terminate");
             }
