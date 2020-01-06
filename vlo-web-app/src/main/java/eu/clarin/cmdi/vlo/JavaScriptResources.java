@@ -42,9 +42,9 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference HISTORY_API = new JavaScriptResourceReference(HistoryApiAjaxRequestTargetListener.class, "vlo-historyapi.js");
 
     private final static ResourceReference BOOTSTRAP_TOC = new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js");
-    private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tourist.js");
+    private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tourist.js", false);
 
-    private final static ResourceReference CLIPBOARD_JS = new ContextRelativeResourceReference("assets/clipboardjs/dist/clipboard.min.js");
+    private final static ResourceReference CLIPBOARD_JS = new ContextRelativeResourceReference("assets/clipboardjs/dist/clipboard.js");
 
     public static ResourceReference getBootstrapJS() {
         return BOOTSTRAP;
