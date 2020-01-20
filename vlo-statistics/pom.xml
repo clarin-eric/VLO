@@ -45,7 +45,7 @@
             <!-- don't create jar, leave this to maven-assembly-->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>default-jar</id>
@@ -55,7 +55,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.5.5</version>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>build-jar-with-dependencies</id>

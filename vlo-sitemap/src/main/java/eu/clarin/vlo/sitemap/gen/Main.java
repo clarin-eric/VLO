@@ -38,7 +38,7 @@ public class Main {
         Config.SOLR_PASS = prop.getString("SOLR_PASS");
         Config.SOLR_URL = prop.getString("SOLR_URL");
         Config.INCLUDE_URLS = ImmutableList.copyOf(prop.getStringArray("INCLUDE_URLS"));
-        Config.SOLR_REQUEST_PAGE_SIZE = Integer.parseInt(prop.getString("SOLR_REQUEST_PAGE_SIZE"));
+        Config.SOLR_REQUEST_PAGE_SIZE = prop.getInt("SOLR_REQUEST_PAGE_SIZE");
 
         _logger.info("properties were successfully read");
 
