@@ -1,22 +1,22 @@
 <dataRoots>
-    <DataRoot ignoreHierarchyDirs="COllections_de_COrpus_Oraux_Numeriques_CoCoON_ex_CRDO_,Oxford_Text_Archive,Berlin_Brandenburg_Academy_of_Sciences_and_Humanities_BBAW_,Nederands_Instituut_voor_Beeld_en_Geluid_OAI_PMH_repository,LINDAT_CLARIN_digital_library_at_the_Institute_of_Formal_and_Applied_Linguistics_Charles_University_in_Prague">
+    <DataRoot ignoreHierarchyDirs="ARCHE,CEDIFOR_OAI_Repository,Center_of_Estonian_Language_Resources,CLARIN_DK_UCPH_Centre_Repository,CLARIN_DK_UCPH_Repository,CLARIN_PL_digital_repository,CLARIN_Virtual_Collection_Registry,CLST,DANS_CMDI_Provider,DARIAH_DE_Repository,Endangered_Languages_Archive,IULA_UPF_OAI_Archive,Language_Bank_of_Finland,MMSH_Phonotheque,ORTOLANG_Repository,Speech_and_Language_Data_Repository_SLDR_ORTOLANG_,Tubingen_Archive_of_Language_Resources_TALAR_,COllections_de_COrpus_Oraux_Numeriques_CoCoON_ex_CRDO_,Oxford_Text_Archive,Berlin_Brandenburg_Academy_of_Sciences_and_Humanities_BBAW_,Nederands_Instituut_voor_Beeld_en_Geluid_OAI_PMH_repository,LINDAT_CLARIN_digital_library_at_the_Institute_of_Formal_and_Applied_Linguistics_UFAL_Faculty_of_Mathematics_and_Physics_Charles_University">
         <originName>CLARIN Centres</originName>
         <rootFile>/srv/vlo-data/clarin/results/cmdi/</rootFile>
-        <prefix>http://beta-vlo.clarin.eu/data/</prefix>
+        <prefix>https://beta-vlo.clarin.eu/data/</prefix>
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
     <DataRoot processHierarchyDirs="NONE">
         <originName>Other</originName>
         <rootFile>/srv/vlo-data/others/results/cmdi/</rootFile>
-        <prefix>http://beta-vlo.clarin.eu/data/</prefix>
+        <prefix>https://beta-vlo.clarin.eu/data/</prefix>
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
     <DataRoot processHierarchyDirs="NONE">
         <originName>Europeana</originName>
         <rootFile>/srv/vlo-data/europeana/results/cmdi/</rootFile>
-        <prefix>http://beta-vlo.clarin.eu/data/</prefix>
+        <prefix>https://beta-vlo.clarin.eu/data/</prefix>
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
