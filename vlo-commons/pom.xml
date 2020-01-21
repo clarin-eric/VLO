@@ -20,8 +20,8 @@
         <!-- default config values -->
         <vloconfig.deleteAllFirst>true</vloconfig.deleteAllFirst>
         <vloconfig.maxDaysInSolr>0</vloconfig.maxDaysInSolr>
-        <vloconfig.homeUrl>http://www.clarin.eu/vlo</vloconfig.homeUrl>
-        <vloconfig.helpUrl>http://www.clarin.eu/vlo</vloconfig.helpUrl>
+        <vloconfig.homeUrl>https://www.clarin.eu/vlo</vloconfig.homeUrl>
+        <vloconfig.helpUrl>https://www.clarin.eu/vlo</vloconfig.helpUrl>
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
         <vloconfig.availabilityStatusUpdaterBatchSize>25</vloconfig.availabilityStatusUpdaterBatchSize>
@@ -46,7 +46,7 @@
         <vloconfig.feedbackFromUrl>http://www.clarin.eu/node/3759?url=</vloconfig.feedbackFromUrl>
         <vloconfig.federatedContentSearchUrl>https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/</vloconfig.federatedContentSearchUrl>
         <vloconfig.lrSwitchboardBaseUrl>https://switchboard.clarin.eu/</vloconfig.lrSwitchboardBaseUrl>
-        <vloconfig.vcrSubmitEndpoint>https://clarin.ids-mannheim.de/vcr/service/submit</vloconfig.vcrSubmitEndpoint>
+        <vloconfig.vcrSubmitEndpoint>https://collections.clarin.eu/app/submit/extensional</vloconfig.vcrSubmitEndpoint>
         <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
         <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
         <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
