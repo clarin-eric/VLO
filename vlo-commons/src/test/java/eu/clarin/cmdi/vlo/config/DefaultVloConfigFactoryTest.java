@@ -421,7 +421,7 @@ public class DefaultVloConfigFactoryTest {
      */
     @Test
     public void testGetFeedbackFromUrl() {
-        String expResult = "http://www.clarin.eu/node/3759?url=";
+        String expResult = "https://www.clarin.eu/node/3759?url=";
         String result = config.getFeedbackFromUrl();
         assertEquals(expResult, result);
     }
@@ -693,7 +693,7 @@ public class DefaultVloConfigFactoryTest {
 
     @Test
     public void testGetVcrSubmitEndpoint() {
-        assertEquals("https://clarin.ids-mannheim.de/vcr/service/submit", config.getVcrSubmitEndpoint());
+        assertEquals("https://collections.clarin.eu/app/submit/extensional", config.getVcrSubmitEndpoint());
     }
 
     @Test
