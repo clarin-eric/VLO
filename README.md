@@ -26,7 +26,7 @@ For more information, see the [wiki page](https://trac.clarin.eu/wiki/CmdiVirtua
 	Instructions on how to upgrade an existing VLO installation
 - [CHANGES](CHANGES.txt)
 	A list of changes per release
-- [COPYING](COPYING.txt)
+- [COPYING](LICENSE.md)
 	Licensing information
 	
 # Building
