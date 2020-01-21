@@ -18,7 +18,7 @@
 
 #configuration
 APP_NAME="vlo"
-MAVEN_IMAGE="maven:3.6.2-jdk-11-slim"
+MAVEN_IMAGE="maven:3.6.3-jdk-11-slim"
 CLEAN_CACHE=${CLEAN_CACHE:-false}
 
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
@@ -90,7 +90,7 @@ docker_run() {
 		-e MAVEN_CONFIG="${MAVEN_CONFIG_DIR}" \
 		-v "${JAVA_SRC_DIR}":/var/src  \
 		-w /var/src \
-		"${MAVEN_IMAGE}" mvn clean install ${MAVEN_OPTS}
+		"${MAVEN_IMAGE}" ${MAVEN_CMD}
 }
 
 # Execute main
