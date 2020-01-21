@@ -16,6 +16,13 @@
         <name>CLARIN</name>
         <url>http://www.clarin.eu</url>
     </organization>
+    <url>https://vlo.clarin.eu</url>
+    
+    <scm>
+        <connection>scm:git:ssh://git@github.com:clarin-eric/VLO.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:clarin-eric/VLO.git</developerConnection>
+        <url>https://github.com/clarin-eric/VLO</url>
+    </scm>
 
     <modules>
         <module>vlo-solr</module>
@@ -174,4 +181,10 @@
             <url>https://nexus.clarin.eu/content/repositories/Clarin</url>
         </repository>
     </distributionManagement>
+    
+    <ciManagement>
+        <system>travis</system>
+        <url>https://travis-ci.org/clarin-eric/VLO</url>
+        <notifiers />
+    </ciManagement>
 </project>
