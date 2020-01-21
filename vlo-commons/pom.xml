@@ -13,7 +13,6 @@
     <artifactId>vlo-commons</artifactId>
     <version>4.8-SNAPSHOT</version>
     <name>VLO Commons</name>
-    <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -43,7 +42,7 @@
         <!-- external service URLs -->
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
         <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
-        <vloconfig.feedbackFromUrl>http://www.clarin.eu/node/3759?url=</vloconfig.feedbackFromUrl>
+        <vloconfig.feedbackFromUrl>https://www.clarin.eu/node/3759?url=</vloconfig.feedbackFromUrl>
         <vloconfig.federatedContentSearchUrl>https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/</vloconfig.federatedContentSearchUrl>
         <vloconfig.lrSwitchboardBaseUrl>https://switchboard.clarin.eu/</vloconfig.lrSwitchboardBaseUrl>
         <vloconfig.vcrSubmitEndpoint>https://collections.clarin.eu/app/submit/extensional</vloconfig.vcrSubmitEndpoint>
