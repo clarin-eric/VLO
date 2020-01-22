@@ -1,6 +1,6 @@
 Bug fixes and new features
 --------------------------
-VLO 4.8 (January 2020)
+VLO 4.8.0 (January 2020)
 
 * Creator information is displayed for records that provide this information
     <https://github.com/clarin-eric/VLO/issues/152>
