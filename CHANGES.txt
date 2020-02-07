@@ -1,5 +1,9 @@
 Bug fixes and new features
 --------------------------
+VLO 4.8.1 (February 2021)
+* Upper bound for number of collections sent to statistics reporting
+    <https://github.com/clarin-eric/VLO/issues/289>
+
 VLO 4.8.0 (January 2020)
 
 * Creator information is displayed for records that provide this information
