@@ -16,8 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
-import eu.clarin.cmdi.rasa.links.CheckedLink;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -40,7 +42,11 @@ public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabili
     }
 
     @Override
-    public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
-        return checkedLinkResource.get(hrefs.collect(Collectors.toSet()), Optional.empty());
+    public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) throws IOException {
+        try {
+            return checkedLinkResource.get(hrefs.collect(Collectors.toSet()), Optional.empty());
+        } catch (SQLException ex) {
+            throw new IOException("Could not retrieve link status", ex);
+        }
     }
 }

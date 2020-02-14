@@ -19,7 +19,7 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
-import eu.clarin.cmdi.rasa.links.CheckedLink;
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
@@ -99,10 +99,10 @@ public class AvailabilityStatusUpdater {
         final SolrQuery recordsQuery = new SolrQuery("*:*");
         recordsQuery.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
 
-        if(solrRequestPageSize <= 0) {
+        if (solrRequestPageSize <= 0) {
             throw new IllegalArgumentException("AvailabilityStatusUpdaterBatchSize parameter must have a positive non-zero value!");
         }
-        
+
         if (logger.isInfoEnabled()) {
             // Get result count
             recordsQuery.setRows(0);
@@ -124,7 +124,14 @@ public class AvailabilityStatusUpdater {
             logger.debug("Records retrieved", pageSize);
 
             //update all of the documents (parallel stream)
-            result.parallelStream().forEach(this::checkAndUpdateRecord);
+            result.parallelStream().forEach((doc) -> {
+                try {
+                    this.checkAndUpdateRecord(doc);
+                } catch (IOException ex) {
+                    logger.error("Error while checking/updating availability status for document {}", doc.getFieldValue(ID_FIELD), ex);
+                    throw new RuntimeException("Error while checking/updating availability status", ex);
+                }
+            });
 
             solrCommit();
 
@@ -167,7 +174,7 @@ public class AvailabilityStatusUpdater {
         }
     }
 
-    private void checkAndUpdateRecord(SolrDocument doc) {
+    private void checkAndUpdateRecord(SolrDocument doc) throws IOException {
         final Object docId = doc.getFieldValue(ID_FIELD);
         logger.debug("Current document: {}", docId);
 
@@ -249,7 +256,7 @@ public class AvailabilityStatusUpdater {
                 }
             } else {
                 if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp(), oldInfo.getLastChecked())) {
-                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp());
+                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp().getTime());
 
                     logger.info("Info changed for {} => {}", oldInfo, newInfo);
                     changes.incrementAndGet();

@@ -4,9 +4,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoDatabase;
 import eu.clarin.cmdi.rasa.helpers.impl.ACDHRasaFactory;
 import eu.clarin.cmdi.rasa.linkResources.impl.ACDHCheckedLinkResource;
 import java.io.File;
@@ -134,12 +131,14 @@ public class MetadataImporter {
     public static class DefaultResourceAvailabilityFactory {
 
         public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
-            final String mongoConnectionString = config.getLinkCheckerMongoConnectionString();
-            final String mongoDbName = config.getLinkCheckerMongoDbName();
+            String rasaDbUri = ""; //=config.get...();
+            String rasaDbUser = ""; //=config.get...();
+            String rasaDbName = ""; //=config.get...();
 
-            if (!Strings.isNullOrEmpty(mongoConnectionString) && !Strings.isNullOrEmpty(mongoDbName)) {
-                LOG.debug("Connecting to Mongo database '{}' for link checker information", mongoDbName);
-                final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
+            if (!Strings.isNullOrEmpty(rasaDbUri)) {
+                LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
+                //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
+                final ACDHRasaFactory factory = new ACDHRasaFactory(rasaDbUri, rasaDbUser, rasaDbName);
                 final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
                 return new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
             } else {

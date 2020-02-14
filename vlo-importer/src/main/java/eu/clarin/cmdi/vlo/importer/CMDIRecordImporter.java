@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
-import eu.clarin.cmdi.rasa.links.CheckedLink;
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -187,22 +188,26 @@ public class CMDIRecordImporter<T> {
         // add landing page resource
         final List<Resource> landingPageResources = cmdiData.getLandingPageResources();
         if (!landingPageResources.isEmpty()) {
-            // get link status information
-            final Map<String, CheckedLink> linkStatusForLandingPages = availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName));
-            landingPageResources.forEach((resource) -> {
-                final String url = resource.getResourceName();
-                if (url != null) {
-                    final Optional<CheckedLink> landingPageStatus = Optional.ofNullable(linkStatusForLandingPages.get(url));
-                    //create resource info object representation
-                    final String landingPageValue = new ResourceInfo(
-                            url,
-                            resource.getMimeType(),
-                            landingPageStatus.map(CheckedLink::getStatus).orElse(null),
-                            landingPageStatus.map(CheckedLink::getTimestamp).orElse(null))
-                            .toJson(objectMapper);
-                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
-                }
-            });
+            try {
+                // get link status information
+                final Map<String, CheckedLink> linkStatusForLandingPages = availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName));
+                landingPageResources.forEach((resource) -> {
+                    final String url = resource.getResourceName();
+                    if (url != null) {
+                        final Optional<CheckedLink> landingPageStatus = Optional.ofNullable(linkStatusForLandingPages.get(url));
+                        //create resource info object representation
+                        final String landingPageValue = new ResourceInfo(
+                                url,
+                                resource.getMimeType(),
+                                landingPageStatus.map(CheckedLink::getStatus).orElse(null),
+                                landingPageStatus.map(CheckedLink::getTimestamp).map(Timestamp::getTime).orElse(null))
+                                .toJson(objectMapper);
+                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
+                    }
+                });
+            } catch (IOException ex) {
+                LOG.error("Error while checking resource availability for {}", file, ex);
+            }
         }
 
         // add search page resource
@@ -263,32 +268,36 @@ public class CMDIRecordImporter<T> {
         final List<Resource> resources = cmdiData.getDataResources();
         final List<Resource> landingPages = cmdiData.getLandingPageResources();
 
-        final Map<String, CheckedLink> linkStatusMap
-                = availabilityChecker.getLinkStatusForRefs(
-                        Streams
-                                .concat(resources.stream(), landingPages.stream())
-                                .map(Resource::getResourceName));
+        try {
+            final Map<String, CheckedLink> linkStatusMap
+                    = availabilityChecker.getLinkStatusForRefs(
+                            Streams
+                                    .concat(resources.stream(), landingPages.stream())
+                                    .map(Resource::getResourceName));
 
-        for (int i = 0; i < resources.size(); i++) {
-            final String fieldValue;
-            if (fieldValues != null && i < fieldValues.size()) {
-                fieldValue = fieldValues.get(i).toString();
-            } else {
-                fieldValue = null;
+            for (int i = 0; i < resources.size(); i++) {
+                final String fieldValue;
+                if (fieldValues != null && i < fieldValues.size()) {
+                    fieldValue = fieldValues.get(i).toString();
+                } else {
+                    fieldValue = null;
+                }
+
+                final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resources.get(i), fieldValue);
+
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
+
+                // TODO check should probably be moved into Solr (by using some minimum length filter)
+                if (!Strings.isNullOrEmpty(resourceInfo.getType())) {
+                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), resourceInfo.getType(), true);
+                }
             }
 
-            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resources.get(i), fieldValue);
-
-            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
-
-            // TODO check should probably be moved into Solr (by using some minimum length filter)
-            if (!Strings.isNullOrEmpty(resourceInfo.getType())) {
-                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), resourceInfo.getType(), true);
-            }
+            final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap, resources.size() + landingPages.size());
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false);
+        } catch (IOException ex) {
+            LOG.error("Error while determining resource availability score for document {}", cmdiData.getId(), ex);
         }
-
-        final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap, resources.size() + landingPages.size());
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false);
 
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
@@ -309,7 +318,7 @@ public class CMDIRecordImporter<T> {
 
         return new ResourceInfo(resource.getResourceName(), postProcessedMimeType,
                 linkStatus.map(CheckedLink::getStatus).orElse(null),
-                linkStatus.map(CheckedLink::getTimestamp).orElse(null)
+                linkStatus.map(CheckedLink::getTimestamp).map(Timestamp::getTime).orElse(null)
         );
 
     }

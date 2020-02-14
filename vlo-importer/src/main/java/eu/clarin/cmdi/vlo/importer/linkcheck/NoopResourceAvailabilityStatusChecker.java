@@ -16,8 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import eu.clarin.cmdi.rasa.links.CheckedLink;
-import java.net.URI;
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;

@@ -16,7 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import eu.clarin.cmdi.rasa.links.CheckedLink;
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
+import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -26,5 +27,5 @@ import java.util.stream.Stream;
  */
 public interface ResourceAvailabilityStatusChecker {
 
-    Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs);
+    Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) throws IOException;
 }

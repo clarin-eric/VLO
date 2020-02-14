@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.google.common.base.Predicates;
-import eu.clarin.cmdi.rasa.links.CheckedLink;
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import java.util.Collection;
 import java.util.Map;

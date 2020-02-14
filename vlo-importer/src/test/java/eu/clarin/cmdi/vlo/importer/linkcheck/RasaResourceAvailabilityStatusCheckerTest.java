@@ -17,9 +17,11 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
-import eu.clarin.cmdi.rasa.links.CheckedLink;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.List;
@@ -63,12 +65,12 @@ public class RasaResourceAvailabilityStatusCheckerTest {
             }
 
             @Override
-            public CheckedLink get(String uri) {
+            public Optional<CheckedLink> get(String uri) {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
 
             @Override
-            public Stream<CheckedLink> getHistory(String uri, CheckedLinkResource.Order order, Optional<CheckedLinkFilter> filter) {
+            public List<CheckedLink> getHistory(String url, CheckedLinkResource.Order order) throws SQLException {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
 
@@ -78,22 +80,28 @@ public class RasaResourceAvailabilityStatusCheckerTest {
             }
 
             @Override
-            public List<String> getCollectionNames() {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Boolean save(CheckedLink cl) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public CheckedLink get(String string, String string1) {
+            public Boolean save(CheckedLink checkedLink) throws SQLException {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
 
             @Override
             public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl, int i, int i1) {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public Optional<CheckedLink> get(String url, String collection) throws SQLException {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public Boolean delete(String url) throws SQLException {
+                throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+
+            @Override
+            public Boolean saveToHistory(CheckedLink checkedLink) throws SQLException {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
         };
@@ -112,7 +120,7 @@ public class RasaResourceAvailabilityStatusCheckerTest {
      * RasaResourceAvailabilityStatusChecker.
      */
     @Test
-    public void testGetLinkStatusForRefs() {
+    public void testGetLinkStatusForRefs() throws IOException {
         System.out.println("getLinkStatusForRefs");
         Stream<String> hrefs = Stream.of("http://uri3", "http://uri2", "http://uri1");
         Map<String, CheckedLink> result = instance.getLinkStatusForRefs(hrefs);
