@@ -68,8 +68,9 @@
                 <xs:element name="centreRegistryOaiPmhEndpointsListJsonUrl" type="xs:string" />
                 <xs:element name="otherProvidersMarkupFile" type="xs:string" />
                 <xs:element name="lrSwitchboardBaseUrl" type="xs:string" />
-                <xs:element name="linkCheckerMongoDbName" type="xs:string" />
-                <xs:element name="linkCheckerMongoConnectionString" type="xs:string" />
+                <xs:element name="linkCheckerDbConnectionString" type="xs:string" />
+                <xs:element name="linkCheckerDbUser" type="xs:string" />
+                <xs:element name="linkCheckerDbPassword" type="xs:string" />
                 <xs:element name="showResultScores" type="xs:string" />
                 <xs:element name="processHierarchies" type="xs:string" />
                 <xs:element ref="signatureFields" />

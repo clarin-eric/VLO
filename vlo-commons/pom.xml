@@ -37,8 +37,9 @@
         <vloconfig.vloExposureUsername>postgres</vloconfig.vloExposureUsername>
         <vloconfig.vloExposurePassword>postgres</vloconfig.vloExposurePassword>
         <!-- link checker database connection -->
-        <vloconfig.linkCheckerMongoDbName>linkchecker</vloconfig.linkCheckerMongoDbName>
-        <vloconfig.linkCheckerMongoConnectionString>mongo:test123</vloconfig.linkCheckerMongoConnectionString>
+        <vloconfig.linkCheckerDbConnectionString>jdbc:mysql://localhost:3307/linkchecker</vloconfig.linkCheckerDbConnectionString>
+        <vloconfig.linkCheckerDbUser>linkchecker</vloconfig.linkCheckerDbUser>
+        <vloconfig.linkCheckerDbPassword>linkchecker</vloconfig.linkCheckerDbPassword>
         <!-- external service URLs -->
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
         <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
@@ -175,8 +176,9 @@
                 <vloconfig.solrUserReadOnlyPass>${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}</vloconfig.solrUserReadOnlyPass>
                 <vloconfig.solrUserReadWrite>${VLO_DOCKER_SOLR_USER_READ_WRITE}</vloconfig.solrUserReadWrite>
                 <vloconfig.solrUserReadWritePass>${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}</vloconfig.solrUserReadWritePass>
-                <vloconfig.linkCheckerMongoDbName>${VLO_DOCKER_LINK_CHECKER_MONGO_DB_NAME}</vloconfig.linkCheckerMongoDbName>
-                <vloconfig.linkCheckerMongoConnectionString>${VLO_DOCKER_LINK_CHECKER_MONGO_DB_CONNECTION_STRING}</vloconfig.linkCheckerMongoConnectionString>
+                <vloconfig.linkCheckerDbConnectionString>${VLO_DOCKER_LINK_CHECKER_DB_CONNECTION_STRING}</vloconfig.linkCheckerDbConnectionString>
+                <vloconfig.linkCheckerDbUser>${VLO_DOCKER_LINK_CHECKER_DB_USER}</vloconfig.linkCheckerDbUser>
+                <vloconfig.linkCheckerDbPassword>${VLO_DOCKER_LINK_CHECKER_DB_PASSWORD}</vloconfig.linkCheckerDbPassword>                
                 <vloconfig.centreRegistryCentresListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_CENTRES_LIST_JSON_URL}</vloconfig.centreRegistryCentresListJsonUrl>
                 <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_OAI_PMH_ENDPOINTS_LIST_JSON_URL}</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
                 <vloConfig.otherProvidersMarkupFile>${VLO_DOCKER_OTHER_PROVIDERS_MARKUP_FILE}</vloConfig.otherProvidersMarkupFile>

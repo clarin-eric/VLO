@@ -131,9 +131,9 @@ public class MetadataImporter {
     public static class DefaultResourceAvailabilityFactory {
 
         public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
-            String rasaDbUri = ""; //=config.get...();
-            String rasaDbUser = ""; //=config.get...();
-            String rasaDbName = ""; //=config.get...();
+            final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
+            final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
+            final String rasaDbName = config.getLinkCheckerDbPassword(); //linkchecker
 
             if (!Strings.isNullOrEmpty(rasaDbUri)) {
                 LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);

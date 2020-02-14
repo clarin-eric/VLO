@@ -149,10 +149,12 @@ public class VloConfig {
     private int fileProcessingThreads = 2;
 
     private int solrThreads = 2;
+    
+    private String linkCheckerDbConnectionString;
 
-    private String linkCheckerMongoDbName;
+    private String linkCheckerDbUser;
 
-    private String linkCheckerMongoConnectionString;
+    private String linkCheckerDbPassword;
 
     private String centreRegistryCentresListJsonUrl;
 
@@ -1453,21 +1455,31 @@ public class VloConfig {
         this.deprecatedFields = deprecatedFields;
     }
 
-    public String getLinkCheckerMongoDbName() {
-        return linkCheckerMongoDbName;
+    public String getLinkCheckerDbConnectionString() {
+        return linkCheckerDbConnectionString;
     }
 
-    public void setLinkCheckerMongoDbName(String linkCheckerMongoDbName) {
-        this.linkCheckerMongoDbName = linkCheckerMongoDbName;
+    public void setLinkCheckerDbConnectionString(String linkCheckerDbConnectionString) {
+        this.linkCheckerDbConnectionString = linkCheckerDbConnectionString;
     }
 
-    public String getLinkCheckerMongoConnectionString() {
-        return linkCheckerMongoConnectionString;
+    public String getLinkCheckerDbUser() {
+        return linkCheckerDbUser;
     }
 
-    public void setLinkCheckerMongoConnectionString(String linkCheckerMongoConnectionString) {
-        this.linkCheckerMongoConnectionString = linkCheckerMongoConnectionString;
+    public void setLinkCheckerDbUser(String linkCheckerDbUser) {
+        this.linkCheckerDbUser = linkCheckerDbUser;
     }
+
+    public String getLinkCheckerDbPassword() {
+        return linkCheckerDbPassword;
+    }
+
+    public void setLinkCheckerDbPassword(String linkCheckerDbPassword) {
+        this.linkCheckerDbPassword = linkCheckerDbPassword;
+    }
+
+    
 
     public String getCentreRegistryCentresListJsonUrl() {
         return centreRegistryCentresListJsonUrl;

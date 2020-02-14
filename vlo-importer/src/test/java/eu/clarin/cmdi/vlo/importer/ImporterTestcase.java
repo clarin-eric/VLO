@@ -55,8 +55,9 @@ public abstract class ImporterTestcase {
         config.setCountryComponentUrl(getCountryCodeComponentUrl());
         config.setLanguage2LetterCodeComponentUrl(getLanguage2LetterCodeUrl());
         config.setLanguage3LetterCodeComponentUrl(getLanguage3LetterCodeUrl());
-        config.setLinkCheckerMongoDbName(null);
-        config.setLinkCheckerMongoConnectionString(null);
+        config.setLinkCheckerDbConnectionString(null);
+        config.setLinkCheckerDbUser(null);
+        config.setLinkCheckerDbPassword(null);
         languageCodeUtils = new LanguageCodeUtils(config);
     }
 
