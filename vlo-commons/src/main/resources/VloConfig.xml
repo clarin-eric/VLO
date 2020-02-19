@@ -290,6 +290,8 @@
     <showResultScores>false</showResultScores>
 
     <processHierarchies>true</processHierarchies>
+    
+    <enableFcsLinks>true</enableFcsLinks>
 
     <!-- fields that are used to generate a document signature to identify duplicates -->
     <signatureFields>

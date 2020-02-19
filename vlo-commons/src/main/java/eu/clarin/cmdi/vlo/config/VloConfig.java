@@ -163,6 +163,8 @@ public class VloConfig {
     private String otherProvidersMarkupFile;
 
     private int availabilityStatusUpdaterBatchSize = 50;
+    
+    private boolean enableFcsLinks;
 
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String, String> fields;
@@ -1511,6 +1513,14 @@ public class VloConfig {
 
     public void setAvailabilityStatusUpdaterBatchSize(Integer availabilityStatusUpdaterBatchSize) {
         this.availabilityStatusUpdaterBatchSize = availabilityStatusUpdaterBatchSize;
+    }
+
+    public boolean isEnableFcsLinks() {
+        return enableFcsLinks;
+    }
+
+    public void setEnableFcsLinks(boolean enableFcsLinks) {
+        this.enableFcsLinks = enableFcsLinks;
     }
 
 }
