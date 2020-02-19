@@ -35,9 +35,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         </label>
                     </div>
                     <div class="checkbox">
-                        <label>
-                            <input wicket:id="fcs" type="checkbox" id="onlyfcs"/><wicket:message key="onlyContentSearch">[Only include resources that support content search]</wicket:message>
-                        </label>
+                        <wicket:enclosure>
+                            <label>
+                                <input wicket:id="fcs" type="checkbox" id="onlyfcs"/><wicket:message key="onlyContentSearch">[Only include resources that support content search]</wicket:message>
+                            </label>
+                        </wicket:enclosure>
                     </div>
                     <div class="checkbox" wicket:id="collectionsSection">
                         <label>

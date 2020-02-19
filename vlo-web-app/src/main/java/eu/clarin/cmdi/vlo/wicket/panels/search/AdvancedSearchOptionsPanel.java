@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
@@ -78,6 +79,8 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
 
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
 
+    private final boolean showFcsFilterOption;
+    
     /**
      * The fields that this panel provides options for
      */
@@ -88,6 +91,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
     public AdvancedSearchOptionsPanel(String id, final IModel<QueryFacetsSelection> model, IModel<FacetSelectionType> selectionTypeModeModel, final IDataProvider<SolrDocument> documentProvider) {
         super(id, model);
         this.documentProvider = documentProvider;
+        this.showFcsFilterOption = config.isEnableFcsLinks();
 
         optionsForm = new Form("options");
 
@@ -101,6 +105,7 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         optionsForm.add(selectionType);
 
         final CheckBox fcsCheck = createFieldNotEmptyOption("fcs", fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
+        fcsCheck.add(BooleanVisibilityBehavior.visibleOnTrue(Model.of(showFcsFilterOption)));
         optionsForm.add(fcsCheck);
 
         final MarkupContainer collectionsSection = new WebMarkupContainer("collectionsSection");
