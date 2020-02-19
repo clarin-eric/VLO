@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
@@ -42,6 +43,7 @@ import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 import eu.clarin.cmdi.vlo.wicket.panels.ContentSearchFormPanel;
 import java.util.Collection;
+import java.util.Collections;
 
 import java.util.Optional;
 
@@ -75,6 +77,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     private static final int PID_LABEL_TEXT_LENGTH = 25;
 
     @SpringBean
+    private VloConfig config;
+    @SpringBean
     private FieldNameService fieldNameService;
     @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
@@ -106,7 +110,11 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
 
         searchPageLinksModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE));
 
-        searchServiceLinksModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
+        if (config.isEnableFcsLinks()) {
+            searchServiceLinksModel = new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
+        } else {
+            searchServiceLinksModel = () -> Collections.emptySet();
+        }
 
         // resource info for single resource
         resourceInfoLinkModel

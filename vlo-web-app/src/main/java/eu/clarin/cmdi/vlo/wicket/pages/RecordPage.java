@@ -139,6 +139,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final IModel<String> linksCountLabelModel;
+    private final boolean showFcsLinks;
 
     /**
      * Constructor that derives document and selection models from page
@@ -148,6 +149,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
      */
     public RecordPage(PageParameters params) {
         super(params);
+        this.showFcsLinks = config.isEnableFcsLinks();
 
         // get search context from params if available
         final SearchContext searchContext = contextParamConverter.fromParameters(params);
@@ -205,9 +207,14 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                     if (countValue instanceof Integer) {
                         Long fieldValuesCount
                                 = Streams.concat(
+                                        // landing page links
                                         Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                        // search page links
                                         Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
-                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty()))
+                                        // include FCS links count iff these links globally enabled
+                                        showFcsLinks
+                                                ? Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty())
+                                                : Stream.empty())
                                         .collect(Collectors.counting());
                         if (fieldValuesCount == 0) {
                             return ((Integer) countValue).toString();

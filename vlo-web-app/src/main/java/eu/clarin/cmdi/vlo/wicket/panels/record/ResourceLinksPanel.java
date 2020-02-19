@@ -20,6 +20,7 @@ import de.agilecoders.wicket.core.markup.html.bootstrap.navigation.ajax.Bootstra
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
@@ -62,6 +63,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     private static final int ITEMS_PER_PAGE = 12;
 
     @SpringBean
+    private VloConfig config;
+    @SpringBean
     private FieldNameService fieldNameService;
     @SpringBean(name = "resourceStringConverter")
     private ResourceStringConverter resourceStringConverter;
@@ -81,6 +84,8 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
     public ResourceLinksPanel(String id, IModel<SolrDocument> documentModel) {
         super(id, documentModel);
 
+        final boolean enableFcsLinks = config.isEnableFcsLinks();
+
         // create table of resources with optional details
         resourcesTable = new WebMarkupContainer("resources") {
             @Override
@@ -89,7 +94,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 setVisible(resourceListing.getPageCount() > 0
                         || landingPagesLinkModel.getObject() != null
                         || searchPagesLinkModel.getObject() != null
-                        || searchServiceLinkModel.getObject() != null);
+                        || (enableFcsLinks && searchServiceLinkModel.getObject() != null));
             }
 
         };
@@ -105,7 +110,11 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         // special items in table for landing page, search page and search service 'resources'
         landingPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<String>(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
         searchPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<String>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE)));
-        searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
+        if (enableFcsLinks) {
+            searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
+        } else {
+            searchServiceLinkModel = new Model<>();
+        }
 
         resourcesTable
                 .add(createSearchPageItems("searchPageItems").add(newSpecialLinkVisibilityBehavior(searchPagesLinkModel)))
@@ -202,7 +211,7 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
                 );
             }
         });
-        
+
         return container;
     }
 
