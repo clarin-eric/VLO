@@ -30,16 +30,9 @@
         <vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
         <vloconfig.solrUserReadWritePass>PASS_READ/WRITE</vloconfig.solrUserReadWritePass>
         <!-- vlo exposure config values -->
-        <vloconfig.vloExposureEnabled>true</vloconfig.vloExposureEnabled>
-        <vloconfig.vloExposureDbName>vloExposure</vloconfig.vloExposureDbName>
-        <vloconfig.vloExposurePort>5432</vloconfig.vloExposurePort>
-        <vloconfig.vloExposureHost>localhost</vloconfig.vloExposureHost>
-        <vloconfig.vloExposureUsername>postgres</vloconfig.vloExposureUsername>
-        <vloconfig.vloExposurePassword>postgres</vloconfig.vloExposurePassword>
+        <vloconfig.vloExposureEnabled>false</vloconfig.vloExposureEnabled>
         <!-- link checker database connection -->
-        <vloconfig.linkCheckerDbConnectionString>jdbc:mysql://localhost:3307/linkchecker</vloconfig.linkCheckerDbConnectionString>
-        <vloconfig.linkCheckerDbUser>linkchecker</vloconfig.linkCheckerDbUser>
-        <vloconfig.linkCheckerDbPassword>linkchecker</vloconfig.linkCheckerDbPassword>
+        <vloconfig.linkCheckerDbConnectionString></vloconfig.linkCheckerDbConnectionString>
         <!-- external service URLs -->
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
         <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
@@ -125,30 +118,16 @@
                 <vloconfig.solrUserReadWrite>docker_user_rw</vloconfig.solrUserReadWrite>
                 <vloconfig.solrUserReadWritePass>docker_secret</vloconfig.solrUserReadWritePass>
                 
+                <vloconfig.linkCheckerDbConnectionString>jdbc:mysql://localhost:3307/linkchecker</vloconfig.linkCheckerDbConnectionString>
+                <vloconfig.linkCheckerDbUser>linkchecker</vloconfig.linkCheckerDbUser>
+                <vloconfig.linkCheckerDbPassword>linkchecker</vloconfig.linkCheckerDbPassword>
+                
                 <vloconfig.vloExposureEnabled>true</vloconfig.vloExposureEnabled>
                 <vloconfig.vloExposureDbName>vlo_exposure</vloconfig.vloExposureDbName>
                 <vloconfig.vloExposurePort>5432</vloconfig.vloExposurePort>
                 <vloconfig.vloExposureHost>localhost</vloconfig.vloExposureHost>
                 <vloconfig.vloExposureUsername>vlo_exposure</vloconfig.vloExposureUsername>
                 <vloconfig.vloExposurePassword>vlo_exposure</vloconfig.vloExposurePassword>
-                
-            </properties>
-        </profile>
-
-        <profile>
-            <!-- For deployment to vlo.clarin.eu -->
-            <id>production</id>
-            <properties>
-                <vloconfig.deleteAllFirst>false</vloconfig.deleteAllFirst>
-                <vloconfig.maxDaysInSolr>7</vloconfig.maxDaysInSolr>
-                <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
-                <vloconfig.homeUrl>https://vlo.clarin.eu</vloconfig.homeUrl>
-                <vloconfig.dataRootsFile>dataroots-production.xml</vloconfig.dataRootsFile>
-                <vloconfig.mappingFilesLocation>file:/srv/VLO-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
-                <vloconfig.facetConceptsFileLocation>file:/srv/VLO-mapping/mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.valueMappingFile>file:/srv/VLO-mapping/value-maps/dist/master.xml</vloconfig.valueMappingFile>
-                <vloconfig.fileProcessingThreads>-1</vloconfig.fileProcessingThreads>
-                <vloconfig.solrThreads>4</vloconfig.solrThreads>
             </properties>
         </profile>
 
@@ -156,41 +135,9 @@
             <!-- For use in docker images (see https://gitlab.com/CLARIN-ERIC) -->
             <id>docker</id>
             <properties>
-                <vloconfig.deleteAllFirst>${VLO_DOCKER_DELETE_ALL_FIRST}</vloconfig.deleteAllFirst>
-                <vloconfig.maxDaysInSolr>${VLO_DOCKER_MAX_DAYS_IN_SOLR}</vloconfig.maxDaysInSolr>
-                <vloconfig.solrUrl>${VLO_DOCKER_SOLR_URL}</vloconfig.solrUrl>
-                <vloconfig.homeUrl>${VLO_DOCKER_PUBLIC_HOME_URL}</vloconfig.homeUrl>
                 <vloconfig.dataRootsFile>${VLO_DOCKER_DATAROOTS_FILE}</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>${VLO_DOCKER_MAPPING_BASE_URI}uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>${VLO_DOCKER_MAPPING_BASE_URI}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
-                <vloconfig.valueMappingFile>${VLO_DOCKER_VALUE_MAPPING_URI}</vloconfig.valueMappingFile>
-                <vloconfig.fileProcessingThreads>${VLO_DOCKER_FILE_PROCESSING_THREADS}</vloconfig.fileProcessingThreads>
-                <vloconfig.solrThreads>${VLO_DOCKER_SOLR_THREADS}</vloconfig.solrThreads>
-                <vloconfig.vcrMaximumItemsCount>${VLO_DOCKER_VCR_MAXIMUM_ITEMS_COUNT}</vloconfig.vcrMaximumItemsCount>
-                <vloconfig.conceptRegistryUrl>${VLO_DOCKER_CONCEPT_REGISTRY_URL}</vloconfig.conceptRegistryUrl>
-                <vloconfig.vocabularyRegistryUrl>${VLO_DOCKER_VOCABULARY_REGISTRY_URL}</vloconfig.vocabularyRegistryUrl>
-                <vloconfig.feedbackFromUrl>${VLO_DOCKER_FEEDBACK_FORM_URL}</vloconfig.feedbackFromUrl>
-                <vloconfig.federatedContentSearchUrl>${VLO_DOCKER_FCS_BASE_URL}</vloconfig.federatedContentSearchUrl>
-                <vloconfig.lrSwitchboardBaseUrl>${VLO_DOCKER_LRS_BASE_URL}</vloconfig.lrSwitchboardBaseUrl>
-                <vloconfig.vcrSubmitEndpoint>${VLO_DOCKER_VCR_SUBMIT_ENDPOINT}</vloconfig.vcrSubmitEndpoint>
-                <vloconfig.solrUserReadOnly>${VLO_DOCKER_SOLR_USER_READ_ONLY}</vloconfig.solrUserReadOnly>
-                <vloconfig.solrUserReadOnlyPass>${VLO_DOCKER_SOLR_PASSWORD_READ_ONLY}</vloconfig.solrUserReadOnlyPass>
-                <vloconfig.solrUserReadWrite>${VLO_DOCKER_SOLR_USER_READ_WRITE}</vloconfig.solrUserReadWrite>
-                <vloconfig.solrUserReadWritePass>${VLO_DOCKER_SOLR_PASSWORD_READ_WRITE}</vloconfig.solrUserReadWritePass>
-                <vloconfig.linkCheckerDbConnectionString>${VLO_DOCKER_LINK_CHECKER_DB_CONNECTION_STRING}</vloconfig.linkCheckerDbConnectionString>
-                <vloconfig.linkCheckerDbUser>${VLO_DOCKER_LINK_CHECKER_DB_USER}</vloconfig.linkCheckerDbUser>
-                <vloconfig.linkCheckerDbPassword>${VLO_DOCKER_LINK_CHECKER_DB_PASSWORD}</vloconfig.linkCheckerDbPassword>                
-                <vloconfig.centreRegistryCentresListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_CENTRES_LIST_JSON_URL}</vloconfig.centreRegistryCentresListJsonUrl>
-                <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>${VLO_DOCKER_CENTRE_REGISTRY_OAI_PMH_ENDPOINTS_LIST_JSON_URL}</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
-                <vloConfig.otherProvidersMarkupFile>${VLO_DOCKER_OTHER_PROVIDERS_MARKUP_FILE}</vloConfig.otherProvidersMarkupFile>
-                <vloconfig.vloExposureEnabled>${VLO_DOCKER_EXPOSURE_ENABLED}</vloconfig.vloExposureEnabled>
-                <vloconfig.vloExposureDbName>${VLO_DOCKER_EXPOSURE_DB_NAME}</vloconfig.vloExposureDbName>
-                <vloconfig.vloExposureHost>${VLO_DOCKER_EXPOSURE_DB_HOST}</vloconfig.vloExposureHost>
-                <vloconfig.vloExposurePort>${VLO_DOCKER_EXPOSURE_DB_PORT}</vloconfig.vloExposurePort>
-                <vloconfig.vloExposureUsername>${VLO_DOCKER_EXPOSURE_DB_USER}</vloconfig.vloExposureUsername>
-                <vloconfig.vloExposurePassword>${VLO_DOCKER_EXPOSURE_DB_PASSWORD}</vloconfig.vloExposurePassword>
-                <vloconfig.vloExposurePassword>${VLO_DOCKER_EXPOSURE_DB_PASSWORD}</vloconfig.vloExposurePassword>
-                <vloConfig.enableFcsLinks>${VLO_DOCKER_ENABLE_FCS_LINKS}</vloConfig.enableFcsLinks>
             </properties>
         </profile>
     </profiles>
