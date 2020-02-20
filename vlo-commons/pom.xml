@@ -50,6 +50,7 @@
         <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
         <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
         <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
+        <vloConfig.enableFcsLinks>true</vloConfig.enableFcsLinks>
     </properties>
 
     <build>
@@ -188,6 +189,8 @@
                 <vloconfig.vloExposurePort>${VLO_DOCKER_EXPOSURE_DB_PORT}</vloconfig.vloExposurePort>
                 <vloconfig.vloExposureUsername>${VLO_DOCKER_EXPOSURE_DB_USER}</vloconfig.vloExposureUsername>
                 <vloconfig.vloExposurePassword>${VLO_DOCKER_EXPOSURE_DB_PASSWORD}</vloconfig.vloExposurePassword>
+                <vloconfig.vloExposurePassword>${VLO_DOCKER_EXPOSURE_DB_PASSWORD}</vloconfig.vloExposurePassword>
+                <vloConfig.enableFcsLinks>${VLO_DOCKER_ENABLE_FCS_LINKS}</vloConfig.enableFcsLinks>
             </properties>
         </profile>
     </profiles>

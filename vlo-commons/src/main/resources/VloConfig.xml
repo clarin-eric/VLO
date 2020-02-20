@@ -291,7 +291,7 @@
 
     <processHierarchies>true</processHierarchies>
     
-    <enableFcsLinks>true</enableFcsLinks>
+    <enableFcsLinks>${vloConfig.enableFcsLinks}</enableFcsLinks>
 
     <!-- fields that are used to generate a document signature to identify duplicates -->
     <signatureFields>
