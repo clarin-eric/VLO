@@ -135,9 +135,9 @@
             <!-- For use in docker images (see https://gitlab.com/CLARIN-ERIC) -->
             <id>docker</id>
             <properties>
-                <vloconfig.dataRootsFile>${VLO_DOCKER_DATAROOTS_FILE}</vloconfig.dataRootsFile>
-                <vloconfig.mappingFilesLocation>${VLO_DOCKER_MAPPING_BASE_URI}uniform-maps/</vloconfig.mappingFilesLocation>
-                <vloconfig.facetConceptsFileLocation>${VLO_DOCKER_MAPPING_BASE_URI}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.dataRootsFile>{{VLO_DOCKER_DATAROOTS_FILE}}</vloconfig.dataRootsFile>
+                <vloconfig.mappingFilesLocation>{{VLO_DOCKER_MAPPING_BASE_URI}}uniform-maps/</vloconfig.mappingFilesLocation>
+                <vloconfig.facetConceptsFileLocation>{{VLO_DOCKER_MAPPING_BASE_URI}}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
             </properties>
         </profile>
     </profiles>
