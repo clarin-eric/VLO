@@ -201,12 +201,12 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     @Override
     public void renderHead(IHeaderResponse response) {
         //render jQuery first, it is the most common dependency
-        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
+        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference(), true));
         // Include other JavaScript for header (e.g. permalink animation)
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS()));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS()));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getClipBoardJS()));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloClipboardJS()));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getClipBoardJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloClipboardJS(), true));
 
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
