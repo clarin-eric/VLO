@@ -45,7 +45,7 @@
         <solr.version>8.3.1</solr.version> <!-- Warning: Solr 8.4.x introduces 'stall time' in the ConcurrentUpdateSolrClient, which can break the import -->
         <slf4j.version>1.7.30</slf4j.version>
         <saxon.version>9.8.0-15</saxon.version>
-        <jackson.version>2.10.1</jackson.version>
+        <jackson.version>2.10.2</jackson.version>
         <jackson.databind.version>${jackson.version}</jackson.databind.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
