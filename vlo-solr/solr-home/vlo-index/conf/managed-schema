@@ -22,6 +22,7 @@
     <fieldType name="string" class="solr.StrField" sortMissingLast="true"/>
     <fieldType name="tdate" class="solr.DatePointField" positionIncrementGap="0"/>
     <fieldType name="tdates" class="solr.DatePointField" positionIncrementGap="0" multiValued="true"/>
+    <fieldType name="date_range" class="solr.DateRangeField"/>
     <fieldType name="tdouble" class="solr.DoublePointField" positionIncrementGap="0"/>
     <fieldType name="tdoubles" class="solr.DoublePointField" positionIncrementGap="0" multiValued="true"/>
     <fieldType name="textSuggest" class="solr.TextField" positionIncrementGap="100">
@@ -176,7 +177,7 @@
     <field name="resourceClass" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
     <field name="rightsHolder" type="string" multiValued="true" indexed="true" stored="true"/>
     <field name="subject" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
-    <field name="temporalCoverage" type="string" termVectors="true" multiValued="true" indexed="true" stored="true"/>
+    <field name="temporalCoverage" type="date_range" termVectors="true" multiValued="true" indexed="true" stored="true"/>
     <field name="text" type="text_general" multiValued="true" indexed="true" stored="true"/>
     <copyField source="_selfLink" dest="recordPid"/>
     <copyField source="text" dest="_suggester"/>
