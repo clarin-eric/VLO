@@ -69,4 +69,8 @@ public class FacetValuesMap implements DocFieldContainer {
         return facetValuesMap.get(name);
     }
 
+    public void removeField(String name) {
+        facetValuesMap.remove(name);
+    }
+
 }
