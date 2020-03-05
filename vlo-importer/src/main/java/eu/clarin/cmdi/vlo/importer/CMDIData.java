@@ -53,6 +53,7 @@ public interface CMDIData<T> extends DocFieldContainer {
 
     List<Resource> getDataResources();
 
+    @Override
     Collection<Object> getDocField(String name);
 
     T getDocument();
@@ -93,6 +94,7 @@ public interface CMDIData<T> extends DocFieldContainer {
 
     void replaceDocField(String name, Object value, boolean caseInsensitive);
     
+    @Override
     void removeField(String name);
     
     boolean hasField(String name);

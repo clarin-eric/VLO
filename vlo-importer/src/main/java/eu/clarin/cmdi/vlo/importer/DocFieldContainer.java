@@ -26,4 +26,6 @@ import java.util.Collection;
 public interface DocFieldContainer {
 
     Collection<Object> getDocField(String name);
+
+    void removeField(String name);
 }
