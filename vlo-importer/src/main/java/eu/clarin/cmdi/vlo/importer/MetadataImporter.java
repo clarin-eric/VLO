@@ -221,7 +221,7 @@ public class MetadataImporter {
         registerPostProcessor(fieldNameService, imb, FieldKey.AVAILABILITY, () -> new AvailabilityPostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE_TYPE, () -> new LicenseTypePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.ORGANISATION, () -> new OrganisationPostNormalizer(config));
-        registerPostProcessor(fieldNameService, imb, FieldKey.TEMPORAL_COVERAGE, () -> new TemporalCoveragePostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.TEMPORAL_COVERAGE, () -> new TemporalCoveragePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.RESOURCE_CLASS, () -> new ResourceClassPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());

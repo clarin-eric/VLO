@@ -417,7 +417,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(
                 "{code:eng}This  recording was made to generate a freely available test resource including speech and gestures. The annotations were created by Peter and Kita who is gesture researcher at the MPI for Psycholinguistics.",
                 doc.getFieldValue("description"));
-        assertEquals("2002-10-30", doc.getFieldValue("temporalCoverage"));
+        assertEquals("[2002 TO 2002]", doc.getFieldValue("temporalCoverage"));
         List<String> fieldValues = new ArrayList(doc.getFieldValues(fieldNameService.getFieldName(FieldKey.FORMAT)));
         assertEquals(2, fieldValues.size());
         assertEquals("video/x-mpeg1", fieldValues.get(0));
@@ -1017,5 +1017,35 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         Iterator<Object> iterator = values.iterator();
         assertEquals("English 1", iterator.next().toString());
         assertEquals("Dutch 1", iterator.next().toString());
+    }
+
+    @Test
+    public void testTemporalCoverageExtension() throws Exception {
+        String content = "";
+        content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+        content += "<CMD xmlns=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1288172614026\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1288172614026/xsd\">\n";
+        content += "   <Header>\n";
+        content += "      <MdCreationDate>2020-02-14</MdCreationDate>\n";
+        content += "      <MdSelfLink>test-hdl:TEST</MdSelfLink>\n";
+        content += "      <MdProfile>clarin.eu:cr1:p_1288172614026</MdProfile>\n";
+        content += "   </Header>\n";
+        content += "   <Resources>\n";
+        content += "      <ResourceProxyList>\n";
+        content += "      </ResourceProxyList>\n";
+        content += "      <JournalFileProxyList/>\n";
+        content += "      <ResourceRelationList/>\n";
+        content += "   </Resources>\n";
+        content += "   <Components>\n";
+        content += "      <cmdp:OLAC-DcmiTerms>\n";
+        content += "         <cmdp:issued>2010-2014</cmdp:issued>\n";
+        content += "         <cmdp:issued>2016</cmdp:issued>\n";
+        content += "      </cmdp:OLAC-DcmiTerms>\n";
+        content += "   </Components>\n";
+        content += "</CMD>\n";
+        File cmdiFile = createCmdiFile("testOlacDcmiTerms", content);
+        CMDIDataProcessor<SolrInputDocument> processor = getDataParser();
+        CMDIData<SolrInputDocument> data = processor.process(cmdiFile, resourceStructureGraph);
+        assertEquals("[2010 TO 2016]", data.getDocument().getFieldValue("temporalCoverage"));
     }
 }

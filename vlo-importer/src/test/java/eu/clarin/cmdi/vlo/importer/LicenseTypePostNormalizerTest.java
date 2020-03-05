@@ -89,5 +89,10 @@ public class LicenseTypePostNormalizerTest extends ImporterTestcase {
             return fields.get(name);
         }
 
+        @Override
+        public void removeField(String name) {
+            fields.remove(name);
+        }
+
     }
 }
