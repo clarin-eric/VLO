@@ -56,7 +56,7 @@ public abstract class AbstractSolrQueryFactory {
             for (Map.Entry<String, FacetSelection> selectionEntry : selections.entrySet()) {
                 final String facetName = selectionEntry.getKey();
                 final FacetSelection selection = selectionEntry.getValue();
-                if (selection != null) {
+                if (selection != null && !selection.isEmpty()) {
                     switch (selection.getSelectionType()) {
                         case NOT_EMPTY:
                             //TODO: test
@@ -129,6 +129,8 @@ public abstract class AbstractSolrQueryFactory {
      * @return
      */
     private String createFacetOrQuery(String facetName, Collection<String> values) {
+        assert(!values.isEmpty());
+        
         // escape value and wrap in quotes to make literal query
         // prefix field name with tag statement (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
         final String prefix = String.format("{!tag=%1$s}%1$s:(", facetName);
