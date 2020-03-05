@@ -81,6 +81,17 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.8.1 to 4.8.2
+-----------------------------
+This release uses the new resource availability status API for linkchecker information.
+If using this, make sure that you configure the connection to the MariaDB with the
+'status' table correctly. Set the following options in `VloConfig.xml` to do so:
+
+    <linkCheckerDbConnectionString>jdbc:mysql://db_host:3306/linkchecker</linkCheckerDbConnectionString>
+    <linkCheckerDbUser>linkchecker</linkCheckerDbUser>
+    <linkCheckerDbPassword>s3cr3t_p4ssw0rd</linkCheckerDbPassword>
+
+-----------------------------
 Upgrading from 4.8.0 to 4.8.1
 -----------------------------
 Maintenance release; no actions needed

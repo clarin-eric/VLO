@@ -1,6 +1,14 @@
 Bug fixes and new features
 --------------------------
-VLO 4.8.1 (February 2021)
+VLO 4.8.2 (March 2020)
+* Using new link checker API
+    <https://github.com/clarin-eric/VLO/issues/285>
+* FCS integration can be disabled
+    <https://github.com/clarin-eric/VLO/issues/286>
+* Fixed bug caused by invalid selection received through query parameters of URL
+    <https://github.com/clarin-eric/VLO/issues/294>
+
+VLO 4.8.1 (February 2020)
 * Upper bound for number of collections sent to statistics reporting
     <https://github.com/clarin-eric/VLO/issues/289>
 
