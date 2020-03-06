@@ -135,6 +135,9 @@ public class SearchResultItemPanel extends Panel {
         expandedDetails = new SearchResultItemExpandedPanel("expandedDetails", documentModel, selectionModel, availabilityOrdering);
         add(expandedDetails);
 
+        // add Languages Labels
+        add(new LanguagesLabelsPanel("languagesList", documentModel, Model.of(ExpansionState.COLLAPSED)));
+
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         // wrap with a count provider
@@ -238,7 +241,6 @@ public class SearchResultItemPanel extends Panel {
                 } else {
                     expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 }
-
                 t.ifPresent(target -> {
                     // parial update (just this search result item)
                     target.add(SearchResultItemPanel.this);
