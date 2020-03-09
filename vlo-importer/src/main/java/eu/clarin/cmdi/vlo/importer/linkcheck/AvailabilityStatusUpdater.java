@@ -255,7 +255,7 @@ public class AvailabilityStatusUpdater {
                     return Stream.of(oldInfo);
                 }
             } else {
-                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp(), oldInfo.getLastChecked())) {
+                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp().getTime(), oldInfo.getLastChecked())) {
                     final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp().getTime());
 
                     logger.info("Info changed for {} => {}", oldInfo, newInfo);
