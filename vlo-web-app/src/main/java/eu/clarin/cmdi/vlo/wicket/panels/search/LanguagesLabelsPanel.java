@@ -37,9 +37,6 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -57,14 +54,12 @@ public class LanguagesLabelsPanel extends Panel {
     private FieldNameService fieldNameService;
 
     private static final int MAX_LABEL_LENGTH = 6;
-    private static final int MAX_LANGUAGES = 1;
+    private static final int MAX_LANGUAGES = 5;
 
     private final IModel<ExpansionState> expansionStateModel;
-    private final IModel<SolrDocument> documentModel;
     private final List<String> languages;
+    private final IModel<SolrDocument> documentModel;
 
-    private final ListView shortList;
-    private final ListView longList;
     private final Link showMoreLink;
 
     public LanguagesLabelsPanel(String id, IModel<SolrDocument> documentModel, IModel<ExpansionState> expansionStateModel) {
@@ -72,17 +67,10 @@ public class LanguagesLabelsPanel extends Panel {
         this.documentModel = documentModel;
         this.expansionStateModel = expansionStateModel;
 
-        final IModel<List<String>> languagesModel = new LanguageLabelModel(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
-        this.languages = languagesModel.getObject();
-        final List<String> shortLanguagesList = languages.subList(0, Math.min(MAX_LANGUAGES, languages.size()));
+        languages =  new LanguageLabelModel(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).getObject();
+        int numOfItems = ((expansionStateModel.getObject() == ExpansionState.COLLAPSED) ? MAX_LANGUAGES: languages.size());
 
-        shortList = createListView("languagesListShort", shortLanguagesList);
-        shortList.setOutputMarkupId(true);
-        add(shortList);
-
-        longList = createListView("languagesListLong", languages);
-        longList.setOutputMarkupId(true);
-        add(longList);
+        add(createListView("languagesList", numOfItems));
 
         showMoreLink = new IndicatingAjaxFallbackLink<Void>("showMore") {
             @Override
@@ -94,8 +82,6 @@ public class LanguagesLabelsPanel extends Panel {
                     expansionStateModel.setObject(ExpansionState.COLLAPSED);
                 }
 
-                System.out.println(expansionStateModel.getObject());
-                System.out.println(LanguagesLabelsPanel.this.getMarkupId());
                 t.ifPresent(target -> {
                    target.add(LanguagesLabelsPanel.this);
                 });
@@ -115,13 +101,13 @@ public class LanguagesLabelsPanel extends Panel {
                                 }
                             }
                         })));
-        showMoreLink.setOutputMarkupId(true);
         add(showMoreLink);
-
         setOutputMarkupId(true);
     }
 
-    private ListView createListView(String id, List<String> list){
+    private ListView createListView(String id,  int numOfItems){
+        List<String> list = languages.subList(0, Math.min(numOfItems, languages.size()));
+
         return new ListView<String>(id, list){
             @Override
             protected void populateItem(ListItem<String> item) {
@@ -141,10 +127,6 @@ public class LanguagesLabelsPanel extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        // this is called once per request; set visibility state for detail panels
-        // according to expansion state
-        shortList.setVisible(expansionStateModel.getObject() == ExpansionState.COLLAPSED);
-        longList.setVisible(expansionStateModel.getObject() == ExpansionState.EXPANDED);
         showMoreLink.setVisible(languages.size() > MAX_LANGUAGES );
 
     }
@@ -154,6 +136,5 @@ public class LanguagesLabelsPanel extends Panel {
         super.detachModels();
         expansionStateModel.detach();
     }
-
 
 }

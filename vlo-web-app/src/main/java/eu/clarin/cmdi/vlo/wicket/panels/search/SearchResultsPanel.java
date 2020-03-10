@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
@@ -67,6 +68,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     private final DataView<SolrDocumentExpansionPair> resultsView;
     private final IModel<Set<Object>> expansionsModel;
     private final IModel<Set<Object>> duplicateItemsExpansionsModel;
+    private final IModel<Set<Object>> LanguageLabelsExpansionsModel;
 
     private final Component navigatorBottom;
     private final Component navigatorTop;
@@ -75,6 +77,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         super(id, selectionModel);
         this.expansionsModel = new Model(new HashSet<>());
         this.duplicateItemsExpansionsModel = new Model(new HashSet<>());
+        this.LanguageLabelsExpansionsModel = new Model(new HashSet<>());
 
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
@@ -93,7 +96,8 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                 item.add(new SearchResultItemPanel("resultItemDetails", (SolrDocumentExpansionPairModel) item.getModel(), contextModel,
                         new SearchResultExpansionStateModel(expansionsModel, item.getModel()),
                         new SearchResultExpansionStateModel(duplicateItemsExpansionsModel, item.getModel()),
-                        availabilityOrdering
+                        availabilityOrdering,
+                        new SearchResultExpansionStateModel(LanguageLabelsExpansionsModel, item.getModel())
                 ));
             }
         };
