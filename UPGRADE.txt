@@ -91,6 +91,12 @@ If using this, make sure that you configure the connection to the MariaDB with t
     <linkCheckerDbUser>linkchecker</linkCheckerDbUser>
     <linkCheckerDbPassword>s3cr3t_p4ssw0rd</linkCheckerDbPassword>
 
+You will also need to set the `enableFcsLinks` option to either `true` or `false`. This
+determines whether the Federated Conten Search integration features will be activated in
+the front end:
+
+	<enableFcsLinks>true</enableFcsLinks>
+
 -----------------------------
 Upgrading from 4.8.0 to 4.8.1
 -----------------------------
