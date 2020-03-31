@@ -17,11 +17,9 @@
 package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -33,37 +31,33 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  * @author Twan Goosen <twan@clarin.eu>
  * @see https://developers.google.com/search/docs/data-types/sitelinks-searchbox
  */
-public class SitelinkSearchboxHeaderBehavior extends Behavior {
+public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
 
     private final static String QUERY_SUFFIX = "?" + VloWebAppParameters.QUERY + "={search_term_string}";
     private final static PageParameters EMPTY_PAGE_PARAMETERS = new PageParameters();
 
-    @Override
-    public void renderHead(Component component, IHeaderResponse response) {
-        final UrlRenderer urlRenderer = component.getRequestCycle().getUrlRenderer();
+    public SitelinkSearchboxHeaderBehavior() {
+        super(createJsonModel());
+    }
 
-        final String baseUrl
-                = urlRenderer.renderFullUrl(Url.parse(component.urlFor(component.getApplication().getHomePage(), EMPTY_PAGE_PARAMETERS)));
+    private static IModel<String> createJsonModel() {
+        return (() -> {
+            final RequestCycle requestCycle = RequestCycle.get();
+            final UrlRenderer urlRenderer = requestCycle.getUrlRenderer();
 
-        final String searchTargetUrl
-                = urlRenderer.renderFullUrl(Url.parse(component.urlFor(FacetedSearchPage.class, EMPTY_PAGE_PARAMETERS))) + QUERY_SUFFIX;
-
-        final String script = "<script type=\"application/ld+json\">\n"
-                + "/*<![CDATA[*/\n"
-                + "{\n"
-                + "  \"@context\": \"https://schema.org\",\n"
-                + "  \"@type\": \"WebSite\",\n"
-                + "  \"url\": \"" + baseUrl + "\",\n"
-                + "  \"potentialAction\": {\n"
-                + "    \"@type\": \"SearchAction\",\n"
-                + "    \"target\": \"" + searchTargetUrl + "\",\n"
-                + "    \"query-input\": \"required name=search_term_string\"\n"
-                + "  }\n"
-                + "}\n"
-                + "/*]]>*/\n"
-                + "</script>\n";
-
-        response.render(new StringHeaderItem(script));
+            final String baseUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(VloWicketApplication.get().getHomePage(), EMPTY_PAGE_PARAMETERS)));
+            final String searchTargetUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(FacetedSearchPage.class, EMPTY_PAGE_PARAMETERS))) + QUERY_SUFFIX;
+            return "{\n"
+                    + "  \"@context\": \"https://schema.org\",\n"
+                    + "  \"@type\": \"WebSite\",\n"
+                    + "  \"url\": \"" + baseUrl + "\",\n"
+                    + "  \"potentialAction\": {\n"
+                    + "    \"@type\": \"SearchAction\",\n"
+                    + "    \"target\": \"" + searchTargetUrl + "\",\n"
+                    + "    \"query-input\": \"required name=search_term_string\"\n"
+                    + "  }\n"
+                    + "}\n";
+        });
     }
 
 }
