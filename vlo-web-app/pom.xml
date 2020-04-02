@@ -57,7 +57,22 @@
             <artifactId>wicket-spring</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-
+        <!-- Wicket bootstrap -->
+        <dependency>
+            <groupId>de.agilecoders.wicket</groupId>
+            <artifactId>wicket-bootstrap-core</artifactId>
+            <version>2.0.13</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-request</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.wicket</groupId>
+                    <artifactId>wicket-util</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -103,6 +118,28 @@
             <version>${solr.version}</version>
             <scope>test</scope>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-1.2-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.solr</groupId>
@@ -110,6 +147,28 @@
             <version>${solr.version}</version>
             <scope>test</scope>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-1.2-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-web</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- JMOCK FOR MOCKING -->
         <dependency>
@@ -155,21 +214,6 @@
             <version>1.2.4</version>
         </dependency>
         <dependency>
-            <groupId>de.agilecoders.wicket</groupId>
-            <artifactId>wicket-bootstrap-core</artifactId>
-            <version>2.0.13</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.wicket</groupId>
-                    <artifactId>wicket-request</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.wicket</groupId>
-                    <artifactId>wicket-util</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
@@ -179,6 +223,18 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20190722</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.github.jsonld-java</groupId>
+            <artifactId>jsonld-java</artifactId>
+            <version>0.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-to-slf4j</artifactId>
+            <version>2.13.1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

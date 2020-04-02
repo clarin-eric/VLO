@@ -41,7 +41,7 @@ public class ContentSearchFormPanelTest extends AbstractWicketTest {
     private VloConfig vloConfig;
 
     @Override
-    public void setUp() throws IOException {
+    public void setUp() throws Exception {
         vloConfig.setFederatedContentSearchUrl("http://fcs.org/aggregator");
         super.setUp();
     }

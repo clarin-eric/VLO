@@ -38,7 +38,7 @@ public class TestRecordPage extends AbstractWicketTest {
 
     @Before
     @Override
-    public void setUp() throws IOException {
+    public void setUp() throws Exception {
         super.setUp();
         document = new SolrDocument();
         document.setField(fieldNameService.getFieldName(FieldKey.ID), "documentId");

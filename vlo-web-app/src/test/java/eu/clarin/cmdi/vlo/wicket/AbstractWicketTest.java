@@ -53,7 +53,7 @@ public abstract class AbstractWicketTest {
     private WicketTester tester;
 
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws Exception {
         final Properties testProperties = new Properties();
         try (InputStream is = getClass().getResourceAsStream("/vlo-test.properties")) {
             testProperties.load(is);
