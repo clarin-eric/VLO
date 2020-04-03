@@ -44,4 +44,12 @@ public abstract class JsonLdHeaderBehavior extends Behavior {
         response.render(new StringHeaderItem(script));
     }
 
+    @Override
+    public void detach(Component component) {
+        super.detach(component);
+        jsonLdContentModel.detach();
+    }
+    
+    
+
 }
