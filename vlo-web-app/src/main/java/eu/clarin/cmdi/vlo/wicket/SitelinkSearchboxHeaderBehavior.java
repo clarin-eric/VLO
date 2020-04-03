@@ -16,12 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel;
+import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel.JsonLdObject;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -39,31 +41,30 @@ public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
     private final static String QUERY_SUFFIX = "?" + VloWebAppParameters.QUERY + "={" + QUERY_PLACEHOLDER + "}";
     private final static PageParameters EMPTY_PAGE_PARAMETERS = new PageParameters();
 
-    private final static GsonBuilder GSON_BUILDER = new GsonBuilder()
-            .disableHtmlEscaping()
-            .setPrettyPrinting();
-
     public SitelinkSearchboxHeaderBehavior() {
         super(createJsonModel());
     }
 
     private static IModel<String> createJsonModel() {
-        return (() -> {
-            final RequestCycle requestCycle = RequestCycle.get();
-            final UrlRenderer urlRenderer = requestCycle.getUrlRenderer();
+        final LoadableDetachableModel<JsonLdObject> objectModel = new LoadableDetachableModel<>() {
+            @Override
+            protected JsonLdObject load() {
+                final RequestCycle requestCycle = RequestCycle.get();
+                final UrlRenderer urlRenderer = requestCycle.getUrlRenderer();
 
-            final String baseUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(VloWicketApplication.get().getHomePage(), EMPTY_PAGE_PARAMETERS)));
-            final String searchTargetUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(FacetedSearchPage.class, EMPTY_PAGE_PARAMETERS))) + QUERY_SUFFIX;
+                final String baseUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(VloWicketApplication.get().getHomePage(), EMPTY_PAGE_PARAMETERS)));
+                final String searchTargetUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(FacetedSearchPage.class, EMPTY_PAGE_PARAMETERS))) + QUERY_SUFFIX;
 
-            final WebSite metadata = new WebSite(baseUrl, new SearchAction(searchTargetUrl, "required name=" + QUERY_PLACEHOLDER));
-            return GSON_BUILDER.create().toJson(metadata);
-        });
+                return new WebSite(baseUrl, new SearchAction(searchTargetUrl, "required name=" + QUERY_PLACEHOLDER));
+            }
+
+        };
+
+        return new JsonLdModel(objectModel);
+
     }
 
-    private static class SearchAction {
-
-        @SerializedName("@type")
-        private final String type = "SearchAction";
+    private static class SearchAction extends JsonLdObject {
 
         private final String target;
 
@@ -71,12 +72,9 @@ public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
         private final String queryInput;
 
         public SearchAction(String target, String queryInput) {
+            super(null, "SearchAction");
             this.target = target;
             this.queryInput = queryInput;
-        }
-
-        public String getType() {
-            return type;
         }
 
         public String getTarget() {
@@ -89,33 +87,20 @@ public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
 
     }
 
-    private static class WebSite {
-
-        public SearchAction getPotentialAction() {
-            return potentialAction;
-        }
-
-        @SerializedName("@context")
-        private final String context = "https://schema.org";
-
-        @SerializedName("@type")
-        private final String type = "WebSite";
+    private static class WebSite extends JsonLdObject {
 
         private final String url;
 
         private final SearchAction potentialAction;
 
         public WebSite(String url, SearchAction potentialAction) {
+            super("https://schema.org", "WebSite");
             this.url = url;
             this.potentialAction = potentialAction;
         }
 
-        public String getContext() {
-            return context;
-        }
-
-        public String getType() {
-            return type;
+        public SearchAction getPotentialAction() {
+            return potentialAction;
         }
 
         public String getUrl() {
