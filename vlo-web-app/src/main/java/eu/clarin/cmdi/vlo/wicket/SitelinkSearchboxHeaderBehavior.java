@@ -72,7 +72,7 @@ public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
         private final String queryInput;
 
         public SearchAction(String target, String queryInput) {
-            super(null, "SearchAction");
+            super("SearchAction");
             this.target = target;
             this.queryInput = queryInput;
         }

@@ -55,6 +55,10 @@ public class JsonLdModel implements IModel<String> {
         @SerializedName("@type")
         private final String type;
 
+        public JsonLdObject(String type) {
+            this(null, type);
+        }
+
         public JsonLdObject(String context, String type) {
             this.context = context;
             this.type = type;
