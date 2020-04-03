@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
+import eu.clarin.cmdi.vlo.wicket.RecordStructuredMeatadataHeaderBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
@@ -194,8 +195,10 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
-
-            setModel(new SolrDocumentModel(document, fieldNameService));
+            
+            final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
+            setModel(documentModel);
+            add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
         }
 
         linksCountLabelModel = new LoadableDetachableModel<String>() {
