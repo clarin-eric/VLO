@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import org.apache.wicket.Page;
 import org.apache.wicket.mock.MockHomePage;
@@ -54,7 +55,9 @@ public class SitelinkSearchboxHeaderBehaviorTest extends AbstractWicketTest {
         page.add(instance);
         
         tester.startPage(page);
-        tester.assertContains("\"@context\": \"https://schema.org\"");
+        tester.assertContains(Pattern.quote("<script type=\"application/ld+json\">"));
+        tester.assertContains(Pattern.quote("\"@context\": \"https://schema.org\""));
+        tester.assertContains(Pattern.quote("\"url\": \"http"));
     }
 
     /**

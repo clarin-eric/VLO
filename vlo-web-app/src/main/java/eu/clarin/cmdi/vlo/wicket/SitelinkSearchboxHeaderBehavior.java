@@ -16,21 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.github.jsonldjava.core.JsonLdError;
-import com.github.jsonldjava.core.JsonLdOptions;
-import com.github.jsonldjava.core.JsonLdProcessor;
-import com.github.jsonldjava.utils.JsonUtils;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
+import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.UrlRenderer;
@@ -45,8 +35,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  */
 public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
 
-    private final static String QUERY_SUFFIX = "?" + VloWebAppParameters.QUERY + "={search_term_string}";
+    private final static String QUERY_PLACEHOLDER = "search_term_string";
+    private final static String QUERY_SUFFIX = "?" + VloWebAppParameters.QUERY + "={" + QUERY_PLACEHOLDER + "}";
     private final static PageParameters EMPTY_PAGE_PARAMETERS = new PageParameters();
+
+    private final static GsonBuilder GSON_BUILDER = new GsonBuilder()
+            .disableHtmlEscaping()
+            .setPrettyPrinting();
 
     public SitelinkSearchboxHeaderBehavior() {
         super(createJsonModel());
@@ -59,43 +54,74 @@ public class SitelinkSearchboxHeaderBehavior extends JsonLdHeaderBehavior {
 
             final String baseUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(VloWicketApplication.get().getHomePage(), EMPTY_PAGE_PARAMETERS)));
             final String searchTargetUrl = urlRenderer.renderFullUrl(Url.parse(requestCycle.urlFor(FacetedSearchPage.class, EMPTY_PAGE_PARAMETERS))) + QUERY_SUFFIX;
-            return "{\n"
-                    + "  \"@context\": \"https://schema.org\",\n"
-                    + "  \"@type\": \"WebSite\",\n"
-                    + "  \"url\": \"" + baseUrl + "\",\n"
-                    + "  \"potentialAction\": {\n"
-                    + "    \"@type\": \"SearchAction\",\n"
-                    + "    \"target\": \"" + searchTargetUrl + "\",\n"
-                    + "    \"query-input\": \"required name=search_term_string\"\n"
-                    + "  }\n"
-                    + "}\n";
+
+            final WebSite metadata = new WebSite(baseUrl, new SearchAction(searchTargetUrl, "required name=" + QUERY_PLACEHOLDER));
+            return GSON_BUILDER.create().toJson(metadata);
         });
     }
-//            try {
-//
-//                //        // Open a valid json(-ld) input file
-////InputStream inputStream = new FileInputStream("input.json");
-////// Read the file into an Object (The type of this object will be a List, Map, String, Boolean,
-////// Number or null depending on the root object in the file).
-////Object jsonObject = JsonUtils.fromInputStream(inputStream);
-//                Map<String, String> jsonObject = ImmutableMap.<String, String>builder()
-//                        .put("url", baseUrl)
-//                        .build();
-//// Create a context JSON map containing prefixes and definitions
-//                Map context = new HashMap();
-//// Customise context...
-//// Create an instance of JsonLdOptions with the standard JSON-LD options
-//                JsonLdOptions options = new JsonLdOptions();
-//// Customise options...
-//// Call whichever JSONLD function you want! (e.g. compact)
-//                Object compact = JsonLdProcessor.compact(jsonObject, context, options);
-//// Print out the result (or don't, it's your call!)
-//                return JsonUtils.toPrettyString(compact);
-//            } catch (JsonLdError | IOException ex) {
-//                return "//error: " + ex.getMessage();
-//            }
-//
-//      });
-//    }
+
+    private static class SearchAction {
+
+        @SerializedName("@type")
+        private final String type = "SearchAction";
+
+        private final String target;
+
+        @SerializedName("query-input")
+        private final String queryInput;
+
+        public SearchAction(String target, String queryInput) {
+            this.target = target;
+            this.queryInput = queryInput;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getTarget() {
+            return target;
+        }
+
+        public String getQueryInput() {
+            return queryInput;
+        }
+
+    }
+
+    private static class WebSite {
+
+        public SearchAction getPotentialAction() {
+            return potentialAction;
+        }
+
+        @SerializedName("@context")
+        private final String context = "https://schema.org";
+
+        @SerializedName("@type")
+        private final String type = "WebSite";
+
+        private final String url;
+
+        private final SearchAction potentialAction;
+
+        public WebSite(String url, SearchAction potentialAction) {
+            this.url = url;
+            this.potentialAction = potentialAction;
+        }
+
+        public String getContext() {
+            return context;
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+    }
 
 }
