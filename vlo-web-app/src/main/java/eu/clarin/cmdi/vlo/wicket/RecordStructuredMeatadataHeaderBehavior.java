@@ -21,10 +21,11 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel;
 import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel.JsonLdObject;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import org.apache.solr.common.SolrDocument;
@@ -59,7 +60,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
                 if (documentModel.getObject() == null) {
                     return null;
                 } else {
-                    return createDataSetForDocument(documentModel.getObject());
+                    return createDataSetForDocument(documentModel);
                 }
             }
         };
@@ -67,15 +68,15 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         return new JsonLdModel(model);
     }
 
-    private static DataSet createDataSetForDocument(SolrDocument document) {
+    private static DataSet createDataSetForDocument(IModel<SolrDocument> documentModel) {
         final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
 
         final DataSet dataSet = new DataSet();
-        dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, document));
+        dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, documentModel.getObject()));
 
-        final ConstructionContext context = new ConstructionContext(fieldNameService, document);
-        context.setDataSetStringValue(FieldKey.NAME, dataSet::setName);
-        context.setDataSetStringValue(FieldKey.DESCRIPTION, dataSet::setDescription);
+        final ConstructionContext context = new ConstructionContext(fieldNameService, documentModel);
+        context.setStringValue(FieldKey.NAME, dataSet::setName, true);
+        context.setStringValue(FieldKey.DESCRIPTION, dataSet::setDescription, false);
 
         //TODO: set remaining properties
         return dataSet;
@@ -84,21 +85,25 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     private static class ConstructionContext {
 
         private final FieldNameService fieldNameService;
-        private final SolrDocument document;
+        private final IModel<SolrDocument> documentModel;
 
-        public ConstructionContext(FieldNameService fieldNameService, SolrDocument document) {
+        public ConstructionContext(FieldNameService fieldNameService, IModel<SolrDocument> documentModel) {
             this.fieldNameService = fieldNameService;
-            this.document = document;
+            this.documentModel = documentModel;
         }
 
-        protected <T> void setDataSetStringValue(FieldKey key, Consumer<String> setter) {
-            setDataSetValue(key, setter, Objects::toString);
+        protected <T> void setStringValue(FieldKey key, Consumer<String> setter, boolean forceSingleValue) {
+            final SolrFieldStringModel valueModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(key), forceSingleValue);
+            final String value = valueModel.getObject();
+            if(value != null) {
+                setter.accept(value);
+            }
         }
 
-        protected <T> void setDataSetValue(FieldKey key, Consumer<T> setter, Function<Object, T> stringMapper) {
-            final Object value = document.getFieldValue(fieldNameService.getFieldName(key));
-            if (value != null) {
-                setter.accept(stringMapper.apply(value));
+        protected <T> void setValue(FieldKey key, Consumer<T> setter, Function<Object, T> valueMapper) {
+            final Collection<Object> value = documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
+            if (value != null && !value.isEmpty()) {
+                setter.accept(valueMapper.apply(value.iterator().next()));
             }
         }
 
