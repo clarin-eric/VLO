@@ -40,16 +40,24 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     }
 
     private static IModel<String> createJsonModel(IModel<SolrDocument> documentModel) {
-        final LoadableDetachableModel<JsonLdObject> model = new LoadableDetachableModel<>(){
+        final LoadableDetachableModel<JsonLdObject> model = new LoadableDetachableModel<>() {
             @Override
             protected JsonLdObject load() {
-                //TODO: set dataset properties
-                return new DataSet();
+                if (documentModel.getObject() == null) {
+                    return null;
+                } else {
+                    return createDataSetForDocument(documentModel.getObject());
+                }
             }
-            
         };
-        
+
         return new JsonLdModel(model);
+    }
+
+    private static DataSet createDataSetForDocument(SolrDocument document) {
+        final DataSet dataSet = new DataSet();
+        //TODO: set properties
+        return dataSet;
     }
 
     private static class DataSet extends JsonLdObject {

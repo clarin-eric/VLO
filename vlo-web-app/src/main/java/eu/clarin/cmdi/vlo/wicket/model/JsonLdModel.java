@@ -20,12 +20,16 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 import org.apache.wicket.model.IModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class JsonLdModel implements IModel<String> {
+    
+    private final static Logger logger = LoggerFactory.getLogger(JsonLdModel.class);
 
     private final static GsonBuilder GSON_BUILDER = new GsonBuilder()
             .disableHtmlEscaping()
@@ -36,12 +40,18 @@ public class JsonLdModel implements IModel<String> {
     public JsonLdModel(IModel<JsonLdObject> jsonLdObjectModel) {
         this.jsonLdObjectModel = jsonLdObjectModel;
     }
-    
+
     @Override
     public String getObject() {
-        return GSON_BUILDER.create().toJson(jsonLdObjectModel.getObject());
+        final JsonLdObject jsonLdObject = jsonLdObjectModel.getObject();
+        if (jsonLdObject == null) {
+            logger.debug("Inner model object is null");
+            return null;
+        } else {
+            return GSON_BUILDER.create().toJson(jsonLdObject);
+        }
     }
-    
+
     @Override
     public void detach() {
         jsonLdObjectModel.detach();
