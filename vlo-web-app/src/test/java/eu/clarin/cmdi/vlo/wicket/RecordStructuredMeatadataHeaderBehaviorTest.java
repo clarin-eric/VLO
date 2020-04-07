@@ -34,6 +34,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
@@ -46,11 +48,14 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBehaviorTest {
 
+    private final static Logger logger = LoggerFactory.getLogger(RecordStructuredMeatadataHeaderBehaviorTest.class);
+    
     private WicketTester tester;
     private RecordStructuredMeatadataHeaderBehavior instance;
     private SolrDocument solrDoc;
 
-    private final static String LANDING_PAGE = "https://www.clarin.eu/landingpage";
+    private final static String LANDING_PAGE_URL = "http://www.clarin.eu/landingpage";
+    private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
     private final static String RECORD_ID = "recordId";
 
     @Inject
@@ -77,16 +82,19 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         tester.startPage(page);
         final String document = tester.getLastResponse().getDocument();
         final JSONObject json = getJsonFromDoc(document);
+        
+        logger.debug("JSON from response: {}", json);
 
         assertEquals("https://schema.org", json.get("@context"));
         assertEquals("DataSet", json.get("@type"));
-        
+
         assertTrue(json.get("url").toString().contains(RECORD_ID));
+        assertEquals(LANDING_PAGE_URL, json.get("mainEntityOfPage"));
 
         final Object identifier = json.get("identifier");
         assertTrue(identifier instanceof JSONArray);
         assertEquals(1, ((JSONArray) identifier).size());
-        assertEquals(LANDING_PAGE, ((JSONArray) identifier).get(0));
+        assertEquals(LANDING_PAGE_URL, ((JSONArray) identifier).get(0));
 
     }
 
