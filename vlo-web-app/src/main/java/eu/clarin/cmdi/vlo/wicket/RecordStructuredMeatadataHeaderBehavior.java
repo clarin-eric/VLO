@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
+import com.google.common.collect.Collections2;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
@@ -24,8 +25,9 @@ import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel.JsonLdObject;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import org.apache.solr.common.SolrDocument;
@@ -78,8 +80,33 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         context.setStringValue(FieldKey.NAME, dataSet::setName, true);
         context.setStringValue(FieldKey.DESCRIPTION, dataSet::setDescription, false);
 
+        //identifier
+        if (context.hasFieldValue(FieldKey.LANDINGPAGE)) {
+            context.setStringValues(FieldKey.LANDINGPAGE, dataSet::setIdentifier);
+        } else {
+            if (context.hasFieldValue(FieldKey.SELF_LINK)) {
+                context.setStringValues(FieldKey.SELF_LINK, dataSet::setIdentifier);
+            } else {
+                context.setStringValues(FieldKey.ID, dataSet::setIdentifier);
+            }
+        }
+        context.setValue(FieldKey.LANDINGPAGE, dataSet::setMainEntityOfPage, RecordStructuredMeatadataHeaderBehavior::fieldValuesToURI);
+
         //TODO: set remaining properties
         return dataSet;
+    }
+
+    private static URI fieldValuesToURI(Collection<Object> values) {
+        if (values.isEmpty()) {
+            return null;
+        } else {
+            try {
+                return new URI(values.iterator().next().toString());
+            } catch (URISyntaxException ex) {
+                logger.debug("Not a valid URI in {}", values);
+                return null;
+            }
+        }
     }
 
     private static class ConstructionContext {
@@ -90,20 +117,30 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         public ConstructionContext(FieldNameService fieldNameService, IModel<SolrDocument> documentModel) {
             this.fieldNameService = fieldNameService;
             this.documentModel = documentModel;
+
+        }
+
+        protected boolean hasFieldValue(FieldKey key) {
+            return documentModel.getObject().containsKey(fieldNameService.getFieldName(key));
         }
 
         protected <T> void setStringValue(FieldKey key, Consumer<String> setter, boolean forceSingleValue) {
             final SolrFieldStringModel valueModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(key), forceSingleValue);
             final String value = valueModel.getObject();
-            if(value != null) {
+            if (value != null) {
                 setter.accept(value);
             }
         }
 
-        protected <T> void setValue(FieldKey key, Consumer<T> setter, Function<Object, T> valueMapper) {
-            final Collection<Object> value = documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
-            if (value != null && !value.isEmpty()) {
-                setter.accept(valueMapper.apply(value.iterator().next()));
+        protected <T> void setStringValues(FieldKey key, Consumer<Collection<String>> setter) {
+            final Collection<Object> values = documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
+            setter.accept(Collections2.transform(values, Objects::toString));
+        }
+
+        protected <T> void setValue(FieldKey key, Consumer<T> setter, Function<Collection<Object>, T> valueMapper) {
+            final Collection<Object> values = documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
+            if (values != null && !values.isEmpty()) {
+                setter.accept(valueMapper.apply(values));
             }
         }
 
@@ -117,7 +154,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         private String description;
 
-        private List<String> identifier;
+        private Collection<String> identifier;
 
         private URI sameAs;
 
@@ -125,7 +162,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         private URI license;
 
-        private List<String> keywords;
+        private Collection<String> keywords;
 
         //TODO: hasPart [CreativeWork]
         //TODO: creator [Person? Organisation?]
@@ -160,11 +197,11 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             this.description = description;
         }
 
-        public List<String> getIdentifier() {
+        public Collection<String> getIdentifier() {
             return identifier;
         }
 
-        public void setIdentifier(List<String> identifier) {
+        public void setIdentifier(Collection<String> identifier) {
             this.identifier = identifier;
         }
 
@@ -192,11 +229,11 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             this.license = license;
         }
 
-        public List<String> getKeywords() {
+        public Collection<String> getKeywords() {
             return keywords;
         }
 
-        public void setKeywords(List<String> keywords) {
+        public void setKeywords(Collection<String> keywords) {
             this.keywords = keywords;
         }
 
