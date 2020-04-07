@@ -25,6 +25,9 @@ import org.apache.wicket.Page;
 import org.apache.wicket.mock.MockHomePage;
 import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Mockery;
+import org.json.simple.JSONObject;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.Configuration;
@@ -37,7 +40,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
  * @author Twan Goosen <twan@clarin.eu>
  */
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
-public class SitelinkSearchboxHeaderBehaviorTest extends AbstractWicketTest {
+public class SitelinkSearchboxHeaderBehaviorTest extends JsonLdHeaderBehaviorTest {
     private WicketTester tester;
     private SitelinkSearchboxHeaderBehavior instance;
 
@@ -50,14 +53,22 @@ public class SitelinkSearchboxHeaderBehaviorTest extends AbstractWicketTest {
     }
 
     @Test
-    public void testOutput() {
+    public void testOutput() throws Exception {
         final Page page = new MockHomePage();
         page.add(instance);
         
         tester.startPage(page);
+
+        final String document = tester.getLastResponse().getDocument();        
+        final JSONObject json = getJsonFromDoc(document);
+        
         tester.assertContains(Pattern.quote("<script type=\"application/ld+json\">"));
         tester.assertContains(Pattern.quote("\"@context\": \"https://schema.org\""));
         tester.assertContains(Pattern.quote("\"url\": \"http"));
+        
+        assertEquals("https://schema.org", json.get("@context"));
+        assertTrue(json.get("url").toString().startsWith("http"));
+        assertTrue(json.get("potentialAction") instanceof JSONObject);
     }
 
     /**
