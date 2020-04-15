@@ -42,7 +42,7 @@
         <vlo.mapping.version>1.4.0</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
-        <solr.version>8.3.1</solr.version> <!-- Warning: Solr 8.4.x introduces 'stall time' in the ConcurrentUpdateSolrClient, which can break the import -->
+        <solr.version>8.5.0</solr.version> <!-- Warning: Solr 8.4.x introduces 'stall time' in the ConcurrentUpdateSolrClient, which can break the import -->
         <slf4j.version>1.7.30</slf4j.version>
         <saxon.version>9.8.0-15</saxon.version>
         <jackson.version>2.10.2</jackson.version>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13</version>
             <scope>test</scope>
         </dependency>
 
