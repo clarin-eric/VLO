@@ -73,6 +73,8 @@ public class SolrBridgeImpl implements SolrBridge {
      */
     @Override
     public void init() throws MalformedURLException {
+        System.setProperty("solr.cloud.client.stallTime", "119999"); // see <https://github.com/clarin-eric/VLO/issues/291>
+        
         final String solrUrl = config.getSolrUrl();
         final int nThreads = config.getSolrThreads();
         LOG.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, nThreads);
