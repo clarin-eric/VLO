@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
+import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeLabel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
@@ -137,8 +138,8 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         }.add(new Label("fileName", new PropertyModel(resourceInfoModel, "fileName"))));
 
         // get the friendly name of the resource type dynamically from the resource bundle
-        columns.add(createResourceTypeLabel("resourceType"));
-
+        columns.add(createResourceMimiTypeLabel("resourceType"));
+        //columns.add(createResourceTypeLabel("resourceType"));
         // toggle details option
         columns.add(new ResourceDetailsToggleLink("details", new PropertyModel<>(resourceInfoModel, "href"))
                 .add(new WebMarkupContainer("show").add(BooleanVisibilityBehavior.visibleOnFalse(itemDetailsShownModel)))
@@ -167,9 +168,13 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
                 new StringResourceModel("resourcetype.${resourceType}.singular", resourceInfoModel)
                         .setDefaultValue(resourceInfoModel.getObject().getResourceType().toString())
         );
-        
     }
-    
+
+    protected ResourceTypeLabel createResourceMimiTypeLabel(String id) {
+        return new ResourceTypeLabel(id, new PropertyModel<>(resourceInfoModel, "mimeType"));
+    }
+
+
     protected Component createOptionsDropdown(final IModel<String> linkModel, final IModel<ResourceInfo> resourceInfoModel) {
         return new ResourceLinkOptionsDropdown("dropdown", documentModel, linkModel, resourceInfoModel);
     }

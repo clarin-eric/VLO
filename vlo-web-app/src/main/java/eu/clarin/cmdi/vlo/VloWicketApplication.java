@@ -150,6 +150,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getComponentInstantiationListeners().add(new SpringComponentInjector(this, applicationContext));
         // register the resource of field names (used by eu.clarin.cmdi.vlo.wicket.componentsSolrFieldNameLabel)
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("fieldNames"));
+        // register the resource of resource mimitype labels
+        getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("mimiTypes"));
         // register the resource of resource type names and class properties
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("resourceTypes"));
         // register the resource of license URLs (used in RecordLicenseInfoPanel)
