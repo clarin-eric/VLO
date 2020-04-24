@@ -112,7 +112,18 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             dataSet.setMainEntityOfPage(landingPageURI);
         }
 
-        //TODO: set remaining properties
+        //Simple properties
+        
+        //TODO: sameAs
+        //TODO: creator
+        //TODO: temporal
+        //TODO: spatial
+        //TODO: license
+        
+        //Complex properties
+        //TODO: hasPart
+        //TODO: distribution
+        
         return dataSet;
     }
     
