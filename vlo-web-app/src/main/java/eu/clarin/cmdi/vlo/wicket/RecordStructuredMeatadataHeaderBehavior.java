@@ -30,9 +30,11 @@ import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
@@ -117,11 +119,22 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         //Simple properties
         //TODO: sameAs
-        //TODO: creator
         //TODO: temporal
         //TODO: spatial
         //TODO: license
         //Complex properties
+        final Collection<Object> creatorValues = context.getFieldValues(FieldKey.CREATOR);
+        if (creatorValues != null) {
+            final List<Person> creators = creatorValues.stream().map(o -> {
+                final String creatorName = o.toString();
+                Person creator = new Person();
+                creator.setName(creatorName);
+                return creator;
+            }).collect(Collectors.toList());
+            dataSet.setCreator(creators);
+        }
+
+        //TODO: creator
         //TODO: hasPart
         //TODO: distribution
         return dataSet;
@@ -155,6 +168,10 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             return documentModel.getObject().containsKey(fieldNameService.getFieldName(key));
         }
 
+        protected Collection<Object> getFieldValues(FieldKey key) {
+            return documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
+        }
+
         protected <T> void setStringValue(FieldKey key, Consumer<String> setter, boolean forceSingleValue) {
             final SolrFieldStringModel valueModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(key), forceSingleValue);
             final String value = valueModel.getObject();
@@ -164,12 +181,12 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         }
 
         protected <T> void setStringValues(FieldKey key, Consumer<Collection<String>> setter) {
-            final Collection<Object> values = documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
+            final Collection<Object> values = getFieldValues(key);
             setter.accept(Collections2.transform(values, Objects::toString));
         }
 
         protected <T> void setValue(FieldKey key, Consumer<T> setter, Function<Collection<Object>, T> valueMapper) {
-            final Collection<Object> values = documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
+            final Collection<Object> values = getFieldValues(key);
             if (values != null && !values.isEmpty()) {
                 setter.accept(valueMapper.apply(values));
             }
@@ -194,7 +211,9 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         private URI license;
 
         private Collection<String> keywords;
-        
+
+        private Collection<Person> creator;
+
         private DataCatalog includedInDataCatalog;
 
         //TODO: hasPart [CreativeWork]
@@ -277,6 +296,14 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             this.includedInDataCatalog = includedInDataCatalog;
         }
 
+        public Collection<Person> getCreator() {
+            return creator;
+        }
+
+        public void setCreator(Collection<Person> creator) {
+            this.creator = creator;
+        }
+
     }
 
     private static class DataCatalog extends JsonLdObject {
@@ -293,6 +320,24 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         public void setUrl(String url) {
             this.url = url;
+        }
+
+    }
+
+    private static class Person extends JsonLdObject {
+
+        private String name;
+
+        public Person() {
+            super("Person");
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
     }

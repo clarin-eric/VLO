@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -47,66 +48,87 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
  */
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBehaviorTest {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(RecordStructuredMeatadataHeaderBehaviorTest.class);
     
     private WicketTester tester;
     private RecordStructuredMeatadataHeaderBehavior instance;
     private SolrDocument solrDoc;
-
+    
     private final static String LANDING_PAGE_URL = "http://www.clarin.eu/landingpage";
+    private final static String HOME_URL = "https://test.vlo.clarin.eu";
     private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
     private final static String RECORD_ID = "recordId";
-
+    private final static String CREATOR_NAME = "creator1";
+    
     @Inject
     private FieldNameService fieldNameService;
     @Inject
     private VloConfig vloConfig;
-
+    
     @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
         tester = getTester();
         solrDoc = new SolrDocument();
-
+        
         instance = new RecordStructuredMeatadataHeaderBehavior(new Model<>(solrDoc));
     }
-
+    
     @Test
     public void testOutput() throws Exception {
         final Page page = new MockHomePage();
         page.add(instance);
-
-        vloConfig.setHomeUrl("https://test.vlo.clarin.eu");
+        
+        vloConfig.setHomeUrl(HOME_URL);
         setDocField(FieldKey.ID, RECORD_ID);
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
-
+        setDocField(FieldKey.CREATOR, ImmutableList.of(CREATOR_NAME, CREATOR_NAME));
+        
         tester.startPage(page);
         final String document = tester.getLastResponse().getDocument();
         final JSONObject json = getJsonFromDoc(document);
         
         logger.debug("JSON from response: {}", json);
 
+        //DataSet object type and schema
         assertEquals("https://schema.org", json.get("@context"));
         assertEquals("DataSet", json.get("@type"));
 
+        // DataSet URL
         assertTrue(json.get("url").toString().contains(RECORD_ID));
-        
-        final Object dataCatalog = json.get("includedInDataCatalog");
-        assertTrue(dataCatalog instanceof JSONObject);
-        assertEquals("DataCatalog", ((JSONObject)dataCatalog).get("@type"));
-        assertEquals("https://test.vlo.clarin.eu", ((JSONObject)dataCatalog).get("url"));
-        
+
+        // Landing page URL
         assertEquals(LANDING_PAGE_URL, json.get("mainEntityOfPage"));
 
-        final Object identifier = json.get("identifier");
-        assertTrue(identifier instanceof JSONArray);
-        assertEquals(1, ((JSONArray) identifier).size());
-        assertEquals(LANDING_PAGE_URL, ((JSONArray) identifier).get(0));
+        // DataCatalog property
+        {
+            final Object dataCatalog = json.get("includedInDataCatalog");
+            assertTrue(dataCatalog instanceof JSONObject);
+            assertEquals("DataCatalog", ((JSONObject) dataCatalog).get("@type"));
+            assertEquals(HOME_URL, ((JSONObject) dataCatalog).get("url"));
+        }
 
+        // Identifiers array
+        {
+            final Object identifier = json.get("identifier");
+            assertTrue(identifier instanceof JSONArray);
+            assertEquals(1, ((JSONArray) identifier).size());
+            assertEquals(LANDING_PAGE_URL, ((JSONArray) identifier).get(0));
+        }
+
+        // Creators array
+        {
+            final Object creators = json.get("creator");
+            assertTrue(creators instanceof JSONArray);
+            assertEquals(2, ((JSONArray) creators).size());
+            final Object creator1 = ((JSONArray) creators).get(0);
+            assertTrue(creator1 instanceof JSONObject);
+            assertEquals(CREATOR_NAME, ((JSONObject) creator1).get("name"));
+        }
     }
-
+    
     private void setDocField(FieldKey key, Object value) {
         solrDoc.setField(fieldNameService.getFieldName(key), value);
     }
@@ -117,15 +139,15 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     @Configuration
     @Import({WicketBaseContextConfiguration.class})
     static class ContextConfiguration extends VloSolrSpringConfig {
-
+        
         @Inject
         private Mockery mockery;
-
+        
         @Override
         public SolrDocumentService documentService() {
             return mockery.mock(SolrDocumentService.class);
         }
-
+        
         @Override
         public FacetFieldsService facetFieldsService() {
             return mockery.mock(FacetFieldsService.class, "facetFieldsService");
