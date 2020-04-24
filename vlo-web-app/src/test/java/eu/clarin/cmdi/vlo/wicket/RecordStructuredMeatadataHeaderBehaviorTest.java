@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
@@ -30,8 +31,7 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Mockery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -60,6 +60,8 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
 
     @Inject
     private FieldNameService fieldNameService;
+    @Inject
+    private VloConfig vloConfig;
 
     @Before
     @Override
@@ -76,6 +78,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         final Page page = new MockHomePage();
         page.add(instance);
 
+        vloConfig.setHomeUrl("https://test.vlo.clarin.eu");
         setDocField(FieldKey.ID, RECORD_ID);
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
 
@@ -89,6 +92,12 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         assertEquals("DataSet", json.get("@type"));
 
         assertTrue(json.get("url").toString().contains(RECORD_ID));
+        
+        final Object dataCatalog = json.get("includedInDataCatalog");
+        assertTrue(dataCatalog instanceof JSONObject);
+        assertEquals("DataCatalog", ((JSONObject)dataCatalog).get("@type"));
+        assertEquals("https://test.vlo.clarin.eu", ((JSONObject)dataCatalog).get("url"));
+        
         assertEquals(LANDING_PAGE_URL, json.get("mainEntityOfPage"));
 
         final Object identifier = json.get("identifier");
