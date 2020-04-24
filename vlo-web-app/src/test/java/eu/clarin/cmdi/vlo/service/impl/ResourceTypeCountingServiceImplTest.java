@@ -23,7 +23,7 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import java.util.Arrays;
 import java.util.Collection;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

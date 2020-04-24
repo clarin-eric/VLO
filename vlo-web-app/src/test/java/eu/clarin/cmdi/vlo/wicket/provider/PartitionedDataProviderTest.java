@@ -16,25 +16,18 @@
  */
 package eu.clarin.cmdi.vlo.wicket.provider;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.UnmodifiableIterator;
 import java.util.Iterator;
 import java.util.List;
-import static org.apache.commons.lang3.CharSetUtils.count;
-import static org.apache.solr.SolrJettyTestBase.context;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
-import org.apache.wicket.model.IModel;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
