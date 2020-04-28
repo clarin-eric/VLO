@@ -101,6 +101,8 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
 
         // Landing page URL
         assertEquals(LANDING_PAGE_URL, json.get("mainEntityOfPage"));
+        // Same as
+        assertEquals(LANDING_PAGE_URL, json.get("sameAs"));
 
         // DataCatalog property
         {

@@ -101,8 +101,9 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             }
         }
 
-        //identifier
+        //identifier - order of preference: 1) landing page 2) self link 3) id
         if (landingPageURI != null) {
+            //identifier
             dataSet.setIdentifier(ImmutableList.of(landingPageURI.toString()));
         } else {
             if (context.hasFieldValue(FieldKey.SELF_LINK)) {
@@ -111,14 +112,16 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
                 context.setStringValues(FieldKey.ID, dataSet::setIdentifier);
             }
         }
-
-        //main entity of page
+        
+        //other landing page derived properties
         if (landingPageURI != null) {
+            //main entity of page
             dataSet.setMainEntityOfPage(landingPageURI);
+            //sameAs
+            dataSet.setSameAs(landingPageURI);
         }
 
         //Simple properties
-        //TODO: sameAs
         //TODO: temporal
         //TODO: spatial
         //TODO: license
