@@ -60,6 +60,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
     private final static String RECORD_ID = "recordId";
     private final static String CREATOR_NAME = "creator1";
+    private final static String LICENSE_URL = "http://www.clarin.eu/license";
     
     @Inject
     private FieldNameService fieldNameService;
@@ -77,7 +78,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     }
     
     @Test
-    public void testOutput() throws Exception {
+    public void testCorrectOutput() throws Exception {
         final Page page = new MockHomePage();
         page.add(instance);
         
@@ -85,6 +86,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         setDocField(FieldKey.ID, RECORD_ID);
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
         setDocField(FieldKey.CREATOR, ImmutableList.of(CREATOR_NAME, CREATOR_NAME));
+        setDocField(FieldKey.LICENSE, LICENSE_URL);
         
         tester.startPage(page);
         final String document = tester.getLastResponse().getDocument();
@@ -103,6 +105,8 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         assertEquals(LANDING_PAGE_URL, json.get("mainEntityOfPage"));
         // Same as
         assertEquals(LANDING_PAGE_URL, json.get("sameAs"));
+        // License
+        assertEquals(LICENSE_URL, json.get("license"));
 
         // DataCatalog property
         {
