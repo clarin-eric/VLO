@@ -18,11 +18,13 @@ import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.JsonLdHeaderBehavior;
 import eu.clarin.cmdi.vlo.wicket.SitelinkSearchboxHeaderBehavior;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
+import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordCountModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
@@ -150,6 +152,11 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         }
         
         add(new SitelinkSearchboxHeaderBehavior());
+        
+        // add schema.org DataCatalog metadata (header)
+        final IModel<JsonLdModel.JsonLdObject> dataCatalogMetadata = Model.of(new DataCatalog(vloConfig.getHomeUrl()));        
+        add(new JsonLdHeaderBehavior(new JsonLdModel(dataCatalogMetadata)));
+        
     }
 
     private void createModels() {
@@ -426,5 +433,19 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("initTourSearchPage();", "initTourSearchPage"));
     }
+    private static class DataCatalog extends JsonLdModel.JsonLdObject {
 
+        private String url;
+
+        public DataCatalog(String url) {
+            super("https://schema.org", "DataCatalog");
+            this.url = url;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+    }
+    
 }

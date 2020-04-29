@@ -35,7 +35,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -163,7 +162,6 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             dataSet.setSpatial(places);
         }
 
-        //TODO: creator
         //TODO: hasPart
         //TODO: distribution
         return dataSet;

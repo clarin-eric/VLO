@@ -28,13 +28,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public abstract class JsonLdHeaderBehavior extends Behavior {
+public class JsonLdHeaderBehavior extends Behavior {
     
     private final static Logger logger = LoggerFactory.getLogger(JsonLdHeaderBehavior.class);
     
     private final IModel<String> jsonLdContentModel;
     
-    protected JsonLdHeaderBehavior(IModel<String> jsonLdContentModel) {
+    public JsonLdHeaderBehavior(IModel<String> jsonLdContentModel) {
         this.jsonLdContentModel = jsonLdContentModel;
     }
     
