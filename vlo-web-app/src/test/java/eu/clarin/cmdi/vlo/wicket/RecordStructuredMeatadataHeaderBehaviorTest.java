@@ -61,6 +61,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
     private final static String RECORD_ID = "recordId";
     private final static String CREATOR_NAME = "creator1";
+    private final static String COUNTRY = "country1";
     private final static String LICENSE_URL = "http://www.clarin.eu/license";
     private final static String LICENSE_TEXT = "CLARIN test license";
 
@@ -85,6 +86,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
 
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
         setDocField(FieldKey.CREATOR, ImmutableList.of(CREATOR_NAME, CREATOR_NAME));
+        setDocField(FieldKey.COUNTRY, ImmutableList.of(COUNTRY, COUNTRY));
         setDocField(FieldKey.LICENSE, LICENSE_URL);
 
         final JSONObject json = startPage(page);
@@ -127,6 +129,16 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
             final Object creator1 = ((JSONArray) creators).get(0);
             assertTrue(creator1 instanceof JSONObject);
             assertEquals(CREATOR_NAME, ((JSONObject) creator1).get("name"));
+        }
+
+        // Country array
+        {
+            final Object spatial = json.get("spatial");
+            assertTrue(spatial instanceof JSONArray);
+            assertEquals(2, ((JSONArray) spatial).size());
+            final Object spatial1 = ((JSONArray) spatial).get(0);
+            assertTrue(spatial1 instanceof JSONObject);
+            assertEquals(COUNTRY, ((JSONObject) spatial1).get("name"));
         }
     }
 

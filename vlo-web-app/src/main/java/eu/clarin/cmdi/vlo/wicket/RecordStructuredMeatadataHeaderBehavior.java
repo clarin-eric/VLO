@@ -49,19 +49,19 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavior {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(RecordStructuredMeatadataHeaderBehavior.class);
-    
+
     public RecordStructuredMeatadataHeaderBehavior(IModel<SolrDocument> documentModel) {
         super(createJsonModel(documentModel));
     }
-    
+
     @Override
     public boolean isEnabled(Component component) {
         // TODO disable in certain cases??
         return super.isEnabled(component);
     }
-    
+
     private static IModel<String> createJsonModel(IModel<SolrDocument> documentModel) {
         final LoadableDetachableModel<JsonLdObject> model = new LoadableDetachableModel<>() {
             @Override
@@ -73,23 +73,23 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
                 }
             }
         };
-        
+
         return new JsonLdModel(model);
     }
-    
+
     private static DataSet createDataSetForDocument(IModel<SolrDocument> documentModel) {
         final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
-        
+
         final DataSet dataSet = new DataSet();
         dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, documentModel.getObject()));
         final DataCatalog dataCatalog = new DataCatalog();
         dataCatalog.setUrl(VloWicketApplication.get().getVloConfig().getHomeUrl());
         dataSet.setIncludedInDataCatalog(dataCatalog);
-        
+
         final ConstructionContext context = new ConstructionContext(fieldNameService, documentModel);
         context.setStringValue(FieldKey.NAME, dataSet::setName, true);
         context.setStringValue(FieldKey.DESCRIPTION, dataSet::setDescription, false);
-        
+
         URI landingPageURI = null;
         if (context.hasFieldValue(FieldKey.LANDINGPAGE)) {
             ResourceInfoObjectModel resourceInfoObjectModel = new ResourceInfoObjectModel(new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
@@ -140,18 +140,27 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         //Simple properties
         //TODO: temporal
-        //TODO: spatial
-        //TODO: license
+
         //Complex properties
+        
+        //creator
         final Collection<Object> creatorValues = context.getFieldValues(FieldKey.CREATOR);
         if (creatorValues != null) {
-            final List<Person> creators = creatorValues.stream().map(o -> {
-                final String creatorName = o.toString();
-                Person creator = new Person();
-                creator.setName(creatorName);
-                return creator;
-            }).collect(Collectors.toList());
+            final List<Person> creators = creatorValues.stream()
+                    .map(Objects::toString)
+                    .map(Person::new)
+                    .collect(Collectors.toList());
             dataSet.setCreator(creators);
+        }
+
+        //spatial
+        final Collection<Object> placeValues = context.getFieldValues(FieldKey.COUNTRY);
+        if (placeValues != null) {
+            final List<Place> places = placeValues.stream()
+                    .map(Objects::toString)
+                    .map(Place::new)
+                    .collect(Collectors.toList());
+            dataSet.setSpatial(places);
         }
 
         //TODO: creator
@@ -159,7 +168,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         //TODO: distribution
         return dataSet;
     }
-    
+
     private static URI fieldValuesToURI(Collection<Object> values) {
         if (values.isEmpty()) {
             return null;
@@ -172,26 +181,26 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             }
         }
     }
-    
+
     private static class ConstructionContext {
-        
+
         private final FieldNameService fieldNameService;
         private final IModel<SolrDocument> documentModel;
-        
+
         public ConstructionContext(FieldNameService fieldNameService, IModel<SolrDocument> documentModel) {
             this.fieldNameService = fieldNameService;
             this.documentModel = documentModel;
-            
+
         }
-        
+
         protected boolean hasFieldValue(FieldKey key) {
             return documentModel.getObject().containsKey(fieldNameService.getFieldName(key));
         }
-        
+
         protected Collection<Object> getFieldValues(FieldKey key) {
             return documentModel.getObject().getFieldValues(fieldNameService.getFieldName(key));
         }
-        
+
         protected <T> void setStringValue(FieldKey key, Consumer<String> setter, boolean forceSingleValue) {
             final SolrFieldStringModel valueModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(key), forceSingleValue);
             final String value = valueModel.getObject();
@@ -199,167 +208,188 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
                 setter.accept(value);
             }
         }
-        
+
         protected <T> void setStringValues(FieldKey key, Consumer<Collection<String>> setter) {
             final Collection<Object> values = getFieldValues(key);
             setter.accept(Collections2.transform(values, Objects::toString));
         }
-        
+
         protected <T> void setValue(FieldKey key, Consumer<T> setter, Function<Collection<Object>, T> valueMapper) {
             final Collection<Object> values = getFieldValues(key);
             if (values != null && !values.isEmpty()) {
                 setter.accept(valueMapper.apply(values));
             }
         }
-        
+
     }
-    
+
     private static class DataSet extends JsonLdObject {
-        
+
         private String url;
-        
+
         private String name;
-        
+
         private String description;
-        
+
         private Collection<String> identifier;
-        
+
         private URI sameAs;
-        
+
         private URI mainEntityOfPage;
-        
+
         private URI license;
-        
+
         private Collection<String> keywords;
-        
+
         private Collection<Person> creator;
-        
+
+        private Collection<Place> spatial;
+
         private DataCatalog includedInDataCatalog;
 
         //TODO: hasPart [CreativeWork]
-        //TODO: creator [Person? Organisation?]
         //TODO: distribution [DataDownload]
-        //TODO: spatial [Place]        
+
         public DataSet() {
             super("https://schema.org", "DataSet");
         }
-        
+
         public String getUrl() {
             return url;
         }
-        
+
         public void setUrl(String url) {
             this.url = url;
         }
-        
+
         public String getName() {
             return name;
         }
-        
+
         public void setName(String name) {
             this.name = name;
         }
-        
+
         public String getDescription() {
             return description;
         }
-        
+
         public void setDescription(String description) {
             this.description = description;
         }
-        
+
         public Collection<String> getIdentifier() {
             return identifier;
         }
-        
+
         public void setIdentifier(Collection<String> identifier) {
             this.identifier = identifier;
         }
-        
+
         public URI getSameAs() {
             return sameAs;
         }
-        
+
         public void setSameAs(URI sameAs) {
             this.sameAs = sameAs;
         }
-        
+
         public URI getMainEntityOfPage() {
             return mainEntityOfPage;
         }
-        
+
         public void setMainEntityOfPage(URI mainEntityOfPage) {
             this.mainEntityOfPage = mainEntityOfPage;
         }
-        
+
         public URI getLicense() {
             return license;
         }
-        
+
         public void setLicense(URI license) {
             this.license = license;
         }
-        
+
         public Collection<String> getKeywords() {
             return keywords;
         }
-        
+
         public void setKeywords(Collection<String> keywords) {
             this.keywords = keywords;
         }
-        
+
         public DataCatalog getIncludedInDataCatalog() {
             return includedInDataCatalog;
         }
-        
+
         public void setIncludedInDataCatalog(DataCatalog includedInDataCatalog) {
             this.includedInDataCatalog = includedInDataCatalog;
         }
-        
+
         public Collection<Person> getCreator() {
             return creator;
         }
-        
+
         public void setCreator(Collection<Person> creator) {
             this.creator = creator;
         }
-        
+
+        public Collection<Place> getSpatial() {
+            return spatial;
+        }
+
+        public void setSpatial(Collection<Place> spatial) {
+            this.spatial = spatial;
+        }
+
     }
-    
+
     private static class DataCatalog extends JsonLdObject {
-        
+
         private String url;
-        
+
         public DataCatalog() {
             super("DataCatalog");
         }
-        
+
         public String getUrl() {
             return url;
         }
-        
+
         public void setUrl(String url) {
             this.url = url;
         }
-        
+
     }
-    
+
     private static class Person extends JsonLdObject {
-        
+
         private String name;
-        
-        public Person() {
+
+        public Person(String name) {
             super("Person");
+            this.name = name;
         }
-        
+
         public String getName() {
             return name;
         }
-        
-        public void setName(String name) {
+
+    }
+
+    private static class Place extends JsonLdObject {
+
+        private String name;
+
+        public Place(String name) {
+            super("Place");
             this.name = name;
         }
-        
+
+        public String getName() {
+            return name;
+        }
+
     }
-    
+
 }
