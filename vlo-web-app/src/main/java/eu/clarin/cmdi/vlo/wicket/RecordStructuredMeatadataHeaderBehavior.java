@@ -20,8 +20,10 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceInfo;
+import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel;
 import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel.JsonLdObject;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoObjectModel;
@@ -40,6 +42,9 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,8 +86,9 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         final DataSet dataSet = new DataSet();
         dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, documentModel.getObject()));
-        final DataCatalog dataCatalog = new DataCatalog();
-        dataCatalog.setUrl(VloWicketApplication.get().getVloConfig().getHomeUrl());
+
+        final VloConfig vloConfig = VloWicketApplication.get().getVloConfig();
+        final DataCatalog dataCatalog = new DataCatalog(vloConfig.getHomeUrl());
         dataSet.setIncludedInDataCatalog(dataCatalog);
 
         final ConstructionContext context = new ConstructionContext(fieldNameService, documentModel);
@@ -139,9 +145,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         //Simple properties
         //TODO: temporal
-
         //Complex properties
-        
         //creator
         final Collection<Object> creatorValues = context.getFieldValues(FieldKey.CREATOR);
         if (creatorValues != null) {
@@ -162,7 +166,19 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             dataSet.setSpatial(places);
         }
 
-        //TODO: hasPart
+        final Collection<Object> hasPartValues = context.getFieldValues(FieldKey.HAS_PART);
+        if (hasPartValues != null) {
+            final List<CreativeWork> children = hasPartValues.stream()
+                    .map(partId -> {
+                        final PageParameters params = new PageParameters().add(VloWebAppParameters.DOCUMENT_ID, partId.toString());
+                        final String relativeUrl = RequestCycle.get().urlFor(RecordPage.class, params).toString();
+                        return RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(relativeUrl));
+                    })
+                    .map(CreativeWork::new)
+                    .collect(Collectors.toList());
+            dataSet.setHasPart(children);
+
+        }
         //TODO: distribution
         return dataSet;
     }
@@ -237,6 +253,8 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         private URI license;
 
+        private Collection<CreativeWork> hasPart;
+
         private Collection<String> keywords;
 
         private Collection<Person> creator;
@@ -245,9 +263,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         private DataCatalog includedInDataCatalog;
 
-        //TODO: hasPart [CreativeWork]
         //TODO: distribution [DataDownload]
-
         public DataSet() {
             super("https://schema.org", "DataSet");
         }
@@ -340,29 +356,34 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             this.spatial = spatial;
         }
 
+        public Collection<CreativeWork> getHasPart() {
+            return hasPart;
+        }
+
+        public void setHasPart(Collection<CreativeWork> hasPart) {
+            this.hasPart = hasPart;
+        }
+
     }
 
     private static class DataCatalog extends JsonLdObject {
 
-        private String url;
+        private final String url;
 
-        public DataCatalog() {
+        public DataCatalog(String url) {
             super("DataCatalog");
+            this.url = url;
         }
 
         public String getUrl() {
             return url;
         }
 
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
     }
 
     private static class Person extends JsonLdObject {
 
-        private String name;
+        private final String name;
 
         public Person(String name) {
             super("Person");
@@ -377,7 +398,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
     private static class Place extends JsonLdObject {
 
-        private String name;
+        private final String name;
 
         public Place(String name) {
             super("Place");
@@ -386,6 +407,21 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         public String getName() {
             return name;
+        }
+
+    }
+
+    private static class CreativeWork extends JsonLdObject {
+
+        private final String url;
+
+        public CreativeWork(String url) {
+            super("CreativeWork");
+            this.url = url;
+        }
+
+        public String getUrl() {
+            return url;
         }
 
     }

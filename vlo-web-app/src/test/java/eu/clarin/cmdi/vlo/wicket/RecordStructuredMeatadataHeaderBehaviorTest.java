@@ -57,6 +57,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     private SolrDocument solrDoc;
 
     private final static String LANDING_PAGE_URL = "http://www.clarin.eu/landingpage";
+    private final static String PART_URL = "child_record_id";
     private final static String HOME_URL = "https://test.vlo.clarin.eu";
     private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
     private final static String RECORD_ID = "recordId";
@@ -87,6 +88,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
         setDocField(FieldKey.CREATOR, ImmutableList.of(CREATOR_NAME, CREATOR_NAME));
         setDocField(FieldKey.COUNTRY, ImmutableList.of(COUNTRY, COUNTRY));
+        setDocField(FieldKey.HAS_PART, ImmutableList.of(PART_URL, PART_URL + "-other"));
         setDocField(FieldKey.LICENSE, LICENSE_URL);
 
         final JSONObject json = startPage(page);
@@ -128,6 +130,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
             assertEquals(2, ((JSONArray) creators).size());
             final Object creator1 = ((JSONArray) creators).get(0);
             assertTrue(creator1 instanceof JSONObject);
+            assertEquals("Person", ((JSONObject) creator1).get("@type"));
             assertEquals(CREATOR_NAME, ((JSONObject) creator1).get("name"));
         }
 
@@ -138,7 +141,20 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
             assertEquals(2, ((JSONArray) spatial).size());
             final Object spatial1 = ((JSONArray) spatial).get(0);
             assertTrue(spatial1 instanceof JSONObject);
+            assertEquals("Place", ((JSONObject) spatial1).get("@type"));
             assertEquals(COUNTRY, ((JSONObject) spatial1).get("name"));
+        }
+
+        // Has part array
+        {
+            final Object parts = json.get("hasPart");
+            assertTrue(parts instanceof JSONArray);
+            assertEquals(2, ((JSONArray) parts).size());
+            final Object part1 = ((JSONArray) parts).get(0);
+            assertTrue(part1 instanceof JSONObject);
+            assertEquals("CreativeWork", ((JSONObject) part1).get("@type"));
+            assertTrue(((JSONObject) part1).get("url") instanceof String);
+            assertTrue(((JSONObject) part1).get("url").toString().endsWith(PART_URL));
         }
     }
 
