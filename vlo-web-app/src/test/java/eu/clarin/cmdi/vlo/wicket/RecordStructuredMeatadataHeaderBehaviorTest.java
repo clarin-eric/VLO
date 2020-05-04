@@ -23,7 +23,10 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
+import org.apache.curator.shaded.com.google.common.base.Suppliers;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Page;
 import org.apache.wicket.mock.MockHomePage;
@@ -56,10 +59,13 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     private RecordStructuredMeatadataHeaderBehavior instance;
     private SolrDocument solrDoc;
 
-    private final static String LANDING_PAGE_URL = "http://www.clarin.eu/landingpage";
-    private final static String PART_URL = "child_record_id";
     private final static String HOME_URL = "https://test.vlo.clarin.eu";
+    private final static String LANDING_PAGE_URL = "http://www.clarin.eu/landingpage";
     private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
+    private final static String RESOURCE_URL = "http://www.clarin.eu/resource";
+    private final static String RESOURCE_TYPE = "application/pdf";
+    private final static String RESOURCE_REF = "{\"url\":\"" + RESOURCE_URL + "\",\"type\":\"" + RESOURCE_TYPE + "\",\"status\":null,\"lastChecked\":null}";
+    private final static String PART_URL = "child_record_id";
     private final static String RECORD_ID = "recordId";
     private final static String CREATOR_NAME = "creator1";
     private final static String COUNTRY = "country1";
@@ -89,6 +95,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         setDocField(FieldKey.CREATOR, ImmutableList.of(CREATOR_NAME, CREATOR_NAME));
         setDocField(FieldKey.COUNTRY, ImmutableList.of(COUNTRY, COUNTRY));
         setDocField(FieldKey.HAS_PART, ImmutableList.of(PART_URL, PART_URL + "-other"));
+        setDocField(FieldKey.RESOURCE, ImmutableList.of(RESOURCE_REF, RESOURCE_REF));
         setDocField(FieldKey.LICENSE, LICENSE_URL);
 
         final JSONObject json = startPage(page);
@@ -156,6 +163,18 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
             assertTrue(((JSONObject) part1).get("url") instanceof String);
             assertTrue(((JSONObject) part1).get("url").toString().endsWith(PART_URL));
         }
+
+        // Resources (distribution) array
+        {
+            final Object resources = json.get("distribution");
+            assertTrue(resources instanceof JSONArray);
+            assertEquals(2, ((JSONArray) resources).size());
+            final Object resource1 = ((JSONArray) resources).get(0);
+            assertTrue(resource1 instanceof JSONObject);
+            assertEquals("DataDownload", ((JSONObject) resource1).get("@type"));
+            assertEquals(RESOURCE_URL, ((JSONObject) resource1).get("contentUrl"));
+            assertEquals(RESOURCE_TYPE, ((JSONObject) resource1).get("encodingFormat"));
+        }
     }
 
     @Test
@@ -192,6 +211,30 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
             assertEquals(1, ((JSONArray) identifier).size());
             assertEquals(RECORD_ID, ((JSONArray) identifier).get(0));
         }
+    }
+
+    @Test
+    public void testArrayLimit() throws Exception {
+        Page page = preparePage();
+
+        final int limit = RecordStructuredMeatadataHeaderBehavior.ARRAY_SIZE_LIMIT;
+        final int belowLimit = limit - 1;
+
+        //more creators than limit allows
+        setDocField(FieldKey.CREATOR, Stream.generate(() -> CREATOR_NAME).limit(limit + 10).collect(Collectors.toList()));
+        //more 'spatial' entries than limit allows
+        setDocField(FieldKey.COUNTRY, Stream.generate(() -> COUNTRY).limit(limit + 10).collect(Collectors.toList()));
+        //hasPart entries below limit
+        setDocField(FieldKey.HAS_PART, Stream.generate(() -> PART_URL).limit(belowLimit).collect(Collectors.toList()));
+        //resource ref entries below limit
+        setDocField(FieldKey.RESOURCE, Stream.generate(() -> RESOURCE_REF).limit(belowLimit).collect(Collectors.toList()));
+
+        final JSONObject json = startPage(page);
+
+        assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("creator")).size());
+        assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("spatial")).size());
+        assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("hasPart")).size());
+        assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("distribution")).size());
     }
 
     private Page preparePage() {

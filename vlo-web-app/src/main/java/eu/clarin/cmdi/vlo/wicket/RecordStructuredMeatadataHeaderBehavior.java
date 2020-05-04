@@ -42,6 +42,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -56,6 +57,8 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
     private final static Logger logger = LoggerFactory.getLogger(RecordStructuredMeatadataHeaderBehavior.class);
 
+    public static final int ARRAY_SIZE_LIMIT = 25;
+    
     public RecordStructuredMeatadataHeaderBehavior(IModel<SolrDocument> documentModel) {
         super(createJsonModel(documentModel));
     }
@@ -152,6 +155,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             final List<Person> creators = creatorValues.stream()
                     .map(Objects::toString)
                     .map(Person::new)
+                    .limit(ARRAY_SIZE_LIMIT)
                     .collect(Collectors.toList());
             dataSet.setCreator(creators);
         }
@@ -162,6 +166,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             final List<Place> places = placeValues.stream()
                     .map(Objects::toString)
                     .map(Place::new)
+                    .limit(ARRAY_SIZE_LIMIT)
                     .collect(Collectors.toList());
             dataSet.setSpatial(places);
         }
@@ -175,10 +180,28 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
                         return RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(relativeUrl));
                     })
                     .map(CreativeWork::new)
+                    .limit(ARRAY_SIZE_LIMIT)
                     .collect(Collectors.toList());
             dataSet.setHasPart(children);
 
         }
+
+        final Collection<Object> resourceInfos = context.getFieldValues(FieldKey.RESOURCE);
+        if (resourceInfos != null) {
+            List<DataDownload> resources = resourceInfos.stream()
+                    .map(Objects::toString).map(Model::of).map(ResourceInfoObjectModel::new).map(ResourceInfoObjectModel::getObject)
+                    .map(resource -> {
+                        final DataDownload dataDownload = new DataDownload();
+                        dataDownload.setContentUrl(resource.getUrl());
+                        dataDownload.setEncodingFormat(resource.getType());
+                        //TODO: set name?
+                        return dataDownload;
+                    })
+                    .limit(ARRAY_SIZE_LIMIT)
+                    .collect(Collectors.toList());
+            dataSet.setDistribution(resources);
+        }
+
         //TODO: distribution
         return dataSet;
     }
@@ -260,6 +283,8 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         private Collection<Person> creator;
 
         private Collection<Place> spatial;
+
+        private Collection<DataDownload> distribution;
 
         private DataCatalog includedInDataCatalog;
 
@@ -364,6 +389,14 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             this.hasPart = hasPart;
         }
 
+        public Collection<DataDownload> getDistribution() {
+            return distribution;
+        }
+
+        public void setDistribution(Collection<DataDownload> distribution) {
+            this.distribution = distribution;
+        }
+
     }
 
     private static class DataCatalog extends JsonLdObject {
@@ -422,6 +455,42 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         public String getUrl() {
             return url;
+        }
+
+    }
+
+    private static class DataDownload extends JsonLdObject {
+
+        private String name;
+        private String contentUrl;
+        private String encodingFormat;
+
+        public DataDownload() {
+            super("DataDownload");
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getContentUrl() {
+            return contentUrl;
+        }
+
+        public void setContentUrl(String contentUrl) {
+            this.contentUrl = contentUrl;
+        }
+
+        public String getEncodingFormat() {
+            return encodingFormat;
+        }
+
+        public void setEncodingFormat(String encodingFormat) {
+            this.encodingFormat = encodingFormat;
         }
 
     }
