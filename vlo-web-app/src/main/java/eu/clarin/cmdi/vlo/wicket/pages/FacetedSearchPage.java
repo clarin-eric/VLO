@@ -58,12 +58,13 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.AbstractPageableView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
 
 /**
  * The main search page showing a search form, facets, and search results
@@ -116,6 +117,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private IModel<Boolean> simpleModeModel;
     private IModel<Long> recordCountModel;
 
+    private IModel<String> searchResultsTitleModel;
+
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
         this(queryModel, Model.of(false));
     }
@@ -138,9 +141,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         final QueryFacetsSelection selection = paramsConverter.fromParameters(parameters);
         final IModel<QueryFacetsSelection> queryModel = new Model<>(selection);
-        
+
         setModel(queryModel);
-        
+
         createModels();
         this.simpleModeModel = simpleModeModel;
 
@@ -150,13 +153,13 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         if (piwikConfig.isEnabled()) {
             resultsHeader.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
         }
-        
+
         add(new SitelinkSearchboxHeaderBehavior());
-        
+
         // add schema.org DataCatalog metadata (header)
-        final IModel<JsonLdModel.JsonLdObject> dataCatalogMetadata = Model.of(new DataCatalog(vloConfig.getHomeUrl()));        
+        final IModel<JsonLdModel.JsonLdObject> dataCatalogMetadata = Model.of(new DataCatalog(vloConfig.getHomeUrl()));
         add(new JsonLdHeaderBehavior(new JsonLdModel(dataCatalogMetadata)));
-        
+
     }
 
     private void createModels() {
@@ -165,6 +168,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         facetNamesModel = new FacetNamesModel(facetFields);
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
         recordCountModel = new RecordCountModel(getModel());
+
+        searchResultsTitleModel = new StringResourceModel("pageTitle.searchResults", FacetedSearchPage.this, super.getTitleModel());
 
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
         facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
@@ -392,6 +397,22 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     @Override
+    public IModel<String> getTitleModel() {
+        return new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                final QueryFacetsSelection selection = FacetedSearchPage.this.getModelObject();
+                if (selection != null && (selection.getQuery() != null || !selection.getSelection().isEmpty())) {
+                    return searchResultsTitleModel.getObject();
+                } else {
+                    return FacetedSearchPage.super.getTitleModel().getObject();
+                }
+            }
+        };
+
+    }
+
+    @Override
     public IModel<String> getCanonicalUrlModel() {
         return new PermaLinkModel(getPageClass(), getModel());
     }
@@ -404,6 +425,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     @Override
     public void detachModels() {
         super.detachModels();
+        
+        searchResultsTitleModel.detach();
+        
         if (facetSelectionTypeModeModel != null) {
             facetSelectionTypeModeModel.detach();
         }
@@ -433,6 +457,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("initTourSearchPage();", "initTourSearchPage"));
     }
+
     private static class DataCatalog extends JsonLdModel.JsonLdObject {
 
         private String url;
@@ -447,5 +472,5 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         }
 
     }
-    
+
 }
