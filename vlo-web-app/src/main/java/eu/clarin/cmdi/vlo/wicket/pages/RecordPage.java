@@ -455,7 +455,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         // Put the name of the record in the page title
         return new StringResourceModel("recordpage.title",
                 new NullFallbackModel<>(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord")))
-                .setDefaultValue(DEFAULT_PAGE_TITLE);
+                .setDefaultValue(new StringResourceModel("pageTitle.default", this));
     }
 
     @Override

@@ -72,7 +72,6 @@ public class VloBasePage<T> extends GenericWebPage<T> {
 
     private final static Logger logger = LoggerFactory.getLogger(VloBasePage.class);
     public static final String DEFAULT_APP_TITLE = "Virtual Language Observatory";
-    public final static String DEFAULT_PAGE_TITLE = "CLARIN VLO";
 
     public static final String VLO_APPLICATION_TITLE_ENV_VAR = "VLO_APPLICATION_TITLE";
     public static final String VLO_PAGE_TITLE_ENV_VAR = "VLO_PAGE_TITLE";
@@ -218,7 +217,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     private void addComponents() {
 
         appTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_APPLICATION_TITLE_ENV_VAR), DEFAULT_APP_TITLE);
-        pageTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), DEFAULT_PAGE_TITLE);
+        pageTitleModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_PAGE_TITLE_ENV_VAR), new StringResourceModel("pageTitle.default", this));
         final IModel<String> instanceInfoModel = new NullFallbackModel<>(new EnvironmentVariableModel(VLO_INSTANCE_INFO_ENV_VAR), "Unnamed application instance");
 
         add(new BootstrapFeedbackPanel("feedback"));
