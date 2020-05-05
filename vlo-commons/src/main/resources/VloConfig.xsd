@@ -66,6 +66,7 @@
                 <xs:element name="vcrSubmitEndpoint" type="xs:string" />
                 <xs:element name="centreRegistryCentresListJsonUrl" type="xs:string" />
                 <xs:element name="centreRegistryOaiPmhEndpointsListJsonUrl" type="xs:string" />
+                <xs:element name="webAppLocale" type="xs:string" />
                 <xs:element name="otherProvidersMarkupFile" type="xs:string" />
                 <xs:element name="lrSwitchboardBaseUrl" type="xs:string" />
                 <xs:element name="linkCheckerDbConnectionString" type="xs:string" />

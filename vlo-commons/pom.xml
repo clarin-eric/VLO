@@ -42,6 +42,7 @@
         <vloconfig.vcrSubmitEndpoint>https://collections.clarin.eu/app/submit/extensional</vloconfig.vcrSubmitEndpoint>
         <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
         <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
+        <vloConfig.webAppLocale>en-GB</vloConfig.webAppLocale>
         <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
         <vloConfig.enableFcsLinks>true</vloConfig.enableFcsLinks>
     </properties>

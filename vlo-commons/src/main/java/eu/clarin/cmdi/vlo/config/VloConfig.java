@@ -165,6 +165,8 @@ public class VloConfig {
     private int availabilityStatusUpdaterBatchSize = 50;
     
     private boolean enableFcsLinks;
+    
+    private String webAppLocale;
 
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String, String> fields;
@@ -1521,6 +1523,14 @@ public class VloConfig {
 
     public void setEnableFcsLinks(boolean enableFcsLinks) {
         this.enableFcsLinks = enableFcsLinks;
+    }
+
+    public String getWebAppLocale() {
+        return webAppLocale;
+    }
+
+    public void setWebAppLocale(String webAppLocale) {
+        this.webAppLocale = webAppLocale;
     }
 
 }

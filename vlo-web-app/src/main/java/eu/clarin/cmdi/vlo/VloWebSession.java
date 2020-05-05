@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import java.io.Serializable;
+import java.util.Locale;
+import java.util.Optional;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.util.time.Time;
@@ -32,9 +34,10 @@ public class VloWebSession extends WebSession {
 
     private final Time initTime;
 
-    public VloWebSession(Request request) {
+    public VloWebSession(Request request, Optional<Locale> locale) {
         super(request);
         this.initTime = Time.now();
+        locale.ifPresent(super::setLocale);
     }
 
     public static VloWebSession get() {

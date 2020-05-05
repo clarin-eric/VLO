@@ -32,8 +32,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
+import java.util.function.Predicate;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
@@ -42,7 +45,6 @@ import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
@@ -90,6 +92,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     private ApplicationContext applicationContext;
     private String appVersionQualifier;
+    private Optional<Locale> sessionLocale;
 
     /**
      * @return the home page of this application
@@ -127,6 +130,14 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
         // add history API ajax request target listener for URL updates on Ajax request
         getAjaxRequestTargetListeners().add(new HistoryApiAjaxRequestTargetListener());
+
+        // fixed session locale from configuration
+        sessionLocale = Optional
+                .ofNullable(vloConfig.getWebAppLocale())
+                // not if set to blank
+                .filter(Predicate.not(String::isBlank))
+                // String to Locale conversion
+                .map(Locale::forLanguageTag);
     }
 
     private void registerResourceBundles() {
@@ -219,7 +230,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     @Override
     public Session newSession(Request request, Response response) {
-        return new VloWebSession(request);
+        return new VloWebSession(request, sessionLocale);
     }
 
     /**
@@ -299,9 +310,9 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     }
 
     public VloConfig getVloConfig() {
-    	return vloConfig;
+        return vloConfig;
     }
-    
+
     private void initBootstrap() {
         Bootstrap.install(this,
                 new BootstrapSettings()

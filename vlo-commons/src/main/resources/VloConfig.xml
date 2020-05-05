@@ -276,6 +276,8 @@
 
     <centreRegistryOaiPmhEndpointsListJsonUrl>${vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl}</centreRegistryOaiPmhEndpointsListJsonUrl>
 
+    <webAppLocale>${vloConfig.webAppLocale}</webAppLocale>
+
     <otherProvidersMarkupFile>${vloConfig.otherProvidersMarkupFile}</otherProvidersMarkupFile>
 
     <lrSwitchboardBaseUrl>${vloconfig.lrSwitchboardBaseUrl}</lrSwitchboardBaseUrl>
