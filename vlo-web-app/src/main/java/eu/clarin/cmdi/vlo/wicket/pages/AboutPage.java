@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
  *
@@ -35,6 +36,11 @@ public class AboutPage extends VloBasePage {
         add(new Label("containerId", containedIdModel)
                 .add(new InvisibleIfNullBehaviour<>(containedIdModel))
         );
+    }
+
+    @Override
+    public IModel getTitleModel() {
+        return new StringResourceModel("pageTitle.aboutPage", this, super.getTitleModel());
     }
 
 }

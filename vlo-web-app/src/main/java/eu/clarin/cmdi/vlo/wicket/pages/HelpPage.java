@@ -21,6 +21,8 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 /**
@@ -52,6 +54,11 @@ public class HelpPage extends VloBasePage {
                 + "  $('body').scrollspy({ target: '#toc' });"
                 + "});";
         response.render(JavaScriptHeaderItem.forScript(scrollspyScript, "scrollspy"));
+    }
+
+    @Override
+    public IModel getTitleModel() {
+        return new StringResourceModel("pageTitle.helpPage", this, super.getTitleModel());
     }
 
 }

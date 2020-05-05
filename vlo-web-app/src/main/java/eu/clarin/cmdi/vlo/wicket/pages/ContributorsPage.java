@@ -30,8 +30,10 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,4 +89,10 @@ public class ContributorsPage extends VloBasePage {
             }
         }
     }
+
+    @Override
+    public IModel getTitleModel() {
+        return new StringResourceModel("pageTitle.contributorsPage", this, super.getTitleModel());
+    }
+
 }
