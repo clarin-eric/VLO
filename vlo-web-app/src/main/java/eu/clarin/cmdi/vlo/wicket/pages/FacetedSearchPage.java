@@ -48,6 +48,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -393,6 +394,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
             //reapply js for nice tooltips
             t.appendJavaScript("applyFacetTooltips();");
+            t.appendJavaScript(String.format("document.title='%s'", JavaScriptUtils.escapeQuotes(getTitleModel().getObject())));
         });
     }
 
@@ -425,9 +427,9 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     @Override
     public void detachModels() {
         super.detachModels();
-        
+
         searchResultsTitleModel.detach();
-        
+
         if (facetSelectionTypeModeModel != null) {
             facetSelectionTypeModeModel.detach();
         }
