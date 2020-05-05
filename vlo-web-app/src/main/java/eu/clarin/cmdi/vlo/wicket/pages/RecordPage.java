@@ -195,7 +195,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
-            
+
             final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
             setModel(documentModel);
             add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
@@ -449,12 +449,12 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             navigationModel.detach();
         }
     }
-
+    
     @Override
     public IModel<String> getTitleModel() {
-        // Put the name of the record in the page title
-        return new StringResourceModel("recordpage.title",
-                new NullFallbackModel<>(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord")))
+        final NullFallbackModel<String> titleModel = new NullFallbackModel<>(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord"));
+        return new StringResourceModel("pageTitle.recordPage", this, super.getTitleModel())
+                .setParameters(titleModel)
                 .setDefaultValue(new StringResourceModel("pageTitle.default", this));
     }
 
