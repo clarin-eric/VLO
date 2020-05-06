@@ -60,7 +60,9 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
             final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
             final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
             return String.format(
-                    "showSwitchboardPopup({alignSelector:'#%s', alignRight:true}, {url:'%s'}); return false;",
+                    "var dropDownId='#' + $('#%s').parents('.dropdown').attr('id');"
+                    + "showSwitchboardPopup({'alignSelector': dropDownId, 'alignRight': true}, {'url': '%s'});"
+                    + "return false;",
                     alignId,
                     resourceLink);
         }));

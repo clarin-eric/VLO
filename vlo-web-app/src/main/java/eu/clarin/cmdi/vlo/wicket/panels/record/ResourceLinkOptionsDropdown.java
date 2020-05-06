@@ -61,6 +61,8 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         this.documentModel = documentModel;
         this.linkModel = linkModel;
         this.resourceInfoModel = resourceInfoModel;
+        
+        setOutputMarkupId(true);
     }
 
     @Override
