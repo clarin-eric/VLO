@@ -15,6 +15,7 @@ import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
+import eu.clarin.cmdi.vlo.wicket.FormatDateConverter;
 import eu.clarin.cmdi.vlo.wicket.RobotAwareWebResponse;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.wicket.pages.AboutPage;
@@ -30,7 +31,9 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,6 +44,8 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.Application;
+import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.HeaderItem;
@@ -250,6 +255,14 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         //Search engine optimisation: prevent JSESSIONID in URL for web crawlers
         return new RobotAwareWebResponse((ServletWebRequest) webRequest, httpServletResponse);
     }
+
+    @Override
+    protected IConverterLocator newConverterLocator() {
+        final ConverterLocator converterLocator = (ConverterLocator) super.newConverterLocator();
+        converterLocator.set(Date.class, new FormatDateConverter(DateFormat.LONG));
+        return converterLocator;
+    }
+    
 
     /**
      *
