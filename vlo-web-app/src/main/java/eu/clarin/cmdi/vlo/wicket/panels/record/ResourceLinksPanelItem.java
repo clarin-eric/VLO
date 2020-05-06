@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
-import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
@@ -42,8 +41,6 @@ import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -323,12 +320,6 @@ public class ResourceLinksPanelItem extends GenericPanel<ResourceInfo> {
         public String getAjaxIndicatorMarkupId() {
             return indicatorAppender.getMarkupId();
         }
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSwitchboardPopupJS(), true));
     }
 
     @Override
