@@ -1,0 +1,157 @@
+.switchboardpopup {
+    width:1px;
+    height:1px;
+    margin:0;
+    padding:0;
+}
+
+button.switchboardpopup-dropdown-toggle {
+    /*background-color: transparent;*/
+    /*padding: 4px 4px;*/
+}
+
+button.switchboardpopup-dropdown-toggle img{
+    /*width: 24px;*/
+    /*height: 24px;*/
+}
+
+ul.switchboardpopup-dropdown-menu {
+    padding: 0px;
+}
+@media (min-width: 768px) {
+    ul.switchboardpopup-dropdown-menu {
+        /*width: 483px;*/
+    }
+}
+
+ul.switchboardpopup-dropdown-menu {
+    padding: 0px;
+    transform: scale(0.75);
+    transform-origin: 0 0;
+}
+
+ul.switchboardpopup-dropdown-menu.switchboardpopup-dropdown-menu-right {
+    transform-origin: 100% 0;
+}
+
+ul iframe {
+    border: none;
+    width: 375px;
+    height: 600px;
+}
+
+
+/**
+ * The rest of this file is generated using the bootstrap customizer,
+ * and selecting only the dropdown jquery plugin and JS component
+ * It has also been customized by prepending .switchboardpopup to each rule
+ * and also by removing unused css roles
+ */
+
+/*!
+ * Bootstrap v3.3.4 (http://getbootstrap.com)
+ * Copyright 2011-2015 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+ */
+
+/*!
+ * Generated using the Bootstrap Customizer (http://getbootstrap.com/customize/?id=1e1cd3679ce835062bd5)
+ * Config saved to config.json and https://gist.github.com/1e1cd3679ce835062bd5
+ */
+/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+
+.switchboardpopup-dropup,
+.switchboardpopup-dropdown {
+    position: relative;
+}
+.switchboardpopup-dropdown-toggle:focus {
+    outline: 0;
+}
+.switchboardpopup-dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0;
+    list-style: none;
+    font-size: 14px;
+    text-align: left;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+}
+.switchboardpopup-open > .switchboardpopup-dropdown-menu {
+    display: block;
+}
+.switchboardpopup-dropdown-menu-right {
+    left: auto;
+    right: 0;
+}
+.switchboardpopup-dropdown-menu-left {
+    left: 0;
+    right: auto;
+}
+.switchboardpopup-dropdown-backdrop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 990;
+}
+.switchboardpopup-pull-right > .switchboardpopup-dropdown-menu {
+    right: 0;
+    left: auto;
+}
+.switchboardpopup-dropup .switchboardpopup-caret,
+.switchboardpopup-dropup .switchboardpopup-dropdown-menu,
+.switchboardpopup-clearfix:before,
+.switchboardpopup-clearfix:after {
+    content: " ";
+    display: table;
+}
+.switchboardpopup-clearfix:after {
+    clear: both;
+}
+.switchboardpopup-center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.switchboardpopup-pull-right {
+    float: right !important;
+}
+.switchboardpopup-pull-left {
+    float: left !important;
+}
+.switchboardpopup-hide {
+    display: none !important;
+}
+.switchboardpopup-show {
+    display: block !important;
+}
+.switchboardpopup-invisible {
+    visibility: hidden;
+}
+.switchboardpopup-text-hide {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
+}
+.switchboardpopup-hidden {
+    display: none !important;
+}
+.switchboardpopup-affix {
+    position: fixed;
+}
