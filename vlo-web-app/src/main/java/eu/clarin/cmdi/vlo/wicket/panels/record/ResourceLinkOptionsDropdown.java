@@ -25,20 +25,17 @@ import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.LanguageResourceSwitchboardLink;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -130,7 +127,7 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     protected boolean showCaret() {
         return false;
     }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();

@@ -16,15 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.wicket.components;
 
-
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
-import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
-import org.apache.wicket.markup.html.link.Link;
+import java.util.Optional;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.core.util.string.JavaScriptUtils;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -35,7 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author twagoo
  */
-public class LanguageResourceSwitchboardLink extends Link {
+public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
 
     private final static Logger logger = LoggerFactory.getLogger(LanguageResourceSwitchboardLink.class);
 
@@ -45,7 +47,7 @@ public class LanguageResourceSwitchboardLink extends Link {
     private LanguageCodeUtils languageCodeUtils;
 
     private final IModel<String> linkModel;
-    private final IModel<ResourceInfo>  resourceInfoModel;
+    private final IModel<ResourceInfo> resourceInfoModel;
     private final IModel<Collection<Object>> languagesModel;
 
     public LanguageResourceSwitchboardLink(String id, IModel<String> linkModel, IModel<Collection<Object>> languagesModel, IModel<ResourceInfo> resourceInfoModel) {
@@ -53,11 +55,31 @@ public class LanguageResourceSwitchboardLink extends Link {
         this.linkModel = linkModel;
         this.resourceInfoModel = resourceInfoModel;
         this.languagesModel = languagesModel;
+
+        add(new AttributeModifier("onclick", () -> {
+            final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
+            final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
+            return String.format(
+                    "showSwitchboardPopup({alignSelector:'#%s', alignRight:true}, {url:'%s'}); return false;",
+                    alignId,
+                    resourceLink);
+        }));
+
+        setOutputMarkupId(true);
     }
 
     @Override
-    public void onClick() {
-        throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
+    public void onClick(Optional<AjaxRequestTarget> target) {
+        if (target.isPresent()) {
+            //call popup
+            final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
+            final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
+            final String js = String.format("showSwitchboardPopup({alignSelector:'#%s', alignRight:true}, {url:'%s'}); return false;", alignId, resourceLink);
+            target.get().appendJavaScript(js);
+        } else {
+            //redirect browser to Switchboard website
+            throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
+        }
     }
 
     private String getLanguageSwitchboardUrl(IModel<String> linkModel, ResourceInfo resourceInfo) {
