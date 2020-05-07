@@ -706,4 +706,14 @@ public class DefaultVloConfigFactoryTest {
         String result = config.getLrSwitchboardBaseUrl();
         assertEquals("https://switchboard.clarin.eu/", result);
     }
+
+    @Test
+    public void testGetDataSetStructuredData() {
+        DataSetStructuredData result = config.getDataSetStructuredData();
+        assertTrue(result.isEnabled());
+        assertEquals(1, result.getInclude().size());
+        assertEquals("clarin", result.getInclude().get(0).getValue());
+        assertEquals("HARVESTER_ROOT", result.getInclude().get(0).getField());
+        assertEquals(0, result.getExclude().size());
+    }
 }

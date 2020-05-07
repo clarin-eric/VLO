@@ -167,6 +167,8 @@ public class VloConfig {
     private boolean enableFcsLinks;
     
     private String webAppLocale;
+    
+    private DataSetStructuredData dataSetStructuredData;
 
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     private Map<String, String> fields;
@@ -1531,6 +1533,14 @@ public class VloConfig {
 
     public void setWebAppLocale(String webAppLocale) {
         this.webAppLocale = webAppLocale;
+    }
+
+    public void setDataSetStructuredData(DataSetStructuredData dataSetStructuredData) {
+        this.dataSetStructuredData = dataSetStructuredData;
+    }
+
+    public DataSetStructuredData getDataSetStructuredData() {
+        return dataSetStructuredData;
     }
 
 }
