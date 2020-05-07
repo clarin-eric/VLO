@@ -45,8 +45,6 @@ public final class JavaScriptResources {
     private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tourist.js", false);
 
     private final static ResourceReference CLIPBOARD_JS = new ContextRelativeResourceReference("assets/clipboardjs/dist/clipboard.js");
-    
-    private final static ResourceReference SWITCHBOARD_POPUP_JS = new ContextRelativeResourceReference("assets/switchboard-popup/switchboardpopup.js");
 
     public static ResourceReference getBootstrapJS() {
         return BOOTSTRAP;
@@ -98,10 +96,6 @@ public final class JavaScriptResources {
 
     public static ResourceReference getClipBoardJS() {
         return CLIPBOARD_JS;
-    }
-
-    public static ResourceReference getSwitchboardPopupJS() {
-        return SWITCHBOARD_POPUP_JS;
     }
 
 }

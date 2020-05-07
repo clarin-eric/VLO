@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
@@ -35,8 +34,6 @@ import java.util.Collection;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
@@ -131,12 +128,6 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     @Override
     protected boolean showCaret() {
         return false;
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSwitchboardPopupJS(), true));
     }
 
     @Override
