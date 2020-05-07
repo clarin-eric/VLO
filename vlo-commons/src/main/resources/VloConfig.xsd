@@ -76,6 +76,7 @@
                 <xs:element name="processHierarchies" type="xs:boolean" />
                 <xs:element name="enableFcsLinks" type="xs:boolean" />
                 <xs:element ref="signatureFields" />
+                <xs:element ref="dataSetStructuredData" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -99,6 +100,22 @@
             <xs:attribute name="ignoreHierarchyDirs" type="xs:string" />
         </xs:complexType>
     </xs:element>
+    <xs:element name="dataSetStructuredData">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="enabled" type="xs:boolean" minOccurs="1" maxOccurs="1" />
+                <xs:element name="include" type="dataSetStructuredDataFilter" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="exclude" type="dataSetStructuredDataFilter" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="dataSetStructuredDataFilter">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="field" use="required" type="xs:string" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
     <xs:element name="fields">
         <xs:complexType>
             <xs:sequence>
