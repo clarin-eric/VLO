@@ -18,15 +18,16 @@ package eu.clarin.cmdi.vlo.wicket;
 
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.config.DataSetStructuredData;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
-import org.apache.curator.shaded.com.google.common.base.Suppliers;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Page;
 import org.apache.wicket.mock.MockHomePage;
@@ -245,6 +246,12 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         //set basic properties
         vloConfig.setHomeUrl(HOME_URL);
         setDocField(FieldKey.ID, RECORD_ID);
+        
+        final DataSetStructuredData dataSetStructuredData = new DataSetStructuredData();
+        dataSetStructuredData.setEnabled(true);
+        dataSetStructuredData.setInclude(new ArrayList<>());
+        dataSetStructuredData.setExclude(new ArrayList<>());
+        vloConfig.setDataSetStructuredData(dataSetStructuredData);
 
         return page;
     }

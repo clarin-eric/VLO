@@ -22,6 +22,8 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.DataSetStructuredData;
+import eu.clarin.cmdi.vlo.config.DataSetStructuredDataFilter;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel;
@@ -46,6 +48,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,15 +61,18 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     private final static Logger logger = LoggerFactory.getLogger(RecordStructuredMeatadataHeaderBehavior.class);
 
     public static final int ARRAY_SIZE_LIMIT = 25;
-    
+    public static final String FILTER_WILDCARD = "*";
+
+    @SpringBean
+    private VloConfig vloConfig;
+    @SpringBean
+    private FieldNameService fieldNameService;
+
+    private final IModel<SolrDocument> documentModel;
+
     public RecordStructuredMeatadataHeaderBehavior(IModel<SolrDocument> documentModel) {
         super(createJsonModel(documentModel));
-    }
-
-    @Override
-    public boolean isEnabled(Component component) {
-        // TODO disable in certain cases??
-        return super.isEnabled(component);
+        this.documentModel = documentModel;
     }
 
     private static IModel<String> createJsonModel(IModel<SolrDocument> documentModel) {
@@ -206,17 +212,55 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         return dataSet;
     }
 
-    private static URI fieldValuesToURI(Collection<Object> values) {
-        if (values.isEmpty()) {
-            return null;
+    @Override
+    public boolean isEnabled(Component component) {
+        if (super.isEnabled(component)) {
+            return isEnabled(vloConfig.getDataSetStructuredData());
         } else {
-            try {
-                return new URI(values.iterator().next().toString());
-            } catch (URISyntaxException ex) {
-                logger.debug("Not a valid URI in {}", values);
-                return null;
+            return false;
+        }
+    }
+
+    private boolean isEnabled(DataSetStructuredData config) {
+        if (config == null || !config.isEnabled()) {
+            return false;
+        } else {
+            //check against include/exclude filters
+            final List<DataSetStructuredDataFilter> include = config.getInclude();
+            final List<DataSetStructuredDataFilter> exclude = config.getExclude();
+
+            if (include == null
+                    || include.isEmpty() // if no include filter is present, it implies 'include all'
+                    || matchesFilter(include)) { // matching include filter is first condition
+                // include check result positive
+                return (exclude == null
+                        || exclude.isEmpty() // if no exclude filter, it implies 'exclude none'
+                        || !matchesFilter(exclude)); // NOT matching exclude filter is second condition
+            } else {
+                // include check result negative
+                return false;
             }
         }
+    }
+
+    private boolean matchesFilter(List<DataSetStructuredDataFilter> filter) {
+        final SolrDocument document = documentModel.getObject();
+        return document != null // null document treated as no match
+                && filter.stream()
+                        .anyMatch(f -> {
+                            final FieldKey fieldKey = FieldKey.valueOf(f.getField());
+                            if (fieldKey != null) {
+                                final Collection<Object> fieldValues = document.getFieldValues(fieldNameService.getFieldName(fieldKey));
+                                if (fieldValues != null) {
+                                    final String filterValue = f.getValue();
+                                    return FILTER_WILDCARD.equals(filterValue) || fieldValues.stream().anyMatch(fieldValue -> {
+                                        return filterValue.equals(fieldValue.toString());
+                                    });
+                                }
+                            }
+
+                            return false;
+                        });
     }
 
     private static class ConstructionContext {
