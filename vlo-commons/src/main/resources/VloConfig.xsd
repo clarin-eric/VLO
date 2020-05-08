@@ -112,7 +112,7 @@
     <xs:complexType name="dataSetStructuredDataFilter">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="field" use="required" type="xs:string" />
+                <xs:attribute name="field" use="required" type="keyType" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
