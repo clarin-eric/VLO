@@ -266,6 +266,8 @@
             <xs:enumeration value="COMPLETE_METADATA" />
             <xs:enumeration value="PROJECT_NAME" />
             <xs:enumeration value="TEMPORAL_COVERAGE" />
+            <xs:enumeration value="TEMPORAL_COVERAGE_START" />
+            <xs:enumeration value="TEMPORAL_COVERAGE_END" />
             <xs:enumeration value="DAYS_SINCE_LAST_SEEN" />
             <xs:enumeration value="HAS_PART_COUNT_WEIGHT" />
             <xs:enumeration value="LANGUAGE_NAME" />

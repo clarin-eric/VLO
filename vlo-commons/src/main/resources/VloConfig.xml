@@ -127,6 +127,8 @@
         <field key="COMPLETE_METADATA">metadataSource</field>
         <field key="PROJECT_NAME">projectName</field>
         <field key="TEMPORAL_COVERAGE">temporalCoverage</field>
+        <field key="TEMPORAL_COVERAGE_START">temporalCoverage_s</field>
+        <field key="TEMPORAL_COVERAGE_END">temporalCoverage_e</field>
         <field key="DAYS_SINCE_LAST_SEEN">_daysSinceLastSeen</field>
         <field key="HAS_PART_COUNT_WEIGHT">_hasPartCountWeight</field>
         <field key="LANGUAGE_NAME">_languageName</field>
