@@ -117,25 +117,23 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             }
         }
 
-        //identifier - order of preference: 1) landing page 2) self link 3) id
-        if (landingPageURI != null) {
-            //identifier
-            dataSet.setIdentifier(ImmutableList.of(landingPageURI.toString()));
-        } else {
-            if (context.hasFieldValue(FieldKey.SELF_LINK)) {
-                context.setStringValues(FieldKey.SELF_LINK, dataSet::setIdentifier);
-            } else {
-                context.setStringValues(FieldKey.ID, dataSet::setIdentifier);
-            }
+        if (landingPageURI == null) {
+            return null;
         }
 
-        //other landing page derived properties
-        if (landingPageURI != null) {
-            //main entity of page
-            dataSet.setMainEntityOfPage(landingPageURI);
-            //sameAs
-            dataSet.setSameAs(landingPageURI);
-        }
+        //identifier
+        dataSet.setIdentifier(ImmutableList.of(landingPageURI.toString()));
+        //main entity of page
+        dataSet.setMainEntityOfPage(landingPageURI);
+        //sameAs
+        dataSet.setSameAs(landingPageURI);
+        
+        // alternative identifiers if no landing page??
+//        if (context.hasFieldValue(FieldKey.SELF_LINK)) {
+//            context.setStringValues(FieldKey.SELF_LINK, dataSet::setIdentifier);
+//        } else {
+//            context.setStringValues(FieldKey.ID, dataSet::setIdentifier);
+//        }
 
         //licence
         context.setValue(FieldKey.LICENSE, dataSet::setLicense, values -> {

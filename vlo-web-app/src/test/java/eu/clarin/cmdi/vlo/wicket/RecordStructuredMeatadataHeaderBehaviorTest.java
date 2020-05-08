@@ -200,18 +200,11 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     @Test
     public void testNoLandingPage() throws Exception {
         Page page = preparePage();
+        setDocField(FieldKey.LANDINGPAGE, null);
 
-        final JSONObject json = startPage(page);
-        assertNull(json.get("mainEntityOfPage"));
-        assertNull(json.get("sameAs"));
-
-        // Identifiers array
-        {
-            final Object identifier = json.get("identifier");
-            assertTrue(identifier instanceof JSONArray);
-            assertEquals(1, ((JSONArray) identifier).size());
-            assertEquals(RECORD_ID, ((JSONArray) identifier).get(0));
-        }
+        tester.startPage(page);
+        final String document = tester.getLastResponse().getDocument();
+        assertFalse(document.contains("<script type=\"application/ld+json\">"));
     }
 
     @Test
@@ -246,7 +239,8 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         //set basic properties
         vloConfig.setHomeUrl(HOME_URL);
         setDocField(FieldKey.ID, RECORD_ID);
-        
+        setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
+
         final DataSetStructuredData dataSetStructuredData = new DataSetStructuredData();
         dataSetStructuredData.setEnabled(true);
         dataSetStructuredData.setInclude(new ArrayList<>());
