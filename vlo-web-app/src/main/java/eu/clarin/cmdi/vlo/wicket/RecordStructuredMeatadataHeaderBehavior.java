@@ -42,6 +42,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -127,14 +128,13 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         dataSet.setMainEntityOfPage(landingPageURI);
         //sameAs
         dataSet.setSameAs(landingPageURI);
-        
+
         // alternative identifiers if no landing page??
 //        if (context.hasFieldValue(FieldKey.SELF_LINK)) {
 //            context.setStringValues(FieldKey.SELF_LINK, dataSet::setIdentifier);
 //        } else {
 //            context.setStringValues(FieldKey.ID, dataSet::setIdentifier);
 //        }
-
         //licence
         context.setValue(FieldKey.LICENSE, dataSet::setLicense, values -> {
             return values.stream().findFirst()
@@ -211,11 +211,9 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     }
 
     @Override
-    public boolean isEnabled(Component component) {
-        if (super.isEnabled(component)) {
-            return isEnabled(vloConfig.getDataSetStructuredData());
-        } else {
-            return false;
+    public void renderHead(Component component, IHeaderResponse response) {
+        if (isEnabled(vloConfig.getDataSetStructuredData())) {
+            super.renderHead(component, response);
         }
     }
 
