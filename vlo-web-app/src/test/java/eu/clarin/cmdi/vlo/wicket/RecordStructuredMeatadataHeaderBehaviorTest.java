@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataSetStructuredData;
+import eu.clarin.cmdi.vlo.config.DataSetStructuredDataFilter;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
@@ -229,6 +230,91 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("spatial")).size());
         assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("hasPart")).size());
         assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("distribution")).size());
+    }
+
+    @Test
+    public void testFilter() throws Exception {
+        final String SUBJECT_VALUE = "subject";
+        final String COLLECTION_VALUE = "collection";
+
+        final Page page = preparePage();
+
+        setDocField(FieldKey.COLLECTION, COLLECTION_VALUE);
+        setDocField(FieldKey.SUBJECT, SUBJECT_VALUE);
+
+        final DataSetStructuredData dataSetStructuredData = vloConfig.getDataSetStructuredData();
+
+        dataSetStructuredData.setEnabled(false);
+        assertNoJson(page);
+
+        // ** no filters **
+        dataSetStructuredData.setEnabled(true);
+        // this will assert json content
+        startPage(page);
+
+        // ** add unmatched include filter **
+        {
+            final DataSetStructuredDataFilter includeFilter = new DataSetStructuredDataFilter();
+            includeFilter.setField(FieldKey.HARVESTER_ROOT.toString());
+            includeFilter.setValue("clarin");
+            dataSetStructuredData.getInclude().add(includeFilter);
+        }
+        assertNoJson(page);
+
+        // ** add matched include filter **
+        {
+            final DataSetStructuredDataFilter includeFilter = new DataSetStructuredDataFilter();
+            includeFilter.setField(FieldKey.COLLECTION.toString());
+            includeFilter.setValue("collection");
+            dataSetStructuredData.getInclude().add(includeFilter);
+        }
+        startPage(page);  // this will assert json content
+
+        // ** add unmatched exclude filter **
+        {
+            final DataSetStructuredDataFilter excludeFilter = new DataSetStructuredDataFilter();
+            excludeFilter.setField(FieldKey.SUBJECT.toString());
+            excludeFilter.setValue("test");
+            dataSetStructuredData.getExclude().add(excludeFilter);
+        }
+        startPage(page); // this will assert json content
+
+        // ** add matched exclude filter **
+        {
+            final DataSetStructuredDataFilter excludeFilter = new DataSetStructuredDataFilter();
+            excludeFilter.setField(FieldKey.SUBJECT.toString());
+            excludeFilter.setValue(SUBJECT_VALUE);
+            dataSetStructuredData.getExclude().add(excludeFilter);
+        }
+        assertNoJson(page);
+
+        // ** unset include filter - should still fail because of exclude **
+        dataSetStructuredData.getInclude().clear();
+        assertNoJson(page);
+
+        // ** test wildcard for include **
+        dataSetStructuredData.getExclude().clear();
+        {
+            final DataSetStructuredDataFilter includeFilter = new DataSetStructuredDataFilter();
+            includeFilter.setField(FieldKey.COLLECTION.toString());
+            includeFilter.setValue("*");
+            dataSetStructuredData.getInclude().add(includeFilter);
+        }
+        startPage(page); // this will assert json content
+        // ** test wildcard for exclude **
+        {
+            final DataSetStructuredDataFilter excludeFilter = new DataSetStructuredDataFilter();
+            excludeFilter.setField(FieldKey.SUBJECT.toString());
+            excludeFilter.setValue("*");
+            dataSetStructuredData.getExclude().add(excludeFilter);
+        }
+        assertNoJson(page);
+    }
+
+    private void assertNoJson(Page page) {
+        tester.startPage(page);
+        final String document = tester.getLastResponse().getDocument();
+        assertFalse(document.contains("<script type=\"application/ld+json\">"));
     }
 
     private Page preparePage() {
