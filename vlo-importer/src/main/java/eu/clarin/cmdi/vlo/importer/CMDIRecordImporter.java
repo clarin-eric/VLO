@@ -31,6 +31,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.TemporalCoveragePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import java.io.File;
 import java.io.IOException;
@@ -244,6 +245,18 @@ public class CMDIRecordImporter<T> {
         } else {
             languageCount = 0;
         }
+
+        // set temporalCoverage helper fields (start/end)
+        Collection<Object> temporalCoverageField = cmdiData.getDocField(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE));
+        if (temporalCoverageField != null && temporalCoverageField.size() == 1) {
+            String tcValue = (String) temporalCoverageField.toArray()[0];
+            Integer[] temporalRange = TemporalCoveragePostNormalizer.extractDateRange(tcValue);
+            if(temporalRange != null) {
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE_START), temporalRange[0].toString() + "-01-01T00:00:00Z", false);
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE_END), temporalRange[1].toString() + "-12-31T23:59:59Z", false);
+            }
+        }
+
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_COUNT), languageCount, false);
     }
 

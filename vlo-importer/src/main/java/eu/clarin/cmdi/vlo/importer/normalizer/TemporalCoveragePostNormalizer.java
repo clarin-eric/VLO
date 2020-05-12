@@ -93,7 +93,7 @@ public class TemporalCoveragePostNormalizer extends AbstractPostNormalizer {
         return resultList;
     }
 
-    private Integer[] extractDateRange(final String value) {
+    public static Integer[] extractDateRange(final String value) {
         Matcher solrMatcher = SOLR_DATERANGE_PATTERN.matcher(value);
         Integer[] rangeArray = null;
         if (solrMatcher.find()) {
