@@ -164,6 +164,8 @@ public class VloConfig {
 
     private int availabilityStatusUpdaterBatchSize = 50;
     
+    private int maxNumberOfFacetsToShow = 10;
+    
     private boolean enableFcsLinks;
     
     private String webAppLocale;
@@ -1541,6 +1543,14 @@ public class VloConfig {
 
     public DataSetStructuredData getDataSetStructuredData() {
         return dataSetStructuredData;
+    }
+
+    public void setMaxNumberOfFacetsToShow(int maxNumberOfFacetsToShow) {
+        this.maxNumberOfFacetsToShow = maxNumberOfFacetsToShow;
+    }
+
+    public int getMaxNumberOfFacetsToShow() {
+        return maxNumberOfFacetsToShow;
     }
 
 }

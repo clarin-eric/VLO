@@ -47,18 +47,6 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     private final int valueLimit;
 
     /**
-     * now we are returning all facets and model is shared between
-     * facetValuesPanel and FacetsPagePanel
-     *
-     * @param service service to use for facet field retrieval
-     * @param facets facets to include
-     * @param selectionModel model that provides current query/selection
-     */
-    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel) {
-        this(service, facets, selectionModel, -1);
-    }
-
-    /**
      *
      * @param service service to use for facet field retrieval
      * @param facets facets to include

@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import com.google.common.collect.ImmutableSet;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
@@ -64,7 +65,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  */
 public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
-    public final static int MAX_NUMBER_OF_FACETS_TO_SHOW = 10; //TODO: get from config
     public final static Collection<String> LOW_PRIORITY_VALUES = ImmutableSet.of("unknown", "unspecified", "");
 
     private final BootstrapModal valuesWindow;
@@ -76,12 +76,16 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<FacetSelectionType> selectionTypeModeModel;
     private final IModel<QueryFacetsSelection> beforeAllValuesSelection = new Model<>();
     private final IModel<FieldValuesFilter> beforeAllValuesFilter = new Model<>();
-
+    private final int maxNumberOfFacetsToShow;
+    
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
 
     @SpringBean
     private PiwikConfig piwikConfig;
+
+    @SpringBean
+    private VloConfig vloConfig;
 
     /**
      * Creates a new panel with selectable values for a single facet
@@ -130,6 +134,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesWindow);
 
         fieldNameModel = new PropertyModel<>(model, "name");
+        
+        maxNumberOfFacetsToShow = vloConfig.getMaxNumberOfFacetsToShow();
     }
 
     /**
@@ -139,7 +145,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @return data view with value links
      */
     private DataView createValuesView(String id) {
-        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), MAX_NUMBER_OF_FACETS_TO_SHOW, LOW_PRIORITY_VALUES, fieldValueConverterProvider) {
+        final FacetFieldValuesProvider valuesProvider = new FacetFieldValuesProvider(getModel(), maxNumberOfFacetsToShow, LOW_PRIORITY_VALUES, fieldValueConverterProvider) {
 
             @Override
             protected IModel<FieldValuesFilter> getFilterModel() {
@@ -260,7 +266,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             protected void onConfigure() {
                 super.onConfigure();
                 // only show if there actually are more values!
-                setVisible(getModelObject().getValueCount() > MAX_NUMBER_OF_FACETS_TO_SHOW);
+                setVisible(getModelObject().getValueCount() > maxNumberOfFacetsToShow);
             }
 
         };
