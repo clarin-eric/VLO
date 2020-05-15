@@ -81,7 +81,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         if (vloConfig.getFacetsInSearch().contains(facet)) {
             // create a new model so that all values will be retrieved
-            setModel(new FacetFieldModel(facet, facetFieldsService, selectionModel)); // gets all facet values
+            setModel(new FacetFieldModel(facet, facetFieldsService, selectionModel, -1)); // gets all facet values
         }
         if (getModelObject() == null) {
             Session.get().error(String.format("Facet '%s' could not be found", facet));

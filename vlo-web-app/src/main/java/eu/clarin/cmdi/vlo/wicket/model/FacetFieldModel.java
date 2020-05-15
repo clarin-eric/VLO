@@ -45,9 +45,10 @@ public class FacetFieldModel implements IModel<FacetField> {
      * @param service service to use for facet field retrieval
      * @param facet facet to provide
      * @param selectionModel model that provides current query/selection
+     * @param valueLimit number of facet values to load (-1 for all)
      */
-    public FacetFieldModel(String facet, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel) {
-        this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, -1));
+    public FacetFieldModel(String facet, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
+        this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, valueLimit));
     }
 
     public FacetFieldModel(String facetName, FacetFieldsModel fieldsModel) {
