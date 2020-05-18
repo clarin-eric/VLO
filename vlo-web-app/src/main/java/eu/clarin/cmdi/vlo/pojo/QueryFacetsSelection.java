@@ -121,6 +121,12 @@ public class QueryFacetsSelection implements Serializable {
         }
     }
 
+    // allows one facet value
+    public void addSingleFacetValue(String facet, FacetSelectionType selectionType, Collection<String> values) {
+        FacetSelection curSel = new FacetSelection(selectionType, values);
+        selectValues(facet, curSel);
+    }
+
     public void addNewFacetValue(String facet, FacetSelectionType selectionType, Collection<String> values) {
         FacetSelection curSel = selection.get(facet);
         if (curSel != null) {

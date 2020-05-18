@@ -87,6 +87,12 @@ public class SolrDocumentServiceImpl implements SolrDocumentService {
     }
 
     @Override
+    public List<SolrDocument> getSortedDocuments(QueryFacetsSelection selection, String sortField, String sortDirection, int first, int count) {
+        final SolrQuery query = queryFactory.createSortedDocumentQuery(selection, sortField, sortDirection, first, count);
+        return searchResultsDao.getDocuments(query);
+    }
+
+    @Override
     public SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count, String collapseField) {
         final SolrQuery query = queryFactory.createDocumentQueryWithExpansion(selection, first, count);
         final QueryResponse queryResponse = searchResultsDao.getQueryResponse(query);

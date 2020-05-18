@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import eu.clarin.cmdi.vlo.FieldKey;
@@ -59,6 +60,22 @@ public class SolrDocumentQueryFactoryImpl extends AbstractSolrQueryFactory imple
         final SolrQuery query = getDefaultDocumentQuery();
         // collapse similar fields
         query.addFilterQuery(COLLAPSE_FIELD_QUERY);
+        // apply selection
+        addQueryFacetParameters(query, selection);
+        // set offset and limit
+        query.setStart(first);
+        query.setRows(count);
+        return query;
+    }
+
+    @Override
+    public SolrQuery createSortedDocumentQuery(QueryFacetsSelection selection, String sortField, String sortDirection, int first, int count) {
+        // make a query to get all documents that match the selection criteria
+        final SolrQuery query = getDefaultDocumentQuery();
+        // collapse similar fields
+        query.addFilterQuery(COLLAPSE_FIELD_QUERY);
+        // apply field Sorting
+        query.addSort(sortField, ORDER.valueOf(sortDirection.toLowerCase()));
         // apply selection
         addQueryFacetParameters(query, selection);
         // set offset and limit

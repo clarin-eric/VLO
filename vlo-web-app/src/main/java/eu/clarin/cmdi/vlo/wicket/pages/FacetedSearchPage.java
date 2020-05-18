@@ -15,6 +15,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.pojo.TemporalCoverageRange;
 import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -23,20 +24,10 @@ import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.JsonLdHeaderBehavior;
 import eu.clarin.cmdi.vlo.wicket.SitelinkSearchboxHeaderBehavior;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
-import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
-import eu.clarin.cmdi.vlo.wicket.model.FacetNamesModel;
-import eu.clarin.cmdi.vlo.wicket.model.JsonLdModel;
-import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
-import eu.clarin.cmdi.vlo.wicket.model.RecordCountModel;
+import eu.clarin.cmdi.vlo.wicket.model.*;
 import eu.clarin.cmdi.vlo.wicket.panels.BreadCrumbPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.CopyPageLinkPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.AdvancedSearchOptionsPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.AvailabilityFacetPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.FacetsPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.SearchFormPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
-import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.search.*;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
 import java.util.HashMap;
@@ -114,6 +105,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private Component searchForm;
     private Component optionsPanel;
     private Component availabilityFacetPanel;
+    private Component temporalCoverageFacetPanel;
     private Component resultsHeader;
     private MarkupContainer selections;
 
@@ -123,7 +115,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private IModel<Boolean> simpleModeModel;
     private IModel<Long> recordCountModel;
     private IModel<HashMap<String, FieldValuesFilter>> facetValuesFiltersModel;
-
+    private IModel<TemporalCoverageRange> temporalCoverageRangeModel;
     private IModel<String> searchResultsTitleModel;
 
     public FacetedSearchPage(IModel<QueryFacetsSelection> queryModel) {
@@ -175,6 +167,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
         facetNamesModel = new FacetNamesModel(facetFields);
         recordCountModel = new RecordCountModel(getModel());
+        temporalCoverageRangeModel = new TemporalCoverageRangeModel(getModel(), fieldNameService);
         searchResultsTitleModel = new StringResourceModel("pageTitle.searchResults", FacetedSearchPage.this, super.getTitleModel());
 
         facetValuesFiltersModel = new Model<>(new HashMap<>());
@@ -248,10 +241,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         };
         facetsPanel = createFacetsPanel("facets");
         availabilityFacetPanel = createAvailabilityPanel("availability");
+        temporalCoverageFacetPanel = createTemporalCoveragePanel("temporalCoverage");
         optionsPanel = createOptionsPanel("options");
 
         searchContainer.add(selections
                 .add(facetsPanel)
+                .add(temporalCoverageFacetPanel)
                 .add(availabilityFacetPanel)
                 .add(optionsPanel)
                 .setOutputMarkupPlaceholderTag(true)
@@ -349,6 +344,18 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         };
         panel.setOutputMarkupId(true);
         return panel;
+    }
+
+    private Panel createTemporalCoveragePanel(String id) {
+        final Panel temporalCoveragePanel = new TemporalCoverageFacetPanel(id, getModel(), facetSelectionTypeModeModel, temporalCoverageRangeModel) {
+
+            @Override
+            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
+                updateSelection(target);
+            }
+        };
+        temporalCoveragePanel.setOutputMarkupId(true);
+        return temporalCoveragePanel;
     }
 
     private Panel createAvailabilityPanel(String id) {

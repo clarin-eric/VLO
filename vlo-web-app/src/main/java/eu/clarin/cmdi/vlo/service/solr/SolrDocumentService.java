@@ -31,7 +31,9 @@ public interface SolrDocumentService {
     SolrDocumentExpansionPair getDocumentWithExpansion(String docId, String collapseField, QueryFacetsSelection selection, int expansionFirst, int expansionCount);
 
     List<SolrDocument> getDocuments(QueryFacetsSelection selection, int first, int count);
-    
+
+    List<SolrDocument> getSortedDocuments(QueryFacetsSelection selection, String sortField, String sortDirection, int first, int count);
+
     SolrDocumentExpansionList getDocumentsWithExpansion(QueryFacetsSelection selection, int first, int count, String collapseField);
     
     /**

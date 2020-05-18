@@ -39,6 +39,20 @@ public interface SolrDocumentQueryFactory {
 
     /**
      * Creates a query to retrieve all document that match a query/facet
+     * selection sorted according to sortField with an offset and limit
+     *
+     * @param selection selection criteria
+     * @param sortField sort the results accorfing to this field
+     * @param sortDirection sort direction "asc" OR "desc"
+     * @param first search result offset
+     * @param count limits the number of results
+     * @return a query set up to retrieve the matching documents, starting with
+     * the specified starting index and limited to the specified count
+     */
+    SolrQuery createSortedDocumentQuery(QueryFacetsSelection selection, String sortField, String sortDirection, int first, int count);
+
+    /**
+     * Creates a query to retrieve all document that match a query/facet
      * selection with an offset and limit, including result expansion
      *
      * @param selection selection criteria
