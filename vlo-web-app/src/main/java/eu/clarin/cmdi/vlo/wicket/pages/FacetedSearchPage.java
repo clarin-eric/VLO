@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
@@ -12,6 +13,7 @@ import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
@@ -37,6 +39,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsHeaderPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultsPanel;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentProviderAdapter;
+import java.util.HashMap;
 
 import java.util.List;
 import java.util.Map;
@@ -117,6 +120,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private IModel<FacetSelectionType> facetSelectionTypeModeModel;
     private IModel<Boolean> simpleModeModel;
     private IModel<Long> recordCountModel;
+    private IModel<HashMap<String, FieldValuesFilter>> facetValuesFiltersModel;
 
     private IModel<String> searchResultsTitleModel;
 
@@ -167,16 +171,21 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         final List<String> facetFields = vloConfig.getFacetFieldNames();
         final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ImmutableList.of(fieldNameService.getFieldName(ADDITIONAL_FACETS))));
 
-        final IModel<Integer> facetValueLimitModel = () -> {
-            
-            return vloConfig.getMaxNumberOfFacetsToShow() + 1;
-        };
-
         facetNamesModel = new FacetNamesModel(facetFields);
-        fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), facetValueLimitModel);
         recordCountModel = new RecordCountModel(getModel());
-
         searchResultsTitleModel = new StringResourceModel("pageTitle.searchResults", FacetedSearchPage.this, super.getTitleModel());
+
+        facetValuesFiltersModel = new Model<>(new HashMap<>());
+        final IModel<Integer> facetValueLimitModel = () -> {
+            // are there any facet value filters?
+            if (facetValuesFiltersModel.getObject().values().stream()
+                    .anyMatch(Predicates.not(map -> map.isEmpty()))) {
+                return -1; //no limit, because filter has to be applied to all
+            } else {
+                return vloConfig.getMaxNumberOfFacetsToShow() + 1;
+            }
+        };
+        fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), facetValueLimitModel);
 
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
         facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
@@ -374,7 +383,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
     private Panel createFacetsPanel(final String id) {
 
-        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, getModel(), facetSelectionTypeModeModel) {
+        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, facetValuesFiltersModel, getModel(), facetSelectionTypeModeModel) {
 
             @Override
             protected void selectionChanged(Optional<AjaxRequestTarget> target) {

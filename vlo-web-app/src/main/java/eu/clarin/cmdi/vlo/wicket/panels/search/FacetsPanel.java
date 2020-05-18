@@ -81,7 +81,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
      * selection state
      * @param selectionTypeModeModel
      */
-    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel) {
+    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, IModel<HashMap<String, FieldValuesFilter>> facetValuesFiltersModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel) {
         super(id, facetNamesModel);
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
@@ -103,14 +103,11 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                 .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
         );
 
-        IModel<HashMap<String, FieldValuesFilter>> filtersModel
-                = new Model<>(new HashMap<>());
-
         final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
 
             @Override
             protected void populateItem(final ListItem<String> item) {
-                final ComputeMapValueModel<String, FieldValuesFilter> filterModel = new ComputeMapValueModel<String, FieldValuesFilter>(filtersModel, item.getModel()) {
+                final ComputeMapValueModel<String, FieldValuesFilter> filterModel = new ComputeMapValueModel<String, FieldValuesFilter>(facetValuesFiltersModel, item.getModel()) {
                     @Override
                     protected FieldValuesFilter computeObject(IModel<String> keyModel) {
                         return new NameAndCountFieldValuesFilter();
