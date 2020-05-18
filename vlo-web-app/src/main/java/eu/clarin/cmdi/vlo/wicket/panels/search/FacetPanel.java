@@ -74,16 +74,16 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     private final IModel<FacetSelectionType> selectionTypeModeModel;
     private final IModel<FieldValuesFilter> filterModel;
 
-    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState) {
-        this(id, facetNameModel, facetFieldModel, selectionModel, selectionTypeModeModel, expansionState, 0);
+    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState, IModel<FieldValuesFilter> filterModel) {
+        this(id, facetNameModel, facetFieldModel, selectionModel, selectionTypeModeModel, expansionState, filterModel, 0);
     }
 
-    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState, int subListSize) {
+    public FacetPanel(String id, IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, IModel<ExpansionState> expansionState, IModel<FieldValuesFilter> filterModel, int subListSize) {
         super(id, facetNameModel, expansionState);
         this.selectionTypeModeModel = selectionTypeModeModel;
 
         // shared model that holds the string for filtering the values (quick search)
-        filterModel = new Model<FieldValuesFilter>(new NameAndCountFieldValuesFilter());
+        this.filterModel = filterModel;
         // create a form with an input bound to the filter model
         add(createFilterForm("filter"));
 

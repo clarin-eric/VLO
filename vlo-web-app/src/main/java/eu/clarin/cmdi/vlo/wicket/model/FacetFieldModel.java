@@ -16,11 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collections;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * Decorator for {@link FacetFieldsModel} for a selection of a single facet.
@@ -48,7 +51,7 @@ public class FacetFieldModel implements IModel<FacetField> {
      * @param valueLimit number of facet values to load (-1 for all)
      */
     public FacetFieldModel(String facet, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
-        this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, valueLimit));
+        this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, Model.of(valueLimit)));
     }
 
     public FacetFieldModel(String facetName, FacetFieldsModel fieldsModel) {

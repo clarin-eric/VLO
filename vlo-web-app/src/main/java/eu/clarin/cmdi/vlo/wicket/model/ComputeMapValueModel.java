@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 CLARIN
+ * Copyright (C) 2020 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,40 +17,29 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import java.util.Map;
+import java.util.Optional;
 import org.apache.wicket.model.IModel;
 
 /**
  *
- * @author Twan Goosen &lt;twan@clarin.eu&gt;
+ * @author Twan Goosen <twan@clarin.eu>
  */
-public class MapValueModel<K, V> implements IModel<V> {
+public abstract class ComputeMapValueModel<K, V> extends MapValueModel<K, V> {
 
-    private final IModel<? extends Map<K, V>> mapModel;
-    private final IModel<K> keyModel;
-
-    public MapValueModel(IModel<? extends Map<K, V>> mapModel, IModel<K> keyModel) {
-        this.mapModel = mapModel;
-        this.keyModel = keyModel;
+    public ComputeMapValueModel(IModel<? extends Map<K, V>> mapModel, IModel<K> keyModel) {
+        super(mapModel, keyModel);
     }
 
     @Override
     public V getObject() {
-        return mapModel.getObject().get(keyModel.getObject());
+        final Optional<V> object = Optional.ofNullable(super.getObject());
+        return object.orElseGet(() -> {
+            final V computed = computeObject(getKeyModel());
+            setObject(computed);
+            return computed;
+        });
     }
 
-    @Override
-    public void setObject(V object) {
-        mapModel.getObject().put(keyModel.getObject(), object);
-    }
-
-    public IModel<K> getKeyModel() {
-        return keyModel;
-    }
-
-    @Override
-    public void detach() {
-        mapModel.detach();
-        keyModel.detach();
-    }
+    protected abstract V computeObject(IModel<K> keyModel);
 
 }

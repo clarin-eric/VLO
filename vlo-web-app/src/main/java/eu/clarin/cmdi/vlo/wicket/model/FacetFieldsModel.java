@@ -44,7 +44,7 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     private final FacetFieldsService service;
     private final List<String> facets;
     private final IModel<QueryFacetsSelection> selectionModel;
-    private final int valueLimit;
+    private final IModel<Integer>  valueLimitModel;
 
     /**
      *
@@ -54,16 +54,16 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
      * @param valueLimit maximum number of values to retrieve per facet.
      * Negative for unlimited
      */
-    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
+    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel, IModel<Integer> valueLimitModel) {
         this.service = service;
         this.facets = facets;
         this.selectionModel = selectionModel;
-        this.valueLimit = valueLimit;
+        this.valueLimitModel = valueLimitModel;
     }
 
     @Override
     protected List<FacetField> load() {
-        return service.getFacetFields(selectionModel.getObject(), facets, valueLimit);
+        return service.getFacetFields(selectionModel.getObject(), facets, valueLimitModel.getObject());
     }
 
     @Override

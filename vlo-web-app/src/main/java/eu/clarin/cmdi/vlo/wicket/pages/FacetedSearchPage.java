@@ -166,8 +166,14 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private void createModels() {
         final List<String> facetFields = vloConfig.getFacetFieldNames();
         final List<String> allFields = ImmutableList.copyOf(Iterables.concat(facetFields, ImmutableList.of(fieldNameService.getFieldName(ADDITIONAL_FACETS))));
+
+        final IModel<Integer> facetValueLimitModel = () -> {
+            
+            return vloConfig.getMaxNumberOfFacetsToShow() + 1;
+        };
+
         facetNamesModel = new FacetNamesModel(facetFields);
-        fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), -1);
+        fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), facetValueLimitModel);
         recordCountModel = new RecordCountModel(getModel());
 
         searchResultsTitleModel = new StringResourceModel("pageTitle.searchResults", FacetedSearchPage.this, super.getTitleModel());

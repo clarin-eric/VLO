@@ -35,9 +35,12 @@ import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
+import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
+import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
+import eu.clarin.cmdi.vlo.wicket.model.ComputeMapValueModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetFieldsModel;
@@ -100,40 +103,49 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                 .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
         );
 
+        IModel<HashMap<String, FieldValuesFilter>> filtersModel
+                = new Model<>(new HashMap<>());
+
         final ListView<String> facetsView = new ListView<String>("facets", facetNamesModel) {
 
             @Override
             protected void populateItem(final ListItem<String> item) {
+                final ComputeMapValueModel<String, FieldValuesFilter> filterModel = new ComputeMapValueModel<String, FieldValuesFilter>(filtersModel, item.getModel()) {
+                    @Override
+                    protected FieldValuesFilter computeObject(IModel<String> keyModel) {
+                        return new NameAndCountFieldValuesFilter();
+                    }
+                };
+
                 // Create a facet field model which does a lookup by name,
                 // making it dynamic in case the selection and therefore
                 // set of available values changes
-                item.add(
-                        new FacetPanel("facet",
-                                item.getModel(),
-                                new FacetFieldModel(item.getModelObject(), fieldsModel),
-                                selectionModel,
-                                selectionTypeModeModel,
-                                new FacetExpansionStateModel(item.getModel(), expansionModel)) {
+                item.add(new FacetPanel("facet",
+                        item.getModel(),
+                        new FacetFieldModel(item.getModelObject(), fieldsModel),
+                        selectionModel,
+                        selectionTypeModeModel,
+                        new FacetExpansionStateModel(item.getModel(), expansionModel), filterModel) {
 
-                            @Override
-                            protected void selectionChanged(Optional<AjaxRequestTarget> target) {
-                                FacetsPanel.this.selectionChanged(target);
-                            }
-                        }.add(new AttributeAppender("class", new IModel<String>() {
-                            //class appender that differentiates between primary and secondary facets (based on configuration)
-                            @Override
-                            public String getObject() {
-                                final Collection<String> primaryFacetFields = vloConfig.getPrimaryFacetFieldNames();
-                                if (primaryFacetFields == null || primaryFacetFields.isEmpty()) {
-                                    //no primary facets configured, don't set a class
-                                    return null;
-                                } else if (primaryFacetFields.contains(item.getModelObject())) {
-                                    return "primary-facet";
-                                } else {
-                                    return "secondary-facet";
-                                }
-                            }
-                        }, " "))
+                    @Override
+                    protected void selectionChanged(Optional<AjaxRequestTarget> target) {
+                        FacetsPanel.this.selectionChanged(target);
+                    }
+                }.add(new AttributeAppender("class", new IModel<String>() {
+                    //class appender that differentiates between primary and secondary facets (based on configuration)
+                    @Override
+                    public String getObject() {
+                        final Collection<String> primaryFacetFields = vloConfig.getPrimaryFacetFieldNames();
+                        if (primaryFacetFields == null || primaryFacetFields.isEmpty()) {
+                            //no primary facets configured, don't set a class
+                            return null;
+                        } else if (primaryFacetFields.contains(item.getModelObject())) {
+                            return "primary-facet";
+                        } else {
+                            return "secondary-facet";
+                        }
+                    }
+                }, " "))
                 );
             }
         };

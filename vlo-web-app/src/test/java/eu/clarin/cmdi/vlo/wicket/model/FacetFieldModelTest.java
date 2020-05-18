@@ -57,7 +57,7 @@ public class FacetFieldModelTest {
      */
     @Test
     public void testGetObject() {
-        final FacetFieldModel instance = new FacetFieldModel("facet4", new FacetFieldsModel(service, ImmutableList.of("facet4"), selectionModel, 20));
+        final FacetFieldModel instance = new FacetFieldModel("facet4", new FacetFieldsModel(service, ImmutableList.of("facet4"), selectionModel, Model.of(20)));
         
         context.checking(new Expectations() {
             {
@@ -82,7 +82,7 @@ public class FacetFieldModelTest {
      */
     @Test
     public void testGetObjectNotIncluded() {
-        final FacetFieldModel instance = new FacetFieldModel("facet4", new FacetFieldsModel(service, ImmutableList.of("facet4"), selectionModel, 20));
+        final FacetFieldModel instance = new FacetFieldModel("facet4", new FacetFieldsModel(service, ImmutableList.of("facet4"), selectionModel, Model.of(20)));
 
         context.checking(new Expectations() {
             {

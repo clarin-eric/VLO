@@ -50,7 +50,7 @@ public class FacetFieldsModelTest {
         final QueryFacetsSelection selection = new QueryFacetsSelection();
         final IModel<QueryFacetsSelection> selectionModel = new Model(selection);
         final List<String> facets = Arrays.asList("facet1", "facet2", "facet3", "facetX");
-        final FacetFieldsModel instance = new FacetFieldsModel(service, facets, selectionModel, 20);
+        final FacetFieldsModel instance = new FacetFieldsModel(service, facets, selectionModel, Model.of(20));
 
         context.checking(new Expectations() {
             {

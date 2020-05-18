@@ -95,19 +95,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
      * @param selectionModel model holding the global query/facet selection
      * @param selectionTypeModel model holding the current selection type
      * @param filterModel model for facet value filter/search text
-     */
-    public FacetValuesPanel(String id, final IModel<FacetField> model, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModel, IModel<FieldValuesFilter> filterModel) {
-        this(id, model, selectionModel, selectionTypeModel, filterModel, 0);
-    }
-
-    /**
-     * Creates a new panel with selectable values for a single facet
-     *
-     * @param id component id
-     * @param model facet field model for this panel
-     * @param selectionModel model holding the global query/facet selection
-     * @param selectionTypeModel model holding the current selection type
-     * @param filterModel model for facet value filter/search text
      * @param subListSize if large than 0, multiple lists will be generated each
      * with a maximum size of this value
      */
@@ -117,6 +104,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         this.selectionTypeModeModel = selectionTypeModel;
         this.filterModel = filterModel;
         this.subListSize = subListSize;
+        
+        this.maxNumberOfFacetsToShow = vloConfig.getMaxNumberOfFacetsToShow();
 
         // create a container for values to allow for AJAX updates when filtering
         valuesContainer = new WebMarkupContainer("valuesContainer");
@@ -134,8 +123,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         add(valuesWindow);
 
         fieldNameModel = new PropertyModel<>(model, "name");
-        
-        maxNumberOfFacetsToShow = vloConfig.getMaxNumberOfFacetsToShow();
     }
 
     /**
