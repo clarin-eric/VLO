@@ -44,6 +44,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -69,6 +73,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.comparator.Comparators;
 
 /**
  * The main search page showing a search form, facets, and search results
@@ -182,7 +187,16 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                     .anyMatch(Predicates.not(map -> map.isEmpty()))) {
                 return -1; //no limit, because filter has to be applied to all
             } else {
-                return vloConfig.getMaxNumberOfFacetsToShow() + 1;
+                //increase by number of selected values to make sure we always get the number of remaining values
+                final OptionalInt maxSelection
+                        = Optional.ofNullable(getModelObject().getSelection())
+                                .map(s
+                                        -> s.values().stream()
+                                        .mapToInt(fs -> fs.getValues().size())
+                                        .max()
+                                ).orElse(OptionalInt.empty());
+
+                return vloConfig.getMaxNumberOfFacetsToShow() + maxSelection.orElse(0) + 1;
             }
         };
         fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), facetValueLimitModel);
