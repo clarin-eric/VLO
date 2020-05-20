@@ -16,8 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
-import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Collections;
@@ -41,27 +39,29 @@ import org.apache.wicket.model.Model;
 public class FacetFieldModel implements IModel<FacetField> {
 
     private final FacetFieldsModel fieldsModel;
-    private final String facetName;
+    private final IModel<String> facetNameModel;
 
     /**
      *
      * @param service service to use for facet field retrieval
-     * @param facet facet to provide
+     * @param facetNameModel facet to provide
      * @param selectionModel model that provides current query/selection
      * @param valueLimit number of facet values to load (-1 for all)
      */
-    public FacetFieldModel(String facet, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
-        this(facet, new FacetFieldsModel(service, Collections.singletonList(facet), selectionModel, Model.of(valueLimit)));
+    public FacetFieldModel(IModel<String> facetNameModel, FacetFieldsService service, IModel<QueryFacetsSelection> selectionModel, int valueLimit) {
+        this(facetNameModel, new FacetFieldsModel(service, () -> {
+            return Collections.singletonList(facetNameModel.getObject());
+        }, selectionModel, Model.of(valueLimit)));
     }
 
-    public FacetFieldModel(String facetName, FacetFieldsModel fieldsModel) {
+    public FacetFieldModel(IModel<String> facetNameModel, FacetFieldsModel fieldsModel) {
         this.fieldsModel = fieldsModel;
-        this.facetName = facetName;
+        this.facetNameModel = facetNameModel;
     }
 
     @Override
     public FacetField getObject() {
-        return fieldsModel.getFacetField(facetName);
+        return fieldsModel.getFacetField(facetNameModel.getObject());
     }
 
     @Override

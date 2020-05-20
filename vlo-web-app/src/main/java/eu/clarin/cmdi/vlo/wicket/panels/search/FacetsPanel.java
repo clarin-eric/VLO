@@ -77,6 +77,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
      * show in this panel
      * @param fieldsModel fields model to be passed to individual facet field
      * models
+     * @param facetValuesFiltersModel
      * @param selectionModel model representing the current query/value
      * selection state
      * @param selectionTypeModeModel
@@ -86,20 +87,16 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
         final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
         expansionModel = new MapModel<>(expansionStateMap);
-        final IModel<Boolean> conditionalFacetDisplayModel = new IModel<Boolean>() {
-
-            @Override
-            public Boolean getObject() {
-                //only enable show/hide secondary facets functionality if there are enoug (too many) available facets
-                return getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject())
-                        >= vloConfig.getHideSecondaryFacetsLimit(); //configurable threshold
-            }
+        final IModel<Boolean> conditionalFacetDisplayModel = () -> {
+            //only enable show/hide secondary facets functionality if there are enoug (too many) available facets
+            final int numberFacetsShown = getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject());
+            return numberFacetsShown >= vloConfig.getHideSecondaryFacetsLimit(); //configurable threshold
         };
 
         final MarkupContainer container = new WebMarkupContainer("container");
         add(container
                 .setOutputMarkupId(true)
-                .add(new AttributeAppender("class", new BooleanOptionsModel<>(conditionalFacetDisplayModel, Model.of("show-conditionally"), new Model<String>()), " "))
+                .add(new AttributeAppender("class", new BooleanOptionsModel<>(conditionalFacetDisplayModel, Model.of("show-conditionally"), new Model<>()), " "))
                 .add(new AttributeAppender("class", new BooleanOptionsModel<>(allFacetsShown, Model.of("show-all"), Model.of("show-primary")), " "))
         );
 
@@ -119,7 +116,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                 // set of available values changes
                 item.add(new FacetPanel("facet",
                         item.getModel(),
-                        new FacetFieldModel(item.getModelObject(), fieldsModel),
+                        new FacetFieldModel(item.getModel(), fieldsModel),
                         selectionModel,
                         selectionTypeModeModel,
                         new FacetExpansionStateModel(item.getModel(), expansionModel), filterModel) {

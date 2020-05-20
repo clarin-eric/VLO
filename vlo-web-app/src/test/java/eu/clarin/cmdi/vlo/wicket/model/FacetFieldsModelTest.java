@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.jmock.Expectations;
@@ -50,7 +51,7 @@ public class FacetFieldsModelTest {
         final QueryFacetsSelection selection = new QueryFacetsSelection();
         final IModel<QueryFacetsSelection> selectionModel = new Model(selection);
         final List<String> facets = Arrays.asList("facet1", "facet2", "facet3", "facetX");
-        final FacetFieldsModel instance = new FacetFieldsModel(service, facets, selectionModel, Model.of(20));
+        final FacetFieldsModel instance = new FacetFieldsModel(service, new ListModel<>(facets), selectionModel, Model.of(20));
 
         context.checking(new Expectations() {
             {

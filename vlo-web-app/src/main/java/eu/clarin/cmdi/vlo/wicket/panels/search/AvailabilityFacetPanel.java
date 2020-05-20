@@ -212,11 +212,11 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
      */
     private class AvailabilityValuesProvider extends FacetFieldValuesProvider {
 
-        private final IModel<FieldValuesFilter> valuesFilter = new Model<FieldValuesFilter>(new FixedSetFieldValuesFilter(availabilityLevels));
+        private final IModel<FieldValuesFilter> valuesFilter = new Model<>(new FixedSetFieldValuesFilter(availabilityLevels));
         private final Ordering<Count> valuesOrdering = Ordering.from(new FacetNameComparator(availabilityLevels));
 
         public AvailabilityValuesProvider() {
-            super(new FacetFieldModel(fieldNameService.getFieldName(AVAILABILITY_FIELD), facetFieldsModel), fieldValueConverterProvider);
+            super(new FacetFieldModel(Model.of(fieldNameService.getFieldName(AVAILABILITY_FIELD)), facetFieldsModel), fieldValueConverterProvider);
         }
 
         @Override

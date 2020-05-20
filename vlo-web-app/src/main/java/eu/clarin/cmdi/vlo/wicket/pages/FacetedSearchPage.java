@@ -45,9 +45,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -69,11 +66,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.util.comparator.Comparators;
 
 /**
  * The main search page showing a search form, facets, and search results
@@ -199,7 +196,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 return vloConfig.getMaxNumberOfFacetsToShow() + maxSelection.orElse(0) + 1;
             }
         };
-        fieldsModel = new FacetFieldsModel(facetFieldsService, allFields, getModel(), facetValueLimitModel);
+        fieldsModel = new FacetFieldsModel(facetFieldsService, new ListModel<>(allFields), getModel(), facetValueLimitModel);
 
         final FacetSelectionType initialSelectionType = getFacetSelectionTypeModeFromSessionOrDefault();
         facetSelectionTypeModeModel = new Model<FacetSelectionType>(initialSelectionType) {
@@ -226,13 +223,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, exposureTracker);
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
         searchContainer = new WebMarkupContainer("searchContainer");
-        searchContainer.add(new AttributeModifier("class", new IModel<>() {
-            @Override
-            public String getObject() {
-                return simpleModeModel.getObject() ? "simple" : "";
-            }
-
-        }));
+        searchContainer.add(new AttributeModifier("class", () -> simpleModeModel.getObject() ? "simple" : ""));
         searchContainer.setOutputMarkupId(true);
         add(searchContainer);
 

@@ -25,6 +25,7 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.util.ListModel;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
@@ -57,7 +58,7 @@ public class FacetFieldModelTest {
      */
     @Test
     public void testGetObject() {
-        final FacetFieldModel instance = new FacetFieldModel("facet4", new FacetFieldsModel(service, ImmutableList.of("facet4"), selectionModel, Model.of(20)));
+        final FacetFieldModel instance = new FacetFieldModel(Model.of("facet4"), new FacetFieldsModel(service, new ListModel<>(ImmutableList.of("facet4")), selectionModel, Model.of(20)));
         
         context.checking(new Expectations() {
             {
@@ -82,7 +83,7 @@ public class FacetFieldModelTest {
      */
     @Test
     public void testGetObjectNotIncluded() {
-        final FacetFieldModel instance = new FacetFieldModel("facet4", new FacetFieldsModel(service, ImmutableList.of("facet4"), selectionModel, Model.of(20)));
+        final FacetFieldModel instance = new FacetFieldModel(Model.of("facet4"), new FacetFieldsModel(service, new ListModel<>(ImmutableList.of("facet4")), selectionModel, Model.of(20)));
 
         context.checking(new Expectations() {
             {

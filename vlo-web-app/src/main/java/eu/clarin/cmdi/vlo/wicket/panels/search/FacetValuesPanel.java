@@ -112,6 +112,8 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         this.maxNumberOfFacetsToShow = vloConfig.getMaxNumberOfFacetsToShow();
 
+        this.fieldNameModel = new PropertyModel<>(model, "name");
+
         // create a container for values to allow for AJAX updates when filtering
         valuesContainer = new WebMarkupContainer("valuesContainer");
         valuesContainer.setOutputMarkupId(true);
@@ -126,8 +128,6 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         // create a popup window for all facet values
         valuesWindow = createAllValuesWindow("allValues");
         add(valuesWindow);
-
-        fieldNameModel = new PropertyModel<>(model, "name");
     }
 
     /**
@@ -177,7 +177,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
         if (piwikConfig.isEnabled()) {
-            selectionTrackingBehavior = new FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, fieldNameModel, new PropertyModel<String>(item.getModel(), "name"));
+            selectionTrackingBehavior = new FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_SELECT, fieldNameModel, new PropertyModel<>(item.getModel(), "name"));
         } else {
             selectionTrackingBehavior = null;
         }
@@ -314,7 +314,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
 
         };
         final IModel<FacetField> fieldModel
-                = new FacetFieldModel(getModelObject().getName(), facetFieldsService, selectionModel, -1);
+                = new FacetFieldModel(fieldNameModel, facetFieldsService, selectionModel, -1);
 
         final Component modalContent = new AllFacetValuesPanel(window.getContentId(), fieldModel, selectionTypeModeModel, selectionModel, filterModel) {
             @Override

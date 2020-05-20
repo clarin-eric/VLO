@@ -25,10 +25,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionValueQualifier;
-import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
-import java.util.HashMap;
 
 /**
  * Model that provides a list of {@link FacetField}s based on the current query
@@ -44,28 +42,28 @@ import java.util.HashMap;
 public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> {
 
     private final FacetFieldsService service;
-    private final List<String> facets;
+    private final  IModel<List<String>> facetsModel;
     private final IModel<QueryFacetsSelection> selectionModel;
     private final IModel<Integer>  valueLimitModel;
 
     /**
      *
      * @param service service to use for facet field retrieval
-     * @param facets facets to include
+     * @param facetsModel facets to include
      * @param selectionModel model that provides current query/selection
-     * @param valueLimit maximum number of values to retrieve per facet.
+     * @param valueLimitModel maximum number of values to retrieve per facet.
      * Negative for unlimited
      */
-    public FacetFieldsModel(FacetFieldsService service, List<String> facets, IModel<QueryFacetsSelection> selectionModel, IModel<Integer> valueLimitModel) {
+    public FacetFieldsModel(FacetFieldsService service, IModel<List<String>> facetsModel, IModel<QueryFacetsSelection> selectionModel, IModel<Integer> valueLimitModel) {
         this.service = service;
-        this.facets = facets;
+        this.facetsModel = facetsModel;
         this.selectionModel = selectionModel;
         this.valueLimitModel = valueLimitModel;
     }
 
     @Override
     protected List<FacetField> load() {
-        return service.getFacetFields(selectionModel.getObject(), facets, valueLimitModel.getObject());
+        return service.getFacetFields(selectionModel.getObject(), facetsModel.getObject(), valueLimitModel.getObject());
     }
 
     @Override

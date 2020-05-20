@@ -28,22 +28,22 @@ import org.apache.wicket.model.IModel;
  */
 public class FacetExpansionStateModel implements IModel<ExpansionState> {
 
-    private final IModel<String> facetName;
+    private final IModel<String> facetNameModel;
     private final IModel<Map<String, ExpansionState>> expansionStateMapModel;
 
     /**
      * 
-     * @param facetModel model that holds the current facet
+     * @param facetNameModel model that holds the current facet
      * @param expansionStateMapModel model that holds the map of expansion states
      */
-    public FacetExpansionStateModel(IModel<String> facetName, IModel<Map<String, ExpansionState>> expansionStateMapModel) {
-        this.facetName = facetName;
+    public FacetExpansionStateModel(IModel<String> facetNameModel, IModel<Map<String, ExpansionState>> expansionStateMapModel) {
+        this.facetNameModel = facetNameModel;
         this.expansionStateMapModel = expansionStateMapModel;
     }
 
     @Override
     public ExpansionState getObject() {
-        final String facet = facetName.getObject();
+        final String facet = facetNameModel.getObject();
         final ExpansionState state = expansionStateMapModel.getObject().get(facet);
         if (state == null) {
             return ExpansionState.COLLAPSED;
@@ -54,13 +54,13 @@ public class FacetExpansionStateModel implements IModel<ExpansionState> {
 
     @Override
     public void setObject(ExpansionState object) {
-        final String facet = facetName.getObject();
+        final String facet = facetNameModel.getObject();
         expansionStateMapModel.getObject().put(facet, object);
     }
 
     @Override
     public void detach() {
-    	facetName.detach();
+    	facetNameModel.detach();
         expansionStateMapModel.detach();
     }
 
