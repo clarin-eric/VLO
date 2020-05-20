@@ -127,12 +127,7 @@ public abstract class AvailabilityFacetPanel extends ExpandablePanel<QueryFacets
     }
 
     private static List<String> getLevelsFromConfig(VloConfig config) {
-        return Lists.transform(config.getAvailabilityValues(), new Function<FieldValueDescriptor, String>() {
-            @Override
-            public String apply(FieldValueDescriptor input) {
-                return input.getValue();
-            }
-        });
+        return Lists.transform(config.getAvailabilityValues(), FieldValueDescriptor::getValue);
     }
 
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);

@@ -101,7 +101,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     private void addComponents() {
         add(new BreadCrumbPanel("breadcrumbs", selectionModel, getModelObject().getName()));
 
-        add(new Label("name", new SolrFieldNameModel(new PropertyModel<String>(getModel(), "name"))));
+        add(new Label("name", new SolrFieldNameModel(new PropertyModel<>(getModel(), "name"))));
 
         add(new AllFacetValuesPanel("values", getModel(), selectionTypeModeModel, selectionModel));
 
