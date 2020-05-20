@@ -24,9 +24,11 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesOrder;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.EventTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
+import eu.clarin.cmdi.vlo.wicket.model.FacetFieldModel;
 import eu.clarin.cmdi.vlo.wicket.provider.PartitionedDataProvider;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldNameModel;
 import eu.clarin.cmdi.vlo.wicket.pages.AllFacetValuesPage;
@@ -77,7 +79,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
     private final IModel<QueryFacetsSelection> beforeAllValuesSelection = new Model<>();
     private final IModel<FieldValuesFilter> beforeAllValuesFilter = new Model<>();
     private final int maxNumberOfFacetsToShow;
-    
+
+    @SpringBean
+    private FacetFieldsService facetFieldsService;
+
     @SpringBean
     private FieldValueConverterProvider fieldValueConverterProvider;
 
@@ -104,7 +109,7 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
         this.selectionTypeModeModel = selectionTypeModel;
         this.filterModel = filterModel;
         this.subListSize = subListSize;
-        
+
         this.maxNumberOfFacetsToShow = vloConfig.getMaxNumberOfFacetsToShow();
 
         // create a container for values to allow for AJAX updates when filtering
@@ -308,8 +313,10 @@ public abstract class FacetValuesPanel extends GenericPanel<FacetField> {
             }
 
         };
+        final IModel<FacetField> fieldModel
+                = new FacetFieldModel(getModelObject().getName(), facetFieldsService, selectionModel, -1);
 
-        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), getModel(), selectionTypeModeModel, selectionModel, filterModel) {
+        final Component modalContent = new AllFacetValuesPanel(window.getContentId(), fieldModel, selectionTypeModeModel, selectionModel, filterModel) {
             @Override
             protected void onSelectionChanged(Optional<AjaxRequestTarget> t) {
                 t.ifPresent(target -> {

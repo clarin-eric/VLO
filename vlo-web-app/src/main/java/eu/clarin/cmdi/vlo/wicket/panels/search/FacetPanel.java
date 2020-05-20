@@ -88,11 +88,11 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         add(createFilterForm("filter"));
 
         // panel showing values for selection
-        facetValuesPanel = createFacetValuesPanel("facetValues", facetNameModel.getObject(), facetFieldModel, selectionModel, subListSize);
+        facetValuesPanel = createFacetValuesPanel("facetValues", facetNameModel, facetFieldModel, selectionModel, subListSize);
         add(facetValuesPanel);
 
         // panel showing current selection, allowing for deselection
-        selectedFacetPanel = createSelectedFacetPanel("facetSelection", facetNameModel.getObject(), selectionModel);
+        selectedFacetPanel = createSelectedFacetPanel("facetSelection", facetNameModel, selectionModel);
         add(selectedFacetPanel);
 
         add(new AttributeAppender("class", new IModel() {
@@ -185,13 +185,13 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         return true;
     }
 
-    private FacetValuesPanel createFacetValuesPanel(String id, final String facetName, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
+    private FacetValuesPanel createFacetValuesPanel(String id, final IModel<String> facetNameModel, IModel<FacetField> facetFieldModel, final IModel<QueryFacetsSelection> selectionModel, int subListSize) {
         return (FacetValuesPanel) new FacetValuesPanel(id, facetFieldModel, selectionModel, selectionTypeModeModel, filterModel, subListSize) {
             @Override
             public void onValuesSelected(FacetSelectionType selectionType, Collection<String> values, Optional<AjaxRequestTarget> target) {
                 if (selectionType != null && values != null) {
                     // A value has been selected on this facet's panel, update the model!
-                    selectionModel.getObject().addNewFacetValue(facetName, selectionType, values);
+                    selectionModel.getObject().addNewFacetValue(facetNameModel.getObject(), selectionType, values);
                 }
 
                 if (target != null) {
@@ -202,12 +202,12 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
         }.setOutputMarkupId(true);
     }
 
-    private SelectedFacetPanel createSelectedFacetPanel(String id, final String facetName, final IModel<QueryFacetsSelection> selectionModel) {
-        return new SelectedFacetPanel(id, facetName, new SelectionModel(facetName, selectionModel)) {
+    private SelectedFacetPanel createSelectedFacetPanel(String id, final IModel<String> facetNameModel, final IModel<QueryFacetsSelection> selectionModel) {
+        return new SelectedFacetPanel(id, facetNameModel, new SelectionModel(facetNameModel, selectionModel)) {
             @Override
             public void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target) {
                 // Values have been removed, calculate remainder
-                selectionModel.getObject().removeFacetValue(facetName, valuesRemoved);
+                selectionModel.getObject().removeFacetValue(facetNameModel.getObject(), valuesRemoved);
 
                 selectionChanged(target);
             }

@@ -54,21 +54,19 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
 
     private final IModel<Boolean> renderForCollapsed = Model.of(true);
 
-    public SelectedFacetPanel(String id, String facetName, final IModel<FacetSelection> model) {
+    public SelectedFacetPanel(String id, IModel<String> facetNameModel, final IModel<FacetSelection> model) {
         super(id, model);
 
         // Add removers for all selected values for collapsed state (hidden unless also rendering for collapsed)
-        add(createSelectionRemovers("facetValueRemover", facetName, renderForCollapsed));
+        add(createSelectionRemovers("facetValueRemover", facetNameModel, renderForCollapsed));
         // Add selected items to expanded state (always shown)
-        add(createSelectionRemovers("selectedItem", facetName, Model.of(true)));
+        add(createSelectionRemovers("selectedItem", facetNameModel, Model.of(true)));
     }
 
-    private ListView<String> createSelectionRemovers(String id, final String facetName, final IModel<Boolean> visibilityModel) {
+    private ListView<String> createSelectionRemovers(String id, final IModel<String> fieldNameModel, final IModel<Boolean> visibilityModel) {
         // Model of the list of selected values in this facet
         final IModel<List<String>> valuesModel = new PropertyModel<>(getModel(), "values");
         final PropertyModel<FacetSelectionType> selectionTypeModel = new PropertyModel(getModel(), "selectionType");
-
-        final IModel<String> fieldNameModel = Model.of(facetName);
 
         // Repeating container of value + unselection links
         final ListView<String> listView = new ListView<String>(id, valuesModel) {
@@ -100,7 +98,7 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
                 // A label showing the name of the facet
                 item.add(new FieldValueLabel("facetValue", item.getModel(), fieldNameModel));
                 // A link to remove the value selection from this facet
-                item.add(new RemoveLink("unselectValue", facetName, item.getModel()));
+                item.add(new RemoveLink("unselectValue", fieldNameModel, item.getModel()));
             }
 
             @Override
@@ -128,12 +126,12 @@ public abstract class SelectedFacetPanel extends GenericPanel<FacetSelection> {
         private final IModel<String> valueModel;
         private final FacetValueSelectionTrackingBehaviour selectionTrackingBehavior;
 
-        public RemoveLink(String id, String facetName, IModel<String> valueModel) {
+        public RemoveLink(String id, IModel<String> facetNameModel, IModel<String> valueModel) {
             super(id);
             this.valueModel = valueModel;
 
             if (piwikConfig.isEnabled()) {
-                selectionTrackingBehavior = new AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_UNSELECT, Model.of(facetName), Model.of(valueModel.getObject()));
+                selectionTrackingBehavior = new AjaxPiwikTrackingBehavior.FacetValueSelectionTrackingBehaviour(PiwikEventConstants.PIWIK_EVENT_ACTION_FACET_UNSELECT, facetNameModel, Model.of(valueModel.getObject()));
             } else {
                 selectionTrackingBehavior = null;
             }

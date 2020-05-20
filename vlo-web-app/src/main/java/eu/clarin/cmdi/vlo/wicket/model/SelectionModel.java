@@ -15,16 +15,16 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 public class SelectionModel implements IModel<FacetSelection> {
 
     private final IModel<QueryFacetsSelection> selectionModel;
-    private final String facetName;
+    private final IModel<String> facetNameModel;
 
-    public SelectionModel(String facetName, IModel<QueryFacetsSelection> selectionModel) {
+    public SelectionModel(IModel<String> facetNameModel, IModel<QueryFacetsSelection> selectionModel) {
         this.selectionModel = selectionModel;
-        this.facetName = facetName;
+        this.facetNameModel = facetNameModel;
     }
 
     @Override
     public FacetSelection getObject() {
-        final FacetSelection facetSelection = selectionModel.getObject().getSelectionValues(facetName);
+        final FacetSelection facetSelection = selectionModel.getObject().getSelectionValues(facetNameModel.getObject());
         return facetSelection != null ? facetSelection : new FacetSelection(FacetSelectionType.AND, Collections.emptyList());
     }
 

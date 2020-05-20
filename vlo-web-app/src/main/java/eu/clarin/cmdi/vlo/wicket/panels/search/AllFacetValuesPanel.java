@@ -175,12 +175,11 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
     }
 
     private SelectedFacetPanel createSelectedValuesView(String id) {
-        final String facet = fieldNameModel.getObject();
-        return new SelectedFacetPanel(id, facet, new SelectionModel(facet, selectionModel)) {
+        return new SelectedFacetPanel(id, fieldNameModel, new SelectionModel(fieldNameModel, selectionModel)) {
             @Override
             protected void onValuesUnselected(Collection<String> valuesRemoved, Optional<AjaxRequestTarget> target) {
                 // Values have been removed, calculate remainder
-                selectionModel.getObject().removeFacetValue(facet, valuesRemoved);
+                selectionModel.getObject().removeFacetValue(fieldNameModel.getObject(), valuesRemoved);
                 target.ifPresent(t -> {
                     t.add(valuesContainer);
                 });
