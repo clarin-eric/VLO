@@ -99,10 +99,14 @@ public class RasaResourceAvailabilityStatusCheckerTest {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
             }
 
-
             @Override
             public Boolean saveToHistory(CheckedLink checkedLink) throws SQLException {
                 throw new UnsupportedOperationException("Not supported"); //not needed for test
+            }
+
+            @Override
+            public Boolean saveToHistory(String string) throws SQLException {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
         };
         instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
@@ -127,10 +131,12 @@ public class RasaResourceAvailabilityStatusCheckerTest {
         assertEquals(2, result.size());
         assertNotNull(result.get("http://uri1"));
         assertEquals("http://uri1", result.get("http://uri1").getUrl());
-        assertEquals(200, result.get("http://uri1").getStatus());
+        assertNotNull(result.get("http://uri1").getStatus());
+        assertEquals(200, result.get("http://uri1").getStatus().intValue());
         assertNotNull(result.get("http://uri2"));
         assertEquals("http://uri2", result.get("http://uri2").getUrl());
-        assertEquals(404, result.get("http://uri2").getStatus());
+        assertNotNull(result.get("http://uri2").getStatus());
+        assertEquals(404, result.get("http://uri2").getStatus().intValue());
     }
 
 }
