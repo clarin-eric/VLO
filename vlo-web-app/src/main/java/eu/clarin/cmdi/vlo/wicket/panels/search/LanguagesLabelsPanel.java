@@ -18,29 +18,21 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.pojo.ExpansionState;
-import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
-import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.LanguageLabelModel;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.Component;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.model.Model;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +45,7 @@ public class LanguagesLabelsPanel extends Panel {
     @SpringBean
     private FieldNameService fieldNameService;
 
-    private static final int MAX_LABEL_LENGTH = 6;
+    private static final int MAX_LABEL_LENGTH = 12;
     private static final int MAX_LANGUAGES = 5;
 
     private final IModel<ExpansionState> expansionStateModel;

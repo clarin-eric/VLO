@@ -28,9 +28,9 @@ import java.util.MissingResourceException;
 public class ResourceTypeLabel extends Label {
     //private final IModel<String> labelModel;
 
-    public ResourceTypeLabel(String id, IModel<String> mimiTypeModel) {
-        super(id, new StringResourceModel("mimitype.${}.label", normalizeMimeType(mimiTypeModel))
-                .setDefaultValue(mimiTypeModel.getObject()));
+    public ResourceTypeLabel(String id, IModel<String> mimeTypeModel) {
+        super(id, new StringResourceModel("mimetype.${}.label", normalizeMimeType(mimeTypeModel))
+                .setDefaultValue(mimeTypeModel.getObject()));
     }
 
 
