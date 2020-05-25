@@ -49,7 +49,8 @@ public class LanguagesLabelsPanel extends Panel {
     private static final int MAX_LANGUAGES = 5;
 
     private final IModel<ExpansionState> expansionStateModel;
-    private final List<String> languages;
+    private final IModel<List<String>> languagesLabelsModel;
+    private IModel<List<String>> languagesListModel;
     private final IModel<SolrDocument> documentModel;
 
     private final Link showMoreLink;
@@ -59,14 +60,18 @@ public class LanguagesLabelsPanel extends Panel {
         this.documentModel = documentModel;
         this.expansionStateModel = expansionStateModel;
 
-        languages =  new LanguageLabelModel(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)).getObject();
-        int numOfItems = ((expansionStateModel.getObject() == ExpansionState.COLLAPSED) ? MAX_LANGUAGES: languages.size());
+        languagesLabelsModel = new LanguageLabelModel(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
+        languagesListModel = () -> {
+            final List<String> fullList = languagesLabelsModel.getObject();
+            int numOfItems = ((expansionStateModel.getObject() == ExpansionState.COLLAPSED) ? MAX_LANGUAGES : fullList.size());
+            return fullList.subList(0, Math.min(numOfItems, fullList.size()));
+        };
 
-        add(createListView("languagesList", numOfItems));
+        add(createListView("languagesList"));
 
         showMoreLink = new IndicatingAjaxFallbackLink<Void>("showMore") {
             @Override
-            public void onClick(Optional<AjaxRequestTarget>  t) {
+            public void onClick(Optional<AjaxRequestTarget> t) {
                 // toggle the expansion state
                 if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
                     expansionStateModel.setObject(ExpansionState.EXPANDED);
@@ -75,38 +80,36 @@ public class LanguagesLabelsPanel extends Panel {
                 }
 
                 t.ifPresent(target -> {
-                   target.add(LanguagesLabelsPanel.this);
+                    target.add(LanguagesLabelsPanel.this);
                 });
 
             }
         };
 
         showMoreLink.add(new WebMarkupContainer("state").add(
-                        new AttributeModifier("class", new IModel<>() {
+                new AttributeModifier("class", new IModel<>() {
 
-                            @Override
-                            public String getObject() {
-                                if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
-                                    return "fa fa-plus-square-o";
-                                } else {
-                                    return "fa fa-minus-square-o";
-                                }
-                            }
-                        })));
+                    @Override
+                    public String getObject() {
+                        if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
+                            return "fa fa-plus-square-o";
+                        } else {
+                            return "fa fa-minus-square-o";
+                        }
+                    }
+                })));
         add(showMoreLink);
         setOutputMarkupId(true);
     }
 
-    private ListView createListView(String id,  int numOfItems){
-        List<String> list = languages.subList(0, Math.min(numOfItems, languages.size()));
-
-        return new ListView<String>(id, list){
+    private ListView createListView(String id) {
+        return new ListView<String>(id, languagesListModel) {
             @Override
             protected void populateItem(ListItem<String> item) {
                 final Link languageLink = new RecordPageLink("languageLink", documentModel);
                 String label = item.getModel().getObject();
-                if(label.length() > MAX_LABEL_LENGTH){
-                    label = label.substring(0, MAX_LABEL_LENGTH)+"..";
+                if (label.length() > MAX_LABEL_LENGTH) {
+                    label = label.substring(0, MAX_LABEL_LENGTH) + "..";
                 }
                 item.add(languageLink
                         .add(new Label("languageName", label))
@@ -119,7 +122,7 @@ public class LanguagesLabelsPanel extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        showMoreLink.setVisible(languages.size() > MAX_LANGUAGES );
+        showMoreLink.setVisible(languagesLabelsModel.getObject().size() > MAX_LANGUAGES);
 
     }
 

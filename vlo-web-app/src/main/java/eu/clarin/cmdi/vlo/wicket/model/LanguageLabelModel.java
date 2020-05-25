@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
@@ -27,8 +26,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+public class LanguageLabelModel implements IModel<List<String>> {
 
-public class LanguageLabelModel implements IModel<List<String>>{
     private final IModel<Collection<Object>> fieldModel;
     private final String field;
 
@@ -46,10 +45,9 @@ public class LanguageLabelModel implements IModel<List<String>>{
         return null;
     }
 
-
     private List<String> getMultipleValuesString(final Collection<Object> fieldValues) {
         final Iterator<?> iterator = fieldValues.iterator();
-        List<String> languages = new ArrayList<String>();
+        List<String> languages = new ArrayList<>();
         while (iterator.hasNext()) {
             languages.add(postprocessValue(iterator.next().toString()));
         }
