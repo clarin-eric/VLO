@@ -22,6 +22,20 @@ package eu.clarin.cmdi.vlo.pojo;
  */
 public enum ExpansionState {
 
-    EXPANDED,
-    COLLAPSED
+    EXPANDED(true),
+    COLLAPSED(false);
+
+    private final boolean expanded;
+
+    private ExpansionState(boolean expanded) {
+        this.expanded = expanded;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public ExpansionState invert() {
+        return isExpanded() ? COLLAPSED : EXPANDED;
+    }
 }

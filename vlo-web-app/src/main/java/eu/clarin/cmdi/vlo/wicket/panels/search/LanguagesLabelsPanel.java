@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.wicket.components.RecordPageLink;
 import eu.clarin.cmdi.vlo.wicket.model.LanguageLabelModel;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.AttributeModifier;
@@ -35,12 +34,15 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import java.util.List;
 import java.util.Optional;
+import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.html.panel.GenericPanel;
 
 /**
  *
  * @author Tariq
  */
-public class LanguagesLabelsPanel extends Panel {
+public class LanguagesLabelsPanel extends GenericPanel<SolrDocument> {
 
     @SpringBean
     private FieldNameService fieldNameService;
@@ -63,8 +65,9 @@ public class LanguagesLabelsPanel extends Panel {
         languagesLabelsModel = new LanguageLabelModel(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
         languagesListModel = () -> {
             final List<String> fullList = languagesLabelsModel.getObject();
-            int numOfItems = ((expansionStateModel.getObject() == ExpansionState.COLLAPSED) ? MAX_LANGUAGES : fullList.size());
-            return fullList.subList(0, Math.min(numOfItems, fullList.size()));
+            final int size = fullList.size();
+            final int numOfItems = (expansionStateModel.getObject().isExpanded()) ? size : Math.min(size, MAX_LANGUAGES);
+            return fullList.subList(0, numOfItems);
         };
 
         add(createListView("languagesList"));
@@ -73,11 +76,7 @@ public class LanguagesLabelsPanel extends Panel {
             @Override
             public void onClick(Optional<AjaxRequestTarget> t) {
                 // toggle the expansion state
-                if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
-                    expansionStateModel.setObject(ExpansionState.EXPANDED);
-                } else {
-                    expansionStateModel.setObject(ExpansionState.COLLAPSED);
-                }
+                expansionStateModel.setObject(expansionStateModel.getObject().invert());
 
                 t.ifPresent(target -> {
                     target.add(LanguagesLabelsPanel.this);
@@ -87,17 +86,20 @@ public class LanguagesLabelsPanel extends Panel {
         };
 
         showMoreLink.add(new WebMarkupContainer("state").add(
-                new AttributeModifier("class", new IModel<>() {
+                new AttributeModifier("class",
+                        () -> expansionStateModel.getObject().isExpanded()
+                        ? "fa fa-minus-square-o"
+                        : "fa fa-plus-square-o")
+        ));
 
-                    @Override
-                    public String getObject() {
-                        if (expansionStateModel.getObject() == ExpansionState.COLLAPSED) {
-                            return "fa fa-plus-square-o";
-                        } else {
-                            return "fa fa-minus-square-o";
-                        }
-                    }
-                })));
+        showMoreLink.add(new Behavior() {
+            @Override
+            public void onConfigure(Component component) {
+                component.setVisible(languagesLabelsModel.getObject().size() > MAX_LANGUAGES);
+            }
+
+        });
+
         add(showMoreLink);
         setOutputMarkupId(true);
     }
@@ -120,16 +122,10 @@ public class LanguagesLabelsPanel extends Panel {
     }
 
     @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        showMoreLink.setVisible(languagesLabelsModel.getObject().size() > MAX_LANGUAGES);
-
-    }
-
-    @Override
     public void detachModels() {
         super.detachModels();
         expansionStateModel.detach();
+        languagesLabelsModel.detach();
     }
 
 }
