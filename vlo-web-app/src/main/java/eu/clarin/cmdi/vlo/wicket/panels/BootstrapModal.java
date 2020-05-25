@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 
 import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -52,20 +52,20 @@ public abstract class BootstrapModal extends Panel {
     protected void onInitialize() {
         super.onInitialize();
         add(new Label("title", getTitle()));
-        add(new AjaxLink("closeCross") {
+        add(new IndicatingAjaxLink<>("closeCross") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onDismiss(Optional.of(target));
             }
         });
-        add(new AjaxLink("closeButton") {
+        add(new IndicatingAjaxLink<>("closeButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onClose(Optional.of(target));
             }
         }.add(new Label("closeButtonLabel", getCloseButtonLabelModel())));
 
-        add(new AjaxLink("dismissButton") {
+        add(new IndicatingAjaxLink<>("dismissButton") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 onDismiss(Optional.of(target));

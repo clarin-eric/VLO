@@ -44,8 +44,8 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.attributes.ThrottlingSettings;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.repeater.util.SortParam;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -204,7 +204,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
                 }
 
                 // link to select an individual facet value
-                final Link selectLink = new AjaxFallbackLink<Void>("facetSelect") {
+                final Link selectLink = new IndicatingAjaxFallbackLink<Void>("facetSelect") {
 
                     @Override
                     public void onClick(Optional<AjaxRequestTarget> target) {
