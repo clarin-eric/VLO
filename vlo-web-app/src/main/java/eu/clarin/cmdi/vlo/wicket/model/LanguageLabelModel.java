@@ -23,6 +23,7 @@ import org.apache.wicket.util.convert.IConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,8 +42,9 @@ public class LanguageLabelModel implements IModel<List<String>> {
         final Collection<Object> fieldValues = fieldModel.getObject();
         if (fieldValues != null) {
             return getMultipleValuesString(fieldValues);
+        } else {
+            return Collections.emptyList();
         }
-        return null;
     }
 
     private List<String> getMultipleValuesString(final Collection<Object> fieldValues) {
