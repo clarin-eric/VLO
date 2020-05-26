@@ -32,11 +32,8 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import java.util.List;
 import java.util.Optional;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 
 /**
@@ -56,8 +53,6 @@ public class LanguagesLabelsPanel extends GenericPanel<SolrDocument> {
     private final IModel<List<String>> languagesListModel;
     private final IModel<SolrDocument> documentModel;
 
-    private final Link showMoreLink;
-
     public LanguagesLabelsPanel(String id, IModel<SolrDocument> documentModel, IModel<ExpansionState> expansionStateModel) {
         super(id, documentModel);
         this.documentModel = documentModel;
@@ -73,24 +68,21 @@ public class LanguagesLabelsPanel extends GenericPanel<SolrDocument> {
 
         add(createListView("languagesList"));
 
-        showMoreLink = new ExpansionToggleLink("showMore");
-
-        showMoreLink.add(new WebMarkupContainer("state").add(
-                new AttributeModifier("class",
-                        () -> expansionStateModel.getObject().isExpanded()
-                        ? "fa fa-minus-square-o"
-                        : "fa fa-plus-square-o")
-        ));
-
-        showMoreLink.add(BooleanVisibilityBehavior.visibleOnTrue(this::isShowMore));
-        add(showMoreLink);
-        
+        // expansion toggle links
         // badge with "... (+n)" label in case there is more        
         final IModel<Integer> remainderCountModel = () -> languagesLabelsModel.getObject().size() - languagesListModel.getObject().size();
         add(new ExpansionToggleLink("showMoreBadge")
                 .add(new Label("remainderCount", remainderCountModel))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(
-                        () -> isShowMore() && !expansionStateModel.getObject().isExpanded())));
+                        () -> isShowMoreEnabled() && !expansionStateModel.getObject().isExpanded()
+                )));
+
+        // "show less" link    
+        add(new ExpansionToggleLink("showLess")
+                .add(BooleanVisibilityBehavior.visibleOnTrue(
+                        () -> expansionStateModel.getObject().isExpanded()
+                )));
+
         setOutputMarkupId(true);
     }
 
@@ -111,7 +103,7 @@ public class LanguagesLabelsPanel extends GenericPanel<SolrDocument> {
         };
     }
 
-    private boolean isShowMore() {
+    private boolean isShowMoreEnabled() {
         return languagesLabelsModel.getObject().size() > MAX_LANGUAGES;
     }
 
