@@ -68,7 +68,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     private final DataView<SolrDocumentExpansionPair> resultsView;
     private final IModel<Set<Object>> expansionsModel;
     private final IModel<Set<Object>> duplicateItemsExpansionsModel;
-    private final IModel<Set<Object>> LanguageLabelsExpansionsModel;
+    private final IModel<Set<Object>> languageLabelsExpansionsModel;
 
     private final Component navigatorBottom;
     private final Component navigatorTop;
@@ -77,7 +77,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
         super(id, selectionModel);
         this.expansionsModel = new Model(new HashSet<>());
         this.duplicateItemsExpansionsModel = new Model(new HashSet<>());
-        this.LanguageLabelsExpansionsModel = new Model(new HashSet<>());
+        this.languageLabelsExpansionsModel = new Model(new HashSet<>());
 
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
@@ -97,7 +97,7 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
                         new SearchResultExpansionStateModel(expansionsModel, item.getModel()),
                         new SearchResultExpansionStateModel(duplicateItemsExpansionsModel, item.getModel()),
                         availabilityOrdering,
-                        new SearchResultExpansionStateModel(LanguageLabelsExpansionsModel, item.getModel())
+                        new SearchResultExpansionStateModel(languageLabelsExpansionsModel, item.getModel())
                 ));
             }
         };
@@ -159,6 +159,14 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
 
     public AbstractPageableView<SolrDocumentExpansionPair> getResultsView() {
         return resultsView;
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        expansionsModel.detach();
+        duplicateItemsExpansionsModel.detach();
+        languageLabelsExpansionsModel.detach();
     }
 
     /**

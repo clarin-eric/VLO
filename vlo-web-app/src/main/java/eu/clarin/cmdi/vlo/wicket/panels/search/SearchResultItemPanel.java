@@ -103,7 +103,7 @@ public class SearchResultItemPanel extends Panel {
      * item
      * @param availabilityOrdering ordering for availability 'tags'
      */
-    public SearchResultItemPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, IModel<ExpansionState> duplicateItemsExpansionModel, Ordering<String> availabilityOrdering, IModel<ExpansionState> LanguageExpansionStateModel) {
+    public SearchResultItemPanel(String id, SolrDocumentExpansionPairModel documentExpansionPairModel, IModel<SearchContext> selectionModel, IModel<ExpansionState> expansionStateModel, IModel<ExpansionState> duplicateItemsExpansionModel, Ordering<String> availabilityOrdering, IModel<ExpansionState> languageExpansionStateModel) {
         super(id, documentExpansionPairModel);
         this.expansionStateModel = expansionStateModel;
         this.selectionModel = selectionModel;
@@ -136,7 +136,7 @@ public class SearchResultItemPanel extends Panel {
         add(expandedDetails);
 
         // add Languages Labels
-        add(new LanguagesLabelsPanel("languagesList", documentModel, LanguageExpansionStateModel));
+        add(new LanguagesLabelsPanel("languagesList", documentModel, languageExpansionStateModel));
 
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
