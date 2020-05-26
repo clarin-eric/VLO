@@ -52,7 +52,7 @@ public class LanguagesLabelsPanel extends GenericPanel<SolrDocument> {
 
     private final IModel<ExpansionState> expansionStateModel;
     private final IModel<List<String>> languagesLabelsModel;
-    private IModel<List<String>> languagesListModel;
+    private final IModel<List<String>> languagesListModel;
     private final IModel<SolrDocument> documentModel;
 
     private final Link showMoreLink;

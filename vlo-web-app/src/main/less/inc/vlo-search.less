@@ -120,17 +120,32 @@
 
         margin-top: 20px;
     }
+
     .searchresult-languageLabels {
-            display: inline;
-            padding: 0;
-            margin: 0;
-            margin-top: 20px;
+        display: inline;
+        padding: 0;
+        margin: 0;
+        margin-top: 20px;
+
+        a {
+            text-decoration: none;
         }
-    .searchresult-languageLabels-badge {
-            background-color:#FFF;
-            border:1px solid #0080aa;
-            color:#0080aa;
+
+        .searchresult-languageLabels-badge {
+            background-color: @body-bg;
+            border:1px solid @clarin-color-2;
+            color: @clarin-color-2;
+
+            &.badge {
+                font-weight: normal;
+            }
+        }
+        
+        &:hover .searchresult-languageLabels-badge {
+            background-color: #eee;
+        }
     }
+
     .searchresult-licenseInfo {
         .availabilityTag, .licenseTag {
             display: inline-block;
@@ -201,7 +216,7 @@
                     text-decoration: @link-hover-decoration;
                 }
             }
-            
+
             .search-results-duplicate-description {
                 font-size: small;
             }
