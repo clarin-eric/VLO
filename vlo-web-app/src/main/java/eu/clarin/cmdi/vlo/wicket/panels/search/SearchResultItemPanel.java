@@ -128,15 +128,12 @@ public class SearchResultItemPanel extends Panel {
         add(createExpansionStateToggle("expansionStateToggle"));
 
         // add a collapsed details panel; only shown when expansion state is collapsed (through onConfigure)
-        collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetails", documentModel, selectionModel, availabilityOrdering);
+        collapsedDetails = new SearchResultItemCollapsedPanel("collapsedDetails", documentModel, selectionModel, availabilityOrdering, languageExpansionStateModel);
         add(collapsedDetails);
 
         // add a collapsed details panel; only shown when expansion state is expanded (through onConfigure)
         expandedDetails = new SearchResultItemExpandedPanel("expandedDetails", documentModel, selectionModel, availabilityOrdering);
         add(expandedDetails);
-
-        // add Languages Labels
-        add(new LanguagesLabelsPanel("languagesList", documentModel, languageExpansionStateModel));
 
         // get model for resources
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));

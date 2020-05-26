@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
 import org.apache.solr.common.SolrDocument;
@@ -42,7 +43,7 @@ public class SearchResultItemCollapsedPanel extends Panel {
 
     private final IModel<SearchContext> selectionModel;
 
-    public SearchResultItemCollapsedPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, Ordering<String> availabilityOrdering) {
+    public SearchResultItemCollapsedPanel(String id, IModel<SolrDocument> documentModel, IModel<SearchContext> selectionModel, Ordering<String> availabilityOrdering, IModel<ExpansionState> languageExpansionStateModel) {
         super(id, documentModel);
         this.selectionModel = selectionModel;
 
@@ -52,6 +53,9 @@ public class SearchResultItemCollapsedPanel extends Panel {
         add(new SolrFieldLabel("description", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), noDescriptionModel, MAX_DESCRIPTION_LENGTH, LONG_DESCRIPTION_TRUNCATE_POINT));
         // extra short description for smaller devices
         add(new SolrFieldLabel("description-shorter", documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION), noDescriptionModel, MAX_DESCRIPTION_LENGTH_SHORTER, LONG_DESCRIPTION_TRUNCATE_POINT_SHORTER));
+        
+        // add Languages Labels
+        add(new LanguagesLabelsPanel("languagesList", documentModel, languageExpansionStateModel));
     }
 
     @Override
