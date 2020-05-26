@@ -23,17 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <div class="searchresult-languageLabels small">
-                <wicket:container wicket:id="languagesList">
-                    <a wicket:id="languageLink" href="record1.html" title="Language Name">
-                        <span wicket:id="languageName" class="badge searchresult-languageLabels-badge"></span>
-                    </a>
-                </wicket:container>
-            </div>
             <a wicket:id="showMore" href="#" class="searchresultdetailstoggle" title="Expand to show all languages">
                 <i wicket:id="state" aria-hidden="true"></i>
             </a>
-
+            <div class="searchresult-languageLabels small">
+                <wicket:container wicket:id="languagesList">
+                    <a wicket:id="languageLink" href="record1.html" class="searchresult-languageLabels-link" title="Language Name">
+                        <span wicket:id="languageName" class="badge searchresult-languageLabels-badge"></span>
+                    </a>
+                </wicket:container>
+                <a wicket:id="showMoreBadge">
+                    <span class="badge searchresult-languageLabels-badge">&hellip; (+<wicket:container wicket:id="remainderCount"></wicket:container>)</span>
+                </a>
+            </div>
         </wicket:panel>
     </body>
 </html>
