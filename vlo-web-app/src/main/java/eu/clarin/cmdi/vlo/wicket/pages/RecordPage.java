@@ -77,6 +77,7 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
+import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -476,5 +477,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour(), true));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("initTourRecordPage();", "initTourRecordPage"));
+        
+        response.render(JavaScriptHeaderItem.forUrl("https://weblicht.sfs.uni-tuebingen.de/switchboard-test/popup/switchboardpopup.js", "switchboard-popup", true));
+        response.render(CssHeaderItem.forUrl("https://weblicht.sfs.uni-tuebingen.de/switchboard-test/popup/switchboardpopup.css"));
     }
 }
