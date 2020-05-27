@@ -234,6 +234,10 @@ public class VloConfig {
     private URI configLocation;
 
     private String lrSwitchboardBaseUrl = "https://switchboard.clarin.eu/";
+    
+    private String lrSwitchboardPopupScriptUrl="https://switchboard.clarin.eu/popup/switchboardpopup.js";
+    
+    private String lrSwitchboardPopupStyleUrl="https://switchboard.clarin.eu/popup/switchboardpopup.css";
 
     /**
      * Get and set methods for web application parameter members<br>
@@ -1551,6 +1555,22 @@ public class VloConfig {
 
     public int getMaxNumberOfFacetsToShow() {
         return maxNumberOfFacetsToShow;
+    }
+
+    public String getLrSwitchboardPopupScriptUrl() {
+        return lrSwitchboardPopupScriptUrl;
+    }
+
+    public void setLrSwitchboardPopupScriptUrl(String lrSwitchboardPopupScriptUrl) {
+        this.lrSwitchboardPopupScriptUrl = lrSwitchboardPopupScriptUrl;
+    }
+
+    public String getLrSwitchboardPopupStyleUrl() {
+        return lrSwitchboardPopupStyleUrl;
+    }
+
+    public void setLrSwitchboardPopupStyleUrl(String lrSwitchboardPopupStyleUrl) {
+        this.lrSwitchboardPopupStyleUrl = lrSwitchboardPopupStyleUrl;
     }
 
 }
