@@ -38,8 +38,8 @@ require your attention at this point!
 5. Stop 
 	1) the Tomcat (or at least the VLO web app), and 
 	2) the Solr server.
-	3) the MongoDB server, if applicable
-	4) jmxtrans, if applicable
+	3) the Postgres server, if applicable (for link checking statistics)
+	4) jmxtrans, if applicable (for remote Solr monitoring)
 
 6. Replace the 'current' symlink with a link to location of the new VLO directory.
 
@@ -71,7 +71,7 @@ which configures the location of the Solr data directory.
 
 9. Start
 	1) the Solr server, and
-	2) the MongoDB server, if applicable
+	2) the Postgres server, if applicable
 	3) the Tomcat server
 	4) jmxtrans, if applicable
 
@@ -79,6 +79,23 @@ which configures the location of the Solr data directory.
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
+
+-----------------------------
+Upgrading from 4.8.x to 4.9.0
+-----------------------------
+There are several new configuration properties in `VloConfig.xml` that need to be set:
+
+- webAppLocale
+- lrSwitchboardPopupScriptUrl
+- lrSwitchboardPopupStyleUrl
+
+and a structure
+```xml
+    <dataSetStructuredData>
+        <enabled>true</enabled>
+        <include field="HARVESTER_ROOT">CLARIN Centres</include>
+    </dataSetStructuredData>
+```
 
 -----------------------------
 Upgrading from 4.8.1 to 4.8.2
