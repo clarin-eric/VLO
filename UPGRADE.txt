@@ -38,8 +38,9 @@ require your attention at this point!
 5. Stop 
 	1) the Tomcat (or at least the VLO web app), and 
 	2) the Solr server.
-	3) the Postgres server, if applicable (for link checking statistics)
-	4) jmxtrans, if applicable (for remote Solr monitoring)
+	3) the Postgres server, if applicable (for exposure statistics)
+	4) the MariaDB server, if applicable (for link checking statistics)
+	5) jmxtrans, if applicable (for remote Solr monitoring)
 
 6. Replace the 'current' symlink with a link to location of the new VLO directory.
 
@@ -72,8 +73,9 @@ which configures the location of the Solr data directory.
 9. Start
 	1) the Solr server, and
 	2) the Postgres server, if applicable
-	3) the Tomcat server
-	4) jmxtrans, if applicable
+	3) the MariaDB server, if applicable
+	4) the Tomcat server
+	5) jmxtrans, if applicable
 
 10. If you want to run an import straight away (discuss this with the person responsible
 for the upgraded VLO instance), go to the `bin` directory and run the importer using the
