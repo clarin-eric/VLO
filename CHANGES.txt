@@ -1,6 +1,26 @@
 Bug fixes and new features
 --------------------------
+VLO 4.9.0 (July 2020)
+
+* Show more precise but user friendly media type for resources
+    <https://github.com/clarin-eric/VLO/issues/240>
+* Embedded Schema.org metadata for datasets
+    <https://github.com/clarin-eric/VLO/issues/209>
+* Make switchboard connection more prominent/obvious
+    <https://github.com/clarin-eric/VLO/issues/127>
+* Show language labels in collapsed search results
+    <https://github.com/clarin-eric/VLO/issues/77>
+* Use long date format
+    <https://github.com/clarin-eric/VLO/issues/284>
+* Make web app locale static
+    <https://github.com/clarin-eric/VLO/issues/282>
+* Upgrade to RASA 2.8
+    <https://github.com/clarin-eric/VLO/issues/299>
+* Add busy indicator to "all values" panel interactions
+    <https://github.com/clarin-eric/VLO/issues/300>
+
 VLO 4.8.2 (March 2020)
+
 * Using new link checker API
     <https://github.com/clarin-eric/VLO/issues/285>
 * FCS integration can be disabled
@@ -9,6 +29,7 @@ VLO 4.8.2 (March 2020)
     <https://github.com/clarin-eric/VLO/issues/294>
 
 VLO 4.8.1 (February 2020)
+
 * Upper bound for number of collections sent to statistics reporting
     <https://github.com/clarin-eric/VLO/issues/289>
 
