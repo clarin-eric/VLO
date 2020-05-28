@@ -28,54 +28,50 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
      * Adds the page view.
      *
      * @param vloConfig the vlo configuration
-     * @param pv        the PageView Object
+     * @param pv the PageView Object
      * @return true, if successful
      */
     @Override
     public boolean addPageView(VloConfig vloConfig, PageView pv) {
-        Connection conn = PgConnection.getConnection(vloConfig);
-        boolean added = false;
-        String query = "INSERT INTO " + table + "(record_id, ip, url, http_referer, \"timeSt\") "
+        final String query = "INSERT INTO " + table + "(record_id, ip, url, http_referer, \"timeSt\") "
                 + "VALUES(?,?,?,?,?)";
-        long id = 0;
-        int affectedRows = -1;
-        if (null != conn) {
-            try {
-                PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-                // set query parameters
-                pstmt.setString(1, pv.getRecordId());
-                pstmt.setString(2, pv.getIp());
-                pstmt.setString(3, pv.getUrl());
-                pstmt.setString(4, pv.getHttpReferer());
-                pstmt.setTimestamp(5, pv.getTimeStamp());
-                // run the query
-                affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    // get the inserted ID back
-                    added = true;
-                    try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            id = rs.getLong(1);
+        boolean added = false;
+        try (Connection conn = PgConnection.getConnection(vloConfig)) {
+            long id;
+            int affectedRows;
+            if (null != conn) {
+                try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                    // set query parameters
+                    pstmt.setString(1, pv.getRecordId());
+                    pstmt.setString(2, pv.getIp());
+                    pstmt.setString(3, pv.getUrl());
+                    pstmt.setString(4, pv.getHttpReferer());
+                    pstmt.setTimestamp(5, pv.getTimeStamp());
+                    // run the query
+                    affectedRows = pstmt.executeUpdate();
+                    if (affectedRows > 0) {
+                        // get the inserted ID back
+                        added = true;
+                        try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                            if (rs.next()) {
+                                id = rs.getLong(1);
+                            }
                         }
-                    } catch (SQLException ex) {
-                        logger.error(ex.getMessage());
                     }
                 }
-                // close the connection
-                conn.close();
-            } catch (SQLException ex) {
-                logger.error(ex.getMessage());
-                added = false;
             }
+        } catch (SQLException ex) {
+            logger.error("Error while saving page view to exposure db", ex);
+            added = false;
         }
         return added;
     }
-    
-    public List<Record> getStats(VloConfig vloConfig, QueryParameters qp){
-        String query = "SELECT record_id, count(*) as views FROM "+ table +
-                " where record_id like ? and \"timeSt\" between ? and ? " +
-                "group by record_id order by views DESC "; //LIMIT ? OFFSET ?
-        List<Record> records= new ArrayList<>();
+
+    public List<Record> getStats(VloConfig vloConfig, QueryParameters qp) {
+        String query = "SELECT record_id, count(*) as views FROM " + table
+                + " where record_id like ? and \"timeSt\" between ? and ? "
+                + "group by record_id order by views DESC "; //LIMIT ? OFFSET ?
+        List<Record> records = new ArrayList<>();
         try {
             Connection conn = PgConnection.getConnection(vloConfig);
             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -85,28 +81,28 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
 
             ResultSet rs = pstmt.executeQuery();
 
-            while(rs.next()) {   
+            while (rs.next()) {
                 String recordId = rs.getString("record_id");
                 int views = rs.getInt("views");
                 records.add(new Record(recordId, views));
             }
             conn.close();
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             logger.error(ex.getMessage());
         }
-        
+
         return records;
-    } 
+    }
 
     // get statistics by record_id
-    public HashMap<String,String> getStatByRecordId(VloConfig vloConfig, QueryParameters qp){
-        HashMap<String,String> returnValues = new LinkedHashMap<String, String>();
+    public HashMap<String, String> getStatByRecordId(VloConfig vloConfig, QueryParameters qp) {
+        HashMap<String, String> returnValues = new LinkedHashMap<String, String>();
         String timeStampField = "\"timeSt\"";
         String query = "SELECT " + table + ".\"record_id\", count(*) as views, "
-                + "min(" + table + ".\"timeSt\") as lastVisited FROM "+ table + 
-                "WHERE record_id=? " +
-                " and " + timeStampField + " between ? and ? " +
-                " group by "+ table +".\"record_id\"";
+                + "min(" + table + ".\"timeSt\") as lastVisited FROM " + table
+                + "WHERE record_id=? "
+                + " and " + timeStampField + " between ? and ? "
+                + " group by " + table + ".\"record_id\"";
         try {
             Connection conn = PgConnection.getConnection(vloConfig);
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -114,30 +110,30 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
             pstmt.setTimestamp(2, qp.getStartDate());
             pstmt.setTimestamp(3, qp.getEndDate());
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 int views = rs.getInt("views");
                 Timestamp lastVisited = rs.getTimestamp("lastVisited");
                 returnValues.put("views", String.valueOf(views));
                 returnValues.put("lastVisited", lastVisited.toString());
             }
             conn.close();
-        }catch(Exception ex){
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
         return returnValues;
     }
 
     // get statistics by record_id
-    public HashMap<String,Integer> getKeyWordsByRecordId(VloConfig vloConfig, QueryParameters qp){
+    public HashMap<String, Integer> getKeyWordsByRecordId(VloConfig vloConfig, QueryParameters qp) {
         String timeStampField = "\"timeSt\"";
         String queriesTable = "\"SearchQueries\"";
         String resultsTable = "\"SearchResults\"";
-        String query = "SELECT "+queriesTable+".\"searchTerm\", count(*) as views FROM " + queriesTable
-                + " WHERE "+ queriesTable + ".id in ( "
-                + " select distinct(query_id) from " + resultsTable +" WHERE record_id =?"
-                +")  and " + timeStampField + " between ? and ? " +
-                " group by \"searchTerm\";";
-        HashMap<String,Integer> map= new LinkedHashMap<>();
+        String query = "SELECT " + queriesTable + ".\"searchTerm\", count(*) as views FROM " + queriesTable
+                + " WHERE " + queriesTable + ".id in ( "
+                + " select distinct(query_id) from " + resultsTable + " WHERE record_id =?"
+                + ")  and " + timeStampField + " between ? and ? "
+                + " group by \"searchTerm\";";
+        HashMap<String, Integer> map = new LinkedHashMap<>();
         try {
             Connection conn = PgConnection.getConnection(vloConfig);
             PreparedStatement pstmt = conn.prepareStatement(query);
@@ -145,24 +141,24 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
             pstmt.setTimestamp(2, qp.getStartDate());
             pstmt.setTimestamp(3, qp.getEndDate());
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String searchTerm = rs.getString("searchTerm");
                 int freq = rs.getInt("views");
                 map.put(searchTerm, freq);
             }
-        }catch(Exception ex){
+        } catch (Exception ex) {
             logger.error(ex.getMessage());
         }
         return map;
     }
 
-    public HashMap<String,Integer> getPageViewsPerDay(VloConfig vloConfig, QueryParameters qp) {
+    public HashMap<String, Integer> getPageViewsPerDay(VloConfig vloConfig, QueryParameters qp) {
         String timeStampField = "\"timeSt\"";
-        String query = "SELECT date_trunc('day', " + timeStampField + ") as day, count(*) as freq FROM "+ table
+        String query = "SELECT date_trunc('day', " + timeStampField + ") as day, count(*) as freq FROM " + table
                 + " where " + timeStampField + " between ? and ? "
                 + "and record_id=?  group by day order by day "; //limit ? offset ?
 
-        HashMap<String,Integer> chartData= new LinkedHashMap<>();
+        HashMap<String, Integer> chartData = new LinkedHashMap<>();
         try {
             Connection conn = PgConnection.getConnection(vloConfig);
             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -181,13 +177,13 @@ public class PageViewsHandlerImpl implements PageViewsHandler {
                 curTime += interval;
             }
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String day = formatter.format(new Date(rs.getTimestamp("day").getTime()));
                 int freq = rs.getInt("freq");
                 chartData.put(day, freq);
             }
             conn.close();
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             logger.error(ex.getMessage());
         }
         return chartData;

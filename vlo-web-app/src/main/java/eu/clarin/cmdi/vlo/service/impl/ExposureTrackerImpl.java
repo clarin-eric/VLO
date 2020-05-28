@@ -84,7 +84,7 @@ public class ExposureTrackerImpl implements ExposureTracker {
                 SearchQuery sq = new SearchQuery(searchTerm, selection.getSelection().toString(), res, ip, pageUrl);
                 sq.save(vloConfig);
             } catch (Exception e) {
-                logger.error(e.getMessage());
+                logger.error("Error while storing search result exposure information", e);
             }
         }
     }

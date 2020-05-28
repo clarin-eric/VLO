@@ -179,22 +179,23 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                     .remove(VloWebAppParameters.DOCUMENT_ID);
             ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
         } else {
-            try {
-                // save these information (id, ip, url, referer) in postgresql DB for record
-                // exposures
-                String id = document.get("id").toString();
-                HttpServletRequest httpRequest = ((ServletWebRequest) RequestCycle.get().getRequest())
-                        .getContainerRequest();
-                String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
-                // get user ip address
-                String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
-                String referer = httpRequest.getHeader("referer");
-                // create PageView object and save it in the DB
-                PageView pageView = new PageView(id, ip, pageUrl, referer);
-                pageView.save(config);
-
-            } catch (Exception e) {
-                logger.error(e.getMessage());
+            if (config.isVloExposureEnabled()) {
+                try {
+                    // save these information (id, ip, url, referer) in postgresql DB for record
+                    // exposures
+                    String id = document.get("id").toString();
+                    HttpServletRequest httpRequest = ((ServletWebRequest) RequestCycle.get().getRequest())
+                            .getContainerRequest();
+                    String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
+                    // get user ip address
+                    String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
+                    String referer = httpRequest.getHeader("referer");
+                    // create PageView object and save it in the DB
+                    PageView pageView = new PageView(id, ip, pageUrl, referer);
+                    pageView.save(config);
+                } catch (Exception e) {
+                    logger.error("Error while storing page view statistics", e);
+                }
             }
 
             final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
@@ -450,7 +451,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             navigationModel.detach();
         }
     }
-    
+
     @Override
     public IModel<String> getTitleModel() {
         final NullFallbackModel<String> titleModel = new NullFallbackModel<>(new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME), true), getString("recordpage.unnamedrecord"));
@@ -477,7 +478,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour(), true));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("initTourRecordPage();", "initTourRecordPage"));
-        
+
         response.render(JavaScriptHeaderItem.forUrl(config.getLrSwitchboardPopupScriptUrl(), "switchboard-popup", true));
         response.render(CssHeaderItem.forUrl(config.getLrSwitchboardPopupStyleUrl()));
     }

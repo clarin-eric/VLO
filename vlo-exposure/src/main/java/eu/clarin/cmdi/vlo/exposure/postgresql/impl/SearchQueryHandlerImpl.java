@@ -21,57 +21,54 @@ public class SearchQueryHandlerImpl implements SearchQueryHandler {
     private final static Logger logger = LoggerFactory.getLogger(SearchQueryHandlerImpl.class);
     private final String table = "\"SearchQueries\"";
 
+    final String sqlQuery = "INSERT INTO " + table + "(\"searchTerm\", filter,  url, ip,  \"timeSt\") "
+            + "VALUES(?,?,?,?,?)";
+
     public boolean addSearchQuery(VloConfig vloConfig, SearchQuery sq) {
-        String sqlQuery = "INSERT INTO " + table + "(\"searchTerm\", filter,  url, ip,  \"timeSt\") "
-                + "VALUES(?,?,?,?,?)";
         boolean added = false;
         SearchResultHandlerImpl srh = new SearchResultHandlerImpl();
         long id = 0;
         int affectedRows = -1;
-        Connection conn = PgConnection.getConnection(vloConfig);
-        if (null != conn) {
-            try {
-                PreparedStatement pstmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
-                // set query parameters
-                pstmt.setString(1, sq.getSearchTerm());
-                pstmt.setString(2, sq.getFilter());
-                pstmt.setString(3, sq.getUrl());
-                pstmt.setString(4, sq.getIp());
-                pstmt.setTimestamp(5, sq.getTimeStamp());
-                // run the query
-                affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    // get the ID back
-                    added = true;
+        try (Connection conn = PgConnection.getConnection(vloConfig)) {
+            if (null != conn) {
+                try (PreparedStatement pstmt = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS)) {
+                    // set query parameters
+                    pstmt.setString(1, sq.getSearchTerm());
+                    pstmt.setString(2, sq.getFilter());
+                    pstmt.setString(3, sq.getUrl());
+                    pstmt.setString(4, sq.getIp());
+                    pstmt.setTimestamp(5, sq.getTimeStamp());
+                    // run the query
+                    affectedRows = pstmt.executeUpdate();
+                    if (affectedRows > 0) {
+                        // get the ID back
+                        added = true;
 
-                    try (ResultSet rs = pstmt.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            id = rs.getLong(1);
-                            // add Search Results;
-                            for (SearchResult searchResult : sq.getResults()) {
-                                srh.addSearchResult(vloConfig, id, searchResult);
+                        try (ResultSet rs = pstmt.getGeneratedKeys()) {
+                            if (rs.next()) {
+                                id = rs.getLong(1);
+                                // add Search Results;
+                                for (SearchResult searchResult : sq.getResults()) {
+                                    srh.addSearchResult(vloConfig, id, searchResult);
+                                }
                             }
                         }
-                    } catch (SQLException ex) {
-                        logger.error(ex.getMessage());
                     }
                 }
-                conn.close();
-            } catch (SQLException ex) {
-                logger.error(ex.getMessage());
             }
-
+        } catch (SQLException ex) {
+            logger.error("Error while saving page search query details to exposure db", ex);
         }
         return added;
     }
 
-    public HashMap<String,Integer> getKeywordsStat(VloConfig vloConfig, QueryParameters qp) {
-        String searchTermField = "\"searchTerm\""; 
+    public HashMap<String, Integer> getKeywordsStat(VloConfig vloConfig, QueryParameters qp) {
+        String searchTermField = "\"searchTerm\"";
         String timeStampField = "\"timeSt\"";
-        String query = "SELECT " + searchTermField + ", count(*) as freq FROM "+ table 
+        String query = "SELECT " + searchTermField + ", count(*) as freq FROM " + table
                 + " where " + timeStampField + " between ? and ? "
                 + "and " + searchTermField + " is not null group by " + searchTermField + " order by freq DESC"; // LIMIT ? OFFSET ?
-        HashMap<String,Integer> map= new LinkedHashMap<>();
+        HashMap<String, Integer> map = new LinkedHashMap<>();
         try {
             Connection conn = PgConnection.getConnection(vloConfig);
             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -80,26 +77,26 @@ public class SearchQueryHandlerImpl implements SearchQueryHandler {
             pstmt.setTimestamp(2, qp.getEndDate());
 
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {   
+            while (rs.next()) {
                 String searchTerm = rs.getString("searchTerm");
                 int freq = rs.getInt("freq");
                 map.put(searchTerm, freq);
             }
             conn.close();
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             logger.error(ex.getMessage());
         }
         return map;
-    } 
-    
-    public HashMap<String,Integer> getSearchQueriesPerDay(VloConfig vloConfig, QueryParameters qp) {
-        String searchTermField = "\"searchTerm\""; 
+    }
+
+    public HashMap<String, Integer> getSearchQueriesPerDay(VloConfig vloConfig, QueryParameters qp) {
+        String searchTermField = "\"searchTerm\"";
         String timeStampField = "\"timeSt\"";
-        String query = "SELECT date_trunc('day', " + timeStampField + ") as day, count(*) as freq FROM "+ table 
+        String query = "SELECT date_trunc('day', " + timeStampField + ") as day, count(*) as freq FROM " + table
                 + " where " + timeStampField + " between ? and ? "
                 + "and " + searchTermField + " is not null group by day order by day "; //limit ? offset ?
 
-        HashMap<String,Integer> chartData= new LinkedHashMap<>();
+        HashMap<String, Integer> chartData = new LinkedHashMap<>();
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
 
         try {
@@ -117,15 +114,15 @@ public class SearchQueryHandlerImpl implements SearchQueryHandler {
                 curTime += interval;
             }
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 String day = formatter.format(new Date(rs.getTimestamp("day").getTime()));
                 int freq = rs.getInt("freq");
                 chartData.put(day, freq);
             }
             conn.close();
-        }catch(SQLException ex){
+        } catch (SQLException ex) {
             logger.error(ex.getMessage());
         }
         return chartData;
-    } 
+    }
 }
