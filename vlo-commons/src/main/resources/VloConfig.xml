@@ -307,7 +307,7 @@
     
     <dataSetStructuredData>
         <enabled>true</enabled>
-        <include field="HARVESTER_ROOT">clarin</include>
+        <include field="HARVESTER_ROOT">CLARIN Centres</include>
     </dataSetStructuredData>
 
 </VloConfig>
