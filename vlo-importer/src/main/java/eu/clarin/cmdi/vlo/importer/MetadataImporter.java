@@ -78,6 +78,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -136,16 +137,37 @@ public class MetadataImporter {
             final String rasaDbName = config.getLinkCheckerDbPassword(); //linkchecker
 
             if (!Strings.isNullOrEmpty(rasaDbUri)) {
-                LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
-                //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
-                final ACDHRasaFactory factory = new ACDHRasaFactory(rasaDbUri, rasaDbUser, rasaDbName);
-                final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                return new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+                try {
+                    LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
+                    //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
+                    final ACDHRasaFactory factory = new ACDHRasaFactory(rasaDbUri, rasaDbUser, rasaDbName);
+                    final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
+                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+
+                    if (testChecker(checker)) {
+                        return checker;
+                    }
+                } catch (Exception ex) {
+                    LOG.error("Error while initialising resource availability checker", ex);
+                }
+                LOG.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
+                return new NoopResourceAvailabilityStatusChecker();
             } else {
                 LOG.warn("No mongo configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             }
 
+        }
+
+        private static boolean testChecker(RasaResourceAvailabilityStatusChecker checker) {
+            final String testUrl = "https://www.clarin.eu";
+            try {
+                checker.getLinkStatusForRefs(Stream.of(testUrl));
+                return true;
+            } catch (IOException ex) {
+                LOG.error("Failed to carry out test check for {}", testUrl, ex);
+                return false;
+            }
         }
     }
 
