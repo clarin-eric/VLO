@@ -188,26 +188,22 @@ public class CMDIRecordImporter<T> {
         // add landing page resource
         final List<Resource> landingPageResources = cmdiData.getLandingPageResources();
         if (!landingPageResources.isEmpty()) {
-            try {
-                // get link status information
-                final Map<String, CheckedLink> linkStatusForLandingPages = availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName));
-                landingPageResources.forEach((resource) -> {
-                    final String url = resource.getResourceName();
-                    if (url != null) {
-                        final Optional<CheckedLink> landingPageStatus = Optional.ofNullable(linkStatusForLandingPages.get(url));
-                        //create resource info object representation
-                        final String landingPageValue = new ResourceInfo(
-                                url,
-                                resource.getMimeType(),
-                                landingPageStatus.map(CheckedLink::getStatus).orElse(null),
-                                landingPageStatus.map(CheckedLink::getTimestamp).map(Timestamp::getTime).orElse(null))
-                                .toJson(objectMapper);
-                        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
-                    }
-                });
-            } catch (IOException ex) {
-                LOG.error("Error while checking resource availability for {}", file, ex);
-            }
+            final Optional<Map<String, CheckedLink>> linkStatusForLandingPages = getLinkStatusForLandingPages(landingPageResources, file);
+            landingPageResources.forEach((resource) -> {
+                final String url = resource.getResourceName();
+                if (url != null) {
+                    final Optional<CheckedLink> landingPageStatus
+                            = linkStatusForLandingPages.flatMap(s -> Optional.ofNullable(s.get(url)));
+                    //create resource info object representation
+                    final String landingPageValue = new ResourceInfo(
+                            url,
+                            resource.getMimeType(),
+                            landingPageStatus.map(CheckedLink::getStatus).orElse(null),
+                            landingPageStatus.map(CheckedLink::getTimestamp).map(Timestamp::getTime).orElse(null))
+                            .toJson(objectMapper);
+                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
+                }
+            });
         }
 
         // add search page resource
@@ -249,6 +245,16 @@ public class CMDIRecordImporter<T> {
             languageCount = 0;
         }
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_COUNT), languageCount, false);
+    }
+
+    private Optional<Map<String, CheckedLink>> getLinkStatusForLandingPages(final List<Resource> landingPageResources, File file) {
+        try {
+            // get link status information
+            return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName)));
+        } catch (IOException ex) {
+            LOG.error("Error while checking resource availability for {}", file, ex);
+            return Optional.empty();
+        }
     }
 
     /**
