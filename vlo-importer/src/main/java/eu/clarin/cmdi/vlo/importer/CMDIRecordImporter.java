@@ -274,43 +274,49 @@ public class CMDIRecordImporter<T> {
         final List<Resource> resources = cmdiData.getDataResources();
         final List<Resource> landingPages = cmdiData.getLandingPageResources();
 
-        try {
-            final Map<String, CheckedLink> linkStatusMap
-                    = availabilityChecker.getLinkStatusForRefs(
-                            Streams
-                                    .concat(resources.stream(), landingPages.stream())
-                                    .map(Resource::getResourceName));
+        final Optional<Map<String, CheckedLink>> linkStatusMap = getLinkStatusForResources(resources, landingPages, cmdiData);
 
-            for (int i = 0; i < resources.size(); i++) {
-                final String fieldValue;
-                if (fieldValues != null && i < fieldValues.size()) {
-                    fieldValue = fieldValues.get(i).toString();
-                } else {
-                    fieldValue = null;
-                }
-
-                final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resources.get(i), fieldValue);
-
-                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
-
-                // TODO check should probably be moved into Solr (by using some minimum length filter)
-                if (!Strings.isNullOrEmpty(resourceInfo.getType())) {
-                    cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), resourceInfo.getType(), true);
-                }
+        for (int i = 0; i < resources.size(); i++) {
+            final String fieldValue;
+            if (fieldValues != null && i < fieldValues.size()) {
+                fieldValue = fieldValues.get(i).toString();
+            } else {
+                fieldValue = null;
             }
 
-            final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap, resources.size() + landingPages.size());
+            final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resources.get(i), fieldValue);
+
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(objectMapper), false);
+
+            // TODO check should probably be moved into Solr (by using some minimum length filter)
+            if (!Strings.isNullOrEmpty(resourceInfo.getType())) {
+                cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FORMAT), resourceInfo.getType(), true);
+            }
+        }
+
+        if (linkStatusMap.isPresent()) {
+            final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap.get(), resources.size() + landingPages.size());
             cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false);
-        } catch (IOException ex) {
-            LOG.error("Error while determining resource availability score for document {}", cmdiData.getId(), ex);
         }
 
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
+    
+    private Optional<Map<String, CheckedLink>> getLinkStatusForResources(final List<Resource> resources, final List<Resource> landingPages, CMDIData cmdiData) {
+        try {
+            return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(
+                    Streams
+                            .concat(resources.stream(), landingPages.stream())
+                            .map(Resource::getResourceName)));
+        } catch (IOException ex) {
+            LOG.error("Error while determining resource availability score for document {}", cmdiData.getId(), ex);
+            return Optional.empty();
+        }
+    }
 
-    private ResourceInfo createResourceInfo(final Map<String, CheckedLink> linkStatusMap, Resource resource, String fieldValue) {
+    private ResourceInfo createResourceInfo(final Optional<Map<String, CheckedLink>> linkStatusMap, Resource resource, String fieldValue) {
         // check link status
-        final Optional<CheckedLink> linkStatus = Optional.ofNullable(linkStatusMap.get(resource.getResourceName()));
+        final Optional<CheckedLink> linkStatus = linkStatusMap.flatMap(s -> Optional.ofNullable(s.get(resource.getResourceName())));
 
         // mime type value fallback chain
         final String mimeType = Optional.ofNullable(resource.getMimeType()) // prefer value from resource proxies
