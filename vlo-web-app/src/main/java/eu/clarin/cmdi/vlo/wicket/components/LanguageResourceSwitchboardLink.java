@@ -72,13 +72,7 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
 
     @Override
     public void onClick(Optional<AjaxRequestTarget> target) {
-        if (target.isPresent()) {
-            //call popup
-            final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
-            final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
-            final String js = String.format("showSwitchboardPopup({alignSelector:'#%s', alignRight:true}, {url:'%s'}); return false;", alignId, resourceLink);
-            target.get().appendJavaScript(js);
-        } else {
+        if (!target.isPresent()) {
             //redirect browser to Switchboard website
             throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
         }
