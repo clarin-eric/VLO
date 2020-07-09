@@ -39,6 +39,8 @@ import org.slf4j.LoggerFactory;
  */
 public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
 
+    private final static boolean POPUP_ENABLED = false;
+
     private final static Logger logger = LoggerFactory.getLogger(LanguageResourceSwitchboardLink.class);
 
     @SpringBean
@@ -56,23 +58,25 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
         this.resourceInfoModel = resourceInfoModel;
         this.languagesModel = languagesModel;
 
-        add(new AttributeModifier("onclick", () -> {
-            final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
-            final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
-            return String.format(
-                    "var dropDownId='#' + $('#%s').parents('.dropdown').attr('id');"
-                    + "showSwitchboardPopup({'alignSelector': dropDownId, 'alignRight': true}, {'url': '%s'});"
-                    + "return false;",
-                    alignId,
-                    resourceLink);
-        }));
+        if (POPUP_ENABLED) {
+            add(new AttributeModifier("onclick", () -> {
+                final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
+                final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
+                return String.format(
+                        "var dropDownId='#' + $('#%s').parents('.dropdown').attr('id');"
+                        + "showSwitchboardPopup({'alignSelector': dropDownId, 'alignRight': true}, {'url': '%s'});"
+                        + "return false;",
+                        alignId,
+                        resourceLink);
+            }));
+        }
 
         setOutputMarkupId(true);
     }
 
     @Override
     public void onClick(Optional<AjaxRequestTarget> target) {
-        if (!target.isPresent()) {
+        if (!target.isPresent() || !POPUP_ENABLED) {
             //redirect browser to Switchboard website
             throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
         }

@@ -18,6 +18,8 @@ VLO 4.9.0 (July 2020)
     <https://github.com/clarin-eric/VLO/issues/299>
 * Add busy indicator to "all values" panel interactions
     <https://github.com/clarin-eric/VLO/issues/300>
+* Prepared implementation of Switchboard pop-up
+    <https://github.com/clarin-eric/VLO/issues/297>
 
 VLO 4.8.2 (March 2020)
 
