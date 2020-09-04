@@ -7,11 +7,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.9.0</version>
+        <version>4.9.1-SNAPSHOT</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.9.0</version>
+    <version>4.9.1-SNAPSHOT</version>
     <name>VLO Commons</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
