@@ -16,12 +16,9 @@
     <name>vlo-exposure</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <log4j.version>2.6.2</log4j.version>
-        <junit.version>4.12</junit.version>
-        <postgresql.version>42.2.5.jre7</postgresql.version>
+        <postgresql.version>42.2.16.jre7</postgresql.version>
         <pg-embedded.version>0.7.1</pg-embedded.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <slf4j.version>1.7.12</slf4j.version>
     </properties>
     <dependencies>
         <!-- Intra-project dependencies -->
@@ -29,17 +26,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>vlo-commons</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -62,13 +48,13 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>5.0.5</version>
+            <version>5.0.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.openjson</groupId>
             <artifactId>openjson</artifactId>
-            <version>1.0.10</version>
+            <version>1.0.12</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
