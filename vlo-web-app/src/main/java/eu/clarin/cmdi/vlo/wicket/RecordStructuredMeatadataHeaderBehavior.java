@@ -93,7 +93,15 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     }
 
     private static DataSet createDataSetForDocument(IModel<SolrDocument> documentModel) {
+        final SolrDocument doc = documentModel.getObject();
         final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
+        
+        // Name and description fields are required; if not present, do not generate data set object
+        if (doc.getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)) == null
+                || doc.getFieldValue(fieldNameService.getFieldName(FieldKey.DESCRIPTION)) == null) {
+            return null;
+        }
+        
 
         final DataSet dataSet = new DataSet();
         dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, documentModel.getObject()));
