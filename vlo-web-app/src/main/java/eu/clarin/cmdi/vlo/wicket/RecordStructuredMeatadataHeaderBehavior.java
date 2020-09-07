@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
@@ -111,7 +112,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             ResourceInfo resourceInfo = resourceInfoObjectModel.getObject();
             if (resourceInfo != null) {
                 try {
-                    landingPageURI = new URI(resourceInfo.getUrl());
+                    landingPageURI = new URI(PIDUtils.getActionableLinkForPid(resourceInfo.getUrl()));
                 } catch (URISyntaxException ex) {
                     logger.debug("Landing page reference is not a valid URI: {}", ex.getMessage());
                 }

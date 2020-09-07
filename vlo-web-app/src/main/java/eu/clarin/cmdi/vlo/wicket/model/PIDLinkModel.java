@@ -32,7 +32,6 @@ import org.apache.wicket.model.IModel;
  */
 public class PIDLinkModel implements IModel<String> {
 
-    private final static Pattern ACTIONABLE_LINK_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
 
     private final IModel<String> linkModel;
 
@@ -42,19 +41,7 @@ public class PIDLinkModel implements IModel<String> {
 
     @Override
     public String getObject() {
-        final String link = linkModel.getObject();
-        if (link != null && !ACTIONABLE_LINK_PATTERN.matcher(link).find()) {
-            if (PIDUtils.isHandle(link)) {
-                return HANDLE_PROXY + PIDUtils.getSchemeSpecificId(link);
-            }
-            if (PIDUtils.isDoi(link)) {
-                return DOI_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
-            }
-            if (PIDUtils.isUrnNbn(link)) {
-                return URN_NBN_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
-            }
-        }
-        return link;
+        return PIDUtils.getActionableLinkForPid(linkModel.getObject());
     }
 
     @Override
