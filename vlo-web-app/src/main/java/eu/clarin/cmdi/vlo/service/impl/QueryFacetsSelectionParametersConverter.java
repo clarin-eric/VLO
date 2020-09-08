@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 
@@ -35,7 +36,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-
 import org.apache.wicket.Session;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
@@ -50,7 +50,6 @@ import org.slf4j.LoggerFactory;
 public class QueryFacetsSelectionParametersConverter implements PageParametersConverter<QueryFacetsSelection> {
 
     public final static Logger logger = LoggerFactory.getLogger(QueryFacetsSelectionParametersConverter.class);
-    
 
     /**
      * Splitter for facet query strings like "language:Dutch". Because it is
@@ -71,10 +70,9 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
      *
      * @see FacetParameterMapper.IdentityMapper
      */
-/*    public QueryFacetsSelectionParametersConverter() {
+    /*    public QueryFacetsSelectionParametersConverter() {
         //this(new FacetParameterMapper.IdentityMapper());
     }*/
-
     /**
      * Constructs a converter that does not do any facet (value) mapping
      *
@@ -104,7 +102,6 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         this.facetParamMapper = facetParamMapper;
         this.facetsAllowed = facetsAllowed;
     }
-    
 
     @Override
     public QueryFacetsSelection fromParameters(PageParameters params) {
@@ -131,8 +128,6 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
 
         return new QueryFacetsSelection(query, selection);
     }
-    
-
 
     private void applySelectionTypeFromParameter(StringValue selectionType, final HashMap<String, FacetSelection> selection) {
         final List<String> fqType = FILTER_SPLITTER.splitToList(selectionType.toString());
@@ -157,43 +152,51 @@ public class QueryFacetsSelectionParametersConverter implements PageParametersCo
         final List<String> fq = FILTER_SPLITTER.splitToList(facetValue.toString());
         if (fq.size() == 2) {
             // we have a facet - value pair
-
-            //get facet name, may be a case of "not"
             final String facetString = fq.get(0);
-            //check if negated
-            final boolean negated = facetString.startsWith("-");
+            final String valueString = fq.get(1);
 
-            //get actual facet name
-            final String requestedFacet;
-            if (negated) {
-                //skip negation for actual facet name
-                requestedFacet = facetString.substring(1);
-            } else {
-                requestedFacet = facetString;
+            if (!Strings.isNullOrEmpty(facetString) && !Strings.isNullOrEmpty(valueString)) {
+                applyFacetQuery(facetString, valueString, selection);
+                return;
             }
-            final String facet = facetParamMapper.getFacet(requestedFacet);
+        }
+        
+        //couldn't parse the filter query
+        logger.info("Illegal query parameter value for {}: '{}'", FILTER_QUERY, facetValue);
+    }
 
-            final String value = facetParamMapper.getValue(requestedFacet, fq.get(1));
-            if (isAllowedFacetName(facet)) {
-                if (selection.containsKey(facet)) {
-                    selection.get(facet).getValues().add(value);
-                } else {
-                    selection.put(facet, new FacetSelection(FacetSelectionType.OR, Arrays.asList(value)));
-                }
-                if (negated) {
-                    //negate selection
-                    selection.get(facet).setQualifier(value, FacetSelectionValueQualifier.NOT);
-                }
+    private void applyFacetQuery(final String facetString, final String valueString, final HashMap<String, FacetSelection> selection) {
+        //check if facet string negated
+        final boolean negated = facetString.startsWith("-");
+
+        //get actual facet name
+        final String requestedFacet;
+        if (negated) {
+            //skip negation for actual facet name
+            requestedFacet = facetString.substring(1);
+        } else {
+            requestedFacet = facetString;
+        }
+        final String facet = facetParamMapper.getFacet(requestedFacet);
+
+        final String value = facetParamMapper.getValue(requestedFacet, valueString);
+        if (isAllowedFacetName(facet)) {
+            if (selection.containsKey(facet)) {
+                selection.get(facet).getValues().add(value);
             } else {
-                logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
-
-                if (Session.exists()) {
-                    // generate Wicket error message
-                    Session.get().error("Unknown facet: " + facet);
-                }
+                selection.put(facet, new FacetSelection(FacetSelectionType.OR, Arrays.asList(value)));
+            }
+            if (negated) {
+                //negate selection
+                selection.get(facet).setQualifier(value, FacetSelectionValueQualifier.NOT);
             }
         } else {
-            logger.info("Illegal query parameter value for {}: {}", FILTER_QUERY, facetValue);
+            logger.debug("Undefined facet passed into query parameter {}: {}", FILTER_QUERY, facet);
+
+            if (Session.exists()) {
+                // generate Wicket error message
+                Session.get().error("Unknown facet: " + facet);
+            }
         }
     }
 
