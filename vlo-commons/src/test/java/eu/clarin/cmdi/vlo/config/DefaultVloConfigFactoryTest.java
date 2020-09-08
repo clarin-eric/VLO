@@ -698,7 +698,7 @@ public class DefaultVloConfigFactoryTest {
 
     @Test
     public void testGetVcrMaximumItemsCount() {
-        assertEquals(Long.valueOf(1000), config.getVcrMaximumItemsCount());
+        assertEquals(Long.valueOf(100), config.getVcrMaximumItemsCount());
     }
 
     @Test
