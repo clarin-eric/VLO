@@ -72,7 +72,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         // collection name input
         form.add(createCollectionNameField("collectionName"));
         // hidden URI fields 
-        form.add(createURIs("metadataUris"));
+        form.add(createItems("items"));
         // keyword list with remove options
         form.add(addKeywords(model, "keywords"));
 
@@ -97,36 +97,36 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         return collectionName;
     }
 
-    private DataView<SolrDocument> createURIs(String id) {
+    private DataView<SolrDocument> createItems(String id) {
 
         return new DataView<SolrDocument>(id, documentProvider) {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
-                final SolrDocument document = item.getModelObject();
+                final IModel<SolrDocument> docModel = item.getModel();
 
-                final IModel<String> linkModel = new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.SELF_LINK));
                 final String uri;
-                if (linkModel.getObject() == null) {
-                    uri = getFieldValueOrNull(document, FieldKey.COMPLETE_METADATA);
-                } else {
-                    uri = linkModel.getObject();
+                {
+                    final IModel<String> linkModel = new SolrFieldStringModel(docModel, fieldNameService.getFieldName(FieldKey.SELF_LINK));
+                    if (linkModel.getObject() == null) {
+                        uri = getFieldValueOrNull(docModel, FieldKey.COMPLETE_METADATA);
+                    } else {
+                        uri = linkModel.getObject();
+                    }
                 }
 
-                String label = getFieldValueOrNull(document, FieldKey.NAME);
-                String description = getFieldValueOrNull(document, FieldKey.DESCRIPTION);
+                final String label = getFieldValueOrNull(docModel, FieldKey.NAME);
+                final String description = getFieldValueOrNull(docModel, FieldKey.DESCRIPTION);
 
                 final Gson gson = new GsonBuilder().serializeNulls().create();
-                final String metadataUriValue = gson.toJson(new MetadataUri(uri, label, description));
-                item.add(new WebMarkupContainer("metadataUri").add(new AttributeModifier("value", metadataUriValue)));
+                final String itemJson = gson.toJson(new MetadataUri(uri, label, description));
+                item.add(new WebMarkupContainer("metadataUri").add(new AttributeModifier("value", itemJson)));
+            }
+
+            private String getFieldValueOrNull(IModel<SolrDocument> documentModel, FieldKey fieldKey) {
+                return new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(fieldKey), true).getObject();
             }
         };
-    }
-
-    private String getFieldValueOrNull(SolrDocument document, FieldKey fieldKey) {
-        return Optional.ofNullable(document.getFieldValue(fieldNameService.getFieldName(fieldKey)))
-                .map(Object::toString)
-                .orElse(null);
     }
 
     private WebMarkupContainer addKeywords(IModel<QueryFacetsSelection> model, String id) {
