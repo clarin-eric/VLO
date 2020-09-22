@@ -14,6 +14,9 @@
     <version>4.10-SNAPSHOT</version>
     <name>VLO Commons</name>
     <properties>
+        <jackson.version>2.11.2</jackson.version>
+        <jackson.databind.version>${jackson.version}</jackson.databind.version>
+        
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- default config values -->
@@ -24,7 +27,7 @@
         <vloconfig.fileProcessingThreads>2</vloconfig.fileProcessingThreads>
         <vloconfig.solrThreads>2</vloconfig.solrThreads>
         <vloconfig.availabilityStatusUpdaterBatchSize>25</vloconfig.availabilityStatusUpdaterBatchSize>
-        <vloconfig.vcrMaximumItemsCount>1000</vloconfig.vcrMaximumItemsCount>
+        <vloconfig.vcrMaximumItemsCount>100</vloconfig.vcrMaximumItemsCount>
         <vloconfig.solrUserReadOnly>user_read</vloconfig.solrUserReadOnly>
         <vloconfig.solrUserReadOnlyPass>PASS_READ_ONLY</vloconfig.solrUserReadOnlyPass>
         <vloconfig.solrUserReadWrite>user_rw</vloconfig.solrUserReadWrite>
@@ -39,7 +42,7 @@
         <vloconfig.feedbackFromUrl>https://www.clarin.eu/node/3759?url=</vloconfig.feedbackFromUrl>
         <vloconfig.federatedContentSearchUrl>https://spraakbanken.gu.se/ws/fcs/2.0/aggregator/</vloconfig.federatedContentSearchUrl>
         <vloconfig.lrSwitchboardBaseUrl>https://switchboard.clarin.eu/</vloconfig.lrSwitchboardBaseUrl>
-        <vloconfig.vcrSubmitEndpoint>https://collections.clarin.eu/app/submit/extensional</vloconfig.vcrSubmitEndpoint>
+        <vloconfig.vcrSubmitEndpoint>https://collections.clarin.eu/submit/extensional</vloconfig.vcrSubmitEndpoint>
         <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
         <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
         <vloConfig.webAppLocale>en-GB</vloConfig.webAppLocale>

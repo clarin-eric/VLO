@@ -693,12 +693,12 @@ public class DefaultVloConfigFactoryTest {
 
     @Test
     public void testGetVcrSubmitEndpoint() {
-        assertEquals("https://collections.clarin.eu/app/submit/extensional", config.getVcrSubmitEndpoint());
+        assertEquals("https://collections.clarin.eu/submit/extensional", config.getVcrSubmitEndpoint());
     }
 
     @Test
     public void testGetVcrMaximumItemsCount() {
-        assertEquals(Long.valueOf(1000), config.getVcrMaximumItemsCount());
+        assertEquals(Long.valueOf(100), config.getVcrMaximumItemsCount());
     }
 
     @Test

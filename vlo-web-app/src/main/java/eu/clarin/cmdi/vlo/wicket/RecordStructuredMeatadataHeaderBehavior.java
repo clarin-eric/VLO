@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
@@ -92,7 +93,15 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     }
 
     private static DataSet createDataSetForDocument(IModel<SolrDocument> documentModel) {
+        final SolrDocument doc = documentModel.getObject();
         final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
+        
+        // Name and description fields are required; if not present, do not generate data set object
+        if (doc.getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)) == null
+                || doc.getFieldValue(fieldNameService.getFieldName(FieldKey.DESCRIPTION)) == null) {
+            return null;
+        }
+        
 
         final DataSet dataSet = new DataSet();
         dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, documentModel.getObject()));
@@ -111,7 +120,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             ResourceInfo resourceInfo = resourceInfoObjectModel.getObject();
             if (resourceInfo != null) {
                 try {
-                    landingPageURI = new URI(resourceInfo.getUrl());
+                    landingPageURI = new URI(PIDUtils.getActionableLinkForPid(resourceInfo.getUrl()));
                 } catch (URISyntaxException ex) {
                     logger.debug("Landing page reference is not a valid URI: {}", ex.getMessage());
                 }

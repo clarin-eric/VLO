@@ -82,6 +82,17 @@ for the upgraded VLO instance), go to the `bin` directory and run the importer u
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
+
+-----------------------------
+Upgrading from 4.9.0 to 4.9.1
+-----------------------------
+Maintenance release. The following settings have changed default values:
+
+    <vcrMaximumItemsCount>100</vcrMaximumItemsCount>
+    <vcrSubmitEndpoint>https://collections.clarin.eu/submit/extensional</vcrSubmitEndpoint>
+
+Advice is to adopt these values.
+
 -----------------------------
 Upgrading from 4.8.x to 4.9.0
 -----------------------------

@@ -477,7 +477,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour(), true));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
-        response.render(JavaScriptHeaderItem.forScript("initTourSearchPage();", "initTourSearchPage"));
+        response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourSearchPage();});", "initTourSearchPage"));
     }
 
     private static class DataCatalog extends JsonLdModel.JsonLdObject {

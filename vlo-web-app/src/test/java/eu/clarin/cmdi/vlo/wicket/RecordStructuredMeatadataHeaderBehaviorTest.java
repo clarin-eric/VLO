@@ -61,6 +61,8 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     private RecordStructuredMeatadataHeaderBehavior instance;
     private SolrDocument solrDoc;
 
+    private final static String RECORD_NAME = "Test record";
+    private final static String RECORD_DESCRIPTION = "Test record description";
     private final static String HOME_URL = "https://test.vlo.clarin.eu";
     private final static String LANDING_PAGE_URL = "http://www.clarin.eu/landingpage";
     private final static String LANDING_PAGE = "{\"url\":\"" + LANDING_PAGE_URL + "\",\"type\":\"text/html\",\"status\":200,\"lastChecked\":0}";
@@ -94,6 +96,8 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         final Page page = preparePage();
 
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
+        setDocField(FieldKey.NAME, RECORD_NAME);
+        setDocField(FieldKey.DESCRIPTION, RECORD_DESCRIPTION);
         setDocField(FieldKey.CREATOR, ImmutableList.of(CREATOR_NAME, CREATOR_NAME));
         setDocField(FieldKey.COUNTRY, ImmutableList.of(COUNTRY, COUNTRY));
         setDocField(FieldKey.HAS_PART, ImmutableList.of(PART_URL, PART_URL + "-other"));
@@ -326,7 +330,9 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
         vloConfig.setHomeUrl(HOME_URL);
         setDocField(FieldKey.ID, RECORD_ID);
         setDocField(FieldKey.LANDINGPAGE, LANDING_PAGE);
-
+        setDocField(FieldKey.NAME, RECORD_NAME);
+        setDocField(FieldKey.DESCRIPTION, RECORD_DESCRIPTION);
+        
         final DataSetStructuredData dataSetStructuredData = new DataSetStructuredData();
         dataSetStructuredData.setEnabled(true);
         dataSetStructuredData.setInclude(new ArrayList<>());

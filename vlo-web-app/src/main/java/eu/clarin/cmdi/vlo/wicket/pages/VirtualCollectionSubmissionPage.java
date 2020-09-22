@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket.pages;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -40,6 +42,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import eu.clarin.cmdi.vlo.FieldKey;
+import java.util.Optional;
 
 /**
  *
@@ -51,7 +54,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
     private VloConfig vloConfig;
     @SpringBean
     private FieldNameService fieldNameService;
-    
+
     private final IDataProvider<SolrDocument> documentProvider;
 
     public VirtualCollectionSubmissionPage(IModel<QueryFacetsSelection> model, IDataProvider<SolrDocument> documentProvider) {
@@ -69,7 +72,7 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         // collection name input
         form.add(createCollectionNameField("collectionName"));
         // hidden URI fields 
-        form.add(createURIs("metadataUris"));
+        form.add(createItems("items"));
         // keyword list with remove options
         form.add(addKeywords(model, "keywords"));
 
@@ -94,19 +97,34 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         return collectionName;
     }
 
-    private DataView<SolrDocument> createURIs(String id) {
+    private DataView<SolrDocument> createItems(String id) {
+
         return new DataView<SolrDocument>(id, documentProvider) {
 
             @Override
             protected void populateItem(Item<SolrDocument> item) {
-                final WebMarkupContainer mdUri = new WebMarkupContainer("metadataUri");
-                final IModel<String> linkModel = new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.SELF_LINK));
-                if (linkModel.getObject() == null) {
-                    mdUri.add(new AttributeModifier("value", new SolrFieldStringModel(item.getModel(), fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA))));
-                } else {
-                    mdUri.add(new AttributeModifier("value", linkModel));
+                final IModel<SolrDocument> docModel = item.getModel();
+
+                final String uri;
+                {
+                    final IModel<String> linkModel = new SolrFieldStringModel(docModel, fieldNameService.getFieldName(FieldKey.SELF_LINK));
+                    if (linkModel.getObject() == null) {
+                        uri = getFieldValueOrNull(docModel, FieldKey.COMPLETE_METADATA);
+                    } else {
+                        uri = linkModel.getObject();
+                    }
                 }
-                item.add(mdUri);
+
+                final String label = getFieldValueOrNull(docModel, FieldKey.NAME);
+                final String description = getFieldValueOrNull(docModel, FieldKey.DESCRIPTION);
+
+                final Gson gson = new GsonBuilder().serializeNulls().create();
+                final String itemJson = gson.toJson(new MetadataUri(uri, label, description));
+                item.add(new WebMarkupContainer("metadataUri").add(new AttributeModifier("value", itemJson)));
+            }
+
+            private String getFieldValueOrNull(IModel<SolrDocument> documentModel, FieldKey fieldKey) {
+                return new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(fieldKey), true).getObject();
             }
         };
     }
@@ -163,6 +181,20 @@ public class VirtualCollectionSubmissionPage extends VloBasePage<QueryFacetsSele
         });
 
         return keywords;
+    }
+
+    public static class MetadataUri {
+
+        private final String uri;
+        private final String label;
+        private final String description;
+
+        public MetadataUri(String uri, String label, String description) {
+            this.uri = uri;
+            this.label = label;
+            this.description = description;
+        }
+
     }
 
 }

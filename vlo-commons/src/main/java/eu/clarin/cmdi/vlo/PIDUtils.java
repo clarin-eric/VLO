@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import static eu.clarin.cmdi.vlo.FacetConstants.DOI_RESOLVER_URL;
+import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
+import static eu.clarin.cmdi.vlo.FacetConstants.URN_NBN_RESOLVER_URL;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +46,8 @@ public class PIDUtils {
     //PID: HDL or DOI
     public final static Pattern PID_PATTERN = Pattern.compile("^(" + HANDLE_PATTERN_STRING + "|" + DOI_PATTERN_STRING + "|" + URN_NBN_PATTERN_STRING + ")$", Pattern.CASE_INSENSITIVE);
 
+    private final static Pattern ACTIONABLE_LINK_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
+    
     /**
      *
      * @param uri
@@ -96,7 +101,7 @@ public class PIDUtils {
     }
 
     public static Optional<PIDType> getType(String uri) {
-        if (isPid(uri)) {            
+        if (isPid(uri)) {
             if (isHandle(uri)) {
                 return Optional.of(PIDType.HANDLE);
             }
@@ -144,6 +149,21 @@ public class PIDUtils {
             }
         }
         return null;
+    }
+
+    public static String getActionableLinkForPid(final String link) {
+        if (link != null && !ACTIONABLE_LINK_PATTERN.matcher(link).find()) {
+            if (PIDUtils.isHandle(link)) {
+                return HANDLE_PROXY + PIDUtils.getSchemeSpecificId(link);
+            }
+            if (PIDUtils.isDoi(link)) {
+                return DOI_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
+            }
+            if (PIDUtils.isUrnNbn(link)) {
+                return URN_NBN_RESOLVER_URL + PIDUtils.getSchemeSpecificId(link);
+            }
+        }
+        return link;
     }
 
 }

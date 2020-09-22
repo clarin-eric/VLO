@@ -1,5 +1,16 @@
 Bug fixes and new features
 --------------------------
+VLO 4.9.1 (September 2020)
+
+* Dataset metadata validation errors
+    <https://github.com/clarin-eric/VLO/issues/307>
+* Update VCR integration
+    <https://github.com/clarin-eric/VLO/issues/306>
+* Tour script is not loaded (timely)
+    <https://github.com/clarin-eric/VLO/issues/305>
+* 'Empty' filter query is accepted
+    <https://github.com/clarin-eric/VLO/issues/283>
+
 VLO 4.9.0 (July 2020)
 
 * Show more precise but user friendly media type for resources
