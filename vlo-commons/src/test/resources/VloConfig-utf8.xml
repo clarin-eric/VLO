@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<VloConfig>
+    <!-- UNICODE TEST -->
+    <facetConceptsFile>facetCönceptš.xml</facetConceptsFile>
+    <!-- /UNICODE TEST -->
+</VloConfig>
