@@ -1,5 +1,10 @@
 Bug fixes and new features
 --------------------------
+VLO 4.9.2 (October 2020)
+
+* New version of resource availability status API
+    <https://github.com/clarin-eric/VLO/issues/311>
+
 VLO 4.9.1 (September 2020)
 
 * Dataset metadata validation errors
