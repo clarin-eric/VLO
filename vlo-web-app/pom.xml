@@ -71,7 +71,17 @@
                     <groupId>org.apache.wicket</groupId>
                     <artifactId>wicket-util</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.webjars</groupId>
+                    <artifactId>jquery</artifactId>
+                </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <!-- Override outdated dependency with known vulnerability -->
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>1.12.4</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
