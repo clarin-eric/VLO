@@ -4,13 +4,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.9.2-beta1</version>
+        <version>4.9.2-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-importer</artifactId>
-    <version>4.9.2-beta1</version>
+    <version>4.9.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>VLO Importer</name>
