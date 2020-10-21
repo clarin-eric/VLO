@@ -72,12 +72,12 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         this.selectionTypeModeModel = selectionTypeModeModel;
         //final Form<RangeValue> form = new Form<RangeValue>("temporalCoverage", Model.of(new RangeValue(MIN_VALUE, MAX_VALUE)));
         final Form<RangeValue> form = new Form<RangeValue>("temporalCoverage",
-                Model.of(new RangeValue(temporalCoverageRangeModel.getObject().getStart(),
-                        temporalCoverageRangeModel.getObject().getEnd())));
+                Model.of(new RangeValue(temporalCoverageRangeModel.getObject().getStart(),              //TODO: refactor - avoid getObject() in constructor
+                        temporalCoverageRangeModel.getObject().getEnd())));                             //TODO: refactor - avoid getObject() in constructor
         final FeedbackPanel feedback = new JQueryFeedbackPanel("feedbackTemporalCoverage");
         form.add(feedback.setOutputMarkupId(true));
-        TextField<Integer> lower = new TextField<Integer>("lower", new PropertyModel<Integer>(form.getModelObject(), "lower"), Integer.class);
-        TextField<Integer> upper = new TextField<Integer>("upper", new PropertyModel<Integer>(form.getModelObject(), "upper"), Integer.class);
+        TextField<Integer> lower = new TextField<Integer>("lower", new PropertyModel<Integer>(form.getModelObject(), "lower"), Integer.class); //TODO: refactor - avoid getObject() in constructor
+        TextField<Integer> upper = new TextField<Integer>("upper", new PropertyModel<Integer>(form.getModelObject(), "upper"), Integer.class); //TODO: refactor - avoid getObject() in constructor
         AjaxRangeSlider slider = new AjaxRangeSlider("slider", form.getModel(), lower, upper) {
 
             private static final long serialVersionUID = 1L;
@@ -102,12 +102,12 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         form.add(upper);
 
         //form.add(slider.setMin(MIN_VALUE).setMax(MAX_VALUE).setRangeValidator(new RangeValidator<Integer>(MIN_VALUE, MAX_VALUE)));
-        form.add(slider.setMin(temporalCoverageRangeModel.getObject().getStart()).setMax(temporalCoverageRangeModel.getObject().getEnd())
-                .setRangeValidator(new RangeValidator<Integer>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd())));
+        form.add(slider.setMin(temporalCoverageRangeModel.getObject().getStart()).setMax(temporalCoverageRangeModel.getObject().getEnd())                               //TODO: refactor - avoid getObject() in constructor
+                .setRangeValidator(new RangeValidator<Integer>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd())));   //TODO: refactor - avoid getObject() in constructor
         form.add(indicatorAppender);
         add(form);
 
-        if (selectionModel.getObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {
+        if (selectionModel.getObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {         //TODO: refactor - avoid getObject() in constructor
             //if there any selection, make initially expanded
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
