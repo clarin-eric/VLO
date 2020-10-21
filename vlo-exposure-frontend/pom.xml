@@ -34,9 +34,9 @@ language governing permissions and limitations under the License. -->
         </license>
     </licenses>
     <properties>
-        <wicket.version>8.6.1</wicket.version>
+        <wicket.version>8.10.0</wicket.version>
         <jetty9.version>9.4.18.v20190429</jetty9.version>
-        <spring.version>5.1.18.RELEASE</spring.version>
+        <spring.version>5.2.9.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vlo.logging.level>DEBUG</vlo.logging.level>
         <log4j.appender>Console</log4j.appender>
@@ -98,13 +98,13 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>com.googlecode.wicket-jquery-ui</groupId>
             <artifactId>wicket-jquery-ui</artifactId>
-            <version>8.0.0</version>
+            <version>8.9.0</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-googlecharts -->
         <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-googlecharts</artifactId>
-            <version>8.6.0</version>
+            <version>8.9.0</version>
         </dependency>
 
         <dependency>
