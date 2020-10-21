@@ -16,8 +16,6 @@
     <name>vlo-exposure</name>
     <url>http://maven.apache.org</url>
     <properties>
-        <postgresql.version>42.2.16.jre7</postgresql.version>
-        <pg-embedded.version>0.7.1</pg-embedded.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
@@ -37,18 +35,18 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
+            <version>42.2.17.jre7</version>
         </dependency>
         <dependency>
             <groupId>com.opentable.components</groupId>
             <artifactId>otj-pg-embedded</artifactId>
-            <version>${pg-embedded.version}</version>
+            <version>0.13.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>5.0.7</version>
+            <version>5.2.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
