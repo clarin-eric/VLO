@@ -36,8 +36,7 @@ language governing permissions and limitations under the License. -->
     <properties>
         <wicket.version>8.6.1</wicket.version>
         <jetty9.version>9.4.18.v20190429</jetty9.version>
-        <junit.version>4.12</junit.version>
-        <spring.version>5.1.9.RELEASE</spring.version>
+        <spring.version>5.1.18.RELEASE</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vlo.logging.level>DEBUG</vlo.logging.level>
         <log4j.appender>Console</log4j.appender>
@@ -117,14 +116,6 @@ language governing permissions and limitations under the License. -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-
-        <!-- JUNIT DEPENDENCY FOR TESTING -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
         </dependency>
 
         <!-- JETTY DEPENDENCIES FOR TESTING -->
