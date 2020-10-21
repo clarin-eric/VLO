@@ -56,12 +56,6 @@ import java.util.Optional;
 public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
 
     @SpringBean
-    private FieldValueConverterProvider fieldValueConverterProvider;
-    @SpringBean
-    private VloConfig vloConfig;
-    @SpringBean
-    private PiwikConfig piwikConfig;
-    @SpringBean
     private FieldNameService fieldNameService;
 
     private final String TEMPORAL_COVERAGE = fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE);
