@@ -284,6 +284,8 @@ public class MetadataImporter {
             LOG.error("error updating files:\n", e);
         } catch (InterruptedException ex) {
             LOG.error("Interrupted while importing", ex);
+        } catch (Exception ex) {
+            LOG.error("Unchecked exception while importing: ", ex);
         } finally {
             try {
                 solrBridge.commit();

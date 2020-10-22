@@ -251,7 +251,7 @@ public class CMDIRecordImporter<T> {
         try {
             // get link status information
             return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName)));
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOG.error("Error while checking resource availability for {}", file, ex);
             return Optional.empty();
         }
@@ -308,7 +308,7 @@ public class CMDIRecordImporter<T> {
                     Streams
                             .concat(resources.stream(), landingPages.stream())
                             .map(Resource::getResourceName)));
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             LOG.error("Error while determining resource availability score for document {}", cmdiData.getId(), ex);
             return Optional.empty();
         }
