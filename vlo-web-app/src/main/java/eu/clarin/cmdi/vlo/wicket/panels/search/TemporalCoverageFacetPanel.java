@@ -57,6 +57,7 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
     private final IModel<FacetSelectionType> selectionTypeModeModel;
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
     private final IModel<TemporalCoverageRange> temporalCoverageRangeModel;
+    private final AjaxRangeSlider slider;
 
     public TemporalCoverageFacetPanel(String id,
             final IModel<QueryFacetsSelection> selectionModel,
@@ -65,14 +66,14 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         super(id, selectionModel);
         this.temporalCoverageRangeModel = temporalCoverageRangeModel;
         this.selectionTypeModeModel = selectionTypeModeModel;
-        
-        final IModel<RangeValue> rangeModel = temporalCoverageRangeModel.map(tcr -> new RangeValue(tcr.getStart(), tcr.getEnd()));        
+
+        final IModel<RangeValue> rangeModel = temporalCoverageRangeModel.map(tcr -> new RangeValue(tcr.getStart(), tcr.getEnd()));
         final Form<RangeValue> form = new Form<>("temporalCoverage", rangeModel);
         final FeedbackPanel feedback = new JQueryFeedbackPanel("feedbackTemporalCoverage");
         form.add(feedback.setOutputMarkupId(true));
         final TextField<Integer> lower = new TextField<>("lower", rangeModel.map(RangeValue::getLower));
         final TextField<Integer> upper = new TextField<>("upper", rangeModel.map(RangeValue::getUpper));
-        final AjaxRangeSlider slider = new AjaxRangeSlider("slider", rangeModel, lower, upper) {
+        slider = new AjaxRangeSlider("slider", rangeModel, lower, upper) {
 
             private static final long serialVersionUID = 1L;
 
@@ -83,26 +84,40 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
 
             @Override
             public void onValueChanged(IPartialPageRequestHandler handler) {
-                RangeValue value = (RangeValue) form.getModelObject();
+                RangeValue value = rangeModel.getObject();
                 String sel = "[" + value.getLower() + " TO " + value.getUpper() + "]";
                 selectionModel.getObject().addSingleFacetValue(TEMPORAL_COVERAGE, selectionTypeModeModel.getObject(),
                         Collections.singleton(sel));
-                selectionChanged(Optional.of((AjaxRequestTarget) handler));
+                if (handler instanceof AjaxRequestTarget) {
+                    selectionChanged(Optional.of((AjaxRequestTarget) handler));
+                } else {
+                    selectionChanged(Optional.empty());
+                }
             }
         };
         form.add(lower);
         form.add(upper);
 
+        form.add(slider);
+
         //form.add(slider.setMin(MIN_VALUE).setMax(MAX_VALUE).setRangeValidator(new RangeValidator<Integer>(MIN_VALUE, MAX_VALUE)));
-        form.add(slider.setMin(temporalCoverageRangeModel.getObject().getStart()).setMax(temporalCoverageRangeModel.getObject().getEnd()) //TODO: refactor - avoid getObject() in constructor
-                .setRangeValidator(new RangeValidator<Integer>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd())));   //TODO: refactor - avoid getObject() in constructor
         form.add(indicatorAppender);
         add(form);
+    }
 
-        if (selectionModel.getObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {         //TODO: refactor - avoid getObject() in constructor
+    @Override
+    protected void onConfigure() {
+        super.onConfigure();
+
+        if (getModelObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {
             //if there any selection, make initially expanded
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
+
+        slider
+                .setMin(temporalCoverageRangeModel.getObject().getStart()).setMax(temporalCoverageRangeModel.getObject().getEnd())
+                .setRangeValidator(new RangeValidator<Integer>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd()));
+
     }
 
     @Override
