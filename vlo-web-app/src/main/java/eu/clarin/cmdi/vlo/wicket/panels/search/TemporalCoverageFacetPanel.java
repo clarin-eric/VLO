@@ -42,6 +42,7 @@ import org.apache.wicket.validation.validator.RangeValidator;
 
 import java.util.Collections;
 import java.util.Optional;
+import org.apache.wicket.model.LambdaModel;
 
 /**
  * Temporal coverage range slider panel
@@ -71,8 +72,35 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         final Form<RangeValue> form = new Form<>("temporalCoverage", rangeModel);
         final FeedbackPanel feedback = new JQueryFeedbackPanel("feedbackTemporalCoverage");
         form.add(feedback.setOutputMarkupId(true));
-        final TextField<Integer> lower = new TextField<>("lower", rangeModel.map(RangeValue::getLower));
-        final TextField<Integer> upper = new TextField<>("upper", rangeModel.map(RangeValue::getUpper));
+
+        final IModel<Integer> lowerModel = LambdaModel.of(
+                () -> rangeModel.getObject().getLower(),
+                (i) -> {
+                    //rangeModel.getObject().setLower(i);
+                    final String sel = "[" + i + " TO " + rangeModel.getObject().getUpper() + "]";
+                    selectionModel.getObject()
+                            .addSingleFacetValue(TEMPORAL_COVERAGE,
+                                    selectionTypeModeModel.getObject(),
+                                    Collections.singleton(sel));
+                }
+        );
+
+        final IModel<Integer> upperModel = LambdaModel.of(
+                () -> rangeModel.getObject().getUpper(),
+                (i) -> {
+                    final String sel = "[" + rangeModel.getObject().getLower() + " TO " + i + "]";
+                    selectionModel.getObject()
+                            .addSingleFacetValue(TEMPORAL_COVERAGE,
+                                    selectionTypeModeModel.getObject(),
+                                    Collections.singleton(sel));
+                }
+        );
+
+        final TextField<Integer> lower = new TextField<>("lower", lowerModel);
+        lower.setType(Integer.class);
+        final TextField<Integer> upper = new TextField<>("upper", upperModel);
+        upper.setType(Integer.class);
+
         slider = new AjaxRangeSlider("slider", rangeModel, lower, upper) {
 
             private static final long serialVersionUID = 1L;
@@ -84,10 +112,6 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
 
             @Override
             public void onValueChanged(IPartialPageRequestHandler handler) {
-                RangeValue value = rangeModel.getObject();
-                String sel = "[" + value.getLower() + " TO " + value.getUpper() + "]";
-                selectionModel.getObject().addSingleFacetValue(TEMPORAL_COVERAGE, selectionTypeModeModel.getObject(),
-                        Collections.singleton(sel));
                 if (handler instanceof AjaxRequestTarget) {
                     selectionChanged(Optional.of((AjaxRequestTarget) handler));
                 } else {
