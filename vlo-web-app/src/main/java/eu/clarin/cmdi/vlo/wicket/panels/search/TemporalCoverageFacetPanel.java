@@ -22,6 +22,7 @@ import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.TemporalCoverageRange;
@@ -42,6 +43,10 @@ import org.apache.wicket.validation.validator.RangeValidator;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.model.LambdaModel;
 
 /**
@@ -60,6 +65,10 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
     private final IModel<TemporalCoverageRange> temporalCoverageRangeModel;
     private final AjaxRangeSlider slider;
 
+    private final static Pattern RANGE_PATTERN = Pattern.compile("\\[(\\d+) TO (\\d+)\\]");
+    private final static int RANGE_PATTERN_LOWER_GROUP = 1;
+    private final static int RANGE_PATTERN_UPPER_GROUP = 2;
+
     public TemporalCoverageFacetPanel(String id,
             final IModel<QueryFacetsSelection> selectionModel,
             final IModel<FacetSelectionType> selectionTypeModeModel,
@@ -74,40 +83,33 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         form.add(feedback.setOutputMarkupId(true));
 
         final IModel<Integer> lowerModel = LambdaModel.of(
-                () -> rangeModel.getObject().getLower(),
-                (i) -> {
-                    //rangeModel.getObject().setLower(i);
-                    final String sel = "[" + i + " TO " + rangeModel.getObject().getUpper() + "]";
-                    selectionModel.getObject()
-                            .addSingleFacetValue(TEMPORAL_COVERAGE,
-                                    selectionTypeModeModel.getObject(),
-                                    Collections.singleton(sel));
+                () -> getBoundFromSelection(selectionModel, rangeModel, RANGE_PATTERN_LOWER_GROUP),
+                (lower) -> {
+                    applySelection(lower, rangeModel.getObject().getUpper());
                 }
         );
 
         final IModel<Integer> upperModel = LambdaModel.of(
-                () -> rangeModel.getObject().getUpper(),
-                (i) -> {
-                    final String sel = "[" + rangeModel.getObject().getLower() + " TO " + i + "]";
-                    selectionModel.getObject()
-                            .addSingleFacetValue(TEMPORAL_COVERAGE,
-                                    selectionTypeModeModel.getObject(),
-                                    Collections.singleton(sel));
+                () -> getBoundFromSelection(selectionModel, rangeModel, RANGE_PATTERN_UPPER_GROUP),
+                (upper) -> {
+                    applySelection(rangeModel.getObject().getLower(), upper);
                 }
         );
 
-        final TextField<Integer> lower = new TextField<>("lower", lowerModel);
-        lower.setType(Integer.class);
-        final TextField<Integer> upper = new TextField<>("upper", upperModel);
-        upper.setType(Integer.class);
+        final TextField<Integer> lowerInput = new TextField<>("lower", lowerModel);
+        lowerInput.setType(Integer.class);
+        final TextField<Integer> upperInput = new TextField<>("upper", upperModel);
+        upperInput.setType(Integer.class);
 
-        slider = new AjaxRangeSlider("slider", rangeModel, lower, upper) {
+        slider = new AjaxRangeSlider("slider", rangeModel, lowerInput, upperInput) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void onError(AjaxRequestTarget target) {
-                target.add(feedback); // do never add 'this' or the form here!
+                if (target != null) {
+                    target.add(feedback); // do never add 'this' or the form here!
+                }
             }
 
             @Override
@@ -119,14 +121,40 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
                 }
             }
         };
-        form.add(lower);
-        form.add(upper);
-
+        form.add(lowerInput);
+        form.add(upperInput);
         form.add(slider);
 
-        //form.add(slider.setMin(MIN_VALUE).setMax(MAX_VALUE).setRangeValidator(new RangeValidator<Integer>(MIN_VALUE, MAX_VALUE)));
         form.add(indicatorAppender);
         add(form);
+    }
+
+    private void applySelection(int lower, int upper) {
+        final String sel = "[" + lower + " TO " + upper + "]";
+        getModelObject().addSingleFacetValue(TEMPORAL_COVERAGE, selectionTypeModeModel.getObject(), Collections.singleton(sel));
+    }
+
+    private Integer getBoundFromSelection(final IModel<QueryFacetsSelection> selectionModel, final IModel<RangeValue> rangeModel, final int rangeMatchGroup) {
+        Optional<String> coverageSelection = Optional.ofNullable(selectionModel.getObject())
+                .flatMap(selection -> Optional.ofNullable(selection.getSelectionValues(TEMPORAL_COVERAGE)))
+                .map(FacetSelection::getValues)
+                .flatMap(values -> values.size() == 1 ? Optional.of(values.iterator().next()) : Optional.empty());
+
+        return coverageSelection.flatMap(
+                s -> {
+                    final Matcher matcher = RANGE_PATTERN.matcher(s);
+                    if (matcher.matches()) {
+                        try {
+                            return Optional
+                                    .ofNullable(matcher.group(rangeMatchGroup))
+                                    .map(Integer::parseInt);
+                        } catch (NumberFormatException ex) {
+                            //TODO log
+                        }
+                    }
+                    return Optional.empty();
+                }
+        ).orElse(rangeModel.getObject().getLower());
     }
 
     @Override
@@ -140,7 +168,7 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
 
         slider
                 .setMin(temporalCoverageRangeModel.getObject().getStart()).setMax(temporalCoverageRangeModel.getObject().getEnd())
-                .setRangeValidator(new RangeValidator<Integer>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd()));
+                .setRangeValidator(new RangeValidator<>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd()));
 
     }
 
@@ -171,7 +199,7 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
     public String getAjaxIndicatorMarkupId() {
         return indicatorAppender.getMarkupId();
     }
-
+    
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
 
 }
