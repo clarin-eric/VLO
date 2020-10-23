@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 
 public class TemporalCoverageRangeModel extends LoadableDetachableModel<TemporalCoverageRange> {
 
+    private final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
+
     private final IModel<QueryFacetsSelection> selectionModel;
     private final String TEMPORAL_COVERAGE_START;
     private final String TEMPORAL_COVERAGE_END;
@@ -51,7 +53,18 @@ public class TemporalCoverageRangeModel extends LoadableDetachableModel<Temporal
         Calendar calendar = new GregorianCalendar();
         final SolrDocumentService documentService = VloWicketApplication.get().getDocumentService();
 
-        final List<SolrDocument> startDocs = documentService.getSortedDocuments(selectionModel.getObject(), TEMPORAL_COVERAGE_START, "asc", 0, 1);
+        //remove existing temporal coverage facet from selection
+        final String temporalCoverageField = fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE);
+        final QueryFacetsSelection originalSelection = selectionModel.getObject();
+        final QueryFacetsSelection unfilteredSelection;
+        if (originalSelection.getFacets().contains(temporalCoverageField)) {
+            unfilteredSelection = originalSelection.copy();
+            unfilteredSelection.getSelection().remove(temporalCoverageField);
+        } else {
+            unfilteredSelection = originalSelection;
+        }
+
+        final List<SolrDocument> startDocs = documentService.getSortedDocuments(unfilteredSelection, TEMPORAL_COVERAGE_START, "asc", 0, 1);
         if (startDocs.size() == 1) {
             final SolrDocument firstDoc = startDocs.get(0);
             if (firstDoc.containsKey(TEMPORAL_COVERAGE_START)) {
@@ -65,7 +78,7 @@ public class TemporalCoverageRangeModel extends LoadableDetachableModel<Temporal
             }
         }
 
-        final List<SolrDocument> endDocs = documentService.getSortedDocuments(selectionModel.getObject(), TEMPORAL_COVERAGE_END, "desc", 0, 1);
+        final List<SolrDocument> endDocs = documentService.getSortedDocuments(unfilteredSelection, TEMPORAL_COVERAGE_END, "desc", 0, 1);
         if (startDocs.size() == 1) {
             final SolrDocument firstDoc = endDocs.get(0);
             if (firstDoc.containsKey(TEMPORAL_COVERAGE_START)) {
