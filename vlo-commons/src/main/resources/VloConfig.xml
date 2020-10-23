@@ -195,7 +195,6 @@
         <ignoredField>LICENSE_TYPE</ignoredField>
         <ignoredField>ACCESS_INFO</ignoredField>
         <ignoredField>SIGNATURE</ignoredField>
-        <ignoredField>TEMPORAL_COVERAGE</ignoredField>
         <ignoredField>PROJECT_NAME</ignoredField>
         <ignoredField>RESOURCE</ignoredField>
         <ignoredField>FILENAME</ignoredField>
@@ -205,6 +204,8 @@
         <ignoredField>HAS_PART_COUNT_WEIGHT</ignoredField>
         <ignoredField>LANGUAGE_NAME</ignoredField>
         <ignoredField>MULTILINGUAL</ignoredField>
+        <ignoredField>TEMPORAL_COVERAGE_START</ignoredField>
+        <ignoredField>TEMPORAL_COVERAGE_END</ignoredField>
     </ignoredFields>
 
     <!-- KEYS of fields shown as technical fields in the record page -->
