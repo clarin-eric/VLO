@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import java.util.Optional;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.behavior.Behavior;
@@ -64,9 +65,15 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
     public ExpandablePanel(String id, IModel<T> model, IModel<ExpansionState> expansionStateModel) {
         super(id, model);
         this.expansionModel = expansionStateModel;
+    }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        
         // title annex expansion toggler
         add(createTitleToggler());
+
         // expand/collapse controls
         addExpandCollapse();
 
@@ -195,6 +202,17 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
             stateModel.detach();
         }
 
+    }
+
+    /**
+     * Override with 'final' since we call this in the constructor
+     *
+     * @param children
+     * @return
+     */
+    @Override
+    public final MarkupContainer add(Component... children) {
+        return super.add(children);
     }
 
 }
