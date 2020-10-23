@@ -25,27 +25,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:extend>
             <div class="sbilinks facetvalues">
                 <form wicket:id="temporalCoverage" id="temporalCoverage">
-                    <!--
-                    <div class="slidecontainer">
-                       <input type="range" min="1" max="100" value="50" class="slider" id="temporalCoverageSlider">
-                    </div>-->
-                    <div class="row">
-                        <div class="col-md-2"><input wicket:id="lower" type="text" size="4" /></div>
-                        <div class="col-md-8"><div wicket:id="slider"></div></div>
-                        <div class="col-md-2"><input wicket:id="upper" type="text" size="4" /></div>
 
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" id="enabletemporalfilter">Only show records with a temporal coverage within the following range:</input>
+                                </label>
+                            </div>
+                        </div>
                     </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input wicket:id="lower" type="text" size="4" />
+                                &nbsp; &nbsp; - &nbsp; &nbsp; 
+                                <input wicket:id="upper" type="text" size="4" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div wicket:id="slider" />
+                        </div>
+                    </div>
+
                     <div wicket:id="feedbackTemporalCoverage"></div>
                     <input type="submit" value="Apply" class="nonjsfallback" />
 
                 </form>
-
-                <p style="margin-top: .5em;">
-
-                    <wicket:message key="temporalCoverageMessage">
-
-                    </wicket:message>
-                </p>
             </div>
         </wicket:extend>
     </body>
