@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
 
-    private final static boolean POPUP_ENABLED = false;
+    private final static boolean POPUP_ENABLED = true;
 
     private final static Logger logger = LoggerFactory.getLogger(LanguageResourceSwitchboardLink.class);
 
