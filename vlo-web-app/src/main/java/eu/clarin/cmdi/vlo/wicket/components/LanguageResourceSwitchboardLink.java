@@ -39,8 +39,6 @@ import org.slf4j.LoggerFactory;
  */
 public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
 
-    private final static boolean POPUP_ENABLED = true;
-
     private final static Logger logger = LoggerFactory.getLogger(LanguageResourceSwitchboardLink.class);
 
     @SpringBean
@@ -58,7 +56,7 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
         this.resourceInfoModel = resourceInfoModel;
         this.languagesModel = languagesModel;
 
-        if (POPUP_ENABLED) {
+        if (isPopupEnabled()) {
             add(new AttributeModifier("onclick", () -> {
                 final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
                 final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
@@ -76,7 +74,7 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
 
     @Override
     public void onClick(Optional<AjaxRequestTarget> target) {
-        if (!target.isPresent() || !POPUP_ENABLED) {
+        if (!target.isPresent() || !isPopupEnabled()) {
             //redirect browser to Switchboard website
             throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
         }
@@ -111,6 +109,10 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
         }
         //all other cases: no info
         return "";
+    }
+    
+    private boolean isPopupEnabled() {
+        return vloConfig.isLrSwitchboardPopupEnabled();
     }
 
     @Override

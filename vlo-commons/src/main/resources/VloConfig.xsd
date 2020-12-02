@@ -71,6 +71,7 @@
                 <xs:element name="lrSwitchboardBaseUrl" type="xs:string" />
                 <xs:element name="lrSwitchboardPopupScriptUrl" type="xs:string" /> 
                 <xs:element name="lrSwitchboardPopupStyleUrl" type="xs:string" />
+                <xs:element name="lrSwitchboardPopupEnabled" type="xs:boolean" />
                 <xs:element name="linkCheckerDbConnectionString" type="xs:string" />
                 <xs:element name="linkCheckerDbUser" type="xs:string" />
                 <xs:element name="linkCheckerDbPassword" type="xs:string" />

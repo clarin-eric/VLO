@@ -238,6 +238,8 @@ public class VloConfig {
     private String lrSwitchboardPopupScriptUrl="https://switchboard.clarin.eu/popup/switchboardpopup.js";
     
     private String lrSwitchboardPopupStyleUrl="https://switchboard.clarin.eu/popup/switchboardpopup.css";
+    
+    private boolean lrSwitchboardPopupEnabled = true;
 
     /**
      * Get and set methods for web application parameter members<br>
@@ -1571,6 +1573,14 @@ public class VloConfig {
 
     public void setLrSwitchboardPopupStyleUrl(String lrSwitchboardPopupStyleUrl) {
         this.lrSwitchboardPopupStyleUrl = lrSwitchboardPopupStyleUrl;
+    }
+
+    public boolean isLrSwitchboardPopupEnabled() {
+        return lrSwitchboardPopupEnabled;
+    }
+
+    public void setLrSwitchboardPopupEnabled(boolean lrSwitchboardPopupEnabled) {
+        this.lrSwitchboardPopupEnabled = lrSwitchboardPopupEnabled;
     }
 
 }
