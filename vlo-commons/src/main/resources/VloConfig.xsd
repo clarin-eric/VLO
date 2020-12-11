@@ -255,6 +255,7 @@
             <xs:enumeration value="SEARCH_SERVICE" />
             <xs:enumeration value="LAST_SEEN" />
             <xs:enumeration value="CLARIN_PROFILE" />
+            <xs:enumeration value="CLARIN_PROFILE_ID" />
             <xs:enumeration value="COMPLETE_METADATA" />
             <xs:enumeration value="HIERARCHY_WEIGHT" />
             <xs:enumeration value="HAS_PART" />

@@ -117,6 +117,7 @@
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
         <field key="LAST_SEEN">_lastSeen</field>
         <field key="CLARIN_PROFILE">_componentProfile</field>
+        <field key="CLARIN_PROFILE_ID">_componentProfileId</field>
         <field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>
         <field key="HAS_PART">_hasPart</field>
         <field key="HAS_PART_COUNT">_hasPartCount</field>
@@ -214,6 +215,7 @@
         <technicalField>SEARCH_SERVICE</technicalField>
         <technicalField>LAST_SEEN</technicalField>
         <technicalField>CLARIN_PROFILE</technicalField>
+        <technicalField>CLARIN_PROFILE_ID</technicalField>
         <technicalField>HARVESTER_ROOT</technicalField>
         <technicalField>HIERARCHY_WEIGHT</technicalField>
         <technicalField>HAS_PART_COUNT</technicalField>

@@ -37,6 +37,7 @@ public class SchemaParsingUtil {
      * Setting namespace for Autopilot ap
      *
      * @param ap
+     * @param profileId
      */
     public static void setNameSpace(AutoPilot ap, String profileId) {
         ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
@@ -56,7 +57,13 @@ public class SchemaParsingUtil {
      */
     public static String extractXsd(VTDNav nav) throws VTDException {
         String profileID = getProfileIdFromHeader(nav);
-        if (profileID == null) {
+        if(profileID != null) {
+            Matcher m = PROFILE_ID_PATTERN.matcher(profileID);
+            if(!m.matches()) {
+                profileID = null;
+            }
+        }
+        if (profileID == null ) {
             profileID = getProfileIdFromSchemaLocation(nav);
         }
         return profileID;

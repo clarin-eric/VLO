@@ -422,7 +422,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("video/x-mpeg1", fieldValues.get(0));
         assertEquals("video/mp4", fieldValues.get(1));
         assertEquals(null, doc.getFieldValue("subject"));
-        assertEquals(17, doc.getFieldNames().size());
+        assertEquals(18, doc.getFieldNames().size());
     }
 
     @Test
@@ -526,7 +526,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, resources.size());
         SolrInputDocument doc = data.getDocument();
         assertNotNull(doc);
-        assertEquals(9, doc.getFieldNames().size());
+        assertEquals(10, doc.getFieldNames().size());
         assertEquals("test-hdl:1839/00-0000-0000-0009-294C-9", doc.getFieldValue("_selfLink")); //unmodified handle
         assertEquals("kleve-route", doc.getFieldValue("name"));
         assertEquals("Europe", doc.getFieldValue("continent"));
@@ -596,7 +596,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(0, dataResources.size());
         SolrInputDocument doc = data.getDocument();
         assertNotNull(doc);
-        assertEquals(10, doc.getFieldNames().size());
+        assertEquals(11, doc.getFieldNames().size());
         assertEquals("oai:ailla.utexas.edu:1", doc.getFieldValue("_selfLink"));
         assertEquals(null, doc.getFieldValue("name"));
         assertEquals(null, doc.getFieldValue("continent"));
@@ -897,7 +897,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("{code:eng}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
-        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 10, doc.getFieldNames().size());
+        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 11, doc.getFieldNames().size());
     }
 
     @Test

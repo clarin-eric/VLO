@@ -126,6 +126,7 @@
     <fieldType name="tlong" class="solr.LongPointField" positionIncrementGap="0"/>
     <fieldType name="tlongs" class="solr.LongPointField" positionIncrementGap="0" multiValued="true"/>
     <field name="_componentProfile" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="_componentProfileId" type="string" multiValued="false" indexed="true" stored="true"/>
     <field name="_contentSearchRef" type="string" multiValued="true" indexed="true" stored="true"/>
     <field name="_daysSinceLastSeen" type="int" default="0" multiValued="false" indexed="true" stored="true"/>
     <field name="_fileName" type="string" multiValued="false" indexed="true" stored="true"/>
