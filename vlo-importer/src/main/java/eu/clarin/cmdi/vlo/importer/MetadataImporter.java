@@ -43,7 +43,6 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
-import eu.clarin.cmdi.vlo.importer.normalizer.CMDIComponentProfileNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.ContinentNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CountryNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.IdPostNormalizer;
