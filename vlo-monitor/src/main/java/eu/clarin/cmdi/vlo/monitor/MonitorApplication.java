@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.monitor;
 
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.repository.Repository;
 
 @SpringBootApplication
 @Slf4j
@@ -20,6 +22,9 @@ public class MonitorApplication {
 
     @Inject
     private IndexService indexService;
+    
+    @Inject
+    private Repository<IndexState, Long> repo;
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
