@@ -33,7 +33,8 @@
         <module>vlo-importer</module>
         <module>vlo-vocabularies</module>
         <module>vlo-sitemap</module>
-        <module>vlo-statistics</module>
+	<module>vlo-statistics</module>
+	<module>vlo-monitor</module>
         <module>vlo-distribution</module>
   </modules>
 
