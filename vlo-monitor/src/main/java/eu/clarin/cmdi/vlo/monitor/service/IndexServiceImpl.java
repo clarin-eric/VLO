@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.monitor;
+package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;

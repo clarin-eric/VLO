@@ -1,4 +1,4 @@
-package eu.clarin.cmdi.vlo.monitor;
+package eu.clarin.cmdi.vlo.monitor.service;
 
 import java.util.Map;
 
