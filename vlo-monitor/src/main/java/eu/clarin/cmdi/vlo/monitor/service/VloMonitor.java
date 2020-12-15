@@ -36,10 +36,11 @@ public class VloMonitor {
         log.info("VLO monitor run - {}", Calendar.getInstance().getTime());
 
         final IndexState newIndexState = newIndexState();
+        logIndexStateStats("New state", Optional.of(newIndexState));
 
         log.info("Loading previous stats");
         final Optional<IndexState> previousIndexState = repo.findFirstByOrderByTimestampDesc();
-        log.info("Latest state: {}", previousIndexState.map(i -> i.getTimestamp().toString()).orElse("null"));
+        logIndexStateStats("New state", previousIndexState);
 
         //TODO: Compare to previous stats
         log.info("Writing new stats");
@@ -47,6 +48,13 @@ public class VloMonitor {
 
         //TODO: Clean up old stats?
         log.info("Done");
+    }
+    
+    private void logIndexStateStats(String name, Optional<IndexState> indexState) {
+        log.info("{}: {} ({} values)",
+                name,
+                indexState.map(i -> i.getTimestamp().toString()).orElse("null"),
+                indexState.flatMap(i -> Optional.ofNullable(i.getFacetStates())).map(List::size).orElse(0));
     }
 
     private IndexState newIndexState() {
