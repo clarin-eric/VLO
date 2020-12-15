@@ -8,6 +8,6 @@ import java.util.Map;
  */
 public interface IndexService {
     
-    Map<String, Integer> getValueCounts(String facet);
+    Map<String, Long> getValueCounts(String facet);
     
 }

@@ -4,7 +4,9 @@ import util.PreemptiveAuthInterceptor;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -19,6 +21,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.springframework.stereotype.Service;
 
@@ -36,14 +39,22 @@ public class IndexServiceImpl implements IndexService {
     private SolrClient solrClient;
 
     @Override
-    public Map<String, Integer> getValueCounts(String facet) {
+    public Map<String, Long> getValueCounts(String facet) {
         final SolrQuery addFacetField = new SolrQuery().addFacetField(facet);
         try {
             final QueryResponse response = solrClient.query(addFacetField);
-            ImmutableMap.Builder<String, Integer> mapBuilder = ImmutableMap.builder();
-            response.getFacetFields()
-                    .forEach(f -> {
-                        mapBuilder.put(f.getName(), f.getValueCount());
+            final ImmutableMap.Builder<String, Long> mapBuilder = ImmutableMap.builder();
+            final Optional<List<FacetField.Count>> facetValues = response.getFacetFields().stream()
+                    .filter(f -> facet.equals(f.getName()))
+                    .map(f -> f.getValues())
+                    .findFirst();
+            facetValues.ifPresentOrElse(
+                    (values) -> {
+                        values.forEach(count -> {
+                            mapBuilder.put(count.getName(), count.getCount());
+                        });
+                    }, () -> {
+                        log.warn("No values for facet {}", facet);
                     });
             return mapBuilder.build();
         } catch (SolrServerException | IOException ex) {

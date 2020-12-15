@@ -21,12 +21,12 @@ public class FacetState implements Serializable {
 
     private String val;
 
-    private Integer count;
+    private Long count;
 
     public FacetState() {
     }
 
-    public FacetState(String facet, String val, Integer count) {
+    public FacetState(String facet, String val, Long count) {
         super();
         this.facet = facet;
         this.val = val;
@@ -57,11 +57,11 @@ public class FacetState implements Serializable {
         this.val = val;
     }
 
-    public Integer getCount() {
+    public Long getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Long count) {
         this.count = count;
     }
 

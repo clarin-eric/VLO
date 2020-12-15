@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import java.util.Calendar;
@@ -40,7 +39,7 @@ public class VloMonitor {
 
         log.info("Loading previous stats");
         final Optional<IndexState> previousIndexState = repo.findFirstByOrderByTimestampDesc();
-        logIndexStateStats("New state", previousIndexState);
+        logIndexStateStats("Previous state", previousIndexState);
 
         //TODO: Compare to previous stats
         log.info("Writing new stats");
