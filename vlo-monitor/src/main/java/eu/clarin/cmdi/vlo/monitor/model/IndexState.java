@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.monitor.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,7 +50,11 @@ public class IndexState implements Serializable {
 
     public void setFacetStates(List<FacetState> facetStates) {
         this.facetStates = facetStates;
+    }
 
+    @Override
+    public String toString() {
+        return String.format("IndexState[id='%s', timestamp='%s']", id, Objects.toString(timestamp));
     }
 
 }

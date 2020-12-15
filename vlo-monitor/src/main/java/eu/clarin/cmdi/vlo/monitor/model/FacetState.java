@@ -65,4 +65,9 @@ public class FacetState implements Serializable {
         this.count = count;
     }
 
+    @Override
+    public String toString() {
+        return String.format("FacetState[facet='%s', value='%s', count=%d]", facet, val, count);
+    }
+
 }

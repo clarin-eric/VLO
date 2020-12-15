@@ -51,8 +51,7 @@ public class VloMonitor {
     
     private void logIndexStateStats(String name, Optional<IndexState> indexState) {
         log.info("{}: {} ({} values)",
-                name,
-                indexState.map(i -> i.getTimestamp().toString()).orElse("null"),
+                name, indexState.map(IndexState::toString).orElse("EMPTY"),
                 indexState.flatMap(i -> Optional.ofNullable(i.getFacetStates())).map(List::size).orElse(0));
     }
 
