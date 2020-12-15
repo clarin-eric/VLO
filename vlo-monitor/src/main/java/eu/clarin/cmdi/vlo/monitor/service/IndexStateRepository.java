@@ -13,8 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface IndexStateRepository extends CrudRepository<IndexState, Long> {
     IndexState findById(long id);
     
-//    @Query("SELECT i FROM IndexState ORDER BY timestamp DESC LIMIT 1")
-//    Optional<IndexState> getLatest();
-    
     Optional<IndexState> findFirstByOrderByTimestampDesc();
 }

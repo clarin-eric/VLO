@@ -1,6 +1,9 @@
 package eu.clarin.cmdi.vlo.monitor;
 
+import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.config.VloConfigFactory;
 import eu.clarin.cmdi.vlo.monitor.service.VloMonitor;
+import java.io.IOException;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -16,11 +19,14 @@ public class MonitorApplication {
     @Inject
     private VloMonitor vloMonitor;
 
+    @Inject
+    private VloConfigFactory vloConfigFactory;
+
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
         return args -> {
             log.info("Starting VLO monitor application");
-            vloMonitor.run(null);
+            vloMonitor.run();
         };
     }
 

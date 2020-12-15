@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,21 +31,20 @@ public class VloMonitor {
     @Inject
     private IndexStateRepository repo;
 
-    public void run(VloConfig vloConfig) {
+    public void run() {
 
         log.info("VLO monitor run - {}", Calendar.getInstance().getTime());
 
         final IndexState newIndexState = newIndexState();
 
-        log.info("Loading previous stats");        
+        log.info("Loading previous stats");
         final Optional<IndexState> previousIndexState = repo.findFirstByOrderByTimestampDesc();
-        log.info("Latest state: {}", previousIndexState.map(i->i.getTimestamp().toString()).orElse("null"));
-        
-        //TODO: Compare to previous stats
+        log.info("Latest state: {}", previousIndexState.map(i -> i.getTimestamp().toString()).orElse("null"));
 
+        //TODO: Compare to previous stats
         log.info("Writing new stats");
         repo.save(newIndexState);
-        
+
         //TODO: Clean up old stats?
         log.info("Done");
     }
