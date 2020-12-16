@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.monitor.RulesConfig;
+import eu.clarin.cmdi.vlo.monitor.Rules;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import java.util.Calendar;
@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class VloMonitor {
 
-    private final Collection<String> facets = ImmutableList.of("collection", "_oaiEndpointURI");
+    private Collection<String> facets;
 
     @Inject
     private IndexService indexService;
@@ -32,12 +33,15 @@ public class VloMonitor {
     private IndexStateRepository repo;
     
     @Inject
-    private RulesConfig rules;
+    private Rules rules;
+    
+    @PostConstruct
+    protected final void init() {
+        facets = rules.getAllFields();
+        log.debug("Fields: {}", facets);
+    }
 
     public void run() {
-        
-        log.debug("Rules: ", rules);
-
         log.info("VLO monitor run - {}", Calendar.getInstance().getTime());
 
         final IndexState newIndexState = newIndexState();

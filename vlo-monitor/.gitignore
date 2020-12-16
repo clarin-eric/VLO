@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 
 .DS_Store
+vlo-monitor.properties
 
 ### STS ###
 .apt_generated
