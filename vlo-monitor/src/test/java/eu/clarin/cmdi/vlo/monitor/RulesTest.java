@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class RulesTest {
 
     @Test
     public void testReadConfig() {
+        //Note: rule configuration is loaded from properties (see @TestPropertySource annotation)
         final RulesConfig config = rules.getConfig();
         assertNotNull(config);
 
@@ -63,6 +65,7 @@ public class RulesTest {
 
     @Test
     public void testGetFieldRules() {
+        //Note: rule configuration is loaded from properties (see @TestPropertySource annotation)
         Map<String, List<Rules.Rule>> fieldRules = rules.getFieldRules();
         assertNotNull(fieldRules);
         assertEquals(2, fieldRules.keySet().size());
@@ -150,33 +153,33 @@ public class RulesTest {
 
     @Test
     public void testCreateRulesErroneous() {
-        try {
+        assertThrows(RuntimeException.class, () -> {
             rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1")
                     .put("field1", "b")
                     .build()));
-            fail("Syntax error should have caused error to be thrown");
-        } catch (RuntimeException ex) {
-            //need to get here before fail
-        }
-        try {
+        });
+
+        assertThrows(RuntimeException.class, () -> {
+            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+                    .put("field1", "1")
+                    .put("field1", "b")
+                    .build()));
+        });
+
+        assertThrows(RuntimeException.class, () -> {
             rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1")
                     .put("field1", "2a")
                     .build()));
-            fail("Syntax error should have caused error to be thrown");
-        } catch (RuntimeException ex) {
-            //need to get here before fail
-        }
-        try {
+        });
+
+        assertThrows(RuntimeException.class, () -> {
             rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1%")
                     .put("field1", "2%a")
                     .build()));
-            fail("Syntax error should have caused error to be thrown");
-        } catch (RuntimeException ex) {
-            //need to get here before fail
-        }
+        });
     }
 
     /**
