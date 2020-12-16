@@ -2,17 +2,17 @@ package eu.clarin.cmdi.vlo.monitor;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,11 +25,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties
 @ContextConfiguration(classes = {RulesConfig.class, Rules.class})
 @TestPropertySource(properties = {
-            "vlo.monitor.rules.facetValuesDecreaseWarning[facet1]=25%",
-            "vlo.monitor.rules.facetValuesDecreaseWarning.facet2=100",
-            "vlo.monitor.rules.facetValuesDecreaseError.facet1=50%",
-            "vlo.monitor.rules.totalRecordsDecreaseWarning=10%",
-            "vlo.monitor.rules.totalRecordsDecreaseError=25%"})
+    "vlo.monitor.rules.facetValuesDecreaseWarning.facet1=25%",
+    "vlo.monitor.rules.facetValuesDecreaseWarning.facet2=100",
+    "vlo.monitor.rules.facetValuesDecreaseError.facet1=50%",
+    "vlo.monitor.rules.totalRecordsDecreaseWarning=10%",
+    "vlo.monitor.rules.totalRecordsDecreaseError=25%"})
 public class RulesTest {
 
     @Autowired
@@ -56,6 +56,45 @@ public class RulesTest {
         final Map<String, String> facetValuesDecreaseError = config.getFacetValuesDecreaseError();
         assertEquals(1, facetValuesDecreaseError.size());
         assertEquals("50%", facetValuesDecreaseError.get("facet1"), "facetValuesDecreaseError for facet1");
+    }
+
+    @Test
+    public void testGetFieldRules() {
+        Map<String, List<Rules.Rule>> fieldRules = rules.getFieldRules();
+        assertNotNull(fieldRules);
+        assertEquals(2, fieldRules.keySet().size());
+
+        assertTrue(fieldRules.containsKey("facet1"));
+        final List<Rules.Rule> facet1rules = fieldRules.get("facet1");
+        assertEquals(2, facet1rules.size());
+        assertThat(facet1rules,
+                allOf(
+                        hasItem(
+                                allOf(
+                                        isA(Rules.RatioDecreaseRule.class),
+                                        hasProperty("level", equalTo(Level.WARN)),
+                                        hasProperty("thresholdRatio", equalTo(.25))
+                                )),
+                        hasItem(
+                                allOf(
+                                        isA(Rules.RatioDecreaseRule.class),
+                                        hasProperty("level", equalTo(Level.ERROR)),
+                                        hasProperty("thresholdRatio", equalTo(.50))
+                                )))
+        );
+
+        assertTrue(fieldRules.containsKey("facet2"));
+        final List<Rules.Rule> facet2rules = fieldRules.get("facet2");
+        assertEquals(1, facet2rules.size());
+        assertThat(facet2rules,
+                hasItem(
+                        allOf(
+                                isA(Rules.AbsoluteDecreaseRule.class),
+                                hasProperty("level", equalTo(Level.WARN)),
+                                hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
+                        ))
+        );
+
     }
 
     /**
