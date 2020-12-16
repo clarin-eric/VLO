@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.monitor.RulesConfig;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import java.util.Calendar;
@@ -29,8 +30,13 @@ public class VloMonitor {
 
     @Inject
     private IndexStateRepository repo;
+    
+    @Inject
+    private RulesConfig rules;
 
     public void run() {
+        
+        log.debug("Rules: ", rules);
 
         log.info("VLO monitor run - {}", Calendar.getInstance().getTime());
 

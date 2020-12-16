@@ -9,13 +9,14 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-@org.springframework.context.annotation.Configuration
-public class Configuration {
+@Configuration
+public class VloMonitorConfiguration {
 
     @Value("${vlo.monitor.config.url}")
     private String configLocation;
