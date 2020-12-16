@@ -4,6 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,9 +28,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties
 @ContextConfiguration(classes = {RulesConfig.class, Rules.class})
 @TestPropertySource(properties = {
-    "vlo.monitor.rules.facetValuesDecreaseWarning.facet1=25%",
-    "vlo.monitor.rules.facetValuesDecreaseWarning.facet2=100",
-    "vlo.monitor.rules.facetValuesDecreaseError.facet1=50%",
+    "vlo.monitor.rules.facetValuesDecreaseWarning.field1=25%",
+    "vlo.monitor.rules.facetValuesDecreaseWarning.field2=100",
+    "vlo.monitor.rules.facetValuesDecreaseError.field1=50%",
     "vlo.monitor.rules.totalRecordsDecreaseWarning=10%",
     "vlo.monitor.rules.totalRecordsDecreaseError=25%"})
 public class RulesTest {
@@ -46,16 +49,16 @@ public class RulesTest {
         assertNotNull(config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning not null");
         assertEquals("10%", config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning value");
 
-        assertNotNull(config.getFacetValuesDecreaseWarning(), "facetValuesDecreaseWarning not null");
+        assertNotNull(config.getFacetValuesDecreaseWarning(), "fieldValuesDecreaseWarning not null");
         final Map<String, String> facetValuesDecreaseWarning = config.getFacetValuesDecreaseWarning();
         assertEquals(2, facetValuesDecreaseWarning.size());
-        assertEquals("25%", facetValuesDecreaseWarning.get("facet1"), "facetValuesDecreaseWarning for facet1");
-        assertEquals("100", facetValuesDecreaseWarning.get("facet2"), "facetValuesDecreaseWarning for facet2");
+        assertEquals("25%", facetValuesDecreaseWarning.get("field1"), "fieldValuesDecreaseWarning for facet1");
+        assertEquals("100", facetValuesDecreaseWarning.get("field2"), "fieldValuesDecreaseWarning for facet2");
 
-        assertNotNull(config.getFacetValuesDecreaseError(), "facetValuesDecreaseError not null");
+        assertNotNull(config.getFacetValuesDecreaseError(), "fieldValuesDecreaseError not null");
         final Map<String, String> facetValuesDecreaseError = config.getFacetValuesDecreaseError();
         assertEquals(1, facetValuesDecreaseError.size());
-        assertEquals("50%", facetValuesDecreaseError.get("facet1"), "facetValuesDecreaseError for facet1");
+        assertEquals("50%", facetValuesDecreaseError.get("field1"), "fieldValuesDecreaseError for facet1");
     }
 
     @Test
@@ -64,8 +67,8 @@ public class RulesTest {
         assertNotNull(fieldRules);
         assertEquals(2, fieldRules.keySet().size());
 
-        assertTrue(fieldRules.containsKey("facet1"));
-        final List<Rules.Rule> facet1rules = fieldRules.get("facet1");
+        assertTrue(fieldRules.containsKey("field1"));
+        final List<Rules.Rule> facet1rules = fieldRules.get("field1");
         assertEquals(2, facet1rules.size());
         assertThat(facet1rules,
                 allOf(
@@ -83,8 +86,8 @@ public class RulesTest {
                                 )))
         );
 
-        assertTrue(fieldRules.containsKey("facet2"));
-        final List<Rules.Rule> facet2rules = fieldRules.get("facet2");
+        assertTrue(fieldRules.containsKey("field2"));
+        final List<Rules.Rule> facet2rules = fieldRules.get("field2");
         assertEquals(1, facet2rules.size());
         assertThat(facet2rules,
                 hasItem(
@@ -94,7 +97,86 @@ public class RulesTest {
                                 hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
                         ))
         );
+    }
 
+    @Test
+    public void testCreateRulesEmpty() {
+        // Empty map
+        final Stream<Rules.Rule> result = rules.createRules(Level.WARN, Optional.empty());
+        assertEquals(0L, result.count());
+    }
+
+    @Test
+    public void testCreateRulesAbsolute() {
+        // Absolute thresholds
+        List<Rules.Rule> result = rules.createRules(Level.WARN, Optional.of(ImmutableMap.<String, String>builder()
+                .put("field1", "1")
+                .put("field2", "2")
+                .put("field3", "3")
+                .build())).collect(Collectors.toList());
+        assertEquals(3, result.size());
+        assertThat(result, everyItem(isA(Rules.AbsoluteDecreaseRule.class)));
+        assertThat(result, everyItem(hasProperty("level", equalTo(Level.WARN))));
+        assertThat(result, allOf(
+                hasItem(hasProperty("field", equalTo("field1"))),
+                hasItem(hasProperty("field", equalTo("field2"))),
+                hasItem(hasProperty("field", equalTo("field3")))));
+        assertThat(result, allOf(
+                hasItem(hasProperty("thresholdDiff", equalTo(1L))),
+                hasItem(hasProperty("thresholdDiff", equalTo(2L))),
+                hasItem(hasProperty("thresholdDiff", equalTo(3L)))));
+    }
+
+    @Test
+    public void testCreateRulesRelative() {
+        // Relative thresholds
+        List<Rules.Rule> result = rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+                .put("field1", "1%")
+                .put("field2", "2%")
+                .put("field3", " 3%")
+                .build())).collect(Collectors.toList());
+        assertEquals(3, result.size());
+        assertThat(result, everyItem(isA(Rules.RatioDecreaseRule.class)));
+        assertThat(result, everyItem(hasProperty("level", equalTo(Level.ERROR))));
+        assertThat(result, allOf(
+                hasItem(hasProperty("field", equalTo("field1"))),
+                hasItem(hasProperty("field", equalTo("field2"))),
+                hasItem(hasProperty("field", equalTo("field3")))));
+        assertThat(result, allOf(
+                hasItem(hasProperty("thresholdRatio", equalTo(.01))),
+                hasItem(hasProperty("thresholdRatio", equalTo(.02))),
+                hasItem(hasProperty("thresholdRatio", equalTo(.03)))));
+    }
+
+    @Test
+    public void testCreateRulesErroneous() {
+        try {
+            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+                    .put("field1", "1")
+                    .put("field1", "b")
+                    .build()));
+            fail("Syntax error should have caused error to be thrown");
+        } catch (RuntimeException ex) {
+            //need to get here before fail
+        }
+        try {
+            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+                    .put("field1", "1")
+                    .put("field1", "2a")
+                    .build()));
+            fail("Syntax error should have caused error to be thrown");
+        } catch (RuntimeException ex) {
+            //need to get here before fail
+        }
+        try {
+            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+                    .put("field1", "1%")
+                    .put("field1", "2%a")
+                    .build()));
+            fail("Syntax error should have caused error to be thrown");
+        } catch (RuntimeException ex) {
+            //need to get here before fail
+        }
     }
 
     /**
@@ -103,16 +185,16 @@ public class RulesTest {
     @Test
     public void testGetAllFields() {
         final RulesConfig config = new RulesConfig();
-        config.setFacetValuesDecreaseWarning(ImmutableMap.of("facet1", "0", "facet2", "0"));
-        config.setFacetValuesDecreaseError(ImmutableMap.of("facet1", "0", "facet3", "0"));
+        config.setFacetValuesDecreaseWarning(ImmutableMap.of("field1", "0", "field2", "0"));
+        config.setFacetValuesDecreaseError(ImmutableMap.of("field1", "0", "field3", "0"));
 
         Rules instance = new Rules(config);
 
         Collection<String> result = instance.getAllFields();
         assertEquals(3, result.size());
-        assertTrue(result.contains("facet1"));
-        assertTrue(result.contains("facet2"));
-        assertTrue(result.contains("facet3"));
+        assertTrue(result.contains("field1"));
+        assertTrue(result.contains("field2"));
+        assertTrue(result.contains("field3"));
     }
 
 }

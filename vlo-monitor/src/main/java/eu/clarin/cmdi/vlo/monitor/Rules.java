@@ -55,21 +55,9 @@ public class Rules {
                             .map(entrySet -> {
                                 //key = facet
                                 //value = 'definition' e.g. '100' or '25%'
-                                return createRule(level, entrySet.getKey(), entrySet.getValue());
+                                return Rule.create(level, entrySet.getKey(), entrySet.getValue());
                             });
                 });
-    }
-
-    public Rule createRule(Level level, String facet, String definition) {
-        if (definition.endsWith("%")) {
-            //percentage indicates a thresholdRatio based rule
-            final double decreaseRatioThreshold = Double.parseDouble(definition.substring(0, definition.indexOf('%')).trim());
-            return new RatioDecreaseRule(facet, level, decreaseRatioThreshold);
-        } else {
-            //assume it's a number that can be parsed as a Long - interpret as an absolute decrease rule
-            final long decreaseThreshold = Long.parseLong(definition.trim());
-            return new AbsoluteDecreaseRule(facet, level, decreaseThreshold);
-        }
     }
 
     public RulesConfig getConfig() {
@@ -100,6 +88,18 @@ public class Rules {
 
         public Level getLevel() {
             return level;
+        }
+
+        public static Rule create(Level level, String facet, String definition) {
+            if (definition.endsWith("%")) {
+                //percentage indicates a thresholdRatio based rule
+                final double decreaseRatioThreshold = Double.parseDouble(definition.substring(0, definition.indexOf('%')).trim());
+                return new RatioDecreaseRule(facet, level, decreaseRatioThreshold);
+            } else {
+                //assume it's a number that can be parsed as a Long - interpret as an absolute decrease rule
+                final long decreaseThreshold = Long.parseLong(definition.trim());
+                return new AbsoluteDecreaseRule(facet, level, decreaseThreshold);
+            }
         }
 
     }
