@@ -24,8 +24,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class VloMonitor {
 
-    private Collection<String> facets;
-
     @Inject
     private IndexService indexService;
 
@@ -34,11 +32,13 @@ public class VloMonitor {
     
     @Inject
     private Rules rules;
+
+    private Collection<String> fields;
     
     @PostConstruct
     protected final void init() {
-        facets = rules.getAllFields();
-        log.debug("Fields: {}", facets);
+        fields = rules.getAllFields();
+        log.debug("Fields: {}", fields);
     }
 
     public void run() {
@@ -68,7 +68,7 @@ public class VloMonitor {
     private IndexState newIndexState() {
         final IndexState newIndexState = new IndexState();
         newIndexState.setTimestamp(Calendar.getInstance().getTime());
-        final List<FacetState> facetStates = facets.stream()
+        final List<FacetState> facetStates = fields.stream()
                 // get facet states for listed facets
                 .map(this::getFacetStateStreamForFacet)
                 // combine streams

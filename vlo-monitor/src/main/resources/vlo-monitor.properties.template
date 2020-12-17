@@ -1,6 +1,6 @@
 spring.datasource.url=jdbc:h2:file:/tmp/vlo-monitoring-db
-vlo.monitor.rules.facetValuesDecreaseWarning.collection=25%
-vlo.monitor.rules.facetValuesDecreaseWarning._oaiEndpointURI=100
-vlo.monitor.rules.facetValuesDecreaseError.collection=90%
+vlo.monitor.rules.fieldValuesDecreaseWarning.collection=25%
+vlo.monitor.rules.fieldValuesDecreaseWarning._oaiEndpointURI=100
+vlo.monitor.rules.fieldValuesDecreaseError.collection=90%
 vlo.monitor.rules.totalRecordsDecreaseWarning=10%
 vlo.monitor.rules.totalRecordsDecreaseError=25%

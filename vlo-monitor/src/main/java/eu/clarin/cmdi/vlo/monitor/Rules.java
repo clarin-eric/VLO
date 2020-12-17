@@ -26,11 +26,11 @@ public class Rules {
 
     public Collection<String> getAllFields() {
         final ImmutableSet.Builder<String> builder = ImmutableSet.builder();
-        if (config.getFacetValuesDecreaseWarning() != null) {
-            builder.addAll(config.getFacetValuesDecreaseWarning().keySet());
+        if (config.getFieldValuesDecreaseWarning() != null) {
+            builder.addAll(config.getFieldValuesDecreaseWarning().keySet());
         }
-        if (config.getFacetValuesDecreaseError() != null) {
-            builder.addAll(config.getFacetValuesDecreaseError().keySet());
+        if (config.getFieldValuesDecreaseError() != null) {
+            builder.addAll(config.getFieldValuesDecreaseError().keySet());
         }
         return builder.build();
     }
@@ -38,8 +38,8 @@ public class Rules {
     public Map<String, List<Rule>> getFieldRules() {
         // combine 'warning' and 'error' rules for all facets
         return Streams.concat(
-                createRules(Level.WARN, Optional.ofNullable(config.getFacetValuesDecreaseWarning())),
-                createRules(Level.ERROR, Optional.ofNullable(config.getFacetValuesDecreaseError()))
+                createRules(Level.WARN, Optional.ofNullable(config.getFieldValuesDecreaseWarning())),
+                createRules(Level.ERROR, Optional.ofNullable(config.getFieldValuesDecreaseError()))
         ).collect(Collectors.groupingBy(Rule::getField));
     }
 
@@ -53,7 +53,7 @@ public class Rules {
                     return m.entrySet()
                             .stream()
                             .map(entrySet -> {
-                                //key = facet
+                                //key = field
                                 //value = 'definition' e.g. '100' or '25%'
                                 return Rule.create(level, entrySet.getKey(), entrySet.getValue());
                             });
@@ -90,15 +90,15 @@ public class Rules {
             return level;
         }
 
-        public static Rule create(Level level, String facet, String definition) {
+        public static Rule create(Level level, String field, String definition) {
             if (definition.endsWith("%")) {
                 //percentage indicates a thresholdRatio based rule
                 final double decreaseRatioThreshold = Double.parseDouble(definition.substring(0, definition.indexOf('%')).trim());
-                return new RatioDecreaseRule(facet, level, decreaseRatioThreshold);
+                return new RatioDecreaseRule(field, level, decreaseRatioThreshold);
             } else {
                 //assume it's a number that can be parsed as a Long - interpret as an absolute decrease rule
                 final long decreaseThreshold = Long.parseLong(definition.trim());
-                return new AbsoluteDecreaseRule(facet, level, decreaseThreshold);
+                return new AbsoluteDecreaseRule(field, level, decreaseThreshold);
             }
         }
 

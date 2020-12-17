@@ -5,9 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- 
- * vlo.monitor.rules.facetValuesDecreaseWarning.[facet]=
- * vlo.monitor.rules.facetValuesDecreaseError.[facet]=
+ * vlo.monitor.rules.fieldValuesDecreaseWarning.{field}=
+ * vlo.monitor.rules.fieldValuesDecreaseError.{field}=
  * vlo.monitor.rules.totalRecordsDecreaseWarning=
  * vlo.monitor.rules.totalRecordsDecreaseError=
  *
@@ -17,25 +16,25 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "vlo.monitor.rules")
 public class RulesConfig {
 
-    private Map<String, String> facetValuesDecreaseWarning;
-    private Map<String, String> facetValuesDecreaseError;
+    private Map<String, String> fieldValuesDecreaseWarning;
+    private Map<String, String> fieldValuesDecreaseError;
     private String totalRecordsDecreaseWarning;
     private String totalRecordsDecreaseError;
-    
-    public Map<String, String> getFacetValuesDecreaseWarning() {
-        return facetValuesDecreaseWarning;
+
+    public Map<String, String> getFieldValuesDecreaseWarning() {
+        return fieldValuesDecreaseWarning;
     }
 
-    public void setFacetValuesDecreaseWarning(Map<String, String> facetValuesDecreaseWarning) {
-        this.facetValuesDecreaseWarning = facetValuesDecreaseWarning;
+    public void setFieldValuesDecreaseWarning(Map<String, String> fieldValuesDecreaseWarning) {
+        this.fieldValuesDecreaseWarning = fieldValuesDecreaseWarning;
     }
 
-    public Map<String, String> getFacetValuesDecreaseError() {
-        return facetValuesDecreaseError;
+    public Map<String, String> getFieldValuesDecreaseError() {
+        return fieldValuesDecreaseError;
     }
 
-    public void setFacetValuesDecreaseError(Map<String, String> facetValuesDecreaseError) {
-        this.facetValuesDecreaseError = facetValuesDecreaseError;
+    public void setFieldValuesDecreaseError(Map<String, String> fieldValuesDecreaseError) {
+        this.fieldValuesDecreaseError = fieldValuesDecreaseError;
     }
 
     public String getTotalRecordsDecreaseWarning() {

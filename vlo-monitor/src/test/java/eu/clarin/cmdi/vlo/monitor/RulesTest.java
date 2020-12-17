@@ -29,9 +29,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableConfigurationProperties
 @ContextConfiguration(classes = {RulesConfig.class, Rules.class})
 @TestPropertySource(properties = {
-    "vlo.monitor.rules.facetValuesDecreaseWarning.field1=25%",
-    "vlo.monitor.rules.facetValuesDecreaseWarning.field2=100",
-    "vlo.monitor.rules.facetValuesDecreaseError.field1=50%",
+    "vlo.monitor.rules.fieldValuesDecreaseWarning.field1=25%",
+    "vlo.monitor.rules.fieldValuesDecreaseWarning.field2=100",
+    "vlo.monitor.rules.fieldValuesDecreaseError.field1=50%",
     "vlo.monitor.rules.totalRecordsDecreaseWarning=10%",
     "vlo.monitor.rules.totalRecordsDecreaseError=25%"})
 public class RulesTest {
@@ -51,16 +51,16 @@ public class RulesTest {
         assertNotNull(config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning not null");
         assertEquals("10%", config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning value");
 
-        assertNotNull(config.getFacetValuesDecreaseWarning(), "fieldValuesDecreaseWarning not null");
-        final Map<String, String> facetValuesDecreaseWarning = config.getFacetValuesDecreaseWarning();
-        assertEquals(2, facetValuesDecreaseWarning.size());
-        assertEquals("25%", facetValuesDecreaseWarning.get("field1"), "fieldValuesDecreaseWarning for facet1");
-        assertEquals("100", facetValuesDecreaseWarning.get("field2"), "fieldValuesDecreaseWarning for facet2");
+        assertNotNull(config.getFieldValuesDecreaseWarning(), "fieldValuesDecreaseWarning not null");
+        final Map<String, String> fieldValuesDecreaseWarning = config.getFieldValuesDecreaseWarning();
+        assertEquals(2, fieldValuesDecreaseWarning.size());
+        assertEquals("25%", fieldValuesDecreaseWarning.get("field1"), "fieldValuesDecreaseWarning for field1");
+        assertEquals("100", fieldValuesDecreaseWarning.get("field2"), "fieldValuesDecreaseWarning for field2");
 
-        assertNotNull(config.getFacetValuesDecreaseError(), "fieldValuesDecreaseError not null");
-        final Map<String, String> facetValuesDecreaseError = config.getFacetValuesDecreaseError();
-        assertEquals(1, facetValuesDecreaseError.size());
-        assertEquals("50%", facetValuesDecreaseError.get("field1"), "fieldValuesDecreaseError for facet1");
+        assertNotNull(config.getFieldValuesDecreaseError(), "fieldValuesDecreaseError not null");
+        final Map<String, String> fieldValuesDecreaseError = config.getFieldValuesDecreaseError();
+        assertEquals(1, fieldValuesDecreaseError.size());
+        assertEquals("50%", fieldValuesDecreaseError.get("field1"), "fieldValuesDecreaseError for field1");
     }
 
     @Test
@@ -71,9 +71,9 @@ public class RulesTest {
         assertEquals(2, fieldRules.keySet().size());
 
         assertTrue(fieldRules.containsKey("field1"));
-        final List<Rules.Rule> facet1rules = fieldRules.get("field1");
-        assertEquals(2, facet1rules.size());
-        assertThat(facet1rules,
+        final List<Rules.Rule> field1rules = fieldRules.get("field1");
+        assertEquals(2, field1rules.size());
+        assertThat(field1rules,
                 allOf(
                         hasItem(
                                 allOf(
@@ -90,9 +90,9 @@ public class RulesTest {
         );
 
         assertTrue(fieldRules.containsKey("field2"));
-        final List<Rules.Rule> facet2rules = fieldRules.get("field2");
-        assertEquals(1, facet2rules.size());
-        assertThat(facet2rules,
+        final List<Rules.Rule> field2rules = fieldRules.get("field2");
+        assertEquals(1, field2rules.size());
+        assertThat(field2rules,
                 hasItem(
                         allOf(
                                 isA(Rules.AbsoluteDecreaseRule.class),
@@ -188,8 +188,8 @@ public class RulesTest {
     @Test
     public void testGetAllFields() {
         final RulesConfig config = new RulesConfig();
-        config.setFacetValuesDecreaseWarning(ImmutableMap.of("field1", "0", "field2", "0"));
-        config.setFacetValuesDecreaseError(ImmutableMap.of("field1", "0", "field3", "0"));
+        config.setFieldValuesDecreaseWarning(ImmutableMap.of("field1", "0", "field2", "0"));
+        config.setFieldValuesDecreaseError(ImmutableMap.of("field1", "0", "field3", "0"));
 
         Rules instance = new Rules(config);
 
