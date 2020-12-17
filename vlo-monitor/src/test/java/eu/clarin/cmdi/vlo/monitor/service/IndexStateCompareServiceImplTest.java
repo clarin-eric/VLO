@@ -19,7 +19,6 @@ import java.util.Optional;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import org.slf4j.event.Level;
@@ -80,19 +79,19 @@ public class IndexStateCompareServiceImplTest {
         oldStateFacetStates.add(new FacetState("field1", "val1a", 1000L));
         newStateFacetStates.add(new FacetState("field1", "val1a", 999L)); // -1
         assertThat(instance.compare(oldState, newState, rules), hasSize(0));
-        
+
         // Add value with increase
         oldStateFacetStates.add(new FacetState("field1", "val1b", 1000L));
         newStateFacetStates.add(new FacetState("field1", "val1b", 1001L)); // +1
         assertThat(instance.compare(oldState, newState, rules), hasSize(0));
-        
+
         // Add field for which there is no rule
         oldStateFacetStates.add(new FacetState("field2", "val2a", 1000L));
         newStateFacetStates.add(new FacetState("field2", "val2a", 0L)); // -100%
         assertThat(instance.compare(oldState, newState, rules), hasSize(0));
-        
+
         // Add rule for which there is no field
-        fieldValuesDecreaseWarning.put("field3", "1%"); 
+        fieldValuesDecreaseWarning.put("field3", "1%");
         assertThat(instance.compare(oldState, newState, rules), hasSize(0));
     }
 
@@ -100,7 +99,7 @@ public class IndexStateCompareServiceImplTest {
      * Test of compare method, of class IndexStateCompareServiceImpl.
      */
     @Test
-    public void testCompareWithChange() {
+    public void testCompareWithChanges() {
         // set up rules & states
 
         //// field 1 rules
@@ -172,4 +171,118 @@ public class IndexStateCompareServiceImplTest {
                 ));
     }
 
+    /**
+     * Test of compare method, of class IndexStateCompareServiceImpl.
+     */
+    @Test
+    public void testCompareWithValuesDisappear() {
+        // set up rules & states
+
+        //// field 1 rule
+        fieldValuesDecreaseWarning.put("field1", "500");
+
+        // field 1 value 1a
+        oldStateFacetStates.add(new FacetState("field1", "val1a", 1000L));
+        newStateFacetStates.add(new FacetState("field1", "val1a", 100L)); // -900 -> WARNING
+
+        // field 1 value 1b
+        oldStateFacetStates.add(new FacetState("field1", "val1b", 1000L));
+        // -------------------------------------------------------------- // value disappeared -> WARNING
+
+        // field 2 rule
+        fieldValuesDecreaseError.put("field2", "1000");
+
+        // field 2 value 2a
+        oldStateFacetStates.add(new FacetState("field2", "val2a", 1000L));
+        newStateFacetStates.add(new FacetState("field2", "val2a", 0L)); // -1000 -> ERROR
+
+        // field 2 value 2b
+        oldStateFacetStates.add(new FacetState("field2", "val2b", 1000L));
+        // -------------------------------------------------------------- // value disappeared -> ERROR
+
+        // field 3 rule
+        fieldValuesDecreaseError.put("field3", "100%");
+
+        // field 3 value 3a
+        oldStateFacetStates.add(new FacetState("field3", "val3a", 1000L));
+        newStateFacetStates.add(new FacetState("field3", "val3a", 0L)); // -100% -> ERROR
+
+        // field 3 value 3b
+        oldStateFacetStates.add(new FacetState("field3", "val3b", 1000L));
+        // -------------------------------------------------------------- // value disappeared -> ERROR        
+
+        final Collection<MonitorReportItem> result = instance.compare(oldState, newState, rules);
+
+        assertThat(result, hasSize(6));
+
+        assertThat(result, hasItem(
+                allOf(
+                        hasProperty("field", equalTo(Optional.of("field1"))),
+                        hasProperty("value", equalTo(Optional.of("val1a"))),
+                        hasProperty("level", equalTo(Level.WARN))
+                )
+        ));
+        assertThat(result, hasItem(
+                allOf(
+                        hasProperty("field", equalTo(Optional.of("field1"))),
+                        hasProperty("value", equalTo(Optional.of("val1b"))),
+                        hasProperty("level", equalTo(Level.WARN))
+                )
+        ));
+        assertThat(result, hasItem(
+                allOf(
+                        hasProperty("field", equalTo(Optional.of("field2"))),
+                        hasProperty("value", equalTo(Optional.of("val2a"))),
+                        hasProperty("level", equalTo(Level.ERROR))
+                )
+        ));
+        assertThat(result, hasItem(
+                allOf(
+                        hasProperty("field", equalTo(Optional.of("field2"))),
+                        hasProperty("value", equalTo(Optional.of("val2b"))),
+                        hasProperty("level", equalTo(Level.ERROR))
+                )
+        ));
+        assertThat(result, hasItem(
+                allOf(
+                        hasProperty("field", equalTo(Optional.of("field3"))),
+                        hasProperty("value", equalTo(Optional.of("val3a"))),
+                        hasProperty("level", equalTo(Level.ERROR))
+                )
+        ));
+        assertThat(result, hasItem(
+                allOf(
+                        hasProperty("field", equalTo(Optional.of("field3"))),
+                        hasProperty("value", equalTo(Optional.of("val3b"))),
+                        hasProperty("level", equalTo(Level.ERROR))
+                )
+        ));
+    }
+
+    /**
+     * Test of compare method, of class IndexStateCompareServiceImpl.
+     */
+    @Test
+    public void testCompareWithValuesAppear() {
+        // set up rules & states
+
+        //// field 1 rule
+        fieldValuesDecreaseWarning.put("field1", "5%");
+
+        // field 1 value 1a
+        // -------------------------------------------------------------- // value did not exist before
+        newStateFacetStates.add(new FacetState("field1", "val1a", 100L));
+        
+        //// field 2 rule
+        fieldValuesDecreaseWarning.put("field2", "500");
+
+        // field 2 value 2a
+        // -------------------------------------------------------------- // value did not exist before
+        oldStateFacetStates.add(new FacetState("field2", "val2a", 0L));
+        newStateFacetStates.add(new FacetState("field2", "val2a", 100L));
+
+        final Collection<MonitorReportItem> result = instance.compare(oldState, newState, rules);
+
+        assertThat(result, hasSize(0));
+    }
 }
