@@ -7,6 +7,7 @@ import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,9 @@ public class VloMonitorConfiguration {
 
     @Value("${vlo.monitor.config.url:}")
     private String configLocation;
+    
+    @Value("${vlo.monitor.pruneAfterDays:}")
+    private Optional<Integer> pruneAfterDays;
 
     @Bean
     public VloConfig vloConfig() throws IOException {
@@ -45,6 +49,14 @@ public class VloMonitorConfiguration {
 
     public void setConfigLocation(String configLocation) {
         this.configLocation = configLocation;
+    }
+
+    public Optional<Integer> getPruneAfterDays() {
+        return pruneAfterDays;
+    }
+
+    public void setPruneAfterDays(Optional<Integer> pruneAfterDays) {
+        this.pruneAfterDays = pruneAfterDays;
     }
 
 }

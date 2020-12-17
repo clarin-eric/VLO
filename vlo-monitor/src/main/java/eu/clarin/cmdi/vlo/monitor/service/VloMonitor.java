@@ -1,6 +1,9 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.monitor.Rules;
+import eu.clarin.cmdi.vlo.monitor.VloMonitorConfiguration;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
@@ -22,47 +25,49 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class VloMonitor {
-    
+
+    private final VloMonitorConfiguration config;
     private final IndexService indexService;
     private final IndexStateRepository repo;
     private final IndexStateCompareService compareService;
     private final Rules rules;
     private Collection<String> fields;
-    
-    public VloMonitor(IndexService indexService, IndexStateRepository repo, IndexStateCompareService compareService, Rules rules) {
+
+    public VloMonitor(VloMonitorConfiguration config, IndexService indexService, IndexStateRepository repo, IndexStateCompareService compareService, Rules rules) {
+        this.config = config;
         this.indexService = indexService;
         this.repo = repo;
         this.compareService = compareService;
         this.rules = rules;
     }
-    
+
     @PostConstruct
     protected final void init() {
         fields = rules.getAllFields();
         log.debug("Fields: {}", fields);
     }
-    
+
     public void run() {
         log.info("VLO monitor run - {}", Calendar.getInstance().getTime());
-        
+
         final IndexState newIndexState = newIndexState();
         logIndexStateStats("New state", Optional.of(newIndexState));
-        
+
         log.info("Loading previous stats");
         final Optional<IndexState> previousIndexState = repo.findFirstByOrderByTimestampDesc();
         logIndexStateStats("Previous state", previousIndexState);
-        
+
         log.info("Comparing old and new state");
         final Collection<MonitorReportItem> report = compareService.compare(newIndexState, newIndexState, rules);
         logReport(report);
-        
+
         log.info("Writing new stats");
         repo.save(newIndexState);
 
-        //TODO: Clean up old stats?
+        pruneRepo();
         log.info("Done");
     }
-    
+
     private IndexState newIndexState() {
         final IndexState newIndexState = new IndexState();
         newIndexState.setTimestamp(Calendar.getInstance().getTime());
@@ -76,20 +81,20 @@ public class VloMonitor {
         newIndexState.setFacetStates(facetStates);
         return newIndexState;
     }
-    
+
     private Stream<FacetState> getFacetStateStreamForFacet(String facet) {
         return indexService.getValueCounts(facet)
                 .entrySet()
                 .stream()
                 .map(pair -> new FacetState(facet, pair.getKey(), pair.getValue()));
     }
-    
+
     private void logIndexStateStats(String name, Optional<IndexState> indexState) {
         log.info("{}: {} ({} values)",
                 name, indexState.map(IndexState::toString).orElse("EMPTY"),
                 indexState.flatMap(i -> Optional.ofNullable(i.getFacetStates())).map(List::size).orElse(0));
     }
-    
+
     private void logReport(Collection<MonitorReportItem> report) {
         if (report.isEmpty()) {
             log.info("No significant differences in comparison");
@@ -109,5 +114,23 @@ public class VloMonitor {
                 }
             });
         }
+    }
+
+    private void pruneRepo() {
+        config.getPruneAfterDays()
+                .filter(maxDays -> maxDays > 0)
+                .ifPresentOrElse(
+                        this::doPrune,
+                        () -> {
+                            log.info("No pruning of old states based on configuration setting '{}'", config.getPruneAfterDays());
+                        });
+    }
+
+    private void doPrune(Integer maxDays) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, -24 * maxDays);
+        final List<IndexState> statesToPrune
+                = ImmutableList.copyOf(repo.findOlderThan(calendar.getTime()));
+        log.info("Found {} old states to prune", statesToPrune.size());
     }
 }
