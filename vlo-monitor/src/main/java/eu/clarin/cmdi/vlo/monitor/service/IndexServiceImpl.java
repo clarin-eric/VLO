@@ -32,29 +32,30 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class IndexServiceImpl implements IndexService {
-
+    
     @Inject
     private VloConfig config;
-
+    
     private SolrClient solrClient;
-
+    
     @Override
     public Map<String, Long> getValueCounts(String facet) {
         final SolrQuery addFacetField = new SolrQuery().addFacetField(facet);
         try {
             final QueryResponse response = solrClient.query(addFacetField);
             final ImmutableMap.Builder<String, Long> mapBuilder = ImmutableMap.builder();
-            final Optional<List<FacetField.Count>> facetValues = response.getFacetFields().stream()
+            response.getFacetFields().stream()
+                    // find counts for target field
                     .filter(f -> facet.equals(f.getName()))
+                    // get values (=list of counts)
                     .map(f -> f.getValues())
-                    .findFirst();
-            facetValues.ifPresentOrElse(
-                    (values) -> {
+                    // there should be only 1 per field
+                    .limit(1)
+                    // put counts in our map
+                    .forEach((values) -> {
                         values.forEach(count -> {
                             mapBuilder.put(count.getName(), count.getCount());
                         });
-                    }, () -> {
-                        log.warn("No values for facet {}", facet);
                     });
             return mapBuilder.build();
         } catch (SolrServerException | IOException ex) {
@@ -62,7 +63,7 @@ public class IndexServiceImpl implements IndexService {
             throw new RuntimeException(ex);
         }
     }
-
+    
     @PostConstruct
     protected void initSolrClient() {
         final String solrUrl = config.getSolrUrl();
@@ -81,7 +82,7 @@ public class IndexServiceImpl implements IndexService {
                 .withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads).withHttpClient(httpClient)) {
         };
     }
-
+    
     @PreDestroy
     protected void closeSolrClient() {
         try {
@@ -90,5 +91,5 @@ public class IndexServiceImpl implements IndexService {
             log.error("Error while closing Solr client", ex);
         }
     }
-
+    
 }
