@@ -11,11 +11,13 @@ public class MonitorReportItem {
 
     private final Level level;
     private final Optional<String> field;
+    private final Optional<String> value;
     private final String message;
 
-    public MonitorReportItem(Level level, Optional<String> field, String message) {
+    public MonitorReportItem(Level level, Optional<String> field, Optional<String> value, String message) {
         this.level = level;
         this.field = field;
+        this.value = value;
         this.message = message;
     }
 
@@ -27,15 +29,19 @@ public class MonitorReportItem {
         return field;
     }
 
+    public Optional<String> getValue() {
+        return value;
+    }
+
     public String getMessage() {
         return message;
     }
 
     @Override
     public String toString() {
-        return String.format("[%s] %s: %s",
+        return String.format("[%s] %s - %s",
                 level,
-                field.map(f -> String.format("'%s'", f)).orElse("(No field)"),
+                field.map(f -> String.format("%s:'%s'", f, value.orElse("-"))).orElse("(No field)"),
                 message);
     }
 
