@@ -32,7 +32,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
     "vlo.monitor.rules.fieldValuesDecreaseWarning.field1=25%",
     "vlo.monitor.rules.fieldValuesDecreaseWarning.field2=100",
     "vlo.monitor.rules.fieldValuesDecreaseError.field1=50%",
-    "vlo.monitor.rules.totalRecordsDecreaseWarning=10%",
+    "vlo.monitor.rules.totalRecordsDecreaseWarning=1000",
     "vlo.monitor.rules.totalRecordsDecreaseError=25%"})
 public class RulesTest {
 
@@ -49,7 +49,10 @@ public class RulesTest {
         assertNotNull(config);
 
         assertNotNull(config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning not null");
-        assertEquals("10%", config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning value");
+        assertEquals("1000", config.getTotalRecordsDecreaseWarning(), "totalRecordsDecreaseWarning value");
+        
+        assertNotNull(config.getTotalRecordsDecreaseError(), "totalRecordsDecreaseError not null");
+        assertEquals("25%", config.getTotalRecordsDecreaseError(), "totalRecordsDecreaseError value");
 
         assertNotNull(config.getFieldValuesDecreaseWarning(), "fieldValuesDecreaseWarning not null");
         final Map<String, String> fieldValuesDecreaseWarning = config.getFieldValuesDecreaseWarning();
@@ -68,9 +71,9 @@ public class RulesTest {
         //Note: rule configuration is loaded from properties (see @TestPropertySource annotation)
         Collection<Rules.Rule> fieldRules = rules.getRules();
         assertNotNull(fieldRules);
-        assertThat(fieldRules, hasSize(3));
+        assertThat(fieldRules, hasSize(5));
 
-        assertThat(fieldRules, allOf(
+        assertThat("Field value count rules", fieldRules, allOf(
                 hasItem(allOf(
                         isA(Rules.RatioDecreaseRule.class),
                         hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
@@ -88,6 +91,20 @@ public class RulesTest {
                         hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.WARN)),
                         hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
+                ))));
+
+        assertThat("Total record count rules", fieldRules, allOf(
+                hasItem(allOf(
+                        isA(Rules.AbsoluteDecreaseRule.class),
+                        hasProperty("scope", equalTo(RuleScope.TOTAL_RECORD_COUNT)),
+                        hasProperty("level", equalTo(Level.WARN)),
+                        hasProperty("thresholdDiff", equalTo(Long.valueOf(1000)))
+                )),
+                hasItem(allOf(
+                        isA(Rules.RatioDecreaseRule.class),
+                        hasProperty("scope", equalTo(RuleScope.TOTAL_RECORD_COUNT)),
+                        hasProperty("level", equalTo(Level.ERROR)),
+                        hasProperty("thresholdRatio", equalTo(.25))
                 )))
         );
     }

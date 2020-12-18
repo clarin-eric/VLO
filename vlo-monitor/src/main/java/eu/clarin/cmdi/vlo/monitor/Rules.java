@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.slf4j.event.Level;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 /**
  *
@@ -56,20 +57,23 @@ public class Rules {
                             .map(entrySet -> {
                                 //key = field
                                 //value = 'definition' e.g. '100' or '25%'
-                                return Rule.create(RuleScope.FIELD_VALUE_COUNT, level, entrySet.getKey(), entrySet.getValue());
+                                return Rule.create(RuleScope.FIELD_VALUE_COUNT, level, Optional.of(entrySet.getKey()), entrySet.getValue());
                             });
                 });
     }
-    
+
     public Stream<Rule> createTotalCountRules(Level level, String totalRecordsDecrease) {
-        //TODO
-        return Stream.empty();
+        if (!ObjectUtils.isEmpty(totalRecordsDecrease)) {
+            return Stream.of(Rule.create(RuleScope.TOTAL_RECORD_COUNT, level, Optional.empty(), totalRecordsDecrease));
+        } else {
+            return Stream.empty();
+        }
     }
 
     public RulesConfig getConfig() {
         return config;
     }
-    
+
     public enum RuleScope {
         FIELD_VALUE_COUNT,
         TOTAL_RECORD_COUNT
@@ -98,7 +102,7 @@ public class Rules {
         public RuleScope getScope() {
             return scope;
         }
-        
+
         public String getField() {
             return field;
         }
@@ -107,15 +111,15 @@ public class Rules {
             return level;
         }
 
-        public static Rule create(RuleScope scope, Level level, String field, String definition) {
+        public static Rule create(RuleScope scope, Level level, Optional<String> field, String definition) {
             if (definition.endsWith("%")) {
                 //percentage indicates a thresholdRatio based rule
                 final double decreaseRatioThreshold = Double.parseDouble(definition.substring(0, definition.indexOf('%')).trim());
-                return new RatioDecreaseRule(scope, field, level, decreaseRatioThreshold);
+                return new RatioDecreaseRule(scope, field.orElse(null), level, decreaseRatioThreshold);
             } else {
                 //assume it's a number that can be parsed as a Long - interpret as an absolute decrease rule
                 final long decreaseThreshold = Long.parseLong(definition.trim());
-                return new AbsoluteDecreaseRule(scope, field, level, decreaseThreshold);
+                return new AbsoluteDecreaseRule(scope, field.orElse(null), level, decreaseThreshold);
             }
         }
 
