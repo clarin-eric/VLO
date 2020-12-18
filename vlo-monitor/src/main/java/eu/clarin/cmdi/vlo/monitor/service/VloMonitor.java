@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.monitor.Rules;
 import eu.clarin.cmdi.vlo.monitor.VloMonitorConfiguration;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
@@ -61,6 +60,7 @@ public class VloMonitor {
         final Collection<MonitorReportItem> report = compareService.compare(newIndexState, newIndexState, rules);
         logReport(report);
 
+        //TODO: compare total number of records
         log.info("Writing new stats");
         repo.save(newIndexState);
 
@@ -128,9 +128,16 @@ public class VloMonitor {
 
     private void doPrune(Integer maxDays) {
         final Calendar calendar = Calendar.getInstance();
+        // set max date based on max number of days in the past
         calendar.add(Calendar.HOUR, -24 * maxDays);
+        
         final List<IndexState> statesToPrune
                 = ImmutableList.copyOf(repo.findOlderThan(calendar.getTime()));
+
         log.info("Found {} old states to prune", statesToPrune.size());
+
+        repo.deleteAll(statesToPrune);
+
+        log.info("Deleted {} old states from the repository", statesToPrune.size());
     }
 }
