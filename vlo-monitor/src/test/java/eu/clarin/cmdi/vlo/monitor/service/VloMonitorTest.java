@@ -2,8 +2,7 @@ package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import eu.clarin.cmdi.vlo.monitor.Rules;
-import eu.clarin.cmdi.vlo.monitor.Rules.Rule;
+import eu.clarin.cmdi.vlo.monitor.service.RulesService.Rule;
 import eu.clarin.cmdi.vlo.monitor.VloMonitorConfiguration;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
@@ -59,7 +58,7 @@ public class VloMonitorTest {
     private IndexStateCompareService compareService;
 
     @Mock
-    private Rules rules;
+    private RulesService rules;
 
     @InjectMocks
     private VloMonitor instance;
@@ -87,7 +86,7 @@ public class VloMonitorTest {
         previousIndexState.setTotalRecordCount(2000L);
         previousIndexState.setFacetStates(ImmutableList.of(new FacetState("field1", "value1a", 100L)));
 
-        final Rule rule = Rule.create(Rules.RuleScope.FIELD_VALUE_COUNT, Level.WARN, Optional.of("field1"), "10%");
+        final Rule rule = Rule.create(RulesService.RuleScope.FIELD_VALUE_COUNT, Level.WARN, Optional.of("field1"), "10%");
         final Collection<MonitorReportItem> result = ImmutableList.of(
                 new MonitorReportItem(rule, Optional.of("value1a"), "message")
         );
@@ -103,14 +102,14 @@ public class VloMonitorTest {
 
         when(repo.findFirstByOrderByTimestampDesc())
                 .thenReturn(Optional.of(previousIndexState));
-        when(compareService.compare(any(IndexState.class), any(IndexState.class), eq(rules)))
+        when(compareService.compare(any(IndexState.class), any(IndexState.class)))
                 .thenReturn(result);
 
         instance.run();
 
         verify(indexService, atLeast(1)).getTotalRecordCount();
         verify(indexService, atLeast(3)).getValueCounts(any(String.class));
-        verify(compareService, times(1)).compare(eq(previousIndexState), indexStateCaptor.capture(), eq(rules));
+        verify(compareService, times(1)).compare(eq(previousIndexState), indexStateCaptor.capture());
 
         final IndexState newIndex = indexStateCaptor.getValue();
         assertNotNull(newIndex);

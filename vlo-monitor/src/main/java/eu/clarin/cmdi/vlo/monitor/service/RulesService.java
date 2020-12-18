@@ -1,26 +1,27 @@
-package eu.clarin.cmdi.vlo.monitor;
+package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
+import eu.clarin.cmdi.vlo.monitor.RulesConfig;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.slf4j.event.Level;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-@Component
-public class Rules {
+@Service
+public class RulesService {
 
     private final RulesConfig config;
 
-    public Rules(RulesConfig rulesConfig) {
+    public RulesService(RulesConfig rulesConfig) {
         this.config = rulesConfig;
     }
 

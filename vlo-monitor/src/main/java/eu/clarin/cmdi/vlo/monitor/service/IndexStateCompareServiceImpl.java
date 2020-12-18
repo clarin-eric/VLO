@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
-import eu.clarin.cmdi.vlo.monitor.Rules;
-import eu.clarin.cmdi.vlo.monitor.Rules.Rule;
+import eu.clarin.cmdi.vlo.monitor.service.RulesService.Rule;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
@@ -21,25 +20,29 @@ import org.springframework.stereotype.Service;
 @Service
 public class IndexStateCompareServiceImpl implements IndexStateCompareService {
 
+    private final RulesService rulesService;
+
+    public IndexStateCompareServiceImpl(RulesService rulesService) {
+        this.rulesService = rulesService;
+    }
+    
     @Override
-    public Collection<MonitorReportItem> compare(IndexState oldState, IndexState newState, Rules rules) {
-        final IndexStateComparison comparison = new IndexStateComparison(oldState, newState, rules);
+    public Collection<MonitorReportItem> compare(IndexState oldState, IndexState newState) {
+        final IndexStateComparison comparison = new IndexStateComparison(oldState, newState);
         return comparison.compare();
     }
 
-    static class IndexStateComparison {
+    private class IndexStateComparison {
 
         private final IndexState oldState;
         private final IndexState newState;
-        private final Rules rules;
 
         private Map<String, List<FacetState>> oldStateByField;
         private Map<String, List<FacetState>> newStateByField;
 
-        public IndexStateComparison(IndexState oldState, IndexState newState, Rules rules) {
+        public IndexStateComparison(IndexState oldState, IndexState newState) {
             this.oldState = oldState;
             this.newState = newState;
-            this.rules = rules;
         }
 
         public Collection<MonitorReportItem> compare() {
@@ -48,7 +51,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
             newStateByField = newState.getFacetStates().stream()
                     .collect(Collectors.groupingBy(FacetState::getFacet));
 
-            return rules.getRules()
+            return rulesService.getRules()
                     .stream()
                     .flatMap(this::evaluate)
                     .collect(Collectors.toList());
@@ -66,7 +69,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
         }
 
         private Stream<MonitorReportItem> evaluateRecordCountRule(Rule rule) {
-            assert (rule.getScope() == Rules.RuleScope.TOTAL_RECORD_COUNT);
+            assert (rule.getScope() == RulesService.RuleScope.TOTAL_RECORD_COUNT);
             if (rule.evaluate(oldState.getTotalRecordCount(), newState.getTotalRecordCount())) {
                 return Stream.of(new MonitorReportItem(rule, Optional.empty(), "Total record count below threshold"));
             } else {
@@ -75,7 +78,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
         }
 
         private Stream<MonitorReportItem> evaluateFieldRule(Rule rule) {
-            assert (rule.getScope() == Rules.RuleScope.FIELD_VALUE_COUNT);
+            assert (rule.getScope() == RulesService.RuleScope.FIELD_VALUE_COUNT);
 
             // Rule applies to a single field; get counts for field from old and new index
             final String field = rule.getField();

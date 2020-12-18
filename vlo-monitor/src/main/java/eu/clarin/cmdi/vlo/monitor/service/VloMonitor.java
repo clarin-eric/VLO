@@ -1,7 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.monitor.Rules;
 import eu.clarin.cmdi.vlo.monitor.VloMonitorConfiguration;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
@@ -28,14 +27,14 @@ public class VloMonitor {
     private final IndexService indexService;
     private final IndexStateRepository repo;
     private final IndexStateCompareService compareService;
-    private final Rules rules;
+    private final RulesService rulesService;
 
-    public VloMonitor(VloMonitorConfiguration config, IndexService indexService, IndexStateRepository repo, IndexStateCompareService compareService, Rules rules) {
+    public VloMonitor(VloMonitorConfiguration config, IndexService indexService, IndexStateRepository repo, IndexStateCompareService compareService, RulesService rules) {
         this.config = config;
         this.indexService = indexService;
         this.repo = repo;
         this.compareService = compareService;
-        this.rules = rules;
+        this.rulesService = rules;
     }
 
     public void run() {
@@ -65,7 +64,7 @@ public class VloMonitor {
         final IndexState newIndexState = new IndexState();
         newIndexState.setTimestamp(Calendar.getInstance().getTime());
         
-        final Collection<String> ruleFields = rules.getAllFields();
+        final Collection<String> ruleFields = rulesService.getAllFields();
         
         final List<FacetState> facetStates = ruleFields.stream()
                 // get facet states for listed facets
@@ -81,7 +80,7 @@ public class VloMonitor {
 
     private void compareStates(IndexState previousIndexState, final IndexState newIndexState) {
         log.info("Comparing old and new state");
-        final Collection<MonitorReportItem> report = compareService.compare(previousIndexState, newIndexState, rules);
+        final Collection<MonitorReportItem> report = compareService.compare(previousIndexState, newIndexState);
         logReport(report);
     }
 

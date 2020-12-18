@@ -1,8 +1,7 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.Maps;
-import eu.clarin.cmdi.vlo.monitor.Rules;
-import eu.clarin.cmdi.vlo.monitor.Rules.RuleScope;
+import eu.clarin.cmdi.vlo.monitor.service.RulesService.RuleScope;
 import eu.clarin.cmdi.vlo.monitor.RulesConfig;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
@@ -40,7 +39,6 @@ public class IndexStateCompareServiceImplTest {
     private HashMap<String, String> fieldValuesDecreaseError;
 
     private RulesConfig rulesConfig;
-    private Rules rules;
     private IndexStateCompareServiceImpl instance;
 
     @BeforeEach
@@ -59,9 +57,8 @@ public class IndexStateCompareServiceImplTest {
         rulesConfig = new RulesConfig();
         rulesConfig.setFieldValuesDecreaseError(fieldValuesDecreaseError = Maps.newHashMap());
         rulesConfig.setFieldValuesDecreaseWarning(fieldValuesDecreaseWarning = Maps.newHashMap());
-        rules = new Rules(rulesConfig);
-
-        instance = new IndexStateCompareServiceImpl();
+        
+        instance = new IndexStateCompareServiceImpl(new RulesService(rulesConfig));
     }
 
     /**
@@ -75,21 +72,21 @@ public class IndexStateCompareServiceImplTest {
         // Add value with small decrease
         oldStateFacetStates.add(new FacetState("field1", "val1a", 1000L));
         newStateFacetStates.add(new FacetState("field1", "val1a", 999L)); // -1
-        assertThat(instance.compare(oldState, newState, rules), hasSize(0));
+        assertThat(instance.compare(oldState, newState), hasSize(0));
 
         // Add value with increase
         oldStateFacetStates.add(new FacetState("field1", "val1b", 1000L));
         newStateFacetStates.add(new FacetState("field1", "val1b", 1001L)); // +1
-        assertThat(instance.compare(oldState, newState, rules), hasSize(0));
+        assertThat(instance.compare(oldState, newState), hasSize(0));
 
         // Add field for which there is no rule
         oldStateFacetStates.add(new FacetState("field2", "val2a", 1000L));
         newStateFacetStates.add(new FacetState("field2", "val2a", 0L)); // -100%
-        assertThat(instance.compare(oldState, newState, rules), hasSize(0));
+        assertThat(instance.compare(oldState, newState), hasSize(0));
 
         // Add rule for which there is no field
         fieldValuesDecreaseWarning.put("field3", "1%");
-        assertThat(instance.compare(oldState, newState, rules), hasSize(0));
+        assertThat(instance.compare(oldState, newState), hasSize(0));
 
         //add total record count rules
         rulesConfig.setTotalRecordsDecreaseWarning("150");
@@ -146,7 +143,7 @@ public class IndexStateCompareServiceImplTest {
         oldState.setTotalRecordCount(1000L);
         newState.setTotalRecordCount(500L);
 
-        final Collection<MonitorReportItem> result = instance.compare(oldState, newState, rules);
+        final Collection<MonitorReportItem> result = instance.compare(oldState, newState);
 
         assertThat(result, hasSize(5));
 
@@ -216,7 +213,7 @@ public class IndexStateCompareServiceImplTest {
         oldStateFacetStates.add(new FacetState("field3", "val3b", 1000L));
         // -------------------------------------------------------------- // value disappeared -> ERROR        
 
-        final Collection<MonitorReportItem> result = instance.compare(oldState, newState, rules);
+        final Collection<MonitorReportItem> result = instance.compare(oldState, newState);
 
         assertThat(result, hasSize(6));
 
@@ -286,7 +283,7 @@ public class IndexStateCompareServiceImplTest {
         oldStateFacetStates.add(new FacetState("field2", "val2a", 0L));
         newStateFacetStates.add(new FacetState("field2", "val2a", 100L));
 
-        final Collection<MonitorReportItem> result = instance.compare(oldState, newState, rules);
+        final Collection<MonitorReportItem> result = instance.compare(oldState, newState);
 
         assertThat(result, hasSize(0));
     }
