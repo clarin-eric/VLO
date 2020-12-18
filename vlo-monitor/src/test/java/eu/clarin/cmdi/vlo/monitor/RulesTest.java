@@ -63,55 +63,42 @@ public class RulesTest {
     }
 
     @Test
-    public void testGetFieldRules() {
+    public void testGetRules() {
         //Note: rule configuration is loaded from properties (see @TestPropertySource annotation)
-        Map<String, List<Rules.Rule>> fieldRules = rules.getFieldRules();
+        Collection<Rules.Rule> fieldRules = rules.getRules();
         assertNotNull(fieldRules);
-        assertEquals(2, fieldRules.keySet().size());
+        assertThat(fieldRules, hasSize(3));
 
-        assertTrue(fieldRules.containsKey("field1"));
-        final List<Rules.Rule> field1rules = fieldRules.get("field1");
-        assertEquals(2, field1rules.size());
-        assertThat(field1rules,
-                allOf(
-                        hasItem(
-                                allOf(
-                                        isA(Rules.RatioDecreaseRule.class),
-                                        hasProperty("level", equalTo(Level.WARN)),
-                                        hasProperty("thresholdRatio", equalTo(.25))
-                                )),
-                        hasItem(
-                                allOf(
-                                        isA(Rules.RatioDecreaseRule.class),
-                                        hasProperty("level", equalTo(Level.ERROR)),
-                                        hasProperty("thresholdRatio", equalTo(.50))
-                                )))
-        );
-
-        assertTrue(fieldRules.containsKey("field2"));
-        final List<Rules.Rule> field2rules = fieldRules.get("field2");
-        assertEquals(1, field2rules.size());
-        assertThat(field2rules,
-                hasItem(
-                        allOf(
-                                isA(Rules.AbsoluteDecreaseRule.class),
-                                hasProperty("level", equalTo(Level.WARN)),
-                                hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
-                        ))
+        assertThat(fieldRules, allOf(
+                hasItem(allOf(
+                        isA(Rules.RatioDecreaseRule.class),
+                        hasProperty("level", equalTo(Level.WARN)),
+                        hasProperty("thresholdRatio", equalTo(.25))
+                )),
+                hasItem(allOf(
+                        isA(Rules.RatioDecreaseRule.class),
+                        hasProperty("level", equalTo(Level.ERROR)),
+                        hasProperty("thresholdRatio", equalTo(.50))
+                )),
+                hasItem(allOf(
+                        isA(Rules.AbsoluteDecreaseRule.class),
+                        hasProperty("level", equalTo(Level.WARN)),
+                        hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
+                )))
         );
     }
 
     @Test
     public void testCreateRulesEmpty() {
         // Empty map
-        final Stream<Rules.Rule> result = rules.createRules(Level.WARN, Optional.empty());
+        final Stream<Rules.Rule> result = rules.createFieldRules(Level.WARN, Optional.empty());
         assertEquals(0L, result.count());
     }
 
     @Test
     public void testCreateRulesAbsolute() {
         // Absolute thresholds
-        List<Rules.Rule> result = rules.createRules(Level.WARN, Optional.of(ImmutableMap.<String, String>builder()
+        List<Rules.Rule> result = rules.createFieldRules(Level.WARN, Optional.of(ImmutableMap.<String, String>builder()
                 .put("field1", "1")
                 .put("field2", "2")
                 .put("field3", "3")
@@ -132,7 +119,7 @@ public class RulesTest {
     @Test
     public void testCreateRulesRelative() {
         // Relative thresholds
-        List<Rules.Rule> result = rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+        List<Rules.Rule> result = rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                 .put("field1", "1%")
                 .put("field2", "2%")
                 .put("field3", " 3%")
@@ -153,28 +140,28 @@ public class RulesTest {
     @Test
     public void testCreateRulesErroneous() {
         assertThrows(RuntimeException.class, () -> {
-            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+            rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1")
                     .put("field1", "b")
                     .build()));
         });
 
         assertThrows(RuntimeException.class, () -> {
-            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+            rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1")
                     .put("field1", "b")
                     .build()));
         });
 
         assertThrows(RuntimeException.class, () -> {
-            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+            rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1")
                     .put("field1", "2a")
                     .build()));
         });
 
         assertThrows(RuntimeException.class, () -> {
-            rules.createRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+            rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                     .put("field1", "1%")
                     .put("field1", "2%a")
                     .build()));

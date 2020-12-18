@@ -3,7 +3,6 @@ package eu.clarin.cmdi.vlo.monitor;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Streams;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,15 +34,17 @@ public class Rules {
         return builder.build();
     }
 
-    public Map<String, List<Rule>> getFieldRules() {
+    public Collection<Rule> getRules() {
         // combine 'warning' and 'error' rules for all facets
         return Streams.concat(
-                createRules(Level.WARN, Optional.ofNullable(config.getFieldValuesDecreaseWarning())),
-                createRules(Level.ERROR, Optional.ofNullable(config.getFieldValuesDecreaseError()))
-        ).collect(Collectors.groupingBy(Rule::getField));
+                createFieldRules(Level.WARN, Optional.ofNullable(config.getFieldValuesDecreaseWarning())),
+                createFieldRules(Level.ERROR, Optional.ofNullable(config.getFieldValuesDecreaseError())),
+                createTotalCountRules(Level.WARN, config.getTotalRecordsDecreaseWarning()),
+                createTotalCountRules(Level.ERROR, config.getTotalRecordsDecreaseError())
+        ).collect(Collectors.toList());
     }
 
-    public Stream<Rule> createRules(Level level, Optional<Map<String, String>> rulesMap) {
+    public Stream<Rule> createFieldRules(Level level, Optional<Map<String, String>> rulesMap) {
         //we want to 'flatten' the definitions to a stream of rules
         return rulesMap
                 //optional as a stream
@@ -58,6 +59,11 @@ public class Rules {
                                 return Rule.create(level, entrySet.getKey(), entrySet.getValue());
                             });
                 });
+    }
+    
+    public Stream<Rule> createTotalCountRules(Level level, String totalRecordsDecrease) {
+        //TODO
+        return Stream.empty();
     }
 
     public RulesConfig getConfig() {

@@ -49,11 +49,8 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
             newStateByField = newState.getFacetStates().stream()
                     .collect(Collectors.groupingBy(FacetState::getFacet));
 
-            return rules.getFieldRules()
-                    .entrySet()
+            return rules.getRules()
                     .stream()
-                    .map(Entry::getValue)
-                    .flatMap(List::stream)
                     .flatMap(this::evaluate)
                     .collect(Collectors.toList());
         }
