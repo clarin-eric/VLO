@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.model;
 
+import eu.clarin.cmdi.vlo.monitor.Rules.Rule;
 import java.util.Optional;
 import org.slf4j.event.Level;
 
@@ -9,28 +10,30 @@ import org.slf4j.event.Level;
  */
 public class MonitorReportItem {
 
-    private final Level level;
-    private final Optional<String> field;
     private final Optional<String> value;
     private final String message;
+    private final Rule rule;
 
-    public MonitorReportItem(Level level, Optional<String> field, Optional<String> value, String message) {
-        this.level = level;
-        this.field = field;
+    public MonitorReportItem(Rule rule, Optional<String> value, String message) {
+        this.rule = rule;
         this.value = value;
         this.message = message;
     }
 
     public Level getLevel() {
-        return level;
+        return rule.getLevel();
     }
 
     public Optional<String> getField() {
-        return field;
+        return Optional.ofNullable(rule.getField());
     }
 
     public Optional<String> getValue() {
         return value;
+    }
+
+    public Rule getRule() {
+        return rule;
     }
 
     public String getMessage() {
@@ -39,9 +42,10 @@ public class MonitorReportItem {
 
     @Override
     public String toString() {
-        return String.format("[%s] %s - %s",
-                level,
-                field.map(f -> String.format("%s:'%s'", f, value.orElse("-"))).orElse("(No field)"),
+        return String.format("[%s] %s: %s - %s",
+                rule.getScope().toString(),
+                getLevel(),
+                getField().map(f -> String.format("%s:'%s'", f, value.orElse("-"))).orElse("(No field)"),
                 message);
     }
 

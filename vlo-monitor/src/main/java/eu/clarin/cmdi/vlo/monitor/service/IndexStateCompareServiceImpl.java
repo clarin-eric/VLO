@@ -9,7 +9,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -56,6 +55,28 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
         }
 
         private Stream<MonitorReportItem> evaluate(Rule rule) {
+            switch (rule.getScope()) {
+                case FIELD_VALUE_COUNT:
+                    return evaluateFieldRule(rule);
+                case TOTAL_RECORD_COUNT:
+                    return evaluateRecordCountRule(rule);
+                default:
+                    throw new RuntimeException("Unsupported rule scope: " + rule.getScope());
+            }
+        }
+
+        private Stream<MonitorReportItem> evaluateRecordCountRule(Rule rule) {
+            assert (rule.getScope() == Rules.RuleScope.TOTAL_RECORD_COUNT);
+            if (rule.evaluate(oldState.getTotalRecordCount(), newState.getTotalRecordCount())) {
+                return Stream.of(new MonitorReportItem(rule, Optional.empty(), "Total record count below threshold"));
+            } else {
+                return Stream.empty();
+            }
+        }
+
+        private Stream<MonitorReportItem> evaluateFieldRule(Rule rule) {
+            assert (rule.getScope() == Rules.RuleScope.FIELD_VALUE_COUNT);
+
             // Rule applies to a single field; get counts for field from old and new index
             final String field = rule.getField();
             final List<FacetState> oldStateCounts = oldStateByField.getOrDefault(field, Collections.emptyList());
@@ -80,8 +101,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
                         if (rule.evaluate(oldCount, newCount)) {
                             final MonitorReportItem reportItem
                                     = new MonitorReportItem(
-                                            rule.getLevel(),
-                                            Optional.of(field),
+                                            rule,
                                             Optional.of(fieldValue),
                                             rule.toString());
                             return Stream.of(reportItem);

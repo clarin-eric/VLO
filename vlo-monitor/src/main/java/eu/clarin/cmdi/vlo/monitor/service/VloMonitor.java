@@ -60,7 +60,6 @@ public class VloMonitor {
         final Collection<MonitorReportItem> report = compareService.compare(newIndexState, newIndexState, rules);
         logReport(report);
 
-        //TODO: compare total number of records
         log.info("Writing new stats");
         repo.save(newIndexState);
 

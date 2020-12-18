@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.monitor.Rules;
+import eu.clarin.cmdi.vlo.monitor.Rules.RuleScope;
 import eu.clarin.cmdi.vlo.monitor.RulesConfig;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
@@ -43,6 +39,7 @@ public class IndexStateCompareServiceImplTest {
     private HashMap<String, String> fieldValuesDecreaseWarning;
     private HashMap<String, String> fieldValuesDecreaseError;
 
+    private RulesConfig rulesConfig;
     private Rules rules;
     private IndexStateCompareServiceImpl instance;
 
@@ -59,7 +56,7 @@ public class IndexStateCompareServiceImplTest {
         newState.setTimestamp(calendar.getTime());
         newState.setFacetStates(newStateFacetStates = Lists.newArrayList());
 
-        final RulesConfig rulesConfig = new RulesConfig();
+        rulesConfig = new RulesConfig();
         rulesConfig.setFieldValuesDecreaseError(fieldValuesDecreaseError = Maps.newHashMap());
         rulesConfig.setFieldValuesDecreaseWarning(fieldValuesDecreaseWarning = Maps.newHashMap());
         rules = new Rules(rulesConfig);
@@ -93,6 +90,14 @@ public class IndexStateCompareServiceImplTest {
         // Add rule for which there is no field
         fieldValuesDecreaseWarning.put("field3", "1%");
         assertThat(instance.compare(oldState, newState, rules), hasSize(0));
+
+        //add total record count rules
+        rulesConfig.setTotalRecordsDecreaseWarning("150");
+        rulesConfig.setTotalRecordsDecreaseError("15%");
+
+        // record counts
+        oldState.setTotalRecordCount(1000L);
+        newState.setTotalRecordCount(900L);
     }
 
     /**
@@ -133,42 +138,42 @@ public class IndexStateCompareServiceImplTest {
         oldStateFacetStates.add(new FacetState("field3", "val3a", 1000L));
         newStateFacetStates.add(new FacetState("field3", "val3a", 1000L));
 
+        //total record count rules
+        rulesConfig.setTotalRecordsDecreaseWarning("50%");
+        rulesConfig.setTotalRecordsDecreaseError("600");
+
+        // record counts
+        oldState.setTotalRecordCount(1000L);
+        newState.setTotalRecordCount(500L);
+
         final Collection<MonitorReportItem> result = instance.compare(oldState, newState, rules);
 
-        assertThat(result, hasSize(4));
+        assertThat(result, hasSize(5));
 
-        assertThat(result,
-                hasItem(
-                        allOf(
-                                hasProperty("field", equalTo(Optional.of("field1"))),
-                                hasProperty("value", equalTo(Optional.of("val1a"))),
-                                hasProperty("level", equalTo(Level.WARN))
-                        )
-                ));
-        assertThat(result,
-                hasItem(
-                        allOf(
-                                hasProperty("field", equalTo(Optional.of("field2"))),
-                                hasProperty("value", equalTo(Optional.of("val2a"))),
-                                hasProperty("level", equalTo(Level.WARN))
-                        )
-                ));
-        assertThat(result,
-                hasItem(
-                        allOf(
-                                hasProperty("field", equalTo(Optional.of("field2"))),
-                                hasProperty("value", equalTo(Optional.of("val2b"))),
-                                hasProperty("level", equalTo(Level.WARN))
-                        )
-                ));
-        assertThat(result,
-                hasItem(
-                        allOf(
-                                hasProperty("field", equalTo(Optional.of("field2"))),
-                                hasProperty("value", equalTo(Optional.of("val2b"))),
-                                hasProperty("level", equalTo(Level.ERROR))
-                        )
-                ));
+        assertThat(result, hasItem(allOf(
+                hasProperty("field", equalTo(Optional.of("field1"))),
+                hasProperty("value", equalTo(Optional.of("val1a"))),
+                hasProperty("level", equalTo(Level.WARN))
+        )));
+        assertThat(result, hasItem(allOf(
+                hasProperty("field", equalTo(Optional.of("field2"))),
+                hasProperty("value", equalTo(Optional.of("val2a"))),
+                hasProperty("level", equalTo(Level.WARN))
+        )));
+        assertThat(result, hasItem(allOf(
+                hasProperty("field", equalTo(Optional.of("field2"))),
+                hasProperty("value", equalTo(Optional.of("val2b"))),
+                hasProperty("level", equalTo(Level.WARN))
+        )));
+        assertThat(result, hasItem(allOf(
+                hasProperty("field", equalTo(Optional.of("field2"))),
+                hasProperty("value", equalTo(Optional.of("val2b"))),
+                hasProperty("level", equalTo(Level.ERROR))
+        )));
+        assertThat(result, hasItem(allOf(
+                hasProperty("rule", hasProperty("scope", equalTo(RuleScope.TOTAL_RECORD_COUNT))),
+                hasProperty("level", equalTo(Level.WARN))
+        )));
     }
 
     /**
@@ -272,7 +277,7 @@ public class IndexStateCompareServiceImplTest {
         // field 1 value 1a
         // -------------------------------------------------------------- // value did not exist before
         newStateFacetStates.add(new FacetState("field1", "val1a", 100L));
-        
+
         //// field 2 rule
         fieldValuesDecreaseWarning.put("field2", "500");
 
