@@ -50,15 +50,17 @@ public class VloMonitor {
         log.info("VLO monitor run - {}", Calendar.getInstance().getTime());
 
         final IndexState newIndexState = newIndexState();
-        logIndexStateStats("New state", Optional.of(newIndexState));
+        logIndexStateStats("New state", newIndexState);
 
         log.info("Loading previous stats");
         final Optional<IndexState> previousIndexState = repo.findFirstByOrderByTimestampDesc();
-        logIndexStateStats("Previous state", previousIndexState);
 
-        log.info("Comparing old and new state");
-        final Collection<MonitorReportItem> report = compareService.compare(newIndexState, newIndexState, rules);
-        logReport(report);
+        previousIndexState.ifPresentOrElse(
+                (previous) -> {
+                    logIndexStateStats("Previous state", previous);
+                    compareStates(previous, newIndexState);
+                },
+                () -> log.info("No previous state, skipping comparison!"));
 
         log.info("Writing new stats");
         repo.save(newIndexState);
@@ -82,6 +84,12 @@ public class VloMonitor {
         return newIndexState;
     }
 
+    private void compareStates(IndexState previousIndexState, final IndexState newIndexState) {
+        log.info("Comparing old and new state");
+        final Collection<MonitorReportItem> report = compareService.compare(previousIndexState, newIndexState, rules);
+        logReport(report);
+    }
+
     private Stream<FacetState> getFacetStateStreamForFacet(String facet) {
         return indexService.getValueCounts(facet)
                 .entrySet()
@@ -89,10 +97,10 @@ public class VloMonitor {
                 .map(pair -> new FacetState(facet, pair.getKey(), pair.getValue()));
     }
 
-    private void logIndexStateStats(String name, Optional<IndexState> indexState) {
+    private void logIndexStateStats(String name, IndexState indexState) {
         log.info("{}: {} ({} values)",
-                name, indexState.map(IndexState::toString).orElse("EMPTY"),
-                indexState.flatMap(i -> Optional.ofNullable(i.getFacetStates())).map(List::size).orElse(0));
+                name, indexState,
+                Optional.ofNullable(indexState.getFacetStates()).map(List::size).orElse(0));
     }
 
     private void logReport(Collection<MonitorReportItem> report) {
@@ -130,7 +138,7 @@ public class VloMonitor {
         final Calendar calendar = Calendar.getInstance();
         // set max date based on max number of days in the past
         calendar.add(Calendar.HOUR, -24 * maxDays);
-        
+
         final List<IndexState> statesToPrune
                 = ImmutableList.copyOf(repo.findOlderThan(calendar.getTime()));
 
