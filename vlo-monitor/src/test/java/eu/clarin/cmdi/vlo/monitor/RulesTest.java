@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.monitor;
 
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.monitor.Rules.RuleScope;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -72,16 +73,19 @@ public class RulesTest {
         assertThat(fieldRules, allOf(
                 hasItem(allOf(
                         isA(Rules.RatioDecreaseRule.class),
+                        hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.WARN)),
                         hasProperty("thresholdRatio", equalTo(.25))
                 )),
                 hasItem(allOf(
                         isA(Rules.RatioDecreaseRule.class),
+                        hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.ERROR)),
                         hasProperty("thresholdRatio", equalTo(.50))
                 )),
                 hasItem(allOf(
                         isA(Rules.AbsoluteDecreaseRule.class),
+                        hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.WARN)),
                         hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
                 )))

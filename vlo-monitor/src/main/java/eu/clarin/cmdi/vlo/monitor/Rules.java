@@ -56,7 +56,7 @@ public class Rules {
                             .map(entrySet -> {
                                 //key = field
                                 //value = 'definition' e.g. '100' or '25%'
-                                return Rule.create(level, entrySet.getKey(), entrySet.getValue());
+                                return Rule.create(RuleScope.FIELD_VALUE_COUNT, level, entrySet.getKey(), entrySet.getValue());
                             });
                 });
     }
@@ -69,13 +69,20 @@ public class Rules {
     public RulesConfig getConfig() {
         return config;
     }
+    
+    public enum RuleScope {
+        FIELD_VALUE_COUNT,
+        TOTAL_RECORD_COUNT
+    }
 
     public static abstract class Rule {
 
+        protected final RuleScope scope;
         protected final String field;
         protected final Level level;
 
-        public Rule(String field, Level level) {
+        public Rule(RuleScope scope, String field, Level level) {
+            this.scope = scope;
             this.field = field;
             this.level = level;
         }
@@ -88,6 +95,10 @@ public class Rules {
          */
         public abstract boolean evaluate(Long oldCount, Long newCount);
 
+        public RuleScope getScope() {
+            return scope;
+        }
+        
         public String getField() {
             return field;
         }
@@ -96,15 +107,15 @@ public class Rules {
             return level;
         }
 
-        public static Rule create(Level level, String field, String definition) {
+        public static Rule create(RuleScope scope, Level level, String field, String definition) {
             if (definition.endsWith("%")) {
                 //percentage indicates a thresholdRatio based rule
                 final double decreaseRatioThreshold = Double.parseDouble(definition.substring(0, definition.indexOf('%')).trim());
-                return new RatioDecreaseRule(field, level, decreaseRatioThreshold);
+                return new RatioDecreaseRule(scope, field, level, decreaseRatioThreshold);
             } else {
                 //assume it's a number that can be parsed as a Long - interpret as an absolute decrease rule
                 final long decreaseThreshold = Long.parseLong(definition.trim());
-                return new AbsoluteDecreaseRule(field, level, decreaseThreshold);
+                return new AbsoluteDecreaseRule(scope, field, level, decreaseThreshold);
             }
         }
 
@@ -114,8 +125,8 @@ public class Rules {
 
         private final double thresholdRatio;
 
-        public RatioDecreaseRule(String field, Level level, double thresholdRatio) {
-            super(field, level);
+        public RatioDecreaseRule(RuleScope scope, String field, Level level, double thresholdRatio) {
+            super(scope, field, level);
             this.thresholdRatio = .01 * thresholdRatio;
         }
 
@@ -138,8 +149,8 @@ public class Rules {
 
         private final long thresholdDiff;
 
-        public AbsoluteDecreaseRule(String field, Level level, Long thresholdDiff) {
-            super(field, level);
+        public AbsoluteDecreaseRule(RuleScope scope, String field, Level level, Long thresholdDiff) {
+            super(scope, field, level);
             this.thresholdDiff = thresholdDiff;
         }
 
