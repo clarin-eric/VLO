@@ -79,6 +79,7 @@ public class VloMonitor {
                 // collect into list
                 .collect(Collectors.toList());
         newIndexState.setFacetStates(facetStates);
+        newIndexState.setTotalRecordCount(indexService.getTotalRecordCount());
         return newIndexState;
     }
 

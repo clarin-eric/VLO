@@ -2,11 +2,10 @@ package eu.clarin.cmdi.vlo.monitor.service;
 
 import util.PreemptiveAuthInterceptor;
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -21,8 +20,8 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
-import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.SolrParams;
 import org.springframework.stereotype.Service;
 
 /**
@@ -32,38 +31,56 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class IndexServiceImpl implements IndexService {
-    
+
     @Inject
     private VloConfig config;
-    
+
     private SolrClient solrClient;
-    
+
     @Override
     public Map<String, Long> getValueCounts(String facet) {
-        final SolrQuery addFacetField = new SolrQuery().addFacetField(facet);
-        try {
-            final QueryResponse response = solrClient.query(addFacetField);
-            final ImmutableMap.Builder<String, Long> mapBuilder = ImmutableMap.builder();
-            response.getFacetFields().stream()
-                    // find counts for target field
-                    .filter(f -> facet.equals(f.getName()))
-                    // get values (=list of counts)
-                    .map(f -> f.getValues())
-                    // there should be only 1 per field
-                    .limit(1)
-                    // put counts in our map
-                    .forEach((values) -> {
-                        values.forEach(count -> {
-                            mapBuilder.put(count.getName(), count.getCount());
-                        });
+        final SolrQuery q = new SolrQuery("*:*")
+                .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
+                .addFacetField(facet)
+                .setRows(0);
+
+        final QueryResponse response = query(q);
+
+        final ImmutableMap.Builder<String, Long> mapBuilder = ImmutableMap.builder();
+        response.getFacetFields().stream()
+                // find counts for target field
+                .filter(f -> facet.equals(f.getName()))
+                // get values (=list of counts)
+                .map(f -> f.getValues())
+                // there should be only 1 per field
+                .limit(1)
+                // put counts in our map
+                .forEach((values) -> {
+                    values.forEach(count -> {
+                        mapBuilder.put(count.getName(), count.getCount());
                     });
-            return mapBuilder.build();
+                });
+        return mapBuilder.build();
+    }
+
+    @Override
+    public Long getTotalRecordCount() {
+        final SolrQuery q
+                = new SolrQuery("*:*")
+                        .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
+                        .setRows(0);
+        return query(q).getResults().getNumFound();
+    }
+
+    private QueryResponse query(SolrParams params) {
+        try {
+            return solrClient.query(params);
         } catch (SolrServerException | IOException ex) {
-            log.error("Error while querying for facet {}", facet, ex);
+            log.error("Error while querying the Solr index", ex);
             throw new RuntimeException(ex);
         }
     }
-    
+
     @PostConstruct
     protected void initSolrClient() {
         final String solrUrl = config.getSolrUrl();
@@ -82,7 +99,7 @@ public class IndexServiceImpl implements IndexService {
                 .withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads).withHttpClient(httpClient)) {
         };
     }
-    
+
     @PreDestroy
     protected void closeSolrClient() {
         try {
@@ -91,5 +108,5 @@ public class IndexServiceImpl implements IndexService {
             log.error("Error while closing Solr client", ex);
         }
     }
-    
+
 }

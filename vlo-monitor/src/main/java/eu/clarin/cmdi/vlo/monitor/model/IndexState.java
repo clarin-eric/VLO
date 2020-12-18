@@ -31,6 +31,8 @@ public class IndexState implements Serializable {
     @OneToMany(targetEntity = FacetState.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<FacetState> facetStates;
 
+    private Long totalRecordCount;
+
     public Long getId() {
         return id;
     }
@@ -55,9 +57,17 @@ public class IndexState implements Serializable {
         this.facetStates = facetStates;
     }
 
+    public Long getTotalRecordCount() {
+        return totalRecordCount;
+    }
+
+    public void setTotalRecordCount(Long totalRecordCount) {
+        this.totalRecordCount = totalRecordCount;
+    }
+
     @Override
     public String toString() {
-        return String.format("IndexState[id='%s', timestamp='%s']", id, Objects.toString(timestamp));
+        return String.format("IndexState[id='%s', timestamp='%s', totalRecordCount=%d]", id, Objects.toString(timestamp), totalRecordCount);
     }
 
 }

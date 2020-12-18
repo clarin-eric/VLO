@@ -9,5 +9,7 @@ import java.util.Map;
 public interface IndexService {
     
     Map<String, Long> getValueCounts(String field);
+
+    Long getTotalRecordCount();
     
 }
