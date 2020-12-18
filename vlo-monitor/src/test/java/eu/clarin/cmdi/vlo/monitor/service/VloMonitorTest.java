@@ -106,7 +106,6 @@ public class VloMonitorTest {
         when(compareService.compare(any(IndexState.class), any(IndexState.class), eq(rules)))
                 .thenReturn(result);
 
-        instance.init();
         instance.run();
 
         verify(indexService, atLeast(1)).getTotalRecordCount();
@@ -157,7 +156,6 @@ public class VloMonitorTest {
         when(repo.findOlderThan(any(Date.class)))
                 .thenReturn(statesToBePruned);
 
-        instance.init();
         instance.run();
 
         verify(repo).findOlderThan(argThat((date) -> {

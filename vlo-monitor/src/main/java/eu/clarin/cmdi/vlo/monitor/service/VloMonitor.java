@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +29,6 @@ public class VloMonitor {
     private final IndexStateRepository repo;
     private final IndexStateCompareService compareService;
     private final Rules rules;
-    private Collection<String> fields;
 
     public VloMonitor(VloMonitorConfiguration config, IndexService indexService, IndexStateRepository repo, IndexStateCompareService compareService, Rules rules) {
         this.config = config;
@@ -38,12 +36,6 @@ public class VloMonitor {
         this.repo = repo;
         this.compareService = compareService;
         this.rules = rules;
-    }
-
-    @PostConstruct
-    protected final void init() {
-        fields = rules.getAllFields();
-        log.debug("Fields: {}", fields);
     }
 
     public void run() {
@@ -72,7 +64,10 @@ public class VloMonitor {
     private IndexState newIndexState() {
         final IndexState newIndexState = new IndexState();
         newIndexState.setTimestamp(Calendar.getInstance().getTime());
-        final List<FacetState> facetStates = fields.stream()
+        
+        final Collection<String> ruleFields = rules.getAllFields();
+        
+        final List<FacetState> facetStates = ruleFields.stream()
                 // get facet states for listed facets
                 .map(this::getFacetStateStreamForFacet)
                 // combine streams
