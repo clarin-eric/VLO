@@ -59,6 +59,9 @@ public class VloMonitorTest {
 
     @Mock
     private RulesService rules;
+    
+    @Mock
+    private ReportingService reportingService;
 
     @InjectMocks
     private VloMonitor instance;
@@ -74,6 +77,9 @@ public class VloMonitorTest {
 
     @Captor
     ArgumentCaptor<IndexState> indexStateCaptor;
+    
+    @Captor
+    ArgumentCaptor<Collection<MonitorReportItem>> reportCaptor;
 
     @Test
     public void testRun() {
@@ -106,9 +112,14 @@ public class VloMonitorTest {
                 .thenReturn(result);
 
         instance.run();
+        
+        // verify retrieval of input
 
         verify(indexService, atLeast(1)).getTotalRecordCount();
         verify(indexService, atLeast(3)).getValueCounts(any(String.class));
+        
+        // verify comparison
+        
         verify(compareService, times(1)).compare(eq(previousIndexState), indexStateCaptor.capture());
 
         final IndexState newIndex = indexStateCaptor.getValue();
@@ -122,6 +133,13 @@ public class VloMonitorTest {
                         hasProperty("count", equalTo(100L))
                 )
         ));
+        
+        // verify reporting of results        
+
+        verify(reportingService, times(1)).report(reportCaptor.capture());
+        assertEquals(result, reportCaptor.getValue());
+        
+        // verify storing of new state
 
         verify(repo, times(1)).save(indexStateCaptor.capture());
         

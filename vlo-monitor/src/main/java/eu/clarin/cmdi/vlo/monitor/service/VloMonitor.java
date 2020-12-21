@@ -26,15 +26,17 @@ public class VloMonitor {
     private final VloMonitorConfiguration config;
     private final IndexService indexService;
     private final IndexStateRepository repo;
-    private final IndexStateCompareService compareService;
     private final RulesService rulesService;
+    private final IndexStateCompareService compareService;
+    private final ReportingService reportingService;
 
-    public VloMonitor(VloMonitorConfiguration config, IndexService indexService, IndexStateRepository repo, IndexStateCompareService compareService, RulesService rules) {
+    public VloMonitor(VloMonitorConfiguration config, IndexService indexService, IndexStateRepository repo, RulesService rules, IndexStateCompareService compareService, ReportingService reportingService) {
         this.config = config;
         this.indexService = indexService;
         this.repo = repo;
-        this.compareService = compareService;
         this.rulesService = rules;
+        this.compareService = compareService;
+        this.reportingService = reportingService;
     }
 
     public void run() {
@@ -63,9 +65,9 @@ public class VloMonitor {
     private IndexState newIndexState() {
         final IndexState newIndexState = new IndexState();
         newIndexState.setTimestamp(Calendar.getInstance().getTime());
-        
+
         final Collection<String> ruleFields = rulesService.getAllFields();
-        
+
         final List<FacetState> facetStates = ruleFields.stream()
                 // get facet states for listed facets
                 .map(this::getFacetStateStreamForFacet)
@@ -81,7 +83,7 @@ public class VloMonitor {
     private void compareStates(IndexState previousIndexState, final IndexState newIndexState) {
         log.info("Comparing old and new state");
         final Collection<MonitorReportItem> report = compareService.compare(previousIndexState, newIndexState);
-        logReport(report);
+        reportingService.report(report);
     }
 
     private Stream<FacetState> getFacetStateStreamForFacet(String facet) {
@@ -95,27 +97,6 @@ public class VloMonitor {
         log.info("{}: {} ({} values)",
                 name, indexState,
                 Optional.ofNullable(indexState.getFacetStates()).map(List::size).orElse(0));
-    }
-
-    private void logReport(Collection<MonitorReportItem> report) {
-        if (report.isEmpty()) {
-            log.info("No significant differences in comparison");
-        } else {
-            report.forEach(item -> {
-                final String message = item.toString();
-                switch (item.getLevel()) {
-                    case WARN:
-                        log.warn(message);
-                        break;
-                    case ERROR:
-                        log.error(message);
-                        break;
-                    default:
-                        log.info(message);
-                        break;
-                }
-            });
-        }
     }
 
     private void pruneRepo() {
@@ -136,7 +117,10 @@ public class VloMonitor {
         final List<IndexState> statesToPrune
                 = ImmutableList.copyOf(repo.findOlderThan(calendar.getTime()));
 
-        log.info("Found {} old states to prune", statesToPrune.size());
+        log.info("Found {} old states to prune: {}{}", statesToPrune.size(),
+                statesToPrune.stream().map(IndexState::toString).limit(10).toArray(),
+                statesToPrune.size() > 10 ? " [...]" : ""
+        );
 
         repo.deleteAll(statesToPrune);
 
