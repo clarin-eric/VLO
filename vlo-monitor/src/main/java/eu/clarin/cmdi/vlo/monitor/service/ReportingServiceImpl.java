@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j(topic = "VLO monitor report")
 public class ReportingServiceImpl implements ReportingService {
-
+    
     @Override
     public void report(Collection<MonitorReportItem> report) {
         if (report.isEmpty()) {

@@ -25,7 +25,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
     public IndexStateCompareServiceImpl(RulesService rulesService) {
         this.rulesService = rulesService;
     }
-    
+
     @Override
     public Collection<MonitorReportItem> compare(IndexState oldState, IndexState newState) {
         final IndexStateComparison comparison = new IndexStateComparison(oldState, newState);
@@ -106,7 +106,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
                                     = new MonitorReportItem(
                                             rule,
                                             Optional.of(fieldValue),
-                                            rule.toString());
+                                            String.format("Triggered by rule: [%s]", rule.toString()));
                             return Stream.of(reportItem);
                         } else {
                             return Stream.empty();
