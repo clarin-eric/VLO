@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.monitor.model;
 
-import eu.clarin.cmdi.vlo.monitor.service.RulesService.Rule;
 import java.util.Optional;
 import org.slf4j.event.Level;
 

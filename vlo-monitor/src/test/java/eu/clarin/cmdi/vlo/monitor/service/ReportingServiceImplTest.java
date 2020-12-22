@@ -5,7 +5,10 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
-import eu.clarin.cmdi.vlo.monitor.service.RulesService.Rule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.AbsoluteDecreaseRule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.RatioDecreaseRule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.RuleScope;
 import java.util.Collection;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -32,8 +35,8 @@ public class ReportingServiceImplTest {
         logAppender.start();
         logger.addAppender(logAppender);
 
-        final Rule rule1 = new RulesService.AbsoluteDecreaseRule(RulesService.RuleScope.FIELD_VALUE_COUNT, "field1", Level.WARN, 10L);
-        final Rule rule2 = new RulesService.RatioDecreaseRule(RulesService.RuleScope.TOTAL_RECORD_COUNT, null, Level.ERROR, .5);
+        final Rule rule1 = new AbsoluteDecreaseRule(RuleScope.FIELD_VALUE_COUNT, "field1", Level.WARN, 10L);
+        final Rule rule2 = new RatioDecreaseRule(RuleScope.TOTAL_RECORD_COUNT, null, Level.ERROR, .5);
         final Collection<MonitorReportItem> report = ImmutableList.of(
                 new MonitorReportItem(rule1, Optional.of("value1"), String.format("Triggered by rule: [%s]", rule1.toString())),
                 new MonitorReportItem(rule1, Optional.of("value2"), String.format("Triggered by rule: [%s]", rule1.toString())),

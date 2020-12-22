@@ -2,11 +2,12 @@ package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import eu.clarin.cmdi.vlo.monitor.service.RulesService.Rule;
 import eu.clarin.cmdi.vlo.monitor.VloMonitorConfiguration;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
+import eu.clarin.cmdi.vlo.monitor.model.Rule;
+import static eu.clarin.cmdi.vlo.monitor.model.Rule.RuleScope.FIELD_VALUE_COUNT;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -92,7 +93,7 @@ public class VloMonitorTest {
         previousIndexState.setTotalRecordCount(2000L);
         previousIndexState.setFacetStates(ImmutableList.of(new FacetState("field1", "value1a", 100L)));
 
-        final Rule rule = Rule.create(RulesService.RuleScope.FIELD_VALUE_COUNT, Level.WARN, Optional.of("field1"), "10%");
+        final Rule rule = Rule.create(FIELD_VALUE_COUNT, Level.WARN, Optional.of("field1"), "10%");
         final Collection<MonitorReportItem> result = ImmutableList.of(
                 new MonitorReportItem(rule, Optional.of("value1a"), "message")
         );

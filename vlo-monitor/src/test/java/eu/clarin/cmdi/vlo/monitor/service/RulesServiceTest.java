@@ -2,18 +2,20 @@ package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.monitor.RulesConfig;
-import eu.clarin.cmdi.vlo.monitor.service.RulesService.RuleScope;
+import eu.clarin.cmdi.vlo.monitor.model.Rule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.AbsoluteDecreaseRule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.RatioDecreaseRule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.RuleScope;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.event.Level;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,25 +72,25 @@ public class RulesServiceTest {
     @Test
     public void testGetRules() {
         //Note: rule configuration is loaded from properties (see @TestPropertySource annotation)
-        Collection<RulesService.Rule> fieldRules = rules.getRules();
+        Collection<Rule> fieldRules = rules.getRules();
         assertNotNull(fieldRules);
         assertThat(fieldRules, hasSize(5));
 
         assertThat("Field value count rules", fieldRules, allOf(
                 hasItem(allOf(
-                        isA(RulesService.RatioDecreaseRule.class),
+                        isA(RatioDecreaseRule.class),
                         hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.WARN)),
                         hasProperty("thresholdRatio", equalTo(.25))
                 )),
                 hasItem(allOf(
-                        isA(RulesService.RatioDecreaseRule.class),
+                        isA(RatioDecreaseRule.class),
                         hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.ERROR)),
                         hasProperty("thresholdRatio", equalTo(.50))
                 )),
                 hasItem(allOf(
-                        isA(RulesService.AbsoluteDecreaseRule.class),
+                        isA(AbsoluteDecreaseRule.class),
                         hasProperty("scope", equalTo(RuleScope.FIELD_VALUE_COUNT)),
                         hasProperty("level", equalTo(Level.WARN)),
                         hasProperty("thresholdDiff", equalTo(Long.valueOf(100)))
@@ -96,13 +98,13 @@ public class RulesServiceTest {
 
         assertThat("Total record count rules", fieldRules, allOf(
                 hasItem(allOf(
-                        isA(RulesService.AbsoluteDecreaseRule.class),
+                        isA(AbsoluteDecreaseRule.class),
                         hasProperty("scope", equalTo(RuleScope.TOTAL_RECORD_COUNT)),
                         hasProperty("level", equalTo(Level.WARN)),
                         hasProperty("thresholdDiff", equalTo(Long.valueOf(1000)))
                 )),
                 hasItem(allOf(
-                        isA(RulesService.RatioDecreaseRule.class),
+                        isA(RatioDecreaseRule.class),
                         hasProperty("scope", equalTo(RuleScope.TOTAL_RECORD_COUNT)),
                         hasProperty("level", equalTo(Level.ERROR)),
                         hasProperty("thresholdRatio", equalTo(.25))
@@ -113,20 +115,20 @@ public class RulesServiceTest {
     @Test
     public void testCreateRulesEmpty() {
         // Empty map
-        final Stream<RulesService.Rule> result = rules.createFieldRules(Level.WARN, Optional.empty());
+        final Stream<Rule> result = rules.createFieldRules(Level.WARN, Optional.empty());
         assertEquals(0L, result.count());
     }
 
     @Test
     public void testCreateRulesAbsolute() {
         // Absolute thresholds
-        List<RulesService.Rule> result = rules.createFieldRules(Level.WARN, Optional.of(ImmutableMap.<String, String>builder()
+        List<Rule> result = rules.createFieldRules(Level.WARN, Optional.of(ImmutableMap.<String, String>builder()
                 .put("field1", "1")
                 .put("field2", "2")
                 .put("field3", "3")
                 .build())).collect(Collectors.toList());
         assertEquals(3, result.size());
-        assertThat(result, everyItem(isA(RulesService.AbsoluteDecreaseRule.class)));
+        assertThat(result, everyItem(isA(AbsoluteDecreaseRule.class)));
         assertThat(result, everyItem(hasProperty("level", equalTo(Level.WARN))));
         assertThat(result, allOf(
                 hasItem(hasProperty("field", equalTo("field1"))),
@@ -141,13 +143,13 @@ public class RulesServiceTest {
     @Test
     public void testCreateRulesRelative() {
         // Relative thresholds
-        List<RulesService.Rule> result = rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
+        List<Rule> result = rules.createFieldRules(Level.ERROR, Optional.of(ImmutableMap.<String, String>builder()
                 .put("field1", "1%")
                 .put("field2", "2%")
                 .put("field3", " 3%")
                 .build())).collect(Collectors.toList());
         assertEquals(3, result.size());
-        assertThat(result, everyItem(isA(RulesService.RatioDecreaseRule.class)));
+        assertThat(result, everyItem(isA(RatioDecreaseRule.class)));
         assertThat(result, everyItem(hasProperty("level", equalTo(Level.ERROR))));
         assertThat(result, allOf(
                 hasItem(hasProperty("field", equalTo("field1"))),

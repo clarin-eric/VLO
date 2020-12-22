@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
-import eu.clarin.cmdi.vlo.monitor.service.RulesService.Rule;
+import eu.clarin.cmdi.vlo.monitor.model.Rule;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
@@ -12,6 +12,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.stereotype.Service;
+import static eu.clarin.cmdi.vlo.monitor.model.Rule.RuleScope.FIELD_VALUE_COUNT;
+import static eu.clarin.cmdi.vlo.monitor.model.Rule.RuleScope.TOTAL_RECORD_COUNT;
 
 /**
  *
@@ -69,7 +71,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
         }
 
         private Stream<MonitorReportItem> evaluateRecordCountRule(Rule rule) {
-            assert (rule.getScope() == RulesService.RuleScope.TOTAL_RECORD_COUNT);
+            assert (rule.getScope() == TOTAL_RECORD_COUNT);
             if (rule.evaluate(oldState.getTotalRecordCount(), newState.getTotalRecordCount())) {
                 return Stream.of(new MonitorReportItem(
                         rule,
@@ -81,7 +83,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
         }
 
         private Stream<MonitorReportItem> evaluateFieldRule(Rule rule) {
-            assert (rule.getScope() == RulesService.RuleScope.FIELD_VALUE_COUNT);
+            assert (rule.getScope() == FIELD_VALUE_COUNT);
 
             // Rule applies to a single field; get counts for field from old and new index
             final String field = rule.getField();

@@ -1,11 +1,11 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
 import com.google.common.collect.Maps;
-import eu.clarin.cmdi.vlo.monitor.service.RulesService.RuleScope;
 import eu.clarin.cmdi.vlo.monitor.RulesConfig;
 import eu.clarin.cmdi.vlo.monitor.model.FacetState;
 import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
+import eu.clarin.cmdi.vlo.monitor.model.Rule.RuleScope;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
