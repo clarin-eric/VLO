@@ -8,7 +8,7 @@ import org.slf4j.event.Level;
  * @author Twan Goosen <twan@clarin.eu>
  */
 public abstract class Rule {
-    
+
     protected final RuleScope scope;
     protected final String field;
     protected final Level level;
@@ -56,7 +56,6 @@ public abstract class Rule {
         }
     }
 
-
     public static class RatioDecreaseRule extends Rule {
 
         final double thresholdRatio;
@@ -68,7 +67,7 @@ public abstract class Rule {
 
         @Override
         public boolean evaluate(Long oldCount, Long newCount) {
-            return (oldCount - newCount) >= (thresholdRatio * oldCount);
+            return (oldCount > 0) && ((oldCount - newCount) >= (thresholdRatio * oldCount));
         }
 
         public double getThresholdRatio() {
@@ -92,7 +91,7 @@ public abstract class Rule {
 
         @Override
         public boolean evaluate(Long oldCount, Long newCount) {
-            return (oldCount - newCount) >= thresholdDiff;
+            return (oldCount > 0) && ((oldCount - newCount) >= thresholdDiff);
         }
 
         public long getThresholdDiff() {
@@ -105,5 +104,5 @@ public abstract class Rule {
         }
 
     }
-    
+
 }

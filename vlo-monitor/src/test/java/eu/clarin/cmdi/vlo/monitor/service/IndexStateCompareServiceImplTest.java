@@ -57,7 +57,7 @@ public class IndexStateCompareServiceImplTest {
         rulesConfig = new RulesConfig();
         rulesConfig.setFieldValuesDecreaseError(fieldValuesDecreaseError = Maps.newHashMap());
         rulesConfig.setFieldValuesDecreaseWarning(fieldValuesDecreaseWarning = Maps.newHashMap());
-        
+
         instance = new IndexStateCompareServiceImpl(new RulesService(rulesConfig));
     }
 
@@ -116,6 +116,10 @@ public class IndexStateCompareServiceImplTest {
         oldStateFacetStates.add(new FacetState("field1", "val1b", 1000L));
         newStateFacetStates.add(new FacetState("field1", "val1b", 1005L)); // -5
 
+        // field 1 value 1c
+        oldStateFacetStates.add(new FacetState("field1", "val1c", 0L));
+        newStateFacetStates.add(new FacetState("field1", "val1c", 0L)); // -0
+
         //// field 2 rules
         fieldValuesDecreaseWarning.put("field2", "10%"); // will be triggered for 2 values
         fieldValuesDecreaseError.put("field2", "20%"); // will be triggered for 1 value
@@ -127,6 +131,10 @@ public class IndexStateCompareServiceImplTest {
         // field 2 value 2b
         oldStateFacetStates.add(new FacetState("field2", "val2b", 1000L));
         newStateFacetStates.add(new FacetState("field2", "val2b", 750L)); // -25% -> WARNING & ERROR
+
+        // field 2 value 2c
+        oldStateFacetStates.add(new FacetState("field2", "val2c", 0L));
+        newStateFacetStates.add(new FacetState("field2", "val2c", 0L)); // - 0/0
 
         //// field 3 rules
         fieldValuesDecreaseWarning.put("field3", "50%"); // will not be triggered
@@ -191,6 +199,10 @@ public class IndexStateCompareServiceImplTest {
         oldStateFacetStates.add(new FacetState("field1", "val1b", 1000L));
         // -------------------------------------------------------------- // value disappeared -> WARNING
 
+        // field 1 value 1c
+        oldStateFacetStates.add(new FacetState("field1", "val1c", 0L));
+        newStateFacetStates.add(new FacetState("field1", "val1c", 0L)); // value was at 0 and remains at 0
+
         // field 2 rule
         fieldValuesDecreaseError.put("field2", "1000");
 
@@ -212,6 +224,10 @@ public class IndexStateCompareServiceImplTest {
         // field 3 value 3b
         oldStateFacetStates.add(new FacetState("field3", "val3b", 1000L));
         // -------------------------------------------------------------- // value disappeared -> ERROR        
+
+        // field 3 value 3c
+        oldStateFacetStates.add(new FacetState("field3", "val3c", 0L));
+        newStateFacetStates.add(new FacetState("field3", "val3c", 0L)); // value was at 0 and remains at 0
 
         final Collection<MonitorReportItem> result = instance.compare(oldState, newState);
 
