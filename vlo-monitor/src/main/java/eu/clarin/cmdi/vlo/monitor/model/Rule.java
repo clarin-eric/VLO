@@ -47,7 +47,7 @@ public abstract class Rule {
     public static Rule create(RuleScope scope, Level level, Optional<String> field, String definition) {
         if (definition.endsWith("%")) {
             //percentage indicates a thresholdRatio based rule
-            final double decreaseRatioThreshold = Double.parseDouble(definition.substring(0, definition.indexOf('%')).trim());
+            final int decreaseRatioThreshold = Integer.parseInt(definition.substring(0, definition.indexOf('%')).trim());
             return new RatioDecreaseRule(scope, field.orElse(null), level, decreaseRatioThreshold);
         } else {
             //assume it's a number that can be parsed as a Long - interpret as an absolute decrease rule
@@ -60,9 +60,16 @@ public abstract class Rule {
 
         final double thresholdRatio;
 
-        public RatioDecreaseRule(RuleScope scope, String field, Level level, double thresholdRatio) {
+        /**
+         * 
+         * @param scope
+         * @param field
+         * @param level
+         * @param thresholdPercent Threshold as percentage (e.g. 50 for 50% reduction threshold)
+         */
+        public RatioDecreaseRule(RuleScope scope, String field, Level level, int thresholdPercent) {
             super(scope, field, level);
-            this.thresholdRatio = .01 * thresholdRatio;
+            this.thresholdRatio = .01 * Double.valueOf(thresholdPercent);
         }
 
         @Override
@@ -76,7 +83,7 @@ public abstract class Rule {
 
         @Override
         public String toString() {
-            return String.format("Ratio decrease rule: applies if decrease is %f%% or more", 100 * thresholdRatio);
+            return String.format("Ratio decrease rule: applies if decrease is %.1f%% or more", 100 * thresholdRatio);
         }
     }
 

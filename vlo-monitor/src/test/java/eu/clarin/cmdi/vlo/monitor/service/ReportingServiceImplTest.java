@@ -36,7 +36,7 @@ public class ReportingServiceImplTest {
         logger.addAppender(logAppender);
 
         final Rule rule1 = new AbsoluteDecreaseRule(RuleScope.FIELD_VALUE_COUNT, "field1", Level.WARN, 10L);
-        final Rule rule2 = new RatioDecreaseRule(RuleScope.TOTAL_RECORD_COUNT, null, Level.ERROR, .5);
+        final Rule rule2 = new RatioDecreaseRule(RuleScope.TOTAL_RECORD_COUNT, null, Level.ERROR, 50);
         final Collection<MonitorReportItem> report = ImmutableList.of(
                 new MonitorReportItem(rule1, Optional.of("value1"), String.format("Triggered by rule: [%s]", rule1.toString())),
                 new MonitorReportItem(rule1, Optional.of("value2"), String.format("Triggered by rule: [%s]", rule1.toString())),
