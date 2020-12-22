@@ -72,11 +72,15 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
 
         private Stream<MonitorReportItem> evaluateRecordCountRule(Rule rule) {
             assert (rule.getScope() == TOTAL_RECORD_COUNT);
-            if (rule.evaluate(oldState.getTotalRecordCount(), newState.getTotalRecordCount())) {
+
+            final Long oldTotalRecordCount = oldState.getTotalRecordCount();
+            final Long newTotalRecordCount = newState.getTotalRecordCount();
+
+            if (rule.evaluate(oldTotalRecordCount, newTotalRecordCount)) {
                 return Stream.of(new MonitorReportItem(
                         rule,
                         Optional.empty(),
-                        String.format("Total record count decrease above threshold. Triggered by rule: [%s]", rule.toString())));
+                        String.format("{%d -> %d} Total record count decrease above threshold. Triggered by rule: [%s]", oldTotalRecordCount, newTotalRecordCount, rule.toString())));
             } else {
                 return Stream.empty();
             }
@@ -111,7 +115,7 @@ public class IndexStateCompareServiceImpl implements IndexStateCompareService {
                                     = new MonitorReportItem(
                                             rule,
                                             Optional.of(fieldValue),
-                                            String.format("Triggered by rule: [%s]", rule.toString()));
+                                            String.format("{%d -> %d} Triggered by rule: [%s]", oldCount, newCount, rule.toString()));
                             return Stream.of(reportItem);
                         } else {
                             return Stream.empty();

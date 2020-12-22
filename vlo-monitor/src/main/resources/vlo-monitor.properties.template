@@ -8,8 +8,8 @@ logging.file.max-size=10MB
 
 vlo.monitor.pruneAfterDays=100
 
-vlo.monitor.rules.fieldValuesDecreaseWarning.collection=25%
-vlo.monitor.rules.fieldValuesDecreaseWarning._oaiEndpointURI=100
-vlo.monitor.rules.fieldValuesDecreaseError.collection=90%
-vlo.monitor.rules.totalRecordsDecreaseWarning=10%
-vlo.monitor.rules.totalRecordsDecreaseError=25%
+vlo.monitor.rules.fieldValuesDecreaseWarning.collection=75%
+vlo.monitor.rules.fieldValuesDecreaseWarning._oaiEndpointURI=50%
+vlo.monitor.rules.fieldValuesDecreaseWarning._oaiEndpointURI=100%
+vlo.monitor.rules.totalRecordsDecreaseWarning=25%
+vlo.monitor.rules.totalRecordsDecreaseError=50%
