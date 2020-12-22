@@ -165,5 +165,15 @@
             <fileMode>0755</fileMode>
             <outputDirectory>bin/statistics</outputDirectory>
         </fileSet>
+        <!-- VLO monitor -->
+        <fileSet>
+            <directory>${project.parent.basedir}/vlo-monitor/target/vlo-monitor-dist/vlo-monitor-dist</directory>
+            <includes>
+                <include>*.sh</include>
+                <include>*.jar</include>
+            </includes>
+            <fileMode>0755</fileMode>
+            <outputDirectory>bin/monitor</outputDirectory>
+        </fileSet>
     </fileSets>
 </assembly>

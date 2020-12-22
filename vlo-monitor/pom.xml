@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>eu.clarin.cmdi.vlo</groupId>
-    <artifactId>monitor</artifactId>
+    <artifactId>vlo-monitor</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>vlo-monitor</name>
-    <description>VLO monitor</description>
+    <name>VLO change monitor</name>
+    <description>Command line utility that carries out rule based checks for changes in the VLO's index</description>
 
     <properties>
         <java.version>11</java.version>
@@ -67,6 +67,27 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- Distribution -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>build-distribution</id>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <descriptors>
+                                <descriptor>src/assembly/dist.xml</descriptor>
+                            </descriptors>
+                            <finalName>vlo-monitor-dist</finalName>
+                        </configuration>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
