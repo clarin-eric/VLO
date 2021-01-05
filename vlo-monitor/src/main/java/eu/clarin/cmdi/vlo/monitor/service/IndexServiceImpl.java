@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
-import util.PreemptiveAuthInterceptor;
+import eu.clarin.cmdi.vlo.monitor.util.PreemptiveAuthInterceptor;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;

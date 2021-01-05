@@ -1,4 +1,4 @@
-package util;
+package eu.clarin.cmdi.vlo.monitor.util;
 
 import java.io.IOException;
 import org.apache.http.HttpException;
