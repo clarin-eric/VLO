@@ -108,9 +108,9 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
                 }
         );
         
-        final TextField<Integer> lowerInput = new TextField<>("lower", new UnwrappedOptionalModel<Integer>(lowerModel));
+        final TextField<Integer> lowerInput = new TextField<>("lower", new UnwrappedOptionalModel<>(lowerModel));
         lowerInput.setType(Integer.class);
-        final TextField<Integer> upperInput = new TextField<>("upper", new UnwrappedOptionalModel<Integer>(upperModel));
+        final TextField<Integer> upperInput = new TextField<>("upper", new UnwrappedOptionalModel<>(upperModel));
         upperInput.setType(Integer.class);
         
         slider = new TemporalCoverageAjaxRangeSlider("slider", rangeModel, lowerInput, upperInput, feedback);
@@ -120,13 +120,17 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         form.add(new Behavior() {
             @Override
             public void onConfigure(Component component) {
+                final Optional<Integer> start = temporalCoverageRangeModel.getObject().getStart();
+                final Optional<Integer> end = temporalCoverageRangeModel.getObject().getEnd();
+                
                 slider
                         .setDisabled(!filterEnabledModel.getObject())
-                        .setMin(temporalCoverageRangeModel.getObject().getStart().orElse(null))
-                        .setMax(temporalCoverageRangeModel.getObject().getEnd().orElse(null))
-                        .setRangeValidator(new RangeValidator<>(temporalCoverageRangeModel.getObject().getStart().orElse(-10000), temporalCoverageRangeModel.getObject().getEnd().orElse(10000)));
+                        .setMin(start.orElse(null))
+                        .setMax(end.orElse(null))
+                        .setRangeValidator(new RangeValidator<>(start.orElse(-10000), end.orElse(10000)));
                 lowerInput.setEnabled(filterEnabledModel.getObject());
                 upperInput.setEnabled(filterEnabledModel.getObject());
+                enabledToggle.setEnabled(!start.isEmpty() || !end.isEmpty());
             }
             
         });
