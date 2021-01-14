@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.pojo;
 
 import java.io.Serializable;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  *
@@ -24,21 +26,28 @@ import java.io.Serializable;
  */
 public class TemporalCoverageRange implements Serializable {
 
-    private final int start;
-    private final int end;
+    private final Optional<Integer> start;
+    private final Optional<Integer> end;
 
-
-    public TemporalCoverageRange(int start, int end) {
+    public TemporalCoverageRange(Optional<Integer> start, Optional<Integer> end) {
         this.start = start;
         this.end = end;
     }
 
-    public int getStart() {
+    public Optional<Integer> getStart() {
         return start;
     }
 
-    public int getEnd() {
+    public Optional<Integer> getEnd() {
         return end;
+    }
+
+    @Override
+    public String toString() {
+
+        return String.format("{start: %s, end: %s}",
+                start.map(Objects::toString).orElse("-"),
+                end.map(Objects::toString).orElse("-"));
     }
 
 }

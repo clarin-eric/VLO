@@ -51,12 +51,10 @@ public class TemporalCoverageRangeModel extends LoadableDetachableModel<Temporal
 
         final QueryFacetsSelection unfilteredSelection = getUnfilteredSelection(selectionModel.getObject());
         final List<SolrDocument> startDocs = documentService.getSortedDocuments(unfilteredSelection, TEMPORAL_COVERAGE_START, "asc", 0, 1);
-        final int startYear = getBoundaryYearFromSelection(calendar, startDocs, TEMPORAL_COVERAGE_START)
-                .orElse(Integer.MIN_VALUE);
+        final Optional<Integer> startYear = getBoundaryYearFromSelection(calendar, startDocs, TEMPORAL_COVERAGE_START);
 
         final List<SolrDocument> endDocs = documentService.getSortedDocuments(unfilteredSelection, TEMPORAL_COVERAGE_END, "desc", 0, 1);
-        final int endYear = getBoundaryYearFromSelection(calendar, endDocs, TEMPORAL_COVERAGE_END)
-                .orElse(Integer.MAX_VALUE);
+        final Optional<Integer> endYear = getBoundaryYearFromSelection(calendar, endDocs, TEMPORAL_COVERAGE_END);
 
         return new TemporalCoverageRange(startYear, endYear);
     }

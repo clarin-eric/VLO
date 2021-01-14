@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.search;
 
+import eu.clarin.cmdi.vlo.wicket.model.UnwrappedOptionalModel;
 import com.googlecode.wicket.jquery.ui.form.slider.AjaxRangeSlider;
 import com.googlecode.wicket.jquery.ui.form.slider.RangeValue;
 import com.googlecode.wicket.jquery.ui.panel.JQueryFeedbackPanel;
@@ -42,6 +43,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -59,27 +61,27 @@ import org.apache.wicket.model.Model;
  * @author Twan Goosen
  */
 public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
-
+    
     @SpringBean
     private FieldNameService fieldNameService;
-
+    
     private final String TEMPORAL_COVERAGE = fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE);
     private final IModel<FacetSelectionType> selectionTypeModeModel;
     private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
     private final IModel<TemporalCoverageRange> temporalCoverageRangeModel;
     private final TemporalCoverageAjaxRangeSlider slider;
-
+    
     private final IModel<Boolean> filterEnabledModel;
     private final AjaxCheckBox enabledToggle;
-
+    
     private final static Pattern RANGE_PATTERN = Pattern.compile("\\[(\\d+) TO (\\d+)\\]");
     private final static int RANGE_PATTERN_LOWER_GROUP = 1;
     private final static int RANGE_PATTERN_UPPER_GROUP = 2;
-
-    private IModel<Integer> upperModel;
-    private IModel<Integer> lowerModel;
+    
+    private IModel<Optional<Integer>> upperModel;
+    private IModel<Optional<Integer>> lowerModel;
     private final IModel<RangeValue> rangeModel;
-
+    
     public TemporalCoverageFacetPanel(String id,
             final IModel<QueryFacetsSelection> selectionModel,
             final IModel<FacetSelectionType> selectionTypeModeModel,
@@ -88,31 +90,31 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         this.temporalCoverageRangeModel = temporalCoverageRangeModel;
         this.selectionTypeModeModel = selectionTypeModeModel;
         this.filterEnabledModel = new Model(false);
-
+        
         final FeedbackPanel feedback = new JQueryFeedbackPanel("feedbackTemporalCoverage");
-
-        rangeModel = () -> new RangeValue(lowerModel.getObject(), upperModel.getObject());
+        
+        rangeModel = () -> new RangeValue(lowerModel.getObject().orElse(null), upperModel.getObject().orElse(null));
         lowerModel = LambdaModel.of(
                 () -> getBoundFromSelection(selectionModel, RANGE_PATTERN_LOWER_GROUP, () -> temporalCoverageRangeModel.getObject().getStart()),
                 (lower) -> {
                     applySelection(lower, upperModel.getObject());
                 }
         );
-
+        
         upperModel = LambdaModel.of(
                 () -> getBoundFromSelection(selectionModel, RANGE_PATTERN_UPPER_GROUP, () -> temporalCoverageRangeModel.getObject().getEnd()),
                 (upper) -> {
                     applySelection(lowerModel.getObject(), upper);
                 }
         );
-
-        final TextField<Integer> lowerInput = new TextField<>("lower", lowerModel);
+        
+        final TextField<Integer> lowerInput = new TextField<>("lower", new UnwrappedOptionalModel<Integer>(lowerModel));
         lowerInput.setType(Integer.class);
-        final TextField<Integer> upperInput = new TextField<>("upper", upperModel);
+        final TextField<Integer> upperInput = new TextField<>("upper", new UnwrappedOptionalModel<Integer>(upperModel));
         upperInput.setType(Integer.class);
-
+        
         slider = new TemporalCoverageAjaxRangeSlider("slider", rangeModel, lowerInput, upperInput, feedback);
-
+        
         final Form<RangeValue> form = new Form<>("temporalCoverage", rangeModel);
         form.add(feedback.setOutputMarkupId(true));
         form.add(new Behavior() {
@@ -120,19 +122,19 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
             public void onConfigure(Component component) {
                 slider
                         .setDisabled(!filterEnabledModel.getObject())
-                        .setMin(temporalCoverageRangeModel.getObject().getStart())
-                        .setMax(temporalCoverageRangeModel.getObject().getEnd())
-                        .setRangeValidator(new RangeValidator<>(temporalCoverageRangeModel.getObject().getStart(), temporalCoverageRangeModel.getObject().getEnd()));
+                        .setMin(temporalCoverageRangeModel.getObject().getStart().orElse(null))
+                        .setMax(temporalCoverageRangeModel.getObject().getEnd().orElse(null))
+                        .setRangeValidator(new RangeValidator<>(temporalCoverageRangeModel.getObject().getStart().orElse(-10000), temporalCoverageRangeModel.getObject().getEnd().orElse(10000)));
                 lowerInput.setEnabled(filterEnabledModel.getObject());
                 upperInput.setEnabled(filterEnabledModel.getObject());
             }
-
+            
         });
-
+        
         form.add(lowerInput);
         form.add(upperInput);
         form.add(slider);
-
+        
         enabledToggle = new AjaxCheckBox("filterEnabled", filterEnabledModel) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -143,102 +145,106 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
                 }
             }
         };
-
+        
         form.add(enabledToggle);
-
+        
         form.add(indicatorAppender);
         add(form);
     }
-
-    private void applySelection(int lower, int upper) {
+    
+    private void applySelection(Optional<Integer> lower, Optional<Integer> upper) {
         if (filterEnabledModel.getObject()) {
-            final String sel = "[" + lower + " TO " + upper + "]";
+            final String sel = "[" + lower.map(Objects::toString).orElse("*") + " TO " + upper.map(Objects::toString).orElse("*") + "]";
             getModelObject().addSingleFacetValue(TEMPORAL_COVERAGE, selectionTypeModeModel.getObject(), Collections.singleton(sel));
         } else {
             getModelObject().removeFacetSelection(TEMPORAL_COVERAGE);
         }
     }
-
-    private Integer getBoundFromSelection(final IModel<QueryFacetsSelection> selectionModel, final int rangeMatchGroup, Supplier<Integer> defaultProvider) {
+    
+    private Optional<Integer> getBoundFromSelection(final IModel<QueryFacetsSelection> selectionModel, final int rangeMatchGroup, Supplier<Optional<Integer>> defaultProvider) {
         Optional<String> coverageSelection = Optional.ofNullable(selectionModel.getObject())
                 .flatMap(selection -> Optional.ofNullable(selection.getSelectionValues(TEMPORAL_COVERAGE)))
                 .map(FacetSelection::getValues)
                 .flatMap(values -> values.size() == 1 ? Optional.of(values.iterator().next()) : Optional.empty());
-
-        return coverageSelection.flatMap(
-                s -> {
-                    final Matcher matcher = RANGE_PATTERN.matcher(s);
-                    if (matcher.matches()) {
-                        try {
-                            return Optional
-                                    .ofNullable(matcher.group(rangeMatchGroup))
-                                    .map(Integer::parseInt);
-                        } catch (NumberFormatException ex) {
-                            //TODO log
+        
+        if (coverageSelection.isEmpty()) {
+            return defaultProvider.get();
+        } else {
+            return coverageSelection.flatMap(
+                    s -> {
+                        final Matcher matcher = RANGE_PATTERN.matcher(s);
+                        if (matcher.matches()) {
+                            try {
+                                return Optional
+                                        .ofNullable(matcher.group(rangeMatchGroup))
+                                        .map(Integer::parseInt);
+                            } catch (NumberFormatException ex) {
+                                //TODO log
+                            }
                         }
+                        return defaultProvider.get();
                     }
-                    return Optional.empty();
-                }
-        ).orElse(defaultProvider.get());
+            );
+        }
     }
-
+    
     @Override
     protected void onConfigure() {
         super.onConfigure();
-
+        
         if (getModelObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {
             //if there any selection, make initially expanded
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
     }
-
+    
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
     }
-
+    
     @Override
     protected Label createTitleLabel(String id) {
         return new Label(id, new StringResourceModel("temporalCoverageTitle"));
     }
-
+    
     @Override
     public void detachModels() {
         super.detachModels();
-
+        
         if (this.temporalCoverageRangeModel != null) {
             this.temporalCoverageRangeModel.detach();
         }
-
+        
         if (selectionTypeModeModel != null) {
             this.selectionTypeModeModel.detach();
         }
     }
-
+    
     @Override
     public String getAjaxIndicatorMarkupId() {
         return indicatorAppender.getMarkupId();
     }
-
+    
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
-
+    
     private class TemporalCoverageAjaxRangeSlider extends AjaxRangeSlider {
-
+        
         private final FeedbackPanel feedback;
-
+        
         public TemporalCoverageAjaxRangeSlider(String id, IModel<RangeValue> model, TextField<Integer> lower, TextField<Integer> upper, FeedbackPanel feedback) {
             super(id, model, lower, upper);
             this.feedback = feedback;
         }
         private static final long serialVersionUID = 1L;
-
+        
         @Override
         protected void onError(AjaxRequestTarget target) {
             if (target != null) {
                 target.add(feedback); // do never add 'this' or the form here!
             }
         }
-
+        
         @Override
         public void onValueChanged(IPartialPageRequestHandler handler) {
             if (handler instanceof AjaxRequestTarget) {
@@ -248,11 +254,11 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
                 selectionChanged(Optional.empty());
             }
         }
-
+        
         public TemporalCoverageAjaxRangeSlider setDisabled(boolean disabled) {
             options.set("disabled", disabled);
             return this;
         }
     }
-
+    
 }
