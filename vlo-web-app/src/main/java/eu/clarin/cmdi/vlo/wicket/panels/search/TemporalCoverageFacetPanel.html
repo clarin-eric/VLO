@@ -30,19 +30,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <div class="col-sm-12">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" id="enabletemporalfilter">Only show records with a temporal coverage within the following range:</input>
+                                    <input type="checkbox" wicket:id="filterEnabled" id="enabletemporalfilter">Only show records with a temporal coverage within the following range:</input>
                                 </label>
                             </div>
                         </div>
                     </div>
 
 
-                    <div class="row">
+                    <div class="row" id="temporalCoverageBoundInputs">
                         <div class="col-md-12">
-                            <div class="form-group">
-                                <input wicket:id="lower" type="text" size="4" />
+                            <div class="form-inline">
+                                <input wicket:id="lower" class="form-control" type="text" size="4" />
                                 &nbsp; &nbsp; - &nbsp; &nbsp; 
-                                <input wicket:id="upper" type="text" size="4" />
+                                <input wicket:id="upper" class="form-control" type="text" size="4" />
                             </div>
                         </div>
                     </div>

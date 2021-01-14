@@ -147,6 +147,10 @@ public class QueryFacetsSelection implements Serializable {
         selectValues(facet, curSel);
     }
 
+    public void removeFacetSelection(String facet) {
+        selection.remove(facet);
+    }
+
     @Override
     public String toString() {
         return String.format("[QueryFacetSelection queryString = %s, selection = %s]", queryString, selection);
