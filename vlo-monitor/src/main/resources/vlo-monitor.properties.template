@@ -5,6 +5,7 @@ vlo.monitor.config.url=file:/opt/vlo/config/VloConfig.xml
 logging.level.root=warn
 logging.file.name=vlo-monitoring.log
 logging.file.max-size=10MB
+logging.file.max-history=5
 
 vlo.monitor.pruneAfterDays=100
 
