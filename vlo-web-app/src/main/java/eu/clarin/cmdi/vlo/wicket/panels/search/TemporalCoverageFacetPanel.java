@@ -224,19 +224,19 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         super.onConfigure();
 
         if (getModelObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {
-            //if there any selection, make initially expanded
+            //if there is any temporal coverage selection, make initially expanded
             getExpansionModel().setObject(ExpansionState.EXPANDED);
         }
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
+    protected Label createTitleLabel(String id) {
+        return new Label(id, new StringResourceModel("temporalCoverageTitle"));
     }
 
     @Override
-    protected Label createTitleLabel(String id) {
-        return new Label(id, new StringResourceModel("temporalCoverageTitle"));
+    public String getAjaxIndicatorMarkupId() {
+        return indicatorAppender.getMarkupId();
     }
 
     @Override
@@ -250,11 +250,10 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         if (selectionTypeModeModel != null) {
             this.selectionTypeModeModel.detach();
         }
-    }
-
-    @Override
-    public String getAjaxIndicatorMarkupId() {
-        return indicatorAppender.getMarkupId();
+        
+        upperModel.detach();
+        lowerModel.detach();
+        rangeModel.detach();
     }
 
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
