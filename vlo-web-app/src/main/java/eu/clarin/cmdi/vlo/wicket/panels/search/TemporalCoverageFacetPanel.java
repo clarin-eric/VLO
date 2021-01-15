@@ -52,7 +52,10 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.model.LambdaModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Temporal coverage range slider panel
@@ -61,6 +64,8 @@ import org.apache.wicket.model.Model;
  * @author Twan Goosen
  */
 public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFacetsSelection> implements IAjaxIndicatorAware {
+    
+    private final static Logger logger = LoggerFactory.getLogger(TemporalCoverageFacetPanel.class);
     
     @SpringBean
     private FieldNameService fieldNameService;
@@ -93,7 +98,6 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         
         final FeedbackPanel feedback = new JQueryFeedbackPanel("feedbackTemporalCoverage");
         
-        rangeModel = () -> new RangeValue(lowerModel.getObject().orElse(null), upperModel.getObject().orElse(null));
         lowerModel = LambdaModel.of(
                 () -> getBoundFromSelection(selectionModel, RANGE_PATTERN_LOWER_GROUP, () -> temporalCoverageRangeModel.getObject().getStart()),
                 (lower) -> {
@@ -107,6 +111,8 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
                     applySelection(lowerModel.getObject(), upper);
                 }
         );
+        
+        rangeModel = new RangeValueModel(lowerModel, upperModel);
         
         final TextField<Integer> lowerInput = new TextField<>("lower", new UnwrappedOptionalModel<>(lowerModel));
         lowerInput.setType(Integer.class);
@@ -183,7 +189,7 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
                                         .ofNullable(matcher.group(rangeMatchGroup))
                                         .map(Integer::parseInt);
                             } catch (NumberFormatException ex) {
-                                //TODO log
+                                logger.debug("User entered invalid value for date range", ex);
                             }
                         }
                         return defaultProvider.get();
@@ -231,6 +237,32 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
     }
     
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);
+    
+    private static class RangeValueModel extends LoadableDetachableModel<RangeValue> {
+        
+        private final IModel<Optional<Integer>> lowerModel;
+        private final IModel<Optional<Integer>> upperModel;
+        
+        public RangeValueModel(IModel<Optional<Integer>> lowerModel, IModel<Optional<Integer>> upperModel) {
+            this.lowerModel = lowerModel;
+            this.upperModel = upperModel;
+        }
+        
+        @Override
+        protected RangeValue load() {
+            return new RangeValue(
+                    lowerModel.orElse(Optional.empty()).getObject().orElse(null),
+                    upperModel.orElse(Optional.empty()).getObject().orElse(null));
+        }
+        
+        @Override
+        public void setObject(RangeValue object) {
+            super.setObject(object);
+            lowerModel.setObject(Optional.of(object.getLower()));
+            upperModel.setObject(Optional.of(object.getUpper()));
+        }
+        
+    }
     
     private class TemporalCoverageAjaxRangeSlider extends AjaxRangeSlider {
         
