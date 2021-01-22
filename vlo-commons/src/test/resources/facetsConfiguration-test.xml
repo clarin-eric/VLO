@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facetsConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <facet name="multilingual">
+        <allowMultipleValues>false</allowMultipleValues>
+        <multilingual>true</multilingual>
+        <description>The name of the resource or tool</description>
+        <definition>The full public name of the resource or tool</definition>
+        <conditions>
+            <condition>
+                <facetCondition>
+                    <facetName>language</facetName>
+                    <selection type="anyValue"/>
+                </facetCondition>
+            </condition>
+            <condition>
+                <facetCondition>
+                    <facetName>test</facetName>
+                    <selection type="anyOf">
+                        <value>test1</value>
+                        <value>test2</value>
+                    </selection>
+                </facetCondition>
+            </condition>
+        </conditions>
+        <conditions>
+            <condition>
+                <facetCondition>
+                    <facetName>language</facetName>
+                    <selection type="anyValue"/>
+                </facetCondition>
+            </condition>
+        </conditions>
+    </facet>
+    <facet name="test">
+        <allowMultipleValues>false</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <description>Test description</description>
+        <definition>Test definition</definition>
+    </facet>
+</facetsConfiguration>

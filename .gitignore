@@ -22,6 +22,8 @@ nbproject*
 /vlo-statistics/target/
 /vlo-solr/solr-home/security.json
 
+**/src/generated
+
 /vlo-sitemap/.settings
 /vlo-statistics/.settings
 /vlo-vocabularies/.settings
