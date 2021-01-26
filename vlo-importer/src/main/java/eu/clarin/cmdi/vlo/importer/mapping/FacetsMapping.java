@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
+import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -8,6 +9,8 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,16 +18,29 @@ import org.slf4j.LoggerFactory;
 /**
  * A list of facets. One FacetConfiguration for each facet.
  */
-public class FacetMapping implements Serializable, Cloneable {
+public class FacetsMapping implements Serializable, Cloneable {
 
-    private final static Logger LOG = LoggerFactory.getLogger(FacetMapping.class);
+    private final static Logger LOG = LoggerFactory.getLogger(FacetsMapping.class);
     /**
      *
      */
     private static final long serialVersionUID = 1L;
-    private LinkedHashMap<String, FacetConfiguration> facetsMap = new LinkedHashMap<String, FacetConfiguration>();
+    private final Map<String, FacetDefinition> facetsMap = new LinkedHashMap<>();
+    private final Map<String, Facet> facetsConfigurationMap;
 
-    public Collection<FacetConfiguration> getFacetConfigurations() {
+    public FacetsMapping(Map<String, Facet> facetsConfigurationMap) {
+        if (facetsConfigurationMap instanceof Serializable) {
+            this.facetsConfigurationMap = facetsConfigurationMap;
+        } else {
+            throw new IllegalArgumentException("facets configuration map must be Serializable");
+        }
+    }
+
+    public Map<String, Facet> getFacetsConfigurations() {
+        return facetsConfigurationMap;
+    }
+
+    public Collection<FacetDefinition> getFacetDefinitions() {
         return this.facetsMap.values();
     }
 
@@ -32,8 +48,12 @@ public class FacetMapping implements Serializable, Cloneable {
         return this.facetsMap.keySet();
     }
 
-    public FacetConfiguration getFacetConfiguration(String facetName) {
-        return this.facetsMap.computeIfAbsent(facetName, fn -> new FacetConfiguration(this, fn));
+    public Optional<Facet> getFacetConfiguration(String facetName) {
+        return Optional.ofNullable(facetsConfigurationMap.get(facetName));
+    }
+
+    public FacetDefinition getFacetDefinition(String facetName) {
+        return this.facetsMap.computeIfAbsent(facetName, fn -> new FacetDefinition(this, fn));
     }
 
     @Override

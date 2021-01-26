@@ -30,11 +30,11 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 public class VloConfig {
 
     public static final String LANGUAGE_LINK_TEMPLATE_LANGUAGE_CODE_PLACEHOLDER = "{}";
-    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/mapping/facetConcepts.xml"; // resource included
-                                                                                                    // into vlo-commons
-                                                                                                    // during build from
-                                                                                                    // vlo-mapping
-                                                                                                    // project
+    
+    // resources included into vlo-commons during build from vlo-mapping project
+    
+    public static final String DEFAULT_FACET_CONCEPTS_RESOURCE_FILE = "/vlo-mapping/mapping/facetConcepts.xml"; 
+    public static final String DEFAULT_FACETS_CONFIG_RESOURCE_FILE = "/vlo-mapping/config/facetsConfiguration.xml"; 
 
     /*
      * VLO application parameter members<br><br>
@@ -88,6 +88,8 @@ public class VloConfig {
     // mapping
     // (required = false)
     private String facetConceptsFile = "";
+    
+    private String facetsConfigFile = "";
 
     private boolean printMapping = false;
 
@@ -751,6 +753,14 @@ public class VloConfig {
      */
     public void setFacetConceptsFile(String param) {
         facetConceptsFile = param;
+    }
+
+    public String getFacetsConfigFile() {
+        return facetsConfigFile;
+    }
+
+    public void setFacetsConfigFile(String facetsConfigFile) {
+        this.facetsConfigFile = facetsConfigFile;
     }
 
     /**
@@ -1491,9 +1501,7 @@ public class VloConfig {
 
     public void setLinkCheckerDbPassword(String linkCheckerDbPassword) {
         this.linkCheckerDbPassword = linkCheckerDbPassword;
-    }
-
-    
+    }    
 
     public String getCentreRegistryCentresListJsonUrl() {
         return centreRegistryCentresListJsonUrl;

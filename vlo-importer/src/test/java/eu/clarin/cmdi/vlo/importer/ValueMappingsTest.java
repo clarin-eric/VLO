@@ -3,6 +3,8 @@ package eu.clarin.cmdi.vlo.importer;
 import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import static eu.clarin.cmdi.vlo.importer.ImporterTestcase.config;
+import static eu.clarin.cmdi.vlo.importer.ImporterTestcase.getTestFacetsConfigFilePath;
 import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
@@ -360,6 +362,7 @@ public class ValueMappingsTest extends ImporterTestcase {
 
                 // make sure the mapping file for testing is used
                 config.setFacetConceptsFile(getTestFacetConceptFilePath());
+                config.setFacetsConfigFile(getTestFacetsConfigFilePath());
 
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();
@@ -411,6 +414,7 @@ public class ValueMappingsTest extends ImporterTestcase {
         dataRoot.setPrefix("http://example.com");
         config.setDataRoots(Collections.singletonList(dataRoot));
         config.setFacetConceptsFile(ImporterTestcase.getTestFacetConceptFilePath());
+        config.setFacetsConfigFile(ImporterTestcase.getTestFacetsConfigFilePath());
 
     }
 

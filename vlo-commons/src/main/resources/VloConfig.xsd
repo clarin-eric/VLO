@@ -33,6 +33,7 @@
                 <xs:element name="useHandleResolver" type="xs:string" />
                 <xs:element name="printMapping" type="xs:string" />
                 <xs:element name="facetConceptsFile" type="xs:string" />
+                <xs:element name="facetsConfigFile" type="xs:string" />
                 <xs:element name="profileSchemaUrl" type="xs:string" />
                 <xs:element name="componentRegistryRESTURL" type="xs:string" />
                 <xs:element name="handleServerUrl" type="xs:string" />

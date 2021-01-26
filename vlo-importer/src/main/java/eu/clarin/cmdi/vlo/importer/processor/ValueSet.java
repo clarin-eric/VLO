@@ -2,20 +2,20 @@ package eu.clarin.cmdi.vlo.importer.processor;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
 public class ValueSet {
 
     private int vtdIndex;
-    private FacetConfiguration originFacetConfig;
+    private FacetDefinition originFacetConfig;
     private TargetFacet targetFacet;
     private Pair<String, String> valueLanguagePair;
     private boolean isDerived;
     private boolean isResultOfValueMapping;
 
-    public ValueSet(int vtdIndex, FacetConfiguration originFacetConfig, TargetFacet targetFacet, Pair<String, String> valueLanguagePair, boolean isDerived, boolean isResultOfValueMapping) {
+    public ValueSet(int vtdIndex, FacetDefinition originFacetConfig, TargetFacet targetFacet, Pair<String, String> valueLanguagePair, boolean isDerived, boolean isResultOfValueMapping) {
         this.vtdIndex = vtdIndex;
         this.originFacetConfig = originFacetConfig;
         this.targetFacet = targetFacet;
@@ -32,11 +32,11 @@ public class ValueSet {
         this.vtdIndex = vtdIndex;
     }
 
-    public FacetConfiguration getOriginFacetConfig() {
+    public FacetDefinition getOriginFacetConfig() {
         return originFacetConfig;
     }
 
-    public void setOriginFacetConfig(FacetConfiguration originFacetConfig) {
+    public void setOriginFacetConfig(FacetDefinition originFacetConfig) {
         this.originFacetConfig = originFacetConfig;
     }
 

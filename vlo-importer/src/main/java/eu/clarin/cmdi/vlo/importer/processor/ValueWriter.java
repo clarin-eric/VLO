@@ -21,8 +21,8 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import static eu.clarin.cmdi.vlo.importer.processor.LanguageDefaults.DEFAULT_LANGUAGE;
 import static eu.clarin.cmdi.vlo.importer.processor.LanguageDefaults.ENGLISH_LANGUAGE;
@@ -78,7 +78,7 @@ public class ValueWriter {
         for (Map.Entry<String, List<ValueSet>> entry : facetValuesMap.entrySet()) {
 
             for (ValueSet valueSet : entry.getValue()) {
-                final FacetConfiguration targetFacetConfig = valueSet.getTargetFacet().getFacetConfiguration();
+                final FacetDefinition targetFacetConfig = valueSet.getTargetFacet().getFacetConfiguration();
                 insertFacetValue(cmdiData, targetFacetConfig, valueSet);
                 if (!(targetFacetConfig.getAllowMultipleValues() || targetFacetConfig.getMultilingual())) {
                     break;
@@ -94,9 +94,9 @@ public class ValueWriter {
      * @param facetMapping
      * @param cmdiData current CMDI data object
      */
-    public void writeDefaultValues(CMDIData cmdiData, FacetMapping facetMapping) {
-        Collection<FacetConfiguration> facetList = facetMapping.getFacetConfigurations();
-        for (FacetConfiguration facetConfig : facetList) {
+    public void writeDefaultValues(CMDIData cmdiData, FacetsMapping facetMapping) {
+        Collection<FacetDefinition> facetList = facetMapping.getFacetDefinitions();
+        for (FacetDefinition facetConfig : facetList) {
             if (cmdiData.getDocField(facetConfig.getName()) == null && this.postProcessors.containsKey(facetConfig.getName()) && this.postProcessors.get(facetConfig.getName()).doesProcessNoValue()) {
                 final ArrayList<Pair<String, String>> valueLangPairList = new ArrayList<>();
                 addValuesToList(facetConfig.getName(), this.postProcessors.get(facetConfig.getName()).process(null, cmdiData), valueLangPairList, DEFAULT_LANGUAGE);
@@ -107,10 +107,10 @@ public class ValueWriter {
 
     /**
      * @param cmdiData cmdiData representation of the CMDI document
-     * @param facetConfig FacetConfiguration of the target facet
+     * @param facetConfig FacetDefinition of the target facet
      * @param valueLangPair Value/language Pair
      */
-    private void insertFacetValue(CMDIData cmdiData, FacetConfiguration facetConfig, ValueSet valueSet) {
+    private void insertFacetValue(CMDIData cmdiData, FacetDefinition facetConfig, ValueSet valueSet) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {
             valueSet = valueSet.makeCopy();
             valueSet.setValue("{" + valueSet.getLanguage() + "}" + valueSet.getValue().trim());
@@ -128,7 +128,7 @@ public class ValueWriter {
      * @param overrideExistingValues should existing values be overridden (=
      * delete + insert)?
      */
-    private void insertFacetValues(FacetConfiguration facetConfig, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean overrideExistingValues) {
+    private void insertFacetValues(FacetDefinition facetConfig, List<Pair<String, String>> valueLangPairList, CMDIData cmdiData, boolean overrideExistingValues) {
 
         for (int i = 0; i < valueLangPairList.size(); i++) {
 //            if (!allowMultipleValues && i > 0) {

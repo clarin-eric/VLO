@@ -1,5 +1,6 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
+import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,32 +8,31 @@ import java.util.List;
 
 import eu.clarin.cmdi.vlo.importer.Pattern;
 
-
 /**
  * Once created contains the information about the facets and such. Just a
  * container for some information, doesn't do processing.
  */
-public class FacetConfiguration implements Serializable{
-	
-	private FacetMapping mapping;
+public class FacetDefinition implements Serializable {
+
+    private FacetsMapping mapping;
 
     private String name;
     private boolean caseInsensitive = false;
     private List<Pattern> patterns = new ArrayList<>();
     private List<Pattern> fallbackPatterns = new ArrayList<>();
-    private List<FacetConfiguration> derivedFacets = new ArrayList<FacetConfiguration>();
-    
-    
+    private List<FacetDefinition> derivedFacets = new ArrayList<>();
+    private Facet facetConfiguration;
+
     private ConditionTargetSet conditionTargetSet;
-    
+
     private boolean allowMultipleValues = true;
     // allow multiple values for the same XPath, even if allowMultipleValues == false
     // (for example for CMD elements with multilingual == yes)
     private boolean multilingual = false;
-    
-    public FacetConfiguration(FacetMapping mapping, String name){
-    	this.mapping = mapping;
-    	this.name = name;
+
+    public FacetDefinition(FacetsMapping mapping, String name) {
+        this.mapping = mapping;
+        this.name = name;
     }
 
     public void setCaseInsensitive(boolean caseValue) {
@@ -77,13 +77,13 @@ public class FacetConfiguration implements Serializable{
     public String getName() {
         return name;
     }
-    
-    public ConditionTargetSet getConditionTargetSet(){
-    	return this.conditionTargetSet;
+
+    public ConditionTargetSet getConditionTargetSet() {
+        return this.conditionTargetSet;
     }
-    
-    public void setConditionTargetSet(ConditionTargetSet conditionTargetSet){
-    	this.conditionTargetSet = conditionTargetSet;
+
+    public void setConditionTargetSet(ConditionTargetSet conditionTargetSet) {
+        this.conditionTargetSet = conditionTargetSet;
     }
 
     @Override
@@ -107,19 +107,35 @@ public class FacetConfiguration implements Serializable{
         this.multilingual = multilingual;
     }
 
-    public List<FacetConfiguration> getDerivedFacets() {
+    public List<FacetDefinition> getDerivedFacets() {
         return derivedFacets;
     }
 
-    public void addDerivedFacet(FacetConfiguration derivedFacet) {
+    public void addDerivedFacet(FacetDefinition derivedFacet) {
         this.derivedFacets.add(derivedFacet);
     }
-    
-    public FacetMapping getFacetMapping(){
-    	return this.mapping;
+
+    public FacetsMapping getFacetMapping() {
+        return this.mapping;
     }
-    
-    public void setFacetMapping(FacetMapping mapping){
-    	this.mapping = mapping;
+
+    public void setFacetMapping(FacetsMapping mapping) {
+        this.mapping = mapping;
+    }
+
+    public void setPropertiesFromConfig(Facet facet) {
+        if (facet != null) {
+            if (facet.isCaseInsensitive() != null) {
+                setCaseInsensitive(facet.isCaseInsensitive());
+            }
+
+            if (facet.isAllowMultipleValues() != null) {
+                setAllowMultipleValues(facet.isAllowMultipleValues());
+            }
+
+            if (facet.isMultilingual() != null) {
+                setMultilingual(facet.isMultilingual());
+            }
+        }
     }
 }

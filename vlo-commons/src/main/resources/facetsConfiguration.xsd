@@ -1,60 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:element name="facetsConfiguration">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="facet"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="facet">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="allowMultipleValues"/>
-        <xs:element ref="multilingual"/>
-        <xs:element ref="description"/>
-        <xs:element ref="definition"/>
-        <xs:choice maxOccurs="unbounded" minOccurs="0">
-          <xs:element ref="conditions"/>
-        </xs:choice>
-      </xs:sequence>
-      <xs:attribute name="name" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="description" type="xs:string"/>
-  <xs:element name="allowMultipleValues" type="xs:boolean"/>
-  <xs:element name="conditions">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="condition"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="condition">
-    <xs:complexType>
-      <xs:choice>
-        <xs:element ref="facetCondition"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="facetCondition">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="facetName"/>
-        <xs:element ref="selection"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="selection">
-    <xs:complexType>
-      <xs:choice maxOccurs="unbounded" minOccurs="0">
-        <xs:element ref="value"/>
-      </xs:choice>
-      <xs:attribute name="type" use="required" type="xs:NCName"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="value" type="xs:NCName"/>
-  <xs:element name="definition" type="xs:string"/>
-  <xs:element name="multilingual" type="xs:boolean"/>
-  <xs:element name="facetName" type="xs:string"/>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" jaxb:extensionBindingPrefixes="xjc"
+    jaxb:version="2.0" elementFormDefault="qualified">
+
+    <xs:annotation>
+        <xs:appinfo>
+            <jaxb:globalBindings generateIsSetMethod="true" optionalProperty="wrapper">
+                <xjc:serializable uid="2021012711"/>
+            </jaxb:globalBindings>
+        </xs:appinfo>
+    </xs:annotation>
+
+
+    <xs:element name="facetsConfiguration">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="facet"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="facet">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="allowMultipleValues" minOccurs="0"/>
+                <xs:element ref="caseInsensitive" minOccurs="0"/>
+                <xs:element ref="multilingual" minOccurs="0"/>
+                <xs:element ref="description" minOccurs="0"/>
+                <xs:element ref="definition" minOccurs="0"/>
+                <xs:choice maxOccurs="unbounded" minOccurs="0">
+                    <xs:element ref="conditions"/>
+                </xs:choice>
+            </xs:sequence>
+            <xs:attribute name="name" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="description" type="xs:string"/>
+    <xs:element name="conditions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" ref="condition"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="condition">
+        <xs:complexType>
+            <xs:choice>
+                <xs:element ref="facetCondition"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="facetCondition">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="facetName"/>
+                <xs:element ref="selection"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="selection">
+        <xs:complexType>
+            <xs:choice maxOccurs="unbounded" minOccurs="0">
+                <xs:element ref="value"/>
+            </xs:choice>
+            <xs:attribute name="type" use="required" type="xs:NCName"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="allowMultipleValues" type="xs:boolean"/>
+    <xs:element name="value" type="xs:NCName"/>
+    <xs:element name="definition" type="xs:string"/>
+    <xs:element name="multilingual" type="xs:boolean"/>
+    <xs:element name="caseInsensitive" type="xs:boolean"/>
+    <xs:element name="facetName" type="xs:string"/>
 </xs:schema>

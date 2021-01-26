@@ -88,7 +88,7 @@
                                     <type>jar</type>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <outputDirectory>${project.build.outputDirectory}/vlo-mapping</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -150,12 +150,13 @@
                 <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
                 <!-- bundled mapping files (package resources, from the VLO-mapping 
                 project) -->
-                <vloconfig.mappingFilesLocation>/uniform-maps/</vloconfig.mappingFilesLocation>
+                <vloconfig.mappingFilesLocation>/vlo-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <!-- empty location uses bundled default facet concepts file 
                 (from the VLO-mapping project) -->
                 <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
+                <vloconfig.facetsConfigFileLocation></vloconfig.facetsConfigFileLocation>
                 <!-- bundled value mappings definition -->
-                <vloconfig.valueMappingFile>/value-maps/dist/master.xml</vloconfig.valueMappingFile>
+                <vloconfig.valueMappingFile>/vlo-mapping/value-maps/dist/master.xml</vloconfig.valueMappingFile>
                 <!-- these credentials match the credentials in docker compose 
                 project .env template -->
                 <vloconfig.solrUserReadOnly>docker_user_read</vloconfig.solrUserReadOnly>
@@ -183,6 +184,7 @@
                 <vloconfig.dataRootsFile>{{.env.VLO_DOCKER_DATAROOTS_FILE}}</vloconfig.dataRootsFile>
                 <vloconfig.mappingFilesLocation>{{.env.VLO_DOCKER_MAPPING_BASE_URI}}uniform-maps/</vloconfig.mappingFilesLocation>
                 <vloconfig.facetConceptsFileLocation>{{.env.VLO_DOCKER_MAPPING_BASE_URI}}mapping/facetConcepts.xml</vloconfig.facetConceptsFileLocation>
+                <vloconfig.facetsConfigFileLocation>{{.env.VLO_DOCKER_MAPPING_BASE_URI}}config/facetsConfiguration.xml</vloconfig.facetsConfigFileLocation>
             </properties>
         </profile>
     </profiles>

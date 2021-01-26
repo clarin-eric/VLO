@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facetsConfiguration>
+    <facet name="id">
+        <allowMultipleValues>false</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+    </facet>
+    <facet name="_selfLink">
+        <allowMultipleValues>false</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+    </facet>
+    <facet name="collection">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The collection to which the resource or tool belongs</description>
+        <definition>The collection to which a resource or tool belongs. A resource or tool can only
+            belong to one collection. A collection is based on a specific (legacy) archive or a
+            certain type of resource within such an archive or centre. The members of a collection
+            share basic metadata vocabularies for the information displayed in the VLO.</definition>
+    </facet>
+    <facet name="projectName">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The project within which the resource or tool was created</description>
+        <definition>The name of the project(s) originally involved in the creation of the resource
+            or tool, also if these projects no longer exist or are not the ones to be contacted
+            regarding the resource/tool, which is often the case.</definition>
+    </facet>
+    <facet name="name">
+        <allowMultipleValues>false</allowMultipleValues>
+        <multilingual>true</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The name of the resource or tool</description>
+        <definition>The full public name of the resource or tool.</definition>
+    </facet>
+    <facet name="temporalCoverage">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The temporal coverage of the source material of the resource</description>
+        <definition>The temporal coverage of the source material of the resource, i.e. not the time
+            within which the resource was created, but when e.g. original texts were written or
+            speech recordings made.</definition>
+    </facet>
+    <facet name="continent">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The continent of origin of the source material of the resource</description>
+        <definition>The continent of origin of the source material of the resource, i.e. not the
+            continent in which the resource was created, but where e.g. original texts were written
+            or speech recordings made.</definition>
+    </facet>
+    <facet name="country">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The country of origin of the source material of the resource</description>
+        <definition>The country of origin of the source material of the resource, i.e. not the
+            country in which the resource was created, but where e.g. original texts were written or
+            speech recordings made.</definition>
+    </facet>
+    <facet name="languageCode">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The object language relevant for the resource or tool</description>
+        <definition>The object language relevant for the resource or tool, i.e. the language of the
+            source material of a resource, the object language of a language description, or the
+            language supported by a linguistic tool. If a tool is language independent, please use
+            the ISO 639-3 'und' for 'undefined'.</definition>
+    </facet>
+    <facet name="_languageName">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>Language name</description>
+        <definition/>
+    </facet>
+    <facet name="availability">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The usage conditions for the resource or tool</description>
+        <definition>A rough description of the conditions under which the resource or tool can be
+            used.</definition>
+    </facet>
+    <facet name="licenseType">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>Distribution and/or licence class (public, academic or
+            restricted)</description>
+        <definition>A rights-based classification of language resources and tools, indicating the
+            scope of the target audience</definition>
+    </facet>
+    <facet name="license">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The licensing conditions for the resource or tool</description>
+        <definition>The name of the license or a very brief description of the licensing conditions
+            under which the resource or tool can be used.</definition>
+    </facet>
+    <facet name="accessInfo">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>TODO...</description>
+        <definition>TODO...</definition>
+    </facet>
+    <facet name="organisation">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The organisation currently responsible for the resource or tool</description>
+        <definition>The name of the organisation currently responsible for the resource or tool,
+            i.e. to be contacted with any questions or requests regarding the metadata or access to
+            the resource/tool.</definition>
+    </facet>
+    <facet name="genre">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>true</caseInsensitive>
+        <description>The genre of the content of the resource</description>
+        <definition>The conventionalized discourse or text type of the content of the resource,
+            consistently applied within the collection.</definition>
+    </facet>
+    <facet name="modality">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>true</caseInsensitive>
+        <description>The modality of the content of the resource or intended for the
+            tool</description>
+        <definition>The channel by which the signs in the content of the resource were transmitted
+            or the modality for which a tool is intended, e.g. to regonize speech, gestures or
+            entities of a text.</definition>
+    </facet>
+    <facet name="subject">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>true</caseInsensitive>
+        <description>The subject or topic of the content of the resource</description>
+        <definition>The subject or topic of the content of the resource, consistently applied within
+            the collection.</definition>
+    </facet>
+    <facet name="description">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>A general description of the resource or tool</description>
+        <definition>A general description of the resource or tool apropriate for the VLO context,
+            i.e. for a specific language resource or tool.</definition>
+    </facet>
+    <facet name="resourceClass">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The type of the resource or tool (e.g. corpus, lexicon, grammar,
+            tool...)</description>
+        <definition>The type of the resource or tool (e.g. corpus, lexicon, grammar,
+            tool...).</definition>
+    </facet>
+    <facet name="format">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The mime types used in the resource or by the tool</description>
+        <definition>The mime types of the files in the resource or consumed/produced by the
+            tool.</definition>
+    </facet>
+    <facet name="text">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+    </facet>
+    <facet name="keywords">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>Keywords describing the resource or tool</description>
+        <definition>Keywords containing relevant information on the resource or tool not stated in
+            other VLO metadata facets, consistently applied within the collection.</definition>
+    </facet>
+    <facet name="lifeCycleStatus">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The status in the life cycle of the resource or tool</description>
+        <definition>The status in the life cycle of the resource or tool.</definition>
+    </facet>
+    <facet name="distributionType">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The audience for which the resource or tool is available</description>
+        <definition>A rights-based classification of language resources and tools, indicating the
+            scope of the target audience (PUB/ACA/RES).</definition>
+    </facet>
+    <facet name="rightsHolder">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The rights holder of the resource or tool</description>
+        <definition>The person or organization holding the full rights for the resource or
+            tool.</definition>
+    </facet>
+    <facet name="creator">
+        <allowMultipleValues>true</allowMultipleValues>
+        <multilingual>false</multilingual>
+        <caseInsensitive>false</caseInsensitive>
+        <description>The creator of the resource or tool</description>
+        <definition>The person or organization taking part in the creation process of the resource
+            or tool.</definition>
+    </facet>
+</facetsConfiguration>

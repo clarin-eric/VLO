@@ -1,10 +1,9 @@
 package eu.clarin.cmdi.vlo.importer.mapping;
 
+import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -18,6 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.FacetConcept;
+import java.util.Optional;
 
 public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
     private final static Logger LOG = LoggerFactory.getLogger(ValueMappingFactorySAXImpl.class);
@@ -26,7 +26,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
 
         // initialized via constructor
         private final List<FacetConcept> facetConcepts;
-        private final FacetMapping facetMapping;
+        private final FacetsMapping facetMapping;
 
 
         private ConditionTargetSet conditionTargetSet;
@@ -39,7 +39,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         private String value;
 
         public ValueMappingsHandler(FacetConceptMapping facetConceptMapping,
-                FacetMapping facetMapping) {
+                FacetsMapping facetMapping) {
             this.facetMapping = facetMapping;
 
             this.facetConcepts = facetConceptMapping.getFacetConcepts();
@@ -77,11 +77,13 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             FacetConcept facetConcept;
-            FacetConfiguration facetConfiguration;
-
+            FacetDefinition facetDefinition;
+            final String facetName = attributes.getValue("name");
+            final Optional<Facet> facetConfiguration = facetMapping.getFacetConfiguration(facetName);
+            
             switch (qName) {
             case "origin-facet":
-                FacetConfiguration facetConfig = this.facetMapping.getFacetConfiguration(attributes.getValue("name"));
+                FacetDefinition facetConfig = this.facetMapping.getFacetDefinition(facetName);
                 this.conditionTargetSet = new ConditionTargetSet();
                 facetConfig.setConditionTargetSet(conditionTargetSet);
                 break;
@@ -89,19 +91,19 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
                 this.defaultFacets = new ArrayList<TargetFacet>();
                 break;
             case "target-facet":
-                facetConcept = this.facetConcepts.stream().filter(fc -> fc.getName().equals(attributes.getValue("name")))
+                facetConcept = this.facetConcepts.stream().filter(fc -> fc.getName().equals(facetName))
                         .findFirst().orElse(null);
 
                 if (facetConcept == null) {
-                    LOG.warn("no facet concept for target-facet " + attributes.getValue("name"));
+                    LOG.warn("no facet concept for target-facet " + facetName);
                     return; // warning for reference to a facet which hasn't been defined
                 }
 
-                facetConfiguration = new FacetConfiguration(null, attributes.getValue("name"));
-                facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
-                facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
+                facetDefinition = new FacetDefinition(null, facetName);
+                
+                facetConfiguration.ifPresent(facetDefinition::setPropertiesFromConfig);
 
-                this.defaultFacets.add(new TargetFacet(facetConfiguration, attributes.getValue("overrideExistingValues"),
+                this.defaultFacets.add(new TargetFacet(facetDefinition, attributes.getValue("overrideExistingValues"),
                         attributes.getValue("removeSourceValue")));
                 break;
             case "target-value-set":
@@ -148,11 +150,10 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
                     break; // warning for reference to a facet which hasn't been defined
                 }
 
-                facetConfiguration = new FacetConfiguration(null, attributes.getValue("facet"));
-                facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
-                facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
+                facetDefinition = new FacetDefinition(null, attributes.getValue("facet"));
+                facetConfiguration.ifPresent(facetDefinition::setPropertiesFromConfig);
 
-                this.targetFacets.add(new TargetFacet(facetConfiguration,
+                this.targetFacets.add(new TargetFacet(facetDefinition,
                         attributes.getValue("overrideExistingValues"), attributes.getValue("removeSourceValue")));
                 break;
             case "source-value":
@@ -191,7 +192,7 @@ public class ValueMappingFactorySAXImpl implements ValueMappingFactory {
         }
     }
     
-    public final void createValueMapping(String fileName, FacetConceptMapping conceptMapping, FacetMapping facetMapping){
+    public final void createValueMapping(String fileName, FacetConceptMapping conceptMapping, FacetsMapping facetMapping){
         
         SAXParserFactory fac = SAXParserFactory.newInstance();
         fac.setXIncludeAware(true);

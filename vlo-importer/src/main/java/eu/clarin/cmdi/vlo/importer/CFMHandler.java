@@ -9,8 +9,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 
 /**
  * @author WolfgangWalter SAUER (wowasa) <wolfgang.sauer@oeaw.ac.at>
@@ -18,10 +18,10 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
  */
 public class CFMHandler extends DefaultHandler {
 	private final Logger LOG; 
-	private FacetMapping mapping;
-	private FacetConfiguration orginFacet;
+	private FacetsMapping mapping;
+	private FacetDefinition orginFacet;
 
-	public CFMHandler(FacetMapping mapping) {
+	public CFMHandler(FacetsMapping mapping) {
 		super();
 		this.LOG = LoggerFactory.getLogger(this.getClass());
 		this.mapping = mapping;
@@ -47,7 +47,7 @@ public class CFMHandler extends DefaultHandler {
 		}
 		else if(this.orginFacet != null && "cross-facet".equals(qName)){
 
-			FacetConfiguration crossFacet;
+			FacetDefinition crossFacet;
 			if((crossFacet = this.mapping.getFacetConfiguration(attributes.getValue("name"))) == null)
 				LOG.warn("cross facet " + attributes.getValue("name") + " can't be processed since there is NO valid facetConcept defined for this facet");
 			else

@@ -20,12 +20,13 @@ import com.google.common.base.Strings;
 import com.sun.jersey.client.impl.CopyOnWriteHashMap;
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.facets.FacetConcept;
-import eu.clarin.cmdi.vlo.facets.FacetConcepts;
-import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
+import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
+import eu.clarin.cmdi.vlo.facets.configuration.Facet;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
 import javax.xml.transform.Source;
@@ -42,12 +43,12 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
 
     private final static Logger logger = LoggerFactory.getLogger(FacetDescriptionServiceImpl.class);
 
-    private final Map<String, String> descriptions = new CopyOnWriteHashMap<>();
+    private final Map<String, Facet> facets = new CopyOnWriteHashMap<>();
     private final VloConfig config;
-    private final FacetConceptsMarshaller marshaller;
+    private final FacetsConfigurationsMarshaller marshaller;
     private final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(FacetDescriptionServiceImpl.class);
 
-    public FacetDescriptionServiceImpl(FacetConceptsMarshaller marshaller, VloConfig vloConfig) {
+    public FacetDescriptionServiceImpl(FacetsConfigurationsMarshaller marshaller, VloConfig vloConfig) {
         this.marshaller = marshaller;
         this.config = vloConfig;
     }
@@ -55,12 +56,12 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
     @PostConstruct
     protected void init() {
         try {
-            final Source streamSource = getFacetConceptsSource();
-            final FacetConcepts facetConcepts = marshaller.unmarshal(streamSource);
-            for (FacetConcept concept : facetConcepts.getFacetConcept()) {
-                if (concept.getDescription() != null) {
-                    logger.debug("Found facet definition '{}'", concept.getName());
-                    descriptions.put(concept.getName(), concept.getDescription());
+            final Source streamSource = getFacetsConfigSource();
+            final FacetsConfiguration facetsConfiguration = marshaller.unmarshal(streamSource);
+            for (Facet facet : facetsConfiguration.getFacet()) {
+                if (facet.getDescription() != null) {
+                    logger.debug("Found facet configuration '{}'", facet.getName());
+                    facets.put(facet.getName(), facet);
                 }
             }
         } catch (JAXBException | IOException ex) {
@@ -68,12 +69,12 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
         }
     }
 
-    private Source getFacetConceptsSource() throws IOException {
-        final String facetConceptsFile = config.getFacetConceptsFile();
+    private Source getFacetsConfigSource() throws IOException {
+        final String facetConceptsFile = config.getFacetsConfigFile();
 
         if (Strings.isNullOrEmpty(facetConceptsFile)) {
             logger.info("No facet concepts file configured. Reading default definitions from packaged file.");
-            return new StreamSource(getClass().getResourceAsStream(VloConfig.DEFAULT_FACET_CONCEPTS_RESOURCE_FILE));
+            return new StreamSource(getClass().getResourceAsStream(VloConfig.DEFAULT_FACETS_CONFIG_RESOURCE_FILE));
         } else {
             final InputSource stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConceptsFile);
             if (stream != null) {
@@ -87,7 +88,9 @@ public class FacetDescriptionServiceImpl implements FacetDescriptionService {
 
     @Override
     public String getDescription(String facetName) {
-        return descriptions.get(facetName);
+        return Optional.ofNullable(facets.get(facetName))
+                .map(Facet::getDescription)
+                .orElse(null);
     }
 
 }

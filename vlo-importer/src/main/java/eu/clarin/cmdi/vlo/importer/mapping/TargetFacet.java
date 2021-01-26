@@ -8,13 +8,13 @@ public class TargetFacet implements Serializable{
      */
     private static final long serialVersionUID = 1L;
 
-    private FacetConfiguration facetConfiguration;
+    private FacetDefinition facetConfiguration;
 
     private boolean overrideExistingValues;
     private boolean removeSourceValue;
     private String value;
 
-    public TargetFacet(FacetConfiguration facetConfiguration, String value) {
+    public TargetFacet(FacetDefinition facetConfiguration, String value) {
         this.facetConfiguration = facetConfiguration;
         this.overrideExistingValues = false;
         this.removeSourceValue = true;
@@ -28,25 +28,25 @@ public class TargetFacet implements Serializable{
         this.value = targetFacet.value;
     }
 
-    public TargetFacet(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue) {
+    public TargetFacet(FacetDefinition facetConfiguration, String overrideExistingValues, String removeSourceValue) {
         this.facetConfiguration = facetConfiguration;
         setOverrideExistingValues(overrideExistingValues);
         setRemoveSourceValue(removeSourceValue);
 
     }
     
-    public TargetFacet(FacetConfiguration facetConfiguration, String overrideExistingValues, String removeSourceValue, String value) {
+    public TargetFacet(FacetDefinition facetConfiguration, String overrideExistingValues, String removeSourceValue, String value) {
         this.facetConfiguration = facetConfiguration;
         setOverrideExistingValues(overrideExistingValues);
         setRemoveSourceValue(removeSourceValue);
         this.value = value;
     }
 
-    public FacetConfiguration getFacetConfiguration() {
+    public FacetDefinition getFacetConfiguration() {
         return facetConfiguration;
     }
 
-    public void setFacetConfiguration(FacetConfiguration facetConfiguration) {
+    public void setFacetConfiguration(FacetDefinition facetConfiguration) {
         this.facetConfiguration = facetConfiguration;
     }
 

@@ -77,31 +77,6 @@ public class FacetConceptMapping {
         @XmlAttribute
         private String name;
 
-        /**
-         * Values will be stored lowercase by default, set isCaseInsensitive to
-         * true if you want to keep the case of the value
-         */
-        @XmlAttribute
-        private boolean isCaseInsensitive = false;
-
-        /**
-         * By default multiple values that are found for a matching pattern will
-         * be stored. For some facets this leads to too much values with little
-         * value for instance for "subject". Set allowMultipleValues to false
-         * will only store the first found value.
-         */
-        @XmlAttribute
-        private boolean allowMultipleValues = true;
-
-        @XmlAttribute
-        private boolean multilingual = false;
-
-        @XmlAttribute
-        private String description = "";
-
-        @XmlAttribute
-        private String definition = "";
-
         @XmlElement(name = "concept")
         private List<String> concepts = new ArrayList<>();
 
@@ -162,46 +137,6 @@ public class FacetConceptMapping {
 
         public String getName() {
             return name;
-        }
-
-        public void setCaseInsensitive(boolean isCaseInsensitive) {
-            this.isCaseInsensitive = isCaseInsensitive;
-        }
-
-        public boolean isCaseInsensitive() {
-            return isCaseInsensitive;
-        }
-
-        public void setAllowMultipleValues(boolean allowMultipleValues) {
-            this.allowMultipleValues = allowMultipleValues;
-        }
-
-        public boolean isAllowMultipleValues() {
-            return allowMultipleValues;
-        }
-
-        public void setMultilingual(boolean multilingual) {
-            this.multilingual = multilingual;
-        }
-
-        public boolean isMultilingual() {
-            return multilingual;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return this.description;
-        }
-
-        public void setDefinition(String definition) {
-            this.definition = definition;
-        }
-
-        public String getDefinition() {
-            return this.definition;
         }
 
         public void setPatterns(List<String> patterns) {

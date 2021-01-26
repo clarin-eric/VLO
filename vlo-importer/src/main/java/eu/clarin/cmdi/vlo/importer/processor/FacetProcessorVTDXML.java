@@ -30,8 +30,8 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
 import eu.clarin.cmdi.vlo.importer.Vocabulary;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizerWithVocabularyMap;
@@ -81,7 +81,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws java.net.URISyntaxException
      */
     @Override
-    public void processFacets(CMDIData cmdiData, FacetMapping facetMapping) throws URISyntaxException, UnsupportedEncodingException, CMDIParsingException {
+    public void processFacets(CMDIData cmdiData, FacetsMapping facetMapping) throws URISyntaxException, UnsupportedEncodingException, CMDIParsingException {
         try {
             FacetValuesMap facetValuesMap = getFacetValuesMap(cmdiData, nav, facetMapping);
 
@@ -96,21 +96,21 @@ public class FacetProcessorVTDXML implements FacetProcessor {
     /**
      * @param cmdiData representation of the CMDI document
      * @param nav VTD Navigator
-     * @param facetMapping A Map of facet-names (key)/ FacetConfiguration
-     * (value)
+     * @param facetMapping A Map of facet-names (key)/ FacetDefinition
+ (value)
      * @return A map of FacetConfigurations/Lists of ValueSets
      * @throws VTDException
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    private FacetValuesMap getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private FacetValuesMap getFacetValuesMap(CMDIData cmdiData, VTDNav nav, FacetsMapping facetMapping) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         FacetValuesMap facetValuesMap = new FacetValuesMap();
 
-        final Collection<FacetConfiguration> facetConfigList = facetMapping.getFacetConfigurations();
+        final Collection<FacetDefinition> facetConfigList = facetMapping.getFacetDefinitions();
 
         boolean matchedPattern;
 
-        for (FacetConfiguration facetConfig : facetConfigList) {
+        for (FacetDefinition facetConfig : facetConfigList) {
             matchedPattern = false;
 
             for (Pattern pattern : facetConfig.getPatterns()) {
@@ -169,7 +169,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param facetValuesMap A map of FacetConfigurations (key)/Lists of
      * ValueSets (value)
      * @param nav VTD Navigator
-     * @param facetConfig FacetConfiguration to process
+     * @param facetConfig FacetDefinition to process
      * @param pattern Pattern to process (since a facet configuration contains
      * usually multiple patterns)
      * @return true, if there was a match for the pattern
@@ -177,7 +177,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    private boolean matchPattern(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
+    private boolean matchPattern(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetDefinition facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(ap, SchemaParsingUtil.extractXsd(nav));
         ap.selectXPath(pattern.getPattern());
@@ -233,7 +233,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @throws XPathEvalException
      * @throws XPathParseException
      */
-    private void processValueConceptLink(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetConfiguration facetConfig, Pattern pattern) throws NavException, XPathParseException, XPathEvalException, UnsupportedEncodingException, URISyntaxException {
+    private void processValueConceptLink(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetDefinition facetConfig, Pattern pattern) throws NavException, XPathParseException, XPathEvalException, UnsupportedEncodingException, URISyntaxException {
         // extract english for ValueConceptLink if available
         Integer vclAttrIndex = nav.getAttrVal("cmd:ValueConceptLink");
         String vcl = null;
@@ -267,12 +267,12 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param facetValuesMap A map of FacetConfigurations (key)/Lists of
      * ValueSets (value)
      * @param vtdIndex VTD Navigator
-     * @param facetConfig FacetConfiguration of the origin facet (which might
-     * lead to different target facets)
+     * @param facetConfig FacetDefinition of the origin facet (which might
+ lead to different target facets)
      * @param valueLanguagePair Value/language Pair
      * @param isDerived Is derived facet
      */
-    private void processRawValue(CMDIData cmdiData, FacetValuesMap facetValuesMap, int vtdIndex, FacetConfiguration facetConfig, Pair<String, String> valueLanguagePair) {
+    private void processRawValue(CMDIData cmdiData, FacetValuesMap facetValuesMap, int vtdIndex, FacetDefinition facetConfig, Pair<String, String> valueLanguagePair) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
             return;
         }
@@ -320,7 +320,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
         }
 
         // insert post-processed values into derived facet(s) if configured
-        for (FacetConfiguration derivedFacetConfig : facetConfig.getDerivedFacets()) {
+        for (FacetDefinition derivedFacetConfig : facetConfig.getDerivedFacets()) {
             for (String postProcessedValue : postProcessed) {
                 for (String derivedValue : postProcess(derivedFacetConfig.getName(), postProcessedValue, facetValuesMap)) {
                     ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, new TargetFacet(derivedFacetConfig, ""), ImmutablePair.of(derivedValue, valueLanguagePair.getRight()), true, false);

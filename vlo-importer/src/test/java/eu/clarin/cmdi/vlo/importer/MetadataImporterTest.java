@@ -6,6 +6,8 @@ import eu.clarin.cmdi.vlo.importer.solr.DummySolrBridgeImpl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.config.DataRoot;
+import static eu.clarin.cmdi.vlo.importer.ImporterTestcase.config;
+import static eu.clarin.cmdi.vlo.importer.ImporterTestcase.getTestFacetsConfigFilePath;
 import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
@@ -130,12 +132,12 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(2, fieldValues.size());
         values = new ArrayList(fieldValues);
         Collections.sort(values);
-        
+
         ResourceInfo resourceInfo1 = ResourceInfo.fromJson(new ObjectMapper(), values.get(0));
         assertNotNull(resourceInfo1);
         assertEquals("unknown type", resourceInfo1.getType());
         assertEquals("file://bla.resource2.txt", resourceInfo1.getUrl());
-        
+
         ResourceInfo resourceInfo2 = ResourceInfo.fromJson(new ObjectMapper(), values.get(1));
         assertNotNull(resourceInfo2);
         assertEquals("unknown type", resourceInfo2.getType());
@@ -403,6 +405,7 @@ public class MetadataImporterTest extends ImporterTestcase {
 
                 // make sure the mapping file for testing is used
                 config.setFacetConceptsFile(getTestFacetConceptFilePath());
+                config.setFacetsConfigFile(getTestFacetsConfigFilePath());
 
                 List<DataRoot> dataRoots = checkDataRoots();
                 long start = System.currentTimeMillis();

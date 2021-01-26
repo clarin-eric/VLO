@@ -58,6 +58,8 @@
 
     <!-- leave empty to use default packaged definition -->
     <facetConceptsFile>${vloconfig.facetConceptsFileLocation}</facetConceptsFile>
+    
+    <facetsConfigFile>${vloconfig.facetsConfigFileLocation}</facetsConfigFile>
 
     <profileSchemaUrl>https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd</profileSchemaUrl>
 
@@ -72,15 +74,15 @@
     <!-- Mapping file locations. These can be an absolute URL, absolute file 
     path or packaged resource location. Evaluated in the this order. -->
 
-    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /uniform-maps/OrganisationControlledVocabulary.xml -->
+    <organisationNamesUrl>${vloconfig.mappingFilesLocation}OrganisationControlledVocabulary.xml</organisationNamesUrl> <!-- bundled resource: /vlo-mapping/uniform-maps/OrganisationControlledVocabulary.xml -->
 
-    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /uniform-maps/LanguageNameVariantsMap.xml -->
+    <languageNameVariantsUrl>${vloconfig.mappingFilesLocation}LanguageNameVariantsMap.xml</languageNameVariantsUrl> <!-- bundled resource: /vlo-mapping/uniform-maps/LanguageNameVariantsMap.xml -->
 
-    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /uniform-maps/LicenseAvailabilityMap.xml -->
+    <licenseAvailabilityMapUrl>${vloconfig.mappingFilesLocation}LicenseAvailabilityMap.xml</licenseAvailabilityMapUrl> <!-- bundled resource: /vlo-mapping/uniform-maps/LicenseAvailabilityMap.xml -->
 
-    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /uniform-maps/LicenseURIMap.xml -->
+    <licenseURIMapUrl>${vloconfig.mappingFilesLocation}LicenseURIMap.xml</licenseURIMapUrl> <!-- bundled resource: /vlo-mapping/uniform-maps/LicenseURIMap.xml -->
 
-    <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /uniform-maps/LicenseTypeMap.xml -->
+    <licenseTypeMapUrl>${vloconfig.mappingFilesLocation}LicenseTypeMap.xml</licenseTypeMapUrl> <!-- bundled resource: /vlo-mapping/uniform-maps/LicenseTypeMap.xml -->
 
     <valueMappingsFile>${vloconfig.valueMappingFile}</valueMappingsFile> <!-- bundled resource: /value-maps/dist/master.xml -->
 

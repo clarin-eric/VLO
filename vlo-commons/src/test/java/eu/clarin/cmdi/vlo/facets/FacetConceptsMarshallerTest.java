@@ -63,7 +63,6 @@ public class FacetConceptsMarshallerTest {
 
         final FacetConcept concept = result.getFacetConcept().get(3);
         assertEquals("projectName", concept.getName());
-        assertEquals("The project within which the resource or tool was created", concept.getDescription());
     }
 
 }

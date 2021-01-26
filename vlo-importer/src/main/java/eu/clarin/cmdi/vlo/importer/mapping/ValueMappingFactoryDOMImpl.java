@@ -14,8 +14,10 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
+import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.FacetConcept;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizerWithVocabularyMap;
+import java.util.Optional;
 import org.xml.sax.InputSource;
 
 /**
@@ -32,7 +34,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
     /* (non-Javadoc)
      * @see eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactory#getValueMappings(java.lang.String, eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping)
      */
-    public final void createValueMapping(String fileName, FacetConceptMapping facetConceptMapping, FacetMapping facetMapping) {
+    public final void createValueMapping(String fileName, FacetConceptMapping facetConceptMapping, FacetsMapping facetMapping) {
 
         DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
         fac.setXIncludeAware(true);
@@ -54,7 +56,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
 
                 Element originFacet = (Element) originFacets.item(a);
 
-                FacetConfiguration facetConfig = facetMapping.getFacetConfiguration(originFacet.getAttribute("name"));
+                FacetDefinition facetConfig = facetMapping.getFacetDefinition(originFacet.getAttribute("name"));
 
                 ConditionTargetSet conditionTargetSet = new ConditionTargetSet();
                 facetConfig.setConditionTargetSet(conditionTargetSet);
@@ -71,7 +73,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @param conditionTargetSet
      * @param originFacetElement
      */
-    private void processOriginFacet(FacetMapping facetMapping, FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, Element originFacetElement) {
+    private void processOriginFacet(FacetsMapping facetMapping, FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, Element originFacetElement) {
         LOG.info("Processing origin-facet node with name='{}'", originFacetElement.getAttribute("name"));
         NodeList valueMaps = originFacetElement.getElementsByTagName("value-map");
 
@@ -89,7 +91,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @param conditionTargetSet
      * @param valueMapElement
      */
-    private void processValueMap(FacetMapping facetMapping, FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, Element valueMapElement) {
+    private void processValueMap(FacetsMapping facetMapping, FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, Element valueMapElement) {
         LOG.info("-- Processing value-map node");
         List<TargetFacet> defaultTargets = new ArrayList<TargetFacet>();
 
@@ -123,7 +125,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @param defaultTargets
      * @param targetValueSetElement
      */
-    private void processTargetValueSet(FacetMapping facetMapping, FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, List<TargetFacet> defaultTargets, Element targetValueSetElement) {
+    private void processTargetValueSet(FacetsMapping facetMapping, FacetConceptMapping facetConceptMapping, ConditionTargetSet conditionTargetSet, List<TargetFacet> defaultTargets, Element targetValueSetElement) {
         NodeList targetValues = targetValueSetElement.getElementsByTagName("target-value");
         LOG.debug("-- -- Processing target-value-set with {} target-value node(s)", targetValues.getLength());
 
@@ -211,7 +213,7 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @return a new instance of TargetFacet with specific settings for
      * overrideExistingValues, removeSourceValue and a value
      */
-    private TargetFacet getTargetFacet(FacetMapping facetMapping, FacetConceptMapping facetConceptMapping, String facetName, String overrideExistingValues, String removeSourceValue, String value) {
+    private TargetFacet getTargetFacet(FacetsMapping facetMapping, FacetConceptMapping facetConceptMapping, String facetName, String overrideExistingValues, String removeSourceValue, String value) {
         FacetConcept facetConcept = facetConceptMapping.getFacetConcepts().stream().filter(fc -> fc.getName().equals(facetName))
                 .findFirst().orElse(null);
 
@@ -220,11 +222,12 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
             return null;
         }
 
-        FacetConfiguration facetConfiguration = facetMapping.getFacetConfiguration(facetName);
-        facetConfiguration.setAllowMultipleValues(facetConcept.isAllowMultipleValues());
-        facetConfiguration.setCaseInsensitive(facetConcept.isCaseInsensitive());
+        final Optional<Facet> facetConfig = facetMapping.getFacetConfiguration(facetName);
 
-        return new TargetFacet(facetConfiguration, overrideExistingValues, removeSourceValue, value);
+        final FacetDefinition facetDefinition = facetMapping.getFacetDefinition(facetName);
+        facetConfig.ifPresent(facetDefinition::setPropertiesFromConfig);
+
+        return new TargetFacet(facetDefinition, overrideExistingValues, removeSourceValue, value);
     }
 
 }

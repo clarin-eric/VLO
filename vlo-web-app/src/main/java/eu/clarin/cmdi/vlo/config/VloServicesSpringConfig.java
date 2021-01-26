@@ -20,6 +20,7 @@ import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
+import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
@@ -185,12 +186,12 @@ public class VloServicesSpringConfig {
 
     @Bean
     public FacetDescriptionService facetDescriptionsService() throws JAXBException {
-        return new FacetDescriptionServiceImpl(facetConceptsMarshaller(), vloConfig);
+        return new FacetDescriptionServiceImpl(facetsConfigMarshaller(), vloConfig);
     }
 
     @Bean
-    public FacetConceptsMarshaller facetConceptsMarshaller() throws JAXBException {
-        return new FacetConceptsMarshaller();
+    public FacetsConfigurationsMarshaller facetsConfigMarshaller() throws JAXBException {
+        return new FacetsConfigurationsMarshaller();
     }
 
     @Bean

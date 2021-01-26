@@ -2,6 +2,8 @@ package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 
 import java.io.FileNotFoundException;
@@ -15,6 +17,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.stream.StreamSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,5 +105,39 @@ public class VLOMarshaller {
         } catch (JAXBException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public FacetsConfiguration getFacetsConfiguration(String facetsConfigFile) {
+
+        final MappingDefinitionResolver mappingDefinitionResolver
+                = new MappingDefinitionResolver(VLOMarshaller.class);
+
+        try {
+            final InputStream is;
+            if (facetsConfigFile == null || "".equals(facetsConfigFile)) {
+                is = VLOMarshaller.class.getResourceAsStream(VloConfig.DEFAULT_FACETS_CONFIG_RESOURCE_FILE);
+            } else {
+                final InputSource resolvedStream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetsConfigFile);
+                is = (resolvedStream == null) ? null : resolvedStream.getByteStream();
+            }
+
+            try {
+                logger.info("Unmarshalling facet concepts definition from file {}", facetsConfigFile);
+                final FacetsConfigurationsMarshaller facetsConfigurationsMarshaller = new FacetsConfigurationsMarshaller();
+                return facetsConfigurationsMarshaller.unmarshal(new StreamSource(is));
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+            }
+
+        } catch (FileNotFoundException e) {
+            logger.error("Could not find facets configuration file: {}", facetsConfigFile);
+            return null;
+        } catch (JAXBException | IOException e) {
+            logger.error("Could not process facets configuration file: {}", facetsConfigFile, e);
+            return null;
+        }
+
     }
 }

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <facetConcepts>
-	<facetConcept name="id" allowMultipleValues="false">
+	<facetConcept name="id">
 		<concept>http://www.isocat.org/datcat/DC-2573</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2573_ae7c2548-8a86-ab6e-7099-e28b7697d1a2</concept>
 		<pattern>/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()</pattern>
 	</facetConcept>
-	<facetConcept name="_selfLink" allowMultipleValues="false">
+	<facetConcept name="_selfLink">
 		<pattern>/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()</pattern>
 	</facetConcept>
-	<facetConcept name="collection" description="The collection to which the resource or tool belongs" definition="The collection to which a resource or tool belongs. A resource or tool can only belong to one collection. A collection is based on a specific (legacy) archive or a certain type of resource within such an archive or centre. The members of a collection share basic metadata vocabularies for the information displayed in the VLO.">
+	<facetConcept name="collection">
 		<pattern>/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()</pattern>
 	</facetConcept>
-	<facetConcept name="projectName" description="The project within which the resource or tool was created" definition="The name of the project(s) originally involved in the creation of the resource or tool, also if these projects no longer exist or are not the ones to be contacted regarding the resource/tool, which is often the case.">
+	<facetConcept name="projectName">
 		<concept>http://www.isocat.org/datcat/DC-2536</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2536_13fc5f10-c14a-1f64-a669-32736f6d3ef5</concept>
 		<concept>http://www.isocat.org/datcat/DC-2537</concept>
@@ -24,7 +24,7 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:GeneralInfo/cmdp:Title/text()</pattern>
 	</facetConcept>
-	<facetConcept name="name" allowMultipleValues="false" multilingual="true" description="The name of the resource or tool" definition="The full public name of the resource or tool.">
+	<facetConcept name="name">
 		<concept>http://www.isocat.org/datcat/DC-5428</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce</concept>
 		<concept>http://www.isocat.org/datcat/DC-5127</concept>
@@ -56,7 +56,7 @@
     <blacklistPattern>/cmd:CMD/cmd:Components/cmdp:LexicalResourceProfile/cmdp:Publications/cmdp:Publication/cmdp:PublicationTitle/</blacklistPattern> <!-- IMS c:LexicalResourceProfile -->
   	<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications/cmdp:Publication/cmdp:PublicationTitle/</blacklistPattern> <!-- IMS c:MultimodalCorpus -->
 	</facetConcept>
-	<facetConcept name="temporalCoverage" description="The temporal coverage of the source material of the resource" definition="The temporal coverage of the source material of the resource, i.e. not the time within which the resource was created, but when e.g. original texts were written or speech recordings made.">
+	<facetConcept name="temporalCoverage">
 		<concept>http://www.isocat.org/datcat/DC-2509</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2509_3b86afe2-ebde-ba09-8a1c-fe6bdc46a739</concept>
 		<concept>http://www.isocat.org/datcat/DC-2510</concept>
@@ -79,7 +79,7 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Project/cmdp:Duration/cmdp:CompletionYear</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:Publications/cmdp:Publication/cmdp:PublicationDate</blacklistPattern>
 	</facetConcept>
-	<facetConcept name="continent" description="The continent of origin of the source material of the resource" definition="The continent of origin of the source material of the resource, i.e. not the continent in which the resource was created, but where e.g. original texts were written or speech recordings made.">
+	<facetConcept name="continent">
 		<concept>http://www.isocat.org/datcat/DC-2531</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2531_e0427265-2fc4-d23e-0a7c-a21981ec3734</concept>
 		<concept>http://www.isocat.org/datcat/DC-3791</concept>
@@ -93,7 +93,7 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:ProfessionalBackground/cmdp:Employment/cmdp:Place/cmdp:Location/cmdp:Continent</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:LinguisticBackground/cmdp:Competence/cmdp:LanguageVariety/cmdp:LanguageVarietyPlace/cmdp:Location/cmdp:Continent</blacklistPattern>
 	</facetConcept>
-	<facetConcept name="country" description="The country of origin of the source material of the resource" definition="The country of origin of the source material of the resource, i.e. not the country in which the resource was created, but where e.g. original texts were written or speech recordings made.">
+	<facetConcept name="country">
 		<concept>http://www.isocat.org/datcat/DC-2532</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2532_d004b0a6-fd1d-3ca3-abf1-1e6aeb3e37b2</concept>
 		<concept>http://www.isocat.org/datcat/DC-3792</concept>
@@ -114,7 +114,7 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:ProfessionalBackground/cmdp:Employment/cmdp:Place/cmdp:Location/cmdp:Country</blacklistPattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Speaker/cmdp:LinguisticBackground/cmdp:Competence/cmdp:LanguageVariety/cmdp:LanguageVarietyPlace/cmdp:Location/cmdp:Country</blacklistPattern>
 	</facetConcept>
-	<facetConcept name="languageCode" description="The object language relevant for the resource or tool" definition="The object language relevant for the resource or tool, i.e. the language of the source material of a resource, the object language of a language description, or the language supported by a linguistic tool. If a tool is language independent, please use the ISO 639-3 'und' for 'undefined'.">
+	<facetConcept name="languageCode">
 		<concept>http://www.isocat.org/datcat/DC-2482</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17</concept>
 		<!-- language code -->
@@ -160,10 +160,10 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:DocumentationLanguages</blacklistPattern>
 		<derivedFacet>_languageName</derivedFacet>
 	</facetConcept>
-	<facetConcept name="_languageName" description="Language name" definition="">
+	<facetConcept name="_languageName">
 		<!-- No mapping, values derived from 'languageCode' -->
 	</facetConcept>
-        <facetConcept name="organisation" description="Organisation involved in creation and/or distribution of the resource">
+        <facetConcept name="organisation">
 		<concept>http://www.isocat.org/datcat/DC-2459</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2459_fc4e74d6-84de-c8cd-1ae8-2c2be5ee90b1</concept>
 		<concept>http://www.isocat.org/datcat/DC-2979</concept>
@@ -185,7 +185,7 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:WebLichtWebService/cmdp:Service/cmdp:Creation/cmdp:Creators/cmdp:Creator</blacklistPattern>
 		<!--  IDS WebLichtWebService -->
 	</facetConcept>
-	<facetConcept name="genre" isCaseInsensitive="true" allowMultipleValues="true" description="The genre of the content of the resource" definition="The conventionalized discourse or text type of the content of the resource, consistently applied within the collection.">
+	<facetConcept name="genre">
 		<concept>http://www.isocat.org/datcat/DC-2470</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2470_d191f2b2-6339-f031-b534-70d526b28357</concept>
 		<concept>http://www.isocat.org/datcat/DC-3899</concept>
@@ -199,11 +199,11 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Keyword/text()</pattern>
 		<!-- IDS IDSAGD_Corpus -->
 	</facetConcept>
-  <facetConcept name="modality" isCaseInsensitive="true" allowMultipleValues="true" description="The channel by which signs are transmitted">
+  <facetConcept name="modality">
 		<concept>http://www.isocat.org/datcat/DC-2490</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2490_44bc38a3-1799-4149-c791-40ac0176f0ff</concept>
 	</facetConcept>
-	<facetConcept name="subject" isCaseInsensitive="true" allowMultipleValues="true" description="The subject or topic of the content of the resource" definition="The subject or topic of the content of the resource, consistently applied within the collection.">
+	<facetConcept name="subject">
 		<concept>http://www.isocat.org/datcat/DC-2591</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2591_f769d93b-c007-d2c9-aff2-99e9177e5764</concept>
 		<concept>http://purl.org/dc/terms/subject</concept>
@@ -226,7 +226,7 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:IDSAGD_Corpus/cmdp:Corpus/cmdp:Modality/cmdp:Modality/text()</pattern>
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:profileDesc/cmdp:textClass</blacklistPattern>
 	</facetConcept>
-        <facetConcept name="description" description="Description of the resource">
+        <facetConcept name="description">
 		<concept>http://www.isocat.org/datcat/DC-2520</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2520_9eeedfb4-47d3-ddee-cfcb-99ac634bf1db</concept>
 		<concept>http://purl.org/dc/terms/description</concept>
@@ -334,7 +334,7 @@
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:MultimodalCorpus/cmdp:TechnicalInfo</blacklistPattern>
 		<!-- IMS MultiModalCorpus -->
 	</facetConcept>
-        <facetConcept name="resourceClass" description="Class or type of the resource">
+        <facetConcept name="resourceClass">
 		<concept>http://purl.org/dc/terms/type</concept>
 		<concept>http://purl.org/dc/elements/1.1/type</concept>
 		<concept>http://www.isocat.org/datcat/DC-3806</concept>
@@ -351,7 +351,7 @@
 
 		<blacklistPattern>/cmd:CMD/cmd:Components/cmdp:TextCorpusProfile/cmdp:Creation/cmdp:Source/cmdp:MediaFiles</blacklistPattern>
 	</facetConcept>
-  <facetConcept name="format" description="Format of the resource based on MIME types">
+  <facetConcept name="format">
 		<concept>http://www.isocat.org/datcat/DC-2571</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df</concept>
 		<concept>http://purl.org/dc/terms/format</concept>
@@ -363,7 +363,7 @@
 	<facetConcept name="_componentProfile">
 		<pattern>/cmd:CMD/cmd:Header/cmd:MdProfile/text()</pattern>
 	</facetConcept>
-  <facetConcept name="keywords" description="Keywords that describe the resource">
+  <facetConcept name="keywords">
 		<concept>http://www.isocat.org/datcat/DC-5436</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5436_6ab57c2c-5f8d-3561-6db6-d75da23d2637</concept>
 		<!-- not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future -->
@@ -375,7 +375,7 @@
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-corpus-profile/cmdp:Collection/cmdp:Project/cmdp:Title/text()</pattern>
 		<!--  BAS -->
 	</facetConcept>
-    <facetConcept name="availability" description="The usage conditions for the resource or tool" definition="A rough description of the conditions under which the resource or tool can be used.">
+    <facetConcept name="availability">
 		<concept>http://www.isocat.org/datcat/DC-2457</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
 		<!-- A description of the licensing conditions... -->
@@ -408,11 +408,11 @@
 		<!-- TEI header availability attributes -->
  		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/@status</pattern>
 	</facetConcept>
-        <facetConcept name="licenseType" description="Distribution and/or licence class (public, academic or restricted)" definition="A rights-based classification of language resources and tools, indicating the scope of the target audience">
+        <facetConcept name="licenseType">
             <concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
 	 		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:availability/cmdp:ab/@type</pattern>
         </facetConcept>
-        <facetConcept name="license" allowMultipleValues="true" description="The licensing conditions for the resource or tool" definition="The name of the license or a very brief description of the licensing conditions under which the resource or tool can be used.">
+        <facetConcept name="license">
 		<!-- URL of the license -->
 		<concept>http://www.isocat.org/datcat/DC-6586</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6586_2c79d86a-5a75-0890-d407-7d9cb86b9beb</concept>

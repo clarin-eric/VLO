@@ -20,6 +20,7 @@ public abstract class ImporterTestcase {
     private final static VloConfigFactory configFactory = new DefaultVloConfigFactory();
     protected static VloConfig config;
     protected static LanguageCodeUtils languageCodeUtils;
+
     protected FieldNameService fieldNameService;
     protected VLOMarshaller marshaller;
     private char ch = 'a';
@@ -44,7 +45,7 @@ public abstract class ImporterTestcase {
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
-    
+
     @BeforeClass
     public static void setupClass() throws Exception {
         // read the configuration defined in the packaged configuration file
@@ -66,7 +67,7 @@ public abstract class ImporterTestcase {
         if (Thread.currentThread().getName().equals("main")) {
             Thread.currentThread().setName("test-main");
         }
-        
+
         fieldNameService = new FieldNameServiceImpl(config);
         marshaller = new VLOMarshaller();
     }
@@ -74,6 +75,14 @@ public abstract class ImporterTestcase {
     public static String getTestFacetConceptFilePath() {
         try {
             return new File(ImporterTestcase.class.getResource("/facetConceptsTest.xml").toURI()).getAbsolutePath();
+        } catch (URISyntaxException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    static String getTestFacetsConfigFilePath() {
+        try {
+            return new File(ImporterTestcase.class.getResource("/facetConfigTest.xml").toURI()).getAbsolutePath();
         } catch (URISyntaxException ex) {
             throw new RuntimeException(ex);
         }

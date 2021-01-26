@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import java.util.Iterator;
 import java.util.List;
@@ -33,8 +33,8 @@ public class AvailabilityPostFilterTest {
 
     AvailabilityPostFilter instance;
 
-    final TargetFacet availabilityTargetFacet = new TargetFacet(new FacetConfiguration(null, "availability"), null);
-    final TargetFacet licenseType = new TargetFacet(new FacetConfiguration(null, "licenseType"), null);
+    final TargetFacet availabilityTargetFacet = new TargetFacet(new FacetDefinition(null, "availability"), null);
+    final TargetFacet licenseType = new TargetFacet(new FacetDefinition(null, "licenseType"), null);
 
     @Before
     public void setUp() {

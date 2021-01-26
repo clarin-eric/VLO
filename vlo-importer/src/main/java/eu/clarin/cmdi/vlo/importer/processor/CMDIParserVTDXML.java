@@ -10,7 +10,7 @@ import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.CMDIDataFactory;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 
@@ -62,13 +62,13 @@ public class CMDIParserVTDXML<T> implements CMDIDataProcessor<T> {
 
         final VTDNav nav = vg.getNav();
         final String profileId = SchemaParsingUtil.extractXsd(nav);
-        final FacetMapping facetMapping = getFacetMapping(nav.cloneNav(), profileId);
+        final FacetsMapping facetMapping = getFacetMapping(nav.cloneNav(), profileId);
 
         // CMDI profile information
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE_ID), profileId, true);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), profileNameExtractor.process(profileId), true);
 
-        if (facetMapping.getFacetConfigurations().isEmpty()) {
+        if (facetMapping.getFacetDefinitions().isEmpty()) {
             LOG.error("Problems mapping facets for file: {}", file.getAbsolutePath());
         }
 
@@ -90,7 +90,7 @@ public class CMDIParserVTDXML<T> implements CMDIDataProcessor<T> {
      * @return the facet mapping used to map meta data to facets
      * @throws VTDException
      */
-    private FacetMapping getFacetMapping(VTDNav nav, String profileId) throws VTDException {
+    private FacetsMapping getFacetMapping(VTDNav nav, String profileId) throws VTDException {
         if (profileId == null) {
             throw new RuntimeException("Cannot get xsd schema so cannot get a proper mapping. Parse failed!");
         }

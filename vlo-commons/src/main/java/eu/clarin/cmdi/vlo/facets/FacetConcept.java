@@ -39,10 +39,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *         &lt;/choice&gt;
  *         &lt;element ref="{}blacklistPattern" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
- *       &lt;attribute name="allowMultipleValues" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
- *       &lt;attribute name="definition" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&gt;
- *       &lt;attribute name="description" type="{http://www.w3.org/2001/XMLSchema}anySimpleType" /&gt;
- *       &lt;attribute name="isCaseInsensitive" type="{http://www.w3.org/2001/XMLSchema}boolean" /&gt;
  *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}NCName" /&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -65,16 +61,7 @@ public class FacetConcept {
     })
     protected List<JAXBElement<String>> conceptOrPattern;
     protected List<String> blacklistPattern;
-    @XmlAttribute(name = "allowMultipleValues")
-    protected Boolean allowMultipleValues;
-    @XmlAttribute(name = "definition")
-    @XmlSchemaType(name = "anySimpleType")
-    protected String definition;
-    @XmlAttribute(name = "description")
-    @XmlSchemaType(name = "anySimpleType")
-    protected String description;
-    @XmlAttribute(name = "isCaseInsensitive")
-    protected Boolean isCaseInsensitive;
+    
     @XmlAttribute(name = "name", required = true)
     @XmlJavaTypeAdapter(CollapsedStringAdapter.class)
     @XmlSchemaType(name = "NCName")
@@ -135,86 +122,6 @@ public class FacetConcept {
             blacklistPattern = new ArrayList<String>();
         }
         return this.blacklistPattern;
-    }
-
-    /**
-     * Gets the value of the allowMultipleValues property.
-     *
-     * @return possible object is {@link Boolean }
-     *
-     */
-    public Boolean isAllowMultipleValues() {
-        return allowMultipleValues;
-    }
-
-    /**
-     * Sets the value of the allowMultipleValues property.
-     *
-     * @param value allowed object is {@link Boolean }
-     *
-     */
-    public void setAllowMultipleValues(Boolean value) {
-        this.allowMultipleValues = value;
-    }
-
-    /**
-     * Gets the value of the definition property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getDefinition() {
-        return definition;
-    }
-
-    /**
-     * Sets the value of the definition property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setDefinition(String value) {
-        this.definition = value;
-    }
-
-    /**
-     * Gets the value of the description property.
-     *
-     * @return possible object is {@link String }
-     *
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the value of the description property.
-     *
-     * @param value allowed object is {@link String }
-     *
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    /**
-     * Gets the value of the isCaseInsensitive property.
-     *
-     * @return possible object is {@link Boolean }
-     *
-     */
-    public Boolean isIsCaseInsensitive() {
-        return isCaseInsensitive;
-    }
-
-    /**
-     * Sets the value of the isCaseInsensitive property.
-     *
-     * @param value allowed object is {@link Boolean }
-     *
-     */
-    public void setIsCaseInsensitive(Boolean value) {
-        this.isCaseInsensitive = value;
     }
 
     /**

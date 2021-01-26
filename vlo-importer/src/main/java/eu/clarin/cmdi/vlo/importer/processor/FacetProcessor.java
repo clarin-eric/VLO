@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.importer.processor;
 
 import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
@@ -36,6 +36,6 @@ public interface FacetProcessor {
      * @throws java.net.URISyntaxException
      * @throws java.io.UnsupportedEncodingException
      */
-    void processFacets(CMDIData cmdiData, FacetMapping facetMapping) throws CMDIParsingException, URISyntaxException, UnsupportedEncodingException;
+    void processFacets(CMDIData cmdiData, FacetsMapping facetMapping) throws CMDIParsingException, URISyntaxException, UnsupportedEncodingException;
 
 }

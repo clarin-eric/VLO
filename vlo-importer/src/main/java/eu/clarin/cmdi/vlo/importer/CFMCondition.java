@@ -6,7 +6,7 @@ package eu.clarin.cmdi.vlo.importer;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.clarin.cmdi.vlo.importer.mapping.FacetConfiguration;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
 
 /**
  * @author WolfgangWalter SAUER (wowasa) <wolfgang.sauer@oeaw.ac.at>
@@ -25,7 +25,7 @@ public class CFMCondition {
 		return this.ifValue;
 	}
 	
-	public void addFacetValuePair(FacetConfiguration fc, String value){
+	public void addFacetValuePair(FacetDefinition fc, String value){
 		this.fvp.add(new FacetValuePair(fc, value));
 	}
 	
@@ -34,15 +34,15 @@ public class CFMCondition {
 	}
 	
 	public class FacetValuePair{
-		private FacetConfiguration fc;
+		private FacetDefinition fc;
 		private String value;
 		
-		public FacetValuePair(FacetConfiguration fc, String value){
+		public FacetValuePair(FacetDefinition fc, String value){
 			this.fc = fc;
 			this.value = value;
 		}
 		
-		public FacetConfiguration getFacetConfiguration(){
+		public FacetDefinition getFacetConfiguration(){
 			return this.fc;
 		}
 		
