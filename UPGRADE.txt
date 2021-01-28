@@ -82,6 +82,19 @@ for the upgraded VLO instance), go to the `bin` directory and run the importer u
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
+------------------------------
+Upgrading from 4.9.x to 4.10.0
+------------------------------
+A new 'facets configuration' file has been added. Some facet related settings have been
+moved from the facet concepts definition file (facetConcepts.xml) to a new facets
+configuration file (facetsConfiguration.xml). Both are now needed to run the VLO web app
+and importer. A configuration property has been added to VloConfig.xml to specify the
+location of the new facets configuration file:
+
+    <facetsConfigFile>file:/my/vlo/config/facetsConfiguration.xml</facetsConfigFile>
+	
+It can be also left empty to use the default facets configuration. 
+
 -----------------------------
 Upgrading from 4.9.1 to 4.9.2
 -----------------------------
