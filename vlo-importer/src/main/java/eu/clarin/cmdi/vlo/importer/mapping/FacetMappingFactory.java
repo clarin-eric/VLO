@@ -29,10 +29,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -61,12 +59,19 @@ public class FacetMappingFactory {
     public FacetMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller) {
         this.vloConfig = vloConfig;
         this.fieldNameService = new FieldNameServiceImpl(vloConfig);
+
         this.conceptMapping = marshaller.getFacetConceptMapping(vloConfig.getFacetConceptsFile());
+        if (conceptMapping == null) {
+            throw new RuntimeException("Cannot proceed without facet concept mapping");
+        }
+        
         this.facetsConfiguration = marshaller.getFacetsConfiguration(vloConfig.getFacetsConfigFile());
-        this.baseMapping = createBaseMapping();
-
-        new ValueMappingFactoryDOMImpl().createValueMapping(vloConfig.getValueMappingsFile(), this.conceptMapping, this.baseMapping);
-
+        if (facetsConfiguration == null) {
+            throw new RuntimeException("Cannot proceed without facets configuration");
+        }
+        
+        this.baseMapping = createBaseMapping(conceptMapping, facetsConfiguration);
+        new ValueMappingFactoryDOMImpl().createValueMapping(vloConfig.getValueMappingsFile(), conceptMapping, baseMapping);
     }
 
     public FacetConceptMapping getConceptMapping() {
@@ -104,7 +109,7 @@ public class FacetMappingFactory {
         });
     }
 
-    private FacetsMapping createBaseMapping() {
+    private static FacetsMapping createBaseMapping(FacetConceptMapping conceptMapping, FacetsConfiguration facetsConfiguration) {
         LOG.debug("Creating base mapping");
 
         final Map<String, Facet> facetConfigMap
@@ -118,7 +123,7 @@ public class FacetMappingFactory {
         FacetsMapping facetMapping = new FacetsMapping(facetConfigMap);
 
         // Below we put the stuff we found into the configuration class.
-        for (FacetConcept facetConcept : this.conceptMapping.getFacetConcepts()) {
+        for (FacetConcept facetConcept : conceptMapping.getFacetConcepts()) {
             LOG.trace("-- Facet concept {}", facetConcept);
             final FacetDefinition definition = facetMapping.getFacetDefinition(facetConcept.getName());
             final Facet facetConfig = facetConfigMap.get(facetConcept.getName());
@@ -126,7 +131,6 @@ public class FacetMappingFactory {
             if (facetConfig != null) {
                 definition.setPropertiesFromConfig(facetConfig);
             }
-//                config.setName(facetConcept.getName());
 
             definition.setFallbackPatterns(facetConcept.getPatterns());
 
