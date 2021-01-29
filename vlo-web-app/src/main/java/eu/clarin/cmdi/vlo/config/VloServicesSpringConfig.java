@@ -16,13 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
-import eu.clarin.cmdi.vlo.facets.FacetConceptsMarshaller;
+import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
+import eu.clarin.cmdi.vlo.facets.configuration.Facet;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
+import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
 import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -39,6 +43,7 @@ import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
 import eu.clarin.cmdi.vlo.service.impl.DOIResolver;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
+import eu.clarin.cmdi.vlo.service.impl.FacetConditionEvaluationServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetDescriptionServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.FieldValueOrderingsFactoryImpl;
@@ -53,6 +58,7 @@ import eu.clarin.cmdi.vlo.service.impl.UriResolverImpl;
 import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProviderImpl;
+import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 import javax.inject.Inject;
@@ -66,6 +72,7 @@ import nl.mpi.archiving.corpusstructure.core.handle.HandleRestApiResolver;
 import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.xml.sax.InputSource;
 
 /**
  * Beans for services used by the VLO web application (converters, resolvers,
@@ -185,8 +192,41 @@ public class VloServicesSpringConfig {
     }
 
     @Bean
-    public FacetDescriptionService facetDescriptionsService() throws JAXBException {
-        return new FacetDescriptionServiceImpl(facetsConfigMarshaller(), vloConfig);
+    public FacetDescriptionService facetDescriptionsService() throws JAXBException, IOException {
+        return new FacetDescriptionServiceImpl(facetsConfiguration());
+    }
+
+    @Bean
+    public FacetConditionEvaluationService facetConditionEvaluationService() throws JAXBException, IOException {
+        return new FacetConditionEvaluationServiceImpl(facetsConfiguration());
+    }
+
+    @Bean
+    public FacetsConfiguration facetsConfiguration() throws JAXBException, IOException {
+        final Source streamSource = getFacetsConfigSource();
+        return facetsConfigMarshaller().unmarshal(streamSource);
+    }
+
+    private Source getFacetsConfigSource() throws IOException {
+        final String facetConceptsFile = vloConfig.getFacetsConfigFile();
+
+        if (Strings.isNullOrEmpty(facetConceptsFile)) {
+            //logger.info("No facet concepts file configured. Reading default definitions from packaged file.");
+            return new StreamSource(getClass().getResourceAsStream(VloConfig.DEFAULT_FACETS_CONFIG_RESOURCE_FILE));
+        } else {
+            final InputSource stream = mappingDefinitionResolver().tryResolveUrlFileOrResourceStream(facetConceptsFile);
+            if (stream != null) {
+                //  logger.info("Reading facet definitions from {}", facetConceptsFile);
+                return new StreamSource(stream.getByteStream(), stream.getSystemId());
+            } else {
+                return null;
+            }
+        }
+    }
+
+    @Bean
+    public MappingDefinitionResolver mappingDefinitionResolver() {
+        return new MappingDefinitionResolver(FacetDescriptionServiceImpl.class);
     }
 
     @Bean
