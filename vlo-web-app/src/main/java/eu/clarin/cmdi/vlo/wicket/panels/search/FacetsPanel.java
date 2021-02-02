@@ -38,6 +38,7 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.ComputeMapValueModel;
@@ -66,6 +67,8 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private FacetConditionEvaluationService facetConditionService;
 
     private MapModel<String, ExpansionState> expansionModel;
     private IModel<Boolean> allFacetsShown = Model.of(false);
@@ -125,6 +128,13 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                     protected void selectionChanged(Optional<AjaxRequestTarget> target) {
                         FacetsPanel.this.selectionChanged(target);
                     }
+
+                    @Override
+                    protected boolean shouldShowFacet() {
+                        return super.shouldShowFacet()
+                                && facetConditionService.shouldShow(item.getModelObject(), selectionModel.getObject());
+                    }
+
                 }.add(new AttributeAppender("class", new IModel<String>() {
                     //class appender that differentiates between primary and secondary facets (based on configuration)
                     @Override
