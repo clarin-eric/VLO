@@ -23,6 +23,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -65,17 +66,17 @@ public abstract class ExpandablePanel<T> extends GenericPanel<T> {
     public ExpandablePanel(String id, IModel<T> model, IModel<ExpansionState> expansionStateModel) {
         super(id, model);
         this.expansionModel = expansionStateModel;
+
+        // expand/collapse controls
+        addExpandCollapse();
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        
+
         // title annex expansion toggler
         add(createTitleToggler());
-
-        // expand/collapse controls
-        addExpandCollapse();
 
         setOutputMarkupId(true);
     }
