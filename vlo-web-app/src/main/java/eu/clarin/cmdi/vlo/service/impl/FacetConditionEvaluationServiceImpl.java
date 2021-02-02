@@ -20,13 +20,16 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.facets.configuration.Condition;
 import eu.clarin.cmdi.vlo.facets.configuration.Conditions;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetCondition;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.solr.client.solrj.response.FacetField;
 
 /**
  *
@@ -34,7 +37,7 @@ import java.util.stream.Collectors;
  */
 public class FacetConditionEvaluationServiceImpl implements FacetConditionEvaluationService {
 
-    private final static FacetDisplayCondition DEFAULT_CONDITION = (QueryFacetsSelection selection) -> true;
+    private final static FacetDisplayCondition DEFAULT_CONDITION = (selection, facetFields) -> true;
 
     private final Map<String, FacetDisplayCondition> conditionsMap;
 
@@ -47,14 +50,14 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
     }
 
     @Override
-    public boolean shouldShow(String facet, QueryFacetsSelection selection) {
+    public boolean shouldShow(String facet, QueryFacetsSelection selection, List<FacetField> facetFields) {
         final FacetDisplayCondition condition = conditionsMap.getOrDefault(facet, DEFAULT_CONDITION);
-        return condition.evaluate(selection);
+        return condition.evaluate(selection, facetFields);
     }
 
     public static interface FacetDisplayCondition {
 
-        boolean evaluate(QueryFacetsSelection selection);
+        boolean evaluate(QueryFacetsSelection selection, List<FacetField> facetFields);
     }
 
     public static class FacetsConfigurationConditionsConverter {
@@ -92,20 +95,55 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
                             .map(this::conditionConfigToCondition)
                             .collect(Collectors.toList()));
 
-            return (selection) -> conditions
+            return (selection, facetFields) -> conditions
                     .stream()
-                    .allMatch(condition -> condition.evaluate(selection));
+                    .allMatch(condition -> condition.evaluate(selection, facetFields));
         }
 
         private FacetDisplayCondition createOrCondition(List<FacetDisplayCondition> collect) {
-            return (selection) -> collect
+            return (selection, facetFields) -> collect
                     .stream()
-                    .anyMatch(condition -> condition.evaluate(selection));
+                    .anyMatch(condition -> condition.evaluate(selection, facetFields));
         }
 
         private FacetDisplayCondition conditionConfigToCondition(Condition condition) {
-            //TODO
-            return DEFAULT_CONDITION;
+            if (condition.getFacetCondition() != null) {
+                return createFacetCondition(condition.getFacetCondition());
+            }
+            // Add other types?
+            throw new RuntimeException("Condition missing in definition");
+        }
+
+        private FacetDisplayCondition createFacetCondition(FacetCondition condition) {
+            final String facet = condition.getFacetName();
+            switch (condition.getSelection().getType()) {
+                case "anyValue":
+                    return (actualSelection, actualFacets) -> {
+                        final FacetSelection selectedValues = actualSelection.getSelectionValues(facet);
+                        return selectedValues != null
+                                && !selectedValues.getValues().isEmpty();
+                    };
+                case "anyOf":
+                    return (actualSelection, actualFacets) -> {
+                        final FacetSelection selectedValues = actualSelection.getSelectionValues(facet);
+                        final List<String> targetValues = condition.getSelection().getValue();
+                        return selectedValues != null
+                                && targetValues.stream().anyMatch(
+                                        value -> selectedValues.getValues().contains(value)
+                                );
+                    };
+                case "allOf":
+                    return (actualSelection, actualFacets) -> {
+                        final FacetSelection selectedValues = actualSelection.getSelectionValues(facet);
+                        final List<String> targetValues = condition.getSelection().getValue();
+                        return selectedValues != null
+                                && targetValues.stream().allMatch(
+                                        value -> selectedValues.getValues().contains(value)
+                                );
+                    };
+                default:
+                    throw new RuntimeException("Unsupported facet conditiont type: " + condition.getSelection().getType());
+            }
         }
     }
 

@@ -132,7 +132,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                     @Override
                     protected boolean shouldShowFacet() {
                         return super.shouldShowFacet()
-                                && facetConditionService.shouldShow(item.getModelObject(), selectionModel.getObject());
+                                && facetConditionService.shouldShow(item.getModelObject(), selectionModel.getObject(), fieldsModel.getObject());
                     }
 
                 }.add(new AttributeAppender("class", new IModel<String>() {

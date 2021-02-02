@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.service;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import java.util.List;
+import org.apache.solr.client.solrj.response.FacetField;
 
 /**
  *
@@ -25,5 +27,5 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 public interface FacetConditionEvaluationService {
     
     
-    boolean shouldShow(String facet, QueryFacetsSelection selection);
+    boolean shouldShow(String facet, QueryFacetsSelection selection, List<FacetField> facetFields);
 }
