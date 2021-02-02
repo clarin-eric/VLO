@@ -16,11 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.facets.configuration.Condition;
+import eu.clarin.cmdi.vlo.facets.configuration.Conditions;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -29,11 +35,15 @@ import java.util.Map;
 public class FacetConditionEvaluationServiceImpl implements FacetConditionEvaluationService {
 
     private final static FacetDisplayCondition DEFAULT_CONDITION = (QueryFacetsSelection selection) -> true;
-    
+
     private final Map<String, FacetDisplayCondition> conditionsMap;
 
     public FacetConditionEvaluationServiceImpl(FacetsConfiguration config) {
-        conditionsMap = createConditionsMap(config);
+        this(new FacetsConfigurationConditionsConverter(), config);
+    }
+
+    public FacetConditionEvaluationServiceImpl(FacetsConfigurationConditionsConverter converter, FacetsConfiguration config) {
+        conditionsMap = converter.createConditionsMap(config);
     }
 
     @Override
@@ -42,14 +52,61 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
         return condition.evaluate(selection);
     }
 
-    private Map<String, FacetDisplayCondition> createConditionsMap(FacetsConfiguration config) {
-        //TODO: generate conditions map based on config
-        return ImmutableMap.of();
-    }
-
     public static interface FacetDisplayCondition {
 
         boolean evaluate(QueryFacetsSelection selection);
+    }
+
+    public static class FacetsConfigurationConditionsConverter {
+
+        public Map<String, FacetDisplayCondition> createConditionsMap(FacetsConfiguration config) {
+            final ImmutableMap.Builder<String, FacetDisplayCondition> mapBuilder = ImmutableMap.builder();
+
+            config.getFacet().forEach(
+                    facet -> conditionsConfigToCondition(facet.getConditions())
+                            .ifPresent(condition -> mapBuilder.put(facet.getName(), condition))
+            );
+
+            return mapBuilder.build();
+        }
+
+        private Optional<FacetDisplayCondition> conditionsConfigToCondition(List<Conditions> conditions) {
+            if (conditions.isEmpty()) {
+                return Optional.empty();
+            } else if (conditions.size() == 1) {
+                return Optional.of(createAndCondition(conditions.get(0).getCondition()));
+            } else {
+                return Optional.of(createOrCondition(
+                        conditions
+                                .stream()
+                                .map(c -> c.getCondition())
+                                .map(this::createAndCondition)
+                                .collect(Collectors.toList())));
+            }
+        }
+
+        private FacetDisplayCondition createAndCondition(List<Condition> conditionsConfig) {
+            final List<FacetDisplayCondition> conditions = ImmutableList.copyOf(
+                    conditionsConfig
+                            .stream()
+                            .map(this::conditionConfigToCondition)
+                            .collect(Collectors.toList()));
+
+            return (selection) -> conditions
+                    .stream()
+                    .allMatch(condition -> condition.evaluate(selection));
+        }
+
+        private FacetDisplayCondition createOrCondition(List<FacetDisplayCondition> collect) {
+            return (selection) -> collect
+                    .stream()
+                    .anyMatch(condition -> condition.evaluate(selection));
+        }
+
+        private FacetDisplayCondition conditionConfigToCondition(Condition condition) {
+            //TODO
+            return DEFAULT_CONDITION;
+        }
     }
 
 }
