@@ -175,24 +175,41 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
     }
 
     protected boolean shouldShowFacet() {
-        // showing depends on whether showing with no values is allowed
-        if (!isHideIfNoValues()) {
-            //always show
-            return true;
-        }
+        final boolean hasSelection = !selectedFacetPanel.getModelObject().isEmpty();
 
-        // if there is a selection, always show
-        if (!selectedFacetPanel.getModelObject().isEmpty()) {
+        if (hasSelection) {
+            // if there is a selection, always show
             return true;
-        }
+        } else if (!meetsDisplayConditions()) {
+            // if no selection and should NOT be shown according to display
+            // conditions, do not show
+            return false;
+        } else {
+            // no selection and no condition against showing;
+            // is showing with no values allowed?
+            if (!isHideIfNoValues()) {
+                //then always show
+                return true;
+            }
 
-        // if no selection, show facet if there are values to be shown
-        if (facetValuesPanel.getModelObject().getValueCount() > 0) {
-            return true;
-        }
+            // if no selection, show facet IFF there are values to be shown
+            if (facetValuesPanel.getModelObject().getValueCount() > 0) {
+                return true;
+            }
 
-        // else hide
-        return false;
+            // else hide
+            return false;
+        }
+    }
+
+    /**
+     * Override to add a preconditions check for showing this facet; if returns
+     * false the facet will be hidden *unless* a value has been selected
+     *
+     * @return
+     */
+    protected boolean meetsDisplayConditions() {
+        return true;
     }
 
     /**
