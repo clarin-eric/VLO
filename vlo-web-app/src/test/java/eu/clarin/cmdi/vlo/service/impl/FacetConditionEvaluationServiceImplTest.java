@@ -112,7 +112,7 @@ public class FacetConditionEvaluationServiceImplTest {
         final FacetsConfiguration config = unmarshalConfig(configXml);
 
         final Map<String, FacetConditionEvaluationServiceImpl.FacetDisplayCondition> result
-                = converter.createConditionsMap(config);
+                = converter.convert(config);
 
         assertThat(result, is(notNullValue()));
         assertThat(result.entrySet(), hasSize(2));

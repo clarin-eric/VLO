@@ -21,11 +21,12 @@ import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 
 /**
+ * Service that evaluates configured display conditions for a query/selection
+ * state and its results
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public interface FacetConditionEvaluationService {
-    
-    
+
     boolean shouldShow(String facet, QueryFacetsSelection selection, List<FacetField> facetFields);
 }
