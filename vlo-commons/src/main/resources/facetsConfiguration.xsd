@@ -45,11 +45,11 @@
     <xs:element name="condition">
         <xs:complexType>
             <xs:choice>
-                <xs:element ref="facetCondition"/>
+                <xs:element ref="facetSelectionCondition"/>
             </xs:choice>
         </xs:complexType>
     </xs:element>
-    <xs:element name="facetCondition">
+    <xs:element name="facetSelectionCondition">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="facetName"/>

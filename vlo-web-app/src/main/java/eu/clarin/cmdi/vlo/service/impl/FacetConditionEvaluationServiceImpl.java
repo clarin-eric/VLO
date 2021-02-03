@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.facets.configuration.Condition;
 import eu.clarin.cmdi.vlo.facets.configuration.Conditions;
-import eu.clarin.cmdi.vlo.facets.configuration.FacetCondition;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetSelectionCondition;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -209,10 +209,10 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
          * @return facet display condition derived from the configuration
          */
         private FacetDisplayCondition conditionConfigToCondition(Condition conditionConfiguration) {
-            if (conditionConfiguration.getFacetCondition() != null) {
+            if (conditionConfiguration.getFacetSelectionCondition() != null) {
                 // Condition is a "facet condition", i.e. requires a certain
                 // selection or result state for a given (other) facet
-                return createFacetCondition(conditionConfiguration.getFacetCondition());
+                return createFacetCondition(conditionConfiguration.getFacetSelectionCondition());
             }
             // TODO: Add other types?
             throw new RuntimeException("Condition missing in definition");
@@ -224,7 +224,7 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
          * @param definition definition to implement as a condition
          * @return display condition that can be evaluated
          */
-        private FacetDisplayCondition createFacetCondition(FacetCondition definition) {
+        private FacetDisplayCondition createFacetCondition(FacetSelectionCondition definition) {
             final String facet = definition.getFacetName();
             switch (definition.getSelection().getType()) {
                 case "anyValue":

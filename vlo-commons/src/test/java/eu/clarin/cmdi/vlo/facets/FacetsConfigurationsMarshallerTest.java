@@ -19,7 +19,7 @@ package eu.clarin.cmdi.vlo.facets;
 import com.google.common.base.Objects;
 import eu.clarin.cmdi.vlo.facets.configuration.Conditions;
 import eu.clarin.cmdi.vlo.facets.configuration.Facet;
-import eu.clarin.cmdi.vlo.facets.configuration.FacetCondition;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetSelectionCondition;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.facets.configuration.Selection;
 import java.io.InputStream;
@@ -112,8 +112,8 @@ public class FacetsConfigurationsMarshallerTest {
                                         hasProperty("condition", allOf(
                                                 isA(List.class),
                                                 hasItem(
-                                                        hasProperty("facetCondition", allOf(
-                                                                isA(FacetCondition.class),
+                                                        hasProperty("facetSelectionCondition", allOf(
+                                                                isA(FacetSelectionCondition.class),
                                                                 hasProperty("facetName", equalTo("language")),
                                                                 hasProperty("selection", isA(Selection.class))
                                                         ))
