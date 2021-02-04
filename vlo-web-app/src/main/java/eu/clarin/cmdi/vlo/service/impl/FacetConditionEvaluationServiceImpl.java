@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.facets.configuration.Condition;
 import eu.clarin.cmdi.vlo.facets.configuration.Conditions;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetSelectionCondition;
@@ -27,27 +28,48 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
 import org.apache.solr.client.solrj.response.FacetField;
+import static org.eclipse.jetty.util.log.JettyLogHandler.config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
 /**
  * Service that evaluates configured display conditions for a query/selection
- * state and its results
+ * state and its results.
+ *
+ * Note: the {@link #init() } method must be called before using the service
+ * (method is annotated with {@link PostConstruct} to ensure this in a Spring
+ * context).
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class FacetConditionEvaluationServiceImpl implements FacetConditionEvaluationService {
 
+    private final static Logger logger = LoggerFactory.getLogger(FacetConditionEvaluationServiceImpl.class);
+
     private final Map<String, FacetDisplayCondition> conditionsMap;
+    private final Converter<FacetsConfiguration, Map<String, FacetDisplayCondition>> converter;
+    private final FacetsConfiguration config;
 
     public FacetConditionEvaluationServiceImpl(FacetsConfiguration config) {
         this(new FacetsConfigurationConditionsConverter(), config);
     }
 
     public FacetConditionEvaluationServiceImpl(Converter<FacetsConfiguration, Map<String, FacetDisplayCondition>> converter, FacetsConfiguration config) {
-        conditionsMap = converter.convert(config);
+        this.converter = converter;
+        this.config = config;
+        conditionsMap = Maps.newConcurrentMap();
+    }
+
+    @PostConstruct
+    protected void init() {
+        conditionsMap.putAll(converter.convert(config));
+        logger.debug("Facet display conditions loaded for {}", Objects.toString(conditionsMap.keySet()));
     }
 
     /**
@@ -61,6 +83,8 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
      */
     @Override
     public boolean shouldShow(String facet, QueryFacetsSelection selection, List<FacetField> facetFields) {
+        logger.trace("Facet display conditions requested for facets {}", facet);
+
         // get condition for the specified facet and evaluate again selection / results
         return conditionsMap
                 .getOrDefault(facet, getDefaultCondition()) // most facets will have no condition, fall back to default
@@ -107,14 +131,20 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
          * @return facet -> condition map
          */
         private Map<String, FacetDisplayCondition> createConditionsMap(FacetsConfiguration config) {
+            logger.debug("Instantiating a facets display conditions map from configuration");
             final ImmutableMap.Builder<String, FacetDisplayCondition> mapBuilder = ImmutableMap.builder();
 
             // All facets can have their own (composite) conditions configured independently. 
             config.getFacet().forEach(
-                    facet -> conditionsConfigToCondition(facet.getConditions())
-                            .ifPresent(condition -> mapBuilder.put(facet.getName(), condition))
+                    facet -> {
+                        logger.trace("Checking display conditions for facet {}", facet.getName());
+                        conditionsConfigToCondition(facet.getConditions())
+                                .ifPresent(condition -> {
+                                    logger.trace("Facet display conditions loaded for {}", facet.getName());
+                                    mapBuilder.put(facet.getName(), condition);
+                                });
+                    }
             );
-
             return mapBuilder.build();
         }
 
@@ -129,9 +159,13 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
         private Optional<FacetDisplayCondition> conditionsConfigToCondition(List<Conditions> conditions) {
             if (conditions == null || conditions.isEmpty()) {
                 // no conditions configured -> no facet display condition
+                logger.trace("No conditions for facet");
+
                 return Optional.empty();
             } else if (conditions.size() == 1) {
                 // one condition -> simple condition (no composite)
+                logger.trace("Single condition (group) for facet");
+
                 final List<Condition> condition
                         = conditions.get(0).getCondition();
                 // convert
@@ -142,6 +176,7 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
             } else {
                 // multiple conditions -> any matched condition should cause 
                 // facet to show, therefore combine as OR
+                logger.trace("Found {} condition (group)s", conditions.size());
 
                 //convert each condition
                 final List<FacetDisplayCondition> facetDisplayConditions
@@ -184,6 +219,8 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
                             .stream()
                             .allMatch(condition -> condition.evaluate(selection, facetFields));
 
+            logger.trace("Composite AND condition created for {} facet display conditions", conditions.size());
+
             return facetDisplayCondition;
         }
 
@@ -196,9 +233,13 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
          * wrapped display conditions match
          */
         private FacetDisplayCondition createOrCondition(List<FacetDisplayCondition> displayConditions) {
-            return (selection, facetFields) -> displayConditions
+            final FacetDisplayCondition facetDisplayCondition = (selection, facetFields) -> displayConditions
                     .stream()
                     .anyMatch(condition -> condition.evaluate(selection, facetFields));
+
+            logger.trace("Composite OR condition created for {} (composite) facet display conditions", displayConditions.size());
+
+            return facetDisplayCondition;
         }
 
         /**
@@ -212,7 +253,7 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
             if (conditionConfiguration.getFacetSelectionCondition() != null) {
                 // Condition is a "facet condition", i.e. requires a certain
                 // selection or result state for a given (other) facet
-                return createFacetCondition(conditionConfiguration.getFacetSelectionCondition());
+                return createFacetSelectionCondition(conditionConfiguration.getFacetSelectionCondition());
             }
             // TODO: Add other types?
             throw new RuntimeException("Condition missing in definition");
@@ -224,9 +265,13 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
          * @param definition definition to implement as a condition
          * @return display condition that can be evaluated
          */
-        private FacetDisplayCondition createFacetCondition(FacetSelectionCondition definition) {
+        private FacetDisplayCondition createFacetSelectionCondition(FacetSelectionCondition definition) {
             final String facet = definition.getFacetName();
-            switch (definition.getSelection().getType()) {
+            final String selectionType = definition.getSelection().getType();
+
+            logger.debug("Creating facet selection condition for facet '{}' with selection type '{}'", facet, selectionType);
+
+            switch (selectionType) {
                 case "anyValue":
                     // any selected value matches
                     return (actualSelection, actualFacets) -> {
@@ -253,7 +298,7 @@ public class FacetConditionEvaluationServiceImpl implements FacetConditionEvalua
                                         value -> selectedValues.getValues().contains(value));
                     };
                 default:
-                    throw new RuntimeException("Unsupported facet conditiont type: " + definition.getSelection().getType());
+                    throw new RuntimeException("Unsupported facet conditiont type: " + selectionType);
             }
         }
     }
