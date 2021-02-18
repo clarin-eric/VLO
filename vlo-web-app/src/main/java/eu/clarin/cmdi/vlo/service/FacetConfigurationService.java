@@ -20,7 +20,7 @@ package eu.clarin.cmdi.vlo.service;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
-public interface FacetDescriptionService {
+public interface FacetConfigurationService {
     
     String getDescription(String facet);
 }

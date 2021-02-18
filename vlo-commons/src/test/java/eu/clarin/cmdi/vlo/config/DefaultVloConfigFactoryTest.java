@@ -459,82 +459,6 @@ public class DefaultVloConfigFactoryTest {
     }
 
     /**
-     * Test of getFacetFields method
-     */
-    @Test
-    public void testGetFacetFields() {
-        List<String> expResult = Arrays.asList(
-                "languageCode",
-                "multilingual",
-                "collection",
-                "resourceClass",
-                "modality",
-                "format",
-                "keywords",
-                "genre",
-                "subject",
-                "country",
-                "organisation",
-                "dataProvider",
-                "nationalProject");
-
-        List<String> result = config.getFacetFieldNames();
-        assertEquals(expResult, result);
-    }
-
-    @Test
-    public void testGetFacetsInSearch() {
-        final String[] expItems = new String[]{
-            "languageCode",
-            "collection",
-            "resourceClass",
-            "modality",
-            "format",
-            "keywords",
-            "genre",
-            "subject",
-            "country",
-            "organisation",
-            "dataProvider",
-            "nationalProject"
-        };
-        List<String> result = config.getFacetsInSearch();
-
-        //order is not important in this case
-        assertThat(result, hasItems(expItems));
-    }
-
-    /**
-     * Test of setFacetFields method, of class VloConfig
-     */
-    @Test
-    public void testSetFacetFields() {
-        List<String> keys = Arrays.asList(
-                "RESOURCE_CLASS",
-                "MODALITY",
-                "GENRE",
-                "COUNTRY",
-                "HARVESTER_ROOT",
-                "NATIONAL_PROJECT",
-                "KEYWORDS");
-
-        List<String> expResult = Arrays.asList(
-                "resourceClass",
-                "modality",
-                "genre",
-                "country",
-                "_harvesterRoot",
-                "nationalProject",
-                "keywords");
-
-        config.setFacetFieldKeys(keys);
-
-        List<String> result = config.getFacetFieldNames();
-
-        assertEquals(expResult, result);
-    }
-
-    /**
      * Test the getCountryComponentUrl method.
      */
     @Test
@@ -665,30 +589,6 @@ public class DefaultVloConfigFactoryTest {
     public void testGetCollectionFacet() {
         final String result = config.getCollectionFacet();
         assertNull(result);
-    }
-
-    @Test
-    public void testGetIgnoredFieldNames() {
-        Set<String> result = config.getIgnoredFieldNames();
-        assertEquals(IGNORED_FIELDS_COUNT, result.size());
-    }
-
-    @Test
-    public void testGetIgnoredFieldKeys() {
-        Set<String> result = config.getIgnoredFieldKeys();
-        assertEquals(IGNORED_FIELDS_COUNT, result.size());
-    }
-
-    @Test
-    public void testGetTechnicalFieldNames() {
-        Set<String> result = config.getTechnicalFieldNames();
-        assertEquals(TECHNICAL_FIELDS_COUNT, result.size());
-    }
-
-    @Test
-    public void testGetTechnicalFieldKeys() {
-        Set<String> result = config.getTechnicalFieldKeys();
-        assertEquals(TECHNICAL_FIELDS_COUNT, result.size());
     }
 
     @Test

@@ -143,89 +143,13 @@
     <deprecatedFields>
         <field key="DEPRECATED_LANGUAGE">language</field>
     </deprecatedFields>
-
-    <!-- KEYS of fields shown as facets on the search page -->
-    <facetFields>
-        <facetField>LANGUAGE_CODE</facetField>
-        <facetField>MULTILINGUAL</facetField>
-        <facetField>COLLECTION</facetField>
-        <facetField>RESOURCE_CLASS</facetField>
-        <facetField>MODALITY</facetField>
-        <facetField>FORMAT</facetField>
-        <facetField>KEYWORDS</facetField>
-        <facetField>GENRE</facetField>
-        <facetField>SUBJECT</facetField>
-        <facetField>COUNTRY</facetField>
-        <facetField>ORGANISATION</facetField>
-        <facetField>DATA_PROVIDER</facetField>
-        <facetField>NATIONAL_PROJECT</facetField>
-    </facetFields>
-
-    <!-- KEYS of fields shown as primary facets -->
-    <primaryFacetFields>
-        <primaryFacetField>LANGUAGE_CODE</primaryFacetField>
-        <primaryFacetField>COLLECTION</primaryFacetField>
-        <primaryFacetField>RESOURCE_CLASS</primaryFacetField>
-        <primaryFacetField>MODALITY</primaryFacetField>
-        <primaryFacetField>FORMAT</primaryFacetField>
-        <primaryFacetField>KEYWORDS</primaryFacetField>
-    </primaryFacetFields>
+    
+    <!-- Note: primary and secondary facet fields, search result fields,
+    ignored fields and technical fields have been moved to the facets
+    configuration file (facetsConfiguration.xml) in the VLO mappings project -->
 
     <!-- If this many facets or more than this have values, hide non-primary facets -->
     <hideSecondaryFacetsLimit>8</hideSecondaryFacetsLimit>
-
-    <!-- KEYS of fields shown in expanded search results on the search page -->
-    <searchResultFields>
-        <searchResultField>NAME</searchResultField>
-        <searchResultField>COUNTRY</searchResultField>
-        <searchResultField>LANGUAGE_CODE</searchResultField>
-        <searchResultField>MODALITY</searchResultField>
-        <searchResultField>SUBJECT</searchResultField>
-        <searchResultField>GENRE</searchResultField>
-        <searchResultField>ORGANISATION</searchResultField>
-        <searchResultField>COLLECTION</searchResultField>
-        <searchResultField>NATIONAL_PROJECT</searchResultField>
-        <searchResultField>CREATOR</searchResultField>
-    </searchResultFields>
-
-    <!-- KEYS of fields ignored in the record page -->
-    <ignoredFields>
-        <ignoredField>FORMAT</ignoredField>
-        <ignoredField>SOLR_SCORE</ignoredField>
-        <ignoredField>LICENSE</ignoredField>
-        <ignoredField>AVAILABILITY</ignoredField>
-        <ignoredField>LICENSE_TYPE</ignoredField>
-        <ignoredField>ACCESS_INFO</ignoredField>
-        <ignoredField>SIGNATURE</ignoredField>
-        <ignoredField>PROJECT_NAME</ignoredField>
-        <ignoredField>RESOURCE</ignoredField>
-        <ignoredField>FILENAME</ignoredField>
-        <ignoredField>HAS_PART</ignoredField>
-        <ignoredField>RESOURCE_COUNT</ignoredField>
-        <ignoredField>DAYS_SINCE_LAST_SEEN</ignoredField>
-        <ignoredField>HAS_PART_COUNT_WEIGHT</ignoredField>
-        <ignoredField>LANGUAGE_NAME</ignoredField>
-        <ignoredField>MULTILINGUAL</ignoredField>
-        <ignoredField>TEMPORAL_COVERAGE_START</ignoredField>
-        <ignoredField>TEMPORAL_COVERAGE_END</ignoredField>
-    </ignoredFields>
-
-    <!-- KEYS of fields shown as technical fields in the record page -->
-    <technicalFields>
-        <technicalField>ID</technicalField>
-        <technicalField>SELF_LINK</technicalField>
-        <technicalField>COMPLETE_METADATA</technicalField>
-        <technicalField>LANDINGPAGE</technicalField>
-        <technicalField>SEARCHPAGE</technicalField>
-        <technicalField>SEARCH_SERVICE</technicalField>
-        <technicalField>LAST_SEEN</technicalField>
-        <technicalField>CLARIN_PROFILE</technicalField>
-        <technicalField>CLARIN_PROFILE_ID</technicalField>
-        <technicalField>HARVESTER_ROOT</technicalField>
-        <technicalField>HIERARCHY_WEIGHT</technicalField>
-        <technicalField>HAS_PART_COUNT</technicalField>
-        <technicalField>RESOURCE_AVAILABILITY_SCORE</technicalField>
-    </technicalFields>
 
     <!-- This defines the availability levels shown in the web app and their 
     display values and descriptions Descriptions are shown on the record page 

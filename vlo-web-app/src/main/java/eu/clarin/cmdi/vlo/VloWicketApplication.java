@@ -10,7 +10,6 @@ import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigWicketResource;
-import eu.clarin.cmdi.vlo.service.FacetDescriptionService;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
@@ -67,6 +66,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
 
 /**
  * Application object for your web application. If you want to run this
@@ -85,7 +85,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Inject
     private FieldValueConverterProvider fieldValueConverterProvider;
     @Inject
-    private FacetDescriptionService facetDescriptionService;
+    private FacetConfigurationService facetDescriptionService;
     @Inject
     private Map<String, Ordering<String>> fieldValueOrderings;
     @Inject
@@ -290,7 +290,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         return fieldValueOrderings;
     }
 
-    public FacetDescriptionService getFacetDescriptionService() {
+    public FacetConfigurationService getFacetDescriptionService() {
         return facetDescriptionService;
     }
 

@@ -1,11 +1,8 @@
 package eu.clarin.cmdi.vlo.config;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -180,45 +177,6 @@ public class VloConfig {
     @XmlJavaTypeAdapter(XmlFieldAdapter.class)
     @XmlElement(name = "deprecatedFields")
     private Map<String, String> deprecatedFields;
-
-    /**
-     * A set of fields to be excluded from display<br>
-     * <br>
-     *
-     * To let JAXB know it has to interpret the element as an array, use the
-     * XmlElementWrapper directive. Use the directive to let JAXB know that the
-     * elements inside 'facetFields' are named 'facetField'.
-     */
-    @XmlElementWrapper(name = "ignoredFields")
-    private Set<String> ignoredField;
-    /**
-     * An array of fields to be included as technical properties<br>
-     * <br>
-     *
-     * To let JAXB know it has to interpret the element as an array, use the
-     * XmlElementWrapper directive. Use the directive to let JAXB know that the
-     * elements inside 'facetFields' are named 'facetField'.
-     */
-
-    @XmlElementWrapper(name = "technicalFields")
-    private Set<String> technicalField;
-
-    @XmlElementWrapper(name = "searchResultFields")
-    private Set<String> searchResultField;
-
-    /**
-     * An array of facetFields<br>
-     * <br>
-     *
-     * To let JAXB know it has to interpret the facetFields element as an array, use
-     * the XmlElementWrapper directive. Use the directive to let JAXB know that the
-     * elements inside 'facetFields' are named 'facetField'.
-     */
-    @XmlElementWrapper(name = "facetFields")
-    private List<String> facetField = new ArrayList<String>();
-
-    @XmlElementWrapper(name = "primaryFacetFields")
-    private Set<String> primaryFacetField;
 
     @XmlElementWrapper(name = "signatureFields")
     private List<String> signatureField;
@@ -975,43 +933,6 @@ public class VloConfig {
         federatedContentSearchUrl = param;
     }
 
-    /**
-     * Get the value of the FacetFields parameter<br>
-     * <br>
-     *
-     * For a description of the parameter, refer to the general VLO documentation.
-     *
-     * @return List of field-keys
-     */
-    public List<String> getFacetFieldKeys() {
-        return this.facetField;
-    }
-
-    /**
-     * @return List of resolved field-names
-     */
-    public List<String> getFacetFieldNames() {
-        return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-    }
-
-    /**
-     * @return Set of field-keys
-     */
-    public Set<String> getPrimaryFacetFieldKeys() {
-        return this.primaryFacetField;
-    }
-
-    /**
-     * @return Set of resolved field-names
-     */
-    public Set<String> getPrimaryFacetFieldNames() {
-        return this.primaryFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-    }
-
-    public void setPrimaryFacetFields(Set<String> primaryFacetField) {
-        this.primaryFacetField = primaryFacetField;
-    }
-
     public List<String> getSignatureFieldKeys() {
         return this.signatureField;
     }
@@ -1022,52 +943,6 @@ public class VloConfig {
 
     public void setSignatureFields(List<String> signatureField) {
         this.signatureField = signatureField;
-    }
-
-    /**
-     *
-     * @return all facet fields, including collection facet (arbitrary order
-     *         unspecified)
-     * @see #getFacetFieldNames()
-     * @see #getCollectionFacet()
-     */
-    public List<String> getFacetsInSearch() {
-        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFieldNames());
-        final String collection = getCollectionFacet();
-        if (collection != null) {
-            allFacets.add(collection);
-        }
-        return allFacets;
-    }
-
-    /**
-     * Set the value of the FacetFields parameter<br>
-     * <br>
-     *
-     * For a description of the parameter, refer to the general VLO documentation.
-     *
-     * @param param the value, a list of facet field-keys
-     */
-    public void setFacetFieldKeys(List<String> param) {
-        facetField = param;
-    }
-
-    /**
-     * @return Collection of field-keys
-     */
-    public Collection<String> getSearchResultFieldKeys() {
-        return searchResultField;
-    }
-
-    /**
-     * @return Collection of resolved field-names
-     */
-    public Collection<String> getSearchResultFieldNames() {
-        return searchResultField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-    }
-
-    public void setSearchResultFieldKeys(Set<String> searchResultField) {
-        this.searchResultField = searchResultField;
     }
 
     /**
@@ -1086,42 +961,6 @@ public class VloConfig {
      */
     public void setCollectionFacet(String collectionFacet) {
         this.collectionFacet = collectionFacet;
-    }
-
-    /**
-     * @return Set of field-keys
-     */
-    public Set<String> getIgnoredFieldKeys() {
-        return this.ignoredField;
-    }
-
-    /**
-     * @return Set of resolved field-names
-     */
-    public Set<String> getIgnoredFieldNames() {
-        return this.ignoredField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-    }
-
-    public void setIgnoredFieldKeys(Set<String> ignoredFields) {
-        this.ignoredField = ignoredFields;
-    }
-
-    /**
-     * @return Set of field-keys
-     */
-    public Set<String> getTechnicalFieldKeys() {
-        return this.technicalField;
-    }
-
-    /**
-     * @return Set of resolved field-names
-     */
-    public Set<String> getTechnicalFieldNames() {
-        return this.technicalField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-    }
-
-    public void setTechnicalFieldKeys(Set<String> technicalFields) {
-        this.technicalField = technicalFields;
     }
 
     /**
