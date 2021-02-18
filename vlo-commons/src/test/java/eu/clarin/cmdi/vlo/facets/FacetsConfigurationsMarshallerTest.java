@@ -122,14 +122,18 @@ public class FacetsConfigurationsMarshallerTest {
                                 ))
                         ))
                 )));
-                assertThat("No conditions for test facet", facets, hasItem(allOf(
+                assertThat("No conditions for test facet", facets, hasItem(
+                        hasProperty("conditions", hasSize(0))
+                ));
+                assertThat("Test facet properties should match definition", facets, hasItem(allOf(
                         hasProperty("name", equalTo("test")),
                         hasMultilingualValue(false),
                         hasCaseInsensitiveValue(true),
                         hasAllowMultipleValue(null),
+                        hasProperty("displayAs", hasSize(1)),
+                        hasProperty("displayAs", hasItem(equalTo("primaryFacet"))),
                         hasProperty("description", equalTo("Test description")),
-                        hasProperty("definition", equalTo("Test definition")),
-                        hasProperty("conditions", hasSize(0))
+                        hasProperty("definition", equalTo("Test definition"))
                 )));
             }
         }

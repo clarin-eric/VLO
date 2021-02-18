@@ -33,6 +33,7 @@
         </conditions>
     </facet>
     <facet name="test">
+        <displayAs>primaryFacet</displayAs>
         <multilingual>false</multilingual>
         <caseInsensitive>true</caseInsensitive>
         <description>Test description</description>
