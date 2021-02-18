@@ -22,6 +22,7 @@
     <xs:element name="facet">
         <xs:complexType>
             <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="displayAs"/>
                 <xs:element ref="allowMultipleValues" minOccurs="0"/>
                 <xs:element ref="caseInsensitive" minOccurs="0"/>
                 <xs:element ref="multilingual" minOccurs="0"/>
@@ -71,4 +72,15 @@
     <xs:element name="multilingual" type="xs:boolean"/>
     <xs:element name="caseInsensitive" type="xs:boolean"/>
     <xs:element name="facetName" type="xs:string"/>
+    <xs:element name="displayAs">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="primaryFacet"/>
+                <xs:enumeration value="secondaryFacet"/>
+                <xs:enumeration value="technicalField"/>
+                <xs:enumeration value="ignoredField"/>
+                <xs:enumeration value="searchResultField"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
 </xs:schema>
