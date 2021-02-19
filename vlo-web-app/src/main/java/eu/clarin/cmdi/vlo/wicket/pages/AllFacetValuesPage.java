@@ -32,6 +32,7 @@ import org.apache.wicket.util.string.StringValue;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
+import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -56,7 +57,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
     @SpringBean
     private FacetParameterMapper facetParamMapper;
     @SpringBean
-    private VloConfig vloConfig;
+    private FacetConfigurationService facetsConfig;
 
     private final IModel<QueryFacetsSelection> selectionModel;
     private final IModel<FacetSelectionType> selectionTypeModeModel;
@@ -79,7 +80,7 @@ public class AllFacetValuesPage extends VloBasePage<FacetField> {
 
         final String facet = facetParamMapper.getFacet(facetValue.toString());
 
-        if (vloConfig.getFacetsInSearch().contains(facet)) {
+        if (facetsConfig.getFacetsInSearch().contains(facet)) {
             // create a new model so that all values will be retrieved
             setModel(new FacetFieldModel(Model.of(facet), facetFieldsService, selectionModel, -1)); // gets all facet values
         }

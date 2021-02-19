@@ -17,12 +17,12 @@
 package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Sets;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
 import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
 import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
-import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
@@ -164,21 +164,21 @@ public class VloServicesSpringConfig {
     }
 
     @Bean(name = "basicPropertiesFilter")
-    public FieldFilter basicPropertiesFieldFilter() {
+    public FieldFilter basicPropertiesFieldFilter() throws JAXBException, IOException {
         return new ExclusiveFieldFilter(Sets.union(
-                vloConfig.getIgnoredFieldNames(),
-                vloConfig.getTechnicalFieldNames()));
+                ImmutableSet.copyOf(facetConfigurationService().getIgnoredFieldNames()),
+                ImmutableSet.copyOf(facetConfigurationService().getTechnicalFieldNames())));
     }
 
     @Bean(name = "searchResultPropertiesFilter")
-    public FieldFilter searchResultPropertiesFilter() {
-        return new InclusiveFieldFilter(vloConfig.getSearchResultFieldNames());
+    public FieldFilter searchResultPropertiesFilter() throws JAXBException, IOException {
+        return new InclusiveFieldFilter(facetConfigurationService().getSearchResultFieldNames());
     }
 
     @Bean(name = "technicalPropertiesFilter")
-    public FieldFilter technicalPropertiesFieldFilter() {
+    public FieldFilter technicalPropertiesFieldFilter() throws JAXBException, IOException {
         return new InclusiveFieldFilter(
-                vloConfig.getTechnicalFieldNames());
+                facetConfigurationService().getTechnicalFieldNames());
     }
 
     @Bean
@@ -192,7 +192,7 @@ public class VloServicesSpringConfig {
     }
 
     @Bean
-    public FacetConfigurationService facetDescriptionsService() throws JAXBException, IOException {
+    public FacetConfigurationService facetConfigurationService() throws JAXBException, IOException {
         return new FacetConfigurationServiceImpl(facetsConfiguration());
     }
 

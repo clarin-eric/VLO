@@ -32,8 +32,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
-
 import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
@@ -73,14 +71,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
     @Override
     public void setUp() throws Exception {
         this.fieldNameService = new FieldNameServiceImpl(DefaultVloConfigFactory.configureDefaultMappingLocations(new DefaultVloConfigFactory().newConfig()));
-        VloConfig vloConfig = new VloConfig() {
-
-            @Override
-            public List<String> getFacetsInSearch() {
-                return ImmutableList.of(fieldNameService.getFieldName(FieldKey.COLLECTION), fieldNameService.getFieldName(FieldKey.COUNTRY));
-            }
-
-        };
+        VloConfig vloConfig = new VloConfig();
         
 
         // set up an embedded solr server

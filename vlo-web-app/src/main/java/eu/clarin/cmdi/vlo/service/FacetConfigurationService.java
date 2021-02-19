@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.service;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
@@ -23,4 +26,11 @@ package eu.clarin.cmdi.vlo.service;
 public interface FacetConfigurationService {
     
     String getDescription(String facet);
+    
+    List<String> getFacetsInSearch();
+    List<String> getFacetFieldNames();
+    Collection<String> getPrimaryFacetFieldNames();
+    Collection<String> getIgnoredFieldNames();
+    Collection<String>  getTechnicalFieldNames();
+    Collection<String>  getSearchResultFieldNames();
 }

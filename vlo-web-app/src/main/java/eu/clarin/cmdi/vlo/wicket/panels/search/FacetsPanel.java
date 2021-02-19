@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
+import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.ComputeMapValueModel;
@@ -67,6 +68,8 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
 
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private FacetConfigurationService facetsConfig;
     @SpringBean
     private FacetConditionEvaluationService facetConditionService;
 
@@ -138,7 +141,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                     //class appender that differentiates between primary and secondary facets (based on configuration)
                     @Override
                     public String getObject() {
-                        final Collection<String> primaryFacetFields = vloConfig.getPrimaryFacetFieldNames();
+                        final Collection<String> primaryFacetFields = facetsConfig.getPrimaryFacetFieldNames();
                         if (primaryFacetFields == null || primaryFacetFields.isEmpty()) {
                             //no primary facets configured, don't set a class
                             return null;

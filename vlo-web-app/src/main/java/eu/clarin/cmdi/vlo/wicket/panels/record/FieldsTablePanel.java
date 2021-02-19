@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
+import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
 import eu.clarin.cmdi.vlo.wicket.components.FieldValueLabel;
@@ -78,7 +79,7 @@ public class FieldsTablePanel extends Panel {
             = Collections.emptySet(); // ImmutableSet.of(FacetConstants.FIELD_LANGUAGE_CODE);
 
     @SpringBean
-    private VloConfig vloConfig;
+    private FacetConfigurationService facetsConfig;
     @SpringBean(name = "fieldValueSorters")
     private Map<String, Ordering> fieldValueOrderingMap;
     @SpringBean
@@ -166,7 +167,7 @@ public class FieldsTablePanel extends Panel {
                 super.onConfigure();
                 // only show for facet fields
                 setVisible(isShowFacetSelectLinks()
-                        && vloConfig.getFacetsInSearch().contains(facetNameModel.getObject()));
+                        && facetsConfig.getFacetsInSearch().contains(facetNameModel.getObject()));
             }
         };
     }
