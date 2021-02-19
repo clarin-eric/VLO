@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.apache.solr.common.SolrDocument;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;

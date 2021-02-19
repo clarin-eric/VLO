@@ -193,8 +193,10 @@ public abstract class FacetPanel extends ExpandablePanel<String> {
             }
 
             // if no selection, show facet IFF there are values to be shown
-            if (facetValuesPanel.getModelObject().getValueCount() > 0) {
-                return true;
+            if (facetValuesPanel.getModelObject() != null) {
+                if (facetValuesPanel.getModelObject().getValueCount() > 0) {
+                    return true;
+                }
             }
 
             // else hide
