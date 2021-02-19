@@ -47,12 +47,7 @@
                 <xs:element name="valueMappingsFile" type="xs:string" />
                 <xs:element ref="fields" />
                 <xs:element ref="deprecatedFields" />
-                <xs:element ref="facetFields" />
-                <xs:element ref="primaryFacetFields" />
                 <xs:element name="hideSecondaryFacetsLimit" type="xs:string" />
-                <xs:element ref="searchResultFields" />
-                <xs:element ref="ignoredFields" />
-                <xs:element ref="technicalFields" />
                 <xs:element ref="availability" />
                 <xs:element name="countryComponentUrl" type="xs:string" />
                 <xs:element name="languageLinkTemplate" type="xs:string" />
