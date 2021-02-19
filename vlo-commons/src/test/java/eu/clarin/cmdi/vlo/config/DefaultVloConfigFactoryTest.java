@@ -4,11 +4,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.hamcrest.CoreMatchers.hasItems;
 
 /**
  *
@@ -583,12 +581,6 @@ public class DefaultVloConfigFactoryTest {
         config.setCqlEndpointAlternative(param);
         String result = config.getCqlEndpointAlternative();
         assertEquals(param, result);
-    }
-
-    @Test
-    public void testGetCollectionFacet() {
-        final String result = config.getCollectionFacet();
-        assertNull(result);
     }
 
     @Test

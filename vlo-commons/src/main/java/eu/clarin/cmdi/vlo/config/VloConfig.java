@@ -183,8 +183,6 @@ public class VloConfig {
 
     private int hideSecondaryFacetsLimit = 7;
 
-    private String collectionFacet;
-
     // (required = false)
     private String cqlEndpointFilter = "";
 
@@ -943,24 +941,6 @@ public class VloConfig {
 
     public void setSignatureFields(List<String> signatureField) {
         this.signatureField = signatureField;
-    }
-
-    /**
-     *
-     * @return the name of the facet that represents the collection a resource
-     *         belongs to
-     */
-    public String getCollectionFacet() {
-        return collectionFacet;
-    }
-
-    /**
-     *
-     * @param collectionFacet the name of the facet that represents the collection a
-     *                        resource belongs to
-     */
-    public void setCollectionFacet(String collectionFacet) {
-        this.collectionFacet = collectionFacet;
     }
 
     /**

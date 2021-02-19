@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import java.util.Map;
@@ -25,6 +26,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service that provides information about the facets configuration.
@@ -35,22 +40,51 @@ import java.util.List;
  */
 public class FacetConfigurationServiceImpl implements FacetConfigurationService {
 
+    public static class DisplayAs {
+
+        private static final String SEARCH_RESULT_FIELD = "searchResultField";
+        private static final String TECHNICAL_FIELD = "technicalField";
+        private static final String IGNORED_FIELD = "ignoredField";
+        private static final String SECONDARY_FACET = "secondaryFacet";
+        private static final String PRIMARY_FACET = "primaryFacet";
+    }
+
     private final static Logger logger = LoggerFactory.getLogger(FacetConfigurationServiceImpl.class);
 
     private Map<String, Facet> facets = Collections.emptyMap();
     private final FacetsConfiguration facetsConfiguration;
+    private List<String> facetFields;
+    private List<String> primaryFacetFields;
+    private List<String> ignoredFields;
+    private List<String> technicalFields;
+    private List<String> searchResultFields;
 
     public FacetConfigurationServiceImpl(FacetsConfiguration facetsConfiguration) {
         this.facetsConfiguration = facetsConfiguration;
     }
 
     public void init() {
-        for (Facet facet : facetsConfiguration.getFacet()) {
-            if (facet.getDescription() != null) {
-                logger.debug("Found facet configuration '{}'", facet.getName());
-                facets.put(facet.getName(), facet);
-            }
-        }
+        facets = facetsConfiguration
+                .getFacet()
+                .stream()
+                .collect(ImmutableMap.toImmutableMap(Facet::getName, Function.identity()));
+
+        facetFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.PRIMARY_FACET, DisplayAs.SECONDARY_FACET));
+        primaryFacetFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.PRIMARY_FACET));
+        ignoredFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.IGNORED_FIELD));
+        technicalFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.TECHNICAL_FIELD));
+        searchResultFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.SEARCH_RESULT_FIELD));
+    }
+
+    private List<String> getFilteredFacetNames(Predicate<Facet> predicate) {
+        return facets.values().stream()
+                .filter(predicate)
+                .map(Facet::getName)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private boolean hasDisplayAsProperties(Facet f, String... properties) {
+        return Stream.of(properties).allMatch(property -> f.getDisplayAs().contains(property));
     }
 
     @Override
@@ -60,168 +94,41 @@ public class FacetConfigurationServiceImpl implements FacetConfigurationService 
                 .orElse(null);
     }
 
-    /**
-     *
-     * @return all facet fields, including collection facet (arbitrary order
-     * unspecified)
-     * @see #getFacetFieldNames()
-     * @see #getCollectionFacet()
-     */
     @Override
-    public List<String> getFacetsInSearch() {
-        //TODO
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFieldNames());
-//        final String collection = getCollectionFacet();
-//        if (collection != null) {
-//            allFacets.add(collection);
-//        }
-//        return allFacets;
+    public List<String> getFacetFieldNames() {
+        return facetFields;
     }
 
     @Override
     public Collection<String> getIgnoredFieldNames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return ignoredFields;
     }
 
     @Override
     public Collection<String> getTechnicalFieldNames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return technicalFields;
     }
 
     @Override
     public Collection<String> getSearchResultFieldNames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List<String> getFacetFieldNames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return searchResultFields;
     }
 
     @Override
     public Collection<String> getPrimaryFacetFieldNames() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return primaryFacetFields;
+    }
+
+    /**
+     *
+     * @return all facet fields, including collection facet (arbitrary order
+     * unspecified)
+     * @deprecated Use {@link #getFacetFieldNames() }
+     * @see #getFacetFieldNames()
+     */
+    @Override
+    @Deprecated
+    public List<String> getFacetsInSearch() {
+        return getFacetFieldNames();
     }
 }
-
-//    /**
-//     * Get the value of the FacetFields parameter<br>
-//     * <br>
-//     *
-//     * For a description of the parameter, refer to the general VLO documentation.
-//     *
-//     * @return List of field-keys
-//     */
-//    public List<String> getFacetFieldKeys() {
-//        return this.facetField;
-//    }
-//
-//    /**
-//     * @return List of resolved field-names
-//     */
-//    public List<String> getFacetFieldNames() {
-//        return this.facetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-//    }
-//
-//    /**
-//     * @return Set of field-keys
-//     */
-//    public Set<String> getPrimaryFacetFieldKeys() {
-//        return this.primaryFacetField;
-//    }
-//
-//    /**
-//     * @return Set of resolved field-names
-//     */
-//    public Set<String> getPrimaryFacetFieldNames() {
-//        return this.primaryFacetField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-//    }
-//
-//    public void setPrimaryFacetFields(Set<String> primaryFacetField) {
-//        this.primaryFacetField = primaryFacetField;
-//    }
-//
-//    /**
-//     *
-//     * @return all facet fields, including collection facet (arbitrary order
-//     *         unspecified)
-//     * @see #getFacetFieldNames()
-//     * @see #getCollectionFacet()
-//     */
-//    public List<String> getFacetsInSearch() {
-//        final ArrayList<String> allFacets = new ArrayList<String>(getFacetFieldNames());
-//        final String collection = getCollectionFacet();
-//        if (collection != null) {
-//            allFacets.add(collection);
-//        }
-//        return allFacets;
-//    }
-//
-//    /**
-//     * Set the value of the FacetFields parameter<br>
-//     * <br>
-//     *
-//     * For a description of the parameter, refer to the general VLO documentation.
-//     *
-//     * @param param the value, a list of facet field-keys
-//     */
-//    public void setFacetFieldKeys(List<String> param) {
-//        facetField = param;
-//    }
-//
-//    /**
-//     * @return Collection of field-keys
-//     */
-//    public Collection<String> getSearchResultFieldKeys() {
-//        return searchResultField;
-//    }
-//
-//    /**
-//     * @return Collection of resolved field-names
-//     */
-//    public Collection<String> getSearchResultFieldNames() {
-//        return searchResultField.stream().map(key -> this.fields.get(key)).collect(Collectors.toList());
-//    }
-//
-//    public void setSearchResultFieldKeys(Set<String> searchResultField) {
-//        this.searchResultField = searchResultField;
-//    }
-//    
-//    
-//
-//    /**
-//     * @return Set of field-keys
-//     */
-//    public Set<String> getIgnoredFieldKeys() {
-//        return this.ignoredField;
-//    }
-//
-//    /**
-//     * @return Set of resolved field-names
-//     */
-//    public Set<String> getIgnoredFieldNames() {
-//        return this.ignoredField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-//    }
-//
-//    public void setIgnoredFieldKeys(Set<String> ignoredFields) {
-//        this.ignoredField = ignoredFields;
-//    }
-//
-//    /**
-//     * @return Set of field-keys
-//     */
-//    public Set<String> getTechnicalFieldKeys() {
-//        return this.technicalField;
-//    }
-//
-//    /**
-//     * @return Set of resolved field-names
-//     */
-//    public Set<String> getTechnicalFieldNames() {
-//        return this.technicalField.stream().map(key -> this.fields.get(key)).collect(Collectors.toSet());
-//    }
-//
-//    public void setTechnicalFieldKeys(Set<String> technicalFields) {
-//        this.technicalField = technicalFields;
-//    }
