@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.config;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import java.util.Map;
@@ -69,22 +70,28 @@ public class FacetConfigurationServiceImpl implements FacetConfigurationService 
                 .stream()
                 .collect(ImmutableMap.toImmutableMap(Facet::getName, Function.identity()));
 
-        facetFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.PRIMARY_FACET, DisplayAs.SECONDARY_FACET));
-        primaryFacetFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.PRIMARY_FACET));
-        ignoredFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.IGNORED_FIELD));
-        technicalFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.TECHNICAL_FIELD));
-        searchResultFields = getFilteredFacetNames(f -> hasDisplayAsProperties(f, DisplayAs.SEARCH_RESULT_FIELD));
-    }
-
-    private List<String> getFilteredFacetNames(Predicate<Facet> predicate) {
-        return facets.values().stream()
-                .filter(predicate)
-                .map(Facet::getName)
+        primaryFacetFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.PRIMARY_FACET))
+                .collect(Collectors.toUnmodifiableList());
+        facetFields = Streams.concat(
+                getFilteredFacetNames(hasDisplayProperties(DisplayAs.PRIMARY_FACET)),
+                getFilteredFacetNames(hasDisplayProperties(DisplayAs.SECONDARY_FACET)))
+                .collect(Collectors.toUnmodifiableList());
+        ignoredFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.IGNORED_FIELD))
+                .collect(Collectors.toUnmodifiableList());
+        technicalFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.TECHNICAL_FIELD))
+                .collect(Collectors.toUnmodifiableList());
+        searchResultFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.SEARCH_RESULT_FIELD))
                 .collect(Collectors.toUnmodifiableList());
     }
 
-    private boolean hasDisplayAsProperties(Facet f, String... properties) {
-        return Stream.of(properties).allMatch(property -> f.getDisplayAs().contains(property));
+    private Stream<String> getFilteredFacetNames(Predicate<Facet> predicate) {
+        return facets.values().stream()
+                .filter(predicate)
+                .map(Facet::getName);
+    }
+
+    private Predicate<Facet> hasDisplayProperties(String... properties) {
+        return facet -> Stream.of(properties).allMatch(property -> facet.getDisplayAs().contains(property));
     }
 
     @Override
