@@ -39,7 +39,7 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.NameAndCountFieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
-import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
+import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.ComputeMapValueModel;

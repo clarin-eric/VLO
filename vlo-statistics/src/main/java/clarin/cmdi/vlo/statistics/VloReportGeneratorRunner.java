@@ -18,8 +18,13 @@ package clarin.cmdi.vlo.statistics;
 
 import clarin.cmdi.vlo.statistics.reporting.StatsdReporter;
 import clarin.cmdi.vlo.statistics.reporting.XmlReportWriter;
+import com.google.common.base.Strings;
+import eu.clarin.cmdi.vlo.MappingDefinitionResolver;
+import eu.clarin.cmdi.vlo.config.FacetConfigurationServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
+import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
+import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,9 +33,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
 import javax.xml.bind.JAXBException;
+import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xml.sax.InputSource;
 
 /**
  *
@@ -55,14 +62,41 @@ public class VloReportGeneratorRunner {
                 = new XmlVloConfigFactory(configLocation.toURI().toURL());
         final VloConfig vloConfig = xmlVloConfigFactory.newConfig();
 
+        final FacetsConfiguration facetsConfiguration = getFacetsConfiguration(vloConfig);
+        final FacetConfigurationServiceImpl facetConfigurationService = new FacetConfigurationServiceImpl(facetsConfiguration);
+
         // instantiate generator
-        final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig);
+        final VloReportGenerator vloReportGenerator = new VloReportGenerator(vloConfig, facetConfigurationService);
+
+        facetConfigurationService.init();
         // complete configuration
         applyConfigurationOptions(vloReportGenerator, properties);
 
         // start report generator
         logger.info("Gathering statistics...");
         vloReportGenerator.run();
+    }
+
+    private static FacetsConfiguration getFacetsConfiguration(VloConfig vloConfig) throws JAXBException, IOException {
+        final String facetConceptsFile = vloConfig.getFacetsConfigFile();
+
+        final StreamSource streamSource;
+        if (Strings.isNullOrEmpty(facetConceptsFile)) {
+            //logger.info("No facet concepts file configured. Reading default definitions from packaged file.");
+            streamSource = new StreamSource(VloReportGenerator.class.getResourceAsStream(VloConfig.DEFAULT_FACETS_CONFIG_RESOURCE_FILE));
+        } else {
+            final MappingDefinitionResolver mappingDefinitionResolver = new MappingDefinitionResolver(FacetConfigurationServiceImpl.class);
+            final InputSource stream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(facetConceptsFile);
+            if (stream != null) {
+                //  logger.info("Reading facet definitions from {}", facetConceptsFile);
+                streamSource = new StreamSource(stream.getByteStream(), stream.getSystemId());
+            } else {
+                return null;
+            }
+        }
+
+        return new FacetsConfigurationsMarshaller().unmarshal(streamSource);
+
     }
 
     private static Properties loadProperties(String[] args) throws IOException {

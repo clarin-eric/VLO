@@ -14,37 +14,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.service.impl;
+package eu.clarin.cmdi.vlo.config;
 
-import com.sun.jersey.client.impl.CopyOnWriteHashMap;
 import eu.clarin.cmdi.vlo.facets.configuration.Facet;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * Service that provides information about the facets configuration.
+ * {@link #init()} method must be called!
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
+ * @see FacetsConfiguration
  */
 public class FacetConfigurationServiceImpl implements FacetConfigurationService {
 
     private final static Logger logger = LoggerFactory.getLogger(FacetConfigurationServiceImpl.class);
 
-    private final Map<String, Facet> facets = new CopyOnWriteHashMap<>();
+    private Map<String, Facet> facets = Collections.emptyMap();
     private final FacetsConfiguration facetsConfiguration;
 
     public FacetConfigurationServiceImpl(FacetsConfiguration facetsConfiguration) {
         this.facetsConfiguration = facetsConfiguration;
     }
 
-    @PostConstruct
-    protected void init() {
+    public void init() {
         for (Facet facet : facetsConfiguration.getFacet()) {
             if (facet.getDescription() != null) {
                 logger.debug("Found facet configuration '{}'", facet.getName());
@@ -104,8 +104,6 @@ public class FacetConfigurationServiceImpl implements FacetConfigurationService 
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
-
-    
 
 //    /**
 //     * Get the value of the FacetFields parameter<br>

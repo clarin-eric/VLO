@@ -17,7 +17,7 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.TemporalCoverageRange;
 import eu.clarin.cmdi.vlo.service.ExposureTracker;
-import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
+import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;

@@ -66,7 +66,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
+import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 
 /**
  * Application object for your web application. If you want to run this

@@ -32,8 +32,14 @@ import org.apache.solr.client.solrj.response.QueryResponse;
  */
 public class RecordCountCollector implements VloStatisticsCollector {
 
+    private final VloConfig config;
+
+    public RecordCountCollector(VloConfig config) {
+        this.config = config;
+    }
+
     @Override
-    public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
+    public void collect(VloReport report, SolrClient solrClient) throws SolrServerException, IOException {
         final SolrQuery query = new SolrQuery("*:*");
         query.setRequestHandler(VloReportGenerator.SOLR_REQUEST_HANDLER);
         query.setRows(0);

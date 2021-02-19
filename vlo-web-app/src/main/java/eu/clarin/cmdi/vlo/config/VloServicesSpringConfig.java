@@ -43,7 +43,6 @@ import eu.clarin.cmdi.vlo.service.impl.DOIResolver;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
 import eu.clarin.cmdi.vlo.service.impl.FacetConditionEvaluationServiceImpl;
-import eu.clarin.cmdi.vlo.service.impl.FacetConfigurationServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.FieldValueOrderingsFactoryImpl;
 import eu.clarin.cmdi.vlo.service.impl.HandleResolverWrapper;
@@ -72,7 +71,6 @@ import org.apache.solr.common.SolrDocument;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.xml.sax.InputSource;
-import eu.clarin.cmdi.vlo.service.FacetConfigurationService;
 
 /**
  * Beans for services used by the VLO web application (converters, resolvers,
@@ -191,7 +189,7 @@ public class VloServicesSpringConfig {
         return new FieldValueConverterProviderImpl(languageCodeUtils(), vloConfig);
     }
 
-    @Bean
+    @Bean(initMethod = "init")
     public FacetConfigurationService facetConfigurationService() throws JAXBException, IOException {
         return new FacetConfigurationServiceImpl(facetsConfiguration());
     }

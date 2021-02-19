@@ -41,12 +41,18 @@ import org.slf4j.LoggerFactory;
 public class CollectionsCollector implements VloStatisticsCollector {
 
     private final static int COLLECTION_FACET_LIMIT = 1000;
-    
+
     private final static Logger logger = LoggerFactory.getLogger(CollectionsCollector.class);
     private FieldNameService fieldNameService = null;
 
+    private final VloConfig config;
+
+    public CollectionsCollector(VloConfig config) {
+        this.config = config;
+    }
+
     @Override
-    public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
+    public void collect(VloReport report, SolrClient solrClient) throws SolrServerException, IOException {
         if (this.fieldNameService == null) {
             this.fieldNameService = new FieldNameServiceImpl(config);
         }

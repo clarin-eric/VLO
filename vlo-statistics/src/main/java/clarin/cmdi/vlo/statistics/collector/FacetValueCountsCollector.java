@@ -18,6 +18,7 @@ package clarin.cmdi.vlo.statistics.collector;
 
 import clarin.cmdi.vlo.statistics.VloReportGenerator;
 import clarin.cmdi.vlo.statistics.model.VloReport;
+import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.List;
@@ -31,29 +32,35 @@ import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
-
 /**
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class FacetValueCountsCollector implements VloStatisticsCollector {
 
+    final VloConfig config;
+    final FacetConfigurationService facetsConfigService;
+
+    public FacetValueCountsCollector(VloConfig config, FacetConfigurationService facetsConfigService) {
+        this.config = config;
+        this.facetsConfigService = facetsConfigService;
+    }
 
     @Override
-    public void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
-        report.setFacets(obtainFacetStats(config, solrClient));
+    public void collect(VloReport report, SolrClient solrClient) throws SolrServerException, IOException {
+        report.setFacets(obtainFacetStats(config, facetsConfigService, solrClient));
     }
-    
-    private List<VloReport.Facet> obtainFacetStats(VloConfig config, SolrClient solrClient) throws SolrServerException, IOException {
+
+    private List<VloReport.Facet> obtainFacetStats(VloConfig config, FacetConfigurationService facetsConfigService, SolrClient solrClient) throws SolrServerException, IOException {
         final SolrQuery query = new SolrQuery("*:*");
         query.setRequestHandler(VloReportGenerator.SOLR_REQUEST_HANDLER);
         query.setRows(0);
         query.setFacet(true);
-        
-        config.getFacetFieldNames().forEach((value) -> {
+
+        facetsConfigService.getFacetFieldNames().forEach((value) -> {
             query.addFacetField(value);
         });
-        
+
         query.setFacetLimit(-1);
 
         QueryRequest req = new QueryRequest(query);
@@ -70,5 +77,5 @@ public class FacetValueCountsCollector implements VloStatisticsCollector {
                 }).collect(Collectors.toList());
         return facets;
     }
-    
+
 }

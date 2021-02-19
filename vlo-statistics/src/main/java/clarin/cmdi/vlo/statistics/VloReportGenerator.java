@@ -23,6 +23,7 @@ import clarin.cmdi.vlo.statistics.collector.VloStatisticsCollector;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import clarin.cmdi.vlo.statistics.reporting.VloReportHandler;
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,13 +48,13 @@ public class VloReportGenerator {
     private final List<VloStatisticsCollector> collectors;
     private final List<VloReportHandler> resultHandlers;
 
-    public VloReportGenerator(VloConfig config) {
-        this(config,
+    public VloReportGenerator(VloConfig vloConfig, FacetConfigurationService facetsConfig) {
+        this(vloConfig,
                 //set the default collectors that will be executed in order when creating the report
                 ImmutableList.of(
-                        new RecordCountCollector(),
-                        new CollectionsCollector(),
-                        new FacetValueCountsCollector()
+                        new RecordCountCollector(vloConfig),
+                        new CollectionsCollector(vloConfig),
+                        new FacetValueCountsCollector(vloConfig, facetsConfig)
                 //TODO: add collector for data providers
                 //TODO: add collector for record ages
                 ));
@@ -78,7 +79,7 @@ public class VloReportGenerator {
         try {
             for (VloStatisticsCollector collector : collectors) {
                 logger.info("Running {}", collector.getClass().getSimpleName());
-                collector.collect(report, config, solrClient);
+                collector.collect(report, solrClient);
             }
         } finally {
             solrClient.close();

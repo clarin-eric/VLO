@@ -28,5 +28,5 @@ import org.apache.solr.client.solrj.SolrServerException;
  */
 public interface VloStatisticsCollector {
 
-    void collect(VloReport report, VloConfig config, SolrClient solrClient) throws SolrServerException, IOException;
+    void collect(VloReport report, SolrClient solrClient) throws SolrServerException, IOException;
 }
