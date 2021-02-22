@@ -95,6 +95,22 @@ location of the new facets configuration file:
 	
 It can be also left empty to use the default facets configuration. 
 
+The following properties or property groups have been removed from VloConfig:
+
+- `facetFields`
+- `primaryFacetFields`
+- `searchResultFields`
+- `ignoredFields`
+- `technicalFields`
+
+The following field have been added:
+- `<field key="CLARIN_PROFILE_ID">_componentProfileId</field>`
+- `<field key="TEMPORAL_COVERAGE_START">temporalCoverage_s</field>`
+- `<field key="TEMPORAL_COVERAGE_END">temporalCoverage_e</field>`
+
+A property `lrSwitchboardPopupEnabled` has been added to VloConfig. By default, this
+should be set to true.
+
 -----------------------------
 Upgrading from 4.9.1 to 4.9.2
 -----------------------------
