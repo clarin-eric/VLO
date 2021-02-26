@@ -70,17 +70,16 @@ public class FacetConfigurationServiceImpl implements FacetConfigurationService 
                 .stream()
                 .collect(ImmutableMap.toImmutableMap(Facet::getName, Function.identity()));
 
-        primaryFacetFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.PRIMARY_FACET))
+        primaryFacetFields = getFilteredFacetNames(hasDisplayProperty(DisplayAs.PRIMARY_FACET))
                 .collect(Collectors.toUnmodifiableList());
-        facetFields = Streams.concat(
-                getFilteredFacetNames(hasDisplayProperties(DisplayAs.PRIMARY_FACET)),
-                getFilteredFacetNames(hasDisplayProperties(DisplayAs.SECONDARY_FACET)))
+        facetFields = getFilteredFacetNames(hasDisplayProperty(DisplayAs.PRIMARY_FACET)
+                .or(hasDisplayProperty(DisplayAs.SECONDARY_FACET)))
                 .collect(Collectors.toUnmodifiableList());
-        ignoredFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.IGNORED_FIELD))
+        ignoredFields = getFilteredFacetNames(hasDisplayProperty(DisplayAs.IGNORED_FIELD))
                 .collect(Collectors.toUnmodifiableList());
-        technicalFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.TECHNICAL_FIELD))
+        technicalFields = getFilteredFacetNames(hasDisplayProperty(DisplayAs.TECHNICAL_FIELD))
                 .collect(Collectors.toUnmodifiableList());
-        searchResultFields = getFilteredFacetNames(hasDisplayProperties(DisplayAs.SEARCH_RESULT_FIELD))
+        searchResultFields = getFilteredFacetNames(hasDisplayProperty(DisplayAs.SEARCH_RESULT_FIELD))
                 .collect(Collectors.toUnmodifiableList());
     }
 
@@ -90,8 +89,8 @@ public class FacetConfigurationServiceImpl implements FacetConfigurationService 
                 .map(Facet::getName);
     }
 
-    private Predicate<Facet> hasDisplayProperties(String... properties) {
-        return facet -> Stream.of(properties).allMatch(property -> facet.getDisplayAs().contains(property));
+    private Predicate<Facet> hasDisplayProperty(String property) {
+        return facet -> facet.getDisplayAs().contains(property);
     }
 
     @Override
