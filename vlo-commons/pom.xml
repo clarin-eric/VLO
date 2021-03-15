@@ -14,7 +14,7 @@
     <version>4.9.3-beta1</version>
     <name>VLO Commons</name>
     <properties>
-        <jackson.version>2.11.3</jackson.version>
+        <jackson.version>2.12.2</jackson.version>
         <jackson.databind.version>${jackson.version}</jackson.databind.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>xmlunit</groupId>
             <artifactId>xmlunit</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <scope>test</scope>
             <type>xml</type>
             <classifier>ivy</classifier>
