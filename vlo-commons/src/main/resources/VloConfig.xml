@@ -284,9 +284,7 @@
     <lrSwitchboardBaseUrl>${vloconfig.lrSwitchboardBaseUrl}</lrSwitchboardBaseUrl>
     
     <lrSwitchboardPopupScriptUrl>${vloconfig.lrSwitchboardBaseUrl}popup/switchboardpopup.js</lrSwitchboardPopupScriptUrl>
-    
-    <lrSwitchboardPopupStyleUrl>${vloconfig.lrSwitchboardBaseUrl}popup/switchboardpopup.css</lrSwitchboardPopupStyleUrl>
-    
+        
     <linkCheckerDbConnectionString>${vloconfig.linkCheckerDbConnectionString}</linkCheckerDbConnectionString>
 
     <linkCheckerDbUser>${vloconfig.linkCheckerDbUser}</linkCheckerDbUser>
