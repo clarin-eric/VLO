@@ -1,5 +1,12 @@
 Bug fixes and new features
 --------------------------
+VLO 4.9.3 (March 2021)
+
+* switchboard pop-up enabled
+	<https://github.com/clarin-eric/VLO/issues/315>
+* Fixed issue with guided tour
+
+
 VLO 4.9.2 (October 2020)
 
 * New version of resource availability status API

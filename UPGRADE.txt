@@ -83,6 +83,11 @@ updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
 -----------------------------
+Upgrading from 4.9.2 to 4.9.3
+-----------------------------
+Maintenance release. No configuration changes are necessary.
+
+-----------------------------
 Upgrading from 4.9.1 to 4.9.2
 -----------------------------
 Maintenance release. No configuration changes are necessary.
