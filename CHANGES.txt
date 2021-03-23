@@ -11,6 +11,12 @@ VLO 4.10.0 (March 2021)
 * Multilingual as conditional facet by default
 		<https://github.com/clarin-eric/VLO/issues/290>
 
+VLO 4.9.3 (March 2021)
+
+* switchboard pop-up enabled
+	<https://github.com/clarin-eric/VLO/issues/315>
+* Fixed issue with guided tour
+
 VLO 4.9.2 (October 2020)
 
 * New version of resource availability status API
