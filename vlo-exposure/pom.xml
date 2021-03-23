@@ -36,6 +36,7 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.2.19.jre7</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.opentable.components</groupId>
