@@ -22,12 +22,10 @@ import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.request.cycle.RequestCycle;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentExpansionPairImpl;
-import eu.clarin.cmdi.vlo.wicket.provider.SolrDocumentExpansionPairProvider;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 
 import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
@@ -36,7 +34,6 @@ import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 

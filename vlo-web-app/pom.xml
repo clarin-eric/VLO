@@ -43,6 +43,13 @@
             <artifactId>vlo-importer</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+        </dependency>        
+        <!-- For exposure db in test -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.19.jre7</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- WICKET DEPENDENCIES -->
