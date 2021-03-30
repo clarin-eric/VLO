@@ -6,13 +6,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.10.0-beta2</version>
+        <version>4.10.0-beta-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-exposure</artifactId>
-    <version>4.10.0-beta2</version>
+    <version>4.10.0-beta-SNAPSHOT</version>
     <name>vlo-exposure</name>
     <url>http://maven.apache.org</url>
     <properties>
