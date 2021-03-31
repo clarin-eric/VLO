@@ -7,12 +7,14 @@ import eu.clarin.cmdi.vlo.monitor.model.IndexState;
 import eu.clarin.cmdi.vlo.monitor.model.MonitorReportItem;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -109,13 +111,17 @@ public class VloMonitor {
                         });
     }
 
-    private void doPrune(Integer maxDays) {
-        final Calendar calendar = Calendar.getInstance();
-        // set max date based on max number of days in the past
-        calendar.add(Calendar.HOUR, -24 * maxDays);
+    /**
+     * Prune any state older that specified age
+     *
+     * @param maxAgeInDays maximum age of state that shouldn't be pruned
+     */
+    private void doPrune(Integer maxAgeInDays) {
+        // calculate max date from max number of days in the past        
+        final Date pruneThreshold = DateUtils.addDays(new Date(), -maxAgeInDays);
 
         final List<IndexState> statesToPrune
-                = ImmutableList.copyOf(repo.findOlderThan(calendar.getTime()));
+                = ImmutableList.copyOf(repo.findOlderThan(pruneThreshold));
 
         log.info("Found {} old states to prune: {}{}", statesToPrune.size(),
                 statesToPrune.stream().map(IndexState::toString).limit(10).toArray(),

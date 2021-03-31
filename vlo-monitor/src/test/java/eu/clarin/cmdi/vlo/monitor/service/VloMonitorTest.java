@@ -177,7 +177,9 @@ public class VloMonitorTest {
         instance.run();
 
         verify(repo).findOlderThan(argThat((date) -> {
-            return Math.abs(date.getTime() - dateLimit.getTime()) < 60000;
+            // specified threshold should not differentiate significantly from expected date limit
+            // (we allow some deviation since the reference timestamp might differ)
+            return Math.abs(date.getTime() - dateLimit.getTime()) < 60000; //60s
         }));
 
         verify(repo).deleteAll(and(anyList(), argThat((list) -> {
