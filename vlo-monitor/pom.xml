@@ -10,7 +10,7 @@
     </parent>
     <groupId>eu.clarin.cmdi.vlo</groupId>
     <artifactId>vlo-monitor</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>4.10.0-1</version>
     <name>VLO change monitor</name>
     <description>Command line utility that carries out rule based checks for changes in the VLO's index</description>
 
