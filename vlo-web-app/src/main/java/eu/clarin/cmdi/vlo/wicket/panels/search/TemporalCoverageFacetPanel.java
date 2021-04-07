@@ -32,7 +32,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.core.request.handler.IPartialPageRequestHandler;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -43,6 +42,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -117,7 +117,7 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
 
     private Form<RangeValue> createTemporalCoverageForm(String id, IModel<TemporalCoverageRange> temporalCoverageRangeModel1) {
         final Form<RangeValue> form = new Form<>(id, rangeModel);
-        
+
         // Form has its own feedback panel
         final FeedbackPanel feedback = new JQueryFeedbackPanel("feedbackTemporalCoverage");
         form.add(feedback.setOutputMarkupId(true));
@@ -223,9 +223,19 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
     protected void onConfigure() {
         super.onConfigure();
 
-        if (getModelObject().getSelectionValues(TEMPORAL_COVERAGE) != null) {
-            //if there is any temporal coverage selection, make initially expanded
-            getExpansionModel().setObject(ExpansionState.EXPANDED);
+        final QueryFacetsSelection modelObject = getModelObject();
+        if (modelObject != null) {
+            final Map<String, FacetSelection> selection = modelObject.getSelection();
+
+            if (!filterEnabledModel.getObject() && selection != null) {
+                // enable temporal coverage control if temporal coverage filter is set
+                filterEnabledModel.setObject(selection.containsKey(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE)));
+            }
+
+            if (modelObject.getSelectionValues(TEMPORAL_COVERAGE) != null) {
+                //if there is any temporal coverage selection, make initially expanded
+                getExpansionModel().setObject(ExpansionState.EXPANDED);
+            }
         }
     }
 
@@ -250,7 +260,7 @@ public abstract class TemporalCoverageFacetPanel extends ExpandablePanel<QueryFa
         if (selectionTypeModeModel != null) {
             this.selectionTypeModeModel.detach();
         }
-        
+
         upperModel.detach();
         lowerModel.detach();
         rangeModel.detach();
