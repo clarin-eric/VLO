@@ -184,20 +184,21 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
             dataSet.setSpatial(places);
         }
 
-        final Collection<Object> hasPartValues = context.getFieldValues(FieldKey.HAS_PART);
-        if (hasPartValues != null) {
-            final List<CreativeWork> children = hasPartValues.stream()
-                    .map(partId -> {
-                        final PageParameters params = new PageParameters().add(VloWebAppParameters.DOCUMENT_ID, partId.toString());
-                        final String relativeUrl = RequestCycle.get().urlFor(RecordPage.class, params).toString();
-                        return RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(relativeUrl));
-                    })
-                    .map(CreativeWork::new)
-                    .limit(ARRAY_SIZE_LIMIT)
-                    .collect(Collectors.toList());
-            dataSet.setHasPart(children);
-
-        }
+        // Skipping hasPart because the type has to be more specific than 'CreativeWork'
+        // but we cannot know it (except for other records in the VLO but lookup would be expensive)
+//        final Collection<Object> hasPartValues = context.getFieldValues(FieldKey.HAS_PART);
+//        if (hasPartValues != null) {
+//            final List<CreativeWork> children = hasPartValues.stream()
+//                    .map(partId -> {
+//                        final PageParameters params = new PageParameters().add(VloWebAppParameters.DOCUMENT_ID, partId.toString());
+//                        final String relativeUrl = RequestCycle.get().urlFor(RecordPage.class, params).toString();
+//                        return RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(relativeUrl));
+//                    })
+//                    .map(CreativeWork::new)
+//                    .limit(ARRAY_SIZE_LIMIT)
+//                    .collect(Collectors.toList());
+//            dataSet.setHasPart(children);
+//        }
 
         final Collection<Object> resourceInfos = context.getFieldValues(FieldKey.RESOURCE);
         if (resourceInfos != null) {
