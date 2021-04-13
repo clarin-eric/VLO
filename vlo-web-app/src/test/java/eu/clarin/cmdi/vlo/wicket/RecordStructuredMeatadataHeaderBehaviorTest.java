@@ -158,18 +158,6 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
             assertEquals(COUNTRY, ((JSONObject) spatial1).get("name"));
         }
 
-        // Has part array
-        {
-            final Object parts = json.get("hasPart");
-            assertTrue(parts instanceof JSONArray);
-            assertEquals(2, ((JSONArray) parts).size());
-            final Object part1 = ((JSONArray) parts).get(0);
-            assertTrue(part1 instanceof JSONObject);
-            assertEquals("CreativeWork", ((JSONObject) part1).get("@type"));
-            assertTrue(((JSONObject) part1).get("url") instanceof String);
-            assertTrue(((JSONObject) part1).get("url").toString().endsWith(PART_URL));
-        }
-
         // Resources (distribution) array
         {
             final Object resources = json.get("distribution");
@@ -232,7 +220,6 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
 
         assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("creator")).size());
         assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("spatial")).size());
-        assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("hasPart")).size());
         assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("distribution")).size());
     }
 
