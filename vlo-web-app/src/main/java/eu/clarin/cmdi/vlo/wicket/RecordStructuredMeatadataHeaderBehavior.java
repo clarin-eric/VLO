@@ -21,7 +21,6 @@ import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.ResourceInfo;
-import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.DataSetStructuredData;
 import eu.clarin.cmdi.vlo.config.DataSetStructuredDataFilter;
@@ -47,9 +46,6 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +59,8 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     private final static Logger logger = LoggerFactory.getLogger(RecordStructuredMeatadataHeaderBehavior.class);
 
     public static final int ARRAY_SIZE_LIMIT = 25;
+    public static final int DESCRIPTION_MIN_LENGTH = 50;
+    public static final int DESCRIPTION_MAX_LENGTH = 5000;
     public static final String FILTER_WILDCARD = "*";
 
     @SpringBean
@@ -95,13 +93,12 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
     private static DataSet createDataSetForDocument(IModel<SolrDocument> documentModel) {
         final SolrDocument doc = documentModel.getObject();
         final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
-        
+
         // Name and description fields are required; if not present, do not generate data set object
         if (doc.getFieldValue(fieldNameService.getFieldName(FieldKey.NAME)) == null
                 || doc.getFieldValue(fieldNameService.getFieldName(FieldKey.DESCRIPTION)) == null) {
             return null;
         }
-        
 
         final DataSet dataSet = new DataSet();
         dataSet.setUrl(VloWicketApplication.get().getPermalinkService().getUrlString(RecordPage.class, null, documentModel.getObject()));
@@ -112,7 +109,7 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         final ConstructionContext context = new ConstructionContext(fieldNameService, documentModel);
         context.setStringValue(FieldKey.NAME, dataSet::setName, true);
-        context.setStringValue(FieldKey.DESCRIPTION, dataSet::setDescription, false);
+        context.setStringValue(FieldKey.DESCRIPTION, dataSet::setDescription, false, RecordStructuredMeatadataHeaderBehavior::fixDescriptionLength);
 
         URI landingPageURI = null;
         if (context.hasFieldValue(FieldKey.LANDINGPAGE)) {
@@ -199,7 +196,6 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 //                    .collect(Collectors.toList());
 //            dataSet.setHasPart(children);
 //        }
-
         final Collection<Object> resourceInfos = context.getFieldValues(FieldKey.RESOURCE);
         if (resourceInfos != null) {
             List<DataDownload> resources = resourceInfos.stream()
@@ -218,6 +214,33 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
 
         //TODO: distribution
         return dataSet;
+    }
+
+    /**
+     * Ensures value validity for description; if necessary transforms the
+     * string to meet string length requirements
+     *
+     * @param description
+     * @return
+     */
+    private static String fixDescriptionLength(String description) {
+        if (description == null) {
+            return null;
+        } else {
+            if (description.length() < DESCRIPTION_MIN_LENGTH) {
+                // Too short: repeat until long enough
+                final StringBuilder longerDescriptionBuilder = new StringBuilder(description);
+                while (longerDescriptionBuilder.length() < DESCRIPTION_MIN_LENGTH) {
+                    longerDescriptionBuilder.append("; ").append(description);
+                }
+                return longerDescriptionBuilder.toString();
+            } else if (description.length() > DESCRIPTION_MAX_LENGTH) {
+                // Too long: truncate
+                return description.substring(0, DESCRIPTION_MAX_LENGTH - 1);
+            } else {
+                return description;
+            }
+        }
     }
 
     @Override
@@ -289,8 +312,12 @@ public class RecordStructuredMeatadataHeaderBehavior extends JsonLdHeaderBehavio
         }
 
         protected <T> void setStringValue(FieldKey key, Consumer<String> setter, boolean forceSingleValue) {
+            setStringValue(key, setter, forceSingleValue, Function.identity());
+        }
+
+        protected <T> void setStringValue(FieldKey key, Consumer<String> setter, boolean forceSingleValue, Function<String, String> postProcessor) {
             final SolrFieldStringModel valueModel = new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(key), forceSingleValue);
-            final String value = valueModel.getObject();
+            final String value = postProcessor.apply(valueModel.getObject());
             if (value != null) {
                 setter.accept(value);
             }
