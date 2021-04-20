@@ -1,15 +1,20 @@
 Bug fixes and new features
 --------------------------
-VLO 4.10.0 (March 2021)
+VLO 4.10.0 (April 2021)
 * Temporal coverage facet has been added
 		<https://github.com/clarin-eric/VLO/issues/115>
 		<https://github.com/clarin-eric/VLO/issues/296>
-* Enabled the Switchboard pop-up
+* Made Switchboard pop-up configurable
 		<https://github.com/clarin-eric/VLO/issues/315>
 * New facets configuration file
 		<https://github.com/clarin-eric/VLO/issues/318>
-* Multilingual as conditional facet by default
+* Conditional facet MULTILINGUAL
 		<https://github.com/clarin-eric/VLO/issues/290>
+
+VLO 4.9.4 (April 2021)
+
+* switchboard pop-up disabled
+	<https://github.com/clarin-eric/VLO/issues/315>
 
 VLO 4.9.3 (March 2021)
 
