@@ -226,6 +226,8 @@
 
     <linkCheckerDbPassword>${vloconfig.linkCheckerDbPassword}</linkCheckerDbPassword>
     
+    <linkCheckerDbPoolsize>${vloconfig.linkCheckerDbPoolsize}</linkCheckerDbPoolsize>
+    
     <!-- makes the score for the result ranking visible in the search results -->
     <showResultScores>false</showResultScores>
 

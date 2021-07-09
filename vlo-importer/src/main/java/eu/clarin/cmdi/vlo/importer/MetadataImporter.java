@@ -4,8 +4,11 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import eu.clarin.cmdi.rasa.helpers.impl.ACDHRasaFactory;
-import eu.clarin.cmdi.rasa.linkResources.impl.ACDHCheckedLinkResource;
+
+import eu.clarin.cmdi.rasa.helpers.RasaFactory;
+import eu.clarin.cmdi.rasa.helpers.impl.RasaFactoryBuilderImpl;
+import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -69,6 +72,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,7 +81,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -133,14 +136,22 @@ public class MetadataImporter {
         public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
             final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
             final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
-            final String rasaDbName = config.getLinkCheckerDbPassword(); //linkchecker
+            final String rasaDbPassword = config.getLinkCheckerDbPassword(); //linkchecker
+            final int rasaDbPoolsize = config.getLinkCheckerDbPoolsize();
 
-            if (!Strings.isNullOrEmpty(rasaDbUri)) {
-                try {
+            if (!Strings.isNullOrEmpty(rasaDbUri)) {                
+               try {
                     LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
                     //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
-                    final ACDHRasaFactory factory = new ACDHRasaFactory(rasaDbUri, rasaDbUser, rasaDbName);
-                    final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
+                    
+                    final Properties rasaProperties = new Properties();
+                    rasaProperties.setProperty("jdbcUrl", rasaDbUri);
+                    rasaProperties.setProperty("username", rasaDbUser);
+                    rasaProperties.setProperty("password", rasaDbPassword);
+                    rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
+                    
+                    final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
+                    final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
                     final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
                     
                     if (testChecker(checker)) {
@@ -152,7 +163,7 @@ public class MetadataImporter {
                 LOG.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             } else {
-                LOG.warn("No mongo configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
+                LOG.warn("No mysql configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             }
             

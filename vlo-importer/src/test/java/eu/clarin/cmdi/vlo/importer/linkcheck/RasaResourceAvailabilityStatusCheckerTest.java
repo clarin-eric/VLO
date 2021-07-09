@@ -18,6 +18,9 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
+import eu.clarin.cmdi.rasa.DAO.Statistics.CategoryStatistics;
+import eu.clarin.cmdi.rasa.DAO.Statistics.Statistics;
+import eu.clarin.cmdi.rasa.DAO.Statistics.StatusStatistics;
 import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
@@ -35,108 +38,100 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- *
- * @author Twan Goosen <twan@clarin.eu>
- */
+/** @author Twan Goosen <twan@clarin.eu> */
 public class RasaResourceAvailabilityStatusCheckerTest {
 
-    private CheckedLinkResource checkedLinkResource;
-    private RasaResourceAvailabilityStatusChecker instance;
+  private CheckedLinkResource checkedLinkResource;
+  private RasaResourceAvailabilityStatusChecker instance;
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
+  @BeforeClass
+  public static void setUpClass() {}
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
+  @AfterClass
+  public static void tearDownClass() {}
 
-    @Before
-    public void setUp() {
-        checkedLinkResource = new CheckedLinkResource() {
+  @Before
+  public void setUp() {
+    checkedLinkResource =
+        new CheckedLinkResource() {
 
-            @Override
-            public Map<String, CheckedLink> get(Collection<String> uri, Optional<CheckedLinkFilter> filter) {
-                return ImmutableMap.<String, CheckedLink>builder()
-                        .put(createResponseMapEntry("http://uri1", 200))
-                        .put(createResponseMapEntry("http://uri2", 404))
-                        .build();
-            }
+          @Override
+          public Map<String, CheckedLink> get(
+              Collection<String> uri, Optional<CheckedLinkFilter> filter) {
+            return ImmutableMap.<String, CheckedLink>builder()
+                .put(createResponseMapEntry("http://uri1", 200))
+                .put(createResponseMapEntry("http://uri2", 404))
+                .build();
+          }
 
-            @Override
-            public Optional<CheckedLink> get(String uri) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public Boolean save(CheckedLink checkedLink) throws SQLException {
+            throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public List<CheckedLink> getHistory(String url, CheckedLinkResource.Order order) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public Stream<CheckedLink> get(CheckedLinkFilter filter) throws SQLException {
+             throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public int getCount(CheckedLinkFilter filter) throws SQLException {
+              throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public Boolean save(CheckedLink checkedLink) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public Statistics getStatistics(CheckedLinkFilter filter) throws SQLException {
+              throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl, int i, int i1) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public Stream<CategoryStatistics> getCategoryStatistics(CheckedLinkFilter filter)
+              throws SQLException {
+              throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public Optional<CheckedLink> get(String url, String collection) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public Stream<StatusStatistics> getStatusStatistics(CheckedLinkFilter filter)
+              throws SQLException {
+              throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public Boolean delete(String url) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
+          @Override
+          public Map<String, CheckedLink> getMap(CheckedLinkFilter filter) throws SQLException {
+              throw new UnsupportedOperationException("Not supported"); // not needed for test
+          }
 
-            @Override
-            public Boolean saveToHistory(CheckedLink checkedLink) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Boolean saveToHistory(String string) throws SQLException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
+          @Override
+          public CheckedLinkFilter getCheckedLinkFilter() {
+            // TODO Auto-generated method stub
+            return null;
+          }
         };
-        instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
-    }
+    instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+  }
 
-    public static AbstractMap.SimpleImmutableEntry<String, CheckedLink> createResponseMapEntry(String url, int status) {
-        final CheckedLink checkedLink = new CheckedLink();
-        checkedLink.setUrl(url);
-        checkedLink.setStatus(status);
-        return new AbstractMap.SimpleImmutableEntry<>(url, checkedLink);
-    }
+  public static AbstractMap.SimpleImmutableEntry<String, CheckedLink> createResponseMapEntry(
+      String url, int status) {
+    final CheckedLink checkedLink = new CheckedLink();
+    checkedLink.setUrl(url);
+    checkedLink.setStatus(status);
+    return new AbstractMap.SimpleImmutableEntry<>(url, checkedLink);
+  }
 
-    /**
-     * Test of getLinkStatusForRefs method, of class
-     * RasaResourceAvailabilityStatusChecker.
-     */
-    @Test
-    public void testGetLinkStatusForRefs() throws IOException {
-        System.out.println("getLinkStatusForRefs");
-        Stream<String> hrefs = Stream.of("http://uri3", "http://uri2", "http://uri1");
-        Map<String, CheckedLink> result = instance.getLinkStatusForRefs(hrefs);
-        assertEquals(2, result.size());
-        assertNotNull(result.get("http://uri1"));
-        assertEquals("http://uri1", result.get("http://uri1").getUrl());
-        assertNotNull(result.get("http://uri1").getStatus());
-        assertEquals(200, result.get("http://uri1").getStatus().intValue());
-        assertNotNull(result.get("http://uri2"));
-        assertEquals("http://uri2", result.get("http://uri2").getUrl());
-        assertNotNull(result.get("http://uri2").getStatus());
-        assertEquals(404, result.get("http://uri2").getStatus().intValue());
-    }
-
+  /** Test of getLinkStatusForRefs method, of class RasaResourceAvailabilityStatusChecker. */
+  @Test
+  public void testGetLinkStatusForRefs() throws IOException {
+    System.out.println("getLinkStatusForRefs");
+    Stream<String> hrefs = Stream.of("http://uri3", "http://uri2", "http://uri1");
+    Map<String, CheckedLink> result = instance.getLinkStatusForRefs(hrefs);
+    assertEquals(2, result.size());
+    assertNotNull(result.get("http://uri1"));
+    assertEquals("http://uri1", result.get("http://uri1").getUrl());
+    assertNotNull(result.get("http://uri1").getStatus());
+    assertEquals(200, result.get("http://uri1").getStatus().intValue());
+    assertNotNull(result.get("http://uri2"));
+    assertEquals("http://uri2", result.get("http://uri2").getUrl());
+    assertNotNull(result.get("http://uri2").getStatus());
+    assertEquals(404, result.get("http://uri2").getStatus().intValue());
+  }
 }

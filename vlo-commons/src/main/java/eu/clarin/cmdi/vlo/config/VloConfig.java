@@ -154,6 +154,8 @@ public class VloConfig {
     private String linkCheckerDbUser;
 
     private String linkCheckerDbPassword;
+    
+    private int linkCheckerDbPoolsize;
 
     private String centreRegistryCentresListJsonUrl;
 
@@ -1320,7 +1322,15 @@ public class VloConfig {
 
     public void setLinkCheckerDbPassword(String linkCheckerDbPassword) {
         this.linkCheckerDbPassword = linkCheckerDbPassword;
-    }    
+    }  
+    
+    public int getLinkCheckerDbPoolsize() {
+        return linkCheckerDbPoolsize;
+    }  
+    
+    public void setLinkCheckerDbPoolsize(int linkCheckerDbPoolsize) {
+        this.linkCheckerDbPoolsize = linkCheckerDbPoolsize;
+    } 
 
     public String getCentreRegistryCentresListJsonUrl() {
         return centreRegistryCentresListJsonUrl;
