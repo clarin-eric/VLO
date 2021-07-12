@@ -96,7 +96,7 @@ import org.apache.solr.common.SolrDocument;
  * defined in the configuration. The startImport function starts the importing
  * and so on.
  */
-public class MetadataImporter implements Closeable {
+public class MetadataImporter implements Closeable, MetadataImporterRunStatistics {
     
     private final VloConfig config;
     private ExecutorService fileProcessingPool;
@@ -770,10 +770,12 @@ public class MetadataImporter implements Closeable {
      *
      * @return time last completed import took; may be null
      */
+    @Override
     public Long getTime() {
         return time;
     }
     
+    @Override
     public ImportStatistics getImportStatistics() {
         return stats;
     }

@@ -115,11 +115,11 @@ public class MetadataImporterRunner {
      * @param configFile name of the VLO configuration file
      * @param datarootsList list of directories, containing the CMDI files to
      * import
-     * @return returns the MetadataImporter
+     * @return returns statistics from the metadata import
      * @throws IOException
      * @throws MalformedURLException
      */
-    protected static MetadataImporter runImporter(String configFile, String datarootsList) throws IOException, MalformedURLException {
+    protected static MetadataImporterRunStatistics runImporter(String configFile, String datarootsList) throws IOException, MalformedURLException {
         // read the configuration from the externally supplied file
         final URL configUrl;
         if (configFile.startsWith("file:")) {
@@ -135,7 +135,7 @@ public class MetadataImporterRunner {
         return runImporter(config, datarootsList);
     }
 
-    protected static MetadataImporter runImporter(final VloConfig config, String datarootsList) throws MalformedURLException, IOException {
+    protected static MetadataImporterRunStatistics runImporter(final VloConfig config, String datarootsList) throws MalformedURLException, IOException {
         final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
         final VLOMarshaller marshaller = new VLOMarshaller();
         final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
