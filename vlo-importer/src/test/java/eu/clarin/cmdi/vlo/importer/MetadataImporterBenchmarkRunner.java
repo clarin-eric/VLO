@@ -58,11 +58,11 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
 
             for (int i = 0; i < RUNS; i++) {
                 requestSolrOptimization(config);
-                final MetadataImporter importer = MetadataImporterRunner.runImporter(config, null);
-                out.printf("Run %d: %d ms (%d documents)\n", i, importer.getTime(), importer.getImportStatistics().nrOFDocumentsSent().get());
+                final MetadataImporterRunStatistics stats = MetadataImporterRunner.runImporter(config, null);
+                out.printf("Run %d: %d ms (%d documents)\n", i, stats.getTime(), stats.getImportStatistics().nrOFDocumentsSent().get());
 
                 //keep for stats
-                times.add(importer.getTime());
+                times.add(stats.getTime());
             }
 
             final Stats stats = Stats.of(times);

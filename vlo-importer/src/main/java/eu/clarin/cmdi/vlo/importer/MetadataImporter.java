@@ -4,8 +4,11 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import eu.clarin.cmdi.rasa.helpers.impl.ACDHRasaFactory;
-import eu.clarin.cmdi.rasa.linkResources.impl.ACDHCheckedLinkResource;
+
+import eu.clarin.cmdi.rasa.helpers.RasaFactory;
+import eu.clarin.cmdi.rasa.helpers.impl.RasaFactoryBuilderImpl;
+import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -60,6 +63,7 @@ import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
+import java.io.Closeable;
 import java.net.SocketTimeoutException;
 
 import java.time.LocalDate;
@@ -69,6 +73,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,7 +82,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -92,7 +96,7 @@ import org.apache.solr.common.SolrDocument;
  * defined in the configuration. The startImport function starts the importing
  * and so on.
  */
-public class MetadataImporter {
+public class MetadataImporter implements Closeable, MetadataImporterRunStatistics {
     
     private final VloConfig config;
     private ExecutorService fileProcessingPool;
@@ -118,6 +122,7 @@ public class MetadataImporter {
     
     private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
+    private final ResourceAvailabilityStatusChecker availabilityChecker;
     
     public static class DefaultSolrBridgeFactory {
         
@@ -133,15 +138,29 @@ public class MetadataImporter {
         public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
             final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
             final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
-            final String rasaDbName = config.getLinkCheckerDbPassword(); //linkchecker
+            final String rasaDbPassword = config.getLinkCheckerDbPassword(); //linkchecker
+            final int rasaDbPoolsize = config.getLinkCheckerDbPoolsize();
 
-            if (!Strings.isNullOrEmpty(rasaDbUri)) {
-                try {
+            if (!Strings.isNullOrEmpty(rasaDbUri)) {                
+               try {
                     LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
                     //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
-                    final ACDHRasaFactory factory = new ACDHRasaFactory(rasaDbUri, rasaDbUser, rasaDbName);
-                    final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+                    
+                    final Properties rasaProperties = new Properties();
+                    rasaProperties.setProperty("jdbcUrl", rasaDbUri);
+                    rasaProperties.setProperty("username", rasaDbUser);
+                    rasaProperties.setProperty("password", rasaDbPassword);
+                    rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
+                    
+                    final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
+                    final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
+                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource) {
+                        @Override
+                        public void onClose() throws IOException {
+                            logger.info("Asking resource availability checker factory to tear down");
+                            factory.tearDown();
+                        }
+                    };
                     
                     if (testChecker(checker)) {
                         return checker;
@@ -152,7 +171,7 @@ public class MetadataImporter {
                 LOG.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             } else {
-                LOG.warn("No mongo configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
+                LOG.warn("No mysql configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             }
             
@@ -203,6 +222,7 @@ public class MetadataImporter {
         this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
         this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
+        this.availabilityChecker = availabilityChecker;
         
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
@@ -750,16 +770,25 @@ public class MetadataImporter {
      *
      * @return time last completed import took; may be null
      */
+    @Override
     public Long getTime() {
         return time;
     }
     
+    @Override
     public ImportStatistics getImportStatistics() {
         return stats;
     }
     
     protected CMDIRecordImporter getRecordProcessor() {
         return recordHandler;
+    }
+    
+    
+    @Override
+    public void close() throws IOException {
+        LOG.info("Closing resource availability checker");
+        availabilityChecker.close();
     }
 
     /**

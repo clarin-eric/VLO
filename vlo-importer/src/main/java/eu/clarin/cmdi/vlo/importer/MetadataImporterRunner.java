@@ -46,7 +46,7 @@ public class MetadataImporterRunner {
      * @throws IOException
      */
     public static void main(String[] args) throws MalformedURLException, IOException {
-        
+
         Thread.currentThread().setName("Importer main");
 
         // path to the configuration file
@@ -113,12 +113,13 @@ public class MetadataImporterRunner {
 
     /**
      * @param configFile name of the VLO configuration file
-     * @param datarootsList list of directories, containing the CMDI files to import
-     * @return returns the MetadataImporter although the return-value isn't used
+     * @param datarootsList list of directories, containing the CMDI files to
+     * import
+     * @return returns statistics from the metadata import
      * @throws IOException
      * @throws MalformedURLException
      */
-    protected static MetadataImporter runImporter(String configFile, String datarootsList) throws IOException, MalformedURLException {
+    protected static MetadataImporterRunStatistics runImporter(String configFile, String datarootsList) throws IOException, MalformedURLException {
         // read the configuration from the externally supplied file
         final URL configUrl;
         if (configFile.startsWith("file:")) {
@@ -128,29 +129,29 @@ public class MetadataImporterRunner {
         }
         System.out.println("Reading configuration from " + configUrl.toString());
         LOG.info("Reading configuration from " + configUrl.toString());
-        
+
         final XmlVloConfigFactory configFactory = new XmlVloConfigFactory(configUrl);
         final VloConfig config = configFactory.newConfig();
         return runImporter(config, datarootsList);
     }
 
-    protected static MetadataImporter runImporter(final VloConfig config, String datarootsList) throws MalformedURLException, IOException {
+    protected static MetadataImporterRunStatistics runImporter(final VloConfig config, String datarootsList) throws MalformedURLException, IOException {
         final LanguageCodeUtils languageCodeUtils = new LanguageCodeUtils(config);
         final VLOMarshaller marshaller = new VLOMarshaller();
         final FacetMappingFactory facetMappingFactory = new FacetMappingFactory(config, marshaller);
 
         // optionally, modify the configuration here
         // create and start the importer
-        final MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, facetMappingFactory, marshaller, datarootsList);
-        importer.startImport();
+        try(MetadataImporter importer = new MetadataImporter(config, languageCodeUtils, facetMappingFactory, marshaller, datarootsList)) {
+            importer.startImport();
 
-        // finished importing
-        if (config.printMapping()) {
-            File file = new File("xsdMapping.txt");
-            facetMappingFactory.printMapping(file);
-            LOG.info("Printed facetMapping in " + file);
+            // finished importing
+            if (config.printMapping()) {
+                File file = new File("xsdMapping.txt");
+                facetMappingFactory.printMapping(file);
+                LOG.info("Printed facetMapping in " + file);
+            }
+            return importer;
         }
-        
-        return importer;
     }
 }

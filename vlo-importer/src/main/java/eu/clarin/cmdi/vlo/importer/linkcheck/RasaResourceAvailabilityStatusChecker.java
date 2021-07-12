@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabilityStatusChecker {
+public abstract class RasaResourceAvailabilityStatusChecker implements ResourceAvailabilityStatusChecker {
 
     protected final static Logger logger = LoggerFactory.getLogger(RasaResourceAvailabilityStatusChecker.class);
 
@@ -48,5 +48,18 @@ public class RasaResourceAvailabilityStatusChecker implements ResourceAvailabili
         } catch (SQLException ex) {
             throw new IOException("Could not retrieve link status", ex);
         }
+    }
+
+    /**
+     * Override to implement logic to be executed on close
+     * @throws java.io.IOException
+     */
+    public void onClose() throws IOException {
+        // do nothing
+    }
+    
+    @Override
+    public final void close() throws IOException {
+        onClose();
     }
 }

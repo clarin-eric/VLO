@@ -7,11 +7,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.10.0</version>
+        <version>4.10.1-SNAPSHOT</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.10.0</version>
+    <version>4.10.1-SNAPSHOT</version>
     <name>VLO Commons</name>
     <properties>
         <jackson.version>2.12.2</jackson.version>
@@ -167,6 +167,7 @@
                 <vloconfig.linkCheckerDbConnectionString>jdbc:mysql://localhost:3307/linkchecker</vloconfig.linkCheckerDbConnectionString>
                 <vloconfig.linkCheckerDbUser>linkchecker</vloconfig.linkCheckerDbUser>
                 <vloconfig.linkCheckerDbPassword>linkchecker</vloconfig.linkCheckerDbPassword>
+                <vloconfig.linkCheckerDbPoolsize>25</vloconfig.linkCheckerDbPoolsize>
                 
                 <vloconfig.vloExposureEnabled>true</vloconfig.vloExposureEnabled>
                 <vloconfig.vloExposureDbName>vlo_exposure</vloconfig.vloExposureDbName>
