@@ -63,6 +63,7 @@ import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
+import java.io.Closeable;
 import java.net.SocketTimeoutException;
 
 import java.time.LocalDate;
@@ -95,7 +96,7 @@ import org.apache.solr.common.SolrDocument;
  * defined in the configuration. The startImport function starts the importing
  * and so on.
  */
-public class MetadataImporter {
+public class MetadataImporter implements Closeable {
     
     private final VloConfig config;
     private ExecutorService fileProcessingPool;
@@ -121,6 +122,7 @@ public class MetadataImporter {
     
     private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
+    private final ResourceAvailabilityStatusChecker availabilityChecker;
     
     public static class DefaultSolrBridgeFactory {
         
@@ -152,7 +154,13 @@ public class MetadataImporter {
                     
                     final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
                     final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource) {
+                        @Override
+                        public void onClose() throws IOException {
+                            logger.info("Asking resource availability checker factory to tear down");
+                            factory.tearDown();
+                        }
+                    };
                     
                     if (testChecker(checker)) {
                         return checker;
@@ -214,6 +222,7 @@ public class MetadataImporter {
         this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
         this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
+        this.availabilityChecker = availabilityChecker;
         
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
@@ -771,6 +780,13 @@ public class MetadataImporter {
     
     protected CMDIRecordImporter getRecordProcessor() {
         return recordHandler;
+    }
+    
+    
+    @Override
+    public void close() throws IOException {
+        LOG.info("Closing resource availability checker");
+        availabilityChecker.close();
     }
 
     /**

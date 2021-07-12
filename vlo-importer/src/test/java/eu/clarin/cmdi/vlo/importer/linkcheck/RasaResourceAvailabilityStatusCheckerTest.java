@@ -107,7 +107,7 @@ public class RasaResourceAvailabilityStatusCheckerTest {
             return null;
           }
         };
-    instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+    instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource) {};
   }
 
   public static AbstractMap.SimpleImmutableEntry<String, CheckedLink> createResponseMapEntry(
