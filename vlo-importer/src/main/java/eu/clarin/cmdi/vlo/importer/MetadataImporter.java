@@ -147,6 +147,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                     //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
                     
                     final Properties rasaProperties = new Properties();
+                    rasaProperties.setProperty("driverClassName", "com.mysql.cj.jdbc.Driver");
                     rasaProperties.setProperty("jdbcUrl", rasaDbUri);
                     rasaProperties.setProperty("username", rasaDbUser);
                     rasaProperties.setProperty("password", rasaDbPassword);
