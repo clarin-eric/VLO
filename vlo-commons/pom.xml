@@ -165,7 +165,7 @@
                 <vloconfig.solrUserReadWritePass>docker_secret</vloconfig.solrUserReadWritePass>
                 
                 <vloconfig.linkCheckerDbConnectionString>jdbc:mysql://localhost:3307/linkchecker</vloconfig.linkCheckerDbConnectionString>
-                <vloconfig.linkCheckerDbUser>linkchecker</vloconfig.linkCheckerDbUser>
+                <vloconfig.linkCheckerDbUser>linkcheckerUser</vloconfig.linkCheckerDbUser>
                 <vloconfig.linkCheckerDbPassword>linkchecker</vloconfig.linkCheckerDbPassword>
                 <vloconfig.linkCheckerDbPoolsize>25</vloconfig.linkCheckerDbPoolsize>
                 
