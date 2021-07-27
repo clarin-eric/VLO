@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import java.io.Closeable;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -29,4 +30,6 @@ import java.util.stream.Stream;
 public interface ResourceAvailabilityStatusChecker extends Closeable {
 
     Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) throws IOException;
+    
+    void writeStatusSummary(Writer writer) throws IOException;
 }

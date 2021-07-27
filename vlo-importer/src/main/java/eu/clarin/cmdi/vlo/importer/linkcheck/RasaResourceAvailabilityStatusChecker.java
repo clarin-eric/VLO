@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.Optional;

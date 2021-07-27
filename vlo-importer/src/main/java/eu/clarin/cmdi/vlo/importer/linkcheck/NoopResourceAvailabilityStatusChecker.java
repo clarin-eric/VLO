@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.importer.MetadataImporterRunner;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -44,6 +45,11 @@ public class NoopResourceAvailabilityStatusChecker implements ResourceAvailabili
     public void close() throws IOException {
         logger.info("Closing NOOP resource availability status checker");
         // do nothing
+    }
+
+    @Override
+    public void writeStatusSummary(Writer writer) throws IOException {
+        writer.write("Noop");
     }
 
 }

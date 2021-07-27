@@ -24,10 +24,10 @@ import eu.clarin.cmdi.rasa.DAO.Statistics.StatusStatistics;
 import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
+import java.io.Writer;
 import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -107,7 +107,12 @@ public class RasaResourceAvailabilityStatusCheckerTest {
             return null;
           }
         };
-    instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource) {};
+    instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource) {
+        @Override
+        public void writeStatusSummary(Writer writer) throws IOException {
+            writer.write("Status - test " + getClass());
+        }
+    };
   }
 
   public static AbstractMap.SimpleImmutableEntry<String, CheckedLink> createResponseMapEntry(
