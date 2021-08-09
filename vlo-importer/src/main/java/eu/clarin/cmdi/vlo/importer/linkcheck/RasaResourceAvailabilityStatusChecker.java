@@ -17,13 +17,15 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
+import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.temporal.TemporalAmount;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,15 +39,20 @@ public abstract class RasaResourceAvailabilityStatusChecker implements ResourceA
     protected final static Logger logger = LoggerFactory.getLogger(RasaResourceAvailabilityStatusChecker.class);
 
     private final CheckedLinkResource checkedLinkResource;
-
-    public RasaResourceAvailabilityStatusChecker(CheckedLinkResource checkedLinkResource) {
+    private final RasaResourceAvailabilityStatusCheckerConfiguration config;
+    
+    public RasaResourceAvailabilityStatusChecker(CheckedLinkResource checkedLinkResource, RasaResourceAvailabilityStatusCheckerConfiguration config) {
         this.checkedLinkResource = checkedLinkResource;
+        this.config = config;
     }
 
     @Override
     public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) throws IOException {
         try {
-            return checkedLinkResource.get(hrefs.collect(Collectors.toSet()), Optional.empty());
+            final CheckedLinkFilter filter = checkedLinkResource.getCheckedLinkFilter();
+            filter.setUrlIn(hrefs.toArray(String[]::new));
+            filter.setCheckedBetween(config.getAgeLimitLowerBound(), config.getAgeLimitUpperBound());
+            return checkedLinkResource.getMap(filter);
         } catch (SQLException ex) {
             throw new IOException("Could not retrieve link status", ex);
         }
@@ -62,5 +69,27 @@ public abstract class RasaResourceAvailabilityStatusChecker implements ResourceA
     @Override
     public final void close() throws IOException {
         onClose();
+    }
+    
+    public final static class RasaResourceAvailabilityStatusCheckerConfiguration  {
+
+        private final Timestamp ageLimitLowerBound;
+        
+        private final Optional<Timestamp> ageLimitUpperBound;
+        
+        public RasaResourceAvailabilityStatusCheckerConfiguration(TemporalAmount checkAgeThreshold) {
+            ageLimitLowerBound = Timestamp.from(Instant.now().minus(checkAgeThreshold));
+            ageLimitUpperBound = Optional.empty();
+        }
+
+        public Timestamp getAgeLimitLowerBound() {
+            return ageLimitLowerBound;
+        }
+
+        public Timestamp getAgeLimitUpperBound() {
+            return ageLimitUpperBound.orElse(Timestamp.from(Instant.now()));
+        }
+        
+        
     }
 }

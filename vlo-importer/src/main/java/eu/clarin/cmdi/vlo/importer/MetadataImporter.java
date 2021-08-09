@@ -42,6 +42,7 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
 import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker;
+import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker.RasaResourceAvailabilityStatusCheckerConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
@@ -67,10 +68,13 @@ import java.io.Closeable;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -163,7 +167,10 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
                     final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
                     final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource) {
+                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(
+                            checkedLinkResource,
+                            new RasaResourceAvailabilityStatusCheckerConfiguration(Duration.ofDays(100)) //TODO: make configurable
+                    ) {
                         @Override
                         public void onClose() throws IOException {
                             logger.info("Asking resource availability checker factory to tear down");
@@ -791,7 +798,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         resourceAvailabilityCheckerMonitor.scheduleAtFixedRate(() -> {
             try {
                 LOG.debug("Resource availability checker status report...");
-                try ( OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
+                try (OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
                     availabilityChecker.writeStatusSummary(availabilityCheckerlogWriter);
                 }
             } catch (IOException ex) {

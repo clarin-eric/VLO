@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.service.impl;
 import eu.clarin.cmdi.vlo.service.PIDResolver;
 import java.net.URI;
 import java.util.stream.Stream;
-import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
