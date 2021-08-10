@@ -36,6 +36,7 @@
         <vloconfig.vloExposureEnabled>false</vloconfig.vloExposureEnabled>
         <!-- link checker database connection -->
         <vloconfig.linkCheckerDbConnectionString></vloconfig.linkCheckerDbConnectionString>
+        <vloconfig.linkCheckerMaxDaysSinceChecked>100</vloconfig.linkCheckerMaxDaysSinceChecked>
         <!-- external service URLs -->
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
         <vloconfig.vocabularyRegistryUrl>http://clavas.clarin.eu/clavas/public/api/find-concepts</vloconfig.vocabularyRegistryUrl>
@@ -48,7 +49,6 @@
         <vloConfig.webAppLocale>en-GB</vloConfig.webAppLocale>
         <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
         <vloConfig.enableFcsLinks>true</vloConfig.enableFcsLinks>
-        <vloConfig.linkCheckerMaxDaysSinceChecked>100</vloConfig.linkCheckerMaxDaysSinceChecked>
     </properties>
 
     <build>
