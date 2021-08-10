@@ -73,8 +73,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
-import java.time.temporal.TemporalAmount;
-import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
@@ -121,7 +119,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      * Logging
      */
     protected final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
-    
+
     /**
      * How often to log resource availability checker status
      */
@@ -147,11 +145,12 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
     public static class DefaultResourceAvailabilityFactory {
 
-        public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
+        public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(final VloConfig config) {
             final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
             final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
             final String rasaDbPassword = config.getLinkCheckerDbPassword(); //linkchecker
             final int rasaDbPoolsize = config.getLinkCheckerDbPoolsize();
+            final Duration checkAgeThreshold = Duration.ofDays(config.getLinkCheckerMaxDaysSinceChecked());
 
             if (!Strings.isNullOrEmpty(rasaDbUri)) {
                 try {
@@ -167,10 +166,9 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
                     final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
                     final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(
-                            checkedLinkResource,
-                            new RasaResourceAvailabilityStatusCheckerConfiguration(Duration.ofDays(100)) //TODO: make configurable
-                    ) {
+                    final RasaResourceAvailabilityStatusChecker checker
+                            = new RasaResourceAvailabilityStatusChecker(checkedLinkResource,
+                                    new RasaResourceAvailabilityStatusCheckerConfiguration(checkAgeThreshold)) {
                         @Override
                         public void onClose() throws IOException {
                             logger.info("Asking resource availability checker factory to tear down");
@@ -790,7 +788,9 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     }
 
     /**
-     * Starts an executor with a status log request to the resource availability checker repeatedly at a fixed rate
+     * Starts an executor with a status log request to the resource availability
+     * checker repeatedly at a fixed rate
+     *
      * @return the pool executor that has the status report task scheduled
      */
     private ScheduledThreadPoolExecutor startAvailabilityCheckerStatusReport() {
@@ -798,7 +798,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         resourceAvailabilityCheckerMonitor.scheduleAtFixedRate(() -> {
             try {
                 LOG.debug("Resource availability checker status report...");
-                try (OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
+                try ( OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
                     availabilityChecker.writeStatusSummary(availabilityCheckerlogWriter);
                 }
             } catch (IOException ex) {

@@ -48,6 +48,7 @@
         <vloConfig.webAppLocale>en-GB</vloConfig.webAppLocale>
         <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
         <vloConfig.enableFcsLinks>true</vloConfig.enableFcsLinks>
+        <vloConfig.linkCheckerMaxDaysSinceChecked>100</vloConfig.linkCheckerMaxDaysSinceChecked>
     </properties>
 
     <build>
