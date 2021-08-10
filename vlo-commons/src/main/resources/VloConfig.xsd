@@ -72,6 +72,7 @@
                 <xs:element name="linkCheckerDbUser" type="xs:string" />
                 <xs:element name="linkCheckerDbPassword" type="xs:string" />
                 <xs:element name="linkCheckerDbPoolsize" type="xs:string" />
+                <xs:element name="linkCheckerMaxDaysSinceChecked" type="xs:string" />
                 <xs:element name="showResultScores" type="xs:boolean" />
                 <xs:element name="processHierarchies" type="xs:boolean" />
                 <xs:element name="enableFcsLinks" type="xs:boolean" />
