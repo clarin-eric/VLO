@@ -154,33 +154,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
             if (!Strings.isNullOrEmpty(rasaDbUri)) {
                 try {
-                    LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
-                    //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
-
-                    final Properties rasaProperties = new Properties();
-                    rasaProperties.setProperty("driverClassName", "com.mysql.cj.jdbc.Driver");
-                    rasaProperties.setProperty("jdbcUrl", rasaDbUri);
-                    rasaProperties.setProperty("username", rasaDbUser);
-                    rasaProperties.setProperty("password", rasaDbPassword);
-                    rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
-
-                    final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
-                    final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                    final RasaResourceAvailabilityStatusChecker checker
-                            = new RasaResourceAvailabilityStatusChecker(checkedLinkResource,
-                                    new RasaResourceAvailabilityStatusCheckerConfiguration(checkAgeThreshold)) {
-                        @Override
-                        public void onClose() throws IOException {
-                            logger.info("Asking resource availability checker factory to tear down");
-                            factory.tearDown();
-                        }
-
-                        @Override
-                        public void writeStatusSummary(Writer writer) throws IOException {
-                            factory.writeStatusSummary(writer);
-                        }
-                    };
-
+                    final RasaResourceAvailabilityStatusChecker checker = newRasaChecker(rasaDbUri, rasaDbUser, rasaDbPassword, rasaDbPoolsize, checkAgeThreshold);
                     if (testChecker(checker)) {
                         return checker;
                     }
@@ -196,7 +170,36 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
         }
 
+        private static RasaResourceAvailabilityStatusChecker newRasaChecker(final String rasaDbUri, final String rasaDbUser, final String rasaDbPassword, final int rasaDbPoolsize, final Duration checkAgeThreshold) {
+            LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
+            //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
+            final Properties rasaProperties = new Properties();
+            rasaProperties.setProperty("driverClassName", "com.mysql.cj.jdbc.Driver");
+            rasaProperties.setProperty("jdbcUrl", rasaDbUri);
+            rasaProperties.setProperty("username", rasaDbUser);
+            rasaProperties.setProperty("password", rasaDbPassword);
+            rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
+            final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
+            final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
+            final RasaResourceAvailabilityStatusChecker checker
+                    = new RasaResourceAvailabilityStatusChecker(checkedLinkResource,
+                            new RasaResourceAvailabilityStatusCheckerConfiguration(checkAgeThreshold)) {
+                @Override
+                public void onClose() throws IOException {
+                    logger.info("Asking resource availability checker factory to tear down");
+                    factory.tearDown();
+                }
+
+                @Override
+                public void writeStatusSummary(Writer writer) throws IOException {
+                    factory.writeStatusSummary(writer);
+                }
+            };
+            return checker;
+        }
+
         private static boolean testChecker(RasaResourceAvailabilityStatusChecker checker) {
+            LOG.debug("Carrying out functional check of RASA checker...");
             final String testUrl = "https://www.clarin.eu";
             try {
                 checker.getLinkStatusForRefs(Stream.of(testUrl));

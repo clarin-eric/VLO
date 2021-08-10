@@ -26,6 +26,7 @@ import java.io.Writer;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -36,6 +37,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -51,10 +53,10 @@ public class RasaResourceAvailabilityStatusCheckerTest {
     private CheckedLinkFilter checkedLinkFilter;
 
     private final ImmutableMap<String, CheckedLink> checkedLinksMap = ImmutableMap.<String, CheckedLink>builder()
-                .put(createResponseMapEntry("http://uri1", 200))
-                .put(createResponseMapEntry("http://uri2", 404))
-                .build();
-    
+            .put(createResponseMapEntry("http://uri1", 200))
+            .put(createResponseMapEntry("http://uri2", 404))
+            .build();
+
     @Before
     public void setUp() throws SQLException {
         checkedLinkResource = context.mock(CheckedLinkResource.class);
@@ -74,7 +76,7 @@ public class RasaResourceAvailabilityStatusCheckerTest {
      * RasaResourceAvailabilityStatusChecker.
      */
     @Test
-    public void testGetLinkStatusForRefs() throws Exception {        
+    public void testGetLinkStatusForRefs() throws Exception {
         context.checking(new Expectations() {
             {
                 atLeast(1).of(checkedLinkResource).getCheckedLinkFilter();
@@ -89,7 +91,7 @@ public class RasaResourceAvailabilityStatusCheckerTest {
 
             }
         });
-        
+
         System.out.println("getLinkStatusForRefs");
         Stream<String> hrefs = Stream.of("http://uri3", "http://uri2", "http://uri1");
         Map<String, CheckedLink> result = instance.getLinkStatusForRefs(hrefs);
@@ -102,6 +104,33 @@ public class RasaResourceAvailabilityStatusCheckerTest {
         assertEquals("http://uri2", result.get("http://uri2").getUrl());
         assertNotNull(result.get("http://uri2").getStatus());
         assertEquals(404, result.get("http://uri2").getStatus().intValue());
+    }
+
+    @Test
+    public void testConstructConfig() {
+        final RasaResourceAvailabilityStatusCheckerConfiguration config
+                = new RasaResourceAvailabilityStatusCheckerConfiguration(Duration.ofDays(99));
+        Timestamp ageLimitLowerBound = config.getAgeLimitLowerBound();
+        Timestamp ageLimitUpperBound = config.getAgeLimitUpperBound();
+
+        assertTrue(ageLimitLowerBound.before(ageLimitUpperBound));
+
+        assertTrue(ageLimitLowerBound.before(Timestamp.from(Instant.now().minus(Duration.ofDays(98)))));
+        assertTrue(ageLimitLowerBound.after(Timestamp.from(Instant.now().minus(Duration.ofDays(100)))));
+
+        assertTrue(ageLimitUpperBound.before(Timestamp.from(Instant.now().plus(Duration.ofMinutes(1)))));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructConfigIllegalAge1() {
+        final RasaResourceAvailabilityStatusCheckerConfiguration config
+                = new RasaResourceAvailabilityStatusCheckerConfiguration(Duration.ofDays(0));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructConfigIllegalAge2() {
+        final RasaResourceAvailabilityStatusCheckerConfiguration config
+                = new RasaResourceAvailabilityStatusCheckerConfiguration(Duration.ofDays(-99));
     }
 
     public static AbstractMap.SimpleImmutableEntry<String, CheckedLink> createResponseMapEntry(

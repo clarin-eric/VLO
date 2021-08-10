@@ -22,7 +22,6 @@ import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
@@ -81,10 +80,10 @@ public abstract class RasaResourceAvailabilityStatusChecker implements ResourceA
         
         /**
          * 
-         * @param checkAgeThreshold Maximum allowed age of link checking information. Must be at least one day.
+         * @param checkAgeThreshold Maximum allowed age of link checking information.
          */
         public RasaResourceAvailabilityStatusCheckerConfiguration(TemporalAmount checkAgeThreshold) {
-            if(checkAgeThreshold.get(ChronoUnit.DAYS) < 1) {
+            if(checkAgeThreshold.get(ChronoUnit.SECONDS) < 1) {
                 throw new IllegalArgumentException("checkAgeThreshold can not be less than 1 day");
             }
             

@@ -22,6 +22,7 @@
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
         <vlo.import.logging.level>INFO</vlo.import.logging.level>
+        <rasa.version>4.0.0-alpha_2</rasa.version>
     </properties>
 
     <profiles>
@@ -192,14 +193,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>eu.clarin.cmdi</groupId>
             <artifactId>rasa-api</artifactId>
-            <version>4.0.0-alpha-SNAPSHOT</version>
+            <version>${rasa.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>eu.clarin.cmdi</groupId>
             <artifactId>rasa-mysql-impl</artifactId>
-            <version>4.0.0-alpha-SNAPSHOT</version>
+            <version>${rasa.version}</version>
         </dependency>
     
         <!-- JMOCK FOR MOCKING -->
