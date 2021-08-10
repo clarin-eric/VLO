@@ -22,7 +22,6 @@ import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAmount;
