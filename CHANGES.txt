@@ -1,5 +1,11 @@
 Bug fixes and new features
 --------------------------
+VLO 4.10.1 (August 2021)
+* Resource availability status API (RASA) updated
+		<https://github.com/clarin-eric/VLO/issues/311>
+* Threshold for age of link status information
+		<https://github.com/clarin-eric/VLO/issues/327>
+
 VLO 4.10.0 (April 2021)
 * Temporal coverage facet has been added
 		<https://github.com/clarin-eric/VLO/issues/115>
