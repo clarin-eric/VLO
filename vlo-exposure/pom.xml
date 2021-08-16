@@ -41,13 +41,13 @@
         <dependency>
             <groupId>com.opentable.components</groupId>
             <artifactId>otj-pg-embedded</artifactId>
-            <version>0.13.3</version>
+            <version>0.13.4</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>5.2.4</version>
+            <version>7.12.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
