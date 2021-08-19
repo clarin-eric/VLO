@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class VloApiApplicationTests {
 
-	@Test
+//	@Test
 	void contextLoads() {
 	}
 

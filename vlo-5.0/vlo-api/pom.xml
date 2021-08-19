@@ -15,6 +15,7 @@
 	<description>VLO API</description>
 	<properties>
 		<java.version>11</java.version>
+                <netbeans.hint.license>gpl30</netbeans.hint.license>
 	</properties>
 	<dependencies>
 		<dependency>
