@@ -1,0 +1,47 @@
+version: '3'
+services:
+  vlo-opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+    ports:
+      - 9200:9200
+      - 9600:9600
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - type: volume
+        source: data
+        target: /usr/share/opensearch/data
+      - type: tmpfs
+        target: /tmp
+#     - "/tmp/opensearch-data:/usr/share/opensearch/data"
+#     - "/tmp/opensearch-temp:/tmp"
+    networks:
+      - opensearch-net
+  vlo-opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: https://vlo-opensearch:9200
+    networks:
+      - opensearch-net
+volumes:
+  temp:
+    external: false
+  data:
+    external: false
+    
+networks:
+  opensearch-net:
