@@ -14,23 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.model;
+package eu.clarin.cmdi.vlo.data.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@ToString
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Document(indexName = "record", createIndex = true)
 public class VloRecord {
-    
-    @Getter @Setter
-    private String id;
 
-    @Getter @Setter
-    private String name;
+    @Id
+    private String id;
     
+    @Field(type=FieldType.Text)
+    private String name;
 }
