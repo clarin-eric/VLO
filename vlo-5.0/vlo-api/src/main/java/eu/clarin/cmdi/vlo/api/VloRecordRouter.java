@@ -35,7 +35,7 @@ public class VloRecordRouter {
     @Bean
     public RouterFunction<ServerResponse> route(VloRecordHandler recordHandler) {
         return RouterFunctions
-                .route(GET("/record").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecord);
+                .route(GET("/record/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecord);
 
     }
 }
