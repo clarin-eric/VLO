@@ -5,6 +5,7 @@ services:
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - plugins.security.ssl.http.enabled=false
       - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
     ports:
       - 9200:9200
