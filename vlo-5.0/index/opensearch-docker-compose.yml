@@ -1,11 +1,11 @@
 version: '3'
 services:
   vlo-opensearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    image: opensearchproject/opensearch:latest
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
-      - xpack.security.http.ssl.enabled=false
+      - plugins.security.ssl.http.enabled=false
       - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
     ports:
       - 9200:9200
@@ -20,24 +20,24 @@ services:
     volumes:
       - type: volume
         source: data
-        target: /usr/share/elasticsearch/data
+        target: /usr/share/opensearch/data
       - type: tmpfs
         target: /tmp
 #     - "/tmp/opensearch-data:/usr/share/opensearch/data"
 #     - "/tmp/opensearch-temp:/tmp"
     networks:
       - opensearch-net
-#  vlo-opensearch-dashboards:
-#    image: opensearchproject/opensearch-dashboards:latest
-#    container_name: opensearch-dashboards
-#    ports:
-#      - 5601:5601
-#    expose:
-#      - "5601"
-#    environment:
-#      OPENSEARCH_HOSTS: https://vlo-opensearch:9200
-#    networks:
-#      - opensearch-net
+  vlo-opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      OPENSEARCH_HOSTS: https://vlo-opensearch:9200
+    networks:
+      - opensearch-net
 volumes:
   temp:
     external: false
