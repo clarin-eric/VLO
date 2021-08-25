@@ -39,19 +39,16 @@ public class VloRecordHandler {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
         this.recordRepository = recordRepository;
     }
-
-    public Mono<ServerResponse> getRecord(ServerRequest request) {
-        final String id = request.pathVariable("id");
-        return getRecordFromRepository(id);
-    }
     
-    public Mono<ServerResponse> getRecordFromRepository(String id) {
+    public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
+        final String id = request.pathVariable("id");
         final Optional<VloRecord> result = recordRepository.findById(id);
         return result.map(record -> ServerResponse.ok().bodyValue(record))
                 .orElse(ServerResponse.notFound().build());
     }
 
-    public Mono<ServerResponse> getRecordFromTemplate(String id) {
+    public Mono<ServerResponse> getRecordFromTemplate(ServerRequest request) {
+        final String id = request.pathVariable("id");
         final Optional<VloRecord> result = Optional.ofNullable(elasticsearchRestTemplate.get(id, VloRecord.class));
         return result.map(record -> ServerResponse.ok().bodyValue(record))
                 .orElse(ServerResponse.notFound().build());
