@@ -1,0 +1,16 @@
+server:
+  port: 8808
+spring:
+  application:
+    name: vlo-api
+  data:
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: 127.0.0.1:9200
+          username: admin
+          password: admin
+          use-ssl: false
+  elasticsearch:
+    rest:
+      uris: http://admin:admin@127.0.0.1:9200
