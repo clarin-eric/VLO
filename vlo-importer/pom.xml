@@ -4,13 +4,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.10.1-beta1</version>
+        <version>4.10.1-beta-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-importer</artifactId>
-    <version>4.10.1-beta1</version>
+    <version>4.10.1-beta-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>VLO Importer</name>
@@ -22,7 +22,7 @@
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
         <vlo.import.logging.level>INFO</vlo.import.logging.level>
-        <rasa.version>4.0.0-alpha_2</rasa.version>
+        <rasa.version>4.0.0</rasa.version>
     </properties>
 
     <profiles>
