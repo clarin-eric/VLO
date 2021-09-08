@@ -18,18 +18,21 @@ package eu.clarin.cmdi.vlo.batchimporter;
 
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Slf4j
 public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
-
+   
     @Override
-    public VloRecord process(MetadataFile i) throws Exception {
+    public VloRecord process(MetadataFile inputFile) throws Exception {
+        log.info("Processing metadata file {}", inputFile);
         return VloRecord.builder()
-                .id(i.getLocation().toString())
+                .id(inputFile.getLocation().toString())
                 .build();
     }
 
