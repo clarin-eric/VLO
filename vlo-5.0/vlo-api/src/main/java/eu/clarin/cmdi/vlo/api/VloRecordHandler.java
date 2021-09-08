@@ -18,7 +18,9 @@ package eu.clarin.cmdi.vlo.api;
 
 import eu.clarin.cmdi.vlo.api.data.VloRecordRepository;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.net.URI;
 import java.util.Optional;
+import org.springframework.data.elasticsearch.client.reactive.ReactiveElasticsearchClient;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -34,12 +36,14 @@ public class VloRecordHandler {
 
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final VloRecordRepository recordRepository;
+    private final ReactiveElasticsearchClient reactiveElasticsearchClient;
 
-    public VloRecordHandler(ElasticsearchRestTemplate elasticsearchRestTemplate, VloRecordRepository recordRepository) {
+    public VloRecordHandler(ElasticsearchRestTemplate elasticsearchRestTemplate, VloRecordRepository recordRepository, ReactiveElasticsearchClient reactiveElasticsearchClient) {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
         this.recordRepository = recordRepository;
+        this.reactiveElasticsearchClient = reactiveElasticsearchClient;
     }
-    
+
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
         final String id = request.pathVariable("id");
         final Optional<VloRecord> result = recordRepository.findById(id);
@@ -52,5 +56,18 @@ public class VloRecordHandler {
         final Optional<VloRecord> result = Optional.ofNullable(elasticsearchRestTemplate.get(id, VloRecord.class));
         return result.map(record -> ServerResponse.ok().bodyValue(record))
                 .orElse(ServerResponse.notFound().build());
+    }
+
+    public Mono<ServerResponse> saveRecord(ServerRequest request) {
+        Mono<VloRecord> recordMono = request.bodyToMono(VloRecord.class);
+        return recordMono.flatMap(
+                vloRecord -> reactiveElasticsearchClient.index(ir
+                        -> ir.index("record").source(vloRecord))
+        ).flatMap(
+                (response) -> {
+                    final URI uri = request.uriBuilder().pathSegment(response.getId()).build();
+                    return ServerResponse.created(uri).bodyValue(response.toString());
+                }
+        ).switchIfEmpty(ServerResponse.badRequest().build());
     }
 }

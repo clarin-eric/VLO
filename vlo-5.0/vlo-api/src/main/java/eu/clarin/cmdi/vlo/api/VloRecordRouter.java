@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
@@ -36,6 +37,7 @@ public class VloRecordRouter {
     public RouterFunction<ServerResponse> route(VloRecordHandler recordHandler) {
         return RouterFunctions
                 .route(GET("/record/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
-                .andRoute(GET("/recordUsingTemplate/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromTemplate);
+                .andRoute(GET("/recordUsingTemplate/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromTemplate)
+                .andRoute(PUT("/record").and(accept(MediaType.APPLICATION_JSON)), recordHandler::saveRecord);
     }
 }
