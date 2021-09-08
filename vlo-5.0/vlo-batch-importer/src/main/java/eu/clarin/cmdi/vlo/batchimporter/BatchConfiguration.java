@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.batchimporter;
 
 import com.google.common.collect.Iterators;
+import com.google.common.collect.UnmodifiableIterator;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.io.IOException;
@@ -51,7 +52,7 @@ public class BatchConfiguration {
 
     @Value("${vlo.importer.recordsDirectory}")
     private String recordsDirectoryPath;
-    
+
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
 
@@ -60,15 +61,18 @@ public class BatchConfiguration {
 
     @Bean
     public ItemReader<MetadataFile> reader() throws IOException {
-        final Path recordsDirectory = Path.of(recordsDirectoryPath);
-        final Iterator<Path> filesIterator = Files.newDirectoryStream(recordsDirectory).iterator();
-        
-        return new IteratorItemReader<>(
-                Iterators.transform(
-                        Iterators.filter(
-                                filesIterator,
-                                path -> path.endsWith(".xml")),
-                        MetadataFile::new));
+        final Iterator<Path> filesIterator
+                = Files.newDirectoryStream(Path.of(recordsDirectoryPath))
+                        .iterator();
+
+        final UnmodifiableIterator<Path> filteredIterator
+                = Iterators.filter(filesIterator,
+                        path -> path.getFileName().toString().endsWith(".xml"));
+
+        final Iterator<MetadataFile> filteredMetadataFileIterator
+                = Iterators.transform(filteredIterator, MetadataFile::new);
+
+        return new IteratorItemReader<>(filteredMetadataFileIterator);
     }
 
     @Bean
@@ -96,7 +100,7 @@ public class BatchConfiguration {
     @Bean
     public Step step1(ItemWriter<VloRecord> writer) throws IOException {
         return stepBuilderFactory.get("step1")
-                .<MetadataFile, VloRecord>chunk(10)
+                .<MetadataFile, VloRecord>chunk(5)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer)
