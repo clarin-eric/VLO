@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.4</version>
+        <version>2.5.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>eu.clarin.cmdi.vlo</groupId>
     <artifactId>vlo-monitor</artifactId>
-    <version>4.10.0-1</version>
+    <version>4.11-SNAPSHOT</version>
     <name>VLO change monitor</name>
     <description>Command line utility that carries out rule based checks for changes in the VLO's index</description>
 

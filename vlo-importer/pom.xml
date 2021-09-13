@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
@@ -22,6 +22,7 @@
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
         <vlo.import.logging.level>INFO</vlo.import.logging.level>
+        <rasa.version>4.0.1</rasa.version>
     </properties>
 
     <profiles>
@@ -141,6 +142,11 @@
             <version>${slf4j.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.usefultoys</groupId>
+            <artifactId>slf4j-toys</artifactId>
+            <version>1.6.3</version>
+        </dependency>
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
@@ -187,9 +193,28 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>resource-availability-status-api</artifactId>
-            <version>3.0.9</version>
+            <groupId>eu.clarin.cmdi</groupId>
+            <artifactId>rasa-api</artifactId>
+            <version>${rasa.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.clarin.cmdi</groupId>
+            <artifactId>rasa-mysql-impl</artifactId>
+            <version>${rasa.version}</version>
+        </dependency>
+
+        <!-- JMOCK FOR MOCKING -->
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+            <version>2.12.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>junit-dep</artifactId>
+                    <groupId>junit</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>
