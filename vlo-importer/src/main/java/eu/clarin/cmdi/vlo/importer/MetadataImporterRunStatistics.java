@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CLARIN
+ * Copyright (C) 2021 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,22 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.importer.linkcheck;
-
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
-import java.util.stream.Stream;
+package eu.clarin.cmdi.vlo.importer;
 
 /**
  *
- * @author Twan Goosen <twan@clarin.eu>
+ * @author twagoo
  */
-public interface ResourceAvailabilityStatusChecker extends Closeable {
+public interface MetadataImporterRunStatistics {
 
-    Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) throws IOException;
+    ImportStatistics getImportStatistics();
+
+    /**
+     *
+     * @return time last completed import took; may be null
+     */
+    Long getTime();
     
-    void writeStatusSummary(Writer writer) throws IOException;
 }

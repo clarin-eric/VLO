@@ -4,8 +4,11 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-import eu.clarin.cmdi.rasa.helpers.impl.ACDHRasaFactory;
-import eu.clarin.cmdi.rasa.linkResources.impl.ACDHCheckedLinkResource;
+
+import eu.clarin.cmdi.rasa.helpers.RasaFactory;
+import eu.clarin.cmdi.rasa.helpers.impl.RasaFactoryBuilderImpl;
+import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,6 +42,7 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
 import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker;
+import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker.RasaResourceAvailabilityStatusCheckerConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
@@ -60,7 +64,11 @@ import eu.clarin.cmdi.vlo.importer.solr.BufferingSolrBridgeImpl;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
+import java.io.Closeable;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.SocketTimeoutException;
+import java.time.Duration;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -69,15 +77,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -92,8 +101,8 @@ import org.apache.solr.common.SolrDocument;
  * defined in the configuration. The startImport function starts the importing
  * and so on.
  */
-public class MetadataImporter {
-    
+public class MetadataImporter implements Closeable, MetadataImporterRunStatistics {
+
     private final VloConfig config;
     private ExecutorService fileProcessingPool;
 
@@ -107,42 +116,45 @@ public class MetadataImporter {
     private static final String[] VALID_CMDI_EXTENSIONS = new String[]{"xml", "cmdi"};
 
     /**
-     * Log log log log
+     * Logging
      */
     protected final static Logger LOG = LoggerFactory.getLogger(MetadataImporter.class);
+
+    /**
+     * How often to log resource availability checker status
+     */
+    private static final int RESOURCE_AVAILABILITY_CHECKER_STATUS_LOG_INTERVAL_SECONDS = 60;
 
     /**
      * interface to the solr server
      */
     private final SolrBridge solrBridge;
-    
+
     private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
-    
+    private final ResourceAvailabilityStatusChecker availabilityChecker;
+
     public static class DefaultSolrBridgeFactory {
-        
+
         public static SolrBridge createDefaultSolrBridge(VloConfig config) {
             final SolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
             solrBridge.setCommit(true);
             return solrBridge;
         }
     }
-    
+
     public static class DefaultResourceAvailabilityFactory {
-        
-        public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(VloConfig config) {
+
+        public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(final VloConfig config) {
             final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
             final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
-            final String rasaDbName = config.getLinkCheckerDbPassword(); //linkchecker
+            final String rasaDbPassword = config.getLinkCheckerDbPassword(); //linkchecker
+            final int rasaDbPoolsize = config.getLinkCheckerDbPoolsize();
+            final Duration checkAgeThreshold = Duration.ofDays(config.getLinkCheckerMaxDaysSinceChecked());
 
             if (!Strings.isNullOrEmpty(rasaDbUri)) {
                 try {
-                    LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
-                    //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
-                    final ACDHRasaFactory factory = new ACDHRasaFactory(rasaDbUri, rasaDbUser, rasaDbName);
-                    final ACDHCheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-                    final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
-                    
+                    final RasaResourceAvailabilityStatusChecker checker = newRasaChecker(rasaDbUri, rasaDbUser, rasaDbPassword, rasaDbPoolsize, checkAgeThreshold);
                     if (testChecker(checker)) {
                         return checker;
                     }
@@ -152,13 +164,42 @@ public class MetadataImporter {
                 LOG.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             } else {
-                LOG.warn("No mongo configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
+                LOG.warn("No mysql configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
                 return new NoopResourceAvailabilityStatusChecker();
             }
-            
+
         }
-        
+
+        private static RasaResourceAvailabilityStatusChecker newRasaChecker(final String rasaDbUri, final String rasaDbUser, final String rasaDbPassword, final int rasaDbPoolsize, final Duration checkAgeThreshold) {
+            LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
+            //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
+            final Properties rasaProperties = new Properties();
+            rasaProperties.setProperty("driverClassName", "com.mysql.cj.jdbc.Driver");
+            rasaProperties.setProperty("jdbcUrl", rasaDbUri);
+            rasaProperties.setProperty("username", rasaDbUser);
+            rasaProperties.setProperty("password", rasaDbPassword);
+            rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
+            final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
+            final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
+            final RasaResourceAvailabilityStatusChecker checker
+                    = new RasaResourceAvailabilityStatusChecker(checkedLinkResource,
+                            new RasaResourceAvailabilityStatusCheckerConfiguration(checkAgeThreshold)) {
+                @Override
+                public void onClose() throws IOException {
+                    logger.info("Asking resource availability checker factory to tear down");
+                    factory.tearDown();
+                }
+
+                @Override
+                public void writeStatusSummary(Writer writer) throws IOException {
+                    factory.writeStatusSummary(writer);
+                }
+            };
+            return checker;
+        }
+
         private static boolean testChecker(RasaResourceAvailabilityStatusChecker checker) {
+            LOG.debug("Carrying out functional check of RASA checker...");
             final String testUrl = "https://www.clarin.eu";
             try {
                 checker.getLinkStatusForRefs(Stream.of(testUrl));
@@ -177,7 +218,7 @@ public class MetadataImporter {
      * document.
      */
     protected final Map<String, AbstractPostNormalizer> postProcessors;
-    
+
     protected final List<FacetValuesMapFilter> postMappingFilters;
 
     /**
@@ -189,13 +230,13 @@ public class MetadataImporter {
     private final ImportStatistics stats = new ImportStatistics();
     private Long time;
     private final FieldNameServiceImpl fieldNameService;
-    
+
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList,
                 DefaultSolrBridgeFactory.createDefaultSolrBridge(config),
                 DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
     }
-    
+
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige, ResourceAvailabilityStatusChecker availabilityChecker) {
         this.config = config;
         this.fieldNameService = new FieldNameServiceImpl(config);
@@ -203,15 +244,16 @@ public class MetadataImporter {
         this.postProcessors = registerPostProcessors(config, fieldNameService, languageCodeUtils);
         this.postMappingFilters = registerPostMappingFilters(fieldNameService);
         this.solrBridge = solrBrdige;
-        
+        this.availabilityChecker = availabilityChecker;
+
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
         this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, availabilityChecker, stats, config.getSignatureFieldNames());
     }
-    
+
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
         ImmutableMap.Builder<String, AbstractPostNormalizer> imb = ImmutableMap.builder();
-        
+
         imb.put(fieldNameService.getFieldName(FieldKey.ID), new IdPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.CONTINENT, () -> new ContinentNamePostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.COUNTRY, () -> new CountryNamePostNormalizer(config));
@@ -226,10 +268,10 @@ public class MetadataImporter {
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.CREATOR, () -> new CreatorPostNormalizer());
-        
+
         return imb.build();
     }
-    
+
     public static ImmutableList<FacetValuesMapFilter> registerPostMappingFilters(FieldNameService fieldNameService) {
         final ImmutableList.Builder<FacetValuesMapFilter> builder = ImmutableList.<FacetValuesMapFilter>builder();
         forFieldsIfExists(
@@ -247,8 +289,9 @@ public class MetadataImporter {
      */
     void startImport() throws MalformedURLException {
         solrBridge.init();
-        
+
         final long start = System.currentTimeMillis();
+        final ScheduledThreadPoolExecutor resourceAvailabilityCheckerMonitor = startAvailabilityCheckerStatusReport();
         try {
             final List<DataRoot> dataRoots = filterDataRootsWithCLArgs(checkDataRoots());
 
@@ -256,7 +299,7 @@ public class MetadataImporter {
             if (config.getDeleteAllFirst()) {
                 deleteAll();
             }
-            
+
             final int nProcessingThreads = config.getFileProcessingThreads();
             if (nProcessingThreads > 0) {
                 LOG.info("Initiating processing pool with {} threads", nProcessingThreads);
@@ -296,19 +339,20 @@ public class MetadataImporter {
                     LOG.error("cannot commit:\n", e);
                 }
             }
+            resourceAvailabilityCheckerMonitor.shutdown();
             shutdown();
         }
         time = (System.currentTimeMillis() - start);
         logStatistics();
     }
-    
+
     protected void deleteAll() throws IOException, SolrServerException {
         LOG.info("Deleting original data...");
         solrBridge.getClient().deleteByQuery("*:*");
         solrBridge.commit();
         LOG.info("Deleting original data done.");
     }
-    
+
     protected void processDataRoot(DataRoot dataRoot) throws SolrServerException, IOException, InterruptedException {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         if (dataRoot.deleteFirst()) {
@@ -327,11 +371,11 @@ public class MetadataImporter {
         updateDaysSinceLastImport(dataRoot);
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
-    
+
     protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String, EndpointDescription> directoryEndpointMap) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
-        
+
         final ResourceStructureGraph resourceStructureGraph = instantiateResourceStructureGraph(dataRoot, centerDirName);
         final boolean createHierarchyGraph = resourceStructureGraph != null;
 
@@ -375,7 +419,7 @@ public class MetadataImporter {
         });
         final Set<Callable<Void>> processorsCollection = processors.collect(Collectors.toSet());
         fileProcessingPool.invokeAll(processorsCollection);
-        
+
         LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
         solrBridge.commit();
         if (resourceStructureGraph != null) {
@@ -415,7 +459,7 @@ public class MetadataImporter {
             return null;
         }
     }
-    
+
     protected void preProcessFile(File file, boolean createHierarchyGraph, Set<File> ignoredFileSet, Set<String> mdSelfLinkSet, AtomicInteger progress) {
         if (config.getMaxFileSize() > 0
                 && file.length() > config.getMaxFileSize()) {
@@ -441,13 +485,13 @@ public class MetadataImporter {
             LOG.info("Pre-processed {} files in set...", progressNow);
         }
     }
-    
+
     protected void purgeOldDocs() throws SolrServerException, IOException {
         LOG.info("Deleting old files that were not seen for more than " + config.getMaxDaysInSolr() + " days...");
         solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.LAST_SEEN) + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
         LOG.info("Deleting old files done.");
     }
-    
+
     protected void logStatistics() {
         LOG.info("Found {} file(s) without an id. (id is generated based on fileName but that may not be unique)", stats.nrOfFilesWithoutId());
         LOG.info("Found {} file(s) with errors.", stats.nrOfFilesWithError());
@@ -471,7 +515,7 @@ public class MetadataImporter {
             } else {
                 existingDataRoots.add(dataRoot);
             }
-            
+
         }
         return existingDataRoots;
     }
@@ -487,18 +531,18 @@ public class MetadataImporter {
         if (clDatarootsList == null) {
             return dataRoots;
         }
-        
+
         LOG.info("Filtering configured data root files with command line arguments: \"" + clDatarootsList + "\"");
-        
+
         LinkedList<File> fsDataRoots = new LinkedList<>();
-        
+
         List<String> paths = Arrays.asList((clDatarootsList.split("\\s+")));
 
         //Convert String paths to File objects for comparison
         for (String path : paths) {
             fsDataRoots.add(new File(path));
         }
-        
+
         List<DataRoot> filteredDataRoots = new LinkedList<>();
         try {
             //filter data
@@ -516,7 +560,7 @@ public class MetadataImporter {
         } catch (IOException e) {
             filteredDataRoots = dataRoots;
         }
-        
+
         return filteredDataRoots;
     }
 
@@ -544,7 +588,7 @@ public class MetadataImporter {
                 if (centerDir.isDirectory()) {
                     centerFileList.addAll(FileUtils.listFiles(centerDir, VALID_CMDI_EXTENSIONS, true));
                 }
-                
+
                 if (!centerFileList.isEmpty()) {
                     LOG.info("Found {} candidates for import in {}", centerFileList.size(), centerDir);
                     result.add(centerFileList);
@@ -590,7 +634,7 @@ public class MetadataImporter {
                 updateCount.incrementAndGet();
                 final SolrInputDocument doc = new SolrInputDocument();
                 doc.setField(fieldNameService.getFieldName(FieldKey.ID), Arrays.asList(vertex.getId()));
-                
+
                 if (vertex.getHierarchyWeight() != 0) {
                     final Map<String, Integer> partialUpdateMap = new HashMap<>();
                     partialUpdateMap.put("set", Math.abs(vertex.getHierarchyWeight()));
@@ -612,7 +656,7 @@ public class MetadataImporter {
                         outgoingVertexIter.remove();
                     }
                 }
-                
+
                 if (!incomingVertexNames.isEmpty()) {
                     doc.setField(fieldNameService.getFieldName(FieldKey.HAS_PART), ImmutableMap.of("set", incomingVertexNames));
                     doc.setField(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT), ImmutableMap.of("set", incomingVertexNames.size()));
@@ -621,7 +665,7 @@ public class MetadataImporter {
                     final Double hasPartCountWeight = Math.log10(1 + Math.min(50, incomingVertexNames.size()));
                     doc.setField(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT_WEIGHT), ImmutableMap.of("set", hasPartCountWeight));
                 }
-                
+
                 if (!outgoingVertexNames.isEmpty()) {
                     doc.setField(fieldNameService.getFieldName(FieldKey.IS_PART_OF), ImmutableMap.of("set", outgoingVertexNames));
                 }
@@ -644,14 +688,14 @@ public class MetadataImporter {
     private void updateDaysSinceLastImport(final DataRoot dataRoot) throws SolrServerException, IOException {
         LOG.info("Updating \"days since last seen\" in Solr for: {}", dataRoot.getOriginName());
         final int fetchSize = 1000;
-        
+
         final SolrQuery countQuery = createOldRecordsQuery(dataRoot);
         countQuery.setRows(0);
-        
+
         final QueryResponse rsp = solrBridge.getClient().query(countQuery);
         final long totalResults = rsp.getResults().getNumFound();
         final LocalDate nowDate = LocalDate.now();
-        
+
         final AtomicInteger updatedDocs = new AtomicInteger();
         int offset = 0;
 
@@ -676,14 +720,14 @@ public class MetadataImporter {
         } catch (InterruptedException ex) {
             LOG.warn("Interrupted while waiting for termination of updating 'days since last seen' properties");
         }
-        
+
         if (updatedDocs.get() > 0) {
             solrBridge.commit();
         }
-        
+
         LOG.info("Updated \"days since last seen\" value in {} records.", updatedDocs.get());
     }
-    
+
     private void performUpdateDaysSinceLastImportBatch(DataRoot dataRoot, final int fetchSize, int offset, AtomicInteger updatedDocs, final LocalDate nowDate) throws SolrServerException, DocumentStoreException, IOException {
         int updatedInBatch = 0;
         final SolrQuery query = createOldRecordsQuery(dataRoot);
@@ -691,18 +735,18 @@ public class MetadataImporter {
         query.setRows(fetchSize);
         for (SolrDocument doc : solrBridge.getClient().query(query).getResults()) {
             updatedInBatch++;
-            
+
             String recordId = (String) doc.getFieldValue(fieldNameService.getFieldName(FieldKey.ID));
             Date lastImportDate = (Date) doc.getFieldValue(fieldNameService.getFieldName(FieldKey.LAST_SEEN));
             LocalDate oldDate = lastImportDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             long daysSinceLastSeen = DAYS.between(oldDate, nowDate);
-            
+
             SolrInputDocument updateDoc = new SolrInputDocument();
             updateDoc.setField(fieldNameService.getFieldName(FieldKey.ID), recordId);
-            
+
             final Map<String, Long> partialUpdateMap = Collections.singletonMap("set", daysSinceLastSeen);
             updateDoc.setField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), partialUpdateMap);
-            
+
             solrBridge.addDocument(updateDoc);
             final Throwable error = solrBridge.popError();
             if (error != null) {
@@ -712,7 +756,7 @@ public class MetadataImporter {
         final int totalUpdated = updatedDocs.addAndGet(updatedInBatch);
         LOG.info("Updating \"days since last seen\": {} updated in batch - {} records updated thus far", updatedInBatch, totalUpdated);
     }
-    
+
     private SolrQuery createOldRecordsQuery(DataRoot dataRoot) {
         final SolrQuery query = new SolrQuery();
         query.setQuery(
@@ -725,7 +769,7 @@ public class MetadataImporter {
         query.setFields(fieldNameService.getFieldName(FieldKey.ID), fieldNameService.getFieldName(FieldKey.LAST_SEEN));
         return query;
     }
-    
+
     private void shutdown() {
         //wait for processing pool to finish
         if (fileProcessingPool != null) {
@@ -747,19 +791,48 @@ public class MetadataImporter {
     }
 
     /**
+     * Starts an executor with a status log request to the resource availability
+     * checker repeatedly at a fixed rate
+     *
+     * @return the pool executor that has the status report task scheduled
+     */
+    private ScheduledThreadPoolExecutor startAvailabilityCheckerStatusReport() {
+        final ScheduledThreadPoolExecutor resourceAvailabilityCheckerMonitor = new ScheduledThreadPoolExecutor(1);
+        resourceAvailabilityCheckerMonitor.scheduleAtFixedRate(() -> {
+            try {
+                LOG.debug("Resource availability checker status report...");
+                try ( OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
+                    availabilityChecker.writeStatusSummary(availabilityCheckerlogWriter);
+                }
+            } catch (IOException ex) {
+                LOG.error("Could not write resource availability checker status to log", ex);
+            }
+        }, 1, RESOURCE_AVAILABILITY_CHECKER_STATUS_LOG_INTERVAL_SECONDS, TimeUnit.SECONDS);
+        return resourceAvailabilityCheckerMonitor;
+    }
+
+    /**
      *
      * @return time last completed import took; may be null
      */
+    @Override
     public Long getTime() {
         return time;
     }
-    
+
+    @Override
     public ImportStatistics getImportStatistics() {
         return stats;
     }
-    
+
     protected CMDIRecordImporter getRecordProcessor() {
         return recordHandler;
+    }
+
+    @Override
+    public void close() throws IOException {
+        LOG.info("Closing resource availability checker");
+        availabilityChecker.close();
     }
 
     /**
@@ -788,7 +861,7 @@ public class MetadataImporter {
                 .map(fieldNameService::getFieldName)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        
+
         if (!fields.isEmpty()) {
             consumer.accept(fields);
         }
@@ -817,9 +890,9 @@ public class MetadataImporter {
     protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, SolrBridge solrBridge, ResourceAvailabilityStatusChecker availabilityChecker) {
         this(config, languageCodeUtils, new VLOMarshaller(), solrBridge, availabilityChecker);
     }
-    
+
     private MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, VLOMarshaller marshaller, SolrBridge solrBridge, ResourceAvailabilityStatusChecker availabilityChecker) {
         this(config, languageCodeUtils, new FacetMappingFactory(config, marshaller), marshaller, null, solrBridge, availabilityChecker);
     }
-    
+
 }

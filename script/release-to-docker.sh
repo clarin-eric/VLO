@@ -6,7 +6,7 @@ SRC_BASE_DIR="${HOME}/git"
 VLO_SRC_PATH="${SRC_BASE_DIR}/vlo"
 DOCKER_PROJECT_PATH="${SRC_BASE_DIR}/docker-vlo"
 COMPOSE_PROJECT_PATH="${SRC_BASE_DIR}/compose_vlo/compose_vlo"
-CI_URL="https://travis-ci.com/clarin-eric/VLO/builds"
+CI_URL="https://app.travis-ci.com/github/clarin-eric/VLO/builds"
 DOCKER_CI_URL="https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/pipelines"
 
 VLO_NEW_VERSION=""

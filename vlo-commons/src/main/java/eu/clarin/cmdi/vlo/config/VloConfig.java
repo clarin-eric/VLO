@@ -154,6 +154,8 @@ public class VloConfig {
     private String linkCheckerDbUser;
 
     private String linkCheckerDbPassword;
+    
+    private int linkCheckerDbPoolsize;
 
     private String centreRegistryCentresListJsonUrl;
 
@@ -198,6 +200,8 @@ public class VloConfig {
     private String lrSwitchboardPopupStyleUrl="https://switchboard.clarin.eu/popup/switchboardpopup.css";
     
     private boolean lrSwitchboardPopupEnabled = true;
+    
+    private int linkCheckerMaxDaysSinceChecked = 100;
 
     /**
      * Get and set methods for web application parameter members<br>
@@ -1320,7 +1324,23 @@ public class VloConfig {
 
     public void setLinkCheckerDbPassword(String linkCheckerDbPassword) {
         this.linkCheckerDbPassword = linkCheckerDbPassword;
-    }    
+    }  
+    
+    public int getLinkCheckerDbPoolsize() {
+        return linkCheckerDbPoolsize;
+    }  
+    
+    public void setLinkCheckerDbPoolsize(int linkCheckerDbPoolsize) {
+        this.linkCheckerDbPoolsize = linkCheckerDbPoolsize;
+    } 
+    
+    public int getLinkCheckerMaxDaysSinceChecked() {
+        return linkCheckerMaxDaysSinceChecked;
+    }  
+
+    public void setLinkCheckerMaxDaysSinceChecked(int linkCheckerMaxDaysSinceChecked) {
+        this.linkCheckerMaxDaysSinceChecked = linkCheckerMaxDaysSinceChecked;
+    }
 
     public String getCentreRegistryCentresListJsonUrl() {
         return centreRegistryCentresListJsonUrl;

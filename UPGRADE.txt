@@ -82,6 +82,22 @@ for the upgraded VLO instance), go to the `bin` directory and run the importer u
 updated configuration file:
     `./vlo_solr_importer.sh -c ../config/VloConfig.xml`
 
+
+-------------------------------
+Upgrading from 4.10.0 to 4.10.1
+-------------------------------
+
+A property `linkCheckerDbPoolsize` has been added to VloConfig. By default, this
+will be set to `25``:
+
+- `<linkCheckerDbPoolsize>25</linkCheckerDbPoolsize>`
+
+A property `linkCheckerMaxDaysSinceChecked` has been added to VloConfig. By default, this
+will be set to `100``:
+
+- `<linkCheckerMaxDaysSinceChecked>100</linkCheckerMaxDaysSinceChecked>`
+
+
 ------------------------------
 Upgrading from 4.9.x to 4.10.0
 ------------------------------
