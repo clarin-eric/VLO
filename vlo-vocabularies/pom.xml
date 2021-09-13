@@ -4,14 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-vocabularies</artifactId>
-    <version>4.10.1-beta2</version>
+    <version>4.10.1</version>
     <name>VLO Vocabularies</name>
     <packaging>jar</packaging>
 
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.10.1-beta2</version>
+        <version>4.10.1</version>
     </parent>
 
 
