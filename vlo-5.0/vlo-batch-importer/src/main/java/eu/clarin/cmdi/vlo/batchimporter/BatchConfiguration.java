@@ -16,14 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
-import com.google.common.collect.Iterators;
-import com.google.common.collect.UnmodifiableIterator;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Iterator;
 import java.util.List;
 import javax.naming.OperationNotSupportedException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +29,6 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.support.IteratorItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -50,29 +43,23 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class BatchConfiguration {
 
-    @Value("${vlo.importer.recordsDirectory}")
-    private String recordsDirectoryPath;
-
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
 
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
+    @Value("${vlo.importer.recordsDirectory}")
+    private String recordsDirectoryPath;
+
+    @Bean(name = "reader")
+    public MetadataFilesBatchReaderFactory readerFactory() {
+        return new MetadataFilesBatchReaderFactory(recordsDirectoryPath);
+    }
+
     @Bean
-    public ItemReader<MetadataFile> reader() throws IOException {
-        final Iterator<Path> filesIterator
-                = Files.newDirectoryStream(Path.of(recordsDirectoryPath))
-                        .iterator();
-
-        final UnmodifiableIterator<Path> filteredIterator
-                = Iterators.filter(filesIterator,
-                        path -> path.getFileName().toString().endsWith(".xml"));
-
-        final Iterator<MetadataFile> filteredMetadataFileIterator
-                = Iterators.transform(filteredIterator, MetadataFile::new);
-
-        return new IteratorItemReader<>(filteredMetadataFileIterator);
+    public ItemReader<MetadataFile> reader() throws Exception {
+        return readerFactory().getObject();
     }
 
     @Bean
@@ -98,7 +85,7 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Step step1(ItemWriter<VloRecord> writer) throws IOException {
+    public Step step1(ItemWriter<VloRecord> writer) throws Exception {
         return stepBuilderFactory.get("step1")
                 .<MetadataFile, VloRecord>chunk(5)
                 .reader(reader())
