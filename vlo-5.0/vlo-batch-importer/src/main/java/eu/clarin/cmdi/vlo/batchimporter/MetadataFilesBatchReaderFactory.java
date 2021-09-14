@@ -16,12 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.UnmodifiableIterator;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.support.IteratorItemReader;
@@ -34,27 +38,41 @@ import org.springframework.beans.factory.FactoryBean;
 @Slf4j
 public class MetadataFilesBatchReaderFactory implements FactoryBean<ItemReader<MetadataFile>> {
 
-    private final String recordsDirectoryPath;
+    private final Map<String, String> dataRootsMap;
+    private final Predicate<Path> filesFilter;
 
-    public MetadataFilesBatchReaderFactory(String recordsDirectoryPath) {
-        this.recordsDirectoryPath = recordsDirectoryPath;
+    private final static Predicate<Path> DEFAULT_FILES_FILTER = Predicates.compose(
+            Predicates.or(
+                    pathString -> pathString.endsWith(".xml"),
+                    pathString -> pathString.endsWith(".cmdi")),
+            (path) -> path.getFileName().toString().toLowerCase());
+
+    public MetadataFilesBatchReaderFactory(Map<String, String> dataRootsMap) {
+        this(dataRootsMap, DEFAULT_FILES_FILTER);
+    }
+
+    public MetadataFilesBatchReaderFactory(Map<String, String> dataRootsMap, Predicate<Path> filesFilter) {
+        this.dataRootsMap = dataRootsMap;
+        this.filesFilter = filesFilter;
+    }
+
+    private Iterator<MetadataFile> newMetadataFileIterator(String dataRootName, String dataRootPath) {
+        log.info("Instantiating file iterator for data root '{}' in '{}'", dataRootName, dataRootPath);
+        
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Path.of(dataRootPath), filesFilter::apply)) {
+            return Iterators.transform(directoryStream.iterator(), (path) -> new MetadataFile(dataRootName, path));
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Error while creating file iterator for data root with name '%s' and path '%s'", dataRootName, dataRootPath), ex);
+        }
     }
 
     @Override
     public ItemReader<MetadataFile> getObject() throws Exception {
-        log.info("Instantiating file reader in {}", recordsDirectoryPath);
-        final Iterator<Path> filesIterator
-                = Files.newDirectoryStream(Path.of(recordsDirectoryPath))
-                        .iterator();
+        final Iterator[] iteratorsArray = dataRootsMap.entrySet().stream()
+                .map(entry -> newMetadataFileIterator(entry.getKey(), entry.getValue()))
+                .toArray(Iterator[]::new);
 
-        final UnmodifiableIterator<Path> filteredIterator
-                = Iterators.filter(filesIterator,
-                        path -> path.getFileName().toString().endsWith(".xml"));
-
-        final Iterator<MetadataFile> filteredMetadataFileIterator
-                = Iterators.transform(filteredIterator, MetadataFile::new);
-
-        return new IteratorItemReader<>(filteredMetadataFileIterator);
+        return new IteratorItemReader(Iterators.concat(iteratorsArray));
     }
 
     @Override

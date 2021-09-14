@@ -29,7 +29,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MetadataFile {
-    
+
+    private String dataRoot;
     private Path location;
-    
+
 }

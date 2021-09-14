@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
@@ -52,14 +53,11 @@ public class BatchConfiguration {
     @Value("${vlo.importer.recordsDirectory}")
     private String recordsDirectoryPath;
 
-    @Bean(name = "reader")
-    public MetadataFilesBatchReaderFactory readerFactory() {
-        return new MetadataFilesBatchReaderFactory(recordsDirectoryPath);
-    }
-
     @Bean
     public ItemReader<MetadataFile> reader() throws Exception {
-        return readerFactory().getObject();
+        final ImmutableMap<String, String> rootsMap = ImmutableMap.<String, String>builder().put("default", recordsDirectoryPath).build();
+        final MetadataFilesBatchReaderFactory metadataFilesBatchReaderFactory = new MetadataFilesBatchReaderFactory(rootsMap);
+        return metadataFilesBatchReaderFactory.getObject();
     }
 
     @Bean
