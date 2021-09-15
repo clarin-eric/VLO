@@ -38,61 +38,75 @@ import org.springframework.beans.factory.FactoryBean;
  */
 @Slf4j
 public class MetadataFilesBatchReaderFactory implements FactoryBean<ItemReader<MetadataFile>> {
-
+    
     private final Map<String, String> dataRootsMap;
     private final Predicate<Path> filesFilter;
-
+    
     private final static Predicate<Path> DEFAULT_FILES_FILTER = Predicates.compose(
             Predicates.or(
                     pathString -> pathString.endsWith(".xml"),
                     pathString -> pathString.endsWith(".cmdi")),
             (path) -> path.getFileName().toString().toLowerCase());
-
+    
     public MetadataFilesBatchReaderFactory(Map<String, String> dataRootsMap) {
         this(dataRootsMap, DEFAULT_FILES_FILTER);
     }
-
+    
     public MetadataFilesBatchReaderFactory(Map<String, String> dataRootsMap, Predicate<Path> filesFilter) {
         this.dataRootsMap = dataRootsMap;
         this.filesFilter = filesFilter;
     }
-
+    
     private Stream<MetadataFile> newMetadataFileIterator(String dataRootName, String dataRootPath) {
         log.info("Instantiating file iterator for data root '{}' in '{}'", dataRootName, dataRootPath);
-
-        try {
-            final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Path.of(dataRootPath), filesFilter::apply);
-            return StreamSupport.stream(directoryStream.spliterator(), false)
-                    .map((path) -> new MetadataFile(dataRootName, path))
-                    .onClose(() -> {
-                        try {
-                            directoryStream.close();
-                        } catch (IOException ex) {
-                            throw new RuntimeException(String.format("Error while closing directory stream for data root with name '%s' and path '%s'", dataRootName, dataRootPath), ex);
-                        }
-                    });
-        } catch (IOException ex) {
-            throw new RuntimeException(String.format("Error while creating file iterator for data root with name '%s' and path '%s'", dataRootName, dataRootPath), ex);
-        }
+        
+        final Path dataRoot = Path.of(dataRootPath);
+        // process all subdirectories (direct children) of the dataroot
+        final DirectoryStream<Path> subDirectoriesStream = newDirectoryStream(dataRoot, Files::isDirectory);
+        return StreamSupport.stream(subDirectoriesStream.spliterator(), false)
+                .flatMap(subDir -> {
+                    // read all files in each of the subdirectories (applying the file filter)
+                    final DirectoryStream<Path> subDirFilesStream = newDirectoryStream(subDir, filesFilter::apply);
+                    return StreamSupport.stream(subDirFilesStream.spliterator(), false)
+                            .map((path) -> new MetadataFile(dataRootName, path))
+                            .onClose(() -> closeDirectoryStream(subDirFilesStream, subDir));
+                })
+                .onClose(() -> closeDirectoryStream(subDirectoriesStream, dataRoot));
     }
-
+    
     @Override
     public ItemReader<MetadataFile> getObject() throws Exception {
         final Iterator<MetadataFile> iterator = dataRootsMap.entrySet().stream()
                 .flatMap(entry -> newMetadataFileIterator(entry.getKey(), entry.getValue()))
                 .iterator();
-
+        
         return new IteratorItemReader<>(iterator);
     }
-
+    
     @Override
     public Class<?> getObjectType() {
         return ItemReader.class;
     }
-
+    
     @Override
     public boolean isSingleton() {
         return true;
     }
-
+    
+    private DirectoryStream<Path> newDirectoryStream(Path path, Predicate<Path> filter) {
+        try {
+            return Files.newDirectoryStream(path, filter::apply);
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Error while creating file iterator for data root path '%s'", path), ex);
+        }
+    }
+    
+    private void closeDirectoryStream(DirectoryStream stream, Path path) {
+        try {
+            stream.close();
+        } catch (IOException ex) {
+            throw new RuntimeException(String.format("Error while closing directory stream for data root with path '%s'", path), ex);
+        }
+    }
+    
 }
