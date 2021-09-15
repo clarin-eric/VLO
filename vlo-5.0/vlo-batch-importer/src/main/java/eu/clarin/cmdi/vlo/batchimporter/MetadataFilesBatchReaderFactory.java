@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.batchimporter;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -26,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.support.IteratorItemReader;
@@ -56,11 +57,20 @@ public class MetadataFilesBatchReaderFactory implements FactoryBean<ItemReader<M
         this.filesFilter = filesFilter;
     }
 
-    private Iterator<MetadataFile> newMetadataFileIterator(String dataRootName, String dataRootPath) {
+    private Stream<MetadataFile> newMetadataFileIterator(String dataRootName, String dataRootPath) {
         log.info("Instantiating file iterator for data root '{}' in '{}'", dataRootName, dataRootPath);
-        
-        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Path.of(dataRootPath), filesFilter::apply)) {
-            return Iterators.transform(directoryStream.iterator(), (path) -> new MetadataFile(dataRootName, path));
+
+        try {
+            final DirectoryStream<Path> directoryStream = Files.newDirectoryStream(Path.of(dataRootPath), filesFilter::apply);
+            return StreamSupport.stream(directoryStream.spliterator(), false)
+                    .map((path) -> new MetadataFile(dataRootName, path))
+                    .onClose(() -> {
+                        try {
+                            directoryStream.close();
+                        } catch (IOException ex) {
+                            throw new RuntimeException(String.format("Error while closing directory stream for data root with name '%s' and path '%s'", dataRootName, dataRootPath), ex);
+                        }
+                    });
         } catch (IOException ex) {
             throw new RuntimeException(String.format("Error while creating file iterator for data root with name '%s' and path '%s'", dataRootName, dataRootPath), ex);
         }
@@ -68,11 +78,11 @@ public class MetadataFilesBatchReaderFactory implements FactoryBean<ItemReader<M
 
     @Override
     public ItemReader<MetadataFile> getObject() throws Exception {
-        final Iterator[] iteratorsArray = dataRootsMap.entrySet().stream()
-                .map(entry -> newMetadataFileIterator(entry.getKey(), entry.getValue()))
-                .toArray(Iterator[]::new);
+        final Iterator<MetadataFile> iterator = dataRootsMap.entrySet().stream()
+                .flatMap(entry -> newMetadataFileIterator(entry.getKey(), entry.getValue()))
+                .iterator();
 
-        return new IteratorItemReader(Iterators.concat(iteratorsArray));
+        return new IteratorItemReader<>(iterator);
     }
 
     @Override
