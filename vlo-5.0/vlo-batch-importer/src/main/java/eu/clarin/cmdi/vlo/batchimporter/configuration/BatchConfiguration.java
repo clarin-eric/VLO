@@ -14,12 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.batchimporter;
+package eu.clarin.cmdi.vlo.batchimporter.configuration;
 
-import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
+import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
+import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import javax.naming.OperationNotSupportedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -31,7 +35,7 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -41,8 +45,12 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @EnableBatchProcessing
+@EnableConfigurationProperties(MetadataSourceConfiguration.class)
 @Slf4j
 public class BatchConfiguration {
+
+    @Autowired
+    public MetadataSourceConfiguration metadataSourceConfiguration;
 
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
@@ -50,12 +58,14 @@ public class BatchConfiguration {
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
 
-    @Value("${vlo.importer.recordsDirectory}")
-    private String recordsDirectoryPath;
-
     @Bean
     public ItemReader<MetadataFile> reader() throws Exception {
-        final ImmutableMap<String, String> rootsMap = ImmutableMap.<String, String>builder().put("default", recordsDirectoryPath).build();
+        // data roots config to map
+        final Map<String, String> rootsMap
+                = metadataSourceConfiguration.getRoots()
+                        .stream()
+                        .collect(Collectors.toMap(DataRootConfiguration::getName, DataRootConfiguration::getPath));
+
         final MetadataFilesBatchReaderFactory metadataFilesBatchReaderFactory = new MetadataFilesBatchReaderFactory(rootsMap);
         return metadataFilesBatchReaderFactory.getObject();
     }

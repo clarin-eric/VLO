@@ -1,0 +1,8 @@
+vlo:
+  importer:
+    metadata-source:
+      roots: 
+        - name: 'First set'
+          path: /my/vlo/records/first
+        - name: 'Second set'
+          path: /my/vlo/records/second
