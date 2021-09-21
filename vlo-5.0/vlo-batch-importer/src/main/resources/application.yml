@@ -1,3 +1,6 @@
+logging:
+  level:
+    eu.clarin.cmdi.vlo.batchimporter: INFO
 vlo:
   importer:
     metadata-source:
