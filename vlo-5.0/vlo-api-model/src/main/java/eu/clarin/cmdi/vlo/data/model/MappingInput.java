@@ -21,6 +21,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
@@ -30,12 +31,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MappingInput {
-    
+
     private String id;
     private String sourcePath;
+    private String selflink;
     private String dataRoot;
     private String profileId;
-    private Map<String, Object> resources; //TODO: make object for this
+    private List<Resource> resources; //TODO: make object for this
     private Map<String, List<String>> pathValuesMap;
-    
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @ToString(onlyExplicitlyIncluded = true)
+    public static class Resource {
+
+        @ToString.Include
+        String ref;
+
+        String type; //TODO: enum?
+
+        String mediaType;
+
+    }
+
 }
