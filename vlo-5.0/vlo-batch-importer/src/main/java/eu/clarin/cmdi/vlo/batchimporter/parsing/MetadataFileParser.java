@@ -16,8 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter.parsing;
 
+import com.ximpleware.ParseException;
+import com.ximpleware.VTDException;
+import com.ximpleware.VTDGen;
+import com.ximpleware.VTDNav;
+import eu.clarin.cmdi.vlo.batchimporter.InputProcessingException;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
+import java.io.IOException;
+import java.nio.file.Files;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,10 +34,30 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MetadataFileParser {
 
-    public MappingInput parseFile(MetadataFile inputFile) {
+    public MappingInput parseFile(MetadataFile inputFile) throws InputProcessingException {
         log.info("Parsing input file {}", inputFile);
         final MappingInput.MappingInputBuilder builder = MappingInput.builder();
-        //TODO: parse CMDI
+        try {
+            builder.dataRoot(inputFile.getDataRoot());
+            builder.sourcePath(inputFile.getLocation().toString());
+            xmlParse(inputFile, builder);
+            log.debug("Builder after parsing: {}", builder);
+        } catch (IOException | VTDException ex) {
+            throw new InputProcessingException(String.format("Error while trying to parse input file %s", inputFile), ex);
+        }
         return builder.build();
+    }
+
+    private void xmlParse(MetadataFile inputFile, MappingInput.MappingInputBuilder builder) throws IOException, VTDException {
+        final VTDGen vg = new VTDGen();
+        //TODO: replace these two lines with `vg.parseFile()` call?
+        vg.setDoc(Files.readAllBytes(inputFile.getLocation()));
+        vg.parse(true);
+
+        final VTDNav nav = vg.getNav();
+        final String profileId = SchemaParsingUtil.extractProfileId(nav);
+        builder.profileId(profileId);
+        
+        nav.toElement(VTDNav.ROOT);
     }
 }

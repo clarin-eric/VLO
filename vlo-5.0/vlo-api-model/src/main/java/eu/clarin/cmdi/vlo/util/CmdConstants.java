@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 CLARIN ERIC <clarin@clarin.eu>
+ * Copyright (C) 2017 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,28 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.data.model;
-
-import java.util.List;
-import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+package eu.clarin.cmdi.vlo.util;
 
 /**
  *
- * @author CLARIN ERIC <clarin@clarin.eu>
+ * @author twagoo
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class MappingInput {
-    
-    private String id;
-    private String sourcePath;
-    private String dataRoot;
-    private String profileId;
-    private Map<String, Object> resources; //TODO: make object for this
-    private Map<String, List<String>> pathValuesMap;
-    
+public class CmdConstants {
+
+    public final static String CMD_NAMESPACE = "http://www.clarin.eu/cmd/1";
 }
