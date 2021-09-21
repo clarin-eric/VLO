@@ -18,12 +18,14 @@ package eu.clarin.cmdi.vlo.batchimporter.configuration;
 
 import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
 import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
+import eu.clarin.cmdi.vlo.batchimporter.VloImporterConfigurationException;
 import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.batchimporter.parsing.MetadataFileParser;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.naming.OperationNotSupportedException;
 import lombok.extern.slf4j.Slf4j;
@@ -49,47 +51,48 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(MetadataSourceConfiguration.class)
 @Slf4j
 public class BatchConfiguration {
-
+    
     @Autowired
     public MetadataSourceConfiguration metadataSourceConfiguration;
-
+    
     @Autowired
     public JobBuilderFactory jobBuilderFactory;
-
+    
     @Autowired
     public StepBuilderFactory stepBuilderFactory;
-
+    
     @Bean
     public ItemReader<MetadataFile> reader() throws Exception {
         // data roots config to map
         final Map<String, String> rootsMap
-                = metadataSourceConfiguration.getRoots()
+                = Optional.ofNullable(metadataSourceConfiguration.getRoots())
+                        .orElseThrow(() -> new VloImporterConfigurationException("No valid data roots are configured"))
                         .stream()
                         .collect(Collectors.toMap(DataRootConfiguration::getName, DataRootConfiguration::getPath));
-
+        
         final MetadataFilesBatchReaderFactory metadataFilesBatchReaderFactory = new MetadataFilesBatchReaderFactory(rootsMap);
         return metadataFilesBatchReaderFactory.getObject();
     }
-
+    
     @Bean
     public MetadataFileParser metadataFileParser() {
         return new MetadataFileParser();
     }
-
+    
     @Bean
     public FileProcessor processor() {
         return new FileProcessor(metadataFileParser());
     }
-
+    
     @Bean
     public ItemWriter<VloRecord> writer() throws OperationNotSupportedException {
         return new VloRecordWriter();
     }
-
+    
     @Bean
     public Job processFileJob(Step step1) {
         //TODO: Construct metadata hierarchy before processing
-        
+
         //TODO: separate into multiple steps (multiple processors)?
         // -----> Read to mapping input  object, send to API (for mapping)
         // -----> Collect VLO record results, send to API (for index)
@@ -100,7 +103,7 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
-
+    
     @Bean
     public Step step1(ItemWriter<VloRecord> writer) throws Exception {
         return stepBuilderFactory.get("step1")
