@@ -14,28 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.data.model;
-
-import java.util.List;
-import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+package eu.clarin.cmdi.vlo.batchimporter;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class MappingInput {
-    
-    private String id;
-    private String sourcePath;
-    private String dataRoot;
-    private String profileId;
-    private Map<String, Object> resources; //TODO: make object for this
-    private Map<String, List<String>> pathValuesMap;
-    
+public class InputProcessingException extends Exception {
+
+    public InputProcessingException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

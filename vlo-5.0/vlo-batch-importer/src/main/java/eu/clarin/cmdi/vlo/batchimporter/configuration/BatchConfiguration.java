@@ -88,6 +88,8 @@ public class BatchConfiguration {
 
     @Bean
     public Job processFileJob(Step step1) {
+        //TODO: Construct metadata hierarchy before processing
+        
         //TODO: separate into multiple steps (multiple processors)?
         // -----> Read to mapping input  object, send to API (for mapping)
         // -----> Collect VLO record results, send to API (for index)
