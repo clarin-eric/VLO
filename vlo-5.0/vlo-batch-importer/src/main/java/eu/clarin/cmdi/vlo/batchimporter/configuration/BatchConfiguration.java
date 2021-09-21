@@ -18,10 +18,11 @@ package eu.clarin.cmdi.vlo.batchimporter.configuration;
 
 import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
 import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
+import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
+import eu.clarin.cmdi.vlo.batchimporter.parsing.MetadataFileParser;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.naming.OperationNotSupportedException;
@@ -71,19 +72,25 @@ public class BatchConfiguration {
     }
 
     @Bean
+    public MetadataFileParser metadataFileParser() {
+        return new MetadataFileParser();
+    }
+
+    @Bean
     public FileProcessor processor() {
-        return new FileProcessor();
+        return new FileProcessor(metadataFileParser());
     }
 
     @Bean
     public ItemWriter<VloRecord> writer() throws OperationNotSupportedException {
-        return (List<? extends VloRecord> items) -> {
-            log.info("Writing items {}", items);
-        };
+        return new VloRecordWriter();
     }
 
     @Bean
     public Job processFileJob(Step step1) {
+        //TODO: separate into multiple steps (multiple processors)?
+        // -----> Read to mapping input  object, send to API (for mapping)
+        // -----> Collect VLO record results, send to API (for index)
         return jobBuilderFactory.get("processFileJob")
                 .incrementer(new RunIdIncrementer())
                 //.listener(listener)
