@@ -16,15 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter.parsing;
 
-import com.ximpleware.ParseException;
+import com.google.common.collect.ImmutableList;
+import com.ximpleware.AutoPilot;
+import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
+import com.ximpleware.XPathEvalException;
+import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.batchimporter.InputProcessingException;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -49,15 +54,63 @@ public class MetadataFileParser {
     }
 
     private void xmlParse(MetadataFile inputFile, MappingInput.MappingInputBuilder builder) throws IOException, VTDException {
+        // prepare parser
         final VTDGen vg = new VTDGen();
-        //TODO: replace these two lines with `vg.parseFile()` call?
-        vg.setDoc(Files.readAllBytes(inputFile.getLocation()));
-        vg.parse(true);
-
+        vg.parseFile(inputFile.getLocation().toString(), true);
         final VTDNav nav = vg.getNav();
+
+        // Profile ID
         final String profileId = SchemaParsingUtil.extractProfileId(nav);
         builder.profileId(profileId);
-        
+
         nav.toElement(VTDNav.ROOT);
+
+        // Self link
+        final AutoPilot mdSelfLink = new AutoPilot(nav);
+        SchemaParsingUtil.setNameSpace(mdSelfLink, null);
+        mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");
+        final String mdSelfLinkString = mdSelfLink.evalXPathToString();
+        builder.selflink(mdSelfLinkString);
+
+        // resources
+        final List<MappingInput.Resource> resources = parseResources(nav);
+        builder.resources(resources);
+    }
+
+    private ImmutableList<MappingInput.Resource> parseResources(final VTDNav nav) throws NavException, XPathParseException, XPathEvalException {
+        final ImmutableList.Builder<MappingInput.Resource> resources = ImmutableList.<MappingInput.Resource>builder();
+
+        AutoPilot resourceProxy = new AutoPilot(nav);
+        SchemaParsingUtil.setNameSpace(resourceProxy, null);
+        resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
+
+        AutoPilot resourceRef = new AutoPilot(nav);
+        SchemaParsingUtil.setNameSpace(resourceRef, null);
+        resourceRef.selectXPath("cmd:ResourceRef");
+
+        AutoPilot resourceType = new AutoPilot(nav);
+        SchemaParsingUtil.setNameSpace(resourceType, null);
+        resourceType.selectXPath("cmd:ResourceType");
+
+        AutoPilot resourceMimeType = new AutoPilot(nav);
+        SchemaParsingUtil.setNameSpace(resourceMimeType, null);
+        resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
+
+        while (resourceProxy.evalXPath() != -1) {
+            String ref = resourceRef.evalXPathToString();
+            String type = resourceType.evalXPathToString();
+            String mimeType = resourceMimeType.evalXPathToString();
+
+            if (!ref.equals("") && !type.equals("")) {
+                // note that the mime type could be empty
+                resources.add(new MappingInput.Resource(ref, type, mimeType));
+            }
+
+//            // TODO: resource hierarchy information 
+//            if (resourceStructureGraph != null && type.toLowerCase().equals("metadata")) {
+//                resourceStructureGraph.addEdge(ref, mdSelfLinkString);
+//            }
+        }
+        return resources.build();
     }
 }
