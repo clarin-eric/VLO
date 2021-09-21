@@ -17,7 +17,9 @@
 package eu.clarin.cmdi.vlo.batchimporter.configuration;
 
 import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Configuration for metadata input (the data roots)
@@ -36,9 +38,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Validated
 @ConfigurationProperties(prefix = "vlo.importer.metadata-source")
 public class MetadataSourceConfiguration {
 
+    @NotEmpty
     private List<DataRootConfiguration> roots;
 
     public List<DataRootConfiguration> getRoots() {
@@ -51,7 +55,10 @@ public class MetadataSourceConfiguration {
 
     public static class DataRootConfiguration {
 
+        @NotEmpty
         private String name;
+        
+        @NotEmpty
         private String path;
 
         public String getName() {
