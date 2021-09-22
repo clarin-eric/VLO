@@ -16,63 +16,29 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter.parsing;
 
-import com.google.common.io.ByteStreams;
+import eu.clarin.cmdi.vlo.batchimporter.AbstractBatchImporterTest;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class MetadataFileParserTest {
-
-    @TempDir
-    public Path tempDir;
-
-    public final String[] testResources = {
-        "test_record1.xml"
-    };
-
-    @BeforeEach
-    public void copyTestResourcesToDisk() throws IOException {
-        for (String resource : testResources) {
-            final Path target = getTestResourcePath(resource);
-            log.debug("Copying test resource to disk: {} -> {}", resource, target);
-            copyTestResourceToDisk(resource, target);
-        }
-    }
-
-    private void copyTestResourceToDisk(String name, Path target) throws IOException {
-        try (InputStream resourceAsStream = MetadataFileParserTest.class.getResourceAsStream(name)) {
-            try (OutputStream outputStream = Files.newOutputStream(target)) {
-                ByteStreams.copy(resourceAsStream, outputStream);
-            }
-        }
-    }
-
-    private Path getTestResourcePath(String name) {
-        return tempDir.resolve(name);
-    }
+public class MetadataFileParserTest extends AbstractBatchImporterTest {
 
     /**
      * Test of parseFile method, of class MetadataFileParser.
+     * @throws java.lang.Exception
      */
     @Test
     public void testParseFile() throws Exception {
         System.out.println("parseFile");
-        MetadataFile inputFile = new MetadataFile("Test data root", getTestResourcePath(testResources[0]));
+        MetadataFile inputFile = new MetadataFile("Test data root", getTestResource("test_record1.xml"));
         MetadataFileParser instance = new MetadataFileParser();
         MappingInput result = instance.parseFile(inputFile);
 
