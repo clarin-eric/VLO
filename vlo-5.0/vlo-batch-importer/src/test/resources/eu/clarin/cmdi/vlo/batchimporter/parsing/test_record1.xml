@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<cmd:CMD xmlns:cmd="http://www.clarin.eu/cmd/1"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1403526079380" CMDVersion="1.2"
+    xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1403526079380 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1403526079380/xsd">
+    <cmd:Header>
+        <cmd:MdCreationDate>2019-01-05</cmd:MdCreationDate>
+        <cmd:MdSelfLink>http://hdl.handle.net/11356/1208@format=cmdi</cmd:MdSelfLink>
+        <cmd:MdProfile>clarin.eu:cr1:p_1403526079380</cmd:MdProfile>
+        <cmd:MdCollectionDisplayName>CLARIN.SI data &amp; tools</cmd:MdCollectionDisplayName>
+    </cmd:Header>
+    <cmd:Resources>
+        <cmd:ResourceProxyList>
+            <cmd:ResourceProxy id="lp_1746">
+                <cmd:ResourceType>LandingPage</cmd:ResourceType>
+                <cmd:ResourceRef>http://hdl.handle.net/11356/1208</cmd:ResourceRef>
+            </cmd:ResourceProxy>
+            <cmd:ResourceProxy id="uri_1">
+                <cmd:ResourceType mimetype="text/html">Resource</cmd:ResourceType>
+                <cmd:ResourceRef>https://parlameter.si/</cmd:ResourceRef>
+            </cmd:ResourceProxy>
+            <cmd:ResourceProxy id="_2699">
+                <cmd:ResourceType mimetype="application/zip">Resource</cmd:ResourceType>
+                <cmd:ResourceRef xmlns:lindat="http://lindat.mff.cuni.cz/ns/experimental/cmdi"
+                    lindat:md5_checksum="08d0b82399bd4914950d88fd34e077db"
+                    >https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1208/ParlaMeter-sl.tei.zip?sequence=1</cmd:ResourceRef>
+            </cmd:ResourceProxy>
+            <cmd:ResourceProxy id="_2700">
+                <cmd:ResourceType mimetype="application/zip">Resource</cmd:ResourceType>
+                <cmd:ResourceRef xmlns:lindat="http://lindat.mff.cuni.cz/ns/experimental/cmdi"
+                    lindat:md5_checksum="4916d4bfe30bc4e40f4b9a519977bae2"
+                    >https://www.clarin.si/repository/xmlui/bitstream/handle/11356/1208/ParlaMeter-sl.vert.zip?sequence=2</cmd:ResourceRef>
+            </cmd:ResourceProxy>
+        </cmd:ResourceProxyList>
+        <cmd:JournalFileProxyList/>
+        <cmd:ResourceRelationList/>
+    </cmd:Resources>
+    <cmd:Components>
+        <cmdp:LINDAT_CLARIN>
+            <cmdp:bibliographicInfo>
+                <cmdp:projectUrl>https://parlameter.si/</cmdp:projectUrl>
+                <cmdp:titles>
+                    <cmdp:title xml:lang="en">Slovenian parliamentary corpus ParlaMeter-sl 1.0</cmdp:title>
+                </cmdp:titles>
+                <cmdp:authors>
+                    <cmdp:author>
+                        <cmdp:lastName>Dobranić</cmdp:lastName>
+                        <cmdp:firstName> Filip</cmdp:firstName>
+                    </cmdp:author>
+                    <cmdp:author>
+                        <cmdp:lastName>Ljubešić</cmdp:lastName>
+                        <cmdp:firstName> Nikola</cmdp:firstName>
+                    </cmdp:author>
+                    <cmdp:author>
+                        <cmdp:lastName>Erjavec</cmdp:lastName>
+                        <cmdp:firstName> Tomaž</cmdp:firstName>
+                    </cmdp:author>
+                </cmdp:authors>
+                <cmdp:dates>
+                    <cmdp:dateIssued>2019-01-08</cmdp:dateIssued>
+                </cmdp:dates>
+                <cmdp:identifiers>
+                    <cmdp:identifier type="Handle">http://hdl.handle.net/11356/1208</cmdp:identifier>
+                </cmdp:identifiers>
+                <cmdp:funds>
+                    <cmdp:funding>
+                        <cmdp:organization>Jožef Stefan Institute</cmdp:organization>
+                        <cmdp:code>CLARIN</cmdp:code>
+                        <cmdp:projectName>CLARIN.SI</cmdp:projectName>
+                        <cmdp:fundsType>nationalFunds</cmdp:fundsType>
+                    </cmdp:funding>
+                </cmdp:funds>
+                <cmdp:contactPerson>
+                    <cmdp:firstName>Nikola</cmdp:firstName>
+                    <cmdp:lastName>Ljubešić</cmdp:lastName>
+                    <cmdp:email>nikola.ljubesic@ijs.si</cmdp:email>
+                    <cmdp:affiliation>Jožef Stefan Institute</cmdp:affiliation>
+                </cmdp:contactPerson>
+                <cmdp:publishers>
+                    <cmdp:publisher>Jožef Stefan Institute</cmdp:publisher>
+                </cmdp:publishers>
+            </cmdp:bibliographicInfo>
+            <cmdp:dataInfo>
+                <cmdp:type>corpus</cmdp:type>
+                <cmdp:description>The ParlaMeter-sl corpus contains minutes of the National Assembly of the Republic of Slovenia and currently covers its VIIth mandate (2014-08-01 to 2018-06-22). The corpus contains speaker metadata (gender, age, education, party affiliatiation), while the transcriptions of their speeches are MSD tagged, lemmatised, and marked with named entities.</cmdp:description>
+                <cmdp:languages>
+                    <cmdp:language>
+                        <cmdp:code>slv</cmdp:code>
+                        <cmdp:name>Slovenian</cmdp:name>
+                    </cmdp:language>
+                </cmdp:languages>
+                <cmdp:keywords>
+                    <cmdp:keyword>Slovenian Parliament</cmdp:keyword>
+                    <cmdp:keyword>parliamentary debates</cmdp:keyword>
+                    <cmdp:keyword>TEI</cmdp:keyword>
+                    <cmdp:keyword>named entities</cmdp:keyword>
+                </cmdp:keywords>
+                <cmdp:sizeInfo>
+                    <cmdp:size>
+                        <cmdp:size>133287</cmdp:size>
+                        <cmdp:unit>utterances</cmdp:unit>
+                    </cmdp:size>
+                    <cmdp:size>
+                        <cmdp:size>1833147</cmdp:size>
+                        <cmdp:unit>sentences</cmdp:unit>
+                    </cmdp:size>
+                    <cmdp:size>
+                        <cmdp:size>40987516</cmdp:size>
+                        <cmdp:unit>tokens</cmdp:unit>
+                    </cmdp:size>
+                </cmdp:sizeInfo>
+            </cmdp:dataInfo>
+            <cmdp:licenseInfo>
+                <cmdp:license>
+                    <cmdp:uri>https://creativecommons.org/licenses/by-sa/4.0/</cmdp:uri>
+                </cmdp:license>
+            </cmdp:licenseInfo>
+        </cmdp:LINDAT_CLARIN>
+    </cmd:Components>
+</cmd:CMD>

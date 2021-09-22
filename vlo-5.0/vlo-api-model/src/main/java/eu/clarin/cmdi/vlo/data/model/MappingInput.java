@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -27,9 +28,10 @@ import lombok.ToString;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Builder
 public class MappingInput {
 
     private String id;

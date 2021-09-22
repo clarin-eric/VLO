@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.batchimporter.parsing;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
@@ -28,8 +30,8 @@ import eu.clarin.cmdi.vlo.batchimporter.InputProcessingException;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -46,7 +48,7 @@ public class MetadataFileParser {
             builder.dataRoot(inputFile.getDataRoot());
             builder.sourcePath(inputFile.getLocation().toString());
             xmlParse(inputFile, builder);
-            log.debug("Builder after parsing: {}", builder);
+            log.debug("Mapping input builder state after parsing: {}", builder);
         } catch (IOException | VTDException ex) {
             throw new InputProcessingException(String.format("Error while trying to parse input file %s", inputFile), ex);
         }
@@ -72,27 +74,32 @@ public class MetadataFileParser {
         final String mdSelfLinkString = mdSelfLink.evalXPathToString();
         builder.selflink(mdSelfLinkString);
 
+        //TODO: other header fields?
         // resources
         final List<MappingInput.Resource> resources = parseResources(nav);
         builder.resources(resources);
+
+        // component section
+        final Map<String, List<String>> pathValuesMap = buildPathsMap(nav, profileId);
+        builder.pathValuesMap(pathValuesMap);
     }
 
     private ImmutableList<MappingInput.Resource> parseResources(final VTDNav nav) throws NavException, XPathParseException, XPathEvalException {
         final ImmutableList.Builder<MappingInput.Resource> resources = ImmutableList.<MappingInput.Resource>builder();
 
-        AutoPilot resourceProxy = new AutoPilot(nav);
+        final AutoPilot resourceProxy = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(resourceProxy, null);
         resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
 
-        AutoPilot resourceRef = new AutoPilot(nav);
+        final AutoPilot resourceRef = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(resourceRef, null);
         resourceRef.selectXPath("cmd:ResourceRef");
 
-        AutoPilot resourceType = new AutoPilot(nav);
+        final AutoPilot resourceType = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(resourceType, null);
         resourceType.selectXPath("cmd:ResourceType");
 
-        AutoPilot resourceMimeType = new AutoPilot(nav);
+        final AutoPilot resourceMimeType = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(resourceMimeType, null);
         resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
 
@@ -112,5 +119,29 @@ public class MetadataFileParser {
 //            }
         }
         return resources.build();
+    }
+
+    private Map<String, List<String>> buildPathsMap(VTDNav nav, String profileId) throws VTDException {
+        //final ImmutableMap.Builder<String, List<String>> builder = ImmutableMap.<String, List<String>>builder();
+        final Map<String, ImmutableList.Builder<String>> builderMap = Maps.newHashMap();
+
+        final AutoPilot ap = new AutoPilot(nav);
+        SchemaParsingUtil.setNameSpace(ap, profileId);
+        nav.toElement(VTDNav.ROOT);
+        ap.selectElement("*");
+        while (ap.iterate()) {
+            final String path = nav.getXPathStringVal();
+            final int textIndex = nav.getText();
+            if (textIndex != -1) {
+                listBuilderForPath(builderMap, path).add(nav.toNormalizedString(textIndex));
+            }
+        }
+
+        // build all value lists
+        return Maps.transformValues(builderMap, ImmutableList.Builder::build);
+    }
+
+    private ImmutableList.Builder<String> listBuilderForPath(final Map<String, ImmutableList.Builder<String>> builderMap, final String path) {
+        return builderMap.computeIfAbsent(path, p -> ImmutableList.<String>builder());
     }
 }
