@@ -37,10 +37,9 @@ public class MetadataFileParserTest extends AbstractBatchImporterTest {
      */
     @Test
     public void testParseFile() throws Exception {
-        System.out.println("parseFile");
-        MetadataFile inputFile = new MetadataFile("Test data root", getTestResource("test_record1.xml"));
-        MetadataFileParser instance = new MetadataFileParser();
-        MappingInput result = instance.parseFile(inputFile);
+        final MetadataFile inputFile = new MetadataFile("Test data root", getTestResource("test_record1.xml"));
+        final MetadataFileParser instance = new MetadataFileParser();
+        final MappingInput result = instance.parseFile(inputFile);
 
         assertNotNull(result);
         assertEquals("http://hdl.handle.net/11356/1208@format=cmdi", result.getSelflink());
