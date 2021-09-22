@@ -32,6 +32,7 @@ import eu.clarin.cmdi.vlo.data.model.MappingInput;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -48,7 +49,7 @@ public class MetadataFileParser {
             builder.dataRoot(inputFile.getDataRoot());
             builder.sourcePath(inputFile.getLocation().toString());
             xmlParse(inputFile, builder);
-            log.debug("Mapping input builder state after parsing: {}", builder);
+            log.trace("Mapping input builder state after parsing: {}", builder);
         } catch (IOException | VTDException ex) {
             throw new InputProcessingException(String.format("Error while trying to parse input file %s", inputFile), ex);
         }
@@ -122,26 +123,46 @@ public class MetadataFileParser {
     }
 
     private Map<String, List<String>> buildPathsMap(VTDNav nav, String profileId) throws VTDException {
-        //final ImmutableMap.Builder<String, List<String>> builder = ImmutableMap.<String, List<String>>builder();
         final Map<String, ImmutableList.Builder<String>> builderMap = Maps.newHashMap();
 
-        final AutoPilot ap = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(ap, profileId);
         nav.toElement(VTDNav.ROOT);
-        ap.selectElement("*");
-        while (ap.iterate()) {
-            final String path = nav.getXPathStringVal();
-            final int textIndex = nav.getText();
-            if (textIndex != -1) {
-                listBuilderForPath(builderMap, path).add(nav.toNormalizedString(textIndex));
-            }
-        }
+        // traverse recursively from root
+        traverseElement(nav, builderMap, new StringBuilder());
 
         // build all value lists
-        return Maps.transformValues(builderMap, ImmutableList.Builder::build);
+        return builderMap.entrySet().stream()
+                .collect(Collectors.toUnmodifiableMap(
+                        e -> e.getKey().toString(),
+                        e -> e.getValue().build()));
     }
 
-    private ImmutableList.Builder<String> listBuilderForPath(final Map<String, ImmutableList.Builder<String>> builderMap, final String path) {
-        return builderMap.computeIfAbsent(path, p -> ImmutableList.<String>builder());
+    private void traverseElement(VTDNav nav, final Map<String, ImmutableList.Builder<String>> builderMap, CharSequence parentPath) throws NavException {
+        final int currentIndex = nav.getCurrentIndex();
+        final String elementName = nav.toNormalizedString(currentIndex);
+        //TODO: extract and normalise namespace
+        final StringBuilder path = new StringBuilder(parentPath).append("/").append(elementName);
+
+        final int textIndex = nav.getText();
+        if (textIndex != -1) {
+            final String text = nav.toNormalizedString(textIndex);
+            log.debug("Current path: {}='{}'", path, text);
+            listBuilderForPath(builderMap, path).add(text);
+        } else {
+            log.debug("Current path: {}", path);
+        }
+
+        //TODO: attributes
+        if (nav.toElement(VTDNav.FIRST_CHILD)) {
+            do {
+                traverseElement(nav, builderMap, path);
+            } while (nav.toElement(VTDNav.NEXT_SIBLING));
+
+            nav.toElement(VTDNav.PARENT);
+        }
+
+    }
+
+    private ImmutableList.Builder<String> listBuilderForPath(final Map<String, ImmutableList.Builder<String>> builderMap, final CharSequence path) {
+        return builderMap.computeIfAbsent(path.toString(), p -> ImmutableList.<String>builder());
     }
 }
