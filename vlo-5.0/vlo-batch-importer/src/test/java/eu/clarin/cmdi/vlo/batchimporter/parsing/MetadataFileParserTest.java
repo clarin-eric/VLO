@@ -16,23 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter.parsing;
 
-import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.batchimporter.AbstractBatchImporterTest;
 import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
+import eu.clarin.cmdi.vlo.data.model.MappingInput.Resource;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -60,14 +60,20 @@ public class MetadataFileParserTest extends AbstractBatchImporterTest {
         assertNotNull(result);
         assertEquals("http://hdl.handle.net/11356/1208@format=cmdi", result.getSelflink());
         assertEquals(testRecord1, Path.of(result.getSourcePath()));
+        assertThat(result.getResources(), allOf(notNullValue(), hasSize(4)));
+        assertThat(result.getResources(), hasItem(allOf(
+                Matchers.isA(Resource.class),
+                hasProperty("id", equalTo("lp_1746")),
+                hasProperty("ref", equalTo("http://hdl.handle.net/11356/1208"))
+        )));
 
         final Map<String, List<String>> valuesMap = result.getPathValuesMap();
 
         assertThat(valuesMap.get("/cmd:CMD/cmd:Components/cmdp:LINDAT_CLARIN/cmdp:bibliographicInfo/cmdp:projectUrl"),
                 allOf(notNullValue(), hasSize(1)));
         assertThat(valuesMap.get("/cmd:CMD/cmd:Components/cmdp:LINDAT_CLARIN/cmdp:bibliographicInfo/cmdp:projectUrl"),
-                contains("https://parlameter.si/"));
-        
+                hasItem("https://parlameter.si/"));
+
         // path without value should not be in map
         assertFalse(valuesMap.containsKey("/cmd:CMD/cmd:Components/cmdp:LINDAT_CLARIN/cmdp:bibliographicInfo/cmdp:authors/cmdp:author"));
 

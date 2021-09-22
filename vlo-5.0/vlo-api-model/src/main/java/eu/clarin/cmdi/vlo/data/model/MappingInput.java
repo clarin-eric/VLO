@@ -39,22 +39,27 @@ public class MappingInput {
     private String selflink;
     private String dataRoot;
     private String profileId;
-    private List<Resource> resources; //TODO: make object for this
+    private List<Resource> resources;
+
+    //TODO: define a different structure for this that allows for disambiguating context
+    //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
     private Map<String, List<String>> pathValuesMap;
 
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @Getter
     @ToString(onlyExplicitlyIncluded = true)
     public static class Resource {
 
+        private String id;
+        
         @ToString.Include
-        String ref;
+        private String ref;
 
-        String type; //TODO: enum?
+        private String type; //TODO: enum?
 
-        String mediaType;
-
+        private String mediaType;
     }
 
 }
