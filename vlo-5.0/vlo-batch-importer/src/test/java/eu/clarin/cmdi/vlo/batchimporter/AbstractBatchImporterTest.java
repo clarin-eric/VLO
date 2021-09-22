@@ -31,15 +31,15 @@ import org.junit.jupiter.api.io.TempDir;
  */
 @Slf4j
 public abstract class AbstractBatchImporterTest {
-    
+
     private final static String TEST_RECORDS_RESOURCES_DIRECTORY = "test-records";
-    
+
     @TempDir
     public Path tempDir;
-    
+
     protected Path getTestResource(String name) {
         final Path targetPath = getTestResourceTargetPath(name);
-        
+
         try {
             if (!Files.exists(targetPath)) {
                 copyTestResourceToFileSystem(name, targetPath);
@@ -47,23 +47,29 @@ public abstract class AbstractBatchImporterTest {
         } catch (IOException ex) {
             throw new RuntimeException("An error has occured while trying to copy internal resource to local file system", ex);
         }
-        
+
         return targetPath;
     }
-    
+
     private Path getTestResourceTargetPath(String name) {
         return tempDir.resolve(name);
     }
-    
+
     private void copyTestResourceToFileSystem(String resourceName, Path fsTarget) throws IOException {
         log.debug("Copying test resource '{}' to file system location '{}'", resourceName, fsTarget);
         try (InputStream resourceAsStream = getTestRecordResourceStream(resourceName)) {
             try (OutputStream outputStream = Files.newOutputStream(fsTarget)) {
+                if (resourceAsStream == null) {
+                    throw new RuntimeException(String.format("No input stream for resource '%s'. Does not exist?", resourceName));
+                }
+                if (outputStream == null) {
+                    throw new RuntimeException(String.format("No output stream for filesystem location '%s'. Does not exist?", fsTarget));
+                }
                 ByteStreams.copy(resourceAsStream, outputStream);
             }
         }
     }
-    
+
     private InputStream getTestRecordResourceStream(String resourceName) {
         final String resourcePath
                 = Path.of(TEST_RECORDS_RESOURCES_DIRECTORY).resolve(resourceName).toString();
