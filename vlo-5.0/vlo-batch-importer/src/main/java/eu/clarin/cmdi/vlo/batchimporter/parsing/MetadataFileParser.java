@@ -92,6 +92,17 @@ public class MetadataFileParser {
         SchemaParsingUtil.setNameSpace(resourceProxy, null);
         resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
 
+        
+        final AutoPilot idAp = new AutoPilot(nav);
+        idAp.selectXPath("@id");
+//        final String id;
+//        final int idIdx = nav.getAttrVal("id");
+//        if (idIdx == -1) {
+//            id = null;
+//        } else {
+//            id = nav.toNormalizedString(idIdx);
+//        }
+
         final AutoPilot resourceRef = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(resourceRef, null);
         resourceRef.selectXPath("cmd:ResourceRef");
@@ -105,13 +116,14 @@ public class MetadataFileParser {
         resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
 
         while (resourceProxy.evalXPath() != -1) {
+            String id = idAp.evalXPathToString();
             String ref = resourceRef.evalXPathToString();
             String type = resourceType.evalXPathToString();
             String mimeType = resourceMimeType.evalXPathToString();
 
             if (!ref.equals("") && !type.equals("")) {
                 // note that the mime type could be empty
-                resources.add(new MappingInput.Resource(ref, type, mimeType));
+                resources.add(new MappingInput.Resource(id, ref, type, mimeType));
             }
 
 //            // TODO: resource hierarchy information 
