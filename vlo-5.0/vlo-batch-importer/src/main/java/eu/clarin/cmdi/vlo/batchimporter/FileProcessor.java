@@ -16,9 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
-import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
-import eu.clarin.cmdi.vlo.batchimporter.parsing.MetadataFileParser;
-import eu.clarin.cmdi.vlo.data.model.MappingInput;
+import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -30,18 +28,13 @@ import org.springframework.batch.item.ItemProcessor;
 @Slf4j
 public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
 
-    private MetadataFileParser fileParser;
-
-    public FileProcessor(MetadataFileParser fileParser) {
-        this.fileParser = fileParser;
+    public FileProcessor() {
+        
     }
 
     @Override
     public VloRecord process(MetadataFile inputFile) throws Exception {
         log.info("Processing metadata file {}", inputFile);
-
-        //parse (extract all paths and values)
-        final MappingInput mappingInput = fileParser.parseFile(inputFile);
 
         //TODO send mapping input object to API
         //<separate processors??>

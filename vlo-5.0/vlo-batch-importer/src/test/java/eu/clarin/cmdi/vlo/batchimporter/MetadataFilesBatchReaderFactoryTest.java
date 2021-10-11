@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.batchimporter;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
+import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;

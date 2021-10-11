@@ -18,11 +18,10 @@ package eu.clarin.cmdi.vlo.batchimporter.configuration;
 
 import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
 import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
-import eu.clarin.cmdi.vlo.batchimporter.VloImporterConfigurationException;
+import eu.clarin.cmdi.vlo.exception.VloImporterConfigurationException;
 import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
-import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
-import eu.clarin.cmdi.vlo.batchimporter.parsing.MetadataFileParser;
+import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.Map;
 import java.util.Optional;
@@ -75,13 +74,8 @@ public class BatchConfiguration {
     }
     
     @Bean
-    public MetadataFileParser metadataFileParser() {
-        return new MetadataFileParser();
-    }
-    
-    @Bean
     public FileProcessor processor() {
-        return new FileProcessor(metadataFileParser());
+        return new FileProcessor();
     }
     
     @Bean

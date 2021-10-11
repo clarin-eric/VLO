@@ -14,16 +14,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.batchimporter;
+package eu.clarin.cmdi.vlo.exception;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class InputProcessingException extends Exception {
+public class VloImporterConfigurationException extends Exception {
 
-    public InputProcessingException(String message, Throwable cause) {
-        super(message, cause);
+    public VloImporterConfigurationException(String message) {
+        super(message);
     }
 
 }
