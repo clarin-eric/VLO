@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.batchimporter;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
+import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;

@@ -14,12 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.batchimporter.parsing;
+package eu.clarin.cmdi.vlo.api.parsing;
 
-import eu.clarin.cmdi.vlo.batchimporter.AbstractBatchImporterTest;
-import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
+import eu.clarin.cmdi.vlo.api.AbstractVloApiTest;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
 import eu.clarin.cmdi.vlo.data.model.MappingInput.Resource;
+import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class MetadataFileParserTest extends AbstractBatchImporterTest {
+public class MetadataFileParserTest extends AbstractVloApiTest {
 
     /**
      * Test of parseFile method, of class MetadataFileParser.

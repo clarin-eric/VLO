@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.batchimporter;
+package eu.clarin.cmdi.vlo.api;
 
 import com.google.common.io.ByteStreams;
 import java.io.IOException;
@@ -30,7 +30,7 @@ import org.junit.jupiter.api.io.TempDir;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public abstract class AbstractBatchImporterTest {
+public abstract class AbstractVloApiTest {
 
     private final static String TEST_RECORDS_RESOURCES_DIRECTORY = "test-records";
 
@@ -73,6 +73,6 @@ public abstract class AbstractBatchImporterTest {
     private InputStream getTestRecordResourceStream(String resourceName) {
         final String resourcePath
                 = Path.of(TEST_RECORDS_RESOURCES_DIRECTORY).resolve(resourceName).toString();
-        return AbstractBatchImporterTest.class.getResourceAsStream(resourcePath);
+        return AbstractVloApiTest.class.getResourceAsStream(resourcePath);
     }
 }

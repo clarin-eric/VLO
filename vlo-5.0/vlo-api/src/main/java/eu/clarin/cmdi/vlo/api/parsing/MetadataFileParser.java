@@ -14,10 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.batchimporter.parsing;
+package eu.clarin.cmdi.vlo.api.parsing;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -26,9 +25,9 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-import eu.clarin.cmdi.vlo.batchimporter.InputProcessingException;
-import eu.clarin.cmdi.vlo.batchimporter.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.MappingInput;
+import eu.clarin.cmdi.vlo.data.model.MetadataFile;
+import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
