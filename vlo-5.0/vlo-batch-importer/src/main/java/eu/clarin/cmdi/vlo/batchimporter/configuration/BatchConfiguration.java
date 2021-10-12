@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.batchimporter.configuration;
 
 import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
 import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
+import eu.clarin.cmdi.vlo.batchimporter.VloApiClient;
 import eu.clarin.cmdi.vlo.exception.VloImporterConfigurationException;
 import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
@@ -27,6 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.naming.OperationNotSupportedException;
+import javax.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -37,19 +39,27 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Configuration
+@Validated
 @EnableBatchProcessing
 @EnableConfigurationProperties(MetadataSourceConfiguration.class)
 @Slf4j
 public class BatchConfiguration {
+    
+    @NotEmpty
+    @Value("${vlo.importer.api-base-url}")
+    private String apiBaseUrl;
     
     @Autowired
     public MetadataSourceConfiguration metadataSourceConfiguration;
@@ -73,9 +83,14 @@ public class BatchConfiguration {
         return metadataFilesBatchReaderFactory.getObject();
     }
     
+    @Bean VloApiClient apiClient() {
+        final WebClient webClient = WebClient.create(apiBaseUrl);
+        return new VloApiClient(webClient);
+    }
+    
     @Bean
     public FileProcessor processor() {
-        return new FileProcessor();
+        return new FileProcessor(apiClient());
     }
     
     @Bean

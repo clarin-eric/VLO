@@ -17,7 +17,10 @@
 package eu.clarin.cmdi.vlo.batchimporter;
 
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
+import eu.clarin.cmdi.vlo.data.model.VloImportRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.exception.InputProcessingException;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 
@@ -28,21 +31,39 @@ import org.springframework.batch.item.ItemProcessor;
 @Slf4j
 public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
 
-    public FileProcessor() {
-        
+    private final VloApiClient apiClient;
+
+    public FileProcessor(VloApiClient apiClient) {
+        this.apiClient = apiClient;
     }
 
     @Override
     public VloRecord process(MetadataFile inputFile) throws Exception {
         log.info("Processing metadata file {}", inputFile);
 
-        //TODO send mapping input object to API
-        //<separate processors??>
-        //TODO retrieve facet values object    
-        //TODO create VLO record containing this information
-        return VloRecord.builder()
-                .id(inputFile.getLocation().toString())
-                .build();
+        try {
+            //make a request object for the API
+            final VloImportRequest importRequest = VloImportRequest.builder()
+                    .file(inputFile)
+                    .xmlContent(xmlContentFromFile(inputFile))
+                    .build();
+
+            //send request object to the API
+            apiClient.sendImportRequest(importRequest);
+
+            //<separate processors??>
+            //TODO retrieve facet values object    
+            //TODO create VLO record containing this information
+            return VloRecord.builder()
+                    .id(inputFile.getLocation().toString())
+                    .build();
+        } catch (IOException ex) {
+            throw new InputProcessingException("Error while processing input from " + inputFile.toString(), ex);
+        }
+    }
+
+    private byte[] xmlContentFromFile(MetadataFile file) throws IOException {
+        return java.nio.file.Files.readAllBytes(file.getLocation());
     }
 
 }

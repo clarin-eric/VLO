@@ -3,6 +3,7 @@ logging:
     eu.clarin.cmdi.vlo.batchimporter: INFO
 vlo:
   importer:
+    api-base-url: http://localhost:8708
     metadata-source:
 #      roots: 
 #        - name: 'First set'
