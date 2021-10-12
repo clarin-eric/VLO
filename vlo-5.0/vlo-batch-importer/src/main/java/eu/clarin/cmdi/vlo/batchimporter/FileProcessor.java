@@ -44,7 +44,8 @@ public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
         try {
             //make a request object for the API
             final VloImportRequest importRequest = VloImportRequest.builder()
-                    .file(inputFile)
+                    .dataRoot(inputFile.getDataRoot())
+                    .file(inputFile.getLocation().toString())
                     .xmlContent(xmlContentFromFile(inputFile))
                     .build();
 

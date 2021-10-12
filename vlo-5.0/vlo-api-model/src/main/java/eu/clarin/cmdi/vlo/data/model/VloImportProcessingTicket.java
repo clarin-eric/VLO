@@ -29,10 +29,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VloImportRequest {
-    
-    private String dataRoot;
+public class VloImportProcessingTicket {
+
     private String file;
-    private byte[] xmlContent;
+    private String resourceUri;
 
 }

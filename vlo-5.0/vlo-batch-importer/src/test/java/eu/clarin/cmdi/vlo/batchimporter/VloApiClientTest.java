@@ -16,20 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
-import eu.clarin.cmdi.vlo.data.model.MetadataFile;
+import eu.clarin.cmdi.vlo.data.model.VloImportProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloImportRequest;
-import java.net.URI;
-import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
@@ -59,6 +61,7 @@ public class VloApiClientTest {
 
     /**
      * Test of sendImportRequest method, of class VloApiClient.
+     *
      * @throws java.lang.Exception
      */
     @Test
@@ -69,14 +72,39 @@ public class VloApiClientTest {
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody(""));
 
-        final Optional<URI> result = instance.sendImportRequest(importRequest).blockOptional(Duration.ofSeconds(10));
+        final Optional<VloImportProcessingTicket> result = instance.sendImportRequest(importRequest).blockOptional(Duration.ofSeconds(10));
         assertTrue(result.isEmpty());
+    }
+
+    /**
+     * Test of sendImportRequest method, of class VloApiClient.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testSendImportRequestNonEmptyResponse() throws Exception {
+        VloImportRequest importRequest = createImportRequest();
+
+        mockWebServer.enqueue(new MockResponse()
+                .setResponseCode(HttpStatus.OK.value())
+                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody("{"
+                        + "\"file\": \"/foo/bar.xml\","
+                        + "\"resourceUri\": \"http://service/recordMapping/xyz\""
+                        + "}"));
+
+        final Optional<VloImportProcessingTicket> result = instance.sendImportRequest(importRequest).blockOptional(Duration.ofSeconds(10));
+        result.ifPresentOrElse(resultObj -> {
+            assertEquals("/foo/bar.xml", resultObj.getFile());
+            assertEquals("http://service/recordMapping/xyz", resultObj.getResourceUri());
+        }, () -> fail("Expected VloImportProcessingTicket result but none found"));
     }
 
     private VloImportRequest createImportRequest() {
         final VloImportRequest importRequest
                 = VloImportRequest.builder()
-                        .file(new MetadataFile("testRoot", Path.of("/foo/bar")))
+                        .dataRoot("testRoot")
+                        .file("/foo/bar.xml")
                         .xmlContent("<cmd></cmd>".getBytes())
                         .build();
         return importRequest;
