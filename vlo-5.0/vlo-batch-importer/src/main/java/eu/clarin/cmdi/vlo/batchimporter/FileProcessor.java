@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.batchimporter;
 
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
-import eu.clarin.cmdi.vlo.data.model.VloImportRequest;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
@@ -43,14 +43,14 @@ public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
 
         try {
             //make a request object for the API
-            final VloImportRequest importRequest = VloImportRequest.builder()
+            final VloRecordMappingRequest importRequest = VloRecordMappingRequest.builder()
                     .dataRoot(inputFile.getDataRoot())
                     .file(inputFile.getLocation().toString())
                     .xmlContent(xmlContentFromFile(inputFile))
                     .build();
 
             //send request object to the API
-            apiClient.sendImportRequest(importRequest);
+            apiClient.sendRecordMappingRequest(importRequest);
 
             //<separate processors??>
             //TODO retrieve facet values object    

@@ -29,9 +29,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class VloImportProcessingTicket {
-
+public class VloRecordMappingRequest {
+    
+    private String dataRoot;
     private String file;
-    private String resourceUri;
+    private byte[] xmlContent;
 
 }

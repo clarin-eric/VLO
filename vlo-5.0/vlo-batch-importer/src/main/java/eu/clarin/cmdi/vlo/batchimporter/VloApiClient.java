@@ -16,8 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
-import eu.clarin.cmdi.vlo.data.model.VloImportProcessingTicket;
-import eu.clarin.cmdi.vlo.data.model.VloImportRequest;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import java.io.IOException;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -37,17 +37,17 @@ public class VloApiClient {
         this.webClient = webClient;
     }
 
-    public Mono<VloImportProcessingTicket> sendImportRequest(VloImportRequest importRequest) throws IOException {
+    public Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest) throws IOException {
         return webClient
                 .method(HttpMethod.POST)
                 .uri("/import-request")
-                .body(Mono.just(importRequest), VloImportRequest.class)
+                .body(Mono.just(importRequest), VloRecordMappingRequest.class)
                 .exchangeToMono(this::handleResponseForImportRequest);
     }
 
-    private Mono<VloImportProcessingTicket> handleResponseForImportRequest(ClientResponse response) {
+    private Mono<VloRecordMappingProcessingTicket> handleResponseForImportRequest(ClientResponse response) {
         if (response.statusCode().equals(HttpStatus.OK)) {
-            return response.bodyToMono(VloImportProcessingTicket.class);
+            return response.bodyToMono(VloRecordMappingProcessingTicket.class);
         } else {
             return response.createException().flatMap(Mono::error);
         }
