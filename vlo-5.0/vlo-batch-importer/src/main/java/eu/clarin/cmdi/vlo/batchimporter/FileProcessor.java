@@ -21,21 +21,22 @@ import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
+import java.time.Duration;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
+import reactor.core.publisher.Mono;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
+@AllArgsConstructor
 public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
 
     private final VloApiClient apiClient;
-
-    public FileProcessor(VloApiClient apiClient) {
-        this.apiClient = apiClient;
-    }
+    private final Duration apiTimeout;
 
     @Override
     public VloRecord process(MetadataFile inputFile) throws Exception {
@@ -49,15 +50,14 @@ public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
                     .xmlContent(xmlContentFromFile(inputFile))
                     .build();
 
-            //send request object to the API
-            apiClient.sendRecordMappingRequest(importRequest);
+            //Send request object to the API
+            final Mono<VloRecord> recordMono = apiClient.sendRecordMappingRequest(importRequest)
+                    .doOnSubscribe(subscr -> log.debug("Vlo record subscribed to: {}", subscr))
+                    //Retrieve record
+                    .flatMap(apiClient::retrieveRecord);
 
-            //<separate processors??>
-            //TODO retrieve facet values object    
-            //TODO create VLO record containing this information
-            return VloRecord.builder()
-                    .id(inputFile.getLocation().toString())
-                    .build();
+            //end of the line, we block for release of the record            
+            return recordMono.block(apiTimeout);
         } catch (IOException ex) {
             throw new InputProcessingException("Error while processing input from " + inputFile.toString(), ex);
         }

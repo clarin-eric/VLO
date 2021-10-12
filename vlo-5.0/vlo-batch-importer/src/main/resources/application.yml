@@ -3,7 +3,11 @@ logging:
     eu.clarin.cmdi.vlo.batchimporter: INFO
 vlo:
   importer:
-    api-base-url: http://localhost:8708
+    api:
+      # Base URL of VLO API
+      base-url: http://localhost:8708
+      # Timeout in milliseconds
+      # timeout: 6000
     metadata-source:
 #      roots: 
 #        - name: 'First set'
