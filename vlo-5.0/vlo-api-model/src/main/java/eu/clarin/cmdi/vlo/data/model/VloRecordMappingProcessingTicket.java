@@ -32,6 +32,6 @@ import lombok.NoArgsConstructor;
 public class VloRecordMappingProcessingTicket {
 
     private String file;
-    private String resourceUri;
+    private String processId;
 
 }

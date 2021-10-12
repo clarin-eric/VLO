@@ -24,6 +24,7 @@ import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,8 +59,12 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class BatchConfiguration {
     
     @NotEmpty
-    @Value("${vlo.importer.api-base-url}")
+    @Value("${vlo.importer.api.base-url}")
     private String apiBaseUrl;
+    
+    @NotEmpty
+    @Value("${vlo.importer.api.timeout:6000}")
+    private Long apiTimeout;
     
     @Autowired
     public MetadataSourceConfiguration metadataSourceConfiguration;
@@ -90,7 +95,7 @@ public class BatchConfiguration {
     
     @Bean
     public FileProcessor processor() {
-        return new FileProcessor(apiClient());
+        return new FileProcessor(apiClient(), Duration.ofMillis(apiTimeout));
     }
     
     @Bean

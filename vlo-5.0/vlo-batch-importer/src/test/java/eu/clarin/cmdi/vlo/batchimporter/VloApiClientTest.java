@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import java.io.IOException;
@@ -68,7 +69,11 @@ public class VloApiClientTest {
     }
 
     private Optional<VloRecordMappingProcessingTicket> instanceSendRecordMappingRequest() throws IOException {
-        final VloRecordMappingRequest importRequest = createImportRequest();
+        final VloRecordMappingRequest importRequest = VloRecordMappingRequest.builder()
+                        .dataRoot("testRoot")
+                        .file("/foo/bar.xml")
+                        .xmlContent("<cmd></cmd>".getBytes())
+                        .build();
         final Mono<VloRecordMappingProcessingTicket> response = instance.sendRecordMappingRequest(importRequest);
         return response.blockOptional(Duration.ofSeconds(10));
     }
@@ -104,7 +109,7 @@ public class VloApiClientTest {
                 .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .setBody("{"
                         + "\"file\": \"/foo/bar.xml\","
-                        + "\"resourceUri\": \"http://service/recordMapping/xyz\""
+                        + "\"processId\": \"http://service/recordMapping/xyz\""
                         + "}"));
 
         //make request
@@ -112,18 +117,43 @@ public class VloApiClientTest {
 
         result.ifPresentOrElse(resultObj -> {
             assertEquals("/foo/bar.xml", resultObj.getFile());
-            assertEquals("http://service/recordMapping/xyz", resultObj.getResourceUri());
+            assertEquals("http://service/recordMapping/xyz", resultObj.getProcessId());
         }, () -> fail("Expected VloImportProcessingTicket result but none found"));
     }
 
-    private VloRecordMappingRequest createImportRequest() {
-        final VloRecordMappingRequest importRequest
-                = VloRecordMappingRequest.builder()
-                        .dataRoot("testRoot")
-                        .file("/foo/bar.xml")
-                        .xmlContent("<cmd></cmd>".getBytes())
-                        .build();
-        return importRequest;
+    private Optional<VloRecord> instanceRetrieveRecord() throws IOException {
+        final VloRecordMappingProcessingTicket ticket = VloRecordMappingProcessingTicket.builder()
+                .file("/foo/bar.xml")
+                .processId("1234-abcd")
+                .build();
+        final Mono<VloRecord> response = instance.retrieveRecord(ticket);
+        return response.blockOptional(Duration.ofSeconds(10));
+    }
+
+    /**
+     * Test of sendImportRequest method, of class VloApiClient.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testRetrieveRecordNonEmptyResponse() throws Exception {
+        //prepare response
+        final MockResponse mockResponse = new MockResponse()
+                .setResponseCode(HttpStatus.OK.value())
+                .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .setBody("{"
+                        + "\"id\": \"record1\","
+                        + "\"name\": \"bar\""
+                        + "}");
+        mockWebServer.enqueue(mockResponse);
+
+        //make request
+        final Optional<VloRecord> result = instanceRetrieveRecord();
+        
+        result.ifPresentOrElse(resultObj -> {
+            assertEquals("record1", resultObj.getId());
+            assertEquals("bar", resultObj.getName());
+        }, () -> fail("Expected VloRecord result but none found"));
     }
 
 }
