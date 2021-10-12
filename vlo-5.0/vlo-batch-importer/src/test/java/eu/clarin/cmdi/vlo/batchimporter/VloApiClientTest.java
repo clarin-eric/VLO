@@ -16,13 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.batchimporter;
 
-import eu.clarin.cmdi.vlo.data.model.VloImportProcessingTicket;
-import eu.clarin.cmdi.vlo.data.model.VloImportRequest;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -33,6 +35,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 /**
  *
@@ -54,9 +57,20 @@ public class VloApiClientTest {
         webClient = WebClient.create("http://" + mockWebServer.getHostName() + ":" + mockWebServer.getPort());
     }
 
+    @AfterAll
+    public static void tearDownClass() throws IOException {
+        mockWebServer.shutdown();
+    }
+
     @BeforeEach
     public void setUp() {
         instance = new VloApiClient(webClient);
+    }
+
+    private Optional<VloRecordMappingProcessingTicket> instanceSendRecordMappingRequest() throws IOException {
+        final VloRecordMappingRequest importRequest = createImportRequest();
+        final Mono<VloRecordMappingProcessingTicket> response = instance.sendRecordMappingRequest(importRequest);
+        return response.blockOptional(Duration.ofSeconds(10));
     }
 
     /**
@@ -65,14 +79,15 @@ public class VloApiClientTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testSendImportRequestEmptyResponse() throws Exception {
-        VloImportRequest importRequest = createImportRequest();
-
+    public void testSendRecordMappingRequestEmptyResponse() throws Exception {
+        //prepare response
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody(""));
+        
+        //make request
+        final Optional<VloRecordMappingProcessingTicket> result = instanceSendRecordMappingRequest();
 
-        final Optional<VloImportProcessingTicket> result = instance.sendImportRequest(importRequest).blockOptional(Duration.ofSeconds(10));
         assertTrue(result.isEmpty());
     }
 
@@ -82,9 +97,8 @@ public class VloApiClientTest {
      * @throws java.lang.Exception
      */
     @Test
-    public void testSendImportRequestNonEmptyResponse() throws Exception {
-        VloImportRequest importRequest = createImportRequest();
-
+    public void testSendRecordMappingRequestNonEmptyResponse() throws Exception {
+        //prepare response
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
                 .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -93,16 +107,18 @@ public class VloApiClientTest {
                         + "\"resourceUri\": \"http://service/recordMapping/xyz\""
                         + "}"));
 
-        final Optional<VloImportProcessingTicket> result = instance.sendImportRequest(importRequest).blockOptional(Duration.ofSeconds(10));
+        //make request
+        final Optional<VloRecordMappingProcessingTicket> result = instanceSendRecordMappingRequest();
+
         result.ifPresentOrElse(resultObj -> {
             assertEquals("/foo/bar.xml", resultObj.getFile());
             assertEquals("http://service/recordMapping/xyz", resultObj.getResourceUri());
         }, () -> fail("Expected VloImportProcessingTicket result but none found"));
     }
 
-    private VloImportRequest createImportRequest() {
-        final VloImportRequest importRequest
-                = VloImportRequest.builder()
+    private VloRecordMappingRequest createImportRequest() {
+        final VloRecordMappingRequest importRequest
+                = VloRecordMappingRequest.builder()
                         .dataRoot("testRoot")
                         .file("/foo/bar.xml")
                         .xmlContent("<cmd></cmd>".getBytes())
