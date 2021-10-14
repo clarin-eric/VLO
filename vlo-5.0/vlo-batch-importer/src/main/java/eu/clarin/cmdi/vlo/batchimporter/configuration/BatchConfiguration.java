@@ -64,7 +64,7 @@ public class BatchConfiguration {
     private String apiBaseUrl;
     
     @NotEmpty
-    @Value("${vlo.importer.api.timeout:6000}")
+    @Value("${vlo.importer.api.timeout:60000}")
     private Long apiTimeout;
     
     @Autowired

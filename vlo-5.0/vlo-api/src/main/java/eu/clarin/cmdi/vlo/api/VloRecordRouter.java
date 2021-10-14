@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
+import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -34,9 +35,11 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class VloRecordRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> route(VloRecordHandler recordHandler) {
+    public RouterFunction<ServerResponse> route(VloMappingHandler mappingHandler, VloRecordHandler recordHandler) {
         return RouterFunctions
-                .route(GET("/record/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
+                .route(POST("/recordMapping/request").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::requestMapping)
+                .andRoute(GET("/recordMapping/result/{id}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult)
+                .andRoute(GET("/record/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
                 .andRoute(GET("/recordUsingTemplate/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromTemplate)
                 .andRoute(PUT("/record").and(accept(MediaType.APPLICATION_JSON)), recordHandler::saveRecord);
     }
