@@ -33,6 +33,8 @@ public class VloRecordMappingRequest {
     
     private String dataRoot;
     private String file;
+    
+    @lombok.ToString.Exclude
     private byte[] xmlContent;
 
 }

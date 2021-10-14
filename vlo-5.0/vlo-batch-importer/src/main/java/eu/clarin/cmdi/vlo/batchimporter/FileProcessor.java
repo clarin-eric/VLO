@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.batchimporter;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
 import java.time.Duration;
@@ -51,12 +52,13 @@ public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
                     .build();
 
             //Send request object to the API
-            final Mono<VloRecord> recordMono = apiClient.sendRecordMappingRequest(importRequest)
-                    .doOnSubscribe(subscr -> log.debug("Vlo record subscribed to: {}", subscr))
-                    //Retrieve record
-                    .flatMap(apiClient::retrieveRecord);
+            final Mono<VloRecordMappingProcessingTicket> ticketMono = apiClient.sendRecordMappingRequest(importRequest)
+                    .doOnSubscribe(subscr -> log.debug("Vlo processing ticket mono subscribed to by {}", subscr));
+            
+            //Retrieve record
+            final Mono<VloRecord> recordMono = ticketMono.flatMap(apiClient::retrieveRecord)
+                    .doOnSubscribe(subscr -> log.debug("Vlo record subscribed to by {}", subscr));
 
-            //end of the line, we block for release of the record            
             return recordMono.block(apiTimeout);
         } catch (IOException ex) {
             throw new InputProcessingException("Error while processing input from " + inputFile.toString(), ex);
