@@ -43,13 +43,13 @@ import reactor.core.publisher.Mono;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class VloApiClientTest {
+public class VloApiClientImplTest {
 
     private static MockWebServer mockWebServer;
     private static WebClient webClient;
-    private VloApiClient instance;
+    private VloApiClientImpl instance;
 
-    public VloApiClientTest() {
+    public VloApiClientImplTest() {
     }
 
     @BeforeAll
@@ -65,7 +65,7 @@ public class VloApiClientTest {
 
     @BeforeEach
     public void setUp() {
-        instance = new VloApiClient(webClient);
+        instance = new VloApiClientImpl(webClient);
     }
 
     private Optional<VloRecordMappingProcessingTicket> instanceSendRecordMappingRequest() throws IOException {
