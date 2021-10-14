@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.batchimporter.configuration;
 import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
 import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
 import eu.clarin.cmdi.vlo.batchimporter.VloApiClient;
+import eu.clarin.cmdi.vlo.batchimporter.VloApiClientImpl;
 import eu.clarin.cmdi.vlo.exception.VloImporterConfigurationException;
 import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
@@ -90,7 +91,7 @@ public class BatchConfiguration {
     
     @Bean VloApiClient apiClient() {
         final WebClient webClient = WebClient.create(apiBaseUrl);
-        return new VloApiClient(webClient);
+        return new VloApiClientImpl(webClient);
     }
     
     @Bean
