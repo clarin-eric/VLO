@@ -58,25 +58,21 @@ public class VloMappingHandler {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(resultMono, VloRecordMappingProcessingTicket.class);
-
-//        return resultMono.flatMap(result
-//                -> ServerResponse
-//                        .ok()
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .body(result, VloRecordMappingProcessingTicket.class));
     }
 
     public Mono<ServerResponse> getMappingResult(ServerRequest request) {
         final String id = request.pathVariable("id");
         log.info("Retrieval of mapping result {}", id);
 
-        final Optional<VloRecord> record = resultStore.getMappingResult(UUID.fromString(id));
+        final Mono<VloRecord> recordMono
+                = Mono.fromCallable(()
+                        -> resultStore
+                        .getMappingResult(UUID.fromString(id))
+                        .orElse(null));
 
         //respond
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.justOrEmpty(record), VloRecord.class)
+        return recordMono
+                .flatMap(record -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(Mono.just(record), VloRecord.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
 
