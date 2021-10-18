@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -41,30 +42,35 @@ public class VloMappingHandler {
 
     private final MappingRequestProcessor mappingRequestProcessor;
 
-    private final MappingResultStore resultStore;
+    private final MappingResultStore<UUID> resultStore;
 
     public Mono<ServerResponse> requestMapping(ServerRequest request) {
         log.debug("Incoming mapping request. Extracting body...");
-        final Mono<VloRecordMappingRequest> mappingRequestMono = request.bodyToMono(VloRecordMappingRequest.class);
+        final Mono<VloRecordMappingRequest> mappingRequestMono
+                = request.bodyToMono(VloRecordMappingRequest.class);
 
-        final Mono<VloRecordMappingProcessingTicket> resultMono = mappingRequestMono
-                .flatMap(mappingRequest -> {
-                    log.debug("Processing incoming mapping request {}", mappingRequest);
-                    return mappingRequestProcessor.processMappingRequest(mappingRequest);
-                });
+        //processing
+        final Mono<VloRecordMappingProcessingTicket> resultMono
+                = mappingRequestProcessor.processMappingRequest(mappingRequestMono);
 
-        //respond
+        //response
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(resultMono, VloRecordMappingProcessingTicket.class);
+
+//        return resultMono.flatMap(result
+//                -> ServerResponse
+//                        .ok()
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .body(result, VloRecordMappingProcessingTicket.class));
     }
 
     public Mono<ServerResponse> getMappingResult(ServerRequest request) {
         final String id = request.pathVariable("id");
         log.info("Retrieval of mapping result {}", id);
 
-        final Optional<VloRecord> record = resultStore.getMappingResult(Long.parseLong(id));
+        final Optional<VloRecord> record = resultStore.getMappingResult(UUID.fromString(id));
 
         //respond
         return ServerResponse

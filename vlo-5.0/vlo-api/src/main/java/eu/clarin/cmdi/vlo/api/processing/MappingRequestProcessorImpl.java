@@ -16,8 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.api.processing;
 
+import eu.clarin.cmdi.vlo.api.parsing.MetadataFileParser;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -26,23 +31,41 @@ import reactor.core.publisher.Mono;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Component
+@AllArgsConstructor
+@Slf4j
 public class MappingRequestProcessorImpl implements MappingRequestProcessor {
 
-    private final MappingResultStore resultStore;
+    private final MappingResultStore<UUID> resultStore;
+    private final MetadataFileParser parser;
 
-    public MappingRequestProcessorImpl(MappingResultStore resultStore) {
-        this.resultStore = resultStore;
-    }
-    
     @Override
-    public Mono<VloRecordMappingProcessingTicket> processMappingRequest(VloRecordMappingRequest request) {
-        //TODO: store request data
-        //TODO: create ticket & do queue processing
+    public Mono<VloRecordMappingProcessingTicket> processMappingRequest(Mono<VloRecordMappingRequest> requestMono) {
+        return requestMono.map(this::mapAndStoreResults);
+    }
 
-        return Mono.just(VloRecordMappingProcessingTicket.builder()
-                            .file(request.getFile())
-                            .processId("1234")
-                            .build());
+    private VloRecordMappingProcessingTicket mapAndStoreResults(VloRecordMappingRequest request) {
+        final UUID ticketId = UUID.randomUUID();
+
+        log.debug("Start processing request with ticket ID {}", ticketId);
+
+        //TOOD: map request data to a VloRecord object
+        //VloRecord record = parser.parseFile(inputFile)
+        final VloRecord record = VloRecord.builder()
+                .id("testRecord" + ticketId.toString())
+                .name("Test record " + ticketId.toString())
+                .build();
+
+        log.debug("Storing mapping result for ticket {}", ticketId);
+        resultStore.storeResult(ticketId, record);
+
+        final VloRecordMappingProcessingTicket ticket = VloRecordMappingProcessingTicket.builder()
+                .file(request.getFile())
+                .processId(ticketId.toString())
+                .build();
+
+        log.debug("Done, ticket {} created", ticketId);
+
+        return ticket;
     }
 
 }

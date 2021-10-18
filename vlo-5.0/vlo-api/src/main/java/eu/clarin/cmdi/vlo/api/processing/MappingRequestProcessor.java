@@ -26,6 +26,6 @@ import reactor.core.publisher.Mono;
  */
 public interface MappingRequestProcessor {
     
-    Mono<VloRecordMappingProcessingTicket> processMappingRequest(VloRecordMappingRequest request);
+    Mono<VloRecordMappingProcessingTicket> processMappingRequest(Mono<VloRecordMappingRequest> request);
     
 }

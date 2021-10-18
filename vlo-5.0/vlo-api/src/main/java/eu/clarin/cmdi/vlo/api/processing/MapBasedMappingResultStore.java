@@ -19,7 +19,9 @@ package eu.clarin.cmdi.vlo.api.processing;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -27,24 +29,25 @@ import org.springframework.stereotype.Component;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Component
-public class MapBasedMappingResultStore implements MappingResultStore {
+@Slf4j
+public class MapBasedMappingResultStore implements MappingResultStore<UUID> {
 
     //TODO: methods to invalidate!!
-    
-    private final Map<Long, VloRecord> store;
+    private final Map<UUID, VloRecord> store;
 
     public MapBasedMappingResultStore() {
         store = new ConcurrentHashMap<>();
     }
-    
-    
+
     @Override
-    public void storeResult(Long identifier, VloRecord record) {
+    public void storeResult(UUID identifier, VloRecord record) {
+        log.debug("Storing record with id {}", identifier);
         store.put(identifier, record);
     }
 
     @Override
-    public Optional<VloRecord> getMappingResult(Long identifier) {
+    public Optional<VloRecord> getMappingResult(UUID identifier) {
+        log.trace("Retrieving record with id {}", identifier);
         return Optional.ofNullable(store.get(identifier));
     }
 
