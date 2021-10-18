@@ -16,9 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import eu.clarin.cmdi.vlo.api.processing.MappingRequestProcessor;
+import eu.clarin.cmdi.vlo.api.processing.MappingResultStore;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -31,22 +35,22 @@ import reactor.core.publisher.Mono;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Component
+@AllArgsConstructor
 @Slf4j
 public class VloMappingHandler {
 
-    public Mono<ServerResponse> requestMapping(ServerRequest request) {
-        log.info("Incoming mapping request. Extracting body...");
-        Mono<VloRecordMappingRequest> mappingRequestMono = request.bodyToMono(VloRecordMappingRequest.class);
-        log.info("Incoming mapping request {}", mappingRequestMono);
+    private final MappingRequestProcessor mappingRequestProcessor;
 
-        Mono<VloRecordMappingProcessingTicket> resultMono = mappingRequestMono
+    private final MappingResultStore resultStore;
+
+    public Mono<ServerResponse> requestMapping(ServerRequest request) {
+        log.debug("Incoming mapping request. Extracting body...");
+        final Mono<VloRecordMappingRequest> mappingRequestMono = request.bodyToMono(VloRecordMappingRequest.class);
+
+        final Mono<VloRecordMappingProcessingTicket> resultMono = mappingRequestMono
                 .flatMap(mappingRequest -> {
-                    //TODO: store request data
-                    //TODO: create ticket & do queue processing
-                    return Mono.just(VloRecordMappingProcessingTicket.builder()
-                            .file(mappingRequest.getFile())
-                            .processId("id")
-                            .build());
+                    log.debug("Processing incoming mapping request {}", mappingRequest);
+                    return mappingRequestProcessor.processMappingRequest(mappingRequest);
                 });
 
         //respond
@@ -60,17 +64,14 @@ public class VloMappingHandler {
         final String id = request.pathVariable("id");
         log.info("Retrieval of mapping result {}", id);
 
-        //TODO: get from processing queue
-        final VloRecord record = VloRecord.builder()
-                .id("recordId")
-                .name("recordName")
-                .build();
+        final Optional<VloRecord> record = resultStore.getMappingResult(Long.parseLong(id));
 
         //respond
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(record), VloRecord.class);
+                .body(Mono.justOrEmpty(record), VloRecord.class)
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
 }
