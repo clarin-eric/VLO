@@ -52,12 +52,10 @@ public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
                     .build();
 
             //Send request object to the API
-            final Mono<VloRecordMappingProcessingTicket> ticketMono = apiClient.sendRecordMappingRequest(importRequest)
-                    .doOnSubscribe(subscr -> log.debug("Vlo processing ticket mono subscribed to by {}", subscr));
-            
+            final Mono<VloRecordMappingProcessingTicket> ticketMono = apiClient.sendRecordMappingRequest(importRequest);
+
             //Retrieve record
-            final Mono<VloRecord> recordMono = ticketMono.flatMap(apiClient::retrieveRecord)
-                    .doOnSubscribe(subscr -> log.debug("Vlo record subscribed to by {}", subscr));
+            final Mono<VloRecord> recordMono = ticketMono.flatMap(apiClient::retrieveRecord);
 
             return recordMono.block(apiTimeout);
         } catch (IOException ex) {

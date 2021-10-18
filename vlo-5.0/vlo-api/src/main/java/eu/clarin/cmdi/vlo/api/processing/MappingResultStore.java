@@ -23,10 +23,10 @@ import java.util.Optional;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface MappingResultStore {
+public interface MappingResultStore<T> {
 
-    void storeResult(Long identifier, VloRecord record);
+    void storeResult(T identifier, VloRecord record);
     
-    Optional<VloRecord> getMappingResult(Long identifier);
+    Optional<VloRecord> getMappingResult(T identifier);
 
 }
