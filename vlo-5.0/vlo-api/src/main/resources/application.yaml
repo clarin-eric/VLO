@@ -1,2 +1,5 @@
 server:
   port: 8708
+spring:
+  codec:
+    max-in-memory-size: 50MB
