@@ -6,8 +6,6 @@ vlo:
     api:
       # Base URL of VLO API
       base-url: http://localhost:8708
-      # Timeout in milliseconds
-      # timeout: 6000
     metadata-source:
 #      roots: 
 #        - name: 'First set'

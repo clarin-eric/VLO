@@ -47,6 +47,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 /**
  *
@@ -62,10 +63,6 @@ public class BatchConfiguration {
     @NotEmpty
     @Value("${vlo.importer.api.base-url}")
     private String apiBaseUrl;
-    
-    @NotEmpty
-    @Value("${vlo.importer.api.timeout:60000}")
-    private Long apiTimeout;
     
     @Autowired
     public MetadataSourceConfiguration metadataSourceConfiguration;
@@ -96,11 +93,11 @@ public class BatchConfiguration {
     
     @Bean
     public FileProcessor processor() {
-        return new FileProcessor(apiClient(), Duration.ofMillis(apiTimeout));
+        return new FileProcessor(apiClient());
     }
     
     @Bean
-    public ItemWriter<VloRecord> writer() throws OperationNotSupportedException {
+    public ItemWriter<Mono<VloRecord>> writer() throws OperationNotSupportedException {
         return new VloRecordWriter();
     }
     
@@ -120,9 +117,9 @@ public class BatchConfiguration {
     }
     
     @Bean
-    public Step step1(ItemWriter<VloRecord> writer) throws Exception {
+    public Step step1(ItemWriter<Mono<VloRecord>> writer) throws Exception {
         return stepBuilderFactory.get("step1")
-                .<MetadataFile, VloRecord>chunk(5)
+                .<MetadataFile, Mono<VloRecord>>chunk(5)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer)
