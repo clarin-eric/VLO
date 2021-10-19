@@ -39,41 +39,49 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @Slf4j
 public class VloMappingHandler {
-
+    
     private final MappingRequestProcessor mappingRequestProcessor;
-
+    
     private final MappingResultStore<UUID> resultStore;
-
+    
     public Mono<ServerResponse> requestMapping(ServerRequest request) {
         log.debug("Incoming mapping request. Extracting body...");
         final Mono<VloRecordMappingRequest> mappingRequestMono
                 = request.bodyToMono(VloRecordMappingRequest.class);
 
         //processing
-        final Mono<VloRecordMappingProcessingTicket> resultMono
+        final Mono<VloRecordMappingProcessingTicket> ticketMono
                 = mappingRequestProcessor.processMappingRequest(mappingRequestMono);
 
-        //response
-        return ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(resultMono, VloRecordMappingProcessingTicket.class);
+        return ticketMono
+                .flatMap(ticket -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(Mono.just(ticket), VloRecordMappingProcessingTicket.class))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
-
+    
     public Mono<ServerResponse> getMappingResult(ServerRequest request) {
         final String id = request.pathVariable("id");
         log.info("Retrieval of mapping result {}", id);
-
-        final Mono<VloRecord> recordMono
-                = Mono.fromCallable(()
-                        -> resultStore
-                        .getMappingResult(UUID.fromString(id))
-                        .orElse(null));
+        
+        final Mono<VloRecord> recordMono = Mono.fromCallable(()
+                -> getRecordFromStore(id));
 
         //respond
         return recordMono
                 .flatMap(record -> ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(Mono.just(record), VloRecord.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
-
+    
+    private VloRecord getRecordFromStore(String id) {
+        try {
+            final UUID uuid = UUID.fromString(id);
+            return resultStore
+                    .getMappingResult(uuid)
+                    .orElse(null);
+        } catch (IllegalArgumentException ex) {
+            log.warn("Illegal UUID value '{}' - record cannot exist", id);
+            //therefore does not exist
+            return null;
+        }
+    }
+    
 }

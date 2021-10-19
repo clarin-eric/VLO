@@ -3,3 +3,14 @@ server:
 spring:
   codec:
     max-in-memory-size: 50MB
+vlo:
+  api:
+    mapping:
+      scheduler:
+        parallel:
+          threads: 10
+        bounded-elastic:
+#          schedulerName: MappingRequestProcessorScheduler
+#          schedulerThreadCap: 8
+#          schedulerQueuedTaskCap: 100
+#          schedulerttlSeconds: 60

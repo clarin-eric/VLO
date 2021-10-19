@@ -23,8 +23,10 @@ import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
 
 /**
  *
@@ -37,15 +39,23 @@ public class MappingRequestProcessorImpl implements MappingRequestProcessor {
 
     private final MappingResultStore<UUID> resultStore;
     private final MetadataFileParser parser;
+    @Qualifier("mappingRequestProcessorScheduler")
+    private final Scheduler scheduler;
 
     @Override
     public Mono<VloRecordMappingProcessingTicket> processMappingRequest(Mono<VloRecordMappingRequest> requestMono) {
-        return requestMono.map(this::mapAndStoreResults);
+        return requestMono
+                .publishOn(scheduler)
+                .flatMap(this::mapAndStoreResults);
+//                .map((request) -> mapAndStoreResults(UUID.randomUUID(), request));
     }
 
-    private VloRecordMappingProcessingTicket mapAndStoreResults(VloRecordMappingRequest request) {
+    private Mono<VloRecordMappingProcessingTicket> mapAndStoreResults(VloRecordMappingRequest request) {
         final UUID ticketId = UUID.randomUUID();
+        return Mono.fromCallable(() -> mapAndStoreResults(ticketId, request));
+    }
 
+    private VloRecordMappingProcessingTicket mapAndStoreResults(final UUID ticketId, VloRecordMappingRequest request) {
         log.debug("Start processing request with ticket ID {}", ticketId);
 
         //TOOD: map request data to a VloRecord object
@@ -54,6 +64,12 @@ public class MappingRequestProcessorImpl implements MappingRequestProcessor {
                 .id("testRecord" + ticketId.toString())
                 .name("Test record " + ticketId.toString())
                 .build();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            log.error("sleep interrupted", ex);
+        }
 
         log.debug("Storing mapping result for ticket {}", ticketId);
         resultStore.storeResult(ticketId, record);
