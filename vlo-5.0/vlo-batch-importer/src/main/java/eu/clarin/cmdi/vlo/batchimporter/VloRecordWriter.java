@@ -20,17 +20,24 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class VloRecordWriter implements ItemWriter<VloRecord> {
-
+public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
+    
     @Override
-    public void write(List<? extends VloRecord> items) throws Exception {
-        log.info("Writing items {}", items);
+    public void write(List<? extends Mono<VloRecord>> items) throws Exception {
+        log.debug("Writing items");
+        final Flux<VloRecord> itemsFlux = Flux.concat(items);
+        
+        itemsFlux.toStream().forEach((item) -> {
+            log.info("Writing item {}", item);
+        });
     }
-
+    
 }

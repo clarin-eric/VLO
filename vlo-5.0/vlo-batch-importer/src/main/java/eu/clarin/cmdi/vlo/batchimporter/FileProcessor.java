@@ -22,11 +22,12 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
-import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 /**
  *
@@ -34,13 +35,14 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @AllArgsConstructor
-public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
+public class FileProcessor implements ItemProcessor<MetadataFile, Mono<VloRecord>> {
 
     private final VloApiClient apiClient;
-    private final Duration apiTimeout;
+
+    private final Scheduler scheduler = Schedulers.newParallel("FileProcessorScheduler", 10);
 
     @Override
-    public VloRecord process(MetadataFile inputFile) throws Exception {
+    public Mono<VloRecord> process(MetadataFile inputFile) throws Exception {
         log.info("Processing metadata file {}", inputFile);
 
         try {
@@ -51,15 +53,22 @@ public class FileProcessor implements ItemProcessor<MetadataFile, VloRecord> {
                     .xmlContent(xmlContentFromFile(inputFile))
                     .build();
 
-            //Send request object to the API
-            final Mono<VloRecordMappingProcessingTicket> ticketMono = apiClient.sendRecordMappingRequest(importRequest);
-
-            //Retrieve record
-            final Mono<VloRecord> recordMono = ticketMono.flatMap(apiClient::retrieveRecord);
-
-            return recordMono.block(apiTimeout);
+            return Mono.just(importRequest)
+                    .publishOn(scheduler)
+                    //Send request object to the API
+                    .flatMap(this::sendRecordMappingRequest)
+                    //Retrieve record
+                    .flatMap(apiClient::retrieveRecord);
         } catch (IOException ex) {
             throw new InputProcessingException("Error while processing input from " + inputFile.toString(), ex);
+        }
+    }
+
+    private Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest) {
+        try {
+            return apiClient.sendRecordMappingRequest(importRequest);
+        } catch (IOException ex) {
+            return Mono.error(ex);
         }
     }
 

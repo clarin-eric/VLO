@@ -42,10 +42,10 @@ import reactor.core.publisher.Mono;
  */
 @ExtendWith(MockitoExtension.class)
 public class FileProcessorTest extends AbstractVloImporterTest {
-
+    
     @Mock
     VloApiClient apiClient;
-
+    
     @Captor
     ArgumentCaptor<VloRecordMappingRequest> mappingReqCaptor;
     @Captor
@@ -57,24 +57,24 @@ public class FileProcessorTest extends AbstractVloImporterTest {
     @Test
     public void testProcess() throws Exception {
         MetadataFile inputFile = new MetadataFile("testRoot", getTestResource("test_record1.xml"));
-        FileProcessor instance = new FileProcessor(apiClient, Duration.ofSeconds(42));
-
+        FileProcessor instance = new FileProcessor(apiClient);
+        
         final VloRecordMappingProcessingTicket ticket = mock(VloRecordMappingProcessingTicket.class);
         when(apiClient.sendRecordMappingRequest(any(VloRecordMappingRequest.class)))
                 .thenReturn(Mono.just(ticket));
         final VloRecord record = mock(VloRecord.class);
         when(apiClient.retrieveRecord(any(VloRecordMappingProcessingTicket.class)))
                 .thenReturn(Mono.just(record));
-
-        final VloRecord result = instance.process(inputFile);
+        
+        final VloRecord result = instance.process(inputFile).block(Duration.ofSeconds(60));
         assertEquals(record, result);
-
+        
         verify(apiClient, times(1)).sendRecordMappingRequest(mappingReqCaptor.capture());
         assertEquals("testRoot", mappingReqCaptor.getValue().getDataRoot());
         assertTrue(mappingReqCaptor.getValue().getFile().contains("test_record1.xml"));
-
+        
         verify(apiClient, times(1)).retrieveRecord(processingTicketCaptor.capture());
         assertEquals(ticket, processingTicketCaptor.getValue());
     }
-
+    
 }
