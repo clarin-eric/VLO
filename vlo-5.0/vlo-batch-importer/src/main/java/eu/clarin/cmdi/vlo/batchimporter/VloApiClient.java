@@ -30,6 +30,6 @@ public interface VloApiClient {
 
     Mono<VloRecord> retrieveRecord(VloRecordMappingProcessingTicket ticket);
 
-    Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest) throws IOException;
+    Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest);
     
 }

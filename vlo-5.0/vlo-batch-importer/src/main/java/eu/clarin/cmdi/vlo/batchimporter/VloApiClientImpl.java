@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.batchimporter;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
-import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -41,7 +40,7 @@ public class VloApiClientImpl implements VloApiClient {
     }
 
     @Override
-    public Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest) throws IOException {
+    public Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest) {
         log.debug("Sending mapping request {}", importRequest);
         return webClient
                 .method(HttpMethod.POST)
