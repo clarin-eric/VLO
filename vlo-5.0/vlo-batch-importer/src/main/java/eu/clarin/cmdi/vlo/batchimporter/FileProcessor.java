@@ -38,7 +38,8 @@ public class FileProcessor implements ItemProcessor<MetadataFile, Mono<VloRecord
 
     private final VloApiClient apiClient;
 
-    private final Scheduler scheduler = Schedulers.newParallel("FileProcessorScheduler", 10);
+    //TODO: make scheduler configurable
+    private final Scheduler scheduler = Schedulers.newBoundedElastic(10, Integer.MAX_VALUE, "FPWorker");
 
     @Override
     public Mono<VloRecord> process(MetadataFile inputFile) throws Exception {

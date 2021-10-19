@@ -22,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
+import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 /**
  *
@@ -29,15 +32,24 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
-    
+
+    //TODO: make scheduler configurable
+    private final Scheduler scheduler = Schedulers.newBoundedElastic(10, Integer.MAX_VALUE, "VRWWorker");
+
     @Override
     public void write(List<? extends Mono<VloRecord>> items) throws Exception {
         log.debug("Writing items");
-        final Flux<VloRecord> itemsFlux = Flux.concat(items);
-        
-        itemsFlux.toStream().forEach((item) -> {
-            log.info("Writing item {}", item);
-        });
+        final ParallelFlux<VloRecord> itemsFlux = Flux.concat(items).parallel();
+
+        itemsFlux
+                .runOn(scheduler)
+                .flatMap(this::writeItem)
+                .subscribe();
     }
-    
+
+    private Mono<Void> writeItem(VloRecord record) {
+        log.info("Writing item {}", record);
+        return Mono.empty();
+    }
+
 }
