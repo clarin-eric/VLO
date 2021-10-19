@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.api.parsing.MetadataFileParser;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import java.util.Date;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
+import reactor.core.scheduler.Schedulers;
 
 /**
  *
@@ -65,10 +67,13 @@ public class MappingRequestProcessorImpl implements MappingRequestProcessor {
                 .name("Test record " + ticketId.toString())
                 .build();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ex) {
-            log.error("sleep interrupted", ex);
+        Date start = new Date();
+        while ((new Date().getTime() - start.getTime()) < 500) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                log.warn("Interrupted while sleeping");
+            }
         }
 
         log.debug("Storing mapping result for ticket {}", ticketId);

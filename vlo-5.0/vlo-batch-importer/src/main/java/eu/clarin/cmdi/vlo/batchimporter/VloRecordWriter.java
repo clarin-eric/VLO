@@ -44,7 +44,7 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
         itemsFlux
                 .runOn(scheduler)
                 .flatMap(this::writeItem)
-                .subscribe();
+                .then().block();
     }
 
     private Mono<Void> writeItem(VloRecord record) {
