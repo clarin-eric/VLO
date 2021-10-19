@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.batchimporter;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
@@ -56,19 +55,11 @@ public class FileProcessor implements ItemProcessor<MetadataFile, Mono<VloRecord
             return Mono.just(importRequest)
                     .publishOn(scheduler)
                     //Send request object to the API
-                    .flatMap(this::sendRecordMappingRequest)
+                    .flatMap(apiClient::sendRecordMappingRequest)
                     //Retrieve record
                     .flatMap(apiClient::retrieveRecord);
         } catch (IOException ex) {
             throw new InputProcessingException("Error while processing input from " + inputFile.toString(), ex);
-        }
-    }
-
-    private Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest) {
-        try {
-            return apiClient.sendRecordMappingRequest(importRequest);
-        } catch (IOException ex) {
-            return Mono.error(ex);
         }
     }
 
