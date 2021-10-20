@@ -16,12 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.api.processing;
 
-import eu.clarin.cmdi.vlo.api.parsing.MetadataFileParser;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
-import java.util.Date;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +38,7 @@ import reactor.core.scheduler.Scheduler;
 public class MappingRequestProcessorImpl implements MappingRequestProcessor {
 
     private final MappingResultStore<UUID> resultStore;
-    private final MetadataFileParser parser;
+    private final MetadataFileProcessor fileProcessor;
     @Qualifier("mappingRequestProcessorScheduler")
     private final Scheduler scheduler;
 
@@ -57,7 +55,7 @@ public class MappingRequestProcessorImpl implements MappingRequestProcessor {
     private VloRecordMappingProcessingTicket mapAndStoreResults(final UUID ticketId, VloRecordMappingRequest request) throws InputProcessingException {
         log.debug("Start processing request with ticket ID {}", ticketId);
 
-        final VloRecord record = parser.parseFile(request);
+        final VloRecord record = fileProcessor.processMappingRequest(request);
 
         log.debug("Storing mapping result for ticket {}", ticketId);
         resultStore.storeResult(ticketId, record);
