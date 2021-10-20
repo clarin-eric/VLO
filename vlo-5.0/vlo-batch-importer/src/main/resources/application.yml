@@ -1,6 +1,11 @@
 logging:
   level:
     eu.clarin.cmdi.vlo.batchimporter: INFO
+    
+spring:
+  codec:
+    max-in-memory-size: 50MB
+
 vlo:
   importer:
     api:
