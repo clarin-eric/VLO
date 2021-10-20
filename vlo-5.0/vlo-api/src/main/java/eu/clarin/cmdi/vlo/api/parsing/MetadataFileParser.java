@@ -25,8 +25,8 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-import eu.clarin.cmdi.vlo.data.model.MappingInput;
-import eu.clarin.cmdi.vlo.data.model.MetadataFile;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
 import java.util.List;
@@ -43,24 +43,28 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MetadataFileParser {
 
-    public MappingInput parseFile(MetadataFile inputFile) throws InputProcessingException {
-        log.info("Parsing input file {}", inputFile);
-        final MappingInput.MappingInputBuilder builder = MappingInput.builder();
+    public VloRecord parseFile(VloRecordMappingRequest request) throws InputProcessingException {
+        log.info("Parsing input from request {}", request);
+        final VloRecord.VloRecordBuilder builder = VloRecord.builder();
+
         try {
-            builder.dataRoot(inputFile.getDataRoot());
-            builder.sourcePath(inputFile.getLocation().toString());
-            xmlParse(inputFile, builder);
+            builder.dataRoot(request.getDataRoot());
+            builder.sourcePath(request.getFile());
+            xmlParse(request.getXmlContent(), builder);
             log.trace("Mapping input builder state after parsing: {}", builder);
         } catch (IOException | VTDException ex) {
-            throw new InputProcessingException(String.format("Error while trying to parse input file %s", inputFile), ex);
+            throw new InputProcessingException(String.format("Error while trying to parse input file %s", request.getFile()), ex);
         }
+
+        log.debug("Completed parsing input from request {}", request);
         return builder.build();
     }
 
-    private void xmlParse(MetadataFile inputFile, MappingInput.MappingInputBuilder builder) throws IOException, VTDException {
+    private void xmlParse(byte[] xmlContent, VloRecord.VloRecordBuilder builder) throws IOException, VTDException {
         // prepare parser
         final VTDGen vg = new VTDGen();
-        vg.parseFile(inputFile.getLocation().toString(), true);
+        vg.setDoc(xmlContent);
+        vg.parse(true);
         final VTDNav nav = vg.getNav();
 
         // Profile ID
@@ -78,7 +82,7 @@ public class MetadataFileParser {
 
         //TODO: other header fields?
         // resources
-        final List<MappingInput.Resource> resources = parseResources(nav);
+        final List<VloRecord.Resource> resources = parseResources(nav);
         builder.resources(resources);
 
         // component section
@@ -86,14 +90,13 @@ public class MetadataFileParser {
         builder.pathValuesMap(pathValuesMap);
     }
 
-    private ImmutableList<MappingInput.Resource> parseResources(final VTDNav nav) throws NavException, XPathParseException, XPathEvalException {
-        final ImmutableList.Builder<MappingInput.Resource> resources = ImmutableList.<MappingInput.Resource>builder();
+    private ImmutableList<VloRecord.Resource> parseResources(final VTDNav nav) throws NavException, XPathParseException, XPathEvalException {
+        final ImmutableList.Builder<VloRecord.Resource> resources = ImmutableList.<VloRecord.Resource>builder();
 
         final AutoPilot resourceProxy = new AutoPilot(nav);
         SchemaParsingUtil.setNameSpace(resourceProxy, null);
         resourceProxy.selectXPath("/cmd:CMD/cmd:Resources/cmd:ResourceProxyList/cmd:ResourceProxy");
 
-        
         final AutoPilot idAp = new AutoPilot(nav);
         idAp.selectXPath("@id");
 //        final String id;
@@ -124,7 +127,7 @@ public class MetadataFileParser {
 
             if (!ref.equals("") && !type.equals("")) {
                 // note that the mime type could be empty
-                resources.add(new MappingInput.Resource(id, ref, type, mimeType));
+                resources.add(new VloRecord.Resource(id, ref, type, mimeType));
             }
 
 //            // TODO: resource hierarchy information 
@@ -145,7 +148,7 @@ public class MetadataFileParser {
         // build all value lists
         return builderMap.entrySet().stream()
                 .collect(Collectors.toUnmodifiableMap(
-                        e -> e.getKey().toString(),
+                        e -> e.getKey(),
                         e -> e.getValue().build()));
     }
 
@@ -158,10 +161,10 @@ public class MetadataFileParser {
         final int textIndex = nav.getText();
         if (textIndex != -1) {
             final String text = nav.toNormalizedString(textIndex);
-            log.debug("Current path: {}='{}'", path, text);
+            log.trace("Current path: {}='{}'", path, text);
             listBuilderForPath(builderMap, path).add(text);
         } else {
-            log.debug("Current path: {}", path);
+            log.trace("Current path: {}", path);
         }
 
         //TODO: attributes

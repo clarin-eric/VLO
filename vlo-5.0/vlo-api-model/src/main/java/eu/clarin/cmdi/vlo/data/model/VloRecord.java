@@ -16,10 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.data.model;
 
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -33,12 +37,54 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString(onlyExplicitlyIncluded = true)
 @Document(indexName = "record", createIndex = true)
 public class VloRecord {
 
     @Id
+    @ToString.Include
     private String id;
-    
-    @Field(type=FieldType.Text)
+
+    @Field(type = FieldType.Text)
+    @ToString.Include
+    private String dataRoot;
+
+    @Field(type = FieldType.Text)
+    @ToString.Include
+    private String sourcePath;
+
+    @Field(type = FieldType.Text)
+    @ToString.Include
     private String name;
+
+    @Field(type = FieldType.Text)
+    @ToString.Include
+    private String selflink;
+
+    @Field(type = FieldType.Text)
+    private String profileId;
+
+    private List<Resource> resources;
+
+    //TODO: define a different structure for this that allows for disambiguating context
+    //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
+    private Map<String, List<String>> pathValuesMap;
+
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @ToString(onlyExplicitlyIncluded = true)
+    public static class Resource {
+
+        private String id;
+
+        @ToString.Include
+        private String ref;
+
+        private String type; //TODO: enum?
+
+        private String mediaType;
+    }
+
 }

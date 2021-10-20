@@ -17,9 +17,10 @@
 package eu.clarin.cmdi.vlo.api.parsing;
 
 import eu.clarin.cmdi.vlo.api.AbstractVloApiTest;
-import eu.clarin.cmdi.vlo.data.model.MappingInput;
-import eu.clarin.cmdi.vlo.data.model.MappingInput.Resource;
-import eu.clarin.cmdi.vlo.data.model.MetadataFile;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecord.Resource;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -53,9 +54,13 @@ public class MetadataFileParserTest extends AbstractVloApiTest {
     public void testParseFile() throws Exception {
         final Path testRecord1 = getTestResource("test_record1.xml");
 
-        final MetadataFile inputFile = new MetadataFile("Test data root", testRecord1);
+        final VloRecordMappingRequest requestInput = VloRecordMappingRequest.builder()
+                .dataRoot("Test data root")
+                .file(testRecord1.toString())
+                .xmlContent(Files.readAllBytes(testRecord1))
+                .build();
         final MetadataFileParser instance = new MetadataFileParser();
-        final MappingInput result = instance.parseFile(inputFile);
+        final VloRecord result = instance.parseFile(requestInput);
 
         assertNotNull(result);
         assertEquals("http://hdl.handle.net/11356/1208@format=cmdi", result.getSelflink());
