@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.batchimporter;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
@@ -46,19 +47,26 @@ public class FileProcessor implements ItemProcessor<MetadataFile, Mono<VloRecord
         log.info("Processing metadata file {}", inputFile);
 
         try {
-            //make a request object for the API
+            //Make a request object for the API
             final VloRecordMappingRequest importRequest = VloRecordMappingRequest.builder()
                     .dataRoot(inputFile.getDataRoot())
                     .file(inputFile.getLocation().toString())
                     .xmlContent(xmlContentFromFile(inputFile))
                     .build();
 
-            return Mono.just(importRequest)
-                    .publishOn(scheduler)
-                    //Send request object to the API
-                    .flatMap(apiClient::sendRecordMappingRequest)
-                    //Retrieve record
-                    .flatMap(apiClient::retrieveRecord);
+            //Publish it to start the reactive chain
+            final Mono<VloRecordMappingRequest> importRequestMono
+                    = Mono.just(importRequest).publishOn(scheduler);
+
+            //Send request object to the API
+            final Mono<VloRecordMappingProcessingTicket> ticketMono
+                    = importRequestMono.flatMap(apiClient::sendRecordMappingRequest);
+
+            //Retrieve record
+            final Mono<VloRecord> recordMono
+                    = ticketMono.flatMap(apiClient::retrieveRecord);
+
+            return recordMono;
         } catch (IOException ex) {
             throw new InputProcessingException("Error while processing input from " + inputFile.toString(), ex);
         }
