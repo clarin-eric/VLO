@@ -25,7 +25,6 @@ import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,20 +58,23 @@ import reactor.core.publisher.Mono;
 @EnableConfigurationProperties(MetadataSourceConfiguration.class)
 @Slf4j
 public class BatchConfiguration {
-    
+
     @NotEmpty
     @Value("${vlo.importer.api.base-url}")
     private String apiBaseUrl;
-    
+
     @Autowired
-    public MetadataSourceConfiguration metadataSourceConfiguration;
-    
+    private MetadataSourceConfiguration metadataSourceConfiguration;
+
     @Autowired
-    public JobBuilderFactory jobBuilderFactory;
-    
+    private JobBuilderFactory jobBuilderFactory;
+
     @Autowired
-    public StepBuilderFactory stepBuilderFactory;
-    
+    private StepBuilderFactory stepBuilderFactory;
+
+    @Autowired
+    private WebClient.Builder webClientBuilder;
+
     @Bean
     public ItemReader<MetadataFile> reader() throws Exception {
         // data roots config to map
@@ -81,26 +83,34 @@ public class BatchConfiguration {
                         .orElseThrow(() -> new VloImporterConfigurationException("No valid data roots are configured"))
                         .stream()
                         .collect(Collectors.toMap(DataRootConfiguration::getName, DataRootConfiguration::getPath));
-        
+
         final MetadataFilesBatchReaderFactory metadataFilesBatchReaderFactory = new MetadataFilesBatchReaderFactory(rootsMap);
         return metadataFilesBatchReaderFactory.getObject();
     }
-    
-    @Bean VloApiClient apiClient() {
-        final WebClient webClient = WebClient.create(apiBaseUrl);
+
+    @Bean(name = "vloApiWebClient")
+    WebClient apiWebClient() {
+        return webClientBuilder
+                .baseUrl(apiBaseUrl)
+                .build();
+    }
+
+    @Bean
+    public VloApiClient apiClient() {
+        final WebClient webClient = apiWebClient();
         return new VloApiClientImpl(webClient);
     }
-    
+
     @Bean
     public FileProcessor processor() {
         return new FileProcessor(apiClient());
     }
-    
+
     @Bean
     public ItemWriter<Mono<VloRecord>> writer() throws OperationNotSupportedException {
         return new VloRecordWriter();
     }
-    
+
     @Bean
     public Job processFileJob(Step step1) {
         //TODO: Construct metadata hierarchy before processing
@@ -115,7 +125,7 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
-    
+
     @Bean
     public Step step1(ItemWriter<Mono<VloRecord>> writer) throws Exception {
         return stepBuilderFactory.get("step1")
