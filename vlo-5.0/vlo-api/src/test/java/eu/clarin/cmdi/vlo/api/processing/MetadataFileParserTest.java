@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.api.parsing;
+package eu.clarin.cmdi.vlo.api.processing;
 
+import eu.clarin.cmdi.vlo.api.processing.MetadataFileProcessorImpl;
 import eu.clarin.cmdi.vlo.api.AbstractVloApiTest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecord.Resource;
@@ -59,8 +60,8 @@ public class MetadataFileParserTest extends AbstractVloApiTest {
                 .file(testRecord1.toString())
                 .xmlContent(Files.readAllBytes(testRecord1))
                 .build();
-        final MetadataFileParser instance = new MetadataFileParser();
-        final VloRecord result = instance.parseFile(requestInput);
+        final MetadataFileProcessorImpl instance = new MetadataFileProcessorImpl();
+        final VloRecord result = instance.processMappingRequest(requestInput);
 
         assertNotNull(result);
         assertEquals("http://hdl.handle.net/11356/1208@format=cmdi", result.getSelflink());

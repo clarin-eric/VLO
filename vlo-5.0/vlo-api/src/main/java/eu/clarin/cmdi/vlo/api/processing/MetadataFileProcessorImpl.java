@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.api.parsing;
+package eu.clarin.cmdi.vlo.api.processing;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
@@ -25,6 +25,7 @@ import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import eu.clarin.cmdi.vlo.api.parsing.SchemaParsingUtil;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
@@ -41,9 +42,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class MetadataFileParser {
+public class MetadataFileProcessorImpl implements MetadataFileProcessor {
 
-    public VloRecord parseFile(VloRecordMappingRequest request) throws InputProcessingException {
+    @Override
+    public VloRecord processMappingRequest(VloRecordMappingRequest request) throws InputProcessingException {
         log.info("Parsing input from request {}", request);
         final VloRecord.VloRecordBuilder builder = VloRecord.builder();
 
