@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.api.parsing.MetadataFileParser;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import java.util.Date;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 /**
  *
@@ -46,35 +46,18 @@ public class MappingRequestProcessorImpl implements MappingRequestProcessor {
 
     @Override
     public Mono<VloRecordMappingProcessingTicket> processMappingRequest(Mono<VloRecordMappingRequest> requestMono) {
+        final UUID ticketId = UUID.randomUUID();
+
         return requestMono
                 .publishOn(scheduler)
-                .flatMap(this::mapAndStoreResults);
-//                .map((request) -> mapAndStoreResults(UUID.randomUUID(), request));
+                .flatMap(request -> Mono.fromCallable(
+                () -> mapAndStoreResults(ticketId, request)));
     }
 
-    private Mono<VloRecordMappingProcessingTicket> mapAndStoreResults(VloRecordMappingRequest request) {
-        final UUID ticketId = UUID.randomUUID();
-        return Mono.fromCallable(() -> mapAndStoreResults(ticketId, request));
-    }
-
-    private VloRecordMappingProcessingTicket mapAndStoreResults(final UUID ticketId, VloRecordMappingRequest request) {
+    private VloRecordMappingProcessingTicket mapAndStoreResults(final UUID ticketId, VloRecordMappingRequest request) throws InputProcessingException {
         log.debug("Start processing request with ticket ID {}", ticketId);
 
-        //TOOD: map request data to a VloRecord object
-        //VloRecord record = parser.parseFile(inputFile)
-        final VloRecord record = VloRecord.builder()
-                .id("testRecord" + ticketId.toString())
-                .name("Test record " + ticketId.toString())
-                .build();
-
-        Date start = new Date();
-        while ((new Date().getTime() - start.getTime()) < 500) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                log.warn("Interrupted while sleeping");
-            }
-        }
+        final VloRecord record = parser.parseFile(request);
 
         log.debug("Storing mapping result for ticket {}", ticketId);
         resultStore.storeResult(ticketId, record);
