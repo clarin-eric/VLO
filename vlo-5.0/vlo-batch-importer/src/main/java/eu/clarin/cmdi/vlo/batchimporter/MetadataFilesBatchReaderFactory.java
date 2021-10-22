@@ -25,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import lombok.extern.slf4j.Slf4j;
@@ -78,6 +80,7 @@ public class MetadataFilesBatchReaderFactory implements FactoryBean<ItemReader<M
     public ItemReader<MetadataFile> getObject() throws Exception {
         final Iterator<MetadataFile> iterator = dataRootsMap.entrySet().stream()
                 .flatMap(entry -> newMetadataFileIterator(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toUnmodifiableList())
                 .iterator();
         
         return new IteratorItemReader<>(iterator);
