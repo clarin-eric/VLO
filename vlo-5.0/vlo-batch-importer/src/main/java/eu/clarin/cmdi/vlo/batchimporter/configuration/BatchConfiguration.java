@@ -44,8 +44,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -130,7 +130,11 @@ public class BatchConfiguration {
     
     @Bean
     public TaskExecutor taskExecutor() {
-        return new SimpleAsyncTaskExecutor("vlo-batch");
+        final ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(8);
+        taskExecutor.setMaxPoolSize(20);
+        taskExecutor.setThreadNamePrefix("vlo-batch-");
+        return taskExecutor;
     }
 
     @Bean
