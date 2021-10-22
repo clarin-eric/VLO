@@ -143,7 +143,7 @@ public class VloApiClientImplTest {
                 .setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .setBody("{"
                         + "\"id\": \"record1\","
-                        + "\"name\": \"bar\""
+                        + "\"selflink\": \"bar\""
                         + "}");
         mockWebServer.enqueue(mockResponse);
 
@@ -152,7 +152,7 @@ public class VloApiClientImplTest {
         
         result.ifPresentOrElse(resultObj -> {
             assertEquals("record1", resultObj.getId());
-            assertEquals("bar", resultObj.getName());
+            assertEquals("bar", resultObj.getSelflink());
         }, () -> fail("Expected VloRecord result but none found"));
     }
 

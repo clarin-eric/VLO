@@ -1,8 +1,10 @@
-server:
-  port: 8708
 spring:
   codec:
     max-in-memory-size: 50MB
+  profiles:
+    active: legacy
+server:
+  port: 8708
 vlo:
   api:
     mapping:
