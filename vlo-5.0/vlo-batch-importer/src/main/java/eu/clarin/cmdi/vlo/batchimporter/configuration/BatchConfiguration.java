@@ -44,6 +44,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -125,14 +127,20 @@ public class BatchConfiguration {
                 .end()
                 .build();
     }
+    
+    @Bean
+    public TaskExecutor taskExecutor() {
+        return new SimpleAsyncTaskExecutor("vlo-batch");
+    }
 
     @Bean
-    public Step step1(ItemWriter<Mono<VloRecord>> writer) throws Exception {
+    public Step step1(ItemWriter<Mono<VloRecord>> writer, TaskExecutor taskExecutor) throws Exception {
         return stepBuilderFactory.get("step1")
-                .<MetadataFile, Mono<VloRecord>>chunk(5)
+                .<MetadataFile, Mono<VloRecord>>chunk(10)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer)
+                .taskExecutor(taskExecutor)
                 .build();
     }
 }
