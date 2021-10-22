@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.data.model;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -55,10 +58,6 @@ public class VloRecord {
 
     @Field(type = FieldType.Text)
     @ToString.Include
-    private String name;
-
-    @Field(type = FieldType.Text)
-    @ToString.Include
     private String selflink;
 
     @Field(type = FieldType.Text)
@@ -69,6 +68,24 @@ public class VloRecord {
     //TODO: define a different structure for this that allows for disambiguating context
     //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
     private Map<String, List<String>> pathValuesMap;
+
+    private final Map<String, List<Object>> fields = Maps.newHashMap();
+
+    public void removeField(String name) {
+        fields.remove(name);
+    }
+
+    public boolean containsKey(String name) {
+        return fields.containsKey(name);
+    }
+
+    public Collection<Object> getFieldValues(String name) {
+        return fields.get(name);
+    }
+
+    public void addField(String name, Object value) {
+        fields.computeIfAbsent(name, v -> Lists.newArrayList()).add(value);
+    }
 
     @Builder
     @NoArgsConstructor

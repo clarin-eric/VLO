@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 /**
@@ -41,6 +42,7 @@ import org.springframework.stereotype.Component;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Component
+@Profile("default")
 @Slf4j
 public class MetadataFileProcessorImpl implements MetadataFileProcessor {
 

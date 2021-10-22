@@ -40,7 +40,7 @@ public class VloApiApplication {
     @Bean
     public boolean createTestRecord(VloRecordRepository repo) {
         if (repo.findById("999").isEmpty()) {
-            repo.save(VloRecord.builder().id("999").name("Test record").build());
+            repo.save(VloRecord.builder().id("999").selflink("https://clarin.eu/test.cmdi").build());
         }
         return true;
     }
