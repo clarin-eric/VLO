@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -79,6 +80,17 @@ public class VloApiClientImpl implements VloApiClient {
             log.error("API response: {}", response.statusCode());
             return response.createException().flatMap(Mono::error);
         }
+    }
+    
+    @Override
+    public Mono<ResponseEntity<Void>> saveRecord(Mono<VloRecord> record) {
+        log.debug("Sending record to endpoint for indexation {}", record);
+        return webClient
+                .method(HttpMethod.PUT)
+                .uri("/record")
+                .body(record, VloRecord.class)
+                .retrieve()
+                .toBodilessEntity();
     }
 
 }

@@ -14,24 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.batchimporter;
+package eu.clarin.cmdi.vlo.api.data;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
-import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
-import org.springframework.http.ResponseEntity;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.springframework.data.elasticsearch.client.reactive.ReactiveElasticsearchClient;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface VloApiClient {
+@Component
+public class VloRecordIndexService {
 
-    Mono<VloRecord> retrieveRecord(VloRecordMappingProcessingTicket ticket);
+    private final ReactiveElasticsearchClient reactiveElasticsearchClient;
 
-    Mono<VloRecordMappingProcessingTicket> sendRecordMappingRequest(VloRecordMappingRequest importRequest);
-    
-    Mono<ResponseEntity<Void>> saveRecord(Mono<VloRecord> record);
-    
+    public VloRecordIndexService(ReactiveElasticsearchClient reactiveElasticsearchClient) {
+        this.reactiveElasticsearchClient = reactiveElasticsearchClient;
+    }
+
+    public Mono<IndexResponse> sendToIndex(Mono<VloRecord> recordMono) {
+        return recordMono.flatMap(
+                vloRecord -> reactiveElasticsearchClient.index(ir
+                        -> ir.index("record").source(vloRecord, XContentType.JSON)));
+    }
+
 }

@@ -110,7 +110,7 @@ public class BatchConfiguration {
 
     @Bean
     public ItemWriter<Mono<VloRecord>> writer() throws OperationNotSupportedException {
-        return new VloRecordWriter();
+        return new VloRecordWriter(apiClient());
     }
 
     @Bean

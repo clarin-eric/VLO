@@ -16,11 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import eu.clarin.cmdi.vlo.api.data.VloRecordIndexService;
 import eu.clarin.cmdi.vlo.api.data.VloRecordRepository;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.net.URI;
 import java.util.Optional;
-import org.springframework.data.elasticsearch.client.reactive.ReactiveElasticsearchClient;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -36,12 +36,12 @@ public class VloRecordHandler {
 
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final VloRecordRepository recordRepository;
-    private final ReactiveElasticsearchClient reactiveElasticsearchClient;
+    private final VloRecordIndexService indexService;
 
-    public VloRecordHandler(ElasticsearchRestTemplate elasticsearchRestTemplate, VloRecordRepository recordRepository, ReactiveElasticsearchClient reactiveElasticsearchClient) {
+    public VloRecordHandler(ElasticsearchRestTemplate elasticsearchRestTemplate, VloRecordRepository recordRepository, VloRecordIndexService indexService) {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
         this.recordRepository = recordRepository;
-        this.reactiveElasticsearchClient = reactiveElasticsearchClient;
+        this.indexService = indexService;
     }
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
@@ -59,15 +59,12 @@ public class VloRecordHandler {
     }
 
     public Mono<ServerResponse> saveRecord(ServerRequest request) {
-        Mono<VloRecord> recordMono = request.bodyToMono(VloRecord.class);
-        return recordMono.flatMap(
-                vloRecord -> reactiveElasticsearchClient.index(ir
-                        -> ir.index("record").source(vloRecord))
-        ).flatMap(
-                (response) -> {
+        return request.bodyToMono(VloRecord.class)
+                .flatMap(record -> indexService.sendToIndex(Mono.just(record)))
+                .flatMap(response -> {
                     final URI uri = request.uriBuilder().pathSegment(response.getId()).build();
                     return ServerResponse.created(uri).bodyValue(response.toString());
-                }
-        ).switchIfEmpty(ServerResponse.badRequest().build());
+                })
+                .switchIfEmpty(ServerResponse.badRequest().build());
     }
 }
