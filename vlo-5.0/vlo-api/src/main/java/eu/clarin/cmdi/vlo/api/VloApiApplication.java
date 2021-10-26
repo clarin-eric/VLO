@@ -15,6 +15,7 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 @EnableReactiveElasticsearchRepositories
@@ -38,11 +39,11 @@ public class VloApiApplication {
     }
 
     @Bean
-    public boolean createTestRecord(VloRecordRepository repo) {
-        if (repo.findById("999").isEmpty()) {
-            repo.save(VloRecord.builder().id("999").selflink("https://clarin.eu/test.cmdi").build());
-        }
-        return true;
+    public VloRecord createTestRecord(VloRecordRepository repo) {
+        Mono<VloRecord> switchIfEmpty = repo
+                .findById("999")
+                .switchIfEmpty(repo.save(VloRecord.builder().id("999").selflink("https://clarin.eu/test.cmdi").build()));
+        return switchIfEmpty.block();
     }
 
 }

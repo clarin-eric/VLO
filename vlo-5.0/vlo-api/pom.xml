@@ -77,6 +77,7 @@
     </build>
 
     <profiles>
+        <!-- Profile for **local development** -->
         <profile>
             <id>dev</id>
             <dependencies>
@@ -86,6 +87,20 @@
                     <optional>true</optional>
                 </dependency>
             </dependencies>
+            <build>
+                <plugins>
+                    <!-- Activate the elastic-test profile on tests. Requires elastic search instance running locally -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <spring.profiles.active>elastic-test</spring.profiles.active>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 
