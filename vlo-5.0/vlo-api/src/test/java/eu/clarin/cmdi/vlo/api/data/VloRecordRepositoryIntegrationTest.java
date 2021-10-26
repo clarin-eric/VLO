@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.api.data;
 
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecord.Resource;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.function.BooleanSupplier;
@@ -97,7 +98,16 @@ public class VloRecordRepositoryIntegrationTest {
         final VloRecord inputRecord = VloRecord.builder()
                 .id("id123")
                 .dataRoot("testDataRoot")
+                .profileId("clarin_profile_id")
+                .selflink("http://repo.eu/id123")
+                .resources(Lists.newArrayList(
+                        Resource.builder().id("resource1").mediaType("text/plain").ref("http://repo.eu/id123/resource1").build(),
+                        Resource.builder().id("resource2").mediaType("text/plain").ref("http://repo.eu/id123/resource2").build()
+                ))
                 .build();
+
+        inputRecord.getFields().put("test", Lists.newArrayList("test1", "test2"));
+        inputRecord.getResources().add(Resource.builder().id("resource1").mediaType("text/plain").ref("http://repo.eu/id123/resource1").build());
 
         final Mono<VloRecord> result = instance.save(inputRecord);
         final VloRecord response = result

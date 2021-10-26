@@ -31,7 +31,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.MultiField;
 
 /**
  *
@@ -70,6 +69,8 @@ public class VloRecord {
     //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
     private Map<String, List<String>> pathValuesMap;
 
+    
+    @Field(type = FieldType.Nested)
     private final Map<String, List<Object>> fields = Maps.newHashMap();
 
     public void removeField(String name) {
