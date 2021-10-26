@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.api.processing;
 
-import eu.clarin.cmdi.vlo.api.processing.MetadataFileProcessorImpl;
 import eu.clarin.cmdi.vlo.api.AbstractVloApiTest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecord.Resource;

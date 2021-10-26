@@ -35,21 +35,27 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
 
     //TODO: make scheduler configurable
     private final Scheduler scheduler = Schedulers.newBoundedElastic(10, Integer.MAX_VALUE, "VRWWorker");
-
+    
+    private final VloApiClient apiClient;
+    
+    public VloRecordWriter(VloApiClient apiClient) {
+        this.apiClient = apiClient;
+    }
+    
     @Override
     public void write(List<? extends Mono<VloRecord>> items) throws Exception {
         log.debug("Writing items");
         final ParallelFlux<VloRecord> itemsFlux = Flux.concat(items).parallel();
-
+        
         itemsFlux
                 .runOn(scheduler)
-                .flatMap(this::writeItem)
-                .then().block();
+                .flatMap(record -> apiClient.saveRecord(Mono.just(record)))
+                .doOnError(e -> {
+                    log.error("Error while sending record to API for indexing {}", e);
+                })
+                .then()
+                .onErrorResume(e -> Mono.empty())
+                .block();
     }
-
-    private Mono<Void> writeItem(VloRecord record) {
-        log.info("Writing item {}", record);
-        return Mono.empty();
-    }
-
+    
 }
