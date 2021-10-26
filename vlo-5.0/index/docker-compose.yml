@@ -1,7 +1,7 @@
 version: '3'
 services:
   vlo-opensearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
@@ -27,6 +27,17 @@ services:
 #     - "/tmp/opensearch-temp:/tmp"
     networks:
       - opensearch-net
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.1
+    container_name: kibana
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_URL: http://vlo-opensearch:9200
+      ELASTICSEARCH_HOSTS: '["http://vlo-opensearch:9200"]'
+    networks:
+      - opensearch-net
+
 #  vlo-opensearch-dashboards:
 #    image: opensearchproject/opensearch-dashboards:latest
 #    container_name: opensearch-dashboards

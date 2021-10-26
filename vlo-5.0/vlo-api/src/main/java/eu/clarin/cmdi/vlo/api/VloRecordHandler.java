@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
-import eu.clarin.cmdi.vlo.api.data.VloRecordIndexService;
 import eu.clarin.cmdi.vlo.api.data.VloRecordRepository;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.net.URI;
@@ -36,12 +35,10 @@ public class VloRecordHandler {
 
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
     private final VloRecordRepository recordRepository;
-    private final VloRecordIndexService indexService;
 
-    public VloRecordHandler(ElasticsearchRestTemplate elasticsearchRestTemplate, VloRecordRepository recordRepository, VloRecordIndexService indexService) {
+    public VloRecordHandler(ElasticsearchRestTemplate elasticsearchRestTemplate, VloRecordRepository recordRepository) {
         this.elasticsearchRestTemplate = elasticsearchRestTemplate;
         this.recordRepository = recordRepository;
-        this.indexService = indexService;
     }
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
@@ -60,7 +57,7 @@ public class VloRecordHandler {
 
     public Mono<ServerResponse> saveRecord(ServerRequest request) {
         return request.bodyToMono(VloRecord.class)
-                .flatMap(record -> indexService.sendToIndex(Mono.just(record)))
+                .flatMap(recordRepository::save)
                 .flatMap(response -> {
                     final URI uri = request.uriBuilder().pathSegment(response.getId()).build();
                     return ServerResponse.created(uri).bodyValue(response.toString());
