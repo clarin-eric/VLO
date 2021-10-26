@@ -69,8 +69,6 @@ public class VloRecord {
     //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
     private Map<String, List<String>> pathValuesMap;
 
-    
-    @Field(type = FieldType.Nested)
     private final Map<String, List<Object>> fields = Maps.newHashMap();
 
     public void removeField(String name) {
