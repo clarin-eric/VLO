@@ -46,9 +46,9 @@ public class VloRecordHandler {
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
         final String id = request.pathVariable("id");
-        final Optional<VloRecord> result = recordRepository.findById(id);
-        return result.map(record -> ServerResponse.ok().bodyValue(record))
-                .orElse(ServerResponse.notFound().build());
+        return recordRepository.findById(id)
+                .flatMap(record -> ServerResponse.ok().bodyValue(record))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     public Mono<ServerResponse> getRecordFromTemplate(ServerRequest request) {

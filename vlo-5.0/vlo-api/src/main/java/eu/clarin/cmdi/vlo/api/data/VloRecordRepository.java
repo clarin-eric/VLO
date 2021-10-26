@@ -17,12 +17,12 @@
 package eu.clarin.cmdi.vlo.api.data;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface VloRecordRepository extends ElasticsearchRepository<VloRecord, String> {
+public interface VloRecordRepository extends ReactiveElasticsearchRepository<VloRecord, String> {
 
 }
