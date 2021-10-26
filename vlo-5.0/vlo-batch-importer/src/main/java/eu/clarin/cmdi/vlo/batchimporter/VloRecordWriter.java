@@ -51,7 +51,7 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
                 .runOn(scheduler)
                 .flatMap(record -> apiClient.saveRecord(Mono.just(record)))
                 .doOnError(e -> {
-                    log.error("Error while sending record to API for indexing {}", e);
+                    log.error("Error while sending record to API for indexing", e);
                 })
                 .then()
                 .onErrorResume(e -> Mono.empty())

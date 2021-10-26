@@ -81,10 +81,13 @@ public class VloApiClientImpl implements VloApiClient {
             return response.createException().flatMap(Mono::error);
         }
     }
-    
+
     @Override
     public Mono<ResponseEntity<Void>> saveRecord(Mono<VloRecord> record) {
-        log.debug("Sending record to endpoint for indexation {}", record);
+        record.doOnNext(r -> {
+            log.debug("Sending record to endpoint for indexation {}", r);
+        });
+        
         return webClient
                 .method(HttpMethod.PUT)
                 .uri("/record")
