@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.api;
 
-import eu.clarin.cmdi.vlo.api.data.VloRecordRepository;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +18,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
-@EnableReactiveElasticsearchRepositories
+@EnableReactiveElasticsearchRepositories(basePackageClasses = VloRecordRepository.class)
 @Slf4j
 public class VloApiApplication {
 

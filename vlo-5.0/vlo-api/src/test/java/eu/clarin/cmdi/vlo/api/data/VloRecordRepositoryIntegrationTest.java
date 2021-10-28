@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.api.data;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecord.Resource;
+import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.function.BooleanSupplier;

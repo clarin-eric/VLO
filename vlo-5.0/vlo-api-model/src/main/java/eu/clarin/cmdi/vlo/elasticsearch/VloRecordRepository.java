@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.api.data;
+package eu.clarin.cmdi.vlo.elasticsearch;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
