@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -64,6 +65,9 @@ public class BatchConfiguration {
     @NotEmpty
     @Value("${vlo.importer.api.base-url}")
     private String apiBaseUrl;
+    
+    @Autowired
+    private VloRecordRepository vloRecordRepository;
 
     @Autowired
     private MetadataSourceConfiguration metadataSourceConfiguration;
@@ -110,7 +114,7 @@ public class BatchConfiguration {
 
     @Bean
     public ItemWriter<Mono<VloRecord>> writer() throws OperationNotSupportedException {
-        return new VloRecordWriter(apiClient());
+        return new VloRecordWriter(apiClient(), vloRecordRepository);
     }
 
     @Bean
