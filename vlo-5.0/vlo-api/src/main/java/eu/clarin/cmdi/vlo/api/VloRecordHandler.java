@@ -16,8 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
-import eu.clarin.cmdi.vlo.api.data.VloRecordRepository;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.net.URI;
 import java.util.Optional;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
