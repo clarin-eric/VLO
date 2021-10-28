@@ -1,11 +1,12 @@
 package eu.clarin.cmdi.vlo.batchimporter;
 
+import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
+import org.springframework.data.elasticsearch.repository.config.EnableReactiveElasticsearchRepositories;
 
-@SpringBootApplication(
-        exclude = ElasticsearchDataAutoConfiguration.class)
+@SpringBootApplication
+@EnableReactiveElasticsearchRepositories(basePackageClasses = VloRecordRepository.class)
 public class VloBatchImporterApplication {
 
     public static void main(String[] args) {

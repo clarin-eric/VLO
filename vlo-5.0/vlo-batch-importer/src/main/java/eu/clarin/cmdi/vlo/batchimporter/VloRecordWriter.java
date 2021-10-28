@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.batchimporter;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemWriter;
@@ -37,9 +38,11 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
     private final Scheduler scheduler = Schedulers.newBoundedElastic(10, Integer.MAX_VALUE, "VRWWorker");
     
     private final VloApiClient apiClient;
+    private final VloRecordRepository vloRecordRepository;
     
-    public VloRecordWriter(VloApiClient apiClient) {
+    public VloRecordWriter(VloApiClient apiClient, VloRecordRepository vloRecordRepository) {
         this.apiClient = apiClient;
+        this.vloRecordRepository = vloRecordRepository;
     }
     
     @Override
@@ -49,7 +52,8 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
         
         itemsFlux
                 .runOn(scheduler)
-                .flatMap(record -> apiClient.saveRecord(Mono.just(record)))
+                //.flatMap(record -> apiClient.saveRecord(Mono.just(record)))
+                .flatMap(vloRecordRepository::save)
                 .doOnError(e -> {
                     log.error("Error while sending record to API for indexing", e);
                 })
