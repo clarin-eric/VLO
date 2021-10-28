@@ -16,10 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import static com.google.common.collect.ComparisonChain.start;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.net.URI;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -35,8 +42,35 @@ public class VloRecordHandler {
 
     private final VloRecordRepository recordRepository;
 
-    public VloRecordHandler(VloRecordRepository recordRepository) {
+    private final ReactiveElasticsearchTemplate esTemplate;
+
+    public VloRecordHandler(VloRecordRepository recordRepository, ReactiveElasticsearchTemplate reactiveElasticsearchTemplate) {
         this.recordRepository = recordRepository;
+        this.esTemplate = reactiveElasticsearchTemplate;
+    }
+
+    public Mono<ServerResponse> getRecords(ServerRequest request) {
+        final Mono<String> qMono = Mono.justOrEmpty(request.queryParam("q"));
+        final int start = request.queryParam("start").map(Integer::valueOf).orElse(1);
+        final int rows = request.queryParam("rows").map(Integer::valueOf).orElse(10);
+
+        final Mono<Query> queryMono = qMono
+                .doOnNext(q -> log.debug("Query parameter in request: '{}'", q))
+                .flatMap(q -> Mono.just(QueryBuilders.queryStringQuery(q)))
+                .doOnNext(qb -> log.debug("Query builder: {}", qb.toString()))
+                .flatMap(qb -> Mono.just(new NativeSearchQuery(qb).setPageable(PageRequest.of(start, rows))));
+
+        //final Optional<NativeSearchQuery> query =
+        final Mono<List<VloRecord>> resultsMono = queryMono
+                .flatMapMany(q -> esTemplate.search(q, VloRecord.class))
+                .doOnNext(hit -> log.debug("Search hit: {}", hit.getId()))
+                .flatMap(hit -> Mono.just(hit.getContent()))
+                .collectList();
+
+        return resultsMono
+                .flatMap(resultList -> ServerResponse.ok().bodyValue(resultList))
+                .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
+
     }
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
