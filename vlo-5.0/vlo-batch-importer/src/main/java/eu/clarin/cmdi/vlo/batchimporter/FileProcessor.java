@@ -26,8 +26,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 /**
  *
@@ -38,9 +36,6 @@ import reactor.core.scheduler.Schedulers;
 public class FileProcessor implements ItemProcessor<MetadataFile, Mono<VloRecord>> {
 
     private final VloApiClient apiClient;
-
-    //TODO: make scheduler configurable
-    private final Scheduler scheduler = Schedulers.newBoundedElastic(10, Integer.MAX_VALUE, "FPWorker");
 
     @Override
     public Mono<VloRecord> process(MetadataFile inputFile) throws Exception {
@@ -56,7 +51,7 @@ public class FileProcessor implements ItemProcessor<MetadataFile, Mono<VloRecord
 
             //Publish it to start the reactive chain
             final Mono<VloRecordMappingRequest> importRequestMono
-                    = Mono.just(importRequest).publishOn(scheduler);
+                    = Mono.just(importRequest);
 
             //Send request object to the API
             final Mono<VloRecordMappingProcessingTicket> ticketMono

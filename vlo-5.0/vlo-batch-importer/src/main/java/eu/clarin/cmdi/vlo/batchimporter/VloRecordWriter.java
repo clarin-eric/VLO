@@ -23,8 +23,6 @@ import org.springframework.batch.item.ItemWriter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
-import reactor.core.scheduler.Scheduler;
-import reactor.core.scheduler.Schedulers;
 
 /**
  *
@@ -32,9 +30,6 @@ import reactor.core.scheduler.Schedulers;
  */
 @Slf4j
 public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
-
-    //TODO: make scheduler configurable
-    private final Scheduler scheduler = Schedulers.newBoundedElastic(10, Integer.MAX_VALUE, "VRWWorker");
 
     private final VloApiClient apiClient;
 
@@ -48,7 +43,6 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
         final ParallelFlux<VloRecord> itemsFlux = Flux.concat(items).parallel();
 
         itemsFlux
-                .runOn(scheduler)
                 .doOnNext(record -> {
                     log.debug("Writing record {}", record.getId());
                 })
