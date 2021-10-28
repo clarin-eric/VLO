@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.api.processing.MappingResultStore;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
-import java.util.Optional;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +44,7 @@ public class VloMappingHandler {
     private final MappingResultStore<UUID> resultStore;
     
     public Mono<ServerResponse> requestMapping(ServerRequest request) {
-        log.debug("Incoming mapping request. Extracting body...");
+        log.info("Incoming mapping request. Extracting body...");
         final Mono<VloRecordMappingRequest> mappingRequestMono
                 = request.bodyToMono(VloRecordMappingRequest.class);
 
