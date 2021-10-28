@@ -33,6 +33,7 @@ public class VloApiApplication {
         return RouterFunctions
                 .route(POST("/recordMapping/request").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::requestMapping)
                 .andRoute(GET("/recordMapping/result/{id}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult)
+                .andRoute(GET("/records").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
                 .andRoute(GET("/record/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
                 .andRoute(PUT("/record").and(accept(MediaType.APPLICATION_JSON)), recordHandler::saveRecord);
     }
