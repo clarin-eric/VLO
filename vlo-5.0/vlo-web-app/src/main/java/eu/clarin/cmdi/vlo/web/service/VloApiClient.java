@@ -14,31 +14,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.web.repository;
+package eu.clarin.cmdi.vlo.web.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import eu.clarin.cmdi.vlo.web.service.VloApiClient;
 import java.util.Optional;
-import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@Repository
-public class ReactiveVloRecordRepository implements VloRecordRepository {
+public interface VloApiClient {
 
-    private final VloApiClient apiClient;
-
-    public ReactiveVloRecordRepository(VloApiClient apiClient) {
-        this.apiClient = apiClient;
-    }
-    
-    @Override
-    public Flux<VloRecord> findAll() {
-        //TODO: Iterate to keep getting records on request
-        return apiClient.getRecords("*", Optional.empty(), Optional.empty());
-    }
+    Flux<VloRecord> getRecords(String q, Optional<Integer> rows, Optional<Integer> start);
 
 }
