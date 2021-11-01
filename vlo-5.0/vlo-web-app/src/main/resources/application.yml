@@ -1,0 +1,13 @@
+logging:
+  level:
+    eu.clarin.cmdi.vlo.web: INFO
+    
+spring:
+  codec:
+    max-in-memory-size: 50MB
+
+vlo:
+  web:
+    api:
+      # Base URL of VLO API
+      base-url: http://localhost:8708

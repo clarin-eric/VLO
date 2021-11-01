@@ -23,12 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <h1>VLO</h1>
-        <div>Hello world</div>
+        <h2>Records</h2>
 
         <div data-th-each="record : ${records}">
-            <h2 data-th-text="${record}">record</h2>
+            <h3 data-th-text="${record}">record</h3>
             <ul>
-                <li>Id: <span data-th-text="${record.id}">record.id</span></li>
+                <li>Data: <span data-th-text="${record.id}">record.fields</span></li>
             </ul>
         </div>
     </body>

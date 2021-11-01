@@ -52,7 +52,7 @@ public class VloRecordHandler {
     public Mono<ServerResponse> getRecords(ServerRequest request) {
         final Mono<String> qMono = Mono.justOrEmpty(request.queryParam("q"));
         final int start = request.queryParam("start").map(Integer::valueOf).orElse(1);
-        final int rows = request.queryParam("rows").map(Integer::valueOf).orElse(10);
+        final int rows = request.queryParam("rows").map(Integer::valueOf).orElse(5);
 
         final Mono<Query> queryMono = qMono
                 .doOnNext(q -> log.debug("Query parameter in request: '{}'", q))
