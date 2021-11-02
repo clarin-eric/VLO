@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.web.controller;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.repository.VloRecordRepository;
-import java.time.Duration;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,11 +42,10 @@ public class SearchController {
     @RequestMapping("/")
     public String index(final Model model) {
         final Flux<VloRecord> recordsFlux
-                = recordRepository.findAll()
-                        .take(200, true)
-                        .delayElements(Duration.ofMillis(200L));
+                = recordRepository.findAll(PageRequest.of(0, 10));
+        
         final IReactiveDataDriverContextVariable reactiveDataDrivenMode
-                = new ReactiveDataDriverContextVariable(recordsFlux, 5);
+                = new ReactiveDataDriverContextVariable(recordsFlux, 2);
 
         model.addAttribute("records", reactiveDataDrivenMode);
 

@@ -19,9 +19,8 @@ package eu.clarin.cmdi.vlo.web.repository;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.service.VloApiClient;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
@@ -35,32 +34,13 @@ public class ReactiveVloRecordRepository implements VloRecordRepository {
 
     private final VloApiClient apiClient;
 
-    private static final int FETCH_ROWS = 3;
-
     public ReactiveVloRecordRepository(VloApiClient apiClient) {
         this.apiClient = apiClient;
     }
 
     @Override
-    public Flux<VloRecord> findAll() {
-        final Flux<Flux<VloRecord>> recordsFlux = Flux.generate(() -> new RetrievalState(FETCH_ROWS, 1),
-                (state, sink) -> {
-                    log.debug("Requesting more records [start={}, rows={}]", state.getStart(), state.getRows());
-                    sink.next(apiClient.getRecords("*", Optional.of(state.getRows()), Optional.of(state.getStart())));
-                    //advance
-                    return new RetrievalState(state.getRows(), state.getStart() + state.getRows());
-                }
-        );
-        
-        return Flux.concat(recordsFlux);
-    }
-
-    @Data
-    @AllArgsConstructor
-    private class RetrievalState {
-
-        private Integer rows;
-        private Integer start;
+    public Flux<VloRecord> findAll(Pageable pageable) {
+        return apiClient.getRecords("*", Optional.of(pageable.getPageSize()).map(Long::valueOf), Optional.of(1 + pageable.getOffset()));
     }
 
 }
