@@ -40,7 +40,7 @@ public class VloApiClientImpl implements VloApiClient {
     }
     
     @Override
-    public Flux<VloRecord> getRecords(String q, Optional<Integer> rows, Optional<Integer> start) {
+    public Flux<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start) {
         log.debug("Getting records");
         return webClient
                 .method(HttpMethod.GET)

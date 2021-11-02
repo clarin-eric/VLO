@@ -26,6 +26,6 @@ import reactor.core.publisher.Flux;
  */
 public interface VloApiClient {
 
-    Flux<VloRecord> getRecords(String q, Optional<Integer> rows, Optional<Integer> start);
+    Flux<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start);
 
 }
