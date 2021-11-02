@@ -16,12 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.web.controller;
 
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.repository.VloRecordRepository;
+import java.time.Duration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.spring5.context.webflux.IReactiveDataDriverContextVariable;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
+import reactor.core.publisher.Flux;
 
 /**
  *
@@ -38,8 +41,12 @@ public class SearchController {
 
     @RequestMapping("/")
     public String index(final Model model) {
+        final Flux<VloRecord> recordsFlux
+                = recordRepository.findAll()
+                        .take(200, true)
+                        .delayElements(Duration.ofMillis(200L));
         final IReactiveDataDriverContextVariable reactiveDataDrivenMode
-                = new ReactiveDataDriverContextVariable(recordRepository.findAll(), 1);
+                = new ReactiveDataDriverContextVariable(recordsFlux, 5);
 
         model.addAttribute("records", reactiveDataDrivenMode);
 
