@@ -59,7 +59,7 @@ public class SearchController {
 
         model.addAttribute("records", reactiveDataDrivenMode);
 
-        return "index";
+        return "search";
     }
 
     @RequestMapping(path = "/search", method = {RequestMethod.GET, RequestMethod.POST})
@@ -78,7 +78,7 @@ public class SearchController {
         model.addAttribute("records", reactiveDataDrivenMode);
         model.addAttribute("query", query);
 
-        return "index";
+        return "search";
     }
 
 }
