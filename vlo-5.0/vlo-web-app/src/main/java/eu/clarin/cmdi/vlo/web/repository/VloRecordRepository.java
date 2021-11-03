@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.web.repository;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
 
@@ -27,5 +28,7 @@ import reactor.core.publisher.Flux;
 public interface VloRecordRepository {
     
     Flux<VloRecord> findAll(Pageable pageable);
+    
+    Flux<VloRecord> search(String query, Pageable pageable);
     
 }

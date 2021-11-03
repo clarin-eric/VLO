@@ -40,7 +40,24 @@ public class ReactiveVloRecordRepository implements VloRecordRepository {
 
     @Override
     public Flux<VloRecord> findAll(Pageable pageable) {
-        return apiClient.getRecords("*", Optional.of(pageable.getPageSize()).map(Long::valueOf), Optional.of(1 + pageable.getOffset()));
+        return search("*", Optional.of(pageable));
+    }
+
+    @Override
+    public Flux<VloRecord> search(String query, Pageable pageable) {
+        return search(query, Optional.of(pageable));
+    }
+
+    private Flux<VloRecord> search(String query, Optional<Pageable> pageable) {
+        return apiClient.getRecords(query, getRows(pageable), getStart(pageable));
+    }
+
+    private Optional<Long> getRows(Optional<Pageable> pageable) {
+        return pageable.map(Pageable::getPageSize).map(Long::valueOf);
+    }
+
+    private Optional<Long> getStart(Optional<Pageable> pageable) {
+        return pageable.map(p -> p.getOffset() + 1);
     }
 
 }
