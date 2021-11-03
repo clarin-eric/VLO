@@ -23,7 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <h1>VLO</h1>
-        <h2>Records</h2>
+        <h2>Search</h2>
+
+        <form action="#" th:action="@{/search}" method="get">
+            <input type="text" th:value="${query}" th:name="query"/>
+            <input type="submit" value="Search" />
+        </form>
 
         <div data-th-each="record : ${records}">
             <h3 data-th-text="${record}">record</h3>
