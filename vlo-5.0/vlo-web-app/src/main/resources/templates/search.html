@@ -25,8 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <h1>VLO</h1>
         <h2>Search</h2>
 
-        <form action="#" th:action="@{/search}" method="get">
-            <input type="text" th:value="${query}" th:name="query"/>
+        <form action="#" th:action="@{/search}" th:object="${searchRequest}" method="get">
+            <input type="text" th:field="*{query}">
+            <input type="text" th:field="*{order}">
             <input type="submit" value="Search" />
         </form>
 
