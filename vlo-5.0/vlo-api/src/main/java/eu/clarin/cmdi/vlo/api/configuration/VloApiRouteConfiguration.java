@@ -30,6 +30,7 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_REQUEST_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH;
 
@@ -51,6 +52,8 @@ public class VloApiRouteConfiguration {
                 .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult)
                 // GET /records
                 .andRoute(GET(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
+                // GET /records/count
+                .andRoute(GET(RECORDS_COUNT_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordCount)
                 // GET /records/{id}
                 .andRoute(GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
                 // PUT /records

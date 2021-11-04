@@ -16,20 +16,27 @@
  */
 package eu.clarin.cmdi.vlo.util;
 
+import org.springframework.data.domain.PageRequest;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class VloApiConstants {
-    
-    public final static String RECORDS_PATH = "/records";
-    public final static String RECORDS_COUNT_PATH = RECORDS_PATH + "/count";
-    public final static String RECORD_MAPPING_PATH = "/recordMapping";
-    public final static String RECORD_MAPPING_REQUEST_PATH = RECORD_MAPPING_PATH + "/request";
-    public final static String RECORD_MAPPING_RESULT_PATH = RECORD_MAPPING_PATH + "/result";
-    
-    public final static String QUERY_PARAMETER = "q";
-    public final static String ROWS_PARAMETER = "size";
-    public final static String START_PARAMETER = "offset";
-    
+public final class Pagination {
+
+    protected Pagination() {
+    }
+
+    /**
+     *
+     * @param offset 1-based index of first result
+     * @param size size of result set
+     * @return
+     */
+    public static PageRequest pageRequestFor(int offset, int size) {
+        int page = Math.floorDiv(offset - 1, size);
+
+        return PageRequest.of(page, size);
+    }
+
 }

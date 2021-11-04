@@ -19,8 +19,8 @@ package eu.clarin.cmdi.vlo.api;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
+import eu.clarin.cmdi.vlo.util.Pagination;
 import java.net.URI;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.data.domain.PageRequest;
@@ -35,6 +35,7 @@ import reactor.core.publisher.Mono;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
+import java.util.Optional;
 
 /**
  *
@@ -53,28 +54,45 @@ public class VloRecordHandler {
         this.esTemplate = reactiveElasticsearchTemplate;
     }
 
+    public Mono<ServerResponse> getRecordCount(ServerRequest request) {
+        final String query = request.queryParam(QUERY_PARAMETER).orElse("*:*");
+
+        return getQuery(Optional.of(query))
+                //query to search result
+                .flatMap(q -> esTemplate.count(q, VloRecord.class))
+                .doOnNext(count -> log.debug("Search result count: {}", count))
+                //map to response
+                .flatMap(count -> ServerResponse.ok().bodyValue(count))
+                .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
+    }
+
     public Mono<ServerResponse> getRecords(ServerRequest request) {
-        final Mono<String> qMono = Mono.justOrEmpty(request.queryParam(QUERY_PARAMETER));
-        final int start = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
-        final int rows = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
+        final Optional<String> query = request.queryParam(QUERY_PARAMETER);
+        int offset = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
+        int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
 
-        final Mono<Query> queryMono = qMono
-                .doOnNext(q -> log.debug("Query parameter in request: '{}'", q))
-                .flatMap(q -> Mono.just(QueryBuilders.queryStringQuery(q)))
-                .doOnNext(qb -> log.debug("Query builder: {}", qb.toString()))
-                .flatMap(qb -> Mono.just(new NativeSearchQuery(qb).setPageable(PageRequest.of(start, rows))));
-
-        //final Optional<NativeSearchQuery> query =
-        final Mono<List<VloRecord>> resultsMono = queryMono
-                .flatMapMany(q -> esTemplate.search(q, VloRecord.class))
+        return getQuery(query)
+                //query to search result
+                .flatMapMany(q -> esTemplate.search(q.setPageable(Pagination.pageRequestFor(offset, size)), VloRecord.class))
                 .doOnNext(hit -> log.debug("Search hit: {}", hit.getId()))
+                //get content (record) for each hit, turn into list
                 .flatMap(hit -> Mono.just(hit.getContent()))
-                .collectList();
-
-        return resultsMono
+                //turn into list mono
+                .collectList()
+                .doOnNext(results -> log.debug("Results: {}", results))
+                //map to response
                 .flatMap(resultList -> ServerResponse.ok().bodyValue(resultList))
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
+    }
 
+    private Mono<Query> getQuery(Optional<String> queryParam) {
+        final Mono<String> qMono = Mono.justOrEmpty(queryParam);
+
+        return qMono
+                .doOnNext(q -> log.debug("Query in request: '{}'", q))
+                .flatMap(q -> Mono.just(QueryBuilders.queryStringQuery(q)))
+                .doOnNext(qb -> log.debug("Query builder: {}", qb.toString()))
+                .flatMap(qb -> Mono.just(new NativeSearchQuery(qb)));
     }
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
