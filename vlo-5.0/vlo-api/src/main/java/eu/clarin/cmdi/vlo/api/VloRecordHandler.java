@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
-import static com.google.common.collect.ComparisonChain.start;
+import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.net.URI;
@@ -31,6 +31,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 
 /**
  *
@@ -50,9 +54,9 @@ public class VloRecordHandler {
     }
 
     public Mono<ServerResponse> getRecords(ServerRequest request) {
-        final Mono<String> qMono = Mono.justOrEmpty(request.queryParam("q"));
-        final int start = request.queryParam("start").map(Integer::valueOf).orElse(1);
-        final int rows = request.queryParam("rows").map(Integer::valueOf).orElse(5);
+        final Mono<String> qMono = Mono.justOrEmpty(request.queryParam(QUERY_PARAMETER));
+        final int start = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
+        final int rows = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
 
         final Mono<Query> queryMono = qMono
                 .doOnNext(q -> log.debug("Query parameter in request: '{}'", q))
@@ -74,7 +78,7 @@ public class VloRecordHandler {
     }
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
-        final String id = request.pathVariable("id");
+        final String id = request.pathVariable(VloApiRouteConfiguration.ID_PATH_VARIABLE);
         return recordRepository.findById(id)
                 .flatMap(record -> ServerResponse.ok().bodyValue(record))
                 .switchIfEmpty(ServerResponse.notFound().build());
