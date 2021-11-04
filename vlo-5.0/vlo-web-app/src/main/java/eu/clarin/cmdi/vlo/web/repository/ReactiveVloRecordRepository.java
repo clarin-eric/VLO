@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.web.repository;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.service.VloApiClient;
+import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -39,16 +40,16 @@ public class ReactiveVloRecordRepository implements VloRecordRepository {
     }
 
     @Override
-    public Flux<VloRecord> findAll(Pageable pageable) {
+    public List<VloRecord> findAll(Pageable pageable) {
         return search("*", Optional.of(pageable));
     }
 
     @Override
-    public Flux<VloRecord> search(String query, Pageable pageable) {
+    public List<VloRecord> search(String query, Pageable pageable) {
         return search(query, Optional.of(pageable));
     }
 
-    private Flux<VloRecord> search(String query, Optional<Pageable> pageable) {
+    private List<VloRecord> search(String query, Optional<Pageable> pageable) {
         return apiClient.getRecords(query, getRows(pageable), getStart(pageable));
     }
 

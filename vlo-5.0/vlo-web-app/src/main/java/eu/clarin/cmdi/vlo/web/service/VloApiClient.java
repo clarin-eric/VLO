@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.web.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.util.List;
 import java.util.Optional;
-import reactor.core.publisher.Flux;
 
 /**
  *
@@ -26,6 +26,6 @@ import reactor.core.publisher.Flux;
  */
 public interface VloApiClient {
 
-    Flux<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start);
+    List<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start);
 
 }

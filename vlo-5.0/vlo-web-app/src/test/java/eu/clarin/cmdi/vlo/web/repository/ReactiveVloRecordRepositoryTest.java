@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.web.repository;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.service.VloApiClient;
 import java.util.List;
@@ -71,18 +72,17 @@ public class ReactiveVloRecordRepositoryTest {
     @Test
     public void testFindAllPageable() {
         when(apiClient.getRecords(any(String.class), any(Optional.class), any(Optional.class)))
-                .thenReturn(Flux.fromIterable(
-                        ImmutableList.of(
+                .thenReturn(ImmutableList.of(
                                 createRecord("record1"),
-                                createRecord("record2"))));
+                                createRecord("record2")));
 
         final ReactiveVloRecordRepository instance = new ReactiveVloRecordRepository(apiClient);
         final Pageable pageable = PageRequest.of(2, 10);
-        final Flux<VloRecord> result = instance.findAll(pageable);
-        final Flux<VloRecord> take = result.take(5, true);
-        final Iterable<VloRecord> resultAsIterable = take.toIterable();
-        final Iterable<VloRecord> resultAsLimitedIterable = Iterables.limit(resultAsIterable, 100);
-        final List<VloRecord> resultAsList = ImmutableList.copyOf(resultAsLimitedIterable);
+        final List<VloRecord> resultAsList = instance.findAll(pageable);
+//        final Flux<VloRecord> take = result.take(5, true);
+//        final Iterable<VloRecord> resultAsIterable = take.toIterable();
+//        final Iterable<VloRecord> resultAsLimitedIterable = Iterables.limit(resultAsIterable, 100);
+//        final List<VloRecord> resultAsList = ImmutableList.copyOf(resultAsLimitedIterable);
         assertEquals(2, resultAsList.size());
 
         verify(apiClient, times(1)).getRecords("*", Optional.of(10L), Optional.of(21L)); //start = offset + 1

@@ -20,6 +20,7 @@ import com.google.common.base.Strings;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.data.SearchRequest;
 import eu.clarin.cmdi.vlo.web.repository.VloRecordRepository;
+import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -29,10 +30,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.thymeleaf.spring5.context.webflux.IReactiveDataDriverContextVariable;
-import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 /**
  *
@@ -51,29 +48,25 @@ public class SearchController {
 
     @GetMapping("/")
     public String index(final Model model) {
-        final Flux<VloRecord> recordsFlux
+        final List<VloRecord> records
                 //= recordRepository.findAll(PageRequest.of(0, 10));
                 = recordRepository.search("*", PageRequest.of(0, 10));
 
-        final IReactiveDataDriverContextVariable reactiveDataDrivenMode
-                = new ReactiveDataDriverContextVariable(recordsFlux, 2);
-
-        model.addAttribute("records", reactiveDataDrivenMode);
+        model.addAttribute("records", records);
+        model.addAttribute("searchRequest", new SearchRequest());
 
         return "search";
     }
 
     @RequestMapping(path = "/search", method = {RequestMethod.GET, RequestMethod.POST})
     public String indexSubmit(final Model model, @ModelAttribute("searchRequest") SearchRequest searchRequest) {
-        final Flux<VloRecord> recordsFlux = recordRepository.search(
+        final List<VloRecord> records = recordRepository.search(
                 Optional.ofNullable(Strings.emptyToNull(searchRequest.getQuery()))
                         .orElse("*"),
                 PageRequest.of(0, 10));
 
-        final IReactiveDataDriverContextVariable recordModel
-                = new ReactiveDataDriverContextVariable(recordsFlux, 2);
-
-        model.addAttribute("records", recordModel);
+        model.addAttribute("records", records);
+        model.addAttribute("searchRequest", searchRequest);
 
         return "search";
     }

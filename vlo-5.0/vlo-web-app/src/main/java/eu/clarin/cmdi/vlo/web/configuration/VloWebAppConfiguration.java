@@ -19,12 +19,16 @@ package eu.clarin.cmdi.vlo.web.configuration;
 import eu.clarin.cmdi.vlo.web.service.VloApiClient;
 import eu.clarin.cmdi.vlo.web.service.VloApiClientImpl;
 import javax.validation.constraints.NotEmpty;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriBuilderFactory;
 
 /**
  *
@@ -32,26 +36,32 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @Configuration
 @Validated
+@Slf4j
 public class VloWebAppConfiguration {
-    
+
     @NotEmpty
     @Value("${vlo.web.api.base-url}")
     private String apiBaseUrl;
-    
+
     @Autowired
-    private WebClient.Builder webClientBuilder;
-    
-        @Bean(name = "vloApiWebClient")
-    WebClient apiWebClient() {
-        return webClientBuilder
-                .baseUrl(apiBaseUrl)
-                .build();
-    }
+    RestTemplateBuilder restTemplateBuilder;
 
     @Bean
-    public VloApiClient apiClient() {
-        final WebClient webClient = apiWebClient();
-        return new VloApiClientImpl(webClient);
+    public UriBuilderFactory uriBuilderFactory() {
+        return new DefaultUriBuilderFactory(apiBaseUrl);
     }
     
+    @Bean
+    public RestTemplate restTemplate() {
+        final RestTemplate template = restTemplateBuilder.build();
+        template.setUriTemplateHandler(uriBuilderFactory());
+        log.debug("REST template created", template);
+        return template;
+    }
+
+    @Bean("vloApiRestTemplate")
+    public VloApiClient apiClient() {
+        return new VloApiClientImpl(restTemplate(), uriBuilderFactory());
+    }
+
 }
