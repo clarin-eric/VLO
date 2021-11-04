@@ -27,6 +27,10 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_REQUEST_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
@@ -45,7 +49,7 @@ public class VloApiClientImpl implements VloApiClient {
         log.debug("Sending mapping request {}", importRequest);
         return webClient
                 .method(HttpMethod.POST)
-                .uri("/recordMapping/request")
+                .uri(RECORD_MAPPING_REQUEST_PATH)
                 .body(Mono.just(importRequest), VloRecordMappingRequest.class)
                 .exchangeToMono(this::handleResponseForImportRequest);
     }
@@ -65,7 +69,7 @@ public class VloApiClientImpl implements VloApiClient {
         log.debug("Retrieving mapped record mono for processing ticket {}", ticket);
         return webClient
                 .method(HttpMethod.GET)
-                .uri("/recordMapping/result/{id}", ticket.getProcessId())
+                .uri(RECORD_MAPPING_RESULT_PATH + "/{id}", ticket.getProcessId())
                 .exchangeToMono(this::handleResponseForRecordRetrieval);
     }
 
@@ -90,7 +94,7 @@ public class VloApiClientImpl implements VloApiClient {
         
         return webClient
                 .method(HttpMethod.PUT)
-                .uri("/record")
+                .uri(RECORDS_PATH)
                 .body(record, VloRecord.class)
                 .retrieve()
                 .toBodilessEntity();

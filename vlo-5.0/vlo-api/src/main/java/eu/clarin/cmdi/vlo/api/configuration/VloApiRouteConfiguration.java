@@ -29,6 +29,10 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_REQUEST_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
@@ -36,13 +40,20 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @Configuration
 public class VloApiRouteConfiguration {
 
+    public final static String ID_PATH_VARIABLE = "id";
+
     @Bean
     public RouterFunction<ServerResponse> route(VloMappingHandler mappingHandler, VloRecordHandler recordHandler) {
         return RouterFunctions
-                .route(POST("/recordMapping/request").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::requestMapping)
-                .andRoute(GET("/recordMapping/result/{id}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult)
-                .andRoute(GET("/records").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
-                .andRoute(GET("/record/{id}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
-                .andRoute(PUT("/record").and(accept(MediaType.APPLICATION_JSON)), recordHandler::saveRecord);
+                // POST /recordMapping/request
+                .route(POST(RECORD_MAPPING_REQUEST_PATH).and(accept(MediaType.APPLICATION_JSON)), mappingHandler::requestMapping)
+                // GET /recordMapping/result/{id}
+                .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult)
+                // GET /records
+                .andRoute(GET(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
+                // GET /records/{id}
+                .andRoute(GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
+                // PUT /records
+                .andRoute(PUT(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::saveRecord);
     }
 }

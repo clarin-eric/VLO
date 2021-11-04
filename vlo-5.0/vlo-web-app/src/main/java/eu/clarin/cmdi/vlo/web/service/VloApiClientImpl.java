@@ -17,10 +17,8 @@
 package eu.clarin.cmdi.vlo.web.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +28,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
+
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 
 /**
  *
@@ -48,16 +51,16 @@ public class VloApiClientImpl implements VloApiClient {
     public List<VloRecord> getRecords(String q, Long rows, Long start) {
         log.debug("Getting records");
 
-        final UriBuilder uriBuilder = uriBuilderFactory.builder().path("/records");
+        final UriBuilder uriBuilder = uriBuilderFactory.builder().path(RECORDS_PATH);
 
         if (q != null) {
-            uriBuilder.queryParam("q", q);
+            uriBuilder.queryParam(QUERY_PARAMETER, q);
         }
         if (rows != null) {
-            uriBuilder.queryParam("rows", rows);
+            uriBuilder.queryParam(ROWS_PARAMETER, rows);
         }
         if (start != null) {
-            uriBuilder.queryParam("start", start);
+            uriBuilder.queryParam(START_PARAMETER, start);
         }
 
         final RequestEntity requestEntity = RequestEntity
