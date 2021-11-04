@@ -17,12 +17,9 @@
 package eu.clarin.cmdi.vlo.web.repository;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.web.service.VloApiClient;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +35,6 @@ import static org.mockito.Mockito.verify;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import reactor.core.publisher.Flux;
 
 /**
  *
@@ -71,21 +67,17 @@ public class ReactiveVloRecordRepositoryTest {
 
     @Test
     public void testFindAllPageable() {
-        when(apiClient.getRecords(any(String.class), any(Optional.class), any(Optional.class)))
+        when(apiClient.getRecords(any(String.class), any(Long.class), any(Long.class)))
                 .thenReturn(ImmutableList.of(
-                                createRecord("record1"),
-                                createRecord("record2")));
+                        createRecord("record1"),
+                        createRecord("record2")));
 
         final ReactiveVloRecordRepository instance = new ReactiveVloRecordRepository(apiClient);
         final Pageable pageable = PageRequest.of(2, 10);
         final List<VloRecord> resultAsList = instance.findAll(pageable);
-//        final Flux<VloRecord> take = result.take(5, true);
-//        final Iterable<VloRecord> resultAsIterable = take.toIterable();
-//        final Iterable<VloRecord> resultAsLimitedIterable = Iterables.limit(resultAsIterable, 100);
-//        final List<VloRecord> resultAsList = ImmutableList.copyOf(resultAsLimitedIterable);
         assertEquals(2, resultAsList.size());
 
-        verify(apiClient, times(1)).getRecords("*", Optional.of(10L), Optional.of(21L)); //start = offset + 1
+        verify(apiClient, times(1)).getRecords("*", 10L, 21L); //start = offset + 1
     }
 
     private VloRecord createRecord(String id) {

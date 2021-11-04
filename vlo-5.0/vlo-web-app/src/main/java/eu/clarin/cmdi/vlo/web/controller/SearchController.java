@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -47,15 +48,8 @@ public class SearchController {
     }
 
     @GetMapping("/")
-    public String index(final Model model) {
-        final List<VloRecord> records
-                //= recordRepository.findAll(PageRequest.of(0, 10));
-                = recordRepository.search("*", PageRequest.of(0, 10));
-
-        model.addAttribute("records", records);
-        model.addAttribute("searchRequest", new SearchRequest());
-
-        return "search";
+    public ModelAndView index(final Model model) {
+        return new ModelAndView("redirect:/search", model.asMap());
     }
 
     @RequestMapping(path = "/search", method = {RequestMethod.GET, RequestMethod.POST})

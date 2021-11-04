@@ -28,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriBuilderFactory;
 
 /**
@@ -44,17 +45,23 @@ public class VloApiClientImpl implements VloApiClient {
     private final UriBuilderFactory uriBuilderFactory;
 
     @Override
-    public List<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start) {
+    public List<VloRecord> getRecords(String q, Long rows, Long start) {
         log.debug("Getting records");
 
-        final URI uri = uriBuilderFactory.builder().path("/records")
-                .queryParam("q", q)
-                .queryParamIfPresent("rows", rows)
-                .queryParamIfPresent("start", start)
-                .build(true);
+        final UriBuilder uriBuilder = uriBuilderFactory.builder().path("/records");
+
+        if (q != null) {
+            uriBuilder.queryParam("q", q);
+        }
+        if (rows != null) {
+            uriBuilder.queryParam("rows", rows);
+        }
+        if (start != null) {
+            uriBuilder.queryParam("start", start);
+        }
 
         final RequestEntity requestEntity = RequestEntity
-                .get(uri)
+                .get(uriBuilder.build(true))
                 .accept(MediaType.APPLICATION_JSON)
                 .build();
 

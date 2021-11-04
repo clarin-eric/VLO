@@ -41,24 +41,18 @@ public class ReactiveVloRecordRepository implements VloRecordRepository {
 
     @Override
     public List<VloRecord> findAll(Pageable pageable) {
-        return search("*", Optional.of(pageable));
+        return search("*", pageable);
     }
 
     @Override
     public List<VloRecord> search(String query, Pageable pageable) {
-        return search(query, Optional.of(pageable));
-    }
-
-    private List<VloRecord> search(String query, Optional<Pageable> pageable) {
-        return apiClient.getRecords(query, getRows(pageable), getStart(pageable));
-    }
-
-    private Optional<Long> getRows(Optional<Pageable> pageable) {
-        return pageable.map(Pageable::getPageSize).map(Long::valueOf);
-    }
-
-    private Optional<Long> getStart(Optional<Pageable> pageable) {
-        return pageable.map(p -> p.getOffset() + 1);
+        if (pageable == null) {
+            return apiClient.getRecords(query, null, null);
+        } else {
+            final Long rows = Long.valueOf(pageable.getPageSize());
+            final long start = pageable.getOffset() + 1;
+            return apiClient.getRecords(query, rows, start);
+        }
     }
 
 }
