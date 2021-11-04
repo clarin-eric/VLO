@@ -17,49 +17,49 @@
 package eu.clarin.cmdi.vlo.web.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilderFactory;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
+@AllArgsConstructor
 public class VloApiClientImpl implements VloApiClient {
-    
-    private final WebClient webClient;
-    
-    public VloApiClientImpl(WebClient webClient) {
-        this.webClient = webClient;
-    }
-    
+
+    @Qualifier("vloApiRestTemplate")
+    private final RestTemplate restTemplate;
+
+    private final UriBuilderFactory uriBuilderFactory;
+
     @Override
-    public Flux<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start) {
+    public List<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start) {
         log.debug("Getting records");
-        return webClient
-                .method(HttpMethod.GET)
-                .uri(uriBuilder
-                        -> uriBuilder
-                        .path("/records")
-                        .queryParam("q", q)
-                        .queryParamIfPresent("rows", rows)
-                        .queryParamIfPresent("start", start)
-                        .build())
-                .exchangeToFlux(this::handleResponseForGetRecords);
-    }
-    
-    private Flux<VloRecord> handleResponseForGetRecords(ClientResponse response) {
-        if (response.statusCode().equals(HttpStatus.OK)) {
-            return response.bodyToFlux(VloRecord.class);
-        } else {
-            log.error("API response: {}", response.statusCode());
-            return response.createException().flatMapMany(Mono::error);
-        }
+
+        final URI uri = uriBuilderFactory.builder().path("/records")
+                .queryParam("q", q)
+                .queryParamIfPresent("rows", rows)
+                .queryParamIfPresent("start", start)
+                .build(true);
+
+        final RequestEntity requestEntity = RequestEntity
+                .get(uri)
+                .accept(MediaType.APPLICATION_JSON)
+                .build();
+
+        final ResponseEntity<VloRecord[]> response = restTemplate.exchange(requestEntity, VloRecord[].class);
+        //TODO: handle errors
+        return Arrays.asList(response.getBody());
     }
 }
