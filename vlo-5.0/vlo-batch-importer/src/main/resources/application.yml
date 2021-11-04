@@ -3,6 +3,8 @@ logging:
     eu.clarin.cmdi.vlo.batchimporter: INFO
     
 spring:
+  main:
+    web-application-type: none
   codec:
     max-in-memory-size: 50MB
 
