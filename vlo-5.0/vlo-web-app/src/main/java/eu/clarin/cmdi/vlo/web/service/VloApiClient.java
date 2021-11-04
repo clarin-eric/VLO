@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.web.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -26,6 +25,13 @@ import java.util.Optional;
  */
 public interface VloApiClient {
 
-    List<VloRecord> getRecords(String q, Optional<Long> rows, Optional<Long> start);
+    /**
+     * 
+     * @param q Query string has to be provided
+     * @param rows For pagination. Can be null to use default.
+     * @param start For pagination. Can be null to use default.
+     * @return 
+     */
+    List<VloRecord> getRecords(String q, Long rows, Long start);
 
 }
