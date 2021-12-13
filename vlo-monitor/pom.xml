@@ -54,7 +54,7 @@
         <dependency>
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo-commons</artifactId>
-            <version>4.10.2-SNAPSHOT</version>
+            <version>4.10.2-alpha1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
