@@ -30,10 +30,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,52 +93,52 @@ public class SelfLinkExtractorImplTest {
         assertNull(result);
     }
 
-    final private int performanceTestIterations = 100000;
-
-    @Test
-    @Ignore("Ignoring performance test")
-    public void testPerformance() throws Exception {
-        final Logger logger = LogManager.getLogger(SelfLinkExtractorImpl.class);
-        final Level level = logger.getLevel();
-        logger.setLevel(Level.OFF);
-        try {
-            final long start = System.currentTimeMillis();
-            runTestIterations(new SelfLinkExtractorImpl());
-            final long time = System.currentTimeMillis() - start;
-            System.out.printf("NEW: total time (2 * %d iterations): %d ms\n", performanceTestIterations, time);
-        } finally {
-            logger.setLevel(level);
-        }
-    }
-
-    @Test
-    @Ignore("Ignoring performance test")
-    public void testPerformanceOld() throws Exception {
-        final Logger logger = LogManager.getLogger(OldSelfLinkExtractor.class);
-        final Level level = logger.getLevel();
-        logger.setLevel(Level.OFF);
-        try {
-            final long start = System.currentTimeMillis();
-            runTestIterations(new OldSelfLinkExtractor());
-            final long time = System.currentTimeMillis() - start;
-            System.out.printf("OLD: total time (2 * %d iterations): %d ms\n", performanceTestIterations, time);
-        } finally {
-            logger.setLevel(level);
-        }
-    }
-
-    private void runTestIterations(SelfLinkExtractor instance) throws IOException {
-        createTestFile(TEST_RESOURCE);
-        for (int i = 0; i < performanceTestIterations; i++) {
-            assertEquals(TEST_SELFLINK, instance.extractMdSelfLink(testFile));
-        }
-        testFile.delete();
-
-        createTestFile(TEST_RESOURCE_NO_SELFLINK);
-        for (int i = 0; i < performanceTestIterations; i++) {
-            assertNull(instance.extractMdSelfLink(testFile));
-        }
-    }
+//    final private int performanceTestIterations = 100000;
+//
+//    @Test
+//    @Ignore("Ignoring performance test")
+//    public void testPerformance() throws Exception {
+//        final Logger logger = LogManager.getLogger(SelfLinkExtractorImpl.class);
+//        final Level level = logger.getLevel();
+//        logger.setLevel(Level.OFF);
+//        try {
+//            final long start = System.currentTimeMillis();
+//            runTestIterations(new SelfLinkExtractorImpl());
+//            final long time = System.currentTimeMillis() - start;
+//            System.out.printf("NEW: total time (2 * %d iterations): %d ms\n", performanceTestIterations, time);
+//        } finally {
+//            logger.setLevel(level);
+//        }
+//    }
+//
+//    @Test
+//    @Ignore("Ignoring performance test")
+//    public void testPerformanceOld() throws Exception {
+//        final Logger logger = LogManager.getLogger(OldSelfLinkExtractor.class);
+//        final Level level = logger.getLevel();
+//        logger.setLevel(Level.OFF);
+//        try {
+//            final long start = System.currentTimeMillis();
+//            runTestIterations(new OldSelfLinkExtractor());
+//            final long time = System.currentTimeMillis() - start;
+//            System.out.printf("OLD: total time (2 * %d iterations): %d ms\n", performanceTestIterations, time);
+//        } finally {
+//            logger.setLevel(level);
+//        }
+//    }
+//
+//    private void runTestIterations(SelfLinkExtractor instance) throws IOException {
+//        createTestFile(TEST_RESOURCE);
+//        for (int i = 0; i < performanceTestIterations; i++) {
+//            assertEquals(TEST_SELFLINK, instance.extractMdSelfLink(testFile));
+//        }
+//        testFile.delete();
+//
+//        createTestFile(TEST_RESOURCE_NO_SELFLINK);
+//        for (int i = 0; i < performanceTestIterations; i++) {
+//            assertNull(instance.extractMdSelfLink(testFile));
+//        }
+//    }
 
     private static class OldSelfLinkExtractor implements SelfLinkExtractor {
 

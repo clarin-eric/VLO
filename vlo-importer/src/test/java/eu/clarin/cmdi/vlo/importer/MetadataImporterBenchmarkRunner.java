@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer;
 
+import com.google.common.io.ByteStreams;
 import com.google.common.math.Stats;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
@@ -27,7 +28,6 @@ import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import org.apache.log4j.lf5.util.StreamUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -74,7 +74,7 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
         System.out.println("------------------\nEND OF BENCHMARK\n------------------");
         System.out.println(outFile.getAbsolutePath());
         try (FileInputStream fileInputStream = new FileInputStream(outFile)) {
-            StreamUtils.copy(fileInputStream, System.out);
+            ByteStreams.copy(fileInputStream, System.out);
         }
     }
 
