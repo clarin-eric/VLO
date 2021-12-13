@@ -30,6 +30,7 @@
             <id>dev</id>
             <properties>
                 <log4j.appender>Stdout</log4j.appender>
+                <vlo.import.logging.directory>.</vlo.import.logging.directory>
                 <vlo.import.logging.level>DEBUG</vlo.import.logging.level>
             </properties>
         </profile>
@@ -38,7 +39,8 @@
             <id>docker</id>
             <properties>
                 <log4j.appender>File</log4j.appender>
-                <vlo.import.logging.level>${IMPORTER_LOG_LEVEL}</vlo.import.logging.level>
+                <vlo.import.logging.directory>${env:IMPORTER_LOG_DIR}</vlo.import.logging.directory>
+                <vlo.import.logging.level>${env:IMPORTER_LOG_LEVEL}</vlo.import.logging.level>
             </properties>
         </profile>
     </profiles>
