@@ -117,9 +117,9 @@
 
         <!-- LOGGING DEPENDENCIES - LOG4J -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
 
         <dependency>
@@ -221,7 +221,6 @@
             <artifactId>wicket-jquery-ui</artifactId>
             <version>8.12.0</version>
         </dependency>
-
     </dependencies>
 
     <build>
