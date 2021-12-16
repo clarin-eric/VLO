@@ -43,8 +43,9 @@
         <vlo.mapping.version>1.6.1</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
-        <solr.version>8.9.0</solr.version>
-        <slf4j.version>1.7.30</slf4j.version>
+        <solr.version>8.8.2</solr.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <log4j2.version>2.16.0</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

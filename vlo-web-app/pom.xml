@@ -18,8 +18,8 @@
     <description></description>
 
     <properties>
-        <wicket.version>8.12.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>5.3.9</spring.version>
+        <wicket.version>8.13.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <spring.version>5.3.13</spring.version>
         <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
@@ -68,7 +68,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>2.0.14</version>
+            <version>2.0.15</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
@@ -117,9 +117,9 @@
 
         <!-- LOGGING DEPENDENCIES - LOG4J -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
 
         <dependency>
@@ -135,12 +135,6 @@
             <version>${solr.version}</version>
             <scope>test</scope>
             <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.solr</groupId>
@@ -148,12 +142,6 @@
             <version>${solr.version}</version>
             <scope>test</scope>
             <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-slf4j-impl</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- JMOCK FOR MOCKING -->
         <dependency>
@@ -221,7 +209,6 @@
             <artifactId>wicket-jquery-ui</artifactId>
             <version>8.12.0</version>
         </dependency>
-
     </dependencies>
 
     <build>

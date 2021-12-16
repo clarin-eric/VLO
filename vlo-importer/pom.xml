@@ -30,6 +30,7 @@
             <id>dev</id>
             <properties>
                 <log4j.appender>Stdout</log4j.appender>
+                <vlo.import.logging.directory>.</vlo.import.logging.directory>
                 <vlo.import.logging.level>DEBUG</vlo.import.logging.level>
             </properties>
         </profile>
@@ -38,7 +39,8 @@
             <id>docker</id>
             <properties>
                 <log4j.appender>File</log4j.appender>
-                <vlo.import.logging.level>${IMPORTER_LOG_LEVEL}</vlo.import.logging.level>
+                <vlo.import.logging.directory>${sys:IMPORTER_LOG_DIR}</vlo.import.logging.directory>
+                <vlo.import.logging.level>${sys:IMPORTER_LOG_LEVEL}</vlo.import.logging.level>
             </properties>
         </profile>
     </profiles>
@@ -137,9 +139,9 @@
             <version>3.12.0</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.usefultoys</groupId>
@@ -202,7 +204,7 @@
             <artifactId>rasa-mysql-impl</artifactId>
             <version>${rasa.version}</version>
         </dependency>
-
+    
         <!-- JMOCK FOR MOCKING -->
         <dependency>
             <groupId>org.jmock</groupId>
@@ -216,5 +218,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
     </dependencies>
 </project>
