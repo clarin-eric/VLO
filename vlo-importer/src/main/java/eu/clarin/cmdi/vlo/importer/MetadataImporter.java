@@ -90,6 +90,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.BaseHttpSolrClient.RemoteSolrException;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 
@@ -332,15 +333,16 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                 solrBridge.commit();
                 buildSuggesterIndex();
                 solrBridge.commit();
-            } catch (SolrServerException | IOException e) {
+            } catch (SolrServerException | RemoteSolrException |IOException e) {
                 if (e instanceof SocketTimeoutException || e.getCause() instanceof SocketTimeoutException) {
                     LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", e);
                 } else {
                     LOG.error("cannot commit:\n", e);
                 }
+            } finally {
+                resourceAvailabilityCheckerMonitor.shutdown();
+                shutdown();
             }
-            resourceAvailabilityCheckerMonitor.shutdown();
-            shutdown();
         }
         time = (System.currentTimeMillis() - start);
         logStatistics();
@@ -801,7 +803,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         resourceAvailabilityCheckerMonitor.scheduleAtFixedRate(() -> {
             try {
                 LOG.debug("Resource availability checker status report...");
-                try ( OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
+                try (OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
                     availabilityChecker.writeStatusSummary(availabilityCheckerlogWriter);
                 }
             } catch (IOException ex) {
