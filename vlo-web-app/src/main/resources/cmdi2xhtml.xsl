@@ -39,11 +39,11 @@
                         <xsl:variable name="collapseId" select="generate-id()"/>
                         <xsl:attribute name="class">node parent panel panel-default</xsl:attribute>
                         <div class="panel-heading node_title">
-                            <xsl:apply-templates select="@cmd1:ref|@ref"/>
                             <a role="button" data-toggle="collapse">
                                 <xsl:attribute name="href" select="concat('#', $collapseId)"/>
                                 <xsl:value-of select="local-name()"/>
                             </a>
+                            <xsl:apply-templates select="@cmd1:ref|@ref"/>
                             <xsl:apply-templates mode="attributes" select="."/>
                         </div>
                         <div class="panel-body collapse in node_content">
@@ -63,15 +63,18 @@
     <xsl:template match="@cmd1:ref|@ref">
         <xsl:variable name="resourceRef" select="//cmd1:ResourceProxy[@id=current() and (cmd1:ResourceType='Resource' or cmd1:ResourceType='LandingPage')]/cmd1:ResourceRef | //ResourceProxy[@id=current() and (ResourceType='Resource' or ResourceType='LandingPage')]/ResourceRef"/>
         <xsl:if test="$resourceRef">
-            <a class="node_resource_ref">
-                <xsl:attribute name="href"
-                    select="replace($resourceRef, '^hdl:', 'http://hdl.handle.net/')"/>
-                <span class="glyphicon glyphicon-file">
-                    <xsl:attribute name="title" select="$resourceRef"/>
-                </span>
-            </a>
+            <div class="node_resource_ref">
+                <a>
+                    <xsl:attribute name="href"
+                        select="replace($resourceRef, '^hdl:', 'http://hdl.handle.net/')"/>
+                    <span class="glyphicon glyphicon-file">
+                        <xsl:attribute name="title" select="$resourceRef"/>
+                    </span>
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="$resourceRef" />
+                </a>
+            </div>
         </xsl:if>
-        <xsl:text> </xsl:text>
     </xsl:template>
 
     <xsl:template mode="attributes" match="*">
