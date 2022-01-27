@@ -33,6 +33,7 @@ public class ResourceTypeIcon extends WebMarkupContainer {
     public final static String LANDING_PAGE = "LANDINGPAGE";
     public final static String SEARCH_PAGE = "SEARCHPAGE";
     public final static String SEARCH_SERVICE = "SEARCHSERVICE";
+    public final static String HIERARCHY = "HIERARCHY";
 
     public ResourceTypeIcon(String id, IModel<String> model) {
         super(id, model);

@@ -27,6 +27,8 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
+import eu.clarin.cmdi.vlo.wicket.model.NotNullModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -108,18 +110,21 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         resourcesTable.add(resourceListing);
 
         // special items in table for landing page, search page and search service 'resources'
-        landingPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<String>(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
-        searchPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<String>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE)));
+        landingPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE)));
+        searchPagesLinkModel = new CollectionListModel<>(new SolrFieldModel<>(getModel(), fieldNameService.getFieldName(FieldKey.SEARCHPAGE)));
         if (enableFcsLinks) {
             searchServiceLinkModel = new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE));
         } else {
             searchServiceLinkModel = new Model<>();
         }
 
+        final RecordMetadataLinksCountModel childRecordCountModel = new RecordMetadataLinksCountModel(documentModel);
+
         resourcesTable
-                .add(createSearchPageItems("searchPageItems").add(newSpecialLinkVisibilityBehavior(searchPagesLinkModel)))
-                .add(createSearchServiceItem(documentModel).add(newSpecialLinkVisibilityBehavior(searchServiceLinkModel)))
-                .add(createLandingPageItems("landingPageItems").add(newSpecialLinkVisibilityBehavior(landingPagesLinkModel)));
+                .add(createSearchPageItems("searchPageItems").add(specialLinkVisibilityBehavior(NotNullModel.of(searchPagesLinkModel))))
+                .add(createSearchServiceItem(documentModel).add(specialLinkVisibilityBehavior(NotNullModel.of(searchServiceLinkModel))))
+                .add(createLandingPageItems("landingPageItems").add(specialLinkVisibilityBehavior(NotNullModel.of(landingPagesLinkModel))))
+                .add(createHierarchyItem(childRecordCountModel).add(specialLinkVisibilityBehaviorLastPage(() -> childRecordCountModel.getObject() > 0)));
 
         // pagination
         add(new BootstrapAjaxPagingNavigator("paging", resourceListing) {
@@ -159,6 +164,15 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         return new ResourceLinksPanelSearchServiceItem("searchServiceItem", searchServiceLinkModel, documentModel);
     }
 
+    private ResourceLinksPanelHierarchyItem createHierarchyItem(IModel<Integer> childRecordCountModel) {
+        return new ResourceLinksPanelHierarchyItem("hierarchyItem", childRecordCountModel) {
+            @Override
+            protected void switchToHierarchyTab(Optional<AjaxRequestTarget> target) {
+                switchToTab(HIERARCHY_SECTION, target);
+            }
+        };
+    }
+
     private SpecialLinkItemsView createLandingPageItems(String id) {
         final SpecialLinkItemsView landingPageItems = new SpecialLinkItemsView(id, "landing page", ResourceTypeIcon.LANDING_PAGE, landingPagesLinkModel) {
             @Override
@@ -170,9 +184,14 @@ public abstract class ResourceLinksPanel extends GenericPanel<SolrDocument> {
         return landingPageItems;
     }
 
-    private Behavior newSpecialLinkVisibilityBehavior(final IModel<?> linkModel) {
+    private Behavior specialLinkVisibilityBehavior(final IModel<Boolean> linkModel) {
         return BooleanVisibilityBehavior.visibleOnTrue(
-                () -> linkModel.getObject() != null && resourceListing.getCurrentPage() == 0);
+                () -> linkModel.getObject() && resourceListing.getCurrentPage() == 0);
+    }
+
+    private Behavior specialLinkVisibilityBehaviorLastPage(final IModel<Boolean> linkModel) {
+        return BooleanVisibilityBehavior.visibleOnTrue(
+                () -> linkModel.getObject() && resourceListing.getCurrentPage() + 1 == resourceListing.getPageCount());
     }
 
     /**
