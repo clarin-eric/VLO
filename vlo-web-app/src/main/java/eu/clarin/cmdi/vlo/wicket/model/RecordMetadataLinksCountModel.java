@@ -39,12 +39,13 @@ public class RecordMetadataLinksCountModel implements IModel<Integer> {
         final FieldNameService fieldNameService = VloWicketApplication.get().getFieldNameService();
 
         final SolrDocument document = documentModel.getObject();
-        final Object partCount = document.getFieldValue(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
-        if (partCount instanceof Integer) {
-            return (Integer) partCount;
-        } else {
-            return 0;
+        if (document != null) {
+            final Object partCount = document.getFieldValue(fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
+            if (partCount instanceof Integer) {
+                return (Integer) partCount;
+            }
         }
+        return 0;
     }
 
     @Override

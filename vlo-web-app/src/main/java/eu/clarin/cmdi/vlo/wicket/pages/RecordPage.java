@@ -45,6 +45,7 @@ import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAware;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PermaLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
@@ -203,6 +204,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
         }
 
+        final IModel<Integer> childRecordsCountModel = new RecordMetadataLinksCountModel(getModel());
         linksCountLabelModel = new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
@@ -210,7 +212,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 if (document != null) {
                     final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
                     if (countValue instanceof Integer) {
-                        Long fieldValuesCount
+                        final Long fieldValuesCount
                                 = Streams.concat(
                                         // landing page links
                                         Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
@@ -220,7 +222,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                                         showFcsLinks
                                                 ? Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty())
                                                 : Stream.empty())
-                                        .collect(Collectors.counting());
+                                        .collect(Collectors.counting())
+                                // add child records
+                                + childRecordsCountModel.getObject();
                         if (fieldValuesCount == 0) {
                             return ((Integer) countValue).toString();
                         } else {
