@@ -34,6 +34,7 @@ import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
@@ -96,6 +97,8 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     private final IModel<Boolean> resourceInfoVisibilityModel;
     private final IModel<Boolean> resourcesLinkVisibilityModel;
     private final IModel<Boolean> hierarchyLinkVisibilityModel;
+    private final IModel<Boolean> recordHasHierarchyModel;
+    private final IModel<Integer> metadataChilderenCountModel;
 
     public RecordDetailsResourceInfoPanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -134,10 +137,29 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                 = () -> (resourcesModel.getObject() != null
                 && resourcesModel.getObject().size() > 1);
 
-        final RecordHasHierarchyModel recordHasHierarchyModel = new RecordHasHierarchyModel(model);
+        metadataChilderenCountModel = new RecordMetadataLinksCountModel(model);
 
+        // show hierarchy if no resources OR if there are children
+        recordHasHierarchyModel = new RecordHasHierarchyModel(model);
         hierarchyLinkVisibilityModel
-                = () -> ((resourcesModel.getObject() == null || resourcesModel.getObject().isEmpty()) && recordHasHierarchyModel.getObject());
+                = () -> ((resourcesModel.getObject() == null || resourcesModel.getObject().isEmpty() || metadataChilderenCountModel.getObject() > 0) && recordHasHierarchyModel.getObject());
+    }
+
+    @Override
+    public void detachModels() {
+        super.detachModels();
+        resourcesModel.detach();
+        resourceInfoModel.detach();
+        landingPageResourceInfoModel.detach();
+        resourceInfoLinkModel.detach();
+        searchPageLinksModel.detach();
+        searchServiceLinksModel.detach();
+        landingPageVisibilityModel.detach();
+        resourceInfoVisibilityModel.detach();
+        resourcesLinkVisibilityModel.detach();
+        hierarchyLinkVisibilityModel.detach();
+        recordHasHierarchyModel.detach();
+        metadataChilderenCountModel.detach();
     }
 
     @Override
@@ -330,7 +352,10 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                     public void onClick(Optional<AjaxRequestTarget> target) {
                         switchToTab(HIERARCHY_SECTION, target);
                     }
-                });
+                }.add(new Label("resourcesCount",
+                        new StringResourceModel("resourcesCount", metadataChilderenCountModel))
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> metadataChilderenCountModel.getObject() > 0))
+                ));
     }
 
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
