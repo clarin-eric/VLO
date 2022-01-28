@@ -110,8 +110,14 @@ public class SearchResultItemPanel extends Panel {
         this.selectionModel = selectionModel;
         this.documentModel = new PropertyModel<>(documentExpansionPairModel, "document");
 
+        // part count model to determine whether a record is a collection record
+        final RecordMetadataLinksCountModel recordMetadataLinksCountModel = new RecordMetadataLinksCountModel(documentModel);
+
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
                 .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this)))
+                // add icon to title for collection records
+                .add(new WebMarkupContainer("titleCollectionRecordIcon")
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> recordMetadataLinksCountModel.getObject() > 0)))
         );
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION)), Model.of(fieldNameService.getFieldName(FieldKey.COLLECTION)))
@@ -140,8 +146,6 @@ public class SearchResultItemPanel extends Panel {
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
-        // part count model to determine whether a record is a collection record
-        final RecordMetadataLinksCountModel recordMetadataLinksCountModel = new RecordMetadataLinksCountModel(documentModel);
 
         final SolrFieldModel<Integer> resourceAvailabilityScoreModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE));
         final IModel<Boolean> resourceAvailabilityWarningModel = new LoadableDetachableModel<Boolean>() {
@@ -194,7 +198,7 @@ public class SearchResultItemPanel extends Panel {
                 //badge for record with no resources
                 .add(new WebMarkupContainer("noResources")
                         .add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
-                        .add(BooleanVisibilityBehavior.visibleOnTrue(()->countProvider.size() == 0 && recordMetadataLinksCountModel.getObject() <= 0))
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> countProvider.size() == 0 && recordMetadataLinksCountModel.getObject() <= 0))
                 )
                 //badge for availability warning
                 .add(new WebMarkupContainer("availabilityWarning")
