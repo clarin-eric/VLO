@@ -43,30 +43,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             <li wicket:id="collectionRecord">
                                 <a wicket:id="recordLink" href="record1.html" title="Collection record">
                                     <span class="badge">
-                                        <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
-                                    </span>
-                                </a>
+                                        <span wicket:id="hierarchyChildrenCountLabel">1</span>
+                                        <i class="fa fa-sitemap" aria-hidden="true"></i>
+                                    </span></a>
                             </li>
                             <li wicket:id="resourceCount">
                                 <a wicket:id="recordLink" href="record1.html">
                                     <span class="badge">
                                         <span wicket:id="resourceCountLabel">1</span>
                                         <span wicket:id="resourceTypeIcon" class="glyphicon" aria-hidden="true"></span>
-                                    </span>
-                                </a>
+                                    </span></a>
                             </li>
                             <li wicket:id="noResources">
                                 <a wicket:id="recordLink" href="record1.html" title="Record without resource links">
                                     <span class="badge">
                                         <span>0</span>
                                         <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
-                                    </span>
-                                </a>
+                                    </span></a>
                             </li>
                             <li wicket:id="availabilityWarning">
                                 <a wicket:id="recordLink" href="record1.html" title="Some linked resources may not be available or have restricted access">
-                                    <span wicket:id="warningBadge"></span>
-                                </a>
+                                    <span wicket:id="warningBadge"></span></a>
                             </li>
                         </ul>
                     </div>

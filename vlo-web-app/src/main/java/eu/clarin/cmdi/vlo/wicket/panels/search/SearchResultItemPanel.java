@@ -41,6 +41,7 @@ import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
@@ -140,7 +141,7 @@ public class SearchResultItemPanel extends Panel {
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
         // part count model to determine whether a record is a collection record
-        final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
+        final RecordMetadataLinksCountModel recordMetadataLinksCountModel = new RecordMetadataLinksCountModel(documentModel);
 
         final SolrFieldModel<Integer> resourceAvailabilityScoreModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE));
         final IModel<Boolean> resourceAvailabilityWarningModel = new LoadableDetachableModel<Boolean>() {
@@ -183,27 +184,17 @@ public class SearchResultItemPanel extends Panel {
                 .add(new ResourceCountDataView("resourceCount", countProvider))
                 //badge for collection records
                 .add(new WebMarkupContainer("collectionRecord")
-                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION))
                         // collection, go to hierarchy instead of records
+                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION)
+                                .add(new Label("hierarchyChildrenCountLabel", recordMetadataLinksCountModel))
+                                .add(new AttributeModifier("title", new StringResourceModel("searchresult.hierarchy.badgetitle", recordMetadataLinksCountModel))))
                         //badge for records without resources (resource count data view will not yield any badges)
-                        .add(new Behavior() {
-                            @Override
-                            public void onConfigure(Component component) {
-                                component.setVisible(partCountModel.getObject() != null);
-                            }
-
-                        })
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> recordMetadataLinksCountModel.getObject() > 0))
                 )
                 //badge for record with no resources
                 .add(new WebMarkupContainer("noResources")
                         .add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
-                        .add(new Behavior() {
-                            @Override
-                            public void onConfigure(Component component) {
-                                component.setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
-                            }
-
-                        })
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(()->countProvider.size() == 0 && recordMetadataLinksCountModel.getObject() <= 0))
                 )
                 //badge for availability warning
                 .add(new WebMarkupContainer("availabilityWarning")
@@ -345,7 +336,7 @@ public class SearchResultItemPanel extends Panel {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION);
             item.add(resourceLink
                     .add(new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count")))
-                    .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
+                    .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<>(item.getModel(), "resourceType")))
                     .add(new AttributeModifier("title", getResourceCountModel(item.getModel())))
             );
         }
