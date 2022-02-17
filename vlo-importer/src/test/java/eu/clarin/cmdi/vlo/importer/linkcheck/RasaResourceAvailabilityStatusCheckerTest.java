@@ -18,13 +18,15 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
+import eu.clarin.cmdi.rasa.DAO.Statistics.CategoryStatistics;
+import eu.clarin.cmdi.rasa.DAO.Statistics.Statistics;
+import eu.clarin.cmdi.rasa.DAO.Statistics.StatusStatistics;
 import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -54,62 +56,60 @@ public class RasaResourceAvailabilityStatusCheckerTest {
 
     @Before
     public void setUp() {
-        checkedLinkResource = new CheckedLinkResource() {
-
-            @Override
-            public Map<String, CheckedLink> get(Collection<String> uri, Optional<CheckedLinkFilter> filter) {
-                return ImmutableMap.<String, CheckedLink>builder()
-                        .put(createResponseMapEntry("http://uri1", 200))
-                        .put(createResponseMapEntry("http://uri2", 404))
-                        .build();
-            }
-
-            @Override
-            public Optional<CheckedLink> get(String uri) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public List<CheckedLink> getHistory(String url, CheckedLinkResource.Order order) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Boolean save(CheckedLink checkedLink) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Stream<CheckedLink> get(Optional<CheckedLinkFilter> optnl, int i, int i1) {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Optional<CheckedLink> get(String url, String collection) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Boolean delete(String url) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Boolean saveToHistory(CheckedLink checkedLink) throws SQLException {
-                throw new UnsupportedOperationException("Not supported"); //not needed for test
-            }
-
-            @Override
-            public Boolean saveToHistory(String string) throws SQLException {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
+        checkedLinkResource = new TestCheckedLinkResource();
         instance = new RasaResourceAvailabilityStatusChecker(checkedLinkResource);
+    }
+
+    private class TestCheckedLinkResource implements CheckedLinkResource {
+
+        @Override
+        public Map<String, CheckedLink> get(Collection<String> uri, Optional<CheckedLinkFilter> filter) {
+            return ImmutableMap.<String, CheckedLink>builder()
+                    .put(createResponseMapEntry("http://uri1", 200))
+                    .put(createResponseMapEntry("http://uri2", 404))
+                    .build();
+        }
+
+        @Override
+        public Stream<CheckedLink> get(CheckedLinkFilter filter) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Boolean save(CheckedLink checkedLink) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public int getCount(CheckedLinkFilter filter) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Statistics getStatistics(CheckedLinkFilter filter) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Stream<CategoryStatistics> getCategoryStatistics(CheckedLinkFilter filter) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Stream<StatusStatistics> getStatusStatistics(CheckedLinkFilter filter) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public Map<String, CheckedLink> getMap(CheckedLinkFilter filter) throws SQLException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public CheckedLinkFilter getCheckedLinkFilter() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
     }
 
     public static AbstractMap.SimpleImmutableEntry<String, CheckedLink> createResponseMapEntry(String url, int status) {

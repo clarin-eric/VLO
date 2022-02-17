@@ -27,7 +27,9 @@ import java.util.ArrayList;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import com.opentable.db.postgres.junit.EmbeddedPostgresRules;
 import com.opentable.db.postgres.junit.PreparedDbRule;
+import org.junit.Ignore;
 
+@Ignore
 public class ExposureTest {
     private final static Logger logger = LoggerFactory.getLogger(ExposureTest.class);
     private EmbeddedPostgres pg = null;
