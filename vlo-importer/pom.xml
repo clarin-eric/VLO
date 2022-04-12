@@ -22,7 +22,7 @@
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
         <vlo.import.logging.level>INFO</vlo.import.logging.level>
-        <rasa.version>5.0.0</rasa.version>
+        <rasa.version>5.0.2</rasa.version>
     </properties>
 
     <profiles>
