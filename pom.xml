@@ -10,7 +10,7 @@
     <!-- When updating the version number here, also update the version number 
         in each module's pom.xml -->
     <version>4.11-SNAPSHOT</version>
-
+    
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
         <name>CLARIN</name>
@@ -44,8 +44,8 @@
         
         <!-- Common runtime dependency versions -->
         <solr.version>8.11.1</solr.version>
-        <slf4j.version>1.7.32</slf4j.version>
-        <log4j2.version>2.17.1</log4j2.version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <log4j2.version>2.17.2</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
