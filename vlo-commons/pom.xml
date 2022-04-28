@@ -35,7 +35,7 @@
         <!-- vlo exposure config values -->
         <vloconfig.vloExposureEnabled>false</vloconfig.vloExposureEnabled>
         <!-- link checker database connection -->
-        <vloconfig.linkCheckerDbConnectionString></vloconfig.linkCheckerDbConnectionString>
+        <vloconfig.linkCheckerDbConnectionString/>
         <vloconfig.linkCheckerMaxDaysSinceChecked>100</vloconfig.linkCheckerMaxDaysSinceChecked>
         <!-- external service URLs -->
         <vloconfig.conceptRegistryUrl>https://concepts.clarin.eu/ccr/api/find-concepts</vloconfig.conceptRegistryUrl>
@@ -47,7 +47,7 @@
         <vloconfig.centreRegistryCentresListJsonUrl>https://centres.clarin.eu/api/model/Centre</vloconfig.centreRegistryCentresListJsonUrl>
         <vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>https://centres.clarin.eu/api/model/OAIPMHEndpoint</vloConfig.centreRegistryOaiPmhEndpointsListJsonUrl>
         <vloConfig.webAppLocale>en-GB</vloConfig.webAppLocale>
-        <vloConfig.otherProvidersMarkupFile></vloConfig.otherProvidersMarkupFile>
+        <vloConfig.otherProvidersMarkupFile/>
         <vloConfig.enableFcsLinks>true</vloConfig.enableFcsLinks>
     </properties>
 
@@ -154,8 +154,8 @@
                 <vloconfig.mappingFilesLocation>/vlo-mapping/uniform-maps/</vloconfig.mappingFilesLocation>
                 <!-- empty location uses bundled default facet concepts file 
                 (from the VLO-mapping project) -->
-                <vloconfig.facetConceptsFileLocation></vloconfig.facetConceptsFileLocation>
-                <vloconfig.facetsConfigFileLocation></vloconfig.facetsConfigFileLocation>
+                <vloconfig.facetConceptsFileLocation/>
+                <vloconfig.facetsConfigFileLocation/>
                 <!-- bundled value mappings definition -->
                 <vloconfig.valueMappingFile>/vlo-mapping/value-maps/dist/master.xml</vloconfig.valueMappingFile>
                 <!-- these credentials match the credentials in docker compose 
@@ -220,7 +220,7 @@
         <dependency>
             <groupId>com.ximpleware</groupId>
             <artifactId>vtd-xml</artifactId>
-            <version>2.11</version>
+            <version>2.13.4</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
