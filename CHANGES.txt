@@ -1,5 +1,12 @@
 Bug fixes and new features
 --------------------------
+VLO 4.10.3 (April 2022)
+* Various dependencies upgraded
+* Fix in CMDI - HTML stylesheet
+		<https://github.com/clarin-eric/VLO/commit/09b13039f3fbc6dc930a8a9ba048da92e2d6630a>
+* Visibility of metadata hierarchies
+		<https://github.com/clarin-eric/VLO/issues/330>
+
 VLO 4.10.2 (December 2021)
 * Various dependencies upgraded,
 * Migrated logging to latest version of  Log4J 2.x (which fixes log4shell vulnerability)
