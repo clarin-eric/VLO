@@ -13,11 +13,4 @@
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
-    <DataRoot processHierarchyDirs="NONE">
-        <originName>Europeana</originName>
-        <rootFile>/srv/vlo-data/europeana/results/cmdi/</rootFile>
-        <prefix>https://beta-vlo.clarin.eu/data/</prefix>
-        <tostrip>/srv/vlo-data/</tostrip>
-        <deleteFirst>false</deleteFirst>
-    </DataRoot>
 </dataRoots>
