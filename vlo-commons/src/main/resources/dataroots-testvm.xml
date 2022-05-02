@@ -6,7 +6,7 @@
         <tostrip>/srv/vlo-data/</tostrip>
         <deleteFirst>false</deleteFirst>
     </DataRoot>
-    <DataRoot processHierarchyDirs="NONE">
+    <DataRoot processHierarchyDirs="Europeana">
         <originName>Others</originName>
         <rootFile>/srv/vlo-data/others/results/cmdi/</rootFile>            
         <prefix>http://alpha-vlo.clarin.eu/data/</prefix>
