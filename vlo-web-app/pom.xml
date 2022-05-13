@@ -19,7 +19,7 @@
 
     <properties>
         <wicket.version>8.14.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>5.3.18</spring.version>
+        <spring.version>5.3.20</spring.version>
         <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
