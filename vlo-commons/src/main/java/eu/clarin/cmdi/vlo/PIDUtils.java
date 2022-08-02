@@ -100,6 +100,19 @@ public class PIDUtils {
         }
     }
 
+    /**
+     *
+     * @param uri
+     * @return whether the provided URI is a handle
+     */
+    public static boolean isActionableLink(String uri) {
+        if (uri == null) {
+            return false;
+        } else {
+            return ACTIONABLE_LINK_PATTERN.matcher(uri).matches();
+        }
+    }
+
     public static Optional<PIDType> getType(String uri) {
         if (isPid(uri)) {
             if (isHandle(uri)) {

@@ -206,6 +206,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS(), true));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getClipBoardJS(), true));
         response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloClipboardJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVcrPluginJS(), true));
 
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));

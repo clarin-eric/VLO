@@ -16,11 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import static eu.clarin.cmdi.vlo.FacetConstants.DOI_RESOLVER_URL;
-import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PROXY;
-import static eu.clarin.cmdi.vlo.FacetConstants.URN_NBN_RESOLVER_URL;
 import eu.clarin.cmdi.vlo.PIDUtils;
-import java.util.regex.Pattern;
 import org.apache.wicket.model.IModel;
 
 /**
