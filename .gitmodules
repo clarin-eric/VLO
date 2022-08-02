@@ -1,0 +1,3 @@
+[submodule "vlo-web-app/src/main/webapp/assets/vcr-plugin"]
+	path = vlo-web-app/src/main/webapp/assets/vcr-plugin
+	url = https://github.com/clarin-eric/js-vcr-integration.git
