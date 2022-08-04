@@ -137,7 +137,7 @@ press_key_to_continue() {
 	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
 	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
 
-	DOCKER_TARGET_VERSION_DEFAULT="vlo-${VLO_NEW_VERSION}-1"
+	DOCKER_TARGET_VERSION_DEFAULT="${VLO_NEW_VERSION}_1.0.0"
 	echo -n "Docker image version to release? [${DOCKER_TARGET_VERSION_DEFAULT}]"
 	read DOCKER_TARGET_VERSION
 	if [ "${DOCKER_TARGET_VERSION}" = "" ]; then
