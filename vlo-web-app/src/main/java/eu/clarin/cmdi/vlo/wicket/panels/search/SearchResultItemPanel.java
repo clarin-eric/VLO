@@ -224,6 +224,7 @@ public class SearchResultItemPanel extends Panel {
                 .add(new AttributeModifier("data-vcr-title", new NullFallbackModel(
                         new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.NAME)),
                         new StringResourceModel("searchpage.unnamedrecord", this))))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(() -> !Strings.isEmpty(config.getVcrSubmitEndpoint())))
         );
 
         add(new WebMarkupContainer("scoreContainer")

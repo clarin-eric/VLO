@@ -22,7 +22,6 @@ import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
 import java.util.Map;
-import javax.inject.Inject;
 import org.apache.wicket.request.resource.ContextRelativeResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;

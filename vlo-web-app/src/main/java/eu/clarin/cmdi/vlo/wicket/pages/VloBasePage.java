@@ -27,6 +27,7 @@ import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.SnippetConfig;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
@@ -76,7 +77,10 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     public static final String VLO_APPLICATION_TITLE_ENV_VAR = "VLO_APPLICATION_TITLE";
     public static final String VLO_PAGE_TITLE_ENV_VAR = "VLO_PAGE_TITLE";
     public static final String VLO_INSTANCE_INFO_ENV_VAR = "VLO_INSTANCE_INFO";
-    
+
+    @SpringBean
+    private VloConfig vloConfig;
+
     @SpringBean
     private JavaScriptResources javaScriptResources;
 
@@ -209,8 +213,11 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getHistoryApiJS(), true));
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getClipBoardJS(), true));
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloClipboardJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginConfigJS(), true));
+
+        if (!Strings.isEmpty(vloConfig.getVcrSubmitEndpoint())) {
+            response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginJS(), true));
+            response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginConfigJS(), true));
+        }
 
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
@@ -279,6 +286,10 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
         );
         return navbar;
+    }
+
+    public final VloConfig getVloConfig() {
+        return vloConfig;
     }
 
 }
