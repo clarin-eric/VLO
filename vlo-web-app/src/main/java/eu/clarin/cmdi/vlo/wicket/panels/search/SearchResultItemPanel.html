@@ -77,7 +77,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <div class="row">
                 <div class="col-md-2 col-md-push-10">
                     <div wicket:id="licenseInfo" class="searchresult-licenseInfo">[LICENSE INFO]</div>
-                    <a wicket:id="addToVcrQueueLink" class="btn btn-default"><span class="glyphicon glyphicon-plus-sign"></span> VCR</a>
                 </div>
                 <div class="col-md-10 col-md-pull-2">
                     <p class="searchresultmoreless">
@@ -87,6 +86,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </p>
                     <div wicket:id="collapsedDetails" class="searchresultitembrief">[COLLAPSED]</div>
                     <div wicket:id="expandedDetails" class="searchresultitemextended">[COLLAPSED]</div>
+                    <div class="search-results-duplicates well well-sm" wicket:id="duplicateResults"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10">
                     <div wicket:id="landingPageLinkContainer" class="search-result-landing-page-link">
                         <a wicket:id="landingPageLink" href="http://hdl.handle.net/11022/0000-0000-8DE3-1">
                             <i class="fa fa-home" aria-hidden="true"></i>
@@ -98,7 +102,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 ></wicket:enclosure
                             ></a>
                     </div>
-                    <div class="search-results-duplicates well well-sm" wicket:id="duplicateResults"></div>
+                </div> 
+                <div class="col-md-2">
+                    <a wicket:id="addToVcrQueueLink" class="badge add-to-vcr-badge" title="Queue this record for submission to a Virtual Collection"><span class="glyphicon glyphicon-plus-sign"></span> VCR</a>
                 </div>
             </div>
         </wicket:panel>

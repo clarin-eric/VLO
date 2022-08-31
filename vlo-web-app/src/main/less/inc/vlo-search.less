@@ -180,7 +180,7 @@
             background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
 
             /* mixin from vlo-license-icons.less */
-            .license-icon-classes(); 
+            .license-icon-classes();
         }
     }
 
@@ -237,6 +237,25 @@
         .search-result-landing-page-link-location {
             font-style: italic;
         }
+    }
+
+
+
+    a.badge, a > .badge {
+        &:hover {
+            background: lighten(@badge-bg, 25%);
+        }
+
+        &[disabled=disabled] {
+            opacity: .2;
+            &:hover {
+                cursor: default;
+            }
+        }
+    }
+
+    .add-to-vcr-badge {
+
     }
 
 }
@@ -315,7 +334,7 @@ a.create-virtual-collection.disabled {
     #temporalCoverageBoundInputs {
         margin-bottom: .5em;
     }
-} 
+}
 
 /*******************
 /* SEARCH WORDS HIGHLIGHTING
