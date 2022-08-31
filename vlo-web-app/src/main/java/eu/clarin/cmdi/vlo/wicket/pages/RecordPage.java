@@ -138,6 +138,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private PiwikConfig piwikConfig;
     @SpringBean
     private FieldNameService fieldNameService;
+    @SpringBean
+    private JavaScriptResources javaScriptResources;
 
     private final IModel<SearchContext> navigationModel;
     private final IModel<QueryFacetsSelection> selectionModel;
@@ -479,7 +481,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour(), true));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourRecordPage();});", "initTourRecordPage"));
 

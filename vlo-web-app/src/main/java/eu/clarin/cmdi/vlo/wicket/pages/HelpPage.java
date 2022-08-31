@@ -35,6 +35,8 @@ public class HelpPage extends VloBasePage {
 
     @SpringBean
     private VloConfig vloConfig;
+    @SpringBean
+    private JavaScriptResources javaScriptResources;
 
     @Override
     protected void onInitialize() {
@@ -47,7 +49,7 @@ public class HelpPage extends VloBasePage {
         super.renderHead(response);
 
         // Table of content with scrollspy (required CSS is compiled along with the VLO LESS)
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapToc()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapToc()));
         // Enable scroll spy on the body tag, required for the table of contents
         final String scrollspyScript = ""
                 + "$(document).ready(function() {"

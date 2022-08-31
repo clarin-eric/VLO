@@ -76,6 +76,9 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     public static final String VLO_APPLICATION_TITLE_ENV_VAR = "VLO_APPLICATION_TITLE";
     public static final String VLO_PAGE_TITLE_ENV_VAR = "VLO_PAGE_TITLE";
     public static final String VLO_INSTANCE_INFO_ENV_VAR = "VLO_INSTANCE_INFO";
+    
+    @SpringBean
+    private JavaScriptResources javaScriptResources;
 
     @SpringBean
     private PiwikConfig piwikConfig;
@@ -202,10 +205,12 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         //render jQuery first, it is the most common dependency
         response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference(), true));
         // Include other JavaScript for header (e.g. permalink animation)
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloHeaderJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHistoryApiJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getClipBoardJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getVloClipboardJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloHeaderJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getHistoryApiJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getClipBoardJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloClipboardJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginConfigJS(), true));
 
         if (bottomSnippet != null) {
             response.render(JavaScriptHeaderItem.forScript(bottomSnippet, "bottomSnippet"));
@@ -228,8 +233,8 @@ public class VloBasePage<T> extends GenericWebPage<T> {
                 // add 'class' attribute to header indicating version qualifier (e.g. 'beta')
                 .add(new AttributeAppender("class", VloWicketApplication.get().getAppVersionQualifier(), " ")));
 
-        add(new Label("instanceInfo", instanceInfoModel).add(new InvisibleIfNullBehaviour(instanceInfoModel)));        
-        
+        add(new Label("instanceInfo", instanceInfoModel).add(new InvisibleIfNullBehaviour(instanceInfoModel)));
+
         add(new HideJavascriptFallbackControlsBehavior());
 
         // add Piwik tracker (if enabled)

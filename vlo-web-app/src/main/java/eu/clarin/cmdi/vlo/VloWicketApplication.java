@@ -94,6 +94,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private FieldNameService fieldNameService;
     @Inject
     private PermalinkService permalinkService;
+    @Inject
+    private JavaScriptResources javaScriptResources;
 
     private ApplicationContext applicationContext;
     private String appVersionQualifier;
@@ -160,10 +162,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         getResourceSettings().getStringResourceLoaders().add(new BundleStringResourceLoader("application"));
         // register JavaScript bundle (combines  JavaScript source in a single resource to decrease number of client requests)
         getResourceBundles().addJavaScriptBundle(VloBasePage.class, "vlo-js",
-                JavaScriptResources.getVloFrontJS(),
-                JavaScriptResources.getVloHeaderJS(),
-                JavaScriptResources.getSyntaxHelpJS(),
-                JavaScriptResources.getVloFacetsJS()
+                javaScriptResources.getVloFrontJS(),
+                javaScriptResources.getVloHeaderJS(),
+                javaScriptResources.getSyntaxHelpJS(),
+                javaScriptResources.getVloFacetsJS()
         );
     }
 
@@ -306,6 +308,10 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         return this.fieldNameService;
     }
 
+    public JavaScriptResources getJavaScriptResources() {
+        return this.javaScriptResources;
+    }
+
     /**
      * Like {@link #mountPage(java.lang.String, java.lang.Class) }, but using
      * {@link FragmentEncodingMountedMapper}
@@ -333,7 +339,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
                 new BootstrapSettings()
                         //bootstrap CSS is provided via markup (CSS link in HTML head)
                         .setThemeProvider(new SingleThemeProvider(new ExtremeNoopTheme()))
-                        .setJsResourceReference(JavaScriptResources.getBootstrapJS()));
+                        .setJsResourceReference(javaScriptResources.getBootstrapJS()));
     }
 
     private static class ExtremeNoopTheme implements ITheme {

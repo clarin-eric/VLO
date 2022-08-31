@@ -101,6 +101,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     private PageParametersConverter<QueryFacetsSelection> paramsConverter;
     @SpringBean
     private FieldNameService fieldNameService;
+    @SpringBean
+    private JavaScriptResources javaScriptResources;
 
     /**
      * Provider of search results including 'expansion' of collapsed (very
@@ -497,7 +499,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getBootstrapTour(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour(), true));
         response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourSearchPage();});", "initTourSearchPage"));
     }
