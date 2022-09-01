@@ -25,12 +25,15 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
+import eu.clarin.cmdi.vlo.wicket.UpdateVcrIntegrationOnDomReadyBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
+import eu.clarin.cmdi.vlo.wicket.model.ActionableLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
@@ -67,6 +70,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.string.Strings;
 
 /**
  * a panel for 'core links' (landing page and/or single resource)
@@ -185,6 +189,10 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                 .add(BooleanVisibilityBehavior.visibleOnTrue(hierarchyLinkVisibilityModel)));
 
         add(createResourcesTitle("resourcesTitle"));
+
+        add(createAddToVcrQueueLink("addToVcrQueueLink"));
+
+        add(new UpdateVcrIntegrationOnDomReadyBehavior());
     }
 
     private Component createResourcesTitle(String id) {
@@ -356,6 +364,20 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                         new StringResourceModel("resourcesCount", metadataChilderenCountModel))
                         .add(BooleanVisibilityBehavior.visibleOnTrue(() -> metadataChilderenCountModel.getObject() > 0))
                 ));
+    }
+
+    private Component createAddToVcrQueueLink(String id) {
+        return new WebMarkupContainer(id)
+                .add(new AttributeModifier("data-vcr-url",
+                        new NullFallbackModel(
+                                //TODO: wrap model with filter that only allows valid URLs and PIDs!
+                                new ActionableLinkModel(
+                                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SELF_LINK))),
+                                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA)))))
+                .add(new AttributeModifier("data-vcr-title", new NullFallbackModel(
+                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME)),
+                        new StringResourceModel("searchpage.unnamedrecord", this))))
+                .add(BooleanVisibilityBehavior.visibleOnTrue(() -> !Strings.isEmpty(config.getVcrSubmitEndpoint())));
     }
 
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
