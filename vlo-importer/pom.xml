@@ -144,11 +144,6 @@
             <version>${log4j2.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.usefultoys</groupId>
-            <artifactId>slf4j-toys</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>

@@ -333,7 +333,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                 solrBridge.commit();
                 buildSuggesterIndex();
                 solrBridge.commit();
-            } catch (SolrServerException | RemoteSolrException |IOException e) {
+            } catch (SolrServerException | RemoteSolrException | IOException e) {
                 if (e instanceof SocketTimeoutException || e.getCause() instanceof SocketTimeoutException) {
                     LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", e);
                 } else {
@@ -803,7 +803,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         resourceAvailabilityCheckerMonitor.scheduleAtFixedRate(() -> {
             try {
                 LOG.debug("Resource availability checker status report...");
-                try (OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(org.usefultoys.slf4j.LoggerFactory.getDebugOutputStream(LOG, "Resource availability checker status"))) {
+                try ( OutputStreamWriter availabilityCheckerlogWriter = new OutputStreamWriter(new LoggerOutputStream(LOG::debug, "Resource availability checker status: "))) {
                     availabilityChecker.writeStatusSummary(availabilityCheckerlogWriter);
                 }
             } catch (IOException ex) {
