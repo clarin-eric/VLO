@@ -31,6 +31,8 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import eu.clarin.cmdi.vlo.FieldKey;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Permalink service that uses a parameter converter and the current wicket
@@ -40,6 +42,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  */
 public class PermalinkServiceImpl implements PermalinkService {
+
     @Inject
     private FieldNameService fieldNameService;
 
@@ -55,7 +58,7 @@ public class PermalinkServiceImpl implements PermalinkService {
         if (selection != null) {
             params.mergeWith(paramsConverter.toParameters(selection));
         }
-        
+
         if (document != null) {
             params.add(VloWebAppParameters.DOCUMENT_ID, document.getFirstValue(fieldNameService.getFieldName(FieldKey.ID)));
         }
@@ -67,7 +70,21 @@ public class PermalinkServiceImpl implements PermalinkService {
 
         final CharSequence url = RequestCycle.get().urlFor(pageClass, params);
         final String absoluteUrl = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(url));
-        return absoluteUrl;
+        return UrlCleaner.cleanUp(absoluteUrl);
+    }
+
+    public static class UrlCleaner {
+
+        private final static Pattern JSESSION_ID_PATTERN = Pattern.compile("^(?<before>.*)(;jsessionid=[A-z0-9]*)(?<after>.*)$");
+
+        public static String cleanUp(String input) {
+            // remove ;jsessionid=... component
+            final Matcher jsessionIdMatcher = JSESSION_ID_PATTERN.matcher(input);
+            if (jsessionIdMatcher.matches()) {
+                return jsessionIdMatcher.replaceFirst("$1$3");
+            }
+            return input;
+        }
     }
 
 }
