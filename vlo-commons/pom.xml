@@ -14,8 +14,8 @@
     <version>4.11-SNAPSHOT</version>
     <name>VLO Commons</name>
     <properties>
-        <jackson.version>2.13.3</jackson.version>
-        <jackson.databind.version>2.13.3</jackson.databind.version>
+        <jackson.version>2.13.4</jackson.version>
+        <jackson.databind.version>2.13.4</jackson.databind.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
