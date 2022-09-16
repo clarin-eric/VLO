@@ -42,6 +42,7 @@ import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
+import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.RESOURCES_SECTION;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
@@ -367,16 +368,19 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     }
 
     private Component createAddToVcrQueueLink(String id) {
+
         return new WebMarkupContainer(id)
-                .add(new AttributeModifier("data-vcr-url",
+                .add(new AttributeModifier("data-vcr-uri",
                         new NullFallbackModel(
-                                //TODO: wrap model with filter that only allows valid URLs and PIDs!
                                 new ActionableLinkModel(
                                         new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SELF_LINK))),
                                 new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA)))))
-                .add(new AttributeModifier("data-vcr-title", new NullFallbackModel(
+                .add(new AttributeModifier("data-vcr-label", new NullFallbackModel(
                         new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME)),
                         new StringResourceModel("searchpage.unnamedrecord", this))))
+                .add(new AttributeModifier("data-vcr-description",
+                        new TruncatingStringModel(
+                                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION)), 1000, 990)))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(() -> !Strings.isEmpty(config.getVcrSubmitEndpoint())));
     }
 

@@ -48,6 +48,7 @@ import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
+import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
 import java.util.Optional;
@@ -234,15 +235,18 @@ public class SearchResultItemPanel extends Panel {
 
     private Component createAddToVcrQueueLink(String id) {
         final Component link = new WebMarkupContainer(id)
-                .add(new AttributeModifier("data-vcr-url",
+                .add(new AttributeModifier("data-vcr-uri",
                         new NullFallbackModel(
                                 //TODO: wrap model with filter that only allows valid URLs and PIDs!
                                 new ActionableLinkModel(
                                         new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SELF_LINK))),
                                 new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA)))))
-                .add(new AttributeModifier("data-vcr-title", new NullFallbackModel(
+                .add(new AttributeModifier("data-vcr-label", new NullFallbackModel(
                         new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.NAME)),
                         new StringResourceModel("searchpage.unnamedrecord", this))))
+                .add(new AttributeModifier("data-vcr-description",
+                        new TruncatingStringModel(
+                                new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.DESCRIPTION)), 1000, 990)))
                 .add(BooleanVisibilityBehavior.visibleOnTrue(() -> !Strings.isEmpty(config.getVcrSubmitEndpoint())));
         if (piwikConfig.isEnabled()) {
             final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_VCR, PiwikEventConstants.PIWIK_EVENT_ACTION_VCR_ADD_TO_QUEUE) {
