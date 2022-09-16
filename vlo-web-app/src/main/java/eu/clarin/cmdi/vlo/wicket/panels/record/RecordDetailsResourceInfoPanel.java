@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.AddToVcrQueueButtonBehavior;
 import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.FieldKey;
@@ -29,11 +30,9 @@ import eu.clarin.cmdi.vlo.wicket.UpdateVcrIntegrationOnDomReadyBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
-import eu.clarin.cmdi.vlo.wicket.model.ActionableLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.CollectionListModel;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
-import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDContext;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordHasHierarchyModel;
@@ -42,7 +41,6 @@ import eu.clarin.cmdi.vlo.wicket.model.ResolvingLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
-import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.RESOURCES_SECTION;
 import static eu.clarin.cmdi.vlo.wicket.pages.RecordPage.HIERARCHY_SECTION;
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
@@ -71,7 +69,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.Strings;
 
 /**
  * a panel for 'core links' (landing page and/or single resource)
@@ -368,20 +365,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     }
 
     private Component createAddToVcrQueueLink(String id) {
-
-        return new WebMarkupContainer(id)
-                .add(new AttributeModifier("data-vcr-uri",
-                        new NullFallbackModel(
-                                new ActionableLinkModel(
-                                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.SELF_LINK))),
-                                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA)))))
-                .add(new AttributeModifier("data-vcr-label", new NullFallbackModel(
-                        new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.NAME)),
-                        new StringResourceModel("searchpage.unnamedrecord", this))))
-                .add(new AttributeModifier("data-vcr-description",
-                        new TruncatingStringModel(
-                                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.DESCRIPTION)), 1000, 990)))
-                .add(BooleanVisibilityBehavior.visibleOnTrue(() -> !Strings.isEmpty(config.getVcrSubmitEndpoint())));
+        return new WebMarkupContainer(id).add(new AddToVcrQueueButtonBehavior(getModel()));
     }
 
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);
