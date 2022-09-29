@@ -23,7 +23,10 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.CmdConstants;
+import java.io.File;
 import java.util.regex.Matcher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -32,6 +35,7 @@ import java.util.regex.Matcher;
 public class SchemaParsingUtil {
     
     private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
+    private static final Logger logger = LoggerFactory.getLogger(SchemaParsingUtil.class);
 
     /**
      * Setting namespace for Autopilot ap
@@ -50,16 +54,20 @@ public class SchemaParsingUtil {
      * Try two approaches to extract the XSD schema information from the CMDI
      * file
      *
+     * @param context file
      * @param nav VTD Navigator
      * @return ID of CMDI schema, or null if neither the CMDI header nor the
      * XMLSchema-instance's attributes contained the information
      * @throws VTDException
      */
-    public static String extractXsd(VTDNav nav) throws VTDException {
+    public static String extractXsd(VTDNav nav, String context) throws VTDException {
         String profileID = getProfileIdFromHeader(nav);
         if(profileID != null) {
             Matcher m = PROFILE_ID_PATTERN.matcher(profileID);
-            if(!m.matches()) {
+            if(m.matches()) {
+                profileID = m.group(1);
+            } else {
+                logger.warn("MdProfile header element in {} contains an invalid profile ID: {}", context, profileID);
                 profileID = null;
             }
         }

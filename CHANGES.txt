@@ -1,6 +1,19 @@
 Bug fixes and new features
 --------------------------
+VLO 4.11.0 (September 2022)
+
+* New method of submitting records and items to a Virtual Collection
+		<https://github.com/clarin-eric/VLO/issues/331>
+		<https://github.com/clarin-eric/VLO/issues/332>
+* Cleaner permalinks
+		<https://github.com/clarin-eric/VLO/issues/320>
+* Short timeout for handle resolution for record page
+		<https://github.com/clarin-eric/VLO/issues/350>
+* Import: header profile ID value validation
+		<https://github.com/clarin-eric/VLO/issues/308>
+
 VLO 4.10.3 (April 2022)
+
 * Various dependencies upgraded
 * Fix in CMDI - HTML stylesheet
 		<https://github.com/clarin-eric/VLO/commit/09b13039f3fbc6dc930a8a9ba048da92e2d6630a>
@@ -8,16 +21,19 @@ VLO 4.10.3 (April 2022)
 		<https://github.com/clarin-eric/VLO/issues/330>
 
 VLO 4.10.2 (December 2021)
+
 * Various dependencies upgraded,
 * Migrated logging to latest version of  Log4J 2.x (which fixes log4shell vulnerability)
 
 VLO 4.10.1 (August 2021)
+
 * Resource availability status API (RASA) updated
 		<https://github.com/clarin-eric/VLO/issues/311>
 * Threshold for age of link status information
 		<https://github.com/clarin-eric/VLO/issues/327>
 
 VLO 4.10.0 (April 2021)
+
 * Temporal coverage facet has been added
 		<https://github.com/clarin-eric/VLO/issues/115>
 		<https://github.com/clarin-eric/VLO/issues/296>

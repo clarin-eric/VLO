@@ -65,7 +65,7 @@ public class UriResolverImpl implements UriResolver {
         return (resolved != null) ? resolved.toString() : uri;
     }
 
-    private final static URI resolve(PIDResolver resolver, String pid) {
+    private static URI resolve(PIDResolver resolver, String pid) {
         try {
             logger.debug("Using {} to resolve pid [{}]", resolver.getClass().getName(), pid);
             return resolver.resolve(new URI(pid));

@@ -75,7 +75,7 @@ h1#recordtitle {
             background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
 
             /* mixin from vlo-license-icons.less */
-            .license-icon-classes(); 
+            .license-icon-classes();
         }
     }
 }
@@ -172,10 +172,17 @@ h1#recordtitle {
                         opacity: 0.7;
                     }
                 }
-            } 
+            }
 
             & > span {
                 display: block;
+            }
+
+            &[disabled] {
+                opacity: .2;
+                &:hover {
+                    cursor: not-allowed;
+                }
             }
         }
 

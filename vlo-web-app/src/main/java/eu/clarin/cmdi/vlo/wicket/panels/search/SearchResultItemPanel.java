@@ -19,15 +19,18 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
-import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.wicket.AddToVcrQueueButtonBehavior;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
@@ -46,6 +49,7 @@ import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
+import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
 import java.util.Optional;
@@ -53,10 +57,9 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -84,6 +87,8 @@ public class SearchResultItemPanel extends Panel {
 
     @SpringBean
     private VloConfig config;
+    @SpringBean
+    private PiwikConfig piwikConfig;
     @SpringBean
     private ResourceTypeCountingService countingService;
     @SpringBean
@@ -214,17 +219,7 @@ public class SearchResultItemPanel extends Panel {
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
-        add(new WebMarkupContainer("addToVcrQueueLink")
-                .add(new AttributeModifier("data-vcr-url",
-                        new NullFallbackModel(
-                                //TODO: wrap model with filter that only allows valid URLs and PIDs!
-                                new ActionableLinkModel(
-                                        new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SELF_LINK))),
-                                new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA)))))
-                .add(new AttributeModifier("data-vcr-title", new NullFallbackModel(
-                        new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.NAME)),
-                        new StringResourceModel("searchpage.unnamedrecord", this))))
-                .add(BooleanVisibilityBehavior.visibleOnTrue(() -> !Strings.isEmpty(config.getVcrSubmitEndpoint())))
+        add(createAddToVcrQueueLink("addToVcrQueueLink")
         );
 
         add(new WebMarkupContainer("scoreContainer")
@@ -237,6 +232,27 @@ public class SearchResultItemPanel extends Panel {
         add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
 
         setOutputMarkupId(true);
+    }
+
+    private Component createAddToVcrQueueLink(String id) {
+        final Component link
+                = new WebMarkupContainer(id)
+                        .add(new AddToVcrQueueButtonBehavior(documentModel));
+        if (piwikConfig.isEnabled()) {
+            final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_VCR, PiwikEventConstants.PIWIK_EVENT_ACTION_VCR_ADD_TO_QUEUE) {
+                @Override
+                protected String getName(AjaxRequestTarget target) {
+                    return "SearchResultItem";
+                }
+
+                @Override
+                protected String getValue(AjaxRequestTarget target) {
+                    return String.valueOf(documentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.SELF_LINK)));
+                }
+            };
+            link.add(eventBehavior);
+        }
+        return link;
     }
 
     private Link createExpansionStateToggle(String id) {

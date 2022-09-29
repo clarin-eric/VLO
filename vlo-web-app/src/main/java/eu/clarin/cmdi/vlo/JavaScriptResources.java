@@ -45,7 +45,7 @@ public class JavaScriptResources {
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
     private final static JavaScriptResourceReference HISTORY_API = new JavaScriptResourceReference(HistoryApiAjaxRequestTargetListener.class, "vlo-historyapi.js");
 
-    private final static ResourceReference VCR_PLUGIN_JS = new ContextRelativeResourceReference("assets/vcr-plugin/dist/vcr-integration.js");
+    private final static ResourceReference VCR_PLUGIN_JS = new ContextRelativeResourceReference("assets/vcr-plugin/dist/vcr-integration.js", false);
 
     private final static ResourceReference BOOTSTRAP_TOC = new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js");
     private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tourist.js", false);

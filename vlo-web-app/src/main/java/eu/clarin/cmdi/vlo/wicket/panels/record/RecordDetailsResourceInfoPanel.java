@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.wicket.panels.record;
 
+import eu.clarin.cmdi.vlo.wicket.AddToVcrQueueButtonBehavior;
 import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.FieldKey;
@@ -25,6 +26,7 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.LazyResourceInfoUpdateBehavior;
+import eu.clarin.cmdi.vlo.wicket.UpdateVcrIntegrationOnDomReadyBehavior;
 import eu.clarin.cmdi.vlo.wicket.components.PIDLinkLabel;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
@@ -185,6 +187,10 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                 .add(BooleanVisibilityBehavior.visibleOnTrue(hierarchyLinkVisibilityModel)));
 
         add(createResourcesTitle("resourcesTitle"));
+
+        add(createAddToVcrQueueLink("addToVcrQueueLink"));
+
+        add(new UpdateVcrIntegrationOnDomReadyBehavior());
     }
 
     private Component createResourcesTitle(String id) {
@@ -356,6 +362,10 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
                         new StringResourceModel("resourcesCount", metadataChilderenCountModel))
                         .add(BooleanVisibilityBehavior.visibleOnTrue(() -> metadataChilderenCountModel.getObject() > 0))
                 ));
+    }
+
+    private Component createAddToVcrQueueLink(String id) {
+        return new WebMarkupContainer(id).add(new AddToVcrQueueButtonBehavior(getModel()));
     }
 
     protected abstract void switchToTab(String tab, Optional<AjaxRequestTarget> target);

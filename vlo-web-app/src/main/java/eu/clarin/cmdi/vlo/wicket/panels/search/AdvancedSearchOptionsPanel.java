@@ -26,33 +26,26 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
-import eu.clarin.cmdi.vlo.wicket.model.BooleanOptionsModel;
 import eu.clarin.cmdi.vlo.wicket.model.FacetSelectionModel;
 import eu.clarin.cmdi.vlo.wicket.model.ToggleModel;
-import eu.clarin.cmdi.vlo.wicket.pages.VirtualCollectionSubmissionPage;
 import eu.clarin.cmdi.vlo.wicket.panels.ExpandablePanel;
 import java.util.Collection;
 import java.util.Optional;
 import org.apache.solr.common.SolrDocument;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -117,45 +110,6 @@ public abstract class AdvancedSearchOptionsPanel extends ExpandablePanel<QueryFa
         optionsForm.add(indicatorAppender);
 
         add(optionsForm);
-
-        add(createVcrSubmitTrigger("vcrSubmitTrigger"));
-    }
-
-    private Component createVcrSubmitTrigger(String id) {
-
-        final IModel<Boolean> vcrSubmitEnabledModel = new LoadableDetachableModel<Boolean>() {
-            @Override
-            protected Boolean load() {
-                final long documentCount = documentProvider.size();
-                return (documentCount > 0 && documentCount <= config.getVcrMaximumItemsCount());
-            }
-        };
-
-        final Link submitLink = new Link<>(id, vcrSubmitEnabledModel) {
-            @Override
-            public void onClick() {
-                setResponsePage(new VirtualCollectionSubmissionPage(AdvancedSearchOptionsPanel.this.getModel(), documentProvider));
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return vcrSubmitEnabledModel.getObject();
-            }
-        };
-
-        return submitLink
-                .add(new AttributeAppender("class",
-                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
-                                new Model<String>(null), //enabled
-                                Model.of("disabled")), " "))
-                .add(new AttributeModifier("target",
-                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
-                                Model.of("_blank"),
-                                new Model<String>(null))))
-                .add(new AttributeModifier("title",
-                        new BooleanOptionsModel<>(vcrSubmitEnabledModel,
-                                Model.of("Create a new collection in the Virtual Collection Registry containing the records included in the current search result"),
-                                Model.of(String.format("Only available for search results containing %s items or less", config.getVcrMaximumItemsCount())))));
     }
 
     private CheckBox createFieldNotEmptyOption(String id, String fieldName) {

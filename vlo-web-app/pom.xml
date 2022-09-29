@@ -6,20 +6,20 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.11-SNAPSHOT</version>
+        <version>4.11.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.11-SNAPSHOT</version>
+    <version>4.11.0</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
         <wicket.version>8.14.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
-        <spring.version>5.3.22</spring.version>
+        <spring.version>5.3.23</spring.version>
         <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
@@ -208,6 +208,11 @@
             <groupId>com.googlecode.wicket-jquery-ui</groupId>
             <artifactId>wicket-jquery-ui</artifactId>
             <version>8.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.3.0</version>
         </dependency>
     </dependencies>
 

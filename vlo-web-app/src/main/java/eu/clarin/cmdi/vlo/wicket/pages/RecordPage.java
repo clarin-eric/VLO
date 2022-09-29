@@ -445,6 +445,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         if (tabs.getSelectedTab() > 0) {
             params.add(VloWebAppParameters.RECORD_PAGE_TAB, TABS_ORDER.get(tabs.getSelectedTab()));
         }
+        
+        // exclude path encoded docId param 
+        params.remove(VloWebAppParameters.DOCUMENT_ID);
 
         return params;
     }

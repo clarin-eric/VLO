@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.10</version>
+        <version>2.7.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>eu.clarin.cmdi.vlo</groupId>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo-commons</artifactId>
-            <version>4.11-SNAPSHOT</version>
+            <version>4.11.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

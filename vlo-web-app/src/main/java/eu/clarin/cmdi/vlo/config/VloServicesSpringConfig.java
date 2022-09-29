@@ -60,6 +60,7 @@ import eu.clarin.cmdi.vlo.service.impl.XmlTransformationServiceImpl;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProviderImpl;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Properties;
 import javax.inject.Inject;
@@ -116,7 +117,7 @@ public class VloServicesSpringConfig {
     }
 
     public PIDResolver handleResolver() {
-        return new HandleResolverWrapper(new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY));
+        return new HandleResolverWrapper(new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY), Duration.ofMillis(vloConfig.getHandleResolverTimeout()));
     }
 
     public PIDResolver doiResolver() {
@@ -254,15 +255,15 @@ public class VloServicesSpringConfig {
     public EndpointProvidersService endpointProvidersService() {
         return new CentreRegistryProvidersService(vloConfig);
     }
-   
-   @Bean
-   public ExposureTracker exposureTracker() {
-       return new ExposureTrackerImpl(vloConfig);
-   }
-   
-   @Bean
-   public JavaScriptResources javaScriptResources() {
-       return new JavaScriptResources(vloConfig);
-   }
+
+    @Bean
+    public ExposureTracker exposureTracker() {
+        return new ExposureTrackerImpl(vloConfig);
+    }
+
+    @Bean
+    public JavaScriptResources javaScriptResources() {
+        return new JavaScriptResources(vloConfig);
+    }
 
 }
