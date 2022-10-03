@@ -182,14 +182,27 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>nl.mpi.corpusstructure</groupId>
-            <artifactId>corpus-structure-2-core</artifactId>
-            <version>1.2.4</version>
-        </dependency>
-        <dependency>
             <groupId>com.googlecode.json-simple</groupId>
             <artifactId>json-simple</artifactId>
             <version>1.1.1</version>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>net.handle</groupId>
+            <artifactId>handle</artifactId>
+            <version>7.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.cnri</groupId>
+            <artifactId>cnriutil</artifactId>
+            <version>7.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jettison</groupId>
+            <artifactId>jettison</artifactId>
+            <version>1.5.0</version>
+            <type>jar</type>
         </dependency>
 
         <dependency>
