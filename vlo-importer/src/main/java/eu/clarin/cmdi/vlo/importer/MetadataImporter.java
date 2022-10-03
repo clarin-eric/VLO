@@ -131,6 +131,11 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      */
     private final SolrBridge solrBridge;
 
+    /**
+     * RASA database driver class
+     */
+    private static final String RASA_JDBC_DRIVER_CLASS_NAME = "org.mariadb.jdbc.Driver";
+
     private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final ResourceAvailabilityStatusChecker availabilityChecker;
@@ -173,9 +178,8 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
         private static RasaResourceAvailabilityStatusChecker newRasaChecker(final String rasaDbUri, final String rasaDbUser, final String rasaDbPassword, final int rasaDbPoolsize, final Duration checkAgeThreshold) {
             LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
-            //final ACDHRasaFactory factory = new ACDHRasaFactory(mongoDbName, mongoConnectionString);
             final Properties rasaProperties = new Properties();
-            rasaProperties.setProperty("driverClassName", "com.mysql.cj.jdbc.Driver");
+            rasaProperties.setProperty("driverClassName", RASA_JDBC_DRIVER_CLASS_NAME);
             rasaProperties.setProperty("jdbcUrl", rasaDbUri);
             rasaProperties.setProperty("username", rasaDbUser);
             rasaProperties.setProperty("password", rasaDbPassword);
