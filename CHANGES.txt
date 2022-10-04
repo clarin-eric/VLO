@@ -1,5 +1,11 @@
 Bug fixes and new features
 --------------------------
+VLO 4.11.1 (October 2022)
+
+* Fixed linkchecker database access problem
+* Fixed database access problem of VLO change monitor
+* Embedded handle resolver classes from MPI corpus structure library to fix vulnerability
+
 VLO 4.11.0 (September 2022)
 
 * New method of submitting records and items to a Virtual Collection
