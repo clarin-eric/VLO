@@ -15,7 +15,7 @@
     <packaging>war</packaging>
     <version>4.11.1</version>
     <name>VLO Web Application</name>
-    <description></description>
+    <description/>
 
     <properties>
         <wicket.version>8.14.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
@@ -220,7 +220,7 @@
         <dependency>
             <groupId>com.googlecode.wicket-jquery-ui</groupId>
             <artifactId>wicket-jquery-ui</artifactId>
-            <version>8.13.0</version>
+            <version>8.14.0</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
