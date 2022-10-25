@@ -36,7 +36,8 @@
 	<module>vlo-statistics</module>
 	<module>vlo-monitor</module>
         <module>vlo-distribution</module>
-  </modules>
+        <module>vlo-mapping</module>
+    </modules>
 
     <properties>
         <!-- VLO-mapping project version to obtain default mappings from at build time -->
