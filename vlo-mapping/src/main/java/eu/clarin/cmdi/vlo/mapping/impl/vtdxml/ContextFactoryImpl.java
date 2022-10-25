@@ -14,8 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import eu.clarin.cmdi.vlo.mapping.ContextFactory;
+import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.model.Context;
 import java.io.File;
 import java.io.IOException;
@@ -26,7 +28,19 @@ import java.util.stream.Stream;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ContextFactory {
+public class ContextFactoryImpl implements ContextFactory {
 
-    Stream<Context> createContexts(File file) throws IOException;
+    private final RecordFactory recordFactory;
+
+    public ContextFactoryImpl(RecordFactory recordFactory) {
+        this.recordFactory = recordFactory;
+    }
+
+    @Override
+    public Stream<Context> createContexts(File file) throws IOException {
+        final Record record = recordFactory.getRecord(file);
+        //TODO: get contexts from the record object
+        return Stream.empty();
+    }
+
 }

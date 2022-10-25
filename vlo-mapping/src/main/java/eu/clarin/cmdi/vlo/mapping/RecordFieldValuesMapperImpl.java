@@ -17,9 +17,10 @@
 package eu.clarin.cmdi.vlo.mapping;
 
 import com.google.common.collect.ImmutableMap;
-import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +38,9 @@ public class RecordFieldValuesMapperImpl implements RecordFieldValuesMapper {
     private FieldValuesProcessor fieldValuesProcessor;
 
     @Override
-    public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(VTDNav nav) {
+    public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException {
         // Produce mapping results for all individual contexts
-        final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(nav);
+        final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(recordFile);
 
         // Distil field values out of mapping results
         return produceFieldValues(resultsByField);
@@ -48,11 +49,11 @@ public class RecordFieldValuesMapperImpl implements RecordFieldValuesMapper {
     /**
      * Produces mapping results for all individual contexts in the record
      *
-     * @param nav
+     * @param recordFile
      * @return
      */
-    private Map<String, List<FieldMappingResult>> mapAllContexts(VTDNav nav) {
-        return contextFactory.createContexts(nav) // gets all contexts in the record
+    private Map<String, List<FieldMappingResult>> mapAllContexts(File recordFile) throws IOException {
+        return contextFactory.createContexts(recordFile) // gets all contexts in the record
                 .flatMap(contextFieldValueMapper::mapContext) // maps all contexts to field value candidates
                 .collect(Collectors.groupingBy(FieldMappingResult::getField)); // collects results grouped by field
     }

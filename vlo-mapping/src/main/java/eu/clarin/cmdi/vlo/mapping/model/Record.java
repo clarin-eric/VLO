@@ -14,19 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
-
-import eu.clarin.cmdi.vlo.mapping.model.Context;
-import java.io.File;
-import java.io.IOException;
-import java.util.stream.Stream;
+package eu.clarin.cmdi.vlo.mapping.model;
 
 /**
- * Generates all contexts (concept + XML paths with values) for an XML document
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ContextFactory {
-
-    Stream<Context> createContexts(File file) throws IOException;
+public class Record {
+    
 }
