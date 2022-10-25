@@ -22,8 +22,8 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
     private final static Logger LOG = LoggerFactory.getLogger(ConceptLinkPathMapperImpl.class);
     private final VloMappingConfiguration config;
 
-    public ConceptLinkPathMapperImpl(VloMappingConfiguration config) {
-        super(config);
+    public ConceptLinkPathMapperImpl(VloMappingConfiguration config, VTDProfileParser profileParser) {
+        super(profileParser);
         this.config = config;
 
     }

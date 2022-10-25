@@ -18,11 +18,9 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
-import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
@@ -36,24 +34,22 @@ public abstract class ProfileXsdWalker<R> {
 
     private final static Logger LOG = LoggerFactory.getLogger(ProfileXsdWalker.class);
 
-    private final VloMappingConfiguration vloConfig;
+    private final VTDProfileParser profileParser;
 
-    public ProfileXsdWalker(VloMappingConfiguration vloConfig) {
-        this.vloConfig = vloConfig;
+    public ProfileXsdWalker(VTDProfileParser profileParser) {
+        this.profileParser = profileParser;
     }
 
     protected abstract R createResultObject();
 
     protected R walkProfile(String profileId) throws NavException {
-        R result = createResultObject();
-        VTDGen vg = new VTDGen();
-        boolean parseSuccess;
-        parseSuccess = vg.parseHttpUrl(vloConfig.getComponentRegistryProfileSchema(profileId), true);
-        if (!parseSuccess) {
+        final R result = createResultObject();
+        final VTDNav vn = profileParser.parse(profileId);
+        if (vn == null) {
             LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + profileId + ". All metadata instances that use this xsd will not be imported correctly.");
             return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.
         }
-        VTDNav vn = vg.getNav();
+
         AutoPilot ap = new AutoPilot(vn);
         ap.selectElement("xs:element");
         LinkedList<Token> elementPath = new LinkedList<>();

@@ -16,14 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import com.ximpleware.VTDGen;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
+import java.net.URL;
+import lombok.extern.slf4j.Slf4j;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Slf4j
 public class ProfileReaderImplTest {
 
     final VloMappingConfiguration mappingConfig = new VloMappingConfiguration() {
@@ -33,35 +38,35 @@ public class ProfileReaderImplTest {
         }
     };
 
-//    public ProfileReaderImplTest() {
-//    }
-//    
-//    @BeforeClass
-//    public static void setUpClass() {
-//    }
-//    
-//    @AfterClass
-//    public static void tearDownClass() {
-//    }
-//    
-//    @Before
-//    public void setUp() {
-//    }
-//    
-//    @After
-//    public void tearDown() {
-//    }
+    final VTDProfileParser parser = new DefaultVTDProfileParser(mappingConfig) {
+        @Override
+        protected boolean doParse(VTDGen vg, String profileId, boolean ns) {
+            log.info("Trying to parse profile {} from schema in bundled resources", profileId);
+            final String resource = String.format("/profiles/%s.xsd", profileId.replaceAll("[:_\\.\\/\\\\]", "_"));
+            // get file from bundled resources
+            final URL resourceUri = getClass().getResource(resource);
+            if (resourceUri == null) {
+                log.error("Profile XSD not found for id {}: {}", profileId, resource);
+                throw new RuntimeException("Profile XSD not found - see logs");
+            } else {
+                return vg.parseFile(resourceUri.getFile(), ns);
+            }
+        }
+
+    };
+    
     /**
      * Test of readProfile method, of class ProfileReaderImpl.
      */
     @Test
     public void testReadProfile() throws Exception {
 
-        final ConceptLinkPathMapper conceptLinkPathMapper = new ConceptLinkPathMapperImpl(mappingConfig);
+        final ConceptLinkPathMapper conceptLinkPathMapper = new ConceptLinkPathMapperImpl(mappingConfig, parser);
         final ProfileReaderImpl instance = new ProfileReaderImpl(conceptLinkPathMapper);
 
-        String profileId = "clarin.eu:cr1:p_1345561703673";
-        CmdProfile result = instance.readProfile(profileId);
+        final String profileId = "clarin.eu:cr1:p_1345561703673";
+        final CmdProfile result = instance.readProfile(profileId);
+        assertNotNull(result);
     }
 
 }
