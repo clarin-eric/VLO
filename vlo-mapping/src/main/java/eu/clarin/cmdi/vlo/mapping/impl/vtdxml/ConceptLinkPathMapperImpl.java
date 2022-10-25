@@ -22,6 +22,10 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
     private final static Logger LOG = LoggerFactory.getLogger(ConceptLinkPathMapperImpl.class);
     private final VloMappingConfiguration config;
 
+    public ConceptLinkPathMapperImpl(VloMappingConfiguration config) {
+        this(config, new DefaultVTDProfileParser(config));
+    }
+
     public ConceptLinkPathMapperImpl(VloMappingConfiguration config, VTDProfileParser profileParser) {
         super(profileParser);
         this.config = config;
@@ -37,8 +41,7 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
      * "this is where the magic happens". Finds paths in the xsd to all concepts
      * (isocat data catagories).
      *
-     * @param profileId Id of CMDI profile
-     * the component registry
+     * @param profileId Id of CMDI profile the component registry
      * @return Map (Data Category -> List of XPath expressions linked to the key
      * data category which can be found in CMDI files with this schema)
      * @throws NavException

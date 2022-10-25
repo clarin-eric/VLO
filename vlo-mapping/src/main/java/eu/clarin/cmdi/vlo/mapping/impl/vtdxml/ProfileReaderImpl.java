@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import com.google.common.collect.ImmutableMap;
 import com.ximpleware.VTDException;
 import eu.clarin.cmdi.vlo.mapping.ProfileReader;
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import java.io.IOException;
 import java.util.List;
@@ -31,6 +32,10 @@ import java.util.Map;
 public class ProfileReaderImpl implements ProfileReader {
 
     private final ConceptLinkPathMapper conceptLinkPathMapper;
+
+    public ProfileReaderImpl(VloMappingConfiguration config) {
+        this(new ConceptLinkPathMapperImpl(config));
+    }
 
     public ProfileReaderImpl(ConceptLinkPathMapper conceptLinkPathMapper) {
         this.conceptLinkPathMapper = conceptLinkPathMapper;

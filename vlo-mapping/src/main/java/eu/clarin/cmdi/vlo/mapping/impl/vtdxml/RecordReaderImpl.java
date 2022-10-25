@@ -43,14 +43,15 @@ import org.apache.commons.io.IOUtils;
 @Slf4j
 public class RecordReaderImpl implements RecordReader {
 
-    private final VloMappingConfiguration mappingConfig;
     private final ProfileFactory profileFactory;
 
-    public RecordReaderImpl(VloMappingConfiguration mappingConfig, ProfileFactory profileFactory) {
-        this.mappingConfig = mappingConfig;
-        this.profileFactory = profileFactory;
+    public RecordReaderImpl(VloMappingConfiguration mappingConfig) {
+        this(new CachingProfileFactory(new ProfileReaderImpl(mappingConfig)));
     }
 
+    public RecordReaderImpl(ProfileFactory profileFactory) {
+        this.profileFactory = profileFactory;
+    }
 
     @Override
     public CmdRecord readRecord(File file) throws IOException {
@@ -64,7 +65,7 @@ public class RecordReaderImpl implements RecordReader {
             final VTDNav nav = vg.getNav();
             final String profileId = extractXsd(nav, file.getAbsolutePath());
             final CmdProfile profile = profileFactory.getProfile(profileId);
-            
+
             return new CmdRecord();
         } catch (VTDException ex) {
             throw new IOException("Exception while parsing record from file: " + String.valueOf(file), ex);

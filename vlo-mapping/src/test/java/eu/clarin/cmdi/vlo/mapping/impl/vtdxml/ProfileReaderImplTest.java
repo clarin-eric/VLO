@@ -20,8 +20,11 @@ import com.ximpleware.VTDGen;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import java.net.URL;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
@@ -66,7 +69,11 @@ public class ProfileReaderImplTest {
 
         final String profileId = "clarin.eu:cr1:p_1345561703673";
         final CmdProfile result = instance.readProfile(profileId);
+        
         assertNotNull(result);
+        Map<String, List<String>> xpathConceptPathMap = result.getXpathConceptPathMap();
+        assertNotNull(xpathConceptPathMap);
+        assertTrue(xpathConceptPathMap.containsKey("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"));
     }
 
 }
