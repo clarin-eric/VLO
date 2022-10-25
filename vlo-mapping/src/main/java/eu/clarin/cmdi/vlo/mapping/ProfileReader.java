@@ -16,16 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
-import java.io.File;
+import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import java.io.IOException;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface RecordReader {
+public interface ProfileReader {
 
-    public CmdRecord readRecord(File file) throws IOException;
-
+    CmdProfile readProfile(String profileId) throws IOException;
 }
