@@ -16,17 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.model.Context;
 import java.io.File;
 import java.io.IOException;
-import java.util.stream.Stream;
 
 /**
- * Generates all contexts (concept + XML paths with values) for an XML document
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ContextFactory {
+public interface RecordReader {
 
-    Stream<Context> createContexts(File file) throws IOException;
+    public Record readRecord(File file) throws IOException;
+
 }

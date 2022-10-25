@@ -16,8 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import com.ximpleware.VTDNav;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import java.util.Map;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public interface RecordFieldValuesMapper {
-    
-    Map<String, Collection<ValueLanguagePair>> mapRecordToFields(VTDNav nav);
-    
+
+    Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException;
+
 }
