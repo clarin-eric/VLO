@@ -10,6 +10,7 @@ nbproject*
 **/nbproject*
 **/nb-configuration.xml
 /target/
+/vlo-mapping/target/
 /vlo-solr/target/
 /vlo-commons/target/
 /vlo-vocabularies/target/

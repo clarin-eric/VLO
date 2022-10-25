@@ -20,6 +20,6 @@ package eu.clarin.cmdi.vlo.mapping.model;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class Record {
+public class CmdRecord {
     
 }

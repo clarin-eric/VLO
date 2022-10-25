@@ -14,18 +14,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.model;
 
-import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
-import java.io.File;
-import java.io.IOException;
+import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Pattern;
+import java.util.Map;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface RecordReader {
+public class CmdProfile {
 
-    public CmdRecord readRecord(File file) throws IOException;
+    private Map<Pattern, String> patternConceptMap;
+
+    public void setPatternConceptMap(Map<Pattern, String> patternConceptMap) {
+        this.patternConceptMap = patternConceptMap;
+    }
 
 }

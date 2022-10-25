@@ -18,13 +18,16 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
-import com.ximpleware.ParseException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
+import eu.clarin.cmdi.vlo.mapping.ProfileFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
+import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.util.CmdConstants;
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,8 +43,17 @@ import org.apache.commons.io.IOUtils;
 @Slf4j
 public class RecordReaderImpl implements RecordReader {
 
+    private final VloMappingConfiguration mappingConfig;
+    private final ProfileFactory profileFactory;
+
+    public RecordReaderImpl(VloMappingConfiguration mappingConfig, ProfileFactory profileFactory) {
+        this.mappingConfig = mappingConfig;
+        this.profileFactory = profileFactory;
+    }
+
+
     @Override
-    public Record readRecord(File file) throws IOException {
+    public CmdRecord readRecord(File file) throws IOException {
         try {
             final VTDGen vg = new VTDGen();
             try ( FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -51,6 +63,9 @@ public class RecordReaderImpl implements RecordReader {
 
             final VTDNav nav = vg.getNav();
             final String profileId = extractXsd(nav, file.getAbsolutePath());
+            final CmdProfile profile = profileFactory.getProfile(profileId);
+            
+            return new CmdRecord();
         } catch (VTDException ex) {
             throw new IOException("Exception while parsing record from file: " + String.valueOf(file), ex);
         }

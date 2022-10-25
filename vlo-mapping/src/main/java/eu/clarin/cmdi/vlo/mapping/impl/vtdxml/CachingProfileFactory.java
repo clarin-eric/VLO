@@ -16,43 +16,42 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
-import eu.clarin.cmdi.vlo.mapping.RecordFactory;
-import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
+import eu.clarin.cmdi.vlo.mapping.ProfileFactory;
+import eu.clarin.cmdi.vlo.mapping.ProfileReader;
+import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import java.io.File;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class CachingRecordFactory implements RecordFactory {
+public class CachingProfileFactory implements ProfileFactory {
 
-    private final LoadingCache<File, CmdRecord> recordCache;
+    private final LoadingCache<String, CmdProfile> profileCache;
 
-    public CachingRecordFactory(RecordReader recordReader) {
-        recordCache = CacheBuilder.newBuilder().build(new CacheLoader<File, CmdRecord>() {
+    public CachingProfileFactory(ProfileReader profileReader) {
+        profileCache = CacheBuilder.newBuilder().build(new CacheLoader<String, CmdProfile>() {
             @Override
-            public CmdRecord load(File f) throws Exception {
-                return recordReader.readRecord(f);
+            public CmdProfile load(String id) throws Exception {
+                return profileReader.readProfile(id);
             }
 
         });
     }
 
     @Override
-    public CmdRecord getRecord(File file) {
-        return recordCache.getUnchecked(file);
+    public CmdProfile getProfile(String profileId) {
+        return profileCache.getUnchecked(profileId);
     }
 
     public void invalidateCache() {
-        recordCache.invalidateAll();
+        profileCache.invalidateAll();
     }
 
     public void invalidateCache(File file) {
-        recordCache.invalidate(file);
+        profileCache.invalidate(file);
     }
-
 }
