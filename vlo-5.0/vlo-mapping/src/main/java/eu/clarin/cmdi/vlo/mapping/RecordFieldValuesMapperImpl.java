@@ -38,7 +38,7 @@ public class RecordFieldValuesMapperImpl implements RecordFieldValuesMapper {
     private FieldValuesProcessor fieldValuesProcessor;
 
     @Override
-    public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException {
+    public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException {
         // Produce mapping results for all individual contexts
         final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(recordFile);
 
@@ -52,7 +52,7 @@ public class RecordFieldValuesMapperImpl implements RecordFieldValuesMapper {
      * @param recordFile
      * @return
      */
-    private Map<String, List<FieldMappingResult>> mapAllContexts(File recordFile) throws IOException {
+    private Map<String, List<FieldMappingResult>> mapAllContexts(File recordFile) throws IOException, VloMappingException {
         return contextFactory.createContexts(recordFile) // gets all contexts in the record
                 .flatMap(contextFieldValueMapper::mapContext) // maps all contexts to field value candidates
                 .collect(Collectors.groupingBy(FieldMappingResult::getField)); // collects results grouped by field

@@ -25,5 +25,5 @@ import java.io.IOException;
  */
 public interface ProfileReader {
 
-    CmdProfile readProfile(String profileId) throws IOException;
+    CmdProfile readProfile(String profileId) throws IOException, VloMappingException;
 }

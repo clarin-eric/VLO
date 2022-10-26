@@ -28,6 +28,6 @@ import java.util.Map;
  */
 public interface RecordFieldValuesMapper {
 
-    Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException;
+    Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException;
 
 }

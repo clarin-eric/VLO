@@ -26,6 +26,6 @@ import java.io.IOException;
  */
 public interface RecordReader {
 
-    public CmdRecord readRecord(File file) throws IOException;
+    public CmdRecord readRecord(File file) throws IOException, VloMappingException;
 
 }

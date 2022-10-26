@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import com.ximpleware.VTDException;
 import eu.clarin.cmdi.vlo.mapping.ProfileReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.Context;
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class ProfileReaderImpl implements ProfileReader {
     }
 
     @Override
-    public CmdProfile readProfile(String profileId) throws IOException {
+    public CmdProfile readProfile(String profileId) throws IOException, VloMappingException {
         final CmdProfile profile = new CmdProfile(profileId);
 
         try {
@@ -49,7 +50,7 @@ public class ProfileReaderImpl implements ProfileReader {
             profile.setXpathContextMap(contextMap);
             return profile;
         } catch (VTDException ex) {
-            throw new IOException("XML processing exception while reading profile " + profileId, ex);
+            throw new VloMappingException("XML processing exception while reading profile " + profileId, ex);
         }
 
     }
