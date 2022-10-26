@@ -43,12 +43,12 @@ public class ProfileReaderImpl implements ProfileReader {
 
     @Override
     public CmdProfile readProfile(String profileId) throws IOException, VloMappingException {
-        final CmdProfile profile = new CmdProfile(profileId);
+        final CmdProfile.CmdProfileBuilder profile = CmdProfile.builder().id(profileId);
 
         try {
             final Map<String, Context> contextMap = conceptLinkPathMapper.createConceptLinkPathMapping(profileId);
-            profile.setXpathContextMap(contextMap);
-            return profile;
+            profile.xpathContextMap(contextMap);
+            return profile.build();
         } catch (VTDException ex) {
             throw new VloMappingException("XML processing exception while reading profile " + profileId, ex);
         }

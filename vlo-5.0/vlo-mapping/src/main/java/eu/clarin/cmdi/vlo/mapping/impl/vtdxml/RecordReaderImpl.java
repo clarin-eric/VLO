@@ -34,6 +34,7 @@ import eu.clarin.cmdi.vlo.util.CmdConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.regex.Matcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -69,9 +70,12 @@ public class RecordReaderImpl implements RecordReader {
             if (profileId == null) {
                 throw new VloMappingException("Profile could not be determined, mapping skipped for record " + file.getAbsolutePath());
             } else {
+                final CmdRecord.CmdRecordBuilder record = CmdRecord.builder();
                 final CmdProfile profile = profileFactory.getProfile(profileId);
-
-                return new CmdRecord(null);
+                record.profile(profile);
+                //TODO: parse record
+                record.contexts(Collections.emptyList());
+                return record.build();
             }
         } catch (VTDException ex) {
             throw new VloMappingException("Exception while parsing record from file: " + String.valueOf(file), ex);
