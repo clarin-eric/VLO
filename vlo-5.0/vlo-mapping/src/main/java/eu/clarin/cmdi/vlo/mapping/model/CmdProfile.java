@@ -24,7 +24,12 @@ import java.util.Map;
  */
 public class CmdProfile {
 
+    private final String id;
     private Map<String, Context> xpathContextMap;
+
+    public CmdProfile(String id) {
+        this.id = id;
+    }
 
     public void setXpathContextMap(Map<String, Context> contextMap) {
         this.xpathContextMap = contextMap;
