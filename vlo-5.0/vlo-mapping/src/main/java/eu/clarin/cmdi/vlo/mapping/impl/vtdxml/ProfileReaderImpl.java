@@ -42,7 +42,7 @@ public class ProfileReaderImpl implements ProfileReader {
 
     @Override
     public CmdProfile readProfile(String profileId) throws IOException {
-        final CmdProfile profile = new CmdProfile();
+        final CmdProfile profile = new CmdProfile(profileId);
 
         try {
             final Map<String, Context> contextMap = conceptLinkPathMapper.createConceptLinkPathMapping(profileId);

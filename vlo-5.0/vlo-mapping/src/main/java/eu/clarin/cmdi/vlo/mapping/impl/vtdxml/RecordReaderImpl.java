@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import eu.clarin.cmdi.vlo.mapping.CachingProfileFactory;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
 import com.ximpleware.VTDException;
