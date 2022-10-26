@@ -17,21 +17,18 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import java.util.Collection;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Data
+@Builder
 public class CmdRecord {
 
-    private Collection<ValueContext> contexts;
-
-    public CmdRecord(Collection<ValueContext> contexts) {
-        this.contexts = contexts;
-    }
-
-    public Collection<ValueContext> getContexts() {
-        return contexts;
-    }
+    private final CmdProfile profile;
+    private final Collection<ValueContext> contexts;
 
 }

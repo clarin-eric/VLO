@@ -17,25 +17,17 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import java.util.Map;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Data
+@Builder
 public class CmdProfile {
 
     private final String id;
-    private Map<String, Context> xpathContextMap;
-
-    public CmdProfile(String id) {
-        this.id = id;
-    }
-
-    public void setXpathContextMap(Map<String, Context> contextMap) {
-        this.xpathContextMap = contextMap;
-    }
-
-    public Map<String, Context> getXpathContextMap() {
-        return xpathContextMap;
-    }
+    private final Map<String, Context> xpathContextMap;
 }
