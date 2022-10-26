@@ -3,7 +3,6 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import com.google.common.collect.ImmutableList;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -57,66 +56,53 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, Cont
 
     @Override
     protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
-        int conceptLinkIndex = getConceptLinkIndex(vn);
-        if (conceptLinkIndex != -1) {
-            String conceptLink = vn.toNormalizedString(conceptLinkIndex);
-            List<String> conceptPath = ImmutableList.of(conceptLink);
-            String xpath = createXpath(elementPath, null);
-
-            final Vocabulary vocab;
-            int vocabIndex = getVocabIndex(vn);
-            if (vocabIndex < 0) {
-                vocab = null;
-            } else {
-                String uri = vn.toNormalizedString(vocabIndex);
-                vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
-                int propIndex = getVocabPropIndex(vn);
-                if (propIndex != -1) {
-                    String prop = vn.toNormalizedString(propIndex);
-                    vocab.setProperty(prop);
-                }
-                int langIndex = getVocabLangIndex(vn);
-                if (langIndex != -1) {
-                    String lang = vn.toNormalizedString(langIndex);
-                    vocab.setLanguage(lang);
-                }
-            }
-            result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
-
-        }
+        final String xpath = createXpath(elementPath, null);
+        final List<String> conceptPath = getConceptPath(vn);
+        final Vocabulary vocab = getVocabulary(vn);
+        result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
     }
 
     @Override
     protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
-        int attributeConceptLinkIndex = getConceptLinkIndex(vn);
         int attributeNameIndex = vn.getAttrVal("name");
 
-        if (attributeNameIndex != -1 && attributeConceptLinkIndex != -1) {
-            String attributeName = vn.toNormalizedString(attributeNameIndex);
-            String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
-            List<String> conceptPath = ImmutableList.of(conceptLink);
-
-            String xpath = createXpath(elementPath, attributeName);
-
-            final Vocabulary vocab;
-            int vocabIndex = getVocabIndex(vn);
-            if (vocabIndex < 0) {
-                vocab = null;
-            } else {
-                String uri = vn.toNormalizedString(vocabIndex);
-                vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
-                int propIndex = getVocabPropIndex(vn);
-                if (propIndex != -1) {
-                    String prop = vn.toNormalizedString(propIndex);
-                    vocab.setProperty(prop);
-                }
-                int langIndex = getVocabLangIndex(vn);
-                if (langIndex != -1) {
-                    String lang = vn.toNormalizedString(langIndex);
-                    vocab.setLanguage(lang);
-                }
-            }
+        if (attributeNameIndex != -1) {
+            final String attributeName = vn.toNormalizedString(attributeNameIndex);
+            final String xpath = createXpath(elementPath, attributeName);
+            final List<String> conceptPath = getConceptPath(vn);
+            final Vocabulary vocab = getVocabulary(vn);
             result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
+        }
+    }
+
+    private List<String> getConceptPath(VTDNav vn) throws NavException {
+        final int attributeConceptLinkIndex = getConceptLinkIndex(vn);
+        if (attributeConceptLinkIndex < 0) {
+            return null;
+        } else {
+            String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
+            return ImmutableList.of(conceptLink);
+        }
+    }
+
+    private Vocabulary getVocabulary(VTDNav vn) throws NavException {
+        int vocabIndex = getVocabIndex(vn);
+        if (vocabIndex < 0) {
+            return null;
+        } else {
+            final String uri = vn.toNormalizedString(vocabIndex);
+            final Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
+            int propIndex = getVocabPropIndex(vn);
+            if (propIndex != -1) {
+                String prop = vn.toNormalizedString(propIndex);
+                vocab.setProperty(prop);
+            }
+            int langIndex = getVocabLangIndex(vn);
+            if (langIndex != -1) {
+                String lang = vn.toNormalizedString(langIndex);
+                vocab.setLanguage(lang);
+            }
+            return vocab;
         }
     }
 
