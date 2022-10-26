@@ -23,9 +23,16 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.allOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -57,7 +64,7 @@ public class ProfileReaderImplTest {
         }
 
     };
-    
+
     /**
      * Test of readProfile method, of class ProfileReaderImpl.
      */
@@ -69,11 +76,18 @@ public class ProfileReaderImplTest {
 
         final String profileId = "clarin.eu:cr1:p_1345561703673";
         final CmdProfile result = instance.readProfile(profileId);
-        
+
         assertNotNull(result);
         Map<String, List<String>> xpathConceptPathMap = result.getXpathConceptPathMap();
         assertNotNull(xpathConceptPathMap);
-        assertTrue(xpathConceptPathMap.containsKey("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"));
+        assertThat(xpathConceptPathMap, hasKey("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"));
+        assertThat(xpathConceptPathMap, hasEntry(
+                //key
+                equalTo("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"),
+                //value
+                allOf(
+                        //todo: match concepts
+                        hasItem(any(String.class)))));
     }
 
 }
