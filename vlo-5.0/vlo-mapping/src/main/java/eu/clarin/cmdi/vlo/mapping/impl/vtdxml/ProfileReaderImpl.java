@@ -16,13 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
-import com.google.common.collect.ImmutableMap;
 import com.ximpleware.VTDException;
 import eu.clarin.cmdi.vlo.mapping.ProfileReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
+import eu.clarin.cmdi.vlo.mapping.model.Context;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,24 +45,13 @@ public class ProfileReaderImpl implements ProfileReader {
         final CmdProfile profile = new CmdProfile();
 
         try {
-            final Map<String, List<Pattern>> conceptPathMap = conceptLinkPathMapper.createConceptLinkPathMapping(profileId);
-            final Map<Pattern, String> patternConceptMap = createPatternConceptMap(conceptPathMap);
-            profile.setPatternConceptMap(patternConceptMap);
+            final Map<String, Context> contextMap = conceptLinkPathMapper.createConceptLinkPathMapping(profileId);
+            profile.setXpathContextMap(contextMap);
             return profile;
         } catch (VTDException ex) {
             throw new IOException("XML processing exception while reading profile " + profileId, ex);
         }
 
-    }
-
-    private ImmutableMap<Pattern, String> createPatternConceptMap(final Map<String, List<Pattern>> conceptPathMap) {
-        final ImmutableMap.Builder<Pattern, String> builder = ImmutableMap.builder();
-        conceptPathMap.forEach((concept, patterns) -> {
-            for (Pattern p : patterns) {
-                builder.put(p, concept);
-            }
-        });
-        return builder.build();
     }
 
 }

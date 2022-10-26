@@ -14,21 +14,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.model;
 
-import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
-import java.util.stream.Stream;
+import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
+import java.util.Collection;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
+public class ContextImpl implements Context {
+
+    private final String xpath;
+    private final Collection<String> conceptPath;
+    private final Vocabulary vocabulary;
+
+    public ContextImpl(String xpath, Collection<String> conceptPath, Vocabulary vocabulary) {
+        this.xpath = xpath;
+        this.conceptPath = conceptPath;
+        this.vocabulary = vocabulary;
+    }
 
     @Override
-    public Stream<FieldMappingResult> mapContext(ContextImpl context) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public String getXpath() {
+        return xpath;
+    }
+
+    @Override
+    public Collection<String> getConceptPath() {
+        return conceptPath;
+    }
+
+    @Override
+    public Vocabulary getVocabulary() {
+        return vocabulary;
     }
 
 }

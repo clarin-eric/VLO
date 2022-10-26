@@ -23,12 +23,43 @@ import java.util.Collection;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface Context {
+public class ValueContextImpl implements ValueContext {
 
-    Collection<String> getConceptPath();
+    private final Context context;
 
-    Vocabulary getVocabulary();
+    private Collection<ValueLanguagePair> values;
 
-    String getXpath();
+    public ValueContextImpl(Context context) {
+        this.context = context;
+    }
+
+    public ValueContextImpl(Context context, Collection<ValueLanguagePair> values) {
+        this.context = context;
+        this.values = values;
+    }
+
+    @Override
+    public Collection<ValueLanguagePair> getValues() {
+        return values;
+    }
+
+    public void setValues(Collection<ValueLanguagePair> values) {
+        this.values = values;
+    }
+
+    @Override
+    public Collection<String> getConceptPath() {
+        return context.getConceptPath();
+    }
+
+    @Override
+    public Vocabulary getVocabulary() {
+        return context.getVocabulary();
+    }
+
+    @Override
+    public String getXpath() {
+        return context.getXpath();
+    }
 
 }

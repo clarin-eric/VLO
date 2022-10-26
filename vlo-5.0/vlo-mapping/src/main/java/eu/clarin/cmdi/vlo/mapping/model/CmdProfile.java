@@ -16,8 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.mapping.model;
 
-import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Pattern;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,16 +24,13 @@ import java.util.Map;
  */
 public class CmdProfile {
 
-    private Map<Pattern, String> patternConceptMap;
+    private Map<String, Context> xpathContextMap;
 
-    public void setPatternConceptMap(Map<Pattern, String> patternConceptMap) {
-        this.patternConceptMap = patternConceptMap;
+    public void setXpathContextMap(Map<String, Context> contextMap) {
+        this.xpathContextMap = contextMap;
     }
 
-    private Map<String, List<String>> xpathConceptPathMap;
-
-    public Map<String, List<String>> getXpathConceptPathMap() {
-        return xpathConceptPathMap;
+    public Map<String, Context> getXpathContextMap() {
+        return xpathContextMap;
     }
-
 }

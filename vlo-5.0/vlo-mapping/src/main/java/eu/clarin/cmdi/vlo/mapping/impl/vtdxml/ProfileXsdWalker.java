@@ -95,15 +95,15 @@ public abstract class ProfileXsdWalker<R> {
      * not null
      * @return
      */
-    protected Pattern createXpath(List<Token> elementPath, String attributeName) {
-        StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
+    protected String createXpath(List<Token> elementPath, String attributeName) {
+        final StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
         for (Token token : elementPath) {
             xpath.append("cmdp:").append(token.name).append("/");
         }
         if (attributeName != null) {
-            return new Pattern(xpath.append("@").append(attributeName).toString());
+            return xpath.append("@").append(attributeName).toString();
         } else {
-            return new Pattern(xpath.append("text()").toString());
+            return xpath.append("text()").toString();
         }
     }
 

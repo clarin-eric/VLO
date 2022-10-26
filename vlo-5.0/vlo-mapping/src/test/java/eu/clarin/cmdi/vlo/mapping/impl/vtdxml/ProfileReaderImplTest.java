@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import com.ximpleware.VTDGen;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
+import eu.clarin.cmdi.vlo.mapping.model.Context;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.any;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.allOf;
@@ -78,16 +79,15 @@ public class ProfileReaderImplTest {
         final CmdProfile result = instance.readProfile(profileId);
 
         assertNotNull(result);
-        Map<String, List<String>> xpathConceptPathMap = result.getXpathConceptPathMap();
+        Map<String, Context> xpathConceptPathMap = result.getXpathContextMap();
         assertNotNull(xpathConceptPathMap);
         assertThat(xpathConceptPathMap, hasKey("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"));
         assertThat(xpathConceptPathMap, hasEntry(
                 //key
                 equalTo("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"),
                 //value
-                allOf(
-                        //todo: match concepts
-                        hasItem(any(String.class)))));
+                hasProperty("conceptPath", hasItem("http://hdl.handle.net/11459/CCR_C-4347_728552dd-4c23-0a69-390c-10214c05983f"))
+        ));
     }
 
 }
