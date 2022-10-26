@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import eu.clarin.cmdi.vlo.mapping.CachingProfileFactory;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
+import com.ximpleware.ParseException;
 import com.ximpleware.VTDException;
 import com.ximpleware.VTDGen;
 import com.ximpleware.VTDNav;
@@ -59,30 +60,43 @@ public class RecordReaderImpl implements RecordReader {
     @Override
     public CmdRecord readRecord(File file) throws IOException, VloMappingException {
         try {
-            final VTDGen vg = new VTDGen();
-            try ( FileInputStream fileInputStream = new FileInputStream(file)) {
-                vg.setDoc(IOUtils.toByteArray(fileInputStream));
-                vg.parse(true);
-            }
-
-            final VTDNav nav = vg.getNav();
-            final String profileId = extractXsd(nav, file.getAbsolutePath());
+            // prepare
+            final VTDNav nav = openFile(file);
+            final String profileId = extractProfileId(nav, file.getAbsolutePath());
             if (profileId == null) {
                 throw new VloMappingException("Profile could not be determined, mapping skipped for record " + file.getAbsolutePath());
             } else {
-                final CmdRecord.CmdRecordBuilder record = CmdRecord.builder();
-                final CmdProfile profile = profileFactory.getProfile(profileId);
-                record.profile(profile);
-                //TODO: parse record
-                record.contexts(Collections.emptyList());
-                return record.build();
+                // we can now dive into the file and construct a record object
+                final CmdRecord.CmdRecordBuilder recordBuilder = CmdRecord.builder();
+                parse(nav, recordBuilder, profileId);
+                return recordBuilder.build();
             }
         } catch (VTDException ex) {
             throw new VloMappingException("Exception while parsing record from file: " + String.valueOf(file), ex);
         }
     }
 
-    public static String extractXsd(VTDNav nav, String context) throws VTDException {
+    private VTDNav openFile(File file) throws ParseException, IOException {
+        final VTDGen vg = new VTDGen();
+        try ( FileInputStream fileInputStream = new FileInputStream(file)) {
+            vg.setDoc(IOUtils.toByteArray(fileInputStream));
+            vg.parse(true);
+        }
+        final VTDNav nav = vg.getNav();
+        return nav;
+    }
+
+    private void parse(VTDNav nav, final CmdRecord.CmdRecordBuilder record, final String profileId) throws IOException, VloMappingException, VTDException {
+        //read the profile
+        final CmdProfile profile = profileFactory.getProfile(profileId);
+        record.profile(profile);
+        // value contexts
+        record.contexts(Collections.emptyList());
+        // resources
+        // anything else?
+    }
+
+    public static String extractProfileId(VTDNav nav, String context) throws VTDException {
         String profileID = getProfileIdFromHeader(nav);
         if (profileID != null) {
             Matcher m = PROFILE_ID_PATTERN.matcher(profileID);

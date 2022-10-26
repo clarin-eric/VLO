@@ -62,4 +62,8 @@ public class ValueContextImpl implements ValueContext {
         return context.getXpath();
     }
 
+    public static ValueContext fromContext(Context base, Collection<ValueLanguagePair> values) {
+        return new ValueContextImpl(base, values);
+    }
+
 }
