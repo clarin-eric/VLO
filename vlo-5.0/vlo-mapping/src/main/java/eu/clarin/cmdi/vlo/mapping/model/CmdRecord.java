@@ -16,10 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.mapping.model;
 
+import java.util.Collection;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public class CmdRecord {
-    
+
+    private Collection<ValueContext> contexts;
+
+    public CmdRecord(Collection<ValueContext> contexts) {
+        this.contexts = contexts;
+    }
+
+    public Collection<ValueContext> getContexts() {
+        return contexts;
+    }
+
 }

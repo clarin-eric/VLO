@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
+import java.io.IOException;
 
 /**
  *
@@ -24,5 +25,5 @@ import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
  */
 public interface ProfileFactory {
 
-    CmdProfile getProfile(String profileId);
+    CmdProfile getProfile(String profileId) throws IOException, VloMappingException;
 }

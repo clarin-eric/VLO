@@ -27,6 +27,7 @@ import com.ximpleware.XPathParseException;
 import eu.clarin.cmdi.vlo.mapping.ProfileFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.util.CmdConstants;
@@ -55,7 +56,7 @@ public class RecordReaderImpl implements RecordReader {
     }
 
     @Override
-    public CmdRecord readRecord(File file) throws IOException {
+    public CmdRecord readRecord(File file) throws IOException, VloMappingException {
         try {
             final VTDGen vg = new VTDGen();
             try ( FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -65,11 +66,15 @@ public class RecordReaderImpl implements RecordReader {
 
             final VTDNav nav = vg.getNav();
             final String profileId = extractXsd(nav, file.getAbsolutePath());
-            final CmdProfile profile = profileFactory.getProfile(profileId);
+            if (profileId == null) {
+                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + file.getAbsolutePath());
+            } else {
+                final CmdProfile profile = profileFactory.getProfile(profileId);
 
-            return new CmdRecord();
+                return new CmdRecord(null);
+            }
         } catch (VTDException ex) {
-            throw new IOException("Exception while parsing record from file: " + String.valueOf(file), ex);
+            throw new VloMappingException("Exception while parsing record from file: " + String.valueOf(file), ex);
         }
     }
 

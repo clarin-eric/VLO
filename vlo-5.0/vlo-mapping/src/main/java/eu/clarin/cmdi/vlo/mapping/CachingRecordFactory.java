@@ -16,13 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.RecordFactory;
-import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -43,8 +43,12 @@ public class CachingRecordFactory implements RecordFactory {
     }
 
     @Override
-    public CmdRecord getRecord(File file) {
-        return recordCache.getUnchecked(file);
+    public CmdRecord getRecord(File file) throws IOException, VloMappingException {
+        try {
+            return recordCache.get(file);
+        } catch (ExecutionException ex) {
+            throw new VloMappingException("Error while loading reacord into cache: " + file.getAbsolutePath(), ex);
+        }
     }
 
     public void invalidateCache() {

@@ -23,6 +23,8 @@ import eu.clarin.cmdi.vlo.mapping.ProfileFactory;
 import eu.clarin.cmdi.vlo.mapping.ProfileReader;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -43,8 +45,12 @@ public class CachingProfileFactory implements ProfileFactory {
     }
 
     @Override
-    public CmdProfile getProfile(String profileId) {
-        return profileCache.getUnchecked(profileId);
+    public CmdProfile getProfile(String profileId) throws IOException, VloMappingException {
+        try {
+            return profileCache.get(profileId);
+        } catch (ExecutionException ex) {
+            throw new VloMappingException("Error while loading profile into cache: " + profileId, ex);
+        }
     }
 
     public void invalidateCache() {

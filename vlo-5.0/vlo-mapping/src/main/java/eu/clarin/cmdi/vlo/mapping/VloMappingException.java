@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN
+ * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,29 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
-import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import java.util.stream.Stream;
-
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
+public class VloMappingException extends Exception {
 
-    @Override
-    public Stream<FieldMappingResult> mapContext(ValueContext context) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public VloMappingException() {
+    }
+
+    public VloMappingException(String message) {
+        super(message);
+    }
+
+    public VloMappingException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public VloMappingException(Throwable cause) {
+        super(cause);
+    }
+
+    public VloMappingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 
 }

@@ -18,8 +18,9 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import eu.clarin.cmdi.vlo.mapping.ContextFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordFactory;
+import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
-import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
+import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -38,10 +39,10 @@ public class ContextFactoryImpl implements ContextFactory {
     }
 
     @Override
-    public Stream<ContextImpl> createContexts(File file) throws IOException {
+    public Stream<ValueContext> createContexts(File file) throws IOException, VloMappingException {
         final CmdRecord record = recordFactory.getRecord(file);
         //TODO: get contexts from the record object
-        return Stream.empty();
+        return record.getContexts().stream();
     }
 
 }
