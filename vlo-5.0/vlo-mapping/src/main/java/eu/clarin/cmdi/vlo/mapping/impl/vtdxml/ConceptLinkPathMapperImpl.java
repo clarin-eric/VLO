@@ -1,10 +1,10 @@
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import com.google.common.collect.ImmutableList;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -14,10 +14,13 @@ import com.ximpleware.NavException;
 import com.ximpleware.VTDNav;
 
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.model.Context;
+import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
 import static eu.clarin.cmdi.vlo.util.CmdConstants.CMD_NAMESPACE;
 import java.util.HashMap;
+import java.util.List;
 
-public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List<Pattern>>> implements ConceptLinkPathMapper {
+public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, Context>> implements ConceptLinkPathMapper {
 
     private final static Logger LOG = LoggerFactory.getLogger(ConceptLinkPathMapperImpl.class);
     private final VloMappingConfiguration config;
@@ -33,7 +36,7 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
     }
 
     @Override
-    protected Map<String, List<Pattern>> createResultObject() {
+    protected Map<String, Context> createResultObject() {
         return new HashMap<>();
     }
 
@@ -48,24 +51,25 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
      * @throws URISyntaxException
      */
     @Override
-    public Map<String, List<Pattern>> createConceptLinkPathMapping(String profileId) throws NavException {
+    public Map<String, Context> createConceptLinkPathMapping(String profileId) throws NavException {
         return walkProfile(profileId);
     }
 
     @Override
-    protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException {
+    protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
         int conceptLinkIndex = getConceptLinkIndex(vn);
         if (conceptLinkIndex != -1) {
             String conceptLink = vn.toNormalizedString(conceptLinkIndex);
-            Pattern xpath = createXpath(elementPath, null);
+            List<String> conceptPath = ImmutableList.of(conceptLink);
+            String xpath = createXpath(elementPath, null);
 
-            result.computeIfAbsent(conceptLink, k -> new ArrayList<>()).add(xpath);
-
+            final Vocabulary vocab;
             int vocabIndex = getVocabIndex(vn);
-            if (vocabIndex != -1) {
+            if (vocabIndex < 0) {
+                vocab = null;
+            } else {
                 String uri = vn.toNormalizedString(vocabIndex);
-                Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
-                xpath.setVocabulary(vocab);
+                vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
                 int propIndex = getVocabPropIndex(vn);
                 if (propIndex != -1) {
                     String prop = vn.toNormalizedString(propIndex);
@@ -77,27 +81,30 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
                     vocab.setLanguage(lang);
                 }
             }
+            result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
+
         }
     }
 
     @Override
-    protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, List<Pattern>> result) throws NavException {
+    protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
         int attributeConceptLinkIndex = getConceptLinkIndex(vn);
         int attributeNameIndex = vn.getAttrVal("name");
 
         if (attributeNameIndex != -1 && attributeConceptLinkIndex != -1) {
             String attributeName = vn.toNormalizedString(attributeNameIndex);
             String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
+            List<String> conceptPath = ImmutableList.of(conceptLink);
 
-            Pattern xpath = createXpath(elementPath, attributeName);
+            String xpath = createXpath(elementPath, attributeName);
 
-            result.computeIfAbsent(conceptLink, k -> new ArrayList<Pattern>()).add(xpath);
-
+            final Vocabulary vocab;
             int vocabIndex = getVocabIndex(vn);
-            if (vocabIndex != -1) {
+            if (vocabIndex < 0) {
+                vocab = null;
+            } else {
                 String uri = vn.toNormalizedString(vocabIndex);
-                Vocabulary vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
-                xpath.setVocabulary(vocab);
+                vocab = new Vocabulary(config.getVocabularyRegistryUrl(), URI.create(uri));
                 int propIndex = getVocabPropIndex(vn);
                 if (propIndex != -1) {
                     String prop = vn.toNormalizedString(propIndex);
@@ -109,6 +116,7 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
                     vocab.setLanguage(lang);
                 }
             }
+            result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
         }
     }
 

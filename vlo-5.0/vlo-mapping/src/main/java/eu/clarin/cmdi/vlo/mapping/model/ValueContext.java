@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN
+ * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.model;
 
-import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
-import java.io.File;
-import java.io.IOException;
-import java.util.stream.Stream;
+import java.util.Collection;
 
 /**
- * Generates all contexts (concept + XML paths with values) for an XML document
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ContextFactory {
+public interface ValueContext extends Context {
 
-    Stream<ContextImpl> createContexts(File file) throws IOException;
+    Collection<ValueLanguagePair> getValues();
 }

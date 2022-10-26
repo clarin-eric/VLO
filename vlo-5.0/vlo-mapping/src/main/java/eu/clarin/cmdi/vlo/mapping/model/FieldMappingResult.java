@@ -25,10 +25,10 @@ import java.util.Collection;
 public class FieldMappingResult {
 
     private final String field;
-    private final Context context;
+    private final ContextImpl context;
     private final Collection<ValueLanguagePair> values;
 
-    public FieldMappingResult(String field, Context context, Collection<ValueLanguagePair> valueLanguagePair) {
+    public FieldMappingResult(String field, ContextImpl context, Collection<ValueLanguagePair> valueLanguagePair) {
         this.field = field;
         this.context = context;
         this.values = valueLanguagePair;
@@ -38,7 +38,7 @@ public class FieldMappingResult {
         return field;
     }
 
-    public Context getContext() {
+    public ContextImpl getContext() {
         return context;
     }
 

@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.model.Context;
+import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import java.util.stream.Stream;
 
@@ -26,5 +26,5 @@ import java.util.stream.Stream;
  */
 public interface ContextFieldValueMapper {
 
-    Stream<FieldMappingResult> mapContext(Context context);
+    Stream<FieldMappingResult> mapContext(ContextImpl context);
 }
