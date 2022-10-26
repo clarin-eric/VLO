@@ -1,8 +1,8 @@
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -16,6 +16,7 @@ import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.Context;
 import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
 import static eu.clarin.cmdi.vlo.util.CmdConstants.CMD_NAMESPACE;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,21 +48,36 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, Cont
      * @return Map (Data Category -> List of XPath expressions linked to the key
      * data category which can be found in CMDI files with this schema)
      * @throws NavException
-     * @throws URISyntaxException
      */
     @Override
     public Map<String, Context> createConceptLinkPathMapping(String profileId) throws NavException {
         return walkProfile(profileId);
     }
 
+    /**
+     * Process an XML element
+     *
+     * @param vn navigator
+     * @param elementPath current tokens path
+     * @param result result object
+     * @throws NavException
+     */
     @Override
     protected void processElement(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
         final String xpath = createXpath(elementPath, null);
-        final List<String> conceptPath = getConceptPath(vn);
+        final List<String> conceptPath = getConceptPath(vn, elementPath, result);
         final Vocabulary vocab = getVocabulary(vn);
         result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
     }
 
+    /**
+     * Process an XML attribute
+     *
+     * @param vn navigator
+     * @param elementPath current tokens path
+     * @param result result object
+     * @throws NavException
+     */
     @Override
     protected void processAttribute(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
         int attributeNameIndex = vn.getAttrVal("name");
@@ -69,19 +85,62 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, Cont
         if (attributeNameIndex != -1) {
             final String attributeName = vn.toNormalizedString(attributeNameIndex);
             final String xpath = createXpath(elementPath, attributeName);
-            final List<String> conceptPath = getConceptPath(vn);
+            final List<String> conceptPath = ImmutableList.copyOf(getConceptPath(vn, elementPath, result));
             final Vocabulary vocab = getVocabulary(vn);
             result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
         }
     }
 
-    private List<String> getConceptPath(VTDNav vn) throws NavException {
+    /**
+     * Creates the concept path for the current node
+     *
+     * @param vn navigator
+     * @param elementPath current element path
+     * @param result result object
+     * @return list representing the concept path
+     * @throws NavException
+     */
+    private List<String> getConceptPath(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
+        // determine the concept link
+        final String conceptLink;
         final int attributeConceptLinkIndex = getConceptLinkIndex(vn);
         if (attributeConceptLinkIndex < 0) {
-            return null;
+            conceptLink = null;
         } else {
-            String conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
-            return ImmutableList.of(conceptLink);
+            conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
+        }
+        
+        // consturct the complete context path
+        return constructContextPath(elementPath, result, conceptLink);
+    }
+
+    private List<String> constructContextPath(LinkedList<Token> elementPath, Map<String, Context> result, final String conceptLink) {
+        // look up parent's context path
+        final Context parentContext = getParentContextPath(elementPath, result);
+
+        final LinkedList<String> conceptPath;
+        if (parentContext == null) {
+            // no parent context path - we start from scratch
+            conceptPath = Lists.newLinkedList();
+        } else {
+            // we can extend the parent's context path
+            conceptPath = Lists.newLinkedList(parentContext.getConceptPath());
+        }
+        // first element is current concept link (may be null)
+        conceptPath.addFirst(conceptLink);
+        return conceptPath;
+    }
+
+    private Context getParentContextPath(LinkedList<Token> elementPath, Map<String, Context> result) {
+        final List<Token> parentElementPath = getParentElementPath(elementPath);
+        return result.get(createXpath(parentElementPath, null));
+    }
+
+    private List<Token> getParentElementPath(List<Token> elementPath) {
+        if (elementPath.size() <= 1) {
+            return Collections.emptyList();
+        } else {
+            return elementPath.subList(0, elementPath.size() - 1);
         }
     }
 
