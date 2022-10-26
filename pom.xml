@@ -36,7 +36,6 @@
 	<module>vlo-statistics</module>
 	<module>vlo-monitor</module>
         <module>vlo-distribution</module>
-        <module>vlo-mapping</module>
     </modules>
 
     <properties>
