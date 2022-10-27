@@ -23,12 +23,23 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.io.File;
 import java.net.URL;
 import java.util.Collection;
-import org.junit.jupiter.api.AfterEach;
+import java.util.Optional;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -68,13 +79,18 @@ public class RecordReaderImplTest {
 
         final CmdRecord result = instance.readRecord(file);
         assertNotNull(result);
-        
+
         final CmdProfile profile = result.getProfile();
         assertNotNull(profile);
         assertEquals("clarin.eu:cr1:p_1345561703673", profile.getId());
-        
+
         final Collection<ValueContext> contexts = result.getContexts();
-        assertNotNull(contexts);
+        assertThat(contexts, not(anyOf(nullValue(), empty())));
+        assertThat(contexts, hasItem(
+                allOf(
+                        hasProperty("xpath", equalTo("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:narrative/cmdp:id/text()")),
+                        hasProperty("values", hasItem(hasProperty("value", equalTo("id3")))),
+                        hasProperty("conceptPath", hasItem(equalTo("http://hdl.handle.net/11459/CCR_C-3894_4d08cc31-25fe-af0c-add4-ca7bdc12f5f7"))))));
     }
 
 }

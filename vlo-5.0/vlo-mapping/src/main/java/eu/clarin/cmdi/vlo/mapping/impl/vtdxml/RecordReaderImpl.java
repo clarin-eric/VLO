@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.mapping.CachingProfileFactory;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -31,11 +32,13 @@ import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
+import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import eu.clarin.cmdi.vlo.mapping.model.ValueContextImpl;
+import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import eu.clarin.cmdi.vlo.util.CmdConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.regex.Matcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -47,6 +50,8 @@ import org.apache.commons.io.IOUtils;
 @Slf4j
 public class RecordReaderImpl implements RecordReader {
 
+    public static final String ENGLISH_LANGUAGE = "code:eng";
+    public static final String DEFAULT_LANGUAGE = "code:und";
     private final ProfileFactory profileFactory;
 
     public RecordReaderImpl(VloMappingConfiguration mappingConfig) {
@@ -68,7 +73,10 @@ public class RecordReaderImpl implements RecordReader {
             } else {
                 // we can now dive into the file and construct a record object
                 final CmdRecord.CmdRecordBuilder recordBuilder = CmdRecord.builder();
-                parse(nav, recordBuilder, profileId);
+
+                final VTDNav rootNav = nav.cloneNav();
+                rootNav.toElement(VTDNav.ROOT);
+                parse(file, rootNav, recordBuilder, profileId);
                 return recordBuilder.build();
             }
         } catch (VTDException ex) {
@@ -86,14 +94,69 @@ public class RecordReaderImpl implements RecordReader {
         return nav;
     }
 
-    private void parse(VTDNav nav, final CmdRecord.CmdRecordBuilder record, final String profileId) throws IOException, VloMappingException, VTDException {
+    private void parse(File file, VTDNav nav, final CmdRecord.CmdRecordBuilder record, final String profileId) throws IOException, VloMappingException, VTDException {
         //read the profile
         final CmdProfile profile = profileFactory.getProfile(profileId);
         record.profile(profile);
+
+        ImmutableList.Builder<ValueContext> contexts = ImmutableList.builder();
+
+        final AutoPilot ap = new AutoPilot(nav);
+        setNameSpace(ap, profileId);
+        profile.getXpathContextMap().forEach((path, context) -> {
+            try {
+                ap.selectXPath(path);
+                final int index = ap.evalXPath();
+                final ImmutableList<ValueLanguagePair> values = getValues(nav, index, ap);
+                if (!values.isEmpty()) {
+                    contexts.add(new ValueContextImpl(context, values));
+                }
+            } catch (VTDException ex) {
+                log.error("Processing exception in {} at path {}", file, path, ex);
+            }
+        });
+
         // value contexts
-        record.contexts(Collections.emptyList());
+        record.contexts(contexts.build());
         // resources
         // anything else?
+    }
+
+    private ImmutableList<ValueLanguagePair> getValues(VTDNav nav, int index, AutoPilot ap) throws VTDException {
+        final ImmutableList.Builder<ValueLanguagePair> valuesBuilder = ImmutableList.builder();
+        boolean matchedPattern = false;
+        while (index != -1) {
+            matchedPattern = true;
+
+            if (nav.getTokenType(index) == VTDNav.TOKEN_ATTR_NAME) {
+                //if it is an attribute you need to add 1 to the index to get the right value
+                index++;
+            }
+
+            final String value = nav.toString(index);
+            final String language = extractLanguageCode(nav);
+            // TODO: extract vocab item URI
+
+            valuesBuilder.add(new ValueLanguagePair(value, language));
+
+            index = ap.evalXPath();
+        }
+
+        final ImmutableList<ValueLanguagePair> values = valuesBuilder.build();
+        return values;
+    }
+
+    private String extractLanguageCode(VTDNav nav) throws NavException {
+        // extract language code in xml:lang if available
+        Integer langAttrIndex = nav.getAttrVal("xml:lang");
+        String languageCode;
+        if (langAttrIndex != -1) {
+            languageCode = nav.toString(langAttrIndex).trim();
+        } else {
+            return DEFAULT_LANGUAGE;
+        }
+
+        return languageCode;
     }
 
     private static String extractProfileId(VTDNav nav, String context) throws VTDException {

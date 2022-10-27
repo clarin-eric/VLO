@@ -18,11 +18,13 @@ package eu.clarin.cmdi.vlo.mapping.model;
 
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
 import java.util.Collection;
+import lombok.ToString;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@ToString
 public class ValueContextImpl implements ValueContext {
 
     private final Context context;
