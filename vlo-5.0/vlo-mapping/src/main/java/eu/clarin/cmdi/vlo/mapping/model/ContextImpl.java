@@ -18,15 +18,19 @@ package eu.clarin.cmdi.vlo.mapping.model;
 
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
 import java.util.Collection;
+import lombok.ToString;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@ToString()
 public class ContextImpl implements Context {
 
     private final String xpath;
+    @ToString.Exclude
     private final Collection<String> conceptPath;
+    @ToString.Exclude
     private final Vocabulary vocabulary;
 
     public ContextImpl(String xpath, Collection<String> conceptPath, Vocabulary vocabulary) {

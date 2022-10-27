@@ -17,11 +17,13 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import java.util.Objects;
+import lombok.ToString;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@ToString
 public class ValueLanguagePair {
 
     private final String value;
