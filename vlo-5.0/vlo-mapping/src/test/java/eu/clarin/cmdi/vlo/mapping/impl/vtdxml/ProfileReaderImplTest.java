@@ -39,12 +39,7 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class ProfileReaderImplTest {
 
-    final VloMappingConfiguration mappingConfig = new VloMappingConfiguration() {
-        {
-            setProfileSchemaUrl("https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd");
-            setVocabularyRegistryUrl("http://clavas.clarin.eu/clavas/public/api/find-concepts");
-        }
-    };
+    final VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
 
     final VTDProfileParser parser = new DefaultVTDProfileParser(mappingConfig) {
         @Override
