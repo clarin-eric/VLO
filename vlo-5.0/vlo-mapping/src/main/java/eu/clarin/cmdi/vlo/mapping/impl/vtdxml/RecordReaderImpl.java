@@ -96,7 +96,7 @@ public class RecordReaderImpl implements RecordReader {
         // anything else?
     }
 
-    public static String extractProfileId(VTDNav nav, String context) throws VTDException {
+    private static String extractProfileId(VTDNav nav, String context) throws VTDException {
         String profileID = getProfileIdFromHeader(nav);
         if (profileID != null) {
             Matcher m = PROFILE_ID_PATTERN.matcher(profileID);
@@ -177,7 +177,7 @@ public class RecordReaderImpl implements RecordReader {
      * @param ap
      * @param profileId
      */
-    public static void setNameSpace(AutoPilot ap, String profileId) {
+    private static void setNameSpace(AutoPilot ap, String profileId) {
         ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
         if (profileId != null) {
             ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/" + profileId);

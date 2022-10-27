@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cmdp:ArthurianFiction xmlns:dcr="http://www.isocat.org/ns/dcr" xmlns="http://www.clarin.eu/cmd/1"
+    xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+    xmlns:cue="http://www.clarin.eu/cmd/cues/1" xmlns:cue_old="http://www.clarin.eu/cmdi/cues/1"
+    xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1345561703673"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1345561703673 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1345561703673/xsd"
+    xmlns:cmd="http://www.clarin.eu/cmd/1" xml:base="http://www.oxygenxml.com/">
+    <cmdp:manuscript xml:base="http://www.oxygenxml.com/">
+        <cmdp:id>id0</cmdp:id>
+        <cmdp:city xml:lang="en-US">city0</cmdp:city>
+        <cmdp:city xml:lang="en-US">city1</cmdp:city>
+        <cmdp:library>library0</cmdp:library>
+        <cmdp:shelfmark>shelfmark0</cmdp:shelfmark>
+        <cmdp:dates xml:base="http://www.oxygenxml.com/">
+            <cmdp:date>date0</cmdp:date>
+            <cmdp:date>date1</cmdp:date>
+        </cmdp:dates>
+        <cmdp:origins xml:base="http://www.oxygenxml.com/">
+            <cmdp:origin xml:base="http://www.oxygenxml.com/">
+                <cmdp:country>country0</cmdp:country>
+                <cmdp:placeInRegion>placeInRegion0</cmdp:placeInRegion>
+            </cmdp:origin>
+            <cmdp:origin xml:base="http://www.oxygenxml.com/">
+                <cmdp:country>country1</cmdp:country>
+                <cmdp:placeInRegion>placeInRegion1</cmdp:placeInRegion>
+            </cmdp:origin>
+        </cmdp:origins>
+        <cmdp:narratives xml:base="http://www.oxygenxml.com/">
+            <cmdp:narrative xml:base="http://www.oxygenxml.com/">
+                <cmdp:id>id1</cmdp:id>
+                <cmdp:title>title0</cmdp:title>
+            </cmdp:narrative>
+            <cmdp:narrative xml:base="http://www.oxygenxml.com/">
+                <cmdp:id>id2</cmdp:id>
+                <cmdp:title>title1</cmdp:title>
+            </cmdp:narrative>
+        </cmdp:narratives>
+        <cmdp:patrons xml:base="http://www.oxygenxml.com/">
+            <cmdp:person>person0</cmdp:person>
+            <cmdp:person>person1</cmdp:person>
+        </cmdp:patrons>
+        <cmdp:artists xml:base="http://www.oxygenxml.com/">
+            <cmdp:person>person2</cmdp:person>
+            <cmdp:person>person3</cmdp:person>
+        </cmdp:artists>
+        <cmdp:scribes xml:base="http://www.oxygenxml.com/">
+            <cmdp:person>person4</cmdp:person>
+            <cmdp:person>person5</cmdp:person>
+        </cmdp:scribes>
+    </cmdp:manuscript>
+    <cmdp:narrative xml:base="http://www.oxygenxml.com/">
+        <cmdp:id>id3</cmdp:id>
+        <cmdp:title>title2</cmdp:title>
+        <cmdp:dates xml:base="http://www.oxygenxml.com/">
+            <cmdp:date>date2</cmdp:date>
+            <cmdp:date>date3</cmdp:date>
+        </cmdp:dates>
+        <cmdp:origins xml:base="http://www.oxygenxml.com/">
+            <cmdp:origin xml:base="http://www.oxygenxml.com/">
+                <cmdp:country>country2</cmdp:country>
+                <cmdp:placeInRegion>placeInRegion2</cmdp:placeInRegion>
+            </cmdp:origin>
+            <cmdp:origin xml:base="http://www.oxygenxml.com/">
+                <cmdp:country>country3</cmdp:country>
+                <cmdp:placeInRegion>placeInRegion3</cmdp:placeInRegion>
+            </cmdp:origin>
+        </cmdp:origins>
+        <cmdp:languages xml:base="http://www.oxygenxml.com/">
+            <cmdp:language xml:base="http://www.oxygenxml.com/">
+                <cmdp:language>language0</cmdp:language>
+                <cmdp:dialect>dialect0</cmdp:dialect>
+            </cmdp:language>
+            <cmdp:language xml:base="http://www.oxygenxml.com/">
+                <cmdp:language>language1</cmdp:language>
+                <cmdp:dialect>dialect1</cmdp:dialect>
+            </cmdp:language>
+        </cmdp:languages>
+        <cmdp:patrons xml:base="http://www.oxygenxml.com/">
+            <cmdp:person>person6</cmdp:person>
+            <cmdp:person>person7</cmdp:person>
+        </cmdp:patrons>
+        <cmdp:authors xml:base="http://www.oxygenxml.com/">
+            <cmdp:person>person8</cmdp:person>
+            <cmdp:person>person9</cmdp:person>
+        </cmdp:authors>
+        <cmdp:manuscripts xml:base="http://www.oxygenxml.com/">
+            <cmdp:manuscript xml:base="http://www.oxygenxml.com/">
+                <cmdp:id>id4</cmdp:id>
+                <cmdp:location>location0</cmdp:location>
+            </cmdp:manuscript>
+            <cmdp:manuscript xml:base="http://www.oxygenxml.com/">
+                <cmdp:id>id5</cmdp:id>
+                <cmdp:location>location1</cmdp:location>
+            </cmdp:manuscript>
+        </cmdp:manuscripts>
+    </cmdp:narrative>
+</cmdp:ArthurianFiction>
