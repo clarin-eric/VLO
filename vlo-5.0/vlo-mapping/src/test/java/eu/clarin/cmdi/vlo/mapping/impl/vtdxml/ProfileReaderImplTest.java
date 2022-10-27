@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import com.ximpleware.VTDGen;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;

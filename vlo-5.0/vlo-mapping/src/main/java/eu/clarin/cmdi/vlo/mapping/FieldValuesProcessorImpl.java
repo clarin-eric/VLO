@@ -14,19 +14,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
+package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
+import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import java.util.Collection;
+import java.util.Collections;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-class VloMappingTestConfiguration extends VloMappingConfiguration {
-    
-    public VloMappingTestConfiguration() {
-        setProfileSchemaUrl("https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd");
-        setVocabularyRegistryUrl("http://clavas.clarin.eu/clavas/public/api/find-concepts");
+@Slf4j
+public class FieldValuesProcessorImpl implements FieldValuesProcessor {
+
+    @Override
+    public Collection<ValueLanguagePair> process(String field, Collection<FieldMappingResult> mappingResults) {
+        log.info("Processing field {} with mapping results {}", field, mappingResults);
+        return Collections.emptySet();
     }
-    
+
 }
