@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.mapping;
 
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.ContextFactoryImpl;
+import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.RecordReaderImpl;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
@@ -31,11 +33,17 @@ import java.util.stream.Collectors;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class RecordFieldValuesMapperImpl implements RecordFieldValuesMapper {
+public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
 
-    private ContextFactory contextFactory;
-    private ContextFieldValueMapper contextFieldValueMapper;
-    private FieldValuesProcessor fieldValuesProcessor;
+    private final ContextFactory contextFactory;
+    private final ContextFieldValueMapper contextFieldValueMapper;
+    private final FieldValuesProcessor fieldValuesProcessor;
+    
+    public BaseRecordFieldValuesMapper(ContextFactory contextFactory, ContextFieldValueMapper contextFieldValueMapper, FieldValuesProcessor fieldValuesProcessor) {
+        this.contextFactory = contextFactory;
+        this.contextFieldValueMapper = contextFieldValueMapper;
+        this.fieldValuesProcessor = fieldValuesProcessor;
+    }
 
     @Override
     public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException {

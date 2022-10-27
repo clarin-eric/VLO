@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN
+ * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,22 +16,17 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
-import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import java.util.stream.Stream;
-import lombok.extern.slf4j.Slf4j;
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@Slf4j
-public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
-
-    @Override
-    public Stream<FieldMappingResult> mapContext(ValueContext context) {
-        log.info("Mapping value context {}", context);
-        return Stream.empty();
+public class VloMappingTestConfiguration extends VloMappingConfiguration {
+    
+    public VloMappingTestConfiguration() {
+        setProfileSchemaUrl("https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd");
+        setVocabularyRegistryUrl("http://clavas.clarin.eu/clavas/public/api/find-concepts");
     }
-
+    
 }

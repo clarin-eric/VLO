@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
@@ -23,7 +24,6 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.io.File;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
@@ -31,7 +31,6 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.isA;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import org.junit.jupiter.api.AfterAll;
