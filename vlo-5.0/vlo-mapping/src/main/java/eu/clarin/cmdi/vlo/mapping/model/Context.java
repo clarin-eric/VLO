@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -25,7 +25,7 @@ import java.util.Collection;
  */
 public interface Context {
 
-    Collection<String> getConceptPath();
+    List<String> getConceptPath();
 
     Vocabulary getVocabulary();
 
