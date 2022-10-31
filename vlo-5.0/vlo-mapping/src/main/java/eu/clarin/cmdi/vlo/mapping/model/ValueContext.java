@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.model;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -24,5 +24,5 @@ import java.util.Collection;
  */
 public interface ValueContext extends Context {
 
-    Collection<ValueLanguagePair> getValues();
+    List<ValueLanguagePair> getValues();
 }

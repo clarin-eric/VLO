@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
-import java.util.Collection;
+import java.util.List;
 import lombok.ToString;
 
 /**
@@ -29,11 +29,11 @@ public class ContextImpl implements Context {
 
     private final String xpath;
     @ToString.Exclude
-    private final Collection<String> conceptPath;
+    private final List<String> conceptPath;
     @ToString.Exclude
     private final Vocabulary vocabulary;
 
-    public ContextImpl(String xpath, Collection<String> conceptPath, Vocabulary vocabulary) {
+    public ContextImpl(String xpath, List<String> conceptPath, Vocabulary vocabulary) {
         this.xpath = xpath;
         this.conceptPath = conceptPath;
         this.vocabulary = vocabulary;
@@ -45,7 +45,7 @@ public class ContextImpl implements Context {
     }
 
     @Override
-    public Collection<String> getConceptPath() {
+    public List<String> getConceptPath() {
         return conceptPath;
     }
 

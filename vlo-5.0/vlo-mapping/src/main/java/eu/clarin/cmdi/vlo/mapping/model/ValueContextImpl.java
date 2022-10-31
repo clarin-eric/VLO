@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.mapping.model;
 
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
 import java.util.Collection;
+import java.util.List;
 import lombok.ToString;
 
 /**
@@ -29,28 +30,28 @@ public class ValueContextImpl implements ValueContext {
 
     private final Context context;
 
-    private Collection<ValueLanguagePair> values;
+    private List<ValueLanguagePair> values;
 
     public ValueContextImpl(Context context) {
         this.context = context;
     }
 
-    public ValueContextImpl(Context context, Collection<ValueLanguagePair> values) {
+    public ValueContextImpl(Context context, List<ValueLanguagePair> values) {
         this.context = context;
         this.values = values;
     }
 
     @Override
-    public Collection<ValueLanguagePair> getValues() {
+    public List<ValueLanguagePair> getValues() {
         return values;
     }
 
-    public void setValues(Collection<ValueLanguagePair> values) {
+    public void setValues(List<ValueLanguagePair> values) {
         this.values = values;
     }
 
     @Override
-    public Collection<String> getConceptPath() {
+    public List<String> getConceptPath() {
         return context.getConceptPath();
     }
 
@@ -64,7 +65,7 @@ public class ValueContextImpl implements ValueContext {
         return context.getXpath();
     }
 
-    public static ValueContext fromContext(Context base, Collection<ValueLanguagePair> values) {
+    public static ValueContext fromContext(Context base, List<ValueLanguagePair> values) {
         return new ValueContextImpl(base, values);
     }
 
