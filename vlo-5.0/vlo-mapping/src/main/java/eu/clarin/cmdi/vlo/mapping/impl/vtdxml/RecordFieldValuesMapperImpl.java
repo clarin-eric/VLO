@@ -23,6 +23,8 @@ import eu.clarin.cmdi.vlo.mapping.FieldValuesProcessorImpl;
 import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.rules.RulesFactory;
+import eu.clarin.cmdi.vlo.mapping.rules.RulesFactoryImpl;
 
 /**
  *
@@ -31,16 +33,16 @@ import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 public class RecordFieldValuesMapperImpl extends BaseRecordFieldValuesMapper {
 
     public RecordFieldValuesMapperImpl(VloMappingConfiguration mappingConfig) {
-        this(new RecordReaderImpl(mappingConfig));
+        this(new RecordReaderImpl(mappingConfig), new RulesFactoryImpl(mappingConfig));
 
     }
 
-    private RecordFieldValuesMapperImpl(RecordReader recordReader) {
-        this(new CachingRecordFactory(recordReader));
+    private RecordFieldValuesMapperImpl(RecordReader recordReader, RulesFactory rulesFactory) {
+        this(new CachingRecordFactory(recordReader), rulesFactory);
 
     }
 
-    private RecordFieldValuesMapperImpl(RecordFactory recordFactory) {
-        super(new ContextFactoryImpl(recordFactory), new ContextFieldValueMapperImpl(), new FieldValuesProcessorImpl());
+    private RecordFieldValuesMapperImpl(RecordFactory recordFactory, RulesFactory rulesFactory) {
+        super(new ContextFactoryImpl(recordFactory), new ContextFieldValueMapperImpl(rulesFactory.getRules()), new FieldValuesProcessorImpl());
     }
 }

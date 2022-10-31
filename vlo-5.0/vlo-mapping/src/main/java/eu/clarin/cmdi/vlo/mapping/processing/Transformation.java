@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN
+ * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,19 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.processing;
 
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.util.stream.Stream;
 
 /**
- * Responsible for mapping value contexts from metadata records to field value
- * candidates (subject to final processing by a {@link FieldValuesProcessor}
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ContextFieldValueMapper {
-
-    Stream<FieldMappingResult> mapContext(ValueContext context);
+public interface Transformation {
+    
+    String getTargetField();
+    
+    Stream<ValueLanguagePair> apply(ValueContext valueContext);
+    
 }
