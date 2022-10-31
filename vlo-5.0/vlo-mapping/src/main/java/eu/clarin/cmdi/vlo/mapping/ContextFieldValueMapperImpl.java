@@ -18,20 +18,50 @@ package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import eu.clarin.cmdi.vlo.mapping.rules.MappingRule;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Rule definitions - {1..*} Context assertion - {1..*} Transformations
+ *
+ * Examples of rules
+ */
+/**
+ * Responsible for mapping value contexts from metadata records to field values
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
 public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
 
+    private final List<MappingRule> rules;
+
+    public ContextFieldValueMapperImpl(List<MappingRule> rules) {
+        this.rules = rules;
+    }
+
     @Override
     public Stream<FieldMappingResult> mapContext(ValueContext context) {
         log.info("Mapping value context {}", context);
-        return Stream.empty();
+        Stream<FieldMappingResult> result = Stream.empty();
+        for (MappingRule rule : rules) {
+            if (rule.applies(context)) {
+                result = Stream.concat(result,
+                        rule.getTransformations().map(
+                                t -> new FieldMappingResult(
+                                        t.getTargetField(),
+                                        context,
+                                        t.apply(context).collect(Collectors.toList()))));
+                if (rule.isTerminal()) {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
 }
