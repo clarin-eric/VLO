@@ -49,7 +49,9 @@ public class ContextAssertionBasedRuleTest {
         final ImmutableList<Transformation> transformations = ImmutableList.of(transformation);
 
         final ContextAssertionBasedRule instance = new ContextAssertionBasedRule(assertions, transformations, false);
-        final SimpleValueContext context = new SimpleValueContext("/a/b/c", ImmutableList.of(new ValueLanguagePair("value1", "enF")));
+        final SimpleValueContext context = SimpleValueContext.builder()
+                .values(ImmutableList.of(new ValueLanguagePair("value1", "en")))
+                .build();
         final boolean result = instance.applies(context);
         assertTrue(result);
     }
