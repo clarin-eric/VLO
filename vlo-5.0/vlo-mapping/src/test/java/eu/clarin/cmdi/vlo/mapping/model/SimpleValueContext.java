@@ -17,10 +17,8 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -28,20 +26,11 @@ import lombok.Data;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Data
-@AllArgsConstructor
+@Builder
 public class SimpleValueContext implements ValueContext {
 
-    private String xpath;
-    private List<ValueLanguagePair> values;
-
-    @Override
-    public List<String> getConceptPath() {
-        return Collections.emptyList();
-    }
-
-    @Override
-    public Vocabulary getVocabulary() {
-        return new Vocabulary("https://www.clarin.eu");
-    }
-
+    private final String xpath;
+    private final List<ValueLanguagePair> values;
+    private final List<String> conceptPath;
+    private final Vocabulary vocabulary;
 }

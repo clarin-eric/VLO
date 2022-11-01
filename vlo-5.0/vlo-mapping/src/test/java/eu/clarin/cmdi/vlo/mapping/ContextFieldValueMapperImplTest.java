@@ -54,7 +54,9 @@ public class ContextFieldValueMapperImplTest {
     @Mock
     private Transformation transformation;
 
-    private final ValueContext context = new SimpleValueContext("/a/b/c", ImmutableList.of(new ValueLanguagePair("value1", "en")));
+    private final ValueContext context = SimpleValueContext.builder()
+            .values(ImmutableList.of(new ValueLanguagePair("value1", "en")))
+            .build();
     private ContextFieldValueMapperImpl instance;
 
     @BeforeEach
