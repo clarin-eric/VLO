@@ -98,4 +98,22 @@ public class ValueAssertionTest {
         }
     }
 
+    /**
+     * Test of evaluate method, of class ValueAssertion.
+     */
+    @Test
+    public void testLanguageMatch() {
+        for (String[] values : ImmutableList.of(new String[]{"value1", "lang1"}, new String[]{"value2", "LANG2"}, new String[]{"value3", "Lang3"})) {
+            final String value = values[0];
+            final String language = values[1];
+            final ValueAssertion instance = new ValueAssertion(value, Boolean.FALSE, Boolean.TRUE, language);
+            assertTrue(instance.evaluate(context), "Case sensitive langage/value match: " + value + " " + language);
+        }
+        for (String[] values : ImmutableList.of(new String[]{"value1", "lang2"}, new String[]{"value3", "LANG"}, new String[]{"value", "lang1"})) {
+            final String value = values[0];
+            final String language = values[1];
+            final ValueAssertion instance = new ValueAssertion(value, Boolean.FALSE, Boolean.TRUE, language);
+            assertFalse(instance.evaluate(context), "Case sensitive langage/value mismatch: " + value + " " + language);
+        }
+    }
 }
