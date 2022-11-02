@@ -17,39 +17,25 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import java.util.Objects;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@Data
-@AllArgsConstructor
-public class TypedContextAssertion implements ContextAssertion {
+public class XPathAssertion implements ContextAssertion {
 
-    public enum ContextAssertionType {
-        CONCEPT,
-        XPATH,
-        VALUE
+    private final String target;
+
+    public XPathAssertion(String target) {
+        //TODO: normalize target?
+        this.target = target;
     }
-
-    public enum MatchType {
-        EQUALS,
-        PATTERN_MATCH,
-        SUBPATH,
-        REGEX
-    }
-
-    private ContextAssertionType type;
-    private MatchType match;
-    private List<String> target;
 
     @Override
     public Boolean evaluate(ValueContext context) {
-        //TODO
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        //TODO: normalize actual?
+        return Objects.equals(target, context.getXpath());
     }
 
 }
