@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import eu.clarin.cmdi.vlo.mapping.XPathUtils;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.util.Objects;
 
@@ -28,14 +29,16 @@ public class XPathAssertion implements ContextAssertion {
     private final String target;
 
     public XPathAssertion(String target) {
-        //TODO: normalize target?
-        this.target = target;
+        this.target = normalize(target);
     }
 
     @Override
     public Boolean evaluate(ValueContext context) {
-        //TODO: normalize actual?
-        return Objects.equals(target, context.getXpath());
+        return Objects.equals(target, normalize(context.getXpath()));
+    }
+
+    protected static String normalize(String xpath) {
+        return XPathUtils.normalize(xpath);
     }
 
 }
