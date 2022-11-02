@@ -89,8 +89,7 @@ public class ValueAssertion implements ContextAssertion {
     private boolean languageMatch(ValueLanguagePair value) {
         // language is optional; if not set this means no check is needed
         return language
-                .map(targetLanguage
-                        -> targetLanguage.equalsIgnoreCase(value.getLanguage()))
+                .map(l -> l.equalsIgnoreCase(value.getLanguage()))
                 // target language not set, so always match on language
                 .orElse(true);
     }
