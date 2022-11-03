@@ -29,7 +29,7 @@ import java.util.regex.Pattern;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class ValueAssertion implements ContextAssertion {
+public class ValueAssertion extends ContextAssertion {
 
     private final String target;
     private final Boolean regex;

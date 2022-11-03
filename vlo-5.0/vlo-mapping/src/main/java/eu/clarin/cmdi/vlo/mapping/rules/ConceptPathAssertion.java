@@ -17,9 +17,15 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
 import static com.google.common.base.Predicates.notNull;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -27,17 +33,17 @@ import java.util.List;
 /**
  * Assertion on concept paths. Examples:
  *
- * 
+ *
  * <pre>{@code
  * // exact match of one concept
  * new ConceptPathAssertion("http://concept1");
- * 
+ *
  * // exact match of two concepts
  * new ConceptPathAssertion("http://concept1", "http://concept2");
- * 
+ *
  * // exact match of first concept, any actuals after that
  * new ConceptPathAssertion("http://concept1", "*");
- * 
+ *
  * // match of two concepts with any actual between and after these
  * new ConceptPathAssertion("http://concept1", "*", "http://concept2", "*");
  * }</pre>
@@ -46,18 +52,30 @@ import java.util.List;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class ConceptPathAssertion implements ContextAssertion {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+public class ConceptPathAssertion extends ContextAssertion {
 
     public static final String WILDCARD = "*";
-    private final Iterable<String> targetPath;
 
-    public ConceptPathAssertion(String... target) {
-        this(Arrays.asList(target));
+    @XmlElementWrapper(name = "conceptPath")
+    @XmlElement(name = "concept")
+    private List<String> targetPath;
+
+    public ConceptPathAssertion() {
     }
 
-    public ConceptPathAssertion(List<String> target) {
+    protected ConceptPathAssertion(String... target) {
+        setTargetPath(Arrays.asList(target));
+    }
+
+    public final void setTargetPath(List<String> target) {
         //remove null
-        this.targetPath = Iterables.filter(target, notNull());
+        this.targetPath = ImmutableList.copyOf(Iterables.filter(target, notNull()));
+    }
+
+    public Iterable<String> getTargetPath() {
+        return targetPath;
     }
 
     @Override

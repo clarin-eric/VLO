@@ -18,16 +18,20 @@ package eu.clarin.cmdi.vlo.mapping.processing;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.stream.Stream;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface Transformation {
+@XmlTransient
+@XmlSeeAlso(IdentityTransformation.class)
+public abstract class Transformation {
     
-    String getTargetField();
+    public abstract String getTargetField();
     
-    Stream<ValueLanguagePair> apply(ValueContext valueContext);
+    public abstract Stream<ValueLanguagePair> apply(ValueContext valueContext);
     
 }
