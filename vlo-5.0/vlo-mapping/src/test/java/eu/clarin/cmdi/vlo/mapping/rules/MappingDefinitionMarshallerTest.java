@@ -16,22 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
-import eu.clarin.cmdi.vlo.mapping.processing.IdentityTransformation;
+import static eu.clarin.cmdi.vlo.mapping.rules.MappingDefinitionSample.MAPPING_DEFINITION;
+import static eu.clarin.cmdi.vlo.mapping.rules.MappingDefinitionSample.MAPPING_DEFINITION_XML_SOURCE;
 import jakarta.xml.bind.JAXBException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isA;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,24 +38,7 @@ import org.junit.jupiter.api.Test;
 @Slf4j
 public class MappingDefinitionMarshallerTest {
 
-    private static MappingDefinition definition;
     private MappingDefinitionMarshaller instance;
-
-    @BeforeAll
-    public static void setUpClass() {
-        definition = new MappingDefinition();
-        definition.setRules(
-                Arrays.asList(
-                        new ContextAssertionBasedRule(
-                                Arrays.asList(
-                                        new ConceptPathAssertion(
-                                                "concept1",
-                                                "concept2")),
-                                Arrays.asList(
-                                        new IdentityTransformation()),
-                                true
-                        )));
-    }
 
     @BeforeEach
     public void setUp() throws JAXBException {
@@ -75,7 +52,7 @@ public class MappingDefinitionMarshallerTest {
         try ( StringWriter writer = new StringWriter()) {
             try {
                 final Result result = new StreamResult(writer);
-                instance.marshal(definition, result);
+                instance.marshal(MAPPING_DEFINITION, result);
                 log.debug("Result: {}", writer.toString());
             } catch (JAXBException ex) {
                 log.error("Failed to serialize", ex);
@@ -86,7 +63,7 @@ public class MappingDefinitionMarshallerTest {
             try ( StringReader reader = new StringReader(writer.toString())) {
                 final MappingDefinition unmarshalled = instance.unmarshal(new StreamSource(reader));
                 assertNotNull(unmarshalled);
-                assertNotNull(unmarshalled.getRules());
+                MappingDefinitionSample.assertContents(unmarshalled.getRules());
             }
         }
     }
@@ -94,41 +71,11 @@ public class MappingDefinitionMarshallerTest {
     @Test
     public void testUnmarshall() throws Exception {
         log.info("Unmarshalling");
-        try ( StringReader reader = new StringReader(XML)) {
-            final MappingDefinition unmarshalled = instance.unmarshal(new StreamSource(reader));
-            assertNotNull(unmarshalled);
+        final MappingDefinition unmarshalled = instance.unmarshal(MAPPING_DEFINITION_XML_SOURCE());
+        assertNotNull(unmarshalled);
 
-            final List<ContextAssertionBasedRule> rules = unmarshalled.getRules();
-            assertThat(rules, hasSize(1));
-            assertThat(rules, hasItem(
-                    hasProperty("assertions",
-                            hasItem(isA(ConceptPathAssertion.class)))));
-            assertThat(rules, hasItem(
-                    hasProperty("assertions",
-                            hasItem(
-                                    hasProperty("targetPath")))));
-            assertThat(rules, hasItem(
-                    hasProperty("terminal", equalTo(true))));
-        }
+        final List<ContextAssertionBasedRule> rules = unmarshalled.getRules();
+        MappingDefinitionSample.assertContents(rules);
     }
-
-    private static final String XML = """
-        <mappingDefinition>
-            <contextAssertionBasedRule>
-                <assertions>
-                    <assertion xsi:type="conceptPathAssertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                        <conceptPath>
-                            <concept>concept1</concept>
-                            <concept>concept2</concept>
-                        </conceptPath>
-                    </assertion>
-                </assertions>
-                <transformations>
-                    <transformation xsi:type="identityTransformation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                </transformations>
-                <terminal>true</terminal>
-            </contextAssertionBasedRule>
-        </mappingDefinition>
-      """;
 
 }
