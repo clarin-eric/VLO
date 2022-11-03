@@ -5,9 +5,8 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
 import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.util.Optional;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
 import lombok.extern.slf4j.Slf4j;
 
 /*
@@ -40,16 +39,17 @@ public class MappingDefinitionMarshaller {
                 MappingDefinition.class, ConceptPathAssertion.class, ContextAssertionBasedRule.class);
     }
 
-    public void marshal(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
-
+    public void marshal(MappingDefinition definition, Result result) throws JAXBException, IOException {
+        log.debug("Marshalling mapping definition to {}  (systemId: {})", result, result.getSystemId());
         Marshaller mar = jaxbContext.createMarshaller();
         mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        mar.marshal(definition, writer);
+        mar.marshal(definition, result);
     }
 
-    public MappingDefinition unmarshal(Reader reader) throws JAXBException {
+    public MappingDefinition unmarshal(Source source) throws JAXBException {
+        log.debug("Unmarshalling mapping definition from {} (systemId: {})", source, source.getSystemId());
         final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-        final Object result = jaxbUnmarshaller.unmarshal(reader);
+        final Object result = jaxbUnmarshaller.unmarshal(source);
         if (result instanceof MappingDefinition mappingDefinition) {
             return mappingDefinition;
         } else {

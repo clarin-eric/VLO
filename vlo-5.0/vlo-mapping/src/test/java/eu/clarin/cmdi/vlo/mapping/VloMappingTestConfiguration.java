@@ -25,6 +25,7 @@ public class VloMappingTestConfiguration extends VloMappingConfiguration {
     public VloMappingTestConfiguration() {
         setProfileSchemaUrl("https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd");
         setVocabularyRegistryUrl("http://clavas.clarin.eu/clavas/public/api/find-concepts");
+        setMappingDefinitionUri(getClass().getResource("/mappings/test-mapping.xml").toString());
     }
     
 }

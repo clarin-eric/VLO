@@ -16,12 +16,31 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import eu.clarin.cmdi.vlo.mapping.VloMappingException;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface RulesFactory {
+public class VloMappingRulesException extends VloMappingException {
 
-    Iterable<MappingRule> getRules() throws VloMappingRulesException;
+    public VloMappingRulesException() {
+    }
+
+    public VloMappingRulesException(String message) {
+        super(message);
+    }
+
+    public VloMappingRulesException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public VloMappingRulesException(Throwable cause) {
+        super(cause);
+    }
+
+    public VloMappingRulesException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }
