@@ -24,6 +24,7 @@ public class VloMappingConfiguration {
 
     private String vocabularyRegistryUrl = "";
     private String profileSchemaUrl = "";
+    private String mappingDefinitionUri = "";
 
     public void setVocabularyRegistryUrl(String vocabularyRegistryUrl) {
         this.vocabularyRegistryUrl = vocabularyRegistryUrl;
@@ -48,6 +49,14 @@ public class VloMappingConfiguration {
 
     public void setProfileSchemaUrl(String profileSchemaUrl) {
         this.profileSchemaUrl = profileSchemaUrl;
+    }
+
+    public String getMappingDefinitionUri() {
+        return mappingDefinitionUri;
+    }
+
+    public void setMappingDefinitionUri(String mappingDefinitionUri) {
+        this.mappingDefinitionUri = mappingDefinitionUri;
     }
 
 }

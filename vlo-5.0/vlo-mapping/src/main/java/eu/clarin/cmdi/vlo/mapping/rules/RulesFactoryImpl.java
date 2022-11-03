@@ -16,31 +16,75 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import com.google.common.base.Suppliers;
+import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import jakarta.xml.bind.JAXBException;
+import java.io.File;
 import java.io.IOException;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.List;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.function.Supplier;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Slf4j
 public class RulesFactoryImpl implements RulesFactory {
 
-    public RulesFactoryImpl(VloMappingConfiguration mappingConfig) {
+    private final Source definitionSource;
+    private final Supplier<MappingDefinitionMarshaller> definitionMarshallerSupplier;
+
+    public RulesFactoryImpl(VloMappingConfiguration config) throws VloMappingRulesException, IOException {
+        this(getDefinitionSourceFromConfig(config));
+    }
+
+    public RulesFactoryImpl(Source source) {
+        this.definitionSource = source;
+        this.definitionMarshallerSupplier = Suppliers.memoize(RulesFactoryImpl::newMarshaller);
     }
 
     @Override
-    public List<MappingRule> getRules() {
-        //TODO
-        return Collections.emptyList();
+    public Iterable<MappingRule> getRules() throws VloMappingRulesException {
+        final MappingDefinitionMarshaller marshaller = definitionMarshallerSupplier.get();
+        try {
+            final MappingDefinition definition = marshaller.unmarshal(definitionSource);
+            return Iterables.transform(definition.getRules(), r -> r);
+        } catch (JAXBException ex) {
+            throw new VloMappingRulesException("Error while trying to unmarshal mapping definition from source: " + definitionSource, ex);
+        }
     }
 
-    public void writeRules(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
-        final MappingDefinitionMarshaller marshaller = new MappingDefinitionMarshaller();
-        marshaller.marshal(definition, writer);
+    private static Source getDefinitionSourceFromConfig(VloMappingConfiguration config) throws VloMappingRulesException, IOException {
+        final String configuredUri = config.getMappingDefinitionUri();
+        try {
+            final URI uri = new URI(configuredUri);
+            if ("file".equalsIgnoreCase(uri.getScheme())) {
+                log.debug("Loading mapping definition: File based stream source for from configured location: {}", uri);
+                return new StreamSource(new File(uri));
+            } else if ("http".equalsIgnoreCase(uri.getScheme()) || "https".equalsIgnoreCase(uri.getScheme())) {
+                log.debug("Loading mapping definition: InputStream based stream source from configured location: {}", uri);
+                final InputStream is = uri.toURL().openStream();
+                return new StreamSource(is, uri.toString());
+            } else {
+                throw new VloMappingRulesException("Can't process scheme: " + uri.getScheme());
+            }
+        } catch (VloMappingRulesException | URISyntaxException ex) {
+            throw new VloMappingRulesException("Could not access mapping definition at configured location: " + configuredUri, ex);
+        }
+    }
+
+    private static MappingDefinitionMarshaller newMarshaller() {
+        try {
+            return new MappingDefinitionMarshaller();
+        } catch (JAXBException ex) {
+            throw new RuntimeException("Failed to instantiate mapping definition marshaller", ex);
+        }
     }
 
 }

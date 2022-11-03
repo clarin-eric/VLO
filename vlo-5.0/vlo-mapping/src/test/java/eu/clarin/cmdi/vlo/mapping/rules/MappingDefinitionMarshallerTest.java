@@ -22,6 +22,9 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -69,40 +72,44 @@ public class MappingDefinitionMarshallerTest {
     public void testMarshall() throws Exception {
         log.info("Marshalling");
 
-        final StringWriter writer = new StringWriter();
-        try {
-            instance.marshal(definition, writer);
-            log.debug("Result: {}", writer.toString());
-        } catch (JAXBException ex) {
-            log.error("Failed to serialize", ex);
-            throw ex;
-        }
+        try ( StringWriter writer = new StringWriter()) {
+            try {
+                final Result result = new StreamResult(writer);
+                instance.marshal(definition, result);
+                log.debug("Result: {}", writer.toString());
+            } catch (JAXBException ex) {
+                log.error("Failed to serialize", ex);
+                throw ex;
+            }
 
-        log.info("Unmarshalling our own output");
-        final String xml = writer.toString();
-        final MappingDefinition unmarshalled = instance.unmarshal(new StringReader(xml));
-        assertNotNull(unmarshalled);
-        assertNotNull(unmarshalled.getRules());
+            log.info("Unmarshalling our own output");
+            try ( StringReader reader = new StringReader(writer.toString())) {
+                final MappingDefinition unmarshalled = instance.unmarshal(new StreamSource(reader));
+                assertNotNull(unmarshalled);
+                assertNotNull(unmarshalled.getRules());
+            }
+        }
     }
 
     @Test
     public void testUnmarshall() throws Exception {
         log.info("Unmarshalling");
+        try ( StringReader reader = new StringReader(XML)) {
+            final MappingDefinition unmarshalled = instance.unmarshal(new StreamSource(reader));
+            assertNotNull(unmarshalled);
 
-        final MappingDefinition unmarshalled = instance.unmarshal(new StringReader(XML));
-        assertNotNull(unmarshalled);
-
-        final List<ContextAssertionBasedRule> rules = unmarshalled.getRules();
-        assertThat(rules, hasSize(1));
-        assertThat(rules, hasItem(
-                hasProperty("assertions",
-                        hasItem(isA(ConceptPathAssertion.class)))));
-        assertThat(rules, hasItem(
-                hasProperty("assertions",
-                        hasItem(
-                                hasProperty("targetPath")))));
-        assertThat(rules, hasItem(
-                hasProperty("terminal", equalTo(true))));
+            final List<ContextAssertionBasedRule> rules = unmarshalled.getRules();
+            assertThat(rules, hasSize(1));
+            assertThat(rules, hasItem(
+                    hasProperty("assertions",
+                            hasItem(isA(ConceptPathAssertion.class)))));
+            assertThat(rules, hasItem(
+                    hasProperty("assertions",
+                            hasItem(
+                                    hasProperty("targetPath")))));
+            assertThat(rules, hasItem(
+                    hasProperty("terminal", equalTo(true))));
+        }
     }
 
     private static final String XML = """

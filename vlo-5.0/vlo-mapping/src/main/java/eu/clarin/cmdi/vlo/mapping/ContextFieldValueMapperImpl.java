@@ -37,15 +37,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
 
-    private final List<MappingRule> rules;
+    private final Iterable<MappingRule> rules;
 
-    public ContextFieldValueMapperImpl(List<MappingRule> rules) {
+    public ContextFieldValueMapperImpl(Iterable<MappingRule> rules) {
         this.rules = rules;
     }
 
     @Override
     public Stream<FieldMappingResult> mapContext(ValueContext context) {
-        log.info("Mapping value context {}", context);
+        log.trace("Mapping value context {}", context);
         Stream<FieldMappingResult> result = Stream.empty();
         for (MappingRule rule : rules) {
             if (rule.applies(context)) {
