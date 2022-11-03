@@ -16,14 +16,22 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import eu.clarin.cmdi.vlo.mapping.processing.IdentityTransformation;
 import jakarta.xml.bind.JAXBException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Arrays;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isA;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -34,6 +42,7 @@ import org.junit.jupiter.api.Test;
 public class MappingDefinitionMarshallerTest {
 
     private static MappingDefinition definition;
+    private MappingDefinitionMarshaller instance;
 
     @BeforeAll
     public static void setUpClass() {
@@ -51,19 +60,68 @@ public class MappingDefinitionMarshallerTest {
                         )));
     }
 
+    @BeforeEach
+    public void setUp() throws JAXBException {
+        instance = new MappingDefinitionMarshaller();
+    }
+
     @Test
-    public void testWriteRules() throws Exception {
-        StringWriter writer = new StringWriter();
-        MappingDefinitionMarshaller instance = new MappingDefinitionMarshaller();
+    public void testMarshall() throws Exception {
+        log.info("Marshalling");
+
+        final StringWriter writer = new StringWriter();
         try {
             instance.marshal(definition, writer);
-            log.info(writer.toString());
+            log.debug("Result: {}", writer.toString());
         } catch (JAXBException ex) {
             log.error("Failed to serialize", ex);
             throw ex;
         }
 
+        log.info("Unmarshalling our own output");
         final String xml = writer.toString();
+        final MappingDefinition unmarshalled = instance.unmarshal(new StringReader(xml));
+        assertNotNull(unmarshalled);
+        assertNotNull(unmarshalled.getRules());
     }
+
+    @Test
+    public void testUnmarshall() throws Exception {
+        log.info("Unmarshalling");
+
+        final MappingDefinition unmarshalled = instance.unmarshal(new StringReader(XML));
+        assertNotNull(unmarshalled);
+
+        final List<ContextAssertionBasedRule> rules = unmarshalled.getRules();
+        assertThat(rules, hasSize(1));
+        assertThat(rules, hasItem(
+                hasProperty("assertions",
+                        hasItem(isA(ConceptPathAssertion.class)))));
+        assertThat(rules, hasItem(
+                hasProperty("assertions",
+                        hasItem(
+                                hasProperty("targetPath")))));
+        assertThat(rules, hasItem(
+                hasProperty("terminal", equalTo(true))));
+    }
+
+    private static final String XML = """
+        <mappingDefinition>
+            <contextAssertionBasedRule>
+                <assertions>
+                    <assertion xsi:type="conceptPathAssertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                        <conceptPath>
+                            <concept>concept1</concept>
+                            <concept>concept2</concept>
+                        </conceptPath>
+                    </assertion>
+                </assertions>
+                <transformations>
+                    <transformation xsi:type="identityTransformation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                </transformations>
+                <terminal>true</terminal>
+            </contextAssertionBasedRule>
+        </mappingDefinition>
+      """;
 
 }
