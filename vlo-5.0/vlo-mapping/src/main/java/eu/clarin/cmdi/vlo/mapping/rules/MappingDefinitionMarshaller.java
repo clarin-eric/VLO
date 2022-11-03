@@ -1,11 +1,14 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
-
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
+import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 
 /*
  * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
@@ -27,13 +30,31 @@ import java.io.Writer;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Slf4j
 public class MappingDefinitionMarshaller {
 
-    public void marshal(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
-        JAXBContext context = JAXBContext.newInstance(
+    private final JAXBContext jaxbContext;
+
+    public MappingDefinitionMarshaller() throws JAXBException {
+        jaxbContext = JAXBContext.newInstance(
                 MappingDefinition.class, ConceptPathAssertion.class, ContextAssertionBasedRule.class);
-        Marshaller mar = context.createMarshaller();
+    }
+
+    public void marshal(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
+
+        Marshaller mar = jaxbContext.createMarshaller();
         mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         mar.marshal(definition, writer);
+    }
+
+    public MappingDefinition unmarshal(Reader reader) throws JAXBException {
+        final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        final Object result = jaxbUnmarshaller.unmarshal(reader);
+        if (result instanceof MappingDefinition mappingDefinition) {
+            return mappingDefinition;
+        } else {
+            log.error("Unmarshalled object is of type {} (expecting MappingDefinition): {}", result == null ? "null" : result.getClass(), result);
+            return null;
+        }
     }
 }

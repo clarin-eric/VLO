@@ -72,4 +72,8 @@ public class ContextAssertionBasedRule extends MappingRule {
         return transformations.stream();
     }
 
+    public List<? extends ContextAssertion> getAssertions() {
+        return assertions;
+    }
+
 }
