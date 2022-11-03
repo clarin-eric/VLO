@@ -16,23 +16,32 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.With;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@NoArgsConstructor
+@AllArgsConstructor
+@With
 public class VloMappingConfiguration {
 
+    @Getter
+    @Setter
     private String vocabularyRegistryUrl = "";
+    
+    @Getter
+    @Setter
     private String profileSchemaUrl = "";
+    
+    @Getter
+    @Setter
     private String mappingDefinitionUri = "";
-
-    public void setVocabularyRegistryUrl(String vocabularyRegistryUrl) {
-        this.vocabularyRegistryUrl = vocabularyRegistryUrl;
-    }
-
-    public String getVocabularyRegistryUrl() {
-        return vocabularyRegistryUrl;
-    }
 
     /**
      * Get the value of the ProfileSchemaUrl by profileId parameter<br>
@@ -45,18 +54,6 @@ public class VloMappingConfiguration {
      */
     public String getComponentRegistryProfileSchema(String id) {
         return profileSchemaUrl.replace("{PROFILE_ID}", id);
-    }
-
-    public void setProfileSchemaUrl(String profileSchemaUrl) {
-        this.profileSchemaUrl = profileSchemaUrl;
-    }
-
-    public String getMappingDefinitionUri() {
-        return mappingDefinitionUri;
-    }
-
-    public void setMappingDefinitionUri(String mappingDefinitionUri) {
-        this.mappingDefinitionUri = mappingDefinitionUri;
     }
 
 }

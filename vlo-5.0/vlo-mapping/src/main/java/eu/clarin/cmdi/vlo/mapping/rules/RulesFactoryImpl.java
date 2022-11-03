@@ -37,15 +37,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RulesFactoryImpl implements RulesFactory {
 
-    private final Source definitionSource;
+    private final Supplier<Source> definitionSource;
     private final Supplier<MappingDefinitionMarshaller> definitionMarshallerSupplier;
 
-    public RulesFactoryImpl(VloMappingConfiguration config) throws VloMappingRulesException, IOException {
-        this(getDefinitionSourceFromConfig(config));
+    public RulesFactoryImpl(VloMappingConfiguration config) throws VloMappingRulesException {
+        this(getConfigSourceSupplier(config));
     }
 
-    public RulesFactoryImpl(Source source) {
-        this.definitionSource = source;
+    public RulesFactoryImpl(Source mappingDefinitionsSource) {
+        this(Suppliers.ofInstance(mappingDefinitionsSource));
+    }
+
+    public RulesFactoryImpl(Supplier<Source> mappingDefinitionsSource) {
+        this.definitionSource = mappingDefinitionsSource;
         this.definitionMarshallerSupplier = Suppliers.memoize(RulesFactoryImpl::newMarshaller);
     }
 
@@ -53,28 +57,34 @@ public class RulesFactoryImpl implements RulesFactory {
     public Iterable<MappingRule> getRules() throws VloMappingRulesException {
         final MappingDefinitionMarshaller marshaller = definitionMarshallerSupplier.get();
         try {
-            final MappingDefinition definition = marshaller.unmarshal(definitionSource);
+            final MappingDefinition definition = marshaller.unmarshal(definitionSource.get());
             return Iterables.transform(definition.getRules(), r -> r);
         } catch (JAXBException ex) {
             throw new VloMappingRulesException("Error while trying to unmarshal mapping definition from source: " + definitionSource, ex);
         }
     }
 
-    private static Source getDefinitionSourceFromConfig(VloMappingConfiguration config) throws VloMappingRulesException, IOException {
+    private static Supplier<Source> getConfigSourceSupplier(VloMappingConfiguration config) throws VloMappingRulesException {
         final String configuredUri = config.getMappingDefinitionUri();
         try {
             final URI uri = new URI(configuredUri);
-            if ("file".equalsIgnoreCase(uri.getScheme())) {
-                log.debug("Loading mapping definition: File based stream source for from configured location: {}", uri);
-                return new StreamSource(new File(uri));
-            } else if ("http".equalsIgnoreCase(uri.getScheme()) || "https".equalsIgnoreCase(uri.getScheme())) {
-                log.debug("Loading mapping definition: InputStream based stream source from configured location: {}", uri);
-                final InputStream is = uri.toURL().openStream();
-                return new StreamSource(is, uri.toString());
-            } else {
-                throw new VloMappingRulesException("Can't process scheme: " + uri.getScheme());
-            }
-        } catch (VloMappingRulesException | URISyntaxException ex) {
+            return () -> {
+                try {
+                    if ("file".equalsIgnoreCase(uri.getScheme())) {
+                        log.debug("Loading mapping definition: File based stream source for from configured location: {}", uri);
+                        return new StreamSource(new File(uri));
+                    } else if ("http".equalsIgnoreCase(uri.getScheme()) || "https".equalsIgnoreCase(uri.getScheme())) {
+                        log.debug("Loading mapping definition: InputStream based stream source from configured location: {}", uri);
+                        final InputStream is = uri.toURL().openStream();
+                        return new StreamSource(is, uri.toString());
+                    } else {
+                        throw new VloMappingRulesException("Can't process scheme: " + uri.getScheme());
+                    }
+                } catch (VloMappingRulesException | IOException ex) {
+                    throw new RuntimeException("Could not access mapping definition at configured location: " + configuredUri, ex);
+                }
+            };
+        } catch (URISyntaxException ex) {
             throw new VloMappingRulesException("Could not access mapping definition at configured location: " + configuredUri, ex);
         }
     }
