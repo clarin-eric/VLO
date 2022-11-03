@@ -16,8 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>

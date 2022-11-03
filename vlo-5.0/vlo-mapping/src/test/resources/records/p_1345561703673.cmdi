@@ -9,10 +9,9 @@
  xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1345561703673/xsd" CMDVersion="1.2">
     <Header>
         <MdCreator>MdCreator0</MdCreator>
-        <MdCreator>MdCreator1</MdCreator>
         <MdCreationDate>2006-05-04</MdCreationDate>
         <MdSelfLink>http://www.oxygenxml.com/</MdSelfLink>
-        <MdProfile>http://www.oxygenxml.com/</MdProfile>
+        <MdProfile>clarin.eu:cr1:p_1345561703673/</MdProfile>
         <MdCollectionDisplayName>MdCollectionDisplayName0</MdCollectionDisplayName>
     </Header>
     <Resources>

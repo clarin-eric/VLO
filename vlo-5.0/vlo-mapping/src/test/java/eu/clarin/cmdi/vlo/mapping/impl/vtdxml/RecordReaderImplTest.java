@@ -18,12 +18,15 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Objects;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
@@ -33,11 +36,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,26 +45,7 @@ import org.junit.jupiter.api.Test;
  */
 public class RecordReaderImplTest {
 
-    final VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
-
-    public RecordReaderImplTest() {
-    }
-
-    @BeforeAll
-    public static void setUpClass() {
-    }
-
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
-    @BeforeEach
-    public void setUp() {
-    }
-
-    @AfterEach
-    public void tearDown() {
-    }
+    private final static VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
 
     /**
      * Test of readRecord method, of class RecordReaderImpl.
@@ -90,6 +70,23 @@ public class RecordReaderImplTest {
                         hasProperty("xpath", equalTo("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:narrative/cmdp:id/text()")),
                         hasProperty("values", hasItem(hasProperty("value", equalTo("id3")))),
                         hasProperty("conceptPath", hasItem(equalTo("http://hdl.handle.net/11459/CCR_C-3894_4d08cc31-25fe-af0c-add4-ca7bdc12f5f7"))))));
+    }
+
+    /**
+     * Main method for profiling
+     *
+     * @param args
+     * @throws IOException
+     * @throws VloMappingException
+     */
+    public static void main(String[] args) throws IOException, VloMappingException {
+        final RecordReaderImpl instance = new RecordReaderImpl(mappingConfig);
+        final URL recordUrl = RecordReaderImplTest.class.getResource("/records/p_1345561703673.cmdi");
+        final File file = new File(recordUrl.getFile());
+
+        final CmdRecord result = instance.readRecord(file);
+        System.out.println("Done reading" + Objects.toString(result));
+
     }
 
 }
