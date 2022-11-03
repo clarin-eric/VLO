@@ -18,29 +18,37 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import java.util.Arrays;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ContextAssertion {
+@XmlTransient
+@XmlSeeAlso({ConceptPathAssertion.class})
+//    ContextAssertionAndOperator.class,
+//    ContextAssertionBooleanOperator.class,
+//    ContextAssertionNotOperator.class})
+//    ValueAssertion.class,
+//    XPathAssertion.class})
+public abstract class ContextAssertion {
 
-    Boolean evaluate(ValueContext context);
+    public abstract Boolean evaluate(ValueContext context);
 
-    static ContextAssertion TRUE() {
+    public static ContextAssertion TRUE() {
         return new ContextAssertionBooleanOperator(true);
     }
 
-    static ContextAssertion FALSE() {
+    public static ContextAssertion FALSE() {
         return new ContextAssertionBooleanOperator(false);
     }
 
-    static ContextAssertion NOT(ContextAssertion assertion) {
+    public static ContextAssertion NOT(ContextAssertion assertion) {
         return new ContextAssertionNotOperator(assertion);
     }
 
-    static ContextAssertion AND(ContextAssertion... assertions) {
+    public static ContextAssertion AND(ContextAssertion... assertions) {
         return new ContextAssertionAndOperator(ImmutableList.copyOf(assertions));
     }
 

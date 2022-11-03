@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class XPathAssertion implements ContextAssertion {
+public class XPathAssertion extends ContextAssertion {
 
     private final String target;
 

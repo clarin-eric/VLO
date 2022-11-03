@@ -32,7 +32,7 @@ public class ContextImpl implements Context {
     private final List<String> conceptPath;
     @ToString.Exclude
     private final Vocabulary vocabulary;
-
+    
     public ContextImpl(String xpath, List<String> conceptPath, Vocabulary vocabulary) {
         this.xpath = xpath;
         this.conceptPath = conceptPath;

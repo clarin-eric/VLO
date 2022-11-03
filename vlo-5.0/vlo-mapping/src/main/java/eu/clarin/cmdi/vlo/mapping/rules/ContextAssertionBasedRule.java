@@ -18,21 +18,44 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.processing.Transformation;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
-import lombok.AllArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@AllArgsConstructor
-public class ContextAssertionBasedRule implements MappingRule {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+public class ContextAssertionBasedRule extends MappingRule {
 
-    private final List<? extends ContextAssertion> assertions;
-    private final Collection<Transformation> transformations;
-    private final Boolean terminal;
+    @XmlElementWrapper(name = "assertions")
+    @XmlElement(name = "assertion")
+    private List<? extends ContextAssertion> assertions;
+
+    @XmlElementWrapper(name = "transformations")
+    @XmlElement(name = "transformation")
+
+    private Collection<Transformation> transformations;
+
+    @XmlElement
+    private Boolean terminal = false;
+
+    public ContextAssertionBasedRule() {
+
+    }
+
+    public ContextAssertionBasedRule(List<? extends ContextAssertion> assertions, Collection<Transformation> transformations, Boolean terminal) {
+        this.assertions = assertions;
+        this.transformations = transformations;
+        this.terminal = terminal;
+    }
 
     @Override
     public boolean applies(ValueContext context) {

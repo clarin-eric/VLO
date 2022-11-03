@@ -16,31 +16,34 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import jakarta.xml.bind.JAXBException;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collections;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAnyElement;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class RulesFactoryImpl implements RulesFactory {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+public class MappingDefinition {
 
-    public RulesFactoryImpl(VloMappingConfiguration mappingConfig) {
+    @XmlElement(name = "contextAssertionBasedRule")
+    private List<ContextAssertionBasedRule> rules;
+
+    public MappingDefinition() {
     }
 
-    @Override
-    public List<MappingRule> getRules() {
-        //TODO
-        return Collections.emptyList();
+    public List<ContextAssertionBasedRule> getRules() {
+        return rules;
     }
 
-    public void writeRules(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
-        final MappingDefinitionMarshaller marshaller = new MappingDefinitionMarshaller();
-        marshaller.marshal(definition, writer);
+    public void setRules(List<ContextAssertionBasedRule> rules) {
+        this.rules = rules;
     }
 
 }

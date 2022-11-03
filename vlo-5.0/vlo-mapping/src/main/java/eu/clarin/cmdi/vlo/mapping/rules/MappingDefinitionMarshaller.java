@@ -1,3 +1,12 @@
+package eu.clarin.cmdi.vlo.mapping.rules;
+
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import java.io.IOException;
+import java.io.Writer;
+
 /*
  * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
  *
@@ -14,33 +23,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
-
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import jakarta.xml.bind.JAXBException;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collections;
-import java.util.List;
-
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class RulesFactoryImpl implements RulesFactory {
+public class MappingDefinitionMarshaller {
 
-    public RulesFactoryImpl(VloMappingConfiguration mappingConfig) {
+    public void marshal(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
+        JAXBContext context = JAXBContext.newInstance(
+                MappingDefinition.class, ConceptPathAssertion.class, ContextAssertionBasedRule.class);
+        Marshaller mar = context.createMarshaller();
+        mar.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        mar.marshal(definition, writer);
     }
-
-    @Override
-    public List<MappingRule> getRules() {
-        //TODO
-        return Collections.emptyList();
-    }
-
-    public void writeRules(MappingDefinition definition, Writer writer) throws JAXBException, IOException {
-        final MappingDefinitionMarshaller marshaller = new MappingDefinitionMarshaller();
-        marshaller.marshal(definition, writer);
-    }
-
 }

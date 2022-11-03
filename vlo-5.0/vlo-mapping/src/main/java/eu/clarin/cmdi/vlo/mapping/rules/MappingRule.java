@@ -18,18 +18,22 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.processing.Transformation;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.stream.Stream;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface MappingRule {
-    
-    boolean applies(ValueContext context);
-    
-    boolean isTerminal();
-    
-    Stream<Transformation> getTransformations();
-    
+@XmlTransient
+@XmlSeeAlso(ContextAssertionBasedRule.class)
+public abstract class MappingRule {
+
+    public abstract boolean applies(ValueContext context);
+
+    public abstract boolean isTerminal();
+
+    public abstract Stream<Transformation> getTransformations();
+
 }
