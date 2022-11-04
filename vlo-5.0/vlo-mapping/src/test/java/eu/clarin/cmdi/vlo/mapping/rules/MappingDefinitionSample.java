@@ -20,7 +20,6 @@ import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.mapping.processing.IdentityTransformation;
 import java.io.StringReader;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -32,6 +31,9 @@ import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.nullValue;
 
 /**
  *
@@ -44,6 +46,7 @@ public class MappingDefinitionSample {
     static {
         MAPPING_DEFINITION.setRules(
                 Arrays.asList(
+                        // composite rule: and(not(false), {concept path})
                         new ContextAssertionBasedRule(
                                 Arrays.asList(
                                         // and operator...
@@ -56,8 +59,18 @@ public class MappingDefinitionSample {
                                                         "concept2"))),
                                 Arrays.asList(
                                         new IdentityTransformation()),
-                                true
-                        )));
+                                true),
+                        // multiple value rules match
+                        new ContextAssertionBasedRule(
+                                Arrays.asList(
+                                        new ValueAssertion("value1", Boolean.FALSE, Boolean.FALSE, "en"),
+                                        new ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"),
+                                        new ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
+                                ),
+                                Arrays.asList(
+                                        new IdentityTransformation()),
+                                false)
+                ));
 
     }
 
@@ -79,7 +92,19 @@ public class MappingDefinitionSample {
                 </transformations>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
+            <contextAssertionBasedRule>
+                <assertions>
+                    <assertion xsi:type="valueAssertion" regex="false" lang="en" caseSensitive="false">value1</assertion>
+                    <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
+                    <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
+                </assertions>
+                <transformations>
+                    <transformation xsi:type="identityTransformation"/>
+                </transformations>
+                <terminal>false</terminal>
+            </contextAssertionBasedRule>
         </mappingDefinition>
+        
       """;
 
     public static Source MAPPING_DEFINITION_XML_SOURCE() {
@@ -91,30 +116,75 @@ public class MappingDefinitionSample {
     }
 
     public static void assertContents(final List<? extends MappingRule> rules) {
-        assertThat(rules, hasSize(1));
+        assertThat("Two rules in definition", rules, hasSize(2));
 
-        assertThat(rules, hasItem(hasProperty("assertions", hasItem(
-                isA(ContextAssertionAndOperator.class)))));
-        final ContextAssertionBasedRule rule = (ContextAssertionBasedRule) rules.get(0);
-        final List<? extends ContextAssertion> assertions = rule.getAssertions();
+        assertThat("Rules have assertions",
+                rules, hasItem(
+                        hasProperty("assertions", hasSize(greaterThan(0)))));
 
-        assertThat(assertions, hasSize(1));
-        assertThat(assertions, hasItem(
-                isA(ContextAssertionAndOperator.class)));
+        /**
+         * Rule 1
+         */
+        final ContextAssertionBasedRule rule1 = (ContextAssertionBasedRule) rules.get(0);
+        final List<? extends ContextAssertion> rule1assertions = rule1.getAssertions();
 
-        final ContextAssertionAndOperator and = (ContextAssertionAndOperator) assertions.get(0);
-        assertThat(and.getAssertions(), hasSize(2));
-        assertThat(and.getAssertions(), hasItems(
+        assertThat(rule1assertions, hasSize(1));
+        assertThat("one 'root' assertion in rule 1",
+                rule1assertions, hasItem(
+                        isA(ContextAssertionAndOperator.class)));
+
+        final ContextAssertionAndOperator and = (ContextAssertionAndOperator) rule1assertions.get(0);
+        assertThat("Number of assertions in rule",
+                and.getAssertions(), hasSize(2));
+        assertThat("Types of assertions in rule",
+                and.getAssertions(), hasItems(
                 isA(ContextAssertionNotOperator.class),
                 isA(ConceptPathAssertion.class)));
-        
-        assertThat(and.getAssertions(), hasItem(
+
+        assertThat("Definition of concept path assertion",
+                and.getAssertions(), hasItem(
                 allOf(
                         isA(ConceptPathAssertion.class),
                         hasProperty("targetPath", hasItems("concept1", "concept2"))
                 )));
-        
-        assertThat(rules, hasItem(
-                hasProperty("terminal", equalTo(true))));
+
+        assertThat("Terminal state of rule", rule1, hasProperty("terminal", equalTo(true)));
+
+        /**
+         * Rule 2
+         */
+        final ContextAssertionBasedRule rule2 = (ContextAssertionBasedRule) rules.get(1);
+        final List<? extends ContextAssertion> rule2assertions = rule2.getAssertions();
+        assertThat(rule2assertions, hasSize(3));
+        assertThat("Only value assertions in rule 2", rule2assertions, allOf(
+                hasItem(isA(ValueAssertion.class)),
+                not(hasItem(not(isA(ValueAssertion.class))))));
+
+        assertThat("Definition of value assertions", rule2assertions, hasItems(
+                allOf(
+                        hasProperty("target", equalTo("value1")),
+                        hasProperty("regex", equalTo(false)),
+                        hasProperty("caseSensitive", equalTo(false)),
+                        hasProperty("language", equalTo("en"))
+                ), allOf(
+                        hasProperty("target", equalTo("value2")),
+                        hasProperty("regex", equalTo(false)),
+                        hasProperty("caseSensitive", equalTo(true)),
+                        hasProperty("language", equalTo("fr"))
+                ), allOf(
+                        hasProperty("target", equalTo("value[A-Z]")),
+                        hasProperty("regex", equalTo(true)),
+                        hasProperty("caseSensitive", equalTo(false)),
+                        hasProperty("language", nullValue())
+                )
+        ));
+
+        assertThat("Terminal state of rule", rule2, hasProperty("terminal", equalTo(false)));
+
     }
 }
+/**
+ * new ValueAssertion("value1", Boolean.FALSE, Boolean.FALSE, "en"), new
+ * ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"), new
+ * ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
+ */

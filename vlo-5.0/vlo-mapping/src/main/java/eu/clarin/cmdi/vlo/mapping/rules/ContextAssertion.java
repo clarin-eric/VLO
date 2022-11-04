@@ -29,8 +29,8 @@ import jakarta.xml.bind.annotation.XmlTransient;
 @XmlSeeAlso({ConceptPathAssertion.class,
     ContextAssertionAndOperator.class,
     ContextAssertionBooleanOperator.class,
-    ContextAssertionNotOperator.class})
-//    ValueAssertion.class,
+    ContextAssertionNotOperator.class,
+    ValueAssertion.class})
 //    XPathAssertion.class})
 public abstract class ContextAssertion {
 
