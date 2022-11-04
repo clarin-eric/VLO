@@ -16,21 +16,44 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-
-<mappingDefinition>
-    <contextAssertionBasedRule>
+<mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<!--    <contextAssertionBasedRule>
         <assertions>
-            <assertion xsi:type="conceptPathAssertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                <conceptPath>
-                    <concept>concept1</concept>
-                    <concept>concept2</concept>
-                </conceptPath>
+            <assertion xsi:type="contextAssertionAndOperator">
+                <assertion xsi:type="contextAssertionNotOperator">
+                    <assertion xsi:type="contextAssertionBooleanOperator">false</assertion>
+                </assertion>
+                <assertion xsi:type="conceptPathAssertion">
+                    <conceptPath>concept1 concept2</conceptPath>
+                </assertion>
             </assertion>
         </assertions>
         <transformations>
-            <transformation xsi:type="identityTransformation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            <transformation xsi:type="identityTransformation" field="test"/>
         </transformations>
         <terminal>true</terminal>
+    </contextAssertionBasedRule>
+    <contextAssertionBasedRule>
+        <assertions>
+            <assertion xsi:type="valueAssertion" regex="false" lang="en" caseSensitive="false">value1</assertion>
+            <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
+            <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
+        </assertions>
+        <transformations>
+            <transformation xsi:type="identityTransformation" field="test"/>
+        </transformations>
+        <terminal>false</terminal>
+    </contextAssertionBasedRule>-->
+    <contextAssertionBasedRule>
+        <assertions>
+            <assertion xsi:type="xPathAssertion">/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
+        </assertions>
+        <transformations>
+            <transformation xsi:type="identityTransformation">
+                <field>id</field>
+            </transformation>
+        </transformations>
+        <terminal>false</terminal>
     </contextAssertionBasedRule>
 </mappingDefinition>
 

@@ -20,26 +20,31 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.stream.Stream;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@NoArgsConstructor
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class IdentityTransformation extends Transformation {
 
+//    @XmlAttribute(name = "field")
+    @Getter
     private String field;
 
-    public void setField(String field) {
+    public IdentityTransformation(String field) {
         this.field = field;
     }
 
-    public String getField() {
-        return field;
+    public void setField(String field) {
+        this.field = field;
     }
 
     @Override

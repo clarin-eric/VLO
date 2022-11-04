@@ -21,15 +21,18 @@ import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
+import static java.lang.StrictMath.log;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Slf4j
 public class RecordFieldValuesMapperImplTest {
 
     final VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
@@ -44,6 +47,7 @@ public class RecordFieldValuesMapperImplTest {
         final File file = new File(recordUrl.getFile());
         final RecordFieldValuesMapper instance = new RecordFieldValuesMapperImpl(mappingConfig);
         Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
+        log.info("Result for {} fields", result.keySet().size());
     }
 
 }
