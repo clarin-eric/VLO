@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.mapping.processing.IdentityTransformation;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import javax.xml.transform.stream.StreamSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.isA;
@@ -59,10 +59,7 @@ public class MappingDefinitionSample {
             <contextAssertionBasedRule>
                 <assertions>
                     <assertion xsi:type="conceptPathAssertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                        <conceptPath>
-                            <concept>concept1</concept>
-                            <concept>concept2</concept>
-                        </conceptPath>
+                        <conceptPath>concept1 concept2</conceptPath>
                     </assertion>
                 </assertions>
                 <transformations>
@@ -89,7 +86,7 @@ public class MappingDefinitionSample {
         assertThat(rules, hasItem(
                 hasProperty("assertions",
                         hasItem(
-                                hasProperty("targetPath")))));
+                                hasProperty("targetPath", hasItems("concept1", "concept2"))))));
         assertThat(rules, hasItem(
                 hasProperty("terminal", equalTo(true))));
     }

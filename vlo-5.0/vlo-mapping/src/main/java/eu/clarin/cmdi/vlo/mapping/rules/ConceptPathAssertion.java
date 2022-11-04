@@ -16,7 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
-import static com.google.common.base.Predicates.notNull;
+import com.google.common.base.Joiner;
+import static com.google.common.base.Predicates.not;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
@@ -24,11 +27,12 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Assertion on concept paths. Examples:
@@ -57,9 +61,10 @@ import java.util.List;
 public class ConceptPathAssertion extends ContextAssertion {
 
     public static final String WILDCARD = "*";
+    private final static Joiner pathJoiner = Joiner.on(' ');
+    private final static Splitter pathSplitter = Splitter.on(Pattern.compile(" +"));
 
-    @XmlElementWrapper(name = "conceptPath")
-    @XmlElement(name = "concept")
+    @XmlTransient
     private List<String> targetPath;
 
     public ConceptPathAssertion() {
@@ -69,12 +74,23 @@ public class ConceptPathAssertion extends ContextAssertion {
         setTargetPath(Arrays.asList(target));
     }
 
-    public final void setTargetPath(List<String> target) {
-        //remove null
-        this.targetPath = ImmutableList.copyOf(Iterables.filter(target, notNull()));
+    @XmlElement(name = "conceptPath")
+    public String getConceptPath() {
+        return pathJoiner.join(targetPath);
     }
 
-    public Iterable<String> getTargetPath() {
+    public void setConceptPath(String path) {
+        setTargetPath(pathSplitter.splitToStream(path)
+                .map(String::trim)
+                .toList());
+    }
+
+    public final void setTargetPath(Iterable<String> target) {
+        //remove null
+        this.targetPath = ImmutableList.copyOf(Iterables.filter(target, not(Strings::isNullOrEmpty)));
+    }
+
+    public List<String> getTargetPath() {
         return targetPath;
     }
 
@@ -82,7 +98,7 @@ public class ConceptPathAssertion extends ContextAssertion {
     public Boolean evaluate(ValueContext context) {
         final Iterator<String> targetIterator = targetPath.iterator();
         final Iterator<String> actualIterator = Iterators.filter(
-                context.getConceptPath().iterator(), notNull());
+                context.getConceptPath().iterator(), not(Strings::isNullOrEmpty));
 
         return evaluate(targetIterator, actualIterator);
     }
