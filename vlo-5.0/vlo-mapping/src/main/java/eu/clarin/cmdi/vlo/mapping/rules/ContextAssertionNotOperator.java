@@ -17,18 +17,22 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @XmlRootElement
 public class ContextAssertionNotOperator extends ContextAssertion {
 
-    private final ContextAssertion assertion;
+    @XmlElement(name = "assertion")
+    private ContextAssertion assertion;
 
     @Override
     public Boolean evaluate(ValueContext context) {

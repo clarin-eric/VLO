@@ -26,10 +26,10 @@ import jakarta.xml.bind.annotation.XmlTransient;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @XmlTransient
-@XmlSeeAlso({ConceptPathAssertion.class})
-//    ContextAssertionAndOperator.class,
-//    ContextAssertionBooleanOperator.class,
-//    ContextAssertionNotOperator.class})
+@XmlSeeAlso({ConceptPathAssertion.class,
+    ContextAssertionAndOperator.class,
+    ContextAssertionBooleanOperator.class,
+    ContextAssertionNotOperator.class})
 //    ValueAssertion.class,
 //    XPathAssertion.class})
 public abstract class ContextAssertion {
