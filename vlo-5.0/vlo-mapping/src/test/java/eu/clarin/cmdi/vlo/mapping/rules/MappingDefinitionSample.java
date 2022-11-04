@@ -58,7 +58,7 @@ public class MappingDefinitionSample {
                                                         "concept1",
                                                         "concept2"))),
                                 Arrays.asList(
-                                        new IdentityTransformation()),
+                                        new IdentityTransformation("field1")),
                                 true),
                         // multiple value rules
                         new ContextAssertionBasedRule(
@@ -68,7 +68,7 @@ public class MappingDefinitionSample {
                                         new ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
                                 ),
                                 Arrays.asList(
-                                        new IdentityTransformation()),
+                                        new IdentityTransformation("field2")),
                                 false),
                         // xpath rules
                         new ContextAssertionBasedRule(
@@ -77,7 +77,7 @@ public class MappingDefinitionSample {
                                         new XPathAssertion("/another/path")
                                 ),
                                 Arrays.asList(
-                                        new IdentityTransformation()),
+                                        new IdentityTransformation("field3")),
                                 true)
                 ));
 

@@ -48,6 +48,7 @@ public class XPathAssertion extends ContextAssertion {
 
     @Override
     public Boolean evaluate(ValueContext context) {
+        //TODO: evaluate in document context with XPath library!
         return Objects.equals(target, normalize(context.getXpath()));
     }
 
