@@ -18,17 +18,21 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlValue;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @AllArgsConstructor
+@NoArgsConstructor
 @XmlRootElement
 public class ContextAssertionBooleanOperator extends ContextAssertion {
 
-    private final Boolean value;
+    @XmlValue
+    private Boolean value;
 
     @Override
     public Boolean evaluate(ValueContext context) {
