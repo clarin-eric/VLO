@@ -19,6 +19,9 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.util.Arrays;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -97,6 +100,25 @@ public class ConceptPathAssertionTest {
     {
         ConceptPathAssertion instance = new ConceptPathAssertion("concept1", null, "concept2", null, "concept3", null);
         assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
+    }
+    
+    @Test
+    public void testGetConceptPath() {
+        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3");
+        assertEquals("concept1 concept2 concept3", instance.getConceptPath());
+        instance = new ConceptPathAssertion("concept1", "*");
+        assertEquals("concept1 *", instance.getConceptPath());
+    }
+    
+    @Test
+    public void testSetConceptPath() {
+        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3");
+        instance.setConceptPath("concept1 concept2 concept3");
+        assertThat(instance.getTargetPath(), hasSize(3));
+        assertThat(instance.getTargetPath(), hasItems("concept1", "concept2", "concept3"));
+        instance.setConceptPath("concept1   concept2  *  ");
+        assertThat(instance.getTargetPath(), hasSize(3));
+        assertThat(instance.getTargetPath(), hasItems("concept1", "concept2", "*"));
     }
 
 }
