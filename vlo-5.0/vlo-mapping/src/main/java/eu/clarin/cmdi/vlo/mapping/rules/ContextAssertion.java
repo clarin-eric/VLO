@@ -30,8 +30,8 @@ import jakarta.xml.bind.annotation.XmlTransient;
     ContextAssertionAndOperator.class,
     ContextAssertionBooleanOperator.class,
     ContextAssertionNotOperator.class,
-    ValueAssertion.class})
-//    XPathAssertion.class})
+    ValueAssertion.class,
+    XPathAssertion.class})
 public abstract class ContextAssertion {
 
     public abstract Boolean evaluate(ValueContext context);
