@@ -18,17 +18,31 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.XPathUtils;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlValue;
 import java.util.Objects;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@NoArgsConstructor
+@XmlRootElement
 public class XPathAssertion extends ContextAssertion {
 
-    private final String target;
+    private String target;
 
     public XPathAssertion(String target) {
+        setTarget(target);
+    }
+
+    @XmlValue
+    public String getTarget() {
+        return target;
+    }
+
+    public final void setTarget(String target) {
         this.target = normalize(target);
     }
 

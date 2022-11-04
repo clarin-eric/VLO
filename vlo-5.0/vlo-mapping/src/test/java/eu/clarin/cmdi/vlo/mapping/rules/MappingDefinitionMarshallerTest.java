@@ -69,7 +69,7 @@ public class MappingDefinitionMarshallerTest {
 
     @Test
     public void testUnmarshall() throws Exception {
-        log.info("Unmarshalling");
+        log.info("Unmarshalling from static XML input");
         final MappingDefinition unmarshalled = instance.unmarshal(MAPPING_DEFINITION_XML_SOURCE());
         assertNotNull(unmarshalled);
 
