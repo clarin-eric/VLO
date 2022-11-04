@@ -20,44 +20,55 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.Optional;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlValue;
 import java.util.function.BiPredicate;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import lombok.Getter;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@XmlRootElement
 public class ValueAssertion extends ContextAssertion {
 
-    private final String target;
-    private final Boolean regex;
-    private final Optional<String> language;
-    private final Supplier<Pattern> pattern;
-    private final BiPredicate<String, String> valueEqualityCheck;
+    @XmlValue
+    @Getter
+    private String target;
 
+    @XmlAttribute
+    @Getter
+    private Boolean regex;
+
+    private Boolean caseSensitive;
+
+    @XmlAttribute(name = "lang")
+    @Getter
+    private String language;
+
+    @XmlTransient
+    private Supplier<Pattern> pattern;
+    @XmlTransient
+    private BiPredicate<String, String> valueEqualityCheck;
+
+    public ValueAssertion() {
+        // for deserialization
+    }
+    
     public ValueAssertion(String target, Boolean regex, Boolean caseSenstive) {
-        this(target, regex, caseSenstive, Optional.empty());
+        this(target, regex, caseSenstive, null);
     }
 
     public ValueAssertion(String target, Boolean regex, Boolean caseSenstive, String language) {
-        this(target, regex, caseSenstive, Optional.of(language));
-    }
-
-    private ValueAssertion(String target, Boolean regex, Boolean caseSenstive, Optional<String> language) {
         this.target = target;
         this.regex = regex;
         this.language = language;
 
-        if (caseSenstive) {
-            this.valueEqualityCheck = (s, v) -> s.equals(v);
-            this.pattern = Suppliers.memoize(() -> Pattern.compile(target));
-        } else {
-            this.valueEqualityCheck = (s, v) -> s.equalsIgnoreCase(v);
-            this.pattern = Suppliers.memoize(() -> Pattern.compile(target, Pattern.CASE_INSENSITIVE));
-        }
-
+        setCaseSensitive(caseSenstive);
     }
 
     @Override
@@ -87,11 +98,28 @@ public class ValueAssertion extends ContextAssertion {
     }
 
     private boolean languageMatch(ValueLanguagePair value) {
-        // language is optional; if not set this means no check is needed
-        return language
-                .map(l -> l.equalsIgnoreCase(value.getLanguage()))
-                // target language not set, so always match on language
-                .orElse(true);
+        if (language == null) {
+            // language is optional; if not set this means no check is needed
+            return true;
+        } else {
+            return language.equalsIgnoreCase(value.getLanguage());
+        }
+    }
+
+    @XmlAttribute(name="caseSensitive")
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    public final void setCaseSensitive(boolean caseSenstive) {
+        this.caseSensitive = caseSenstive;
+        if (caseSenstive) {
+            this.valueEqualityCheck = (s, v) -> s.equals(v);
+            this.pattern = Suppliers.memoize(() -> Pattern.compile(target));
+        } else {
+            this.valueEqualityCheck = (s, v) -> s.equalsIgnoreCase(v);
+            this.pattern = Suppliers.memoize(() -> Pattern.compile(target, Pattern.CASE_INSENSITIVE));
+        }
     }
 
 }
