@@ -25,7 +25,7 @@ import eu.clarin.cmdi.vlo.mapping.rules.assertions.XPathAssertion;
 import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionNotOperator;
 import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.mapping.rules.transformation.IdentityTransformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.IdentityTransformer;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
@@ -52,9 +52,7 @@ public class MappingDefinitionSample {
     public static final MappingDefinition MAPPING_DEFINITION = new MappingDefinition();
 
     static {
-        MAPPING_DEFINITION.setRules(
-                Arrays.asList(
-                        // composite rule: and(not(false), {concept path})
+        MAPPING_DEFINITION.setRules(Arrays.asList(// composite rule: and(not(false), {concept path})
                         new ContextAssertionBasedRule(
                                 Arrays.asList(
                                         // and operator...
@@ -65,8 +63,7 @@ public class MappingDefinitionSample {
                                                 new ConceptPathAssertion( // AND concept path
                                                         "concept1",
                                                         "concept2"))),
-                                Arrays.asList(
-                                        new IdentityTransformation("field1")),
+                                Arrays.asList(new IdentityTransformer("field1")),
                                 true),
                         // multiple value rules
                         new ContextAssertionBasedRule(
@@ -75,8 +72,7 @@ public class MappingDefinitionSample {
                                         new ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"),
                                         new ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
                                 ),
-                                Arrays.asList(
-                                        new IdentityTransformation("field2")),
+                                Arrays.asList(new IdentityTransformer("field2")),
                                 false),
                         // xpath rules
                         new ContextAssertionBasedRule(
@@ -84,8 +80,7 @@ public class MappingDefinitionSample {
                                         new XPathAssertion("/path/to/the/element"),
                                         new XPathAssertion("/another/path")
                                 ),
-                                Arrays.asList(
-                                        new IdentityTransformation("field3")),
+                                Arrays.asList(new IdentityTransformer("field3")),
                                 true)
                 ));
 

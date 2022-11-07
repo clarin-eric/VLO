@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.rules.MappingRule;
-import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformer;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -43,7 +43,7 @@ public class ContextAssertionBasedRule extends MappingRule {
     @XmlElementWrapper(name = "transformations")
     @XmlElement(name = "transformation")
 
-    private Collection<Transformation> transformations;
+    private Collection<Transformer> transformations;
 
     @XmlElement
     private Boolean terminal = false;
@@ -52,7 +52,7 @@ public class ContextAssertionBasedRule extends MappingRule {
 
     }
 
-    public ContextAssertionBasedRule(List<? extends ContextAssertion> assertions, Collection<Transformation> transformations, Boolean terminal) {
+    public ContextAssertionBasedRule(List<? extends ContextAssertion> assertions, Collection<Transformer> transformations, Boolean terminal) {
         this.assertions = assertions;
         this.transformations = transformations;
         this.terminal = terminal;
@@ -69,7 +69,7 @@ public class ContextAssertionBasedRule extends MappingRule {
     }
 
     @Override
-    public Stream<Transformation> getTransformations() {
+    public Stream<Transformer> getTransformations() {
         return transformations.stream();
     }
 

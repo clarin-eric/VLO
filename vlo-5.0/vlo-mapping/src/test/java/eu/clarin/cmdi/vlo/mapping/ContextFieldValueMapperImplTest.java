@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformer;
 import eu.clarin.cmdi.vlo.mapping.rules.MappingRule;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +52,7 @@ public class ContextFieldValueMapperImplTest {
     private MappingRule rule;
 
     @Mock
-    private Transformation transformation;
+    private Transformer transformation;
 
     private final ValueContext context = SimpleValueContext.builder()
             .values(ImmutableList.of(new ValueLanguagePair("value1", "en")))

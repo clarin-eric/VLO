@@ -23,15 +23,16 @@ import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.stream.Stream;
 
 /**
+ * Transform a value from a metadata record into a field value.
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @XmlTransient
-@XmlSeeAlso(IdentityTransformation.class)
-public abstract class Transformation {
-    
+@XmlSeeAlso(IdentityTransformer.class)
+public abstract class Transformer {
+
     public abstract String getTargetField();
-    
+
     public abstract Stream<ValueLanguagePair> apply(ValueContext valueContext);
-    
+
 }
