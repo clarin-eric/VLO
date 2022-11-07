@@ -14,46 +14,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
-import eu.clarin.cmdi.vlo.mapping.XPathUtils;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlValue;
-import java.util.Objects;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement
-public class XPathAssertion extends ContextAssertion {
-
-    private String target;
-
-    public XPathAssertion(String target) {
-        setTarget(target);
-    }
+public class ContextAssertionBooleanOperator extends ContextAssertion {
 
     @XmlValue
-    public String getTarget() {
-        return target;
-    }
-
-    public final void setTarget(String target) {
-        this.target = normalize(target);
-    }
+    private Boolean value;
 
     @Override
     public Boolean evaluate(ValueContext context) {
-        //TODO: evaluate in document context with XPath library!
-        return Objects.equals(target, normalize(context.getXpath()));
-    }
-
-    protected static String normalize(String xpath) {
-        return XPathUtils.normalize(xpath);
+        return value;
     }
 
 }

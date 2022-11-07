@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Iterables;

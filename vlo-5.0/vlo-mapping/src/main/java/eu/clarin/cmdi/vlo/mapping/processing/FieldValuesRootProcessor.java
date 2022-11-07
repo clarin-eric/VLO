@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.processing;
 
 import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class FieldValuesProcessorImpl implements FieldValuesProcessor {
+public class FieldValuesRootProcessor implements FieldValuesProcessor {
 
     private final static IdentityProcessor identityProcessor = new IdentityProcessor();
 
@@ -38,15 +38,5 @@ public class FieldValuesProcessorImpl implements FieldValuesProcessor {
         return identityProcessor.process(field, mappingResults);
     }
 
-    public static class IdentityProcessor implements FieldValuesProcessor {
-
-        @Override
-        public Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults) {
-            return Streams.stream(mappingResults)
-                    .map(FieldMappingResult::getValues) // get the values from the result
-                    .flatMap(Collection::stream); // join them in the result stream
-        }
-
-    }
 
 }

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;

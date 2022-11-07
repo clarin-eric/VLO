@@ -19,7 +19,7 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import eu.clarin.cmdi.vlo.mapping.BaseRecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.CachingRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.ContextFieldValueMapperImpl;
-import eu.clarin.cmdi.vlo.mapping.FieldValuesProcessorImpl;
+import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesRootProcessor;
 import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
@@ -44,6 +44,6 @@ public class RecordFieldValuesMapperImpl extends BaseRecordFieldValuesMapper {
     }
 
     private RecordFieldValuesMapperImpl(RecordFactory recordFactory, RulesFactory rulesFactory) throws VloMappingRulesException {
-        super(new ContextFactoryImpl(recordFactory), new ContextFieldValueMapperImpl(rulesFactory.getRules()), new FieldValuesProcessorImpl());
+        super(new ContextFactoryImpl(recordFactory), new ContextFieldValueMapperImpl(rulesFactory.getRules()), new FieldValuesRootProcessor());
     }
 }

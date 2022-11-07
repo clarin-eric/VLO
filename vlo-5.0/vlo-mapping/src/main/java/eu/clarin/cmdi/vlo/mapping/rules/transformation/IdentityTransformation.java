@@ -14,28 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import jakarta.xml.bind.annotation.XmlElement;
+import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
+import java.util.stream.Stream;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement
-public class ContextAssertionNotOperator extends ContextAssertion {
+@XmlAccessorType(XmlAccessType.FIELD)
+public class IdentityTransformation extends Transformation {
 
-    @XmlElement(name = "assertion")
-    private ContextAssertion assertion;
+//    @XmlAttribute(name = "field")
+    @Getter
+    private String field;
+
+    public IdentityTransformation(String field) {
+        this.field = field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
 
     @Override
-    public Boolean evaluate(ValueContext context) {
-        return !assertion.evaluate(context);
+    public String getTargetField() {
+        return field;
     }
+
+    @Override
+    public Stream<ValueLanguagePair> apply(ValueContext valueContext) {
+        return valueContext.getValues().stream();
+    }
+
 }

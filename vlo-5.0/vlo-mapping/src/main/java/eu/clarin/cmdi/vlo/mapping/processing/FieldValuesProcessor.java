@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
+ * Copyright (C) 2022 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,27 +14,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.processing;
 
-import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
-import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
-import jakarta.xml.bind.annotation.XmlSeeAlso;
-import jakarta.xml.bind.annotation.XmlTransient;
+import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
+import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.util.stream.Stream;
 
 /**
+ * Processes mapping results for a field into a set of values that actually will
+ * be stored in that field
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@XmlTransient
-@XmlSeeAlso(ContextAssertionBasedRule.class)
-public abstract class MappingRule {
+public interface FieldValuesProcessor {
 
-    public abstract boolean applies(ValueContext context);
-
-    public abstract boolean isTerminal();
-
-    public abstract Stream<Transformation> getTransformations();
+    Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults);
 
 }

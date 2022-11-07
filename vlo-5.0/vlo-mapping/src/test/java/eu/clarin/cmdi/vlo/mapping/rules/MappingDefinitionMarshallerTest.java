@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import static eu.clarin.cmdi.vlo.mapping.rules.MappingDefinitionSample.MAPPING_DEFINITION;
 import static eu.clarin.cmdi.vlo.mapping.rules.MappingDefinitionSample.MAPPING_DEFINITION_XML_SOURCE;
 import jakarta.xml.bind.JAXBException;

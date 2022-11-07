@@ -14,11 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlValue;
+import java.util.Arrays;
+import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -29,14 +31,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement
-public class ContextAssertionBooleanOperator extends ContextAssertion {
+public class ContextAssertionAndOperator extends ContextAssertion {
 
-    @XmlValue
-    private Boolean value;
+    @XmlElement(name = "assertion")
+    private Collection<ContextAssertion> assertions;
+
+    public ContextAssertionAndOperator(ContextAssertion... assertions) {
+        this(Arrays.asList(assertions));
+    }
 
     @Override
     public Boolean evaluate(ValueContext context) {
-        return value;
+        return assertions.stream().allMatch(a -> a.evaluate(context));
+    }
+
+    public Collection<ContextAssertion> getAssertions() {
+        return assertions;
     }
 
 }

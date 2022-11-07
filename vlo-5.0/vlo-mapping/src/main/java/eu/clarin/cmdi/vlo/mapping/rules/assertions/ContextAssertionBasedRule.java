@@ -14,10 +14,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import eu.clarin.cmdi.vlo.mapping.processing.Transformation;
+import eu.clarin.cmdi.vlo.mapping.rules.MappingRule;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
