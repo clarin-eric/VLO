@@ -100,7 +100,7 @@ public class MappingDefinitionSample {
                     </assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformation"/>
+                    <transformer xsi:type="identityTransformer"/>
                 </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
@@ -111,7 +111,7 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformation"/>
+                    <transformer xsi:type="identityTransformer"/>
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
@@ -121,12 +121,11 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="xPathAssertion">/another/path</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformation"/>
+                    <transformer xsi:type="identityTransformer"/>
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
         </mappingDefinition>
-        
       """;
 
     public static Source MAPPING_DEFINITION_XML_SOURCE() {
@@ -170,6 +169,8 @@ public class MappingDefinitionSample {
                             isA(ConceptPathAssertion.class),
                             hasProperty("targetPath", hasItems("concept1", "concept2"))
                     )));
+            
+            assertThat("Transformer", rule1, hasProperty("transformers", allOf(hasItem(isA(IdentityTransformer.class)))));
 
             assertThat("Terminal state of rule", rule1, hasProperty("terminal", equalTo(true)));
         }
@@ -202,6 +203,8 @@ public class MappingDefinitionSample {
                             hasProperty("language", nullValue())
                     )
             ));
+
+            assertThat("Transformer", rule2, hasProperty("transformers", allOf(hasItem(isA(IdentityTransformer.class)))));
 
             assertThat("Terminal state of rule", rule2, hasProperty("terminal", equalTo(false)));
         }

@@ -24,7 +24,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class ContextAssertionBasedRule extends MappingRule {
 
     @XmlElementWrapper(name = "transformers")
     @XmlElement(name = "transformer")
-    private Collection<Transformer> transformations;
+    private List<Transformer> transformers;
 
     @XmlElement
     private Boolean terminal = false;
@@ -53,9 +52,9 @@ public class ContextAssertionBasedRule extends MappingRule {
 
     }
 
-    public ContextAssertionBasedRule(List<? extends ContextAssertion> assertions, Collection<Transformer> transformations, Boolean terminal) {
+    public ContextAssertionBasedRule(List<? extends ContextAssertion> assertions, List<Transformer> transformers, Boolean terminal) {
         this.assertions = assertions;
-        this.transformations = transformations;
+        this.transformers = transformers;
         this.terminal = terminal;
     }
 
@@ -74,9 +73,13 @@ public class ContextAssertionBasedRule extends MappingRule {
         return terminal;
     }
 
+    public List<Transformer> getTransformers() {
+        return transformers;
+    }
+
     @Override
-    public Stream<Transformer> getTransformations() {
-        return transformations.stream();
+    public Stream<Transformer> getTransformerStream() {
+        return transformers.stream();
     }
 
     public List<? extends ContextAssertion> getAssertions() {
