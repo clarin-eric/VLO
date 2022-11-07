@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN
+ * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,20 +14,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping;
+package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
-import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.stream.Stream;
+import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 /**
- * Processes mapping results for a field into a set of values that actually will
- * be stored in that field
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface FieldValuesProcessor {
+@AllArgsConstructor
+@NoArgsConstructor
+@XmlRootElement
+public class ContextAssertionNotOperator extends ContextAssertion {
 
-    Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults);
+    @XmlElement(name = "assertion")
+    private ContextAssertion assertion;
 
+    @Override
+    public Boolean evaluate(ValueContext context) {
+        return !assertion.evaluate(context);
+    }
 }

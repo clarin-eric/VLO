@@ -1,5 +1,7 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ConceptPathAssertion;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;

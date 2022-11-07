@@ -16,19 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import com.google.common.base.Functions;
+import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
 /**

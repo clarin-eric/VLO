@@ -14,8 +14,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertion;
 
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ConceptPathAssertion;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.util.Arrays;

@@ -14,39 +14,46 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertions;
 
+import eu.clarin.cmdi.vlo.mapping.XPathUtils;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
-import java.util.Arrays;
-import java.util.Collection;
-import lombok.AllArgsConstructor;
+import jakarta.xml.bind.annotation.XmlValue;
+import java.util.Objects;
 import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@AllArgsConstructor
 @NoArgsConstructor
 @XmlRootElement
-public class ContextAssertionAndOperator extends ContextAssertion {
+public class XPathAssertion extends ContextAssertion {
 
-    @XmlElement(name = "assertion")
-    private Collection<ContextAssertion> assertions;
+    private String target;
 
-    public ContextAssertionAndOperator(ContextAssertion... assertions) {
-        this(Arrays.asList(assertions));
+    public XPathAssertion(String target) {
+        setTarget(target);
+    }
+
+    @XmlValue
+    public String getTarget() {
+        return target;
+    }
+
+    public final void setTarget(String target) {
+        this.target = normalize(target);
     }
 
     @Override
     public Boolean evaluate(ValueContext context) {
-        return assertions.stream().allMatch(a -> a.evaluate(context));
+        //TODO: evaluate in document context with XPath library!
+        return Objects.equals(target, normalize(context.getXpath()));
     }
 
-    protected Collection<ContextAssertion> getAssertions() {
-        return assertions;
+    protected static String normalize(String xpath) {
+        return XPathUtils.normalize(xpath);
     }
 
 }

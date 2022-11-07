@@ -16,45 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
-import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import com.google.common.collect.Streams;
+import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import java.util.Collection;
 import java.util.stream.Stream;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@NoArgsConstructor
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-public class IdentityTransformation extends Transformation {
-
-//    @XmlAttribute(name = "field")
-    @Getter
-    private String field;
-
-    public IdentityTransformation(String field) {
-        this.field = field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
-    }
+public class IdentityProcessor implements FieldValuesProcessor {
 
     @Override
-    public String getTargetField() {
-        return field;
-    }
-
-    @Override
-    public Stream<ValueLanguagePair> apply(ValueContext valueContext) {
-        return valueContext.getValues().stream();
+    public Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults) {
+        return // get the values from the result
+                Streams.stream(mappingResults).map(FieldMappingResult::getValues) // get the values from the result
+                        .flatMap(Collection::stream); // join them in the result stream
     }
 
 }

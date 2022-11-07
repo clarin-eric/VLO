@@ -16,8 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules;
 
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBooleanOperator;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ValueAssertion;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ConceptPathAssertion;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertion;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionAndOperator;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.XPathAssertion;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionNotOperator;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.mapping.processing.IdentityTransformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.IdentityTransformation;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;

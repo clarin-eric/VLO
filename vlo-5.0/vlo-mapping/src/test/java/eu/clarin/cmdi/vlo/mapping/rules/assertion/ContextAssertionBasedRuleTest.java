@@ -14,12 +14,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.rules;
+package eu.clarin.cmdi.vlo.mapping.rules.assertion;
 
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBooleanOperator;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertion;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import eu.clarin.cmdi.vlo.mapping.processing.Transformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.hamcrest.MatcherAssert.assertThat;
