@@ -99,9 +99,9 @@ public class MappingDefinitionSample {
                         </assertion>
                     </assertion>
                 </assertions>
-                <transformations>
-                    <transformation xsi:type="identityTransformation"/>
-                </transformations>
+                <transformers>
+                    <transformer xsi:type="identityTransformation"/>
+                </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
             <contextAssertionBasedRule>
@@ -110,9 +110,9 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
                     <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
                 </assertions>
-                <transformations>
-                    <transformation xsi:type="identityTransformation"/>
-                </transformations>
+                <transformers>
+                    <transformer xsi:type="identityTransformation"/>
+                </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
             <contextAssertionBasedRule>
@@ -120,9 +120,9 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="xPathAssertion">/path/to/the/element</assertion>
                     <assertion xsi:type="xPathAssertion">/another/path</assertion>
                 </assertions>
-                <transformations>
-                    <transformation xsi:type="identityTransformation"/>
-                </transformations>
+                <transformers>
+                    <transformer xsi:type="identityTransformation"/>
+                </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
         </mappingDefinition>

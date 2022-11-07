@@ -17,43 +17,68 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<!--    <contextAssertionBasedRule>
-        <assertions>
-            <assertion xsi:type="contextAssertionAndOperator">
-                <assertion xsi:type="contextAssertionNotOperator">
-                    <assertion xsi:type="contextAssertionBooleanOperator">false</assertion>
-                </assertion>
-                <assertion xsi:type="conceptPathAssertion">
-                    <conceptPath>concept1 concept2</conceptPath>
-                </assertion>
-            </assertion>
-        </assertions>
-        <transformations>
-            <transformation xsi:type="identityTransformation" field="test"/>
-        </transformations>
-        <terminal>true</terminal>
-    </contextAssertionBasedRule>
     <contextAssertionBasedRule>
-        <assertions>
-            <assertion xsi:type="valueAssertion" regex="false" lang="en" caseSensitive="false">value1</assertion>
-            <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
-            <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
-        </assertions>
-        <transformations>
-            <transformation xsi:type="identityTransformation" field="test"/>
-        </transformations>
-        <terminal>false</terminal>
-    </contextAssertionBasedRule>-->
-    <contextAssertionBasedRule>
+        <!-- id of manuscript via path -->
         <assertions>
             <assertion xsi:type="xPathAssertion">/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
         </assertions>
-        <transformations>
-            <transformation xsi:type="identityTransformation">
+        <transformers>
+            <transformer xsi:type="identityTransformation">
                 <field>id</field>
-            </transformation>
-        </transformations>
+            </transformer>
+        </transformers>
         <terminal>false</terminal>
     </contextAssertionBasedRule>
+
+    <contextAssertionBasedRule>
+        <assertions>
+            <!-- title of narrative via concept -->
+            <assertion xsi:type="conceptPathAssertion">
+                <!-- location manuscript * narrative * -->
+                <conceptPath>
+                    http://hdl.handle.net/11459/CCR_C-5470_264bbec8-0f10-7126-2925-23fe2594b0da
+                    http://hdl.handle.net/11459/CCR_C-4371_f6ca641a-b4ed-d4d1-8e6f-ca8f6b4762ed
+                    *
+                    http://hdl.handle.net/11459/CCR_C-4451_143a66c6-bbc5-b1d8-31eb-ec7c75d83c99
+                    *
+                </conceptPath>
+            </assertion>
+        </assertions>
+        <transformers>
+            <transformer xsi:type="identityTransformation">
+                <field>title</field>
+            </transformer>
+        </transformers>
+        <terminal>false</terminal>
+    </contextAssertionBasedRule>
+    
 </mappingDefinition>
 
+
+<!--    <contextAssertionBasedRule>
+    <assertions>
+        <assertion xsi:type="contextAssertionAndOperator">
+            <assertion xsi:type="contextAssertionNotOperator">
+                <assertion xsi:type="contextAssertionBooleanOperator">false</assertion>
+            </assertion>
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>concept1 concept2</conceptPath>
+            </assertion>
+        </assertion>
+    </assertions>
+    <transformers>
+        <transformer xsi:type="identityTransformation" field="test"/>
+    </transformers>
+    <terminal>true</terminal>
+</contextAssertionBasedRule>
+<contextAssertionBasedRule>
+    <assertions>
+        <assertion xsi:type="valueAssertion" regex="false" lang="en" caseSensitive="false">value1</assertion>
+        <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
+        <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
+    </assertions>
+    <transformers>
+        <transformer xsi:type="identityTransformation" field="test"/>
+    </transformers>
+    <terminal>false</terminal>
+</contextAssertionBasedRule>-->

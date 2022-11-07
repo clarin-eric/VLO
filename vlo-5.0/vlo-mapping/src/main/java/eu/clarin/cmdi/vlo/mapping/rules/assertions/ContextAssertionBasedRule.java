@@ -27,6 +27,7 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -34,15 +35,15 @@ import java.util.stream.Stream;
  */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
+@Slf4j
 public class ContextAssertionBasedRule extends MappingRule {
 
     @XmlElementWrapper(name = "assertions")
     @XmlElement(name = "assertion")
     private List<? extends ContextAssertion> assertions;
 
-    @XmlElementWrapper(name = "transformations")
-    @XmlElement(name = "transformation")
-
+    @XmlElementWrapper(name = "transformers")
+    @XmlElement(name = "transformer")
     private Collection<Transformer> transformations;
 
     @XmlElement
@@ -60,7 +61,12 @@ public class ContextAssertionBasedRule extends MappingRule {
 
     @Override
     public boolean applies(ValueContext context) {
-        return assertions.stream().anyMatch(a -> a.evaluate(context));
+        if (assertions == null) {
+            log.debug("Rule cannot apply (no assertions)");
+            return false;
+        } else {
+            return assertions.stream().anyMatch(a -> a.evaluate(context));
+        }
     }
 
     @Override
