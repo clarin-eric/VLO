@@ -16,10 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,10 +30,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FieldValuesProcessorImpl implements FieldValuesProcessor {
 
+    private final static IdentityProcessor identityProcessor = new IdentityProcessor();
+
     @Override
-    public Collection<ValueLanguagePair> process(String field, Collection<FieldMappingResult> mappingResults) {
+    public Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults) {
         log.info("Processing field {} with mapping results {}", field, mappingResults);
-        return Collections.emptySet();
+        return identityProcessor.process(field, mappingResults);
+    }
+
+    public static class IdentityProcessor implements FieldValuesProcessor {
+
+        @Override
+        public Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults) {
+            return Streams.stream(mappingResults)
+                    .map(FieldMappingResult::getValues) // get the values from the result
+                    .flatMap(Collection::stream); // join them in the result stream
+        }
+
     }
 
 }

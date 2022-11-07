@@ -16,15 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
+import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -38,7 +42,7 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
     private final ContextFactory contextFactory;
     private final ContextFieldValueMapper contextFieldValueMapper;
     private final FieldValuesProcessor fieldValuesProcessor;
-    
+
     public BaseRecordFieldValuesMapper(ContextFactory contextFactory, ContextFieldValueMapper contextFieldValueMapper, FieldValuesProcessor fieldValuesProcessor) {
         this.contextFactory = contextFactory;
         this.contextFieldValueMapper = contextFieldValueMapper;
@@ -48,7 +52,7 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
     @Override
     public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException {
         log.info("Field mapping of record ({})", recordFile);
-        
+
         log.debug("Mapping all contexts (record {})", recordFile);
         // Produce mapping results for all individual contexts
         final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(recordFile);
@@ -81,7 +85,7 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
                 = ImmutableMap.builder();
         resultsByField.entrySet().forEach(e -> {
             // field specific processing of all individual mapping results into field values
-            resultBuilder.put(e.getKey(), fieldValuesProcessor.process(e.getKey(), e.getValue()));
+            resultBuilder.put(e.getKey(), fieldValuesProcessor.process(e.getKey(), e.getValue()).toList());
         });
         return resultBuilder.buildOrThrow();
     }

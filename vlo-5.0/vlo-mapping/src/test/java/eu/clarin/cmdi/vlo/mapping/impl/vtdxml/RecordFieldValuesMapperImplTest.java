@@ -21,11 +21,17 @@ import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
-import static java.lang.StrictMath.log;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.not;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,6 +45,7 @@ public class RecordFieldValuesMapperImplTest {
 
     /**
      * Test of mapRecordToFields method, of class RecordFieldValuesMapperImpl.
+     *
      * @throws java.lang.Exception
      */
     @Test
@@ -48,6 +55,7 @@ public class RecordFieldValuesMapperImplTest {
         final RecordFieldValuesMapper instance = new RecordFieldValuesMapperImpl(mappingConfig);
         Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
         log.info("Result for {} fields", result.keySet().size());
+        assertThat(result, hasEntry(equalTo("id"), allOf(isA(Collection.class), not(empty()))));
     }
 
 }
