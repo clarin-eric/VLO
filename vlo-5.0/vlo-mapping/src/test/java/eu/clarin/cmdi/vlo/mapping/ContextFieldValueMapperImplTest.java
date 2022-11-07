@@ -33,6 +33,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.Mock;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.never;
@@ -54,6 +55,8 @@ public class ContextFieldValueMapperImplTest {
     @Mock
     private Transformer transformation;
 
+    private VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
+
     private final ValueContext context = SimpleValueContext.builder()
             .values(ImmutableList.of(new ValueLanguagePair("value1", "en")))
             .build();
@@ -61,7 +64,7 @@ public class ContextFieldValueMapperImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        instance = new ContextFieldValueMapperImpl(ImmutableList.of(rule, rule, rule));
+        instance = new ContextFieldValueMapperImpl(ImmutableList.of(rule, rule, rule), mappingConfig);
     }
 
     /**
@@ -86,7 +89,7 @@ public class ContextFieldValueMapperImplTest {
                     .thenReturn(false, true, true);
             when(rule.getTransformerStream())
                     .thenReturn(Stream.of(transformation), Stream.of(transformation));
-            when(transformation.apply(context))
+            when(transformation.apply(eq(context), any(VloMappingConfiguration.class)))
                     .thenReturn(Stream.of(output), Stream.of(output));
 
             // map and collect
@@ -94,7 +97,7 @@ public class ContextFieldValueMapperImplTest {
             assertThat(result, hasSize(2));
 
             verify(rule, times(2)).getTransformerStream();
-            verify(transformation, times(2)).apply(context);
+            verify(transformation, times(2)).apply(eq(context), any(VloMappingConfiguration.class));
         }
     }
 
@@ -108,7 +111,7 @@ public class ContextFieldValueMapperImplTest {
                     .thenReturn(true);
             when(rule.getTransformerStream())
                     .thenReturn(Stream.of(transformation));
-            when(transformation.apply(context))
+            when(transformation.apply(eq(context), any(VloMappingConfiguration.class)))
                     .thenReturn(Stream.of(output));
 
             // map and collect
@@ -116,7 +119,7 @@ public class ContextFieldValueMapperImplTest {
             assertThat(result, hasSize(1));
 
             verify(rule, times(1)).getTransformerStream();
-            verify(transformation, atLeastOnce()).apply(context);
+            verify(transformation, atLeastOnce()).apply(eq(context), any(VloMappingConfiguration.class));
         }
     }
 }

@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import eu.clarin.cmdi.vlo.mapping.BaseRecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.CachingRecordFactory;
+import eu.clarin.cmdi.vlo.mapping.ContextFieldValueMapper;
 import eu.clarin.cmdi.vlo.mapping.ContextFieldValueMapperImpl;
 import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesRootProcessor;
 import eu.clarin.cmdi.vlo.mapping.RecordFactory;
@@ -35,15 +36,15 @@ import java.io.IOException;
 public class RecordFieldValuesMapperImpl extends BaseRecordFieldValuesMapper {
 
     public RecordFieldValuesMapperImpl(VloMappingConfiguration mappingConfig) throws VloMappingRulesException, IOException {
-        this(new RecordReaderImpl(mappingConfig), new RulesFactoryImpl(mappingConfig));
+        this(new RecordReaderImpl(mappingConfig), new RulesFactoryImpl(mappingConfig), mappingConfig);
     }
 
-    private RecordFieldValuesMapperImpl(RecordReader recordReader, RulesFactory rulesFactory) throws VloMappingRulesException {
-        this(new CachingRecordFactory(recordReader), rulesFactory);
+    private RecordFieldValuesMapperImpl(RecordReader recordReader, RulesFactory rulesFactory, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
+        this(new CachingRecordFactory(recordReader), new ContextFieldValueMapperImpl(rulesFactory.getRules(), mappingConfig));
 
     }
 
-    private RecordFieldValuesMapperImpl(RecordFactory recordFactory, RulesFactory rulesFactory) throws VloMappingRulesException {
-        super(new ContextFactoryImpl(recordFactory), new ContextFieldValueMapperImpl(rulesFactory.getRules()), new FieldValuesRootProcessor());
+    private RecordFieldValuesMapperImpl(RecordFactory recordFactory, ContextFieldValueMapper fieldValueMapper) throws VloMappingRulesException {
+        super(new ContextFactoryImpl(recordFactory), fieldValueMapper, new FieldValuesRootProcessor());
     }
 }
