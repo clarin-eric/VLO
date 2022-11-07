@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.Collection;
+import java.util.stream.Stream;
 
 /**
  * Processes mapping results for a field into a set of values that actually will
@@ -28,6 +28,6 @@ import java.util.Collection;
  */
 public interface FieldValuesProcessor {
 
-    Collection<ValueLanguagePair> process(String field, Collection<FieldMappingResult> mappingResults);
+    Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults);
 
 }
