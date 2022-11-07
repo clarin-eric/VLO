@@ -87,7 +87,7 @@ public class ContextAssertionBasedRuleTest {
 
         {
             final ContextAssertionBasedRule instance = new ContextAssertionBasedRule(assertions, transformations, true);
-            final List<Transformer> collected = instance.getTransformations().collect(Collectors.toList());
+            final List<Transformer> collected = instance.getTransformerStream().collect(Collectors.toList());
             assertThat(collected, hasItem(transformation));
         }
     }

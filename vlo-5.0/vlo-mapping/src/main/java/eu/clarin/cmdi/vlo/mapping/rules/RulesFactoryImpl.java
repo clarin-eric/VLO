@@ -19,12 +19,14 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import jakarta.xml.bind.JAXBException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.function.Supplier;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -58,6 +60,8 @@ public class RulesFactoryImpl implements RulesFactory {
         final MappingDefinitionMarshaller marshaller = definitionMarshallerSupplier.get();
         try {
             final MappingDefinition definition = marshaller.unmarshal(definitionSource.get());
+            assessDefinitionQuality(definition);
+
             return Iterables.transform(definition.getRules(), r -> r);
         } catch (JAXBException ex) {
             throw new VloMappingRulesException("Error while trying to unmarshal mapping definition from source: " + definitionSource, ex);
@@ -95,6 +99,20 @@ public class RulesFactoryImpl implements RulesFactory {
         } catch (JAXBException ex) {
             throw new RuntimeException("Failed to instantiate mapping definition marshaller", ex);
         }
+    }
+
+    /**
+     * Inspect definition and log any relevant warnings or errors 
+     * @param definition 
+     */
+    private void assessDefinitionQuality(final MappingDefinition definition) {
+        if (definition.getRules() == null || definition.getRules().isEmpty()) {
+            log.warn("Definition contains no rules! {}", definition);
+        }
+
+        final List<ContextAssertionBasedRule> rules = definition.getRules();
+        rules.stream().filter(rule -> rule.getAssertions() == null || rule.getAssertions().isEmpty())
+                .forEach(r -> log.warn("Rule without assertions! {}", r));
     }
 
 }

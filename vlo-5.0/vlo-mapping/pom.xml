@@ -12,6 +12,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
+                    <trimStackTrace>false</trimStackTrace>
                     <argLine>-XX:+ShowCodeDetailsInExceptionMessages</argLine>
                 </configuration>
             </plugin>

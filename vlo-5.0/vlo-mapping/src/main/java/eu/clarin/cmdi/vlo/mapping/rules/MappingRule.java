@@ -35,6 +35,6 @@ public abstract class MappingRule {
 
     public abstract boolean isTerminal();
 
-    public abstract Stream<Transformer> getTransformations();
+    public abstract Stream<Transformer> getTransformerStream();
 
 }

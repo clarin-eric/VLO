@@ -73,7 +73,7 @@ public class ContextFieldValueMapperImplTest {
 
         Stream<FieldMappingResult> result = instance.mapContext(context);
         verify(rule, times(3)).applies(any(ValueContext.class));
-        verify(rule, never()).getTransformations();
+        verify(rule, never()).getTransformerStream();
         verify(rule, never()).isTerminal();
         assertThat(result.collect(Collectors.toList()), empty());
     }
@@ -84,7 +84,7 @@ public class ContextFieldValueMapperImplTest {
             ValueLanguagePair output = new ValueLanguagePair("output1", "en");
             when(rule.applies(context))
                     .thenReturn(false, true, true);
-            when(rule.getTransformations())
+            when(rule.getTransformerStream())
                     .thenReturn(Stream.of(transformation), Stream.of(transformation));
             when(transformation.apply(context))
                     .thenReturn(Stream.of(output), Stream.of(output));
@@ -93,7 +93,7 @@ public class ContextFieldValueMapperImplTest {
             List<FieldMappingResult> result = instance.mapContext(context).collect(Collectors.toList());
             assertThat(result, hasSize(2));
 
-            verify(rule, times(2)).getTransformations();
+            verify(rule, times(2)).getTransformerStream();
             verify(transformation, times(2)).apply(context);
         }
     }
@@ -106,7 +106,7 @@ public class ContextFieldValueMapperImplTest {
                     .thenReturn(false, true, true);
             when(rule.isTerminal())
                     .thenReturn(true);
-            when(rule.getTransformations())
+            when(rule.getTransformerStream())
                     .thenReturn(Stream.of(transformation));
             when(transformation.apply(context))
                     .thenReturn(Stream.of(output));
@@ -115,7 +115,7 @@ public class ContextFieldValueMapperImplTest {
             List<FieldMappingResult> result = instance.mapContext(context).collect(Collectors.toList());
             assertThat(result, hasSize(1));
 
-            verify(rule, times(1)).getTransformations();
+            verify(rule, times(1)).getTransformerStream();
             verify(transformation, atLeastOnce()).apply(context);
         }
     }
