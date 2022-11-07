@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
@@ -33,6 +34,6 @@ public abstract class Transformer {
 
     public abstract String getTargetField();
 
-    public abstract Stream<ValueLanguagePair> apply(ValueContext valueContext);
+    public abstract Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig);
 
 }

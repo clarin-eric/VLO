@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -55,7 +56,7 @@ public class IdentityTransformer extends Transformer {
     }
 
     @Override
-    public Stream<ValueLanguagePair> apply(ValueContext valueContext) {
+    public Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig) {
         return valueContext.getValues().stream();
     }
 
