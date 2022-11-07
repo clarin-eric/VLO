@@ -22,7 +22,9 @@ import java.util.stream.Stream;
 
 /**
  * Processes mapping results for a field into a set of values that actually will
- * be stored in that field
+ * be stored in that field. This is to be applied after all transformations on
+ * record values have been carried  out. Typical use cases are value 
+ * harmonisation/normalisation.
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */

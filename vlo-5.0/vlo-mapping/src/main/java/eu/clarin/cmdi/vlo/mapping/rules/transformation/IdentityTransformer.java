@@ -32,13 +32,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class IdentityTransformation extends Transformation {
+public class IdentityTransformer extends Transformer {
 
 //    @XmlAttribute(name = "field")
     @Getter
     private String field;
 
-    public IdentityTransformation(String field) {
+    public IdentityTransformer(String field) {
         this.field = field;
     }
 

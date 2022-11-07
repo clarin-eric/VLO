@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformer;
 import java.util.List;
 import java.util.stream.Collectors;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -41,7 +41,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ContextAssertionBasedRuleTest {
 
     @Mock
-    Transformation transformation;
+    Transformer transformation;
 
     /**
      * Test of applies method, of class ContextAssertionBasedRule.
@@ -49,7 +49,7 @@ public class ContextAssertionBasedRuleTest {
     @Test
     public void testApplies() {
         final ImmutableList<ContextAssertion> assertions = ImmutableList.of(ContextAssertion.FALSE(), ContextAssertion.TRUE());
-        final ImmutableList<Transformation> transformations = ImmutableList.of(transformation);
+        final ImmutableList<Transformer> transformations = ImmutableList.of(transformation);
 
         final ContextAssertionBasedRule instance = new ContextAssertionBasedRule(assertions, transformations, false);
         final SimpleValueContext context = SimpleValueContext.builder()
@@ -65,7 +65,7 @@ public class ContextAssertionBasedRuleTest {
     @Test
     public void testIsTerminal() {
         final ImmutableList<ContextAssertionBooleanOperator> assertions = ImmutableList.of(new ContextAssertionBooleanOperator(false), new ContextAssertionBooleanOperator(true));
-        final ImmutableList<Transformation> transformations = ImmutableList.of(transformation);
+        final ImmutableList<Transformer> transformations = ImmutableList.of(transformation);
 
         {
             final ContextAssertionBasedRule instance = new ContextAssertionBasedRule(assertions, transformations, true);
@@ -83,11 +83,11 @@ public class ContextAssertionBasedRuleTest {
     @Test
     public void testGetTransformations() {
         final ImmutableList<ContextAssertionBooleanOperator> assertions = ImmutableList.of(new ContextAssertionBooleanOperator(false), new ContextAssertionBooleanOperator(true));
-        final ImmutableList<Transformation> transformations = ImmutableList.of(transformation);
+        final ImmutableList<Transformer> transformations = ImmutableList.of(transformation);
 
         {
             final ContextAssertionBasedRule instance = new ContextAssertionBasedRule(assertions, transformations, true);
-            final List<Transformation> collected = instance.getTransformations().collect(Collectors.toList());
+            final List<Transformer> collected = instance.getTransformations().collect(Collectors.toList());
             assertThat(collected, hasItem(transformation));
         }
     }

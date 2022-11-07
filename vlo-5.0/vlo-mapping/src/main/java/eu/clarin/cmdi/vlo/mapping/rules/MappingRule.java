@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.mapping.rules;
 
 import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformation;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.Transformer;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.stream.Stream;
@@ -35,6 +35,6 @@ public abstract class MappingRule {
 
     public abstract boolean isTerminal();
 
-    public abstract Stream<Transformation> getTransformations();
+    public abstract Stream<Transformer> getTransformations();
 
 }
