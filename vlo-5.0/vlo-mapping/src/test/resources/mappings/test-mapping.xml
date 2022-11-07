@@ -23,9 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <assertion xsi:type="xPathAssertion">/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
         </assertions>
         <transformers>
-            <transformer xsi:type="identityTransformer">
-                <field>id</field>
-            </transformer>
+            <transformer xsi:type="identityTransformer" field="id" />
+            <transformer xsi:type="identityTransformer" field="identifier" />
         </transformers>
         <terminal>true</terminal>
     </contextAssertionBasedRule>
@@ -43,9 +42,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </assertion>
         </assertions>
         <transformers>
-            <transformer xsi:type="identityTransformer">
-                <field>location</field>
-            </transformer>
+            <transformer xsi:type="identityTransformer" field="location" />
         </transformers>
         <terminal>true</terminal>
     </contextAssertionBasedRule>

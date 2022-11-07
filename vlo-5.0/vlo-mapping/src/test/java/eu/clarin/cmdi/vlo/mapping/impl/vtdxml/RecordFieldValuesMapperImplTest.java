@@ -55,8 +55,9 @@ public class RecordFieldValuesMapperImplTest {
         final RecordFieldValuesMapper instance = new RecordFieldValuesMapperImpl(mappingConfig);
         Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
         log.info("Result for {} fields", result.keySet().size());
-        assertThat(result, aMapWithSize(2));
+        assertThat(result, aMapWithSize(3));
         assertThat(result, hasEntry(equalTo("id"), allOf(isA(Collection.class), hasSize(1))));
+        assertThat(result, hasEntry(equalTo("identifier"), allOf(isA(Collection.class), hasSize(1))));
         assertThat(result, hasEntry(equalTo("location"), allOf(isA(Collection.class), hasSize(2))));
     }
 
