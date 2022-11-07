@@ -100,7 +100,7 @@ public class MappingDefinitionSample {
                     </assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformer"/>
+                    <transformer xsi:type="identityTransformer" field="field1"/>
                 </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
@@ -111,7 +111,7 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformer"/>
+                    <transformer xsi:type="identityTransformer" field="field2"/>
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
@@ -121,7 +121,7 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="xPathAssertion">/another/path</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformer"/>
+                    <transformer xsi:type="identityTransformer" field="field3"/>
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>

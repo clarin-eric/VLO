@@ -20,9 +20,9 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.stream.Stream;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -31,15 +31,18 @@ import lombok.NoArgsConstructor;
  */
 @NoArgsConstructor
 @XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.NONE)
 public class IdentityTransformer extends Transformer {
 
-//    @XmlAttribute(name = "field")
-    @Getter
+    @XmlAttribute(name = "field")
     private String field;
 
     public IdentityTransformer(String field) {
         this.field = field;
+    }
+
+    public String getField() {
+        return field;
     }
 
     public void setField(String field) {
