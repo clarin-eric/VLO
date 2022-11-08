@@ -46,7 +46,7 @@ public class PIDUtils {
     //PID: HDL or DOI
     public final static Pattern PID_PATTERN = Pattern.compile("^(" + HANDLE_PATTERN_STRING + "|" + DOI_PATTERN_STRING + "|" + URN_NBN_PATTERN_STRING + ")$", Pattern.CASE_INSENSITIVE);
 
-    private final static Pattern ACTIONABLE_LINK_PATTERN = Pattern.compile("^https?:\\/\\/", Pattern.CASE_INSENSITIVE);
+    private final static Pattern ACTIONABLE_LINK_PATTERN = Pattern.compile("https?:\\/\\/.+", Pattern.CASE_INSENSITIVE);
     
     /**
      *
@@ -103,7 +103,7 @@ public class PIDUtils {
     /**
      *
      * @param uri
-     * @return whether the provided URI is a handle
+     * @return whether the provided URI is actionable
      */
     public static boolean isActionableLink(String uri) {
         if (uri == null) {
@@ -165,7 +165,7 @@ public class PIDUtils {
     }
 
     public static String getActionableLinkForPid(final String link) {
-        if (link != null && !ACTIONABLE_LINK_PATTERN.matcher(link).find()) {
+        if (link != null && !isActionableLink(link)) {
             if (PIDUtils.isHandle(link)) {
                 return HANDLE_PROXY + PIDUtils.getSchemeSpecificId(link);
             }
