@@ -1,5 +1,10 @@
 Bug fixes and new features
 --------------------------
+VLO 4.11.2 (November 2022)
+
+* Actionable links that are not PIDs are not recognised as actionable
+		<https://github.com/clarin-eric/VLO/issues/358>
+
 VLO 4.11.1 (October 2022)
 
 * Fixed linkchecker database access problem
