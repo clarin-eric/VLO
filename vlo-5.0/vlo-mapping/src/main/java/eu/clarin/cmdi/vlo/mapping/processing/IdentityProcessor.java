@@ -17,22 +17,18 @@
 package eu.clarin.cmdi.vlo.mapping.processing;
 
 import com.google.common.collect.Streams;
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.Collection;
 import java.util.stream.Stream;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class IdentityProcessor implements FieldValuesProcessor {
+public class IdentityProcessor implements SingleFieldValuesProcessor {
 
     @Override
-    public Stream<ValueLanguagePair> process(String field, Iterable<FieldMappingResult> mappingResults) {
-        return // get the values from the result
-                Streams.stream(mappingResults).map(FieldMappingResult::getValues) // get the values from the result
-                        .flatMap(Collection::stream); // join them in the result stream
+    public Stream<ValueLanguagePair> process(String field, Iterable<ValueLanguagePair> mappingResults) {
+        return Streams.stream(mappingResults);
     }
 
 }
