@@ -14,23 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.mapping.processing;
-
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
-import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
 /**
- * Processes mapping results into a final map of field values that actually will
- * be stored. This is to be applied after all transformations on record values
- * have been carried out. This can include processing of individual fields but
- * also implement integration and harmonisation across fields.
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface FieldValuesProcessor {
-
-    Map<String, Collection<ValueLanguagePair>> process(final Map<String, List<FieldMappingResult>> resultsByField);
+public interface Normalizer {
+    
 }

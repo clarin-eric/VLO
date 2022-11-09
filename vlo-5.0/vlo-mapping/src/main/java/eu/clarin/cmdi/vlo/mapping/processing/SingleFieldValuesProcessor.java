@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
+ * Copyright (C) 2022 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
-import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 /**
- * Processes mapping results into a final map of field values that actually will
- * be stored. This is to be applied after all transformations on record values
- * have been carried out. This can include processing of individual fields but
- * also implement integration and harmonisation across fields.
+ * Processes mapping results for a field into a set of values that actually will
+ * be stored in that field. This is to be applied after all transformations on
+ * record values have been carried  out. Typical use cases are value 
+ * harmonisation/normalisation within a single field.
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface FieldValuesProcessor {
+public interface SingleFieldValuesProcessor {
 
-    Map<String, Collection<ValueLanguagePair>> process(final Map<String, List<FieldMappingResult>> resultsByField);
+    Stream<ValueLanguagePair> process(String field, Iterable<ValueLanguagePair> values);
+
 }

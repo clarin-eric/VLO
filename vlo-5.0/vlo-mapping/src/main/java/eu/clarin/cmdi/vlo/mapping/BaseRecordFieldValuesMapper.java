@@ -16,10 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
-import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -56,7 +55,7 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
 
         log.debug("Producing field values (record {})", recordFile);
         // Distil field values out of mapping results
-        return produceFieldValues(resultsByField);
+        return fieldValuesProcessor.process(resultsByField);
     }
 
     /**
@@ -69,22 +68,6 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
         return contextFactory.createContexts(recordFile) // gets all contexts in the record
                 .flatMap(contextFieldValueMapper::mapContext) // maps all contexts to field value candidates
                 .collect(Collectors.groupingBy(FieldMappingResult::getField)); // collects results grouped by field
-    }
-
-    /**
-     * Distils field values out of mapping results
-     *
-     * @param resultsByField
-     * @return
-     */
-    private Map<String, Collection<ValueLanguagePair>> produceFieldValues(final Map<String, List<FieldMappingResult>> resultsByField) {
-        final ImmutableMap.Builder<String, Collection<ValueLanguagePair>> resultBuilder
-                = ImmutableMap.builder();
-        resultsByField.entrySet().forEach(e -> {
-            // field specific processing of all individual mapping results into field values
-            resultBuilder.put(e.getKey(), fieldValuesProcessor.process(e.getKey(), e.getValue()).toList());
-        });
-        return resultBuilder.buildOrThrow();
     }
 
 }
