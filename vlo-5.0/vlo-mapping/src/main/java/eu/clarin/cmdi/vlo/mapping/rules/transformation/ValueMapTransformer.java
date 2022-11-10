@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
 import com.google.common.base.Functions;
 import com.google.common.base.Suppliers;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
@@ -30,13 +31,15 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -96,21 +99,34 @@ public class ValueMapTransformer extends BaseTransformer {
                 .map(mapper::apply);
     }
 
+    /**
+     * Creates the function that maps value/language pairs to target
+     * value/language pairs, depending on the settings on this transformer
+     *
+     * @return Function that can be applied to input
+     */
     private Function<ValueLanguagePair, ValueLanguagePair> createMapperFunction() {
         log.debug("Creating a mapper function for a value map transformer for field {}", field);
         if (map != null) {
             if (regex) {
-                //TODO: regex based lookup
-                return Functions.identity();
+                return createRegexMapperFunction();
             } else {
                 return createNonRegexMapperFunction();
             }
         } else {
-            return Functions.identity();
+            //TODO: load map from elsewhere??
+            throw new UnsupportedOperationException("Cannot create mapper function without map set");
         }
     }
 
+    /**
+     * Creates a map based function for looking up values and their targets
+     *
+     * @return Function that can be applied to input
+     */
     private Function<ValueLanguagePair, ValueLanguagePair> createNonRegexMapperFunction() {
+        log.debug("Creating mapper function for simple (non-regex) lookup");
+
         // normalization
         final Function<String, String> normalizer = keyNormalizerSupplier.get();
         final ImmutableMap<String, String> normalizedMap = getNormalizedMap(map, normalizer);
@@ -120,7 +136,7 @@ public class ValueMapTransformer extends BaseTransformer {
                 = (vlp) -> Optional.ofNullable(normalizedMap.get(normalizer.apply(vlp.getValue())))
                         .map(s -> new ValueLanguagePair(s, targetLang));
 
-        // complete function depending on default behaviour
+        // complete function depending on default result
         if (defaultValue == null) {
             // function returning original if no match
             return vlp -> lookup.apply(vlp).orElse(vlp);
@@ -139,6 +155,15 @@ public class ValueMapTransformer extends BaseTransformer {
         }
     }
 
+    /**
+     * Normalizes the keys of a map with a provided normalizer
+     *
+     * @param <K> key type
+     * @param <V> value type
+     * @param map map to normalize
+     * @param keyNormalizer normalizer function to be applied to keys
+     * @return Immutable, materialized map with normalized keys
+     */
     private static <K, V> ImmutableMap<K, V> getNormalizedMap(Map<K, V> map, Function<K, K> keyNormalizer) {
         return ImmutableMap.copyOf(
                 Iterables.transform(
@@ -146,6 +171,49 @@ public class ValueMapTransformer extends BaseTransformer {
                         e -> Maps.immutableEntry(
                                 keyNormalizer.apply(e.getKey()),
                                 e.getValue())));
+    }
+
+    private Function<ValueLanguagePair, ValueLanguagePair> createRegexMapperFunction() {
+        log.debug("Creating mapper function for regex based lookup");
+
+        final int patternFlags = getRegexFlags();
+
+        // convert map to list of entries of compiled Patterns - target value
+        final List<Entry<Pattern, String>> regexRules
+                = ImmutableList.copyOf(
+                        Iterables.transform(map.entrySet(),
+                                entry -> Maps.immutableEntry(
+                                        Pattern.compile(entry.getKey(), patternFlags),
+                                        entry.getValue())));
+
+        // match finder function
+        final Function<ValueLanguagePair, Optional<ValueLanguagePair>> matchFinder = vlp -> {
+            return regexRules.stream() // iterate over all expressions
+                    // actual matching
+                    .filter(e -> e.getKey().matcher(vlp.getValue()).matches())
+                    // we only need one match
+                    .findAny()
+                    // if found, map to value language pair
+                    .map(e -> new ValueLanguagePair(e.getValue(), targetLang));
+        };
+
+        // complete function depending on default result
+        if (defaultValue == null) {
+            // function returning original if there is no match
+            return vlp -> matchFinder.apply(vlp).orElse(vlp);
+        } else {
+            // function returning default value language pair if there is no match
+            final ValueLanguagePair defaultVlp = new ValueLanguagePair(defaultValue, targetLang);
+            return vlp -> matchFinder.apply(vlp).orElse(defaultVlp);
+        }
+    }
+
+    private int getRegexFlags() {
+        int patternFlags = 0;
+        if (!caseSensitive) {
+            patternFlags |= Pattern.CASE_INSENSITIVE;
+        }
+        return patternFlags;
     }
 
 }
