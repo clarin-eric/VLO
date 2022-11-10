@@ -49,7 +49,14 @@ public class ValueMapTransformerTest {
             Maps.immutableEntry("b", "BB"),
             Maps.immutableEntry("c", "CC")
     );
-    
+
+    private final static Map<String, String> REGEX_MAP = ImmutableMap.ofEntries(
+            Maps.immutableEntry("^a.*", "starts with a"),
+            Maps.immutableEntry(".*z", "ends in z"),
+            Maps.immutableEntry(".*[0-9].*$", "contains a number"),
+            Maps.immutableEntry("[0-9]", "exactly one digit")
+    );
+
     @Mock
     private VloMappingConfiguration mappingConfig;
 
@@ -73,7 +80,7 @@ public class ValueMapTransformerTest {
 
         final ValueContext valueContext = SimpleValueContext.builder()
                 .values(ImmutableList.of(
-                        new ValueLanguagePair("a", "nl"),
+                        new ValueLanguagePair("a", "x"),
                         new ValueLanguagePair("B", "fr"),
                         new ValueLanguagePair("c", null),
                         new ValueLanguagePair("d", "x")))
@@ -109,8 +116,8 @@ public class ValueMapTransformerTest {
 
         final ValueContext valueContext = SimpleValueContext.builder()
                 .values(ImmutableList.of(
-                        new ValueLanguagePair("a", "nl"),
-                        new ValueLanguagePair("B", "fr"),
+                        new ValueLanguagePair("a", "x"),
+                        new ValueLanguagePair("B", "x"),
                         new ValueLanguagePair("C", null),
                         new ValueLanguagePair("d", "x")))
                 .build();
@@ -126,7 +133,7 @@ public class ValueMapTransformerTest {
                 allOf(hasProperty("value", equalTo("AA")), hasProperty("language", equalTo("en")))));
 
         assertThat("Non-matching items should be kept (not mapped)", result, hasItems(
-                allOf(hasProperty("value", equalTo("B")), hasProperty("language", equalTo("fr"))),
+                allOf(hasProperty("value", equalTo("B")), hasProperty("language", equalTo("x"))),
                 allOf(hasProperty("value", equalTo("C"))),
                 allOf(hasProperty("value", equalTo("d")), hasProperty("language", equalTo("x")))));
     }
@@ -144,8 +151,8 @@ public class ValueMapTransformerTest {
 
         final ValueContext valueContext = SimpleValueContext.builder()
                 .values(ImmutableList.of(
-                        new ValueLanguagePair("a", "nl"),
-                        new ValueLanguagePair("B", "fr"),
+                        new ValueLanguagePair("a", "x"),
+                        new ValueLanguagePair("B", "x"),
                         new ValueLanguagePair("c", null),
                         new ValueLanguagePair("d", "x")))
                 .build();
@@ -165,7 +172,112 @@ public class ValueMapTransformerTest {
         assertThat("Non-matching item should be mapped to default value", result, hasItems(
                 allOf(hasProperty("value", equalTo("defaultValue")), hasProperty("language", equalTo("en")))));
     }
-    
-    
+
+    /**
+     * Test of apply method, of class ValueMapTransformer.
+     */
+    @Test
+    public void testRegexMapCaseInsensitive() {
+        instance.setMap(REGEX_MAP);
+        instance.setCaseSensitive(false);
+        instance.setRegex(true);
+        instance.setTargetLang("en");
+
+        final ValueContext valueContext = SimpleValueContext.builder()
+                .values(ImmutableList.of(
+                        new ValueLanguagePair("abcd", "x"),
+                        new ValueLanguagePair("uvwxyz", "x"),
+                        new ValueLanguagePair("oo33oo", null),
+                        new ValueLanguagePair("dddd", "x")))
+                .build();
+
+        final Stream<ValueLanguagePair> resultStream = instance.apply(valueContext, mappingConfig);
+        assertNotNull(resultStream);
+
+        // collect
+        final List<ValueLanguagePair> result = resultStream.toList();
+        assertThat(result, hasSize(4));
+
+        assertThat("Regex match cases should be mapped", result, hasItems(
+                allOf(hasProperty("value", equalTo("starts with a")), hasProperty("language", equalTo("en"))),
+                allOf(hasProperty("value", equalTo("ends in z")), hasProperty("language", equalTo("en"))),
+                allOf(hasProperty("value", equalTo("contains a number")), hasProperty("language", equalTo("en")))));
+
+        assertThat("Non-matching item should be kept (not mapped)", result, hasItems(
+                allOf(hasProperty("value", equalTo("dddd")), hasProperty("language", equalTo("x")))));
+    }
+
+    /**
+     * Test of apply method, of class ValueMapTransformer.
+     */
+    @Test
+    public void testRegexMapCaseSensitive() {
+        instance.setMap(REGEX_MAP);
+        instance.setCaseSensitive(true);
+        instance.setRegex(true);
+        instance.setTargetLang("en");
+
+        final ValueContext valueContext = SimpleValueContext.builder()
+                .values(ImmutableList.of(
+                        new ValueLanguagePair("abcd", "x"),
+                        new ValueLanguagePair("ABCD", "x"),
+                        new ValueLanguagePair("uvwxyz", "x"),
+                        new ValueLanguagePair("UVWXYZ", "x"),
+                        new ValueLanguagePair("oo33oo", null),
+                        new ValueLanguagePair("dddd", "x")))
+                .build();
+
+        final Stream<ValueLanguagePair> resultStream = instance.apply(valueContext, mappingConfig);
+        assertNotNull(resultStream);
+
+        // collect
+        final List<ValueLanguagePair> result = resultStream.toList();
+        assertThat(result, hasSize(6));
+
+        assertThat("Regex match cases should be mapped", result, hasItems(
+                allOf(hasProperty("value", equalTo("starts with a")), hasProperty("language", equalTo("en"))),
+                allOf(hasProperty("value", equalTo("ends in z")), hasProperty("language", equalTo("en"))),
+                allOf(hasProperty("value", equalTo("contains a number")), hasProperty("language", equalTo("en")))));
+
+        assertThat("Non-matching item should be kept (not mapped)", result, hasItems(
+                allOf(hasProperty("value", equalTo("ABCD")), hasProperty("language", equalTo("x"))),
+                allOf(hasProperty("value", equalTo("UVWXYZ")), hasProperty("language", equalTo("x"))),
+                allOf(hasProperty("value", equalTo("dddd")), hasProperty("language", equalTo("x")))));
+    }
+
+    /**
+     * Test of apply method, of class ValueMapTransformer.
+     */
+    @Test
+    public void testRegexMapCaseInsensitiveWithDefault() {
+        instance.setMap(REGEX_MAP);
+        instance.setCaseSensitive(false);
+        instance.setRegex(true);
+        instance.setTargetLang("en");
+        instance.setDefaultValue("defaultValue");
+
+        final ValueContext valueContext = SimpleValueContext.builder()
+                .values(ImmutableList.of(
+                        new ValueLanguagePair("abcd", "x"),
+                        new ValueLanguagePair("uvwxyz", "x"),
+                        new ValueLanguagePair("oo33oo", null),
+                        new ValueLanguagePair("dddd", "x")))
+                .build();
+
+        final Stream<ValueLanguagePair> resultStream = instance.apply(valueContext, mappingConfig);
+        assertNotNull(resultStream);
+
+        // collect
+        final List<ValueLanguagePair> result = resultStream.toList();
+        assertThat(result, hasSize(4));
+
+        assertThat("Regex match cases should be mapped", result, hasItems(
+                allOf(hasProperty("value", equalTo("starts with a")), hasProperty("language", equalTo("en"))),
+                allOf(hasProperty("value", equalTo("ends in z")), hasProperty("language", equalTo("en"))),
+                allOf(hasProperty("value", equalTo("contains a number")), hasProperty("language", equalTo("en")))));
+
+        assertThat("Non-matching item should be mapped to default value", result, hasItems(
+                allOf(hasProperty("value", equalTo("defaultValue")), hasProperty("language", equalTo("en")))));
+    }
 
 }
