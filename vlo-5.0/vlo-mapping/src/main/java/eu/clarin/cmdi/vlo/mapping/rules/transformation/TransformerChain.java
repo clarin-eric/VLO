@@ -16,13 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
+import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import eu.clarin.cmdi.vlo.mapping.model.ValueContextImpl;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlElement;
+import java.util.List;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 
@@ -31,33 +33,25 @@ import lombok.NoArgsConstructor;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @NoArgsConstructor
-@XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-public class NormalizationTransformer extends Transformer {
+public class TransformerChain extends BaseTransformer {
 
-    @XmlAttribute(name = "field")
-    private String field;
+    @XmlElement(name = "transformer")
+    private List<Transformer> transformers;
 
-    public NormalizationTransformer(String field) {
-        this.field = field;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
-    }
-
-    @Override
-    public String getTargetField() {
-        return field;
+    public TransformerChain(String field, List<Transformer> transformers) {
+        super(field);
+        this.transformers = transformers;
     }
 
     @Override
     public Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ValueContext currentContext = valueContext;
+        for (Transformer transformer : transformers) {
+            currentContext = new ValueContextImpl(currentContext, transformer.apply(currentContext, mappingConfig).toList());
+        }
+
+        return Streams.stream(currentContext.getValues());
     }
 
 }

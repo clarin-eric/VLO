@@ -16,13 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.mapping.model;
 
-import java.util.List;
-
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public interface ValueContext extends Context {
 
-    List<ValueLanguagePair> getValues();
+    Iterable<ValueLanguagePair> getValues();
 }
