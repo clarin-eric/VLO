@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @XmlTransient
-@XmlSeeAlso(IdentityTransformer.class)
+@XmlSeeAlso({IdentityTransformer.class, ValueMapTransformer.class, TransformerChain.class})
 public abstract class Transformer {
 
     public abstract String getTargetField();
