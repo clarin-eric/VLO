@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -25,12 +26,16 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,6 +44,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class ValueMapTransformerTest {
 
@@ -53,8 +59,8 @@ public class ValueMapTransformerTest {
     private final static Map<String, String> REGEX_MAP = ImmutableMap.ofEntries(
             Maps.immutableEntry("^a.*", "starts with a"),
             Maps.immutableEntry(".*z", "ends in z"),
-            Maps.immutableEntry(".*[0-9].*$", "contains a number"),
-            Maps.immutableEntry("[0-9]", "exactly one digit")
+            Maps.immutableEntry("[0-9]", "exactly one digit"),
+            Maps.immutableEntry(".*[0-9].*$", "contains a number")
     );
 
     @Mock
@@ -278,6 +284,36 @@ public class ValueMapTransformerTest {
 
         assertThat("Non-matching item should be mapped to default value", result, hasItems(
                 allOf(hasProperty("value", equalTo("defaultValue")), hasProperty("language", equalTo("en")))));
+    }
+
+    @Test
+    @Disabled
+    public void regexPerformanceTest() {
+        final int valuesCount = 1_000_000;
+
+        instance.setMap(REGEX_MAP);
+        instance.setCaseSensitive(false);
+        instance.setRegex(false);
+        instance.setTargetLang("en");
+
+        final ImmutableList.Builder<ValueLanguagePair> listBuilder 
+                = ImmutableList.<ValueLanguagePair>builder();
+        final Random random = new Random();
+        for (int i = 0; i < valuesCount/2; i++) {
+            listBuilder.add(new ValueLanguagePair(Integer.toString(random.nextInt()), "en"));
+            listBuilder.add(new ValueLanguagePair("abc", "en"));
+        }
+
+        final ValueContext valueContext = SimpleValueContext.builder()
+                .values(listBuilder.build())
+                .build();
+
+        // (time this)
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        final Stream<ValueLanguagePair> resultStream = instance.apply(valueContext, mappingConfig);
+        final List<ValueLanguagePair> result = resultStream.toList();
+        stopwatch.stop();
+        log.info("Done timing {} values -> {} values in {}ms", valuesCount, result.size(), stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
 }
