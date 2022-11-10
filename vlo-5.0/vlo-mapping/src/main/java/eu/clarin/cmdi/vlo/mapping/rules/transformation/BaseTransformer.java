@@ -16,13 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.mapping.rules.transformation;
 
-import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 
@@ -31,17 +29,30 @@ import lombok.NoArgsConstructor;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @NoArgsConstructor
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.NONE)
-public class IdentityTransformer extends BaseTransformer {
+@XmlTransient
+public abstract class BaseTransformer extends Transformer {
 
-    public IdentityTransformer(String field) {
-        super(field);
+    @XmlAttribute(name = "field")
+    protected String field;
+
+    public BaseTransformer(String field) {
+        this.field = field;
+    }
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
     }
 
     @Override
-    public Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig) {
-        return Streams.stream(valueContext.getValues());
+    public String getTargetField() {
+        return field;
     }
+
+    @Override
+    public abstract Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig);
 
 }
