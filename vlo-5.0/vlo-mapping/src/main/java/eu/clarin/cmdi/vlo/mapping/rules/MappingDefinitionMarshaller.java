@@ -1,7 +1,5 @@
 package eu.clarin.cmdi.vlo.mapping.rules;
 
-import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
-import eu.clarin.cmdi.vlo.mapping.rules.assertions.ConceptPathAssertion;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -37,8 +35,7 @@ public class MappingDefinitionMarshaller {
     private final JAXBContext jaxbContext;
 
     public MappingDefinitionMarshaller() throws JAXBException {
-        jaxbContext = JAXBContext.newInstance(
-                MappingDefinition.class, ConceptPathAssertion.class, ContextAssertionBasedRule.class);
+        jaxbContext = JAXBContext.newInstance(MappingDefinition.class);
     }
 
     public void marshal(MappingDefinition definition, Result result) throws JAXBException, IOException {
