@@ -109,7 +109,7 @@ public class MappingDefinitionSample {
                             <item source="value2" target="val2"/>
                         </valueMap>
                     </transformer>
-                    </transformers>
+                </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
             <contextAssertionBasedRule>

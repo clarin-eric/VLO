@@ -26,12 +26,7 @@ import java.util.Collection;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.aMapWithSize;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isA;
+import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -55,10 +50,14 @@ public class RecordFieldValuesMapperImplTest {
         final RecordFieldValuesMapper instance = new RecordFieldValuesMapperImpl(mappingConfig);
         Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
         log.info("Result for {} fields", result.keySet().size());
-        assertThat(result, aMapWithSize(3));
+        assertThat(result, aMapWithSize(4));
         assertThat(result, hasEntry(equalTo("id"), allOf(isA(Collection.class), hasSize(1))));
         assertThat(result, hasEntry(equalTo("identifier"), allOf(isA(Collection.class), hasSize(1))));
         assertThat(result, hasEntry(equalTo("location"), allOf(isA(Collection.class), hasSize(2))));
+        assertThat(result, hasEntry(equalTo("locationNormalized"), allOf(
+                isA(Collection.class),
+                hasItem(hasProperty("value", equalTo("locationX"))),
+                hasItem(hasProperty("value", equalTo("location1"))))));
     }
 
 }
