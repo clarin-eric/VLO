@@ -24,9 +24,9 @@ import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesRootProcessor;
 import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import eu.clarin.cmdi.vlo.mapping.rules.RulesFactory;
-import eu.clarin.cmdi.vlo.mapping.rules.RulesFactoryImpl;
-import eu.clarin.cmdi.vlo.mapping.rules.VloMappingRulesException;
+import eu.clarin.cmdi.vlo.mapping.definition.RulesFactory;
+import eu.clarin.cmdi.vlo.mapping.definition.RulesFactoryImpl;
+import eu.clarin.cmdi.vlo.mapping.definition.VloMappingRulesException;
 import java.io.IOException;
 
 /**
