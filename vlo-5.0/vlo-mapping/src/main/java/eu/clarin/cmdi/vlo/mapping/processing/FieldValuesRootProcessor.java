@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;

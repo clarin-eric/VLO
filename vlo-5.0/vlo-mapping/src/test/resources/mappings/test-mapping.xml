@@ -43,6 +43,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </assertions>
         <transformers>
             <transformer xsi:type="identityTransformer" field="location" />
+            <transformer xsi:type="valueMapTransformer" field="locationNormalized" behaviour="replaceOnMatch" regex="true" caseSensitive="false">
+                <valueMap>
+                    <item source="^location[0abc]+$" target="locationX"/>
+                    <item source="Nimwegen" target="Nijmegen"/>
+                </valueMap>
+            </transformer>
         </transformers>
         <terminal>true</terminal>
     </contextAssertionBasedRule>
