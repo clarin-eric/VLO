@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.mapping;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.rules.MappingRule;
+import static java.util.function.Function.identity;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +48,12 @@ public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
     @Override
     public Stream<FieldMappingResult> mapContext(ValueContext context) {
         log.trace("Mapping value context {}", context);
-        Stream<FieldMappingResult> result = Stream.empty();
+        final Stream.Builder<Stream<FieldMappingResult>> builder = Stream.builder();
+        
         for (MappingRule rule : rules) {
             if (rule.applies(context)) {
-                result = Stream.concat(result,
-                        rule.getTransformerStream().map(
+                builder.add(rule
+                        .getTransformerStream().map(
                                 t -> new FieldMappingResult(
                                         t.getTargetField(),
                                         context,
@@ -62,7 +64,7 @@ public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
             }
         }
 
-        return result;
+        return builder.build().flatMap(identity());
     }
 
 }
