@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import eu.clarin.cmdi.vlo.mapping.rules.MappingRule;
+import eu.clarin.cmdi.vlo.mapping.definition.MappingRule;
 import static java.util.function.Function.identity;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
