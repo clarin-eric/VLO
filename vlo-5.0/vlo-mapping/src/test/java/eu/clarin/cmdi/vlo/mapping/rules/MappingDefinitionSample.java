@@ -25,23 +25,17 @@ import eu.clarin.cmdi.vlo.mapping.rules.assertions.XPathAssertion;
 import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionNotOperator;
 import eu.clarin.cmdi.vlo.mapping.rules.assertions.ContextAssertionBasedRule;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.mapping.rules.transformation.IdentityTransformer;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.ValueMapTransformer;
+import eu.clarin.cmdi.vlo.mapping.rules.transformation.ValueMapTransformer.ValueMappingBehaviour;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.isA;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 /**
  *
@@ -52,37 +46,45 @@ public class MappingDefinitionSample {
     public static final MappingDefinition MAPPING_DEFINITION = new MappingDefinition();
 
     static {
+
+        final ValueMapTransformer valueMapTransformer = new ValueMapTransformer();
+        valueMapTransformer.setField("field2");
+        valueMapTransformer.setBehaviour(ValueMappingBehaviour.REMOVE_ORIGINAL);
+        valueMapTransformer.setCaseSensitive(false);
+        valueMapTransformer.setRegex(true);
+        valueMapTransformer.setMap(ImmutableMap.of("value1", "val1", "value2", "val2"));
+
         MAPPING_DEFINITION.setRules(Arrays.asList(// composite rule: and(not(false), {concept path})
-                        new ContextAssertionBasedRule(
-                                Arrays.asList(
-                                        // and operator...
-                                        new ContextAssertionAndOperator(
-                                                new ContextAssertionNotOperator( // NOT
-                                                        new ContextAssertionBooleanOperator(
-                                                                Boolean.FALSE)), //FALSE
-                                                new ConceptPathAssertion( // AND concept path
-                                                        "concept1",
-                                                        "concept2"))),
-                                Arrays.asList(new IdentityTransformer("field1")),
-                                true),
-                        // multiple value rules
-                        new ContextAssertionBasedRule(
-                                Arrays.asList(
-                                        new ValueAssertion("value1", Boolean.FALSE, Boolean.FALSE, "en"),
-                                        new ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"),
-                                        new ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
-                                ),
-                                Arrays.asList(new IdentityTransformer("field2")),
-                                false),
-                        // xpath rules
-                        new ContextAssertionBasedRule(
-                                Arrays.asList(
-                                        new XPathAssertion("/path/to/the/element"),
-                                        new XPathAssertion("/another/path")
-                                ),
-                                Arrays.asList(new IdentityTransformer("field3")),
-                                true)
-                ));
+                new ContextAssertionBasedRule(
+                        Arrays.asList(
+                                // and operator...
+                                new ContextAssertionAndOperator(
+                                        new ContextAssertionNotOperator( // NOT
+                                                new ContextAssertionBooleanOperator(
+                                                        Boolean.FALSE)), //FALSE
+                                        new ConceptPathAssertion( // AND concept path
+                                                "concept1",
+                                                "concept2"))),
+                        Arrays.asList(new IdentityTransformer("field1"), valueMapTransformer),
+                        true),
+                // multiple value rules
+                new ContextAssertionBasedRule(
+                        Arrays.asList(
+                                new ValueAssertion("value1", Boolean.FALSE, Boolean.FALSE, "en"),
+                                new ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"),
+                                new ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
+                        ),
+                        Arrays.asList(new IdentityTransformer("field3")),
+                        false),
+                // xpath rules
+                new ContextAssertionBasedRule(
+                        Arrays.asList(
+                                new XPathAssertion("/path/to/the/element"),
+                                new XPathAssertion("/another/path")
+                        ),
+                        Arrays.asList(new IdentityTransformer("field4")),
+                        true)
+        ));
 
     }
 
@@ -101,7 +103,13 @@ public class MappingDefinitionSample {
                 </assertions>
                 <transformers>
                     <transformer xsi:type="identityTransformer" field="field1"/>
-                </transformers>
+                    <transformer xsi:type="valueMapTransformer" field="field2" behaviour="removeOriginal" regex="true" caseSensitive="false">
+                        <valueMap>
+                            <item source="value1" target="val1"/>
+                            <item source="value2" target="val2"/>
+                        </valueMap>
+                    </transformer>
+                    </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
             <contextAssertionBasedRule>
@@ -111,7 +119,7 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformer" field="field2"/>
+                    <transformer xsi:type="identityTransformer" field="field3"/>
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
@@ -121,7 +129,7 @@ public class MappingDefinitionSample {
                     <assertion xsi:type="xPathAssertion">/another/path</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformer" field="field3"/>
+                    <transformer xsi:type="identityTransformer" field="field4"/>
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
@@ -169,8 +177,20 @@ public class MappingDefinitionSample {
                             isA(ConceptPathAssertion.class),
                             hasProperty("targetPath", hasItems("concept1", "concept2"))
                     )));
-            
-            assertThat("Transformer", rule1, hasProperty("transformers", allOf(hasItem(isA(IdentityTransformer.class)))));
+
+            assertThat("Transformers", rule1,
+                    hasProperty("transformers", hasItems(
+                            isA(IdentityTransformer.class),
+                            isA(ValueMapTransformer.class))));
+
+            assertThat("Value map transformer properties", rule1.getTransformers(), hasItem(
+                    allOf(
+                            hasProperty("field", equalTo("field2")),
+                            hasProperty("behaviour", equalTo(ValueMappingBehaviour.REMOVE_ORIGINAL)),
+                            hasProperty("caseSensitive", equalTo(false)),
+                            hasProperty("regex", equalTo(true)),
+                            hasProperty("map", aMapWithSize(2)))
+            ));
 
             assertThat("Terminal state of rule", rule1, hasProperty("terminal", equalTo(true)));
         }
@@ -222,8 +242,3 @@ public class MappingDefinitionSample {
         }
     }
 }
-/**
- * new ValueAssertion("value1", Boolean.FALSE, Boolean.FALSE, "en"), new
- * ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"), new
- * ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
- */

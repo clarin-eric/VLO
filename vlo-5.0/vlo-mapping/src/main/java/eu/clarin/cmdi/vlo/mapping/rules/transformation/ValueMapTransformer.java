@@ -32,16 +32,22 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -86,7 +92,8 @@ public class ValueMapTransformer extends BaseTransformer {
     @Setter
     private String defaultValue = null;
 
-    @XmlElement(name = "map")
+    @XmlElement(name = "valueMap")
+    @XmlJavaTypeAdapter(ValueMapAdapter.class)
     @Getter
     @Setter
     private Map<String, String> map;
@@ -305,6 +312,53 @@ public class ValueMapTransformer extends BaseTransformer {
             throw new IllegalArgumentException(value);
         }
 
+    }
+
+    /**
+     * Adapter that allows us to have a serialization like
+     *
+     * <pre>{@code
+     * <valueMap>
+     *   <item source="value1" target="val1"/>
+     *   <item source="value2" target="val2"/>
+     * </valueMap>
+     * }</pre>
+     *
+     * Solution based on https://stackoverflow.com/a/15566755
+     */
+    public static class ValueMapAdapter extends XmlAdapter<ValueMapDefinition[], Map<String, String>> {
+
+        public ValueMapAdapter() {
+        }
+
+        @Override
+        public ValueMapDefinition[] marshal(Map<String, String> map) throws Exception {
+            return map.entrySet().stream()
+                    // transform map entry to value map definition
+                    .map(e -> new ValueMapDefinition(e.getKey(), e.getValue()))
+                    .toArray(ValueMapDefinition[]::new);
+        }
+
+        @Override
+        public Map<String, String> unmarshal(ValueMapDefinition[] def) throws Exception {
+            return Stream.of(def).collect(Collectors.toMap(
+                    // key
+                    ValueMapDefinition::getSource,
+                    // value
+                    ValueMapDefinition::getTarget));
+        }
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ValueMapDefinition {
+
+        @XmlAttribute
+        @Getter
+        public String source;
+        @XmlAttribute
+        @Getter
+        public String target;
     }
 
 }
