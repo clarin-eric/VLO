@@ -30,10 +30,12 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -44,6 +46,9 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
+ * Transformer that maps values or value patterns (regex) to values. Different
+ * types of behaviour are possible that determine the end result in
+ * match/no-match conditions - see {@link ValueMappingBehaviour}.
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
@@ -52,9 +57,14 @@ import lombok.extern.slf4j.Slf4j;
 public class ValueMapTransformer extends BaseTransformer {
 
     @XmlTransient
-    private final Supplier<Function<ValueLanguagePair, ValueLanguagePair>> mapperSupplier;
+    private final Supplier<Function<ValueLanguagePair, Stream<ValueLanguagePair>>> mapperSupplier;
     @XmlTransient
     private final Supplier<Function<String, String>> keyNormalizerSupplier;
+
+    @XmlAttribute
+    @Getter
+    @Setter
+    private ValueMappingBehaviour behaviour = ValueMappingBehaviour.REPLACE_ON_MATCH;
 
     @XmlAttribute
     @Getter
@@ -93,10 +103,10 @@ public class ValueMapTransformer extends BaseTransformer {
 
     @Override
     public Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig) {
-        final Function<ValueLanguagePair, ValueLanguagePair> mapper = mapperSupplier.get();
+        final Function<ValueLanguagePair, Stream<ValueLanguagePair>> mapper = mapperSupplier.get();
         return Streams.stream(valueContext.getValues())
                 // apply mapper
-                .map(mapper::apply);
+                .flatMap(mapper::apply);
     }
 
     /**
@@ -105,7 +115,7 @@ public class ValueMapTransformer extends BaseTransformer {
      *
      * @return Function that can be applied to input
      */
-    private Function<ValueLanguagePair, ValueLanguagePair> createMapperFunction() {
+    private Function<ValueLanguagePair, Stream<ValueLanguagePair>> createMapperFunction() {
         log.debug("Creating a mapper function for a value map transformer for field {}", field);
         if (map != null) {
             if (regex) {
@@ -124,7 +134,7 @@ public class ValueMapTransformer extends BaseTransformer {
      *
      * @return Function that can be applied to input
      */
-    private Function<ValueLanguagePair, ValueLanguagePair> createNonRegexMapperFunction() {
+    private Function<ValueLanguagePair, Stream<ValueLanguagePair>> createNonRegexMapperFunction() {
         log.debug("Creating mapper function for simple (non-regex) lookup");
 
         // normalization
@@ -132,19 +142,12 @@ public class ValueMapTransformer extends BaseTransformer {
         final ImmutableMap<String, String> normalizedMap = getNormalizedMap(map, normalizer);
 
         // base lookup function
-        final Function<ValueLanguagePair, Optional<ValueLanguagePair>> lookup
+        final Function<ValueLanguagePair, Optional<ValueLanguagePair>> matchFinder
                 = (vlp) -> Optional.ofNullable(normalizedMap.get(normalizer.apply(vlp.getValue())))
                         .map(s -> new ValueLanguagePair(s, targetLang));
 
-        // complete function depending on default result
-        if (defaultValue == null) {
-            // function returning original if no match
-            return vlp -> lookup.apply(vlp).orElse(vlp);
-        } else {
-            // function returning default value language pair if no match
-            final ValueLanguagePair defaultVlp = new ValueLanguagePair(defaultValue, targetLang);
-            return vlp -> lookup.apply(vlp).orElse(defaultVlp);
-        }
+        // wrap function depending on default result
+        return createMatchHandler(matchFinder);
     }
 
     private Function<String, String> createKeyNormalizer() {
@@ -173,7 +176,7 @@ public class ValueMapTransformer extends BaseTransformer {
                                 e.getValue())));
     }
 
-    private Function<ValueLanguagePair, ValueLanguagePair> createRegexMapperFunction() {
+    private Function<ValueLanguagePair, Stream<ValueLanguagePair>> createRegexMapperFunction() {
         log.debug("Creating mapper function for regex based lookup");
 
         final int patternFlags = getRegexFlags();
@@ -197,15 +200,60 @@ public class ValueMapTransformer extends BaseTransformer {
                     .map(e -> new ValueLanguagePair(e.getValue(), targetLang));
         };
 
-        // complete function depending on default result
-        if (defaultValue == null) {
-            // function returning original if there is no match
-            return vlp -> matchFinder.apply(vlp).orElse(vlp);
-        } else {
-            // function returning default value language pair if there is no match
-            final ValueLanguagePair defaultVlp = new ValueLanguagePair(defaultValue, targetLang);
-            return vlp -> matchFinder.apply(vlp).orElse(defaultVlp);
+        return createMatchHandler(matchFinder);
+    }
+
+    /**
+     * Wraps a match finder function to create a function that returns all
+     * results for the input value language pair, depending on the configured
+     * behaviour
+     *
+     * @param matchFinder
+     * @return match handler function based on the finder and the set
+     * {@link #behaviour}
+     */
+    private Function<ValueLanguagePair, Stream<ValueLanguagePair>>
+            createMatchHandler(Function<ValueLanguagePair, Optional<ValueLanguagePair>> matchFinder) {
+        if (null != behaviour) {
+            switch (behaviour) {
+                case ADD_ON_MATCH -> {
+                    // 'add on match' behaviour: always return original value
+                    return vlp -> matchFinder.apply(vlp)
+                            // match: both original and target value
+                            .map(result -> Stream.of(vlp, result))
+                            // no match: only original
+                            .orElseGet(() -> Stream.of(vlp));
+                }
+                case REMOVE_ORIGINAL -> {
+                    // 'remove original' behaviour: return nothing unless there is a match
+                    return vlp -> matchFinder.apply(vlp)
+                            //match: return target value
+                            .map(Stream::of)
+                            //no match: return nothing
+                            .orElseGet(Stream::empty);
+                }
+                case REPLACE_ON_MATCH -> {
+                    // 'replace if match' behaviour depends on availability of a default value
+                    if (defaultValue == null) {
+                        // function returning original if no match
+                        return vlp -> matchFinder.apply(vlp)
+                                // match: return only target value
+                                .map(Stream::of)
+                                // no match: return original
+                                .orElseGet(() -> Stream.of(vlp));
+                    } else {
+                        // function returning default value language pair if no match
+                        final ValueLanguagePair defaultVlp = new ValueLanguagePair(defaultValue, targetLang);
+                        return vlp -> matchFinder.apply(vlp)
+                                // match: return only target value
+                                .map(Stream::of)
+                                // no match: return default value
+                                .orElseGet(() -> Stream.of(defaultVlp));
+                    }
+                }
+            }
         }
+        throw new IllegalArgumentException("Cannot create match handler function for behaviour: " + Objects.toString(behaviour));
     }
 
     private int getRegexFlags() {
@@ -214,6 +262,49 @@ public class ValueMapTransformer extends BaseTransformer {
             patternFlags |= Pattern.CASE_INSENSITIVE;
         }
         return patternFlags;
+    }
+
+    public enum ValueMappingBehaviour {
+        /**
+         * If there is a match, replaces the original value with the target
+         * value; if there is no match, the default value will be selected if
+         * configured - otherwise, the original value is kept.
+         */
+        @XmlEnumValue("replaceOnMatch")
+        REPLACE_ON_MATCH("replaceOnMatch"),
+        /**
+         * If there is match, replaces the original value with the target value;
+         * if there is no match, the original value will be removed without
+         * replacement.
+         */
+        @XmlEnumValue("removeOriginal")
+        REMOVE_ORIGINAL("removeOriginal"),
+        /**
+         * If there is a match, the target value will be added; if there is no
+         * match, there will be no change to the values.
+         */
+        @XmlEnumValue("addOnMatch")
+        ADD_ON_MATCH("addOnMatch");
+
+        private final String value;
+
+        private ValueMappingBehaviour(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static ValueMappingBehaviour fromValue(String value) {
+            for (ValueMappingBehaviour vmb : ValueMappingBehaviour.values()) {
+                if (vmb.value.equals(value)) {
+                    return vmb;
+                }
+            }
+            throw new IllegalArgumentException(value);
+        }
+
     }
 
 }
