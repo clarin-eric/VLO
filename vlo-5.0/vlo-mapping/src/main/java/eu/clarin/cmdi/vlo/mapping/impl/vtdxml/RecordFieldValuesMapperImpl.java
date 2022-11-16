@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import com.google.common.base.Suppliers;
 import eu.clarin.cmdi.vlo.mapping.BaseRecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.CachingRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.ContextFieldValueMapper;
@@ -24,10 +25,10 @@ import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesRootProcessor;
 import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import eu.clarin.cmdi.vlo.mapping.definition.RulesFactory;
-import eu.clarin.cmdi.vlo.mapping.definition.RulesFactoryImpl;
+import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionProviderImpl;
 import eu.clarin.cmdi.vlo.mapping.definition.VloMappingRulesException;
 import java.io.IOException;
+import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionProvider;
 
 /**
  *
@@ -36,11 +37,11 @@ import java.io.IOException;
 public class RecordFieldValuesMapperImpl extends BaseRecordFieldValuesMapper {
 
     public RecordFieldValuesMapperImpl(VloMappingConfiguration mappingConfig) throws VloMappingRulesException, IOException {
-        this(new RecordReaderImpl(mappingConfig), new RulesFactoryImpl(mappingConfig), mappingConfig);
+        this(new RecordReaderImpl(mappingConfig), new MappingDefinitionProviderImpl(mappingConfig), mappingConfig);
     }
 
-    private RecordFieldValuesMapperImpl(RecordReader recordReader, RulesFactory rulesFactory, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
-        this(new CachingRecordFactory(recordReader), new ContextFieldValueMapperImpl(rulesFactory.getRules(), mappingConfig));
+    private RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinitionProvider definitionProvider, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
+        this(new CachingRecordFactory(recordReader), new ContextFieldValueMapperImpl(Suppliers.memoize(() -> definitionProvider.get().getRules()), mappingConfig));
 
     }
 

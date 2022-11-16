@@ -16,12 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.mapping.definition;
 
+import java.util.function.Supplier;
+
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface RulesFactory {
+public interface MappingDefinitionProvider extends Supplier<MappingDefinition> {
 
-    Iterable<MappingRule> getRules() throws VloMappingRulesException;
+    MappingDefinition getDefinition() throws VloMappingRulesException;
+
+    @Override
+    public default MappingDefinition get() {
+        try {
+            return getDefinition();
+        } catch (VloMappingRulesException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
 }

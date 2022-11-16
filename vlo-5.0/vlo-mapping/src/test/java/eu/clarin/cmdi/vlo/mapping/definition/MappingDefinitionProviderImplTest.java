@@ -29,9 +29,9 @@ import static eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionSample.MAPP
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class RulesFactoryImplTest {
+public class MappingDefinitionProviderImplTest {
 
-    public RulesFactoryImplTest() {
+    public MappingDefinitionProviderImplTest() {
     }
 
     @BeforeAll
@@ -52,12 +52,17 @@ public class RulesFactoryImplTest {
 
     /**
      * Test of getRules method, of class RulesFactoryImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetRules() throws Exception {
-        final RulesFactoryImpl instance = new RulesFactoryImpl(MAPPING_DEFINITION_XML_SOURCE());
-        final Iterable<MappingRule> rules = instance.getRules();
+        final MappingDefinitionProviderImpl instance = new MappingDefinitionProviderImpl(() -> MAPPING_DEFINITION_XML_SOURCE());
+        final MappingDefinition definition = instance.getDefinition();
+        assertNotNull(definition);
+        
+        final Iterable<? extends MappingRule> rules = definition.getRules();
         assertNotNull(rules);
+        
         MappingDefinitionSample.assertContents(rules);
     }
 
@@ -66,13 +71,13 @@ public class RulesFactoryImplTest {
         final VloMappingTestConfiguration baseConfig = new VloMappingTestConfiguration();
 
         assertThrows(RuntimeException.class, () -> {
-            final RulesFactoryImpl instance = new RulesFactoryImpl(baseConfig.withMappingDefinitionUri(""));
-            instance.getRules();
+            final MappingDefinitionProviderImpl instance = new MappingDefinitionProviderImpl(baseConfig.withMappingDefinitionUri(""));
+            instance.getDefinition();
         });
 
         assertThrows(RuntimeException.class, () -> {
-            final RulesFactoryImpl instance = new RulesFactoryImpl(baseConfig.withMappingDefinitionUri("ftp://this.is.not.supported"));
-            instance.getRules();
+            final MappingDefinitionProviderImpl instance = new MappingDefinitionProviderImpl(baseConfig.withMappingDefinitionUri("ftp://this.is.not.supported"));
+            instance.getDefinition();
         });
     }
 
