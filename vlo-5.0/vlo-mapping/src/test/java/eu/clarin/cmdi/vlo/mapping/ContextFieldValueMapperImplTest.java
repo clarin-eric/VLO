@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
@@ -64,7 +65,8 @@ public class ContextFieldValueMapperImplTest {
 
     @BeforeEach
     public void beforeEach() {
-        instance = new ContextFieldValueMapperImpl(ImmutableList.of(rule, rule, rule), mappingConfig);
+        final ImmutableList<MappingRule> rules = ImmutableList.of(rule, rule, rule);
+        instance = new ContextFieldValueMapperImpl(Suppliers.ofInstance(rules), mappingConfig);
     }
 
     /**

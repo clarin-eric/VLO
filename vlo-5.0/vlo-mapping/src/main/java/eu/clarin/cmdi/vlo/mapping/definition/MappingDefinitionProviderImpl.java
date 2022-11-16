@@ -37,32 +37,28 @@ import lombok.extern.slf4j.Slf4j;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class RulesFactoryImpl implements RulesFactory {
+public class MappingDefinitionProviderImpl implements MappingDefinitionProvider {
 
     private final Supplier<Source> definitionSource;
     private final Supplier<MappingDefinitionMarshaller> definitionMarshallerSupplier;
 
-    public RulesFactoryImpl(VloMappingConfiguration config) throws VloMappingRulesException {
+    public MappingDefinitionProviderImpl(VloMappingConfiguration config) throws VloMappingRulesException {
         this(getConfigSourceSupplier(config));
     }
 
-    public RulesFactoryImpl(Source mappingDefinitionsSource) {
-        this(Suppliers.ofInstance(mappingDefinitionsSource));
-    }
-
-    public RulesFactoryImpl(Supplier<Source> mappingDefinitionsSource) {
+    public MappingDefinitionProviderImpl(Supplier<Source> mappingDefinitionsSource) {
         this.definitionSource = mappingDefinitionsSource;
-        this.definitionMarshallerSupplier = Suppliers.memoize(RulesFactoryImpl::newMarshaller);
+        this.definitionMarshallerSupplier = Suppliers.memoize(MappingDefinitionProviderImpl::newMarshaller);
     }
 
     @Override
-    public Iterable<MappingRule> getRules() throws VloMappingRulesException {
+    public MappingDefinition getDefinition() throws VloMappingRulesException {
         final MappingDefinitionMarshaller marshaller = definitionMarshallerSupplier.get();
         try {
             final MappingDefinition definition = marshaller.unmarshal(definitionSource.get());
             assessDefinitionQuality(definition);
 
-            return Iterables.transform(definition.getRules(), r -> r);
+            return definition;
         } catch (JAXBException ex) {
             throw new VloMappingRulesException("Error while trying to unmarshal mapping definition from source: " + definitionSource, ex);
         }

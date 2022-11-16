@@ -16,10 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
+import com.google.common.base.Suppliers;
+import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinition;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.definition.MappingRule;
 import static java.util.function.Function.identity;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
@@ -37,11 +40,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
 
-    private final Iterable<MappingRule> rules;
+    private final Supplier<Iterable<? extends MappingRule>> rules;
     private final VloMappingConfiguration mappingConfig;
 
-    public ContextFieldValueMapperImpl(Iterable<MappingRule> rules, VloMappingConfiguration mappingConfig) {
-        this.rules = rules;
+    public ContextFieldValueMapperImpl(Supplier<Iterable<? extends MappingRule>> rulesSupplier, VloMappingConfiguration mappingConfig) {
+        this.rules = rulesSupplier;
         this.mappingConfig = mappingConfig;
     }
 
@@ -49,8 +52,8 @@ public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
     public Stream<FieldMappingResult> mapContext(ValueContext context) {
         log.trace("Mapping value context {}", context);
         final Stream.Builder<Stream<FieldMappingResult>> builder = Stream.builder();
-        
-        for (MappingRule rule : rules) {
+
+        for (MappingRule rule : rules.get()) {
             if (rule.applies(context)) {
                 builder.add(rule
                         .getTransformerStream().map(

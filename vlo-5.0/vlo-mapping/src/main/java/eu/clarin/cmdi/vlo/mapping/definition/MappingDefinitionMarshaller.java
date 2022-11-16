@@ -46,6 +46,9 @@ public class MappingDefinitionMarshaller {
     }
 
     public MappingDefinition unmarshal(Source source) throws JAXBException {
+        //TODO: support XInclude (see VLO config marshaller)
+        
+        
         log.debug("Unmarshalling mapping definition from {} (systemId: {})", source, source.getSystemId());
         final Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
         final Object result = jaxbUnmarshaller.unmarshal(source);
