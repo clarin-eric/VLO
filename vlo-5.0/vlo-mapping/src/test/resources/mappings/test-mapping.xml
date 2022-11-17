@@ -52,4 +52,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </transformers>
         <terminal>true</terminal>
     </contextAssertionBasedRule>
+
+    <fieldValuesRootProcessor>
+        <processor xsi:type="identityProcessor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </fieldValuesRootProcessor>
 </mappingDefinition>

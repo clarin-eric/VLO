@@ -34,7 +34,7 @@ import java.util.Optional;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @XmlTransient
-@XmlSeeAlso({FieldValuesRootProcessor.class})
+@XmlSeeAlso({FieldValuesRootProcessor.class, IdentityProcessor.class})
 public abstract class FieldValuesProcessor {
 
     public abstract Optional<Map<String, Collection<ValueLanguagePair>>> process(final Map<String, List<FieldMappingResult>> resultsByField);
