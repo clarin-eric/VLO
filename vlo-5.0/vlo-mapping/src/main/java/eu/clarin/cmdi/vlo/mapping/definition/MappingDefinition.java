@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.mapping.definition;
 
 import eu.clarin.cmdi.vlo.mapping.definition.rules.assertions.ContextAssertionBasedRule;
+import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesRootProcessor;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -34,6 +35,9 @@ public class MappingDefinition {
     @XmlElement(name = "contextAssertionBasedRule")
     private List<ContextAssertionBasedRule> rules;
 
+    @XmlElement(name = "fieldValuesRootProcessor")
+    private FieldValuesRootProcessor fieldValuesProcessor;
+
     public MappingDefinition() {
     }
 
@@ -43,6 +47,14 @@ public class MappingDefinition {
 
     public void setRules(List<ContextAssertionBasedRule> rules) {
         this.rules = rules;
+    }
+
+    public FieldValuesRootProcessor getFieldValuesProcessor() {
+        return fieldValuesProcessor;
+    }
+
+    public void setFieldValuesProcessor(FieldValuesRootProcessor fieldValuesProcessor) {
+        this.fieldValuesProcessor = fieldValuesProcessor;
     }
 
 }

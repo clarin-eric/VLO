@@ -18,9 +18,12 @@ package eu.clarin.cmdi.vlo.mapping.processing;
 
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
+import jakarta.xml.bind.annotation.XmlTransient;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Processes mapping results into a final map of field values that actually will
@@ -30,7 +33,9 @@ import java.util.Map;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface FieldValuesProcessor {
+@XmlTransient
+@XmlSeeAlso({FieldValuesRootProcessor.class})
+public abstract class FieldValuesProcessor {
 
-    Map<String, Collection<ValueLanguagePair>> process(final Map<String, List<FieldMappingResult>> resultsByField);
+    public abstract Optional<Map<String, Collection<ValueLanguagePair>>> process(final Map<String, List<FieldMappingResult>> resultsByField);
 }

@@ -66,7 +66,7 @@ public class ContextFieldValueMapperImplTest {
     @BeforeEach
     public void beforeEach() {
         final ImmutableList<MappingRule> rules = ImmutableList.of(rule, rule, rule);
-        instance = new ContextFieldValueMapperImpl(Suppliers.ofInstance(rules), mappingConfig);
+        instance = new ContextFieldValueMapperImpl(rules, mappingConfig);
     }
 
     /**

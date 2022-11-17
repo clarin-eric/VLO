@@ -16,14 +16,19 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,33 +38,50 @@ import lombok.extern.slf4j.Slf4j;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class FieldValuesRootProcessor implements FieldValuesProcessor {
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.NONE)
+@NoArgsConstructor
+public class FieldValuesRootProcessor extends FieldValuesProcessor {
 
-    private final static IdentityProcessor identityProcessor = new IdentityProcessor();
+    @XmlElement(name = "processor")
+    @Getter
+    @Setter
+    private List<? extends FieldValuesProcessor> processors;
+
+    public FieldValuesRootProcessor(List<? extends FieldValuesProcessor> processorsProvider) {
+        this.processors = processorsProvider;
+    }
 
     @Override
-    public Map<String, Collection<ValueLanguagePair>> process(Map<String, List<FieldMappingResult>> resultsByField) {
-        final Map<String, Collection<ValueLanguagePair>> singleFieldsResults
-                = processSingleFields(resultsByField);
-        //TODO: feed into global processor(s)? Integrators, extractors, summarizers...
-        return singleFieldsResults;
+    public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> resultsByField) {
+        return Optional.empty();
     }
-
-    private Map<String, Collection<ValueLanguagePair>> processSingleFields(Map<String, List<FieldMappingResult>> resultsByField) {
-        return Maps.transformEntries(resultsByField, (k, v) -> processSingleField(k, v));
-    }
-
-    public Collection<ValueLanguagePair> processSingleField(String field, Iterable<FieldMappingResult> mappingResults) {
-        log.debug("Processing field {} with mapping results {}", field, mappingResults);
-        final ImmutableSet<ValueLanguagePair> values
-                = ImmutableSet.copyOf(
-                        Iterables.concat(
-                                Iterables.transform(
-                                        mappingResults,
-                                        FieldMappingResult::getValues)));
-
-        //TODO: apply processors from field-processor map (fall back to identity)
-        return identityProcessor.process(field, values).toList();
-    }
+//
+//    private final static IdentityProcessor identityProcessor = new IdentityProcessor();
+//
+//    @Override
+//    public Map<String, Collection<ValueLanguagePair>> process(Map<String, List<FieldMappingResult>> resultsByField) {
+//        final Map<String, Collection<ValueLanguagePair>> singleFieldsResults
+//                = processSingleFields(resultsByField);
+//        //TODO: feed into global processor(s)? Integrators, extractors, summarizers...
+//        return singleFieldsResults;
+//    }
+//
+//    private Map<String, Collection<ValueLanguagePair>> processSingleFields(Map<String, List<FieldMappingResult>> resultsByField) {
+//        return Maps.transformEntries(resultsByField, (k, v) -> processSingleField(k, v));
+//    }
+//
+//    public Collection<ValueLanguagePair> processSingleField(String field, Iterable<FieldMappingResult> mappingResults) {
+//        log.debug("Processing field {} with mapping results {}", field, mappingResults);
+//        final ImmutableSet<ValueLanguagePair> values
+//                = ImmutableSet.copyOf(
+//                        Iterables.concat(
+//                                Iterables.transform(
+//                                        mappingResults,
+//                                        FieldMappingResult::getValues)));
+//
+//        //TODO: apply processors from field-processor map (fall back to identity)
+//        return identityProcessor.process(field, values).toList();
+//    }
 
 }
