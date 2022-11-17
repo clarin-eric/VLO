@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,28 +35,31 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
-
+    
     private final ContextFactory contextFactory;
     private final ContextFieldValueMapper contextFieldValueMapper;
     private final FieldValuesProcessor fieldValuesProcessor;
-
+    
     public BaseRecordFieldValuesMapper(ContextFactory contextFactory, ContextFieldValueMapper contextFieldValueMapper, FieldValuesProcessor fieldValuesProcessor) {
         this.contextFactory = contextFactory;
         this.contextFieldValueMapper = contextFieldValueMapper;
         this.fieldValuesProcessor = fieldValuesProcessor;
     }
-
+    
     @Override
     public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException {
         log.info("Field mapping of record ({})", recordFile);
-
+        
         log.debug("Mapping all contexts (record {})", recordFile);
         // Produce mapping results for all individual contexts
         final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(recordFile);
-
+        
         log.debug("Producing field values (record {})", recordFile);
         // Distil field values out of mapping results
-        return fieldValuesProcessor.process(resultsByField);
+        return fieldValuesProcessor.process(resultsByField).orElseGet(() -> {
+            log.warn("Field values processor returns empty for {}. No fields produced!", recordFile);
+            return Collections.emptyMap();
+        });
     }
 
     /**
@@ -69,5 +73,5 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
                 .flatMap(contextFieldValueMapper::mapContext) // maps all contexts to field value candidates
                 .collect(Collectors.groupingBy(FieldMappingResult::getField)); // collects results grouped by field
     }
-
+    
 }
