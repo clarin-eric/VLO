@@ -16,19 +16,35 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
-import com.google.common.collect.Streams;
+import com.google.common.collect.Maps;
+import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.util.stream.Stream;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public class IdentityProcessor implements SingleFieldValuesProcessor {
+@XmlRootElement
+public class IdentityProcessor extends FieldValuesProcessor {
 
     @Override
-    public Stream<ValueLanguagePair> process(String field, Iterable<ValueLanguagePair> mappingResults) {
-        return Streams.stream(mappingResults);
+    public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> resultsByField) {
+        return Optional.of(
+                Maps.transformEntries(
+                        resultsByField,
+                        (k, v) -> mappingResultsToValues(v)));
+    }
+
+    private Collection<ValueLanguagePair> mappingResultsToValues(List<FieldMappingResult> mappingResults) {
+        return mappingResults
+                .stream()
+                .flatMap(r -> r.getValues().stream())
+                .toList();
     }
 
 }

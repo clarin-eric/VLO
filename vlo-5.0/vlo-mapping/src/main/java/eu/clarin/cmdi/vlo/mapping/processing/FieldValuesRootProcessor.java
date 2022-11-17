@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -23,6 +25,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,7 +43,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
-@NoArgsConstructor
 public class FieldValuesRootProcessor extends FieldValuesProcessor {
 
     @XmlElement(name = "processor")
@@ -48,40 +50,32 @@ public class FieldValuesRootProcessor extends FieldValuesProcessor {
     @Setter
     private List<? extends FieldValuesProcessor> processors;
 
-    public FieldValuesRootProcessor(List<? extends FieldValuesProcessor> processorsProvider) {
-        this.processors = processorsProvider;
+    public FieldValuesRootProcessor() {
+        this(Collections.emptyList());
+    }
+    
+    public FieldValuesRootProcessor(List<? extends FieldValuesProcessor> processors) {
+        this.processors = processors;
     }
 
     @Override
-    public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> resultsByField) {
-        return Optional.empty();
+    public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> input) {
+        Map<String, List<FieldMappingResult>> currentInput = input;
+        Optional<Map<String, Collection<ValueLanguagePair>>> intermediateResult = Optional.empty();
+
+        for (FieldValuesProcessor processor : processors) {
+            currentInput = intermediateResult
+                    .map(this::valuesToMappingResult)
+                    .orElse(currentInput);
+
+            final Optional<Map<String, Collection<ValueLanguagePair>>> previousResult = intermediateResult;
+            intermediateResult = processor.process(currentInput).or(() -> previousResult);
+        }
+        return intermediateResult;
     }
-//
-//    private final static IdentityProcessor identityProcessor = new IdentityProcessor();
-//
-//    @Override
-//    public Map<String, Collection<ValueLanguagePair>> process(Map<String, List<FieldMappingResult>> resultsByField) {
-//        final Map<String, Collection<ValueLanguagePair>> singleFieldsResults
-//                = processSingleFields(resultsByField);
-//        //TODO: feed into global processor(s)? Integrators, extractors, summarizers...
-//        return singleFieldsResults;
-//    }
-//
-//    private Map<String, Collection<ValueLanguagePair>> processSingleFields(Map<String, List<FieldMappingResult>> resultsByField) {
-//        return Maps.transformEntries(resultsByField, (k, v) -> processSingleField(k, v));
-//    }
-//
-//    public Collection<ValueLanguagePair> processSingleField(String field, Iterable<FieldMappingResult> mappingResults) {
-//        log.debug("Processing field {} with mapping results {}", field, mappingResults);
-//        final ImmutableSet<ValueLanguagePair> values
-//                = ImmutableSet.copyOf(
-//                        Iterables.concat(
-//                                Iterables.transform(
-//                                        mappingResults,
-//                                        FieldMappingResult::getValues)));
-//
-//        //TODO: apply processors from field-processor map (fall back to identity)
-//        return identityProcessor.process(field, values).toList();
-//    }
+
+    private Map<String, List<FieldMappingResult>> valuesToMappingResult(Map<String, Collection<ValueLanguagePair>> valuesMap) {
+        return Maps.transformEntries(valuesMap, (k, v) -> ImmutableList.of(new FieldMappingResult(k, null, v)));
+    }
 
 }
