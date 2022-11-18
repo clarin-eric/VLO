@@ -24,12 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class FieldValuesRootProcessorTest {
 
-    private final Map<String, List<FieldMappingResult>> input = ImmutableMap.<String, List<FieldMappingResult>>builder()
+    private static final Map<String, List<FieldMappingResult>> input = ImmutableMap.<String, List<FieldMappingResult>>builder()
             .put("field1", ImmutableList.of(
                     new FieldMappingResult("field1", null, ImmutableList.of(new ValueLanguagePair("f1v1a", null), new ValueLanguagePair("f1v1b", null))),
                     new FieldMappingResult("field1", null, ImmutableList.of(new ValueLanguagePair("f1v2a", null), new ValueLanguagePair("f1v2b", null))),
@@ -49,25 +46,6 @@ public class FieldValuesRootProcessorTest {
                     new FieldMappingResult("field2", null, ImmutableList.of(new ValueLanguagePair("f2v2a", null), new ValueLanguagePair("f2v2b", null))),
                     new FieldMappingResult("field2", null, ImmutableList.of(new ValueLanguagePair("f2v3a", null), new ValueLanguagePair("f2v3b", null)))))
             .build();
-
-    public FieldValuesRootProcessorTest() {
-    }
-
-    @BeforeAll
-    public static void setUpClass() {
-    }
-
-    @AfterAll
-    public static void tearDownClass() {
-    }
-
-    @BeforeEach
-    public void setUp() {
-    }
-
-    @AfterEach
-    public void tearDown() {
-    }
 
     /**
      * Test of process method, of class FieldValuesRootProcessor.
@@ -100,10 +78,15 @@ public class FieldValuesRootProcessorTest {
      */
     @Test
     public void testProcessWithNoop() {
-        final FieldValuesRootProcessor instance = new FieldValuesRootProcessor(
-                ImmutableList.of(
-                        new NoopProcessor(), new IdentityProcessor(), new NoopProcessor(), new IdentityProcessor()));
-        Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+        final FieldValuesRootProcessor instance
+                = new FieldValuesRootProcessor(ImmutableList.of(
+                        noopProcessor(),
+                        new IdentityProcessor(),
+                        noopProcessor(),
+                        new IdentityProcessor()));
+
+        final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+
         result.ifPresentOrElse(r -> {
             assertThat(r, aMapWithSize(2));
         }, () -> {
@@ -111,11 +94,51 @@ public class FieldValuesRootProcessorTest {
         });
     }
 
-    public static class NoopProcessor extends FieldValuesProcessor {
+    /**
+     * Test of process method, of class FieldValuesRootProcessor.
+     */
+    @Test
+    public void testProcessWithStatic() {
+
+        final Map<String, Collection<ValueLanguagePair>> staticValue
+                = ImmutableMap.<String, Collection<ValueLanguagePair>>builder()
+                        .put("fieldX", ImmutableList.of(new ValueLanguagePair("val", "lang")))
+                        .build();
+
+        final FieldValuesRootProcessor instance
+                = new FieldValuesRootProcessor(ImmutableList.of(
+                        new IdentityProcessor(),
+                        staticProcessor(staticValue),
+                        new IdentityProcessor()));
+
+        final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+
+        result.ifPresentOrElse(r -> {
+            assertThat(r, allOf(aMapWithSize(1), hasKey("fieldX")));
+        }, () -> {
+            fail("Result expected");
+        });
+    }
+
+    private static FieldValuesProcessor noopProcessor() {
+        return new LambdaProcessor(i -> Optional.empty());
+    }
+
+    private static FieldValuesProcessor staticProcessor(Map<String, Collection<ValueLanguagePair>> returnValue) {
+        return new LambdaProcessor(i -> Optional.ofNullable(returnValue));
+    }
+
+    private static class LambdaProcessor extends FieldValuesProcessor {
+
+        private final Function<Map<String, List<FieldMappingResult>>, Optional<Map<String, Collection<ValueLanguagePair>>>> function;
+
+        public LambdaProcessor(Function<Map<String, List<FieldMappingResult>>, Optional<Map<String, Collection<ValueLanguagePair>>>> function) {
+            this.function = function;
+        }
 
         @Override
-        public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> resultsByField) {
-            return Optional.empty();
+        public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> input) {
+            return function.apply(input);
         }
 
     }
