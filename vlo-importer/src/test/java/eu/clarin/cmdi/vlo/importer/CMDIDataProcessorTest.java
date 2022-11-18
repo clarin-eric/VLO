@@ -16,8 +16,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
@@ -31,7 +32,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
                 config, facetMappingFactory, marshaller, new CMDIDataSolrImplFactory(fieldNameService), fieldNameService, true);
     }
 
-    @Before
+    @BeforeEach
     @Override
     public void setup() throws Exception {
         super.setup();

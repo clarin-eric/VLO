@@ -20,9 +20,9 @@ import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 
 /**
@@ -33,7 +33,7 @@ public class FormatPostNormalizerTest {
 
     private FormatPostNormalizer instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new FormatPostNormalizer();
     }

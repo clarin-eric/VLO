@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
@@ -14,7 +14,7 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 
 import java.io.IOException;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class FacetMappingFactoryTest extends ImporterTestcase {
 
@@ -32,7 +32,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
 
     private FacetMappingFactory facetMappingFactory;
 
-    @Before
+    @BeforeEach
     @Override
     public void setup() throws Exception {
         super.setup();

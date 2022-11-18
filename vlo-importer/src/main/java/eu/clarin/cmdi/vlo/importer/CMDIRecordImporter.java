@@ -21,13 +21,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
 import com.google.common.collect.Streams;
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
+import eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
@@ -189,18 +189,18 @@ public class CMDIRecordImporter<T> {
         // add landing page resource
         final List<Resource> landingPageResources = cmdiData.getLandingPageResources();
         if (!landingPageResources.isEmpty()) {
-            final Optional<Map<String, CheckedLink>> linkStatusForLandingPages = getLinkStatusForLandingPages(landingPageResources, file);
+            final Optional<Map<String, LinkStatus>> linkStatusForLandingPages = getLinkStatusForLandingPages(landingPageResources, file);
             landingPageResources.forEach((resource) -> {
                 final String url = resource.getResourceName();
                 if (url != null) {
-                    final Optional<CheckedLink> landingPageStatus
+                    final Optional<LinkStatus> landingPageStatus
                             = linkStatusForLandingPages.flatMap(s -> Optional.ofNullable(s.get(url)));
                     //create resource info object representation
                     final String landingPageValue = new ResourceInfo(
                             url,
                             resource.getMimeType(),
-                            landingPageStatus.map(CheckedLink::getStatus).orElse(null),
-                            landingPageStatus.map(CheckedLink::getTimestamp).map(Timestamp::getTime).orElse(null))
+                            landingPageStatus.map(LinkStatus::getStatus).orElse(null),
+                            landingPageStatus.map(LinkStatus::getCheckingDataAsLocalTimeMs).orElse(null))
                             .toJson(objectMapper);
                     cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
                 }
@@ -251,7 +251,7 @@ public class CMDIRecordImporter<T> {
         if (temporalCoverageField != null && temporalCoverageField.size() == 1) {
             String tcValue = (String) temporalCoverageField.toArray()[0];
             Integer[] temporalRange = TemporalCoveragePostNormalizer.extractDateRange(tcValue);
-            if(temporalRange != null) {
+            if (temporalRange != null) {
                 cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE_START), temporalRange[0].toString() + "-01-01T00:00:00Z", false);
                 cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE_END), temporalRange[1].toString() + "-12-31T23:59:59Z", false);
             }
@@ -260,7 +260,7 @@ public class CMDIRecordImporter<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_COUNT), languageCount, false);
     }
 
-    private Optional<Map<String, CheckedLink>> getLinkStatusForLandingPages(final List<Resource> landingPageResources, File file) {
+    private Optional<Map<String, LinkStatus>> getLinkStatusForLandingPages(final List<Resource> landingPageResources, File file) {
         try {
             // get link status information
             return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName)));
@@ -287,7 +287,7 @@ public class CMDIRecordImporter<T> {
         final List<Resource> resources = cmdiData.getDataResources();
         final List<Resource> landingPages = cmdiData.getLandingPageResources();
 
-        final Optional<Map<String, CheckedLink>> linkStatusMap = getLinkStatusForResources(resources, landingPages, cmdiData);
+        final Optional<Map<String, LinkStatus>> linkStatusMap = getLinkStatusForResources(resources, landingPages, cmdiData);
 
         for (int i = 0; i < resources.size(); i++) {
             final String fieldValue;
@@ -314,8 +314,8 @@ public class CMDIRecordImporter<T> {
 
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
-    
-    private Optional<Map<String, CheckedLink>> getLinkStatusForResources(final List<Resource> resources, final List<Resource> landingPages, CMDIData cmdiData) {
+
+    private Optional<Map<String, LinkStatus>> getLinkStatusForResources(final List<Resource> resources, final List<Resource> landingPages, CMDIData cmdiData) {
         try {
             return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(
                     Streams
@@ -327,9 +327,9 @@ public class CMDIRecordImporter<T> {
         }
     }
 
-    private ResourceInfo createResourceInfo(final Optional<Map<String, CheckedLink>> linkStatusMap, Resource resource, String fieldValue) {
+    private ResourceInfo createResourceInfo(final Optional<Map<String, LinkStatus>> linkStatusMap, Resource resource, String fieldValue) {
         // check link status
-        final Optional<CheckedLink> linkStatus = linkStatusMap.flatMap(s -> Optional.ofNullable(s.get(resource.getResourceName())));
+        final Optional<LinkStatus> linkStatus = linkStatusMap.flatMap(s -> Optional.ofNullable(s.get(resource.getResourceName())));
 
         // mime type value fallback chain
         final String mimeType = Optional.ofNullable(resource.getMimeType()) // prefer value from resource proxies
@@ -342,8 +342,8 @@ public class CMDIRecordImporter<T> {
         final String postProcessedMimeType = new FormatPostNormalizer().process(mimeType, null).get(0);
 
         return new ResourceInfo(resource.getResourceName(), postProcessedMimeType,
-                linkStatus.map(CheckedLink::getStatus).orElse(null),
-                linkStatus.map(CheckedLink::getTimestamp).map(Timestamp::getTime).orElse(null)
+                linkStatus.map(LinkStatus::getStatus).orElse(null),
+                linkStatus.map(LinkStatus::getCheckingDataAsLocalTimeMs).orElse(null)
         );
 
     }

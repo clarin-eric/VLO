@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.importer.MetadataImporterRunner;
 import java.io.IOException;
 import java.io.Writer;
@@ -36,7 +35,7 @@ public class NoopResourceAvailabilityStatusChecker implements ResourceAvailabili
     
 
     @Override
-    public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) {
+    public Map<String, LinkStatus> getLinkStatusForRefs(Stream<String> hrefs) {
         logger.trace("getLinkStatusForRefs");
         return Collections.emptyMap();
     }

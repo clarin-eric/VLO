@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping.FacetConcept;

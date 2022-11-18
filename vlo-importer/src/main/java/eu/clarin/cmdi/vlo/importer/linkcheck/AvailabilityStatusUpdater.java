@@ -28,10 +28,12 @@ import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import eu.clarin.cmdi.vlo.importer.MetadataImporter;
+import static eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus.getCheckingDataAsLocalTimeMs;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import java.io.File;
 import java.io.IOException;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -190,7 +192,7 @@ public class AvailabilityStatusUpdater {
             final Collection<ResourceInfo> landingPageInfoObjects = fieldToResourceInfos(landingPageValues);
 
             //check links for both landing page and resource refs
-            final Map<String, CheckedLink> statusCheckResults
+            final Map<String, LinkStatus> statusCheckResults
                     = statusChecker.getLinkStatusForRefs(
                             Streams.concat(resourceInfoObjects.stream(), landingPageInfoObjects.stream())
                                     .map(ResourceInfo::getUrl)); //extract URLs
@@ -239,9 +241,9 @@ public class AvailabilityStatusUpdater {
                 .collect(Collectors.toSet());
     }
 
-    private Stream<ResourceInfo> updateResourceInfo(Map<String, CheckedLink> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
+    private Stream<ResourceInfo> updateResourceInfo(Map<String, LinkStatus> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
         {
-            final CheckedLink checkResult = statusCheckResults.get(oldInfo.getUrl());
+            final LinkStatus checkResult = statusCheckResults.get(oldInfo.getUrl());
 
             if (checkResult == null) {
                 if (oldInfo.getStatus() != null || oldInfo.getLastChecked() != null) {
@@ -255,8 +257,8 @@ public class AvailabilityStatusUpdater {
                     return Stream.of(oldInfo);
                 }
             } else {
-                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp().getTime(), oldInfo.getLastChecked())) {
-                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp().getTime());
+                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(getCheckingDataAsLocalTimeMs(checkResult), oldInfo.getLastChecked())) {
+                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), getCheckingDataAsLocalTimeMs(checkResult));
 
                     logger.info("Info changed for {} => {}", oldInfo, newInfo);
                     changes.incrementAndGet();
@@ -330,7 +332,7 @@ public class AvailabilityStatusUpdater {
             try {
                 final VloConfig config = new XmlVloConfigFactory(configFile.toURI().toURL()).newConfig();
                 final SolrBridge solrBridge = MetadataImporter.DefaultSolrBridgeFactory.createDefaultSolrBridge(config);
-                final ResourceAvailabilityStatusChecker statusChecker = MetadataImporter.DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config);
+                final ResourceAvailabilityStatusChecker statusChecker = ResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config);
                 final AvailabilityStatusUpdater updater = new AvailabilityStatusUpdater(config, solrBridge, statusChecker);
                 updater.run();
             } catch (IOException ex) {

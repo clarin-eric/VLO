@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 CLARIN
+ * Copyright (C) 2022 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,19 +16,29 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.TimeZone;
 
 /**
  *
- * @author Twan Goosen <twan@clarin.eu>
+ * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface ResourceAvailabilityStatusChecker extends Closeable {
+public interface LinkStatus {
 
-    Map<String, LinkStatus> getLinkStatusForRefs(Stream<String> hrefs) throws IOException;
-    
-    void writeStatusSummary(Writer writer) throws IOException;
+    String getUrl();
+
+    Integer getStatus();
+
+    LocalDateTime getCheckingDate();
+
+    String getContentType();
+
+    static final ZoneOffset TZ_OFFSET = ZoneOffset.of(TimeZone.getDefault().getID());
+
+    public static long getCheckingDataAsLocalTimeMs(LinkStatus status) {
+        return status
+                .getCheckingDate()
+                .toEpochSecond(TZ_OFFSET);
+    }
 }

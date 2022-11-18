@@ -1,0 +1,15 @@
+spring:
+   datasource:
+      url: jdbc:h2:mem:linkcheckerTest;MODE=MYSQL;DATABASE_TO_LOWER=TRUE
+      username: sa
+      password: password
+      driver-class-name: org.h2.Driver
+   jpa:
+      show-sql: true
+      hibernate:
+         ddl-auto: none
+      database-platform: org.hibernate.dialect.MariaDBDialect
+logging:
+   level:
+      org.hibernate.SQL: DEBUG
+      org.hibernate.type.descriptor.sql.BasicBinder: TRACE

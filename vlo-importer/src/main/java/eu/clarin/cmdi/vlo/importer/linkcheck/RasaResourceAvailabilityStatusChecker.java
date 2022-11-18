@@ -16,17 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
+import com.google.common.collect.Maps;
 import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.rasa.filters.CheckedLinkFilter;
 import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalAmount;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,19 +39,19 @@ public abstract class RasaResourceAvailabilityStatusChecker implements ResourceA
 
     private final CheckedLinkResource checkedLinkResource;
     private final RasaResourceAvailabilityStatusCheckerConfiguration config;
-    
+
     public RasaResourceAvailabilityStatusChecker(CheckedLinkResource checkedLinkResource, RasaResourceAvailabilityStatusCheckerConfiguration config) {
         this.checkedLinkResource = checkedLinkResource;
         this.config = config;
     }
 
     @Override
-    public Map<String, CheckedLink> getLinkStatusForRefs(Stream<String> hrefs) throws IOException {
+    public Map<String, LinkStatus> getLinkStatusForRefs(Stream<String> hrefs) throws IOException {
         try {
             final CheckedLinkFilter filter = checkedLinkResource.getCheckedLinkFilter();
             filter.setUrlIn(hrefs.toArray(String[]::new));
             filter.setCheckedBetween(config.getAgeLimitLowerBound(), config.getAgeLimitUpperBound());
-            return checkedLinkResource.getMap(filter);
+            return Maps.transformEntries(checkedLinkResource.getMap(filter), (k, v) -> new RasaLinkStatus(v));
         } catch (SQLException ex) {
             throw new IOException("Could not retrieve link status", ex);
         }
@@ -61,44 +59,46 @@ public abstract class RasaResourceAvailabilityStatusChecker implements ResourceA
 
     /**
      * Override to implement logic to be executed on close
+     *
      * @throws java.io.IOException
      */
     public void onClose() throws IOException {
         // do nothing
     }
-    
+
     @Override
     public final void close() throws IOException {
         onClose();
     }
-    
-    public final static class RasaResourceAvailabilityStatusCheckerConfiguration  {
 
-        private final Timestamp ageLimitLowerBound;
-        
-        private final Optional<Timestamp> ageLimitUpperBound;
-        
-        /**
-         * 
-         * @param checkAgeThreshold Maximum allowed age of link checking information.
-         */
-        public RasaResourceAvailabilityStatusCheckerConfiguration(TemporalAmount checkAgeThreshold) {
-            if(checkAgeThreshold.get(ChronoUnit.SECONDS) < 1) {
-                throw new IllegalArgumentException("checkAgeThreshold can not be less than 1 day");
-            }
-            
-            ageLimitLowerBound = Timestamp.from(Instant.now().minus(checkAgeThreshold));
-            ageLimitUpperBound = Optional.empty();
+    private static class RasaLinkStatus implements LinkStatus {
+
+        private final CheckedLink checkedLink;
+
+        public RasaLinkStatus(CheckedLink checkedLink) {
+            this.checkedLink = checkedLink;
         }
 
-        public Timestamp getAgeLimitLowerBound() {
-            return ageLimitLowerBound;
+        @Override
+        public String getUrl() {
+            return checkedLink.getUrl();
         }
 
-        public Timestamp getAgeLimitUpperBound() {
-            return ageLimitUpperBound.orElse(Timestamp.from(Instant.now()));
+        @Override
+        public Integer getStatus() {
+            return checkedLink.getStatus();
         }
-        
-        
+
+        @Override
+        public LocalDateTime getCheckingDate() {
+            return checkedLink.getCheckingDate().toLocalDateTime();
+        }
+
+        @Override
+        public String getContentType() {
+            return checkedLink.getContentType();
+        }
+
     }
+
 }
