@@ -16,11 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;

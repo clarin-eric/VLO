@@ -16,71 +16,76 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import eu.clarin.linkchecker.persistence.model.Status;
+import eu.clarin.linkchecker.persistence.model.Url;
 import eu.clarin.linkchecker.persistence.service.StatusService;
 import java.io.IOException;
 import java.io.Writer;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public class LinkcheckerAvailabilityStatusChecker implements ResourceAvailabilityStatusChecker {
-
+    
+    private final static Logger logger = LoggerFactory.getLogger(LinkcheckerAvailabilityStatusChecker.class);
+    
     private final StatusService statusService;
-
-    public LinkcheckerAvailabilityStatusChecker(StatusService statusService) {
+    private final Consumer<Writer> statusWriter;
+    private final Callable closeHandler;
+    
+    public LinkcheckerAvailabilityStatusChecker(StatusService statusService, Consumer<Writer> satusWriter, Callable closeHandler) {
         this.statusService = statusService;
+        this.statusWriter = satusWriter;
+        this.closeHandler = closeHandler;
     }
-
+    
     @Override
     public Map<String, LinkStatus> getLinkStatusForRefs(Stream<String> hrefs) throws IOException {
         final Map<String, Status> status = statusService.getStatus(hrefs.toArray(String[]::new));
-        return Maps.transformEntries(status, (k, v) -> new LinkcheckerLinkStatus(v));
+        return ImmutableMap.copyOf(Maps.transformEntries(status, (k, v) -> newLinkStatus(v)));
     }
-
+    
     @Override
     public void writeStatusSummary(Writer writer) throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (statusWriter != null) {
+            statusWriter.accept(writer);
+        }
     }
-
+    
     @Override
     public void close() throws IOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    private static class LinkcheckerLinkStatus implements LinkStatus {
-
-        private final Status status;
-
-        public LinkcheckerLinkStatus(Status status) {
-            this.status = status;
-        }
-
-        @Override
-        public String getUrl() {
-            return status.getUrl().toString();
-        }
-
-        @Override
-        public Integer getStatus() {
-            return status.getStatusCode();
-        }
-
-        @Override
-        public LocalDateTime getCheckingDate() {
-            return status.getCheckingDate();
-        }
-
-        @Override
-        public String getContentType() {
-            return status.getContentType();
+        try {
+            if (closeHandler != null) {
+                closeHandler.call();
+            }
+        } catch (IOException ex) {
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Error while closing status checker", ex);
         }
     }
 
+    /**
+     * Materialize a linkchecker Status into a LinkStatus object
+     *
+     * @param status
+     * @return materialized LinkStatus
+     */
+    private static LinkStatus newLinkStatus(Status status) {
+        final Url url = status.getUrl();
+        if (url == null) {
+            throw new NullPointerException("Null URL in status " + status);
+        }
+        return new BasicLinkStatus(url.getName(), status.getStatusCode(), status.getCheckingDate(), status.getContentType());
+    }
+    
 }

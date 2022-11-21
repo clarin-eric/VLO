@@ -17,25 +17,43 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface LinkStatus {
+public class BasicLinkStatus implements LinkStatus {
 
-    String getUrl();
+    private final String url;
+    private final Integer status;
+    private final LocalDateTime checkingDate;
+    private final String contentType;
 
-    Integer getStatus();
-
-    LocalDateTime getCheckingDate();
-
-    String getContentType();
-
-    public static long getCheckingDataAsUtcEpochMs(LinkStatus status) {
-        return status.getCheckingDate()
-                .toInstant(ZoneOffset.UTC)
-                .toEpochMilli();
+    public BasicLinkStatus(String url, Integer status, LocalDateTime checkingDate, String contentType) {
+        this.url = url;
+        this.status = status;
+        this.checkingDate = checkingDate;
+        this.contentType = contentType;
     }
+
+    @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public Integer getStatus() {
+        return status;
+    }
+
+    @Override
+    public LocalDateTime getCheckingDate() {
+        return checkingDate;
+    }
+
+    @Override
+    public String getContentType() {
+        return contentType;
+    }
+
 }

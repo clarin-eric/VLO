@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
@@ -28,12 +27,10 @@ import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import eu.clarin.cmdi.vlo.importer.MetadataImporter;
-import static eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus.getCheckingDataAsLocalTimeMs;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import java.io.File;
 import java.io.IOException;
-import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +50,7 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus.getCheckingDataAsUtcEpochMs;
 
 /**
  *
@@ -257,8 +255,8 @@ public class AvailabilityStatusUpdater {
                     return Stream.of(oldInfo);
                 }
             } else {
-                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(getCheckingDataAsLocalTimeMs(checkResult), oldInfo.getLastChecked())) {
-                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), getCheckingDataAsLocalTimeMs(checkResult));
+                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(getCheckingDataAsUtcEpochMs(checkResult), oldInfo.getLastChecked())) {
+                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), getCheckingDataAsUtcEpochMs(checkResult));
 
                     logger.info("Info changed for {} => {}", oldInfo, newInfo);
                     changes.incrementAndGet();

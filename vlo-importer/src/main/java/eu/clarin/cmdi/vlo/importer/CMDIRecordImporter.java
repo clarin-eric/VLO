@@ -44,7 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
-import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -200,7 +199,7 @@ public class CMDIRecordImporter<T> {
                             url,
                             resource.getMimeType(),
                             landingPageStatus.map(LinkStatus::getStatus).orElse(null),
-                            landingPageStatus.map(LinkStatus::getCheckingDataAsLocalTimeMs).orElse(null))
+                            landingPageStatus.map(LinkStatus::getCheckingDataAsUtcEpochMs).orElse(null))
                             .toJson(objectMapper);
                     cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
                 }
@@ -343,7 +342,7 @@ public class CMDIRecordImporter<T> {
 
         return new ResourceInfo(resource.getResourceName(), postProcessedMimeType,
                 linkStatus.map(LinkStatus::getStatus).orElse(null),
-                linkStatus.map(LinkStatus::getCheckingDataAsLocalTimeMs).orElse(null)
+                linkStatus.map(LinkStatus::getCheckingDataAsUtcEpochMs).orElse(null)
         );
 
     }

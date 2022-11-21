@@ -16,18 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import com.google.common.base.Strings;
-import eu.clarin.cmdi.rasa.helpers.RasaFactory;
-import eu.clarin.cmdi.rasa.helpers.impl.RasaFactoryBuilderImpl;
-import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
-import java.io.Writer;
-import java.time.Duration;
-import java.util.Properties;
+import java.util.List;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.env.YamlPropertySourceLoader;
+import org.springframework.core.env.MapPropertySource;
+import org.springframework.core.env.MutablePropertySources;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 /**
  *
@@ -38,70 +40,73 @@ public class ResourceAvailabilityFactory {
     /**
      * Logging
      */
-    protected final static Logger LOG = LoggerFactory.getLogger(ResourceAvailabilityFactory.class);
-    /**
-     * RASA database driver class
-     */
-    private static final String RASA_JDBC_DRIVER_CLASS_NAME = "org.mariadb.jdbc.Driver";
+    private final static Logger logger = LoggerFactory.getLogger(ResourceAvailabilityFactory.class);
 
-    public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(final VloConfig config) {
-        final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
-        final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
-        final String rasaDbPassword = config.getLinkCheckerDbPassword(); //linkchecker
-        final int rasaDbPoolsize = config.getLinkCheckerDbPoolsize();
-        final Duration checkAgeThreshold = Duration.ofDays(config.getLinkCheckerMaxDaysSinceChecked());
-        if (!Strings.isNullOrEmpty(rasaDbUri)) {
-            try {
-                final RasaResourceAvailabilityStatusChecker checker = newRasaChecker(rasaDbUri, rasaDbUser, rasaDbPassword, rasaDbPoolsize, checkAgeThreshold);
-                if (testChecker(checker)) {
-                    return checker;
-                }
-            } catch (Exception ex) {
-                LOG.error("Error while initialising resource availability checker", ex);
+    public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(final VloConfig vloConfig) {
+        try {
+            final LinkcheckerAvailabilityStatusChecker checker = newJpaAvailabilityStatusChecker(vloConfig);
+            if (testChecker(checker)) {
+                return checker;
             }
-            LOG.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
-            return new NoopResourceAvailabilityStatusChecker();
-        } else {
-            LOG.warn("No mysql configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
-            return new NoopResourceAvailabilityStatusChecker();
+        } catch (Exception ex) {
+            logger.error("Error while initialising resource availability checker", ex);
         }
+        logger.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
+        return new NoopResourceAvailabilityStatusChecker();
     }
 
-    private static RasaResourceAvailabilityStatusChecker newRasaChecker(final String rasaDbUri, final String rasaDbUser, final String rasaDbPassword, final int rasaDbPoolsize, final Duration checkAgeThreshold) {
-        LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
-        final Properties rasaProperties = new Properties();
-        rasaProperties.setProperty("driverClassName", RASA_JDBC_DRIVER_CLASS_NAME);
-        rasaProperties.setProperty("jdbcUrl", rasaDbUri);
-        rasaProperties.setProperty("username", rasaDbUser);
-        rasaProperties.setProperty("password", rasaDbPassword);
-        rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
-        final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
-        final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-        final RasaResourceAvailabilityStatusChecker checker = new RasaResourceAvailabilityStatusChecker(checkedLinkResource, new RasaResourceAvailabilityStatusCheckerConfiguration(checkAgeThreshold)) {
+    private static LinkcheckerAvailabilityStatusChecker newJpaAvailabilityStatusChecker(final VloConfig vloConfig) {
+
+        final LinkcheckerAvailabilityStatusCheckerFactory factory = new LinkcheckerAvailabilityStatusCheckerFactory() {
             @Override
-            public void onClose() throws IOException {
-                RasaResourceAvailabilityStatusChecker.logger.info("Asking resource availability checker factory to tear down");
-                factory.tearDown();
+            public void configureEnvironment(MutablePropertySources propertySources) {
+                super.configureEnvironment(propertySources);
+
+                // Configure environment with YAML properties loaded from a resource file
+                try {
+                    final List<PropertySource<?>> sources = loadYamlProperties("/spring/application.yml");
+                    if (sources != null) {
+                        sources.forEach(propertySources::addLast);
+                    }
+                } catch (IOException ex) {
+                    logger.error("Error while reading properties from yaml", ex);
+                }
+
+                // Set database properties from VLO config
+                logger.info("Setting database connection properties from VLO configuration");
+                final ImmutableMap<String, Object> dbProps = ImmutableMap.<String, Object>builder()
+                        .put("spring.datasource.url", vloConfig.getLinkCheckerDbConnectionString())
+                        .put("spring.datasource.username", vloConfig.getLinkCheckerDbUser())
+                        .put("spring.datasource.password", vloConfig.getLinkCheckerDbPassword())
+                        .build();
+                logger.debug("Database properties: {}", Iterables.toString(dbProps.entrySet()));
+                propertySources.addLast(new MapPropertySource("VloConfig", dbProps));
             }
 
-            @Override
-            public void writeStatusSummary(Writer writer) throws IOException {
-                factory.writeStatusSummary(writer);
-            }
         };
-        return checker;
+        logger.info("Initializing LinkcheckerAvailabilityStatusCheckerFactory");
+        factory.init();
+
+        logger.info("Getting LinkcheckerAvailabilityStatusChecker from factory");
+        return factory.getInstance();
     }
 
-    private static boolean testChecker(RasaResourceAvailabilityStatusChecker checker) {
-        LOG.debug("Carrying out functional check of RASA checker...");
+    private static List<PropertySource<?>> loadYamlProperties(String resourcePath) throws IOException {
+        logger.info("Loading YAML properties from classpath resource: {}", resourcePath);
+        final YamlPropertySourceLoader yamlLoader = new YamlPropertySourceLoader();
+        final Resource resource = new ClassPathResource(resourcePath, ResourceAvailabilityFactory.class);
+        return yamlLoader.load("springConfig", resource);
+    }
+
+    private static boolean testChecker(ResourceAvailabilityStatusChecker checker) {
+        logger.debug("Carrying out functional check of resource availability status checker...");
         final String testUrl = "https://www.clarin.eu";
         try {
             checker.getLinkStatusForRefs(Stream.of(testUrl));
             return true;
         } catch (IOException ex) {
-            LOG.error("Failed to carry out test check for {}", testUrl, ex);
+            logger.error("Failed to carry out test check for {}", testUrl, ex);
             return false;
         }
     }
-
 }
