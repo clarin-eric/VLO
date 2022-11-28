@@ -36,8 +36,6 @@ import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.CMDIDataSolrImpl;
 import org.apache.solr.SolrTestCaseJ4;
 
 import org.junit.BeforeClass;
@@ -62,7 +60,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
                 //schema
                 getResourcePath("/solr/vlo-index/conf/managed-schema"),
                 //solr home
-                getResourcePath("/solr"), 
+                getResourcePath("/solr"),
                 //core name
                 "vlo-index");
     }
@@ -72,7 +70,6 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
     public void setUp() throws Exception {
         this.fieldNameService = new FieldNameServiceImpl(DefaultVloConfigFactory.configureDefaultMappingLocations(new DefaultVloConfigFactory().newConfig()));
         VloConfig vloConfig = new VloConfig();
-        
 
         // set up an embedded solr server
         super.setUp();
@@ -81,20 +78,29 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
         // add some documents
         int id = 1;
-        CMDIData<SolrInputDocument> cmdiData = new CMDIDataSolrImpl(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "First collection", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "A country", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc1", true);
-        SolrInputDocument document = cmdiData.getDocument();
+//        CMDIData<SolrInputDocument> cmdiData = new CMDIDataSolrImpl(fieldNameService);
+//        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "First collection", false);
+//        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "A country", false);
+//        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc1", true);
+//        SolrInputDocument document = cmdiData.getDocument();
+        SolrInputDocument document = new SolrInputDocument();
+        document.addField(fieldNameService.getFieldName(FieldKey.COLLECTION), "First collection");
+        document.addField(fieldNameService.getFieldName(FieldKey.COUNTRY), "A country");
+        document.addField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc1");
         document.addField("id", Integer.toString(id++));
         server.add(document);
+//
+//        cmdiData = new CMDIDataSolrImpl(fieldNameService);
+//        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Second collection", false);
+//        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Another country", false);
+//        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc2", true);
+//        document = cmdiData.getDocument();
 
-        cmdiData = new CMDIDataSolrImpl(fieldNameService);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Second collection", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Another country", false);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc2", true);
-        document = cmdiData.getDocument();
-        
+        document = new SolrInputDocument();
+        document.addField(fieldNameService.getFieldName(FieldKey.COLLECTION), "Second collection");
+        document.addField(fieldNameService.getFieldName(FieldKey.COUNTRY), "Another country");
+        document.addField(fieldNameService.getFieldName(FieldKey.SIGNATURE), "doc2");
+
         document.addField("id", Integer.toString(id++));
         server.add(document);
 
