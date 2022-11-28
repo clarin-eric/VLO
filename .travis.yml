@@ -1,9 +1,9 @@
 language: java
 jdk:
-- openjdk11
+- openjdk17
 
 before_install:
-- echo "MAVEN_OPTS='-Xmx2g -XX:MaxPermSize=512m'" > ~/.mavenrc
+- echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
 script:
 - bash -c 'if [ "${TRAVIS_TAG}" ]; then mvn versions:set -DnewVersion=${TRAVIS_TAG} versions:commit; fi'
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
