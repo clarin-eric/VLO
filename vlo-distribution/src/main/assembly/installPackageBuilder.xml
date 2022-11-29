@@ -40,11 +40,11 @@
         <!-- importer related files to be packaged -->
         <!-- jar file -->
         <fileSet>
-            <directory>${project.parent.basedir}/vlo-importer/target</directory>
+            <directory>${project.parent.basedir}/vlo-importer/target/vlo-importer-${project.version}/lib</directory>
             <includes>
-                <include>*.jar</include>
+                <include>*</include>
             </includes>
-            <outputDirectory>bin</outputDirectory>
+            <outputDirectory>bin/lib</outputDirectory>
         </fileSet>
         <!-- run script -->
         <fileSet>
