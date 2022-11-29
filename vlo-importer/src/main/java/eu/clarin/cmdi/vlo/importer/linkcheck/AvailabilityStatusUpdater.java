@@ -51,12 +51,13 @@ import org.apache.solr.common.params.CursorMarkParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus.getCheckingDataAsUtcEpochMs;
+import java.io.Closeable;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class AvailabilityStatusUpdater {
+public class AvailabilityStatusUpdater implements Closeable {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
 
@@ -139,9 +140,6 @@ public class AvailabilityStatusUpdater {
         });
 
         logger.info("All documents processed and committed. Shutting down Solr...");
-
-        // Commit and tidy up
-        shutdownSolr();
 
         logger.info("Done. Total number of documents updated: {}", updateCount);
 
@@ -321,18 +319,26 @@ public class AvailabilityStatusUpdater {
         }
     }
 
+    @Override
+    public void close() throws IOException {
+        // Commit and tidy up
+        shutdownSolr();
+    }
+
     public final static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Provide location of VloConfig.xml as parameter");
             System.exit(1);
         } else {
-            File configFile = new File(args[0]);
+            final File configFile = new File(args[0]);
             try {
                 final VloConfig config = new XmlVloConfigFactory(configFile.toURI().toURL()).newConfig();
                 final SolrBridge solrBridge = MetadataImporter.DefaultSolrBridgeFactory.createDefaultSolrBridge(config);
-                final ResourceAvailabilityStatusChecker statusChecker = ResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config);
-                final AvailabilityStatusUpdater updater = new AvailabilityStatusUpdater(config, solrBridge, statusChecker);
-                updater.run();
+                try ( ResourceAvailabilityStatusChecker statusChecker = ResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config)) {
+                    try ( AvailabilityStatusUpdater updater = new AvailabilityStatusUpdater(config, solrBridge, statusChecker)) {
+                        updater.run();
+                    }
+                }
             } catch (IOException ex) {
                 System.err.println("Could not read configuration file: " + ex.getMessage());
                 System.exit(1);
