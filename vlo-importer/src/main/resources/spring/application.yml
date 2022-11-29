@@ -2,11 +2,10 @@ spring:
    datasource:
       driver-class-name: org.mariadb.jdbc.Driver
    jpa:
-      show-sql: true
       hibernate:
          ddl-auto: none
       database-platform: org.hibernate.dialect.MariaDBDialect
 logging:
    level:
-      org.hibernate.SQL: DEBUG
-      org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+      org.hibernate.SQL: WARN
+      org.hibernate.type.descriptor.sql.BasicBinder: WARN
