@@ -37,6 +37,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import org.apache.solr.SolrTestCaseJ4;
+import org.hamcrest.MatcherAssert;
 
 import org.junit.BeforeClass;
 
@@ -131,12 +132,12 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         assertEquals(2, facetFields.size());
 
         // 2 collections
-        assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
+        MatcherAssert.assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
                 Matchers.<FacetField>hasProperty("name", equalTo(fieldNameService.getFieldName(FieldKey.COLLECTION))),
                 Matchers.<FacetField>hasProperty("valueCount", equalTo(2)))));
 
         // 2 countries
-        assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
+        MatcherAssert.assertThat(facetFields, Matchers.<FacetField>hasItem(Matchers.allOf(
                 Matchers.<FacetField>hasProperty("name", equalTo(fieldNameService.getFieldName(FieldKey.COUNTRY))),
                 Matchers.<FacetField>hasProperty("valueCount", equalTo(2)))));
     }
