@@ -1,5 +1,13 @@
 Bug fixes and new features
 --------------------------
+VLO 4.11.3 (December 2022)
+
+* Using new linkchecker persistence library to access resource availability status
+information
+		<https://github.com/clarin-eric/VLO/issues/360>
+* Importer no longer distributed as a 'fat jar' (jar with dependencies)
+		<https://github.com/clarin-eric/VLO/issues/333>
+
 VLO 4.11.2 (November 2022)
 
 * Actionable links that are not PIDs are not recognised as actionable
