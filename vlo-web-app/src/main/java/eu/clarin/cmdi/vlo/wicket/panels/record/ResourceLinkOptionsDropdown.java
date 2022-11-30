@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
@@ -35,15 +36,22 @@ import java.util.Optional;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
+import org.springframework.web.util.JavaScriptUtils;
 
 /**
  *
@@ -85,6 +93,22 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         createDropdownOptions(optionsBuilder);
 
         setModel(new ListModel<>(optionsBuilder.build()));
+
+        add(new Behavior() {
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                response.render(JavaScriptReferenceHeaderItem.forReference(JavaScriptResources.getSwitchboardIntegrationJs()));
+                response.render(JavaScriptHeaderItem.forScript(String.format("$(document).on('shown.bs.dropdown', '#%s',", JavaScriptUtils.javaScriptEscape(component.getMarkupId()))
+                        + "    function() {"
+                        + String.format(
+                                " switchboardPreflight('%s', '#%s');",
+                                JavaScriptUtils.javaScriptEscape(resourceInfoModel.getObject().getHref()),
+                                JavaScriptUtils.javaScriptEscape(component.getMarkupId()))
+                        + "    });", "onLinkDropdownShown" + component.getMarkupId()));
+            }
+
+        });
+
         super.onInitialize();
     }
 
@@ -101,10 +125,20 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         final DropdownMenuItem switchboardItem = new BootstrapDropdown.DropdownMenuItem(switchboardItemLabelModel, Model.of("glyphicon glyphicon-open-file")) {
             @Override
             protected Link getLink(String id) {
-                return getResourceLink(id);
+                return getSwitchboardLink(id);
             }
         };
         return switchboardItem;
+    }
+
+    private Link getSwitchboardLink(String id) {
+        final IModel<Collection<Object>> languageValuesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
+        final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
+        if (piwikConfig.isEnabled()) {
+            link.add(createPiwikActionTrackingBehavior(resourceInfoModel, PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE));
+        }
+        link.add(new AttributeAppender("class", "resourceDropdownSwitchboardItem"));
+        return link;
     }
 
     private DropdownMenuItem createVcrItem() {
@@ -140,15 +174,6 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
                 //title
                 StringEscapeUtils.escapeJavaScript(fileNameModel.getObject())
         );
-    }
-
-    private Link getResourceLink(String id) {
-        final IModel<Collection<Object>> languageValuesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
-        final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
-        if (piwikConfig.isEnabled()) {
-            link.add(createPiwikActionTrackingBehavior(resourceInfoModel, PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE));
-        }
-        return link;
     }
 
     private AjaxPiwikTrackingBehavior.EventTrackingBehavior createPiwikActionTrackingBehavior(final IModel<ResourceInfo> resourceInfoModel, String category, String action) {

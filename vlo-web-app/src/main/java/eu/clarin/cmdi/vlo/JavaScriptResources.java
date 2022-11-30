@@ -44,6 +44,7 @@ public class JavaScriptResources {
     private final static JavaScriptResourceReference SEARCH = new JavaScriptResourceReference(VloBasePage.class, "vlo-search.js");
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
     private final static JavaScriptResourceReference HISTORY_API = new JavaScriptResourceReference(HistoryApiAjaxRequestTargetListener.class, "vlo-historyapi.js");
+    private final static JavaScriptResourceReference LRS_INTEGRATION = new JavaScriptResourceReference(RecordPage.class, "switchboard-integration.js");
 
     private final static ResourceReference VCR_PLUGIN_JS = new ContextRelativeResourceReference("assets/vcr-plugin/dist/vcr-integration.js", false);
 
@@ -130,4 +131,9 @@ public class JavaScriptResources {
     public ResourceReference getClipBoardJS() {
         return CLIPBOARD_JS;
     }
+
+    public static JavaScriptResourceReference getSwitchboardIntegrationJs() {
+        return LRS_INTEGRATION;
+    }
+
 }

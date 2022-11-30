@@ -44,7 +44,7 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
         super(id);
         this.openStateModel = Model.of(false);
     }
-    
+
     public BootstrapDropdown(String id, IModel<List<DropdownMenuItem>> itemsModel) {
         super(id, itemsModel);
         this.openStateModel = Model.of(false);
@@ -60,7 +60,7 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
         add(createMenu("menu"));
     }
 
-    protected Component createDropDownLink(String id) {
+    protected Link<Boolean> createDropDownLink(String id) {
         //link that activates dropdown
         final Link<Boolean> link = new Link<Boolean>(id, openStateModel) {
             @Override
@@ -125,19 +125,19 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
 
     public abstract static class DropdownMenuItem implements Serializable {
 
-        private final IModel<String>  label;
-        private final IModel<String>  iconClass;
+        private final IModel<String> label;
+        private final IModel<String> iconClass;
 
         public DropdownMenuItem(IModel<String> label, IModel<String> iconClass) {
             this.label = label;
             this.iconClass = iconClass;
         }
 
-        public IModel<String>  getLabel() {
+        public IModel<String> getLabel() {
             return label;
         }
 
-        public IModel<String>  getIconClass() {
+        public IModel<String> getIconClass() {
             return iconClass;
         }
 
