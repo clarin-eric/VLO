@@ -40,6 +40,7 @@ import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
@@ -88,20 +89,31 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     }
 
     protected void createDropdownOptions(ImmutableList.Builder<DropdownMenuItem> listBuilder) {
-        listBuilder.add(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
+        listBuilder.add(createSwitchboardItem());
+
+        if (!Strings.isEmpty(vloConfig.getVcrSubmitEndpoint())) {
+            listBuilder.add(createVcrItem());
+        }
+    }
+
+    private DropdownMenuItem createSwitchboardItem() {
+        final Model<String> switchboardItemLabelModel = Model.of("Process with Language Resource Switchboard");
+        final DropdownMenuItem switchboardItem = new BootstrapDropdown.DropdownMenuItem(switchboardItemLabelModel, Model.of("glyphicon glyphicon-open-file")) {
             @Override
             protected Link getLink(String id) {
                 return getResourceLink(id);
             }
-        });
-        if (!Strings.isEmpty(vloConfig.getVcrSubmitEndpoint())) {
-            listBuilder.add(new BootstrapDropdown.DropdownMenuItem("Queue for submission to a Virtual Collection", "glyphicon glyphicon-plus") {
-                @Override
-                protected Link getLink(String id) {
-                    return getVcrQueueLink(id);
-                }
-            });
-        }
+        };
+        return switchboardItem;
+    }
+
+    private DropdownMenuItem createVcrItem() {
+        return new BootstrapDropdown.DropdownMenuItem(Model.of("Queue for submission to a Virtual Collection"), Model.of("glyphicon glyphicon-plus")) {
+            @Override
+            protected Link getLink(String id) {
+                return getVcrQueueLink(id);
+            }
+        };
     }
 
     public Link getVcrQueueLink(String id) {

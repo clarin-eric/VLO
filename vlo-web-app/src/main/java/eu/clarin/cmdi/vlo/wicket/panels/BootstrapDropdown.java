@@ -125,19 +125,19 @@ public class BootstrapDropdown extends GenericPanel<List<BootstrapDropdown.Dropd
 
     public abstract static class DropdownMenuItem implements Serializable {
 
-        private final String label;
-        private final String iconClass;
+        private final IModel<String>  label;
+        private final IModel<String>  iconClass;
 
-        public DropdownMenuItem(String label, String iconClass) {
+        public DropdownMenuItem(IModel<String> label, IModel<String> iconClass) {
             this.label = label;
             this.iconClass = iconClass;
         }
 
-        public String getLabel() {
+        public IModel<String>  getLabel() {
             return label;
         }
 
-        public String getIconClass() {
+        public IModel<String>  getIconClass() {
             return iconClass;
         }
 
