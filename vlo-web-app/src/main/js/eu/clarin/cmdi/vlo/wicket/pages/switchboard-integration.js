@@ -16,7 +16,7 @@
  */
 
 const switchboardConfig = {
-    'preflightTimeout': 5000
+    'preflightTimeout': 10000
 };
 
 $(document).ready(function () {
@@ -43,7 +43,7 @@ function handleTestSwitchboardMatches(element, baseText, data) {
         text += ' (' + data.matches + ' matches)';
     }
 
-    console.log('Text: ', text);
+    console.debug('Preflight result text: ', text);
     element.text(text);
 }
 
