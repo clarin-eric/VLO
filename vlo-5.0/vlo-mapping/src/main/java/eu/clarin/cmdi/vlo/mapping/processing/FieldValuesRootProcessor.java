@@ -24,6 +24,7 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -50,7 +51,7 @@ public class FieldValuesRootProcessor extends FieldValuesProcessor {
     private List<? extends FieldValuesProcessor> processors;
 
     public FieldValuesRootProcessor() {
-        this(Collections.emptyList());
+        this(new ArrayList<>());
     }
     
     public FieldValuesRootProcessor(List<? extends FieldValuesProcessor> processors) {
