@@ -42,6 +42,7 @@ function handleTestSwitchboardMatches(element, baseText, data) {
     } else {
         text += ' (' + data.matches + ' matches)';
     }
+
     console.log('Text: ', text);
     element.text(text);
 }
@@ -50,17 +51,7 @@ function handleTestSwitchboardMatchesError(e) {
     console.error('testSwitchboardMatches: failed', e);
 }
 
-function switchboardPreflight(link, dropdownId) {
-    console.debug('switchboardPreflight', link, dropdownId);
-    const selector = dropdownId + ' a.resourceDropdownSwitchboardItem span';
-    const item = $(selector);
-    if (item.length === 0) {
-        console.error('Element not found: ', selector);
-        return;
-    }
-    const baseText = item.text();
-    console.debug('item base text:', baseText);
-
+function switchboardPreflight(link, item, baseText) {
     if (typeof testSwitchboardMatches === 'function') {
         testSwitchboardMatches([link])
                 .then(handleTestSwitchboardMatches.bind(null, item, baseText))
@@ -68,12 +59,29 @@ function switchboardPreflight(link, dropdownId) {
     } else {
         console.error('testSwitchboardMatches function not found');
     }
+}
 
+const baseTextMap = {};
+
+function getBaseText(id, element) {
+    if (baseTextMap[id] === undefined) {
+        baseTextMap[id] = element.text();
+    }
+    return baseTextMap[id];
 }
 
 function registerSwitchboardPreflight(uri, dropdownSelector) {
     console.debug('Registering switchboard preflight handler on dropdown shown event for ', dropdownSelector);
+
     $(document).on('shown.bs.dropdown', dropdownSelector, function () {
-        switchboardPreflight(uri, dropdownSelector);
+        console.debug('switchboardPreflight', uri, dropdownSelector);
+        const selector = dropdownSelector + ' a.resourceDropdownSwitchboardItem span';
+        const item = $(selector);
+        if (item.length === 0) {
+            console.error('Element not found: ', selector);
+            return;
+        }
+
+        switchboardPreflight(uri, item, getBaseText(dropdownSelector, item));
     });
 }
