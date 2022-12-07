@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Collection Registry integration example</title>
+
+    <!-- Bootstrap styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <!-- VCR integration script-->
+    <script src="./vcr-integration.js"></script>
+
+    <!-- Optional custom configuration -->
+    <script script type="text/javascript">
+        window.vcrIntegrationConfiguration = {
+            'endpointUrl': 'https://noop-collections.clarin.eu/submit/extensional', // submit will not work because of this
+            'maxItemCount': 2, // to demonstrate max queue size (default is 100)
+            'queueControlPosition': 'bottom-right' // could be moved to e.g. 'top-left'
+        };
+    </script>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <h1>VCR integration example</h1>
+            <h2>Resources</h2>
+
+            <div class="well">
+                <h3>Some resource</h3>
+                <pre>http://doi.org/10.5555/12345678</pre>
+                <a class="btn btn-primary" data-vcr-uri="http://doi.org/10.5555/12345678"
+                    data-vcr-label="Some resource">
+                    Add to virtual collection
+                </a>
+            </div>
+
+            <div class="well">
+                <h3>Other resource</h3>
+                <pre>https://tinyurl.com/my-resource</pre>
+                <a class="btn btn-primary" data-vcr-uri="https://tinyurl.com/my-resource"
+                    data-vcr-label="Some other resource" data-vcr-description="Optional description for the second resource">
+                    Add to virtual collection
+                </a>
+            </div>
+
+            <div class="well">
+                <h3>One more resource</h3>
+                <pre>https://github.com/clarin-eric/js-vcr-integration/</pre>
+                <a class="btn btn-primary" data-vcr-uri="https://github.com/clarin-eric/js-vcr-integration/"
+                    data-vcr-label="Final resource" data-vcr-description="Optional description for the third resource">
+                    Add to virtual collection
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

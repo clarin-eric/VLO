@@ -30,6 +30,7 @@ public class PiwikEventConstants {
     public static final String PIWIK_EVENT_CATEGORY_FACET = "Facet";
     public static final String PIWIK_EVENT_CATEGORY_RECORDPAGE = "RecordPageTab";
     public static final String PIWIK_EVENT_CATEGORY_LRS = "LRS";
+    public static final String PIWIK_EVENT_CATEGORY_VCR = "VCR";
     public static final String PIWIK_EVENT_CATEGORY_USER_SATISFACTION = "UserSatisfaction";
 
     //Actions
@@ -40,6 +41,7 @@ public class PiwikEventConstants {
     public static final String PIWIK_EVENT_ACTION_AVAILABILITY = "AvailabilitySelection";
     public static final String PIWIK_EVENT_ACTION_RECORDPAGE_TABSWITCH = "Switch";
     public static final String PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE = "ProcessResource";
+    public static final String PIWIK_EVENT_ACTION_VCR_ADD_TO_QUEUE = "AddToVcrQueue";
     public static final String PIWIK_EVENT_ACTION_HIERARCHY_UP = "HierarchyNavigateUp";
     public static final String PIWIK_EVENT_ACTION_HIERARCHY_CHILD = "HierarchyToggleChild";
 

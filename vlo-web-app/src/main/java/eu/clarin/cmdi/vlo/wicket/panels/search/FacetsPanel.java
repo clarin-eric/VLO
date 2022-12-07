@@ -72,6 +72,8 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
     private FacetConfigurationService facetsConfig;
     @SpringBean
     private FacetConditionEvaluationService facetConditionService;
+    @SpringBean
+    private JavaScriptResources javaScriptResources;
 
     private MapModel<String, ExpansionState> expansionModel;
     private IModel<Boolean> allFacetsShown = Model.of(false);
@@ -208,7 +210,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
     @Override
     public void renderHead(IHeaderResponse response) {
         // JQuery UI for tooltips
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getSyntaxHelpJS()));
     }
 
     protected abstract void selectionChanged(Optional<AjaxRequestTarget> target);

@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -81,6 +82,40 @@ public class PIDUtilsTest {
                     "hdl:123/456",
                     "http://hdl.handle.net/123/456",
                     "https://hdl.handle.net/123/456");
+
+    private final static List<String> ACTIONABLE_PIDS
+            = ImmutableList.of(
+                    "http://hdl.handle.net/123/456",
+                    "https://hdl.handle.net/123/456",
+                    "HTTP://hdl.HANDLE.net/123/456",
+                    "https://HDL.handle.NET/123/456",
+                    "http://doi.org/123/456",
+                    "https://doi.org/123/456",
+                    "https://DOI.ORG/123/456",
+                    "http://dx.doi.org/123/456",
+                    "https://dx.doi.org/123/456",
+                    "https://DX.doi.ORG/123/456",
+                    "http://urn.fi/urn:nbn:fi:lb-2017021504",
+                    "http://nbn-resolving.de/urn:nbn:de:kobv:b4-200905195090");
+
+    private final static List<String> NON_ACTIONABLE_PIDS
+            = ImmutableList.of(
+                    "hdl:123/456",
+                    "HDL:123/456",
+                    "doi:10.1038/nphys1170",
+                    "urn:nbn:de:bvb:19-146642");
+
+    private final static Iterable<String> ACTIONABLE
+            = Iterables.concat(ACTIONABLE_PIDS, ImmutableList.of(
+                    "https://wwww.clarin.eu",
+                    "http://wwww.clarin.eu"));
+
+    private final static List<String> INVALID // generally non-actionable or resolvable
+            = ImmutableList.of(
+                    "",
+                    "abcd",
+                    "http:",
+                    "//");
 
     /**
      * Test of isPid method, of class PIDUtils.
@@ -155,6 +190,22 @@ public class PIDUtilsTest {
         //negatives
         NOT_PIDS.forEach(h -> assertNull(PIDUtils.getSchemeSpecificId(h)));
         assertNull(PIDUtils.getSchemeSpecificId(null));
+    }
+
+    @Test
+    public void testIsActionable() {
+        ACTIONABLE.forEach(h -> assertTrue(PIDUtils.isActionableLink(h)));
+        NON_ACTIONABLE_PIDS.forEach(h -> assertFalse(PIDUtils.isActionableLink(h)));
+        INVALID.forEach(h -> assertFalse(PIDUtils.isActionableLink(h)));
+        ACTIONABLE.forEach(h -> assertFalse("input should be trimmed", PIDUtils.isActionableLink(" " + h + " ")));
+    }
+
+    @Test
+    public void testGetActionableLinkForPid() {
+        ACTIONABLE_PIDS.forEach(h -> assertEquals("actionable pids should not be changed", h, PIDUtils.getActionableLinkForPid(h)));
+        ACTIONABLE.forEach(h -> assertEquals("actionable links should not be changed", h, PIDUtils.getActionableLinkForPid(h)));
+        NON_ACTIONABLE_PIDS.forEach(h -> assertNotEquals("non-actionable PIDs should be changed into links", h, PIDUtils.getActionableLinkForPid(h)));
+        INVALID.forEach(h -> assertEquals("invalid links should not be changed", h, PIDUtils.getActionableLinkForPid(h)));
     }
 
 }

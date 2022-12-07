@@ -101,8 +101,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <span class="fa fa-sitemap"></span>
                     </span>
                     <div><span class="badge"><wicket:message key="textLinkedRecords">[Linked records]</wicket:message></span></div>
+                    <div><span class="badge"><wicket:container wicket:id="resourcesCount">[N children]</wicket:container></span></div>
                 </a>
             </div>
+
+            <wicket:enclosure>
+                <div class="panel panel-default resource-info">
+                    <a href="#" wicket:id="addToVcrQueueLink" class="resourcelink" title="Queue this record for submission to a Virtual Collection">
+                        <span><span class="badge badge-info"><span class="glyphicon glyphicon-plus-sign"></span> VCR</span></span>
+                        Add this record to the Virtual Collection submission queue
+                    </a>
+                </div>
+            </wicket:enclosure>
 
         </wicket:panel>
     </body>

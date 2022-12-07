@@ -43,6 +43,10 @@ public abstract class CMDIDataBaseImpl<T> implements CMDIData<T> {
      * The unique identifier of the cmdi file.
      */
     protected String id;
+    /**
+     * Profile identifier
+     */
+    protected String profileId;
     // Lists for different types of resources.
     protected final List<Resource> metaDataResources = new ArrayList<>();
     protected final List<Resource> dataResources = new ArrayList<>();
@@ -53,7 +57,6 @@ public abstract class CMDIDataBaseImpl<T> implements CMDIData<T> {
     public CMDIDataBaseImpl(FieldNameService fieldNameService) {
         this.fieldNameService = fieldNameService;
     }
-
 
     @Override
     public List<Resource> getDataResources() {
@@ -145,6 +148,16 @@ public abstract class CMDIDataBaseImpl<T> implements CMDIData<T> {
     @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public String getProfileId() {
+        return profileId;
+    }
+
+    @Override
+    public void setProfileId(String profileId) {
+        this.profileId = profileId;
     }
 
 }

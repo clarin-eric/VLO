@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>        
+        <Console name="Stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %p [%c{1}#%M:%L] - %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Stdout"/>
+        </Root>
+    </Loggers>
+</Configuration>

@@ -21,8 +21,8 @@ import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.Assert.*;
 
 /**
@@ -36,7 +36,7 @@ public class AvailabilityPostFilterTest {
     final TargetFacet availabilityTargetFacet = new TargetFacet(new FacetDefinition(null, "availability"), null);
     final TargetFacet licenseType = new TargetFacet(new FacetDefinition(null, "licenseType"), null);
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new AvailabilityPostFilter("availability", "licenseType");
     }

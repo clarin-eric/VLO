@@ -22,19 +22,18 @@ import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
+import eu.clarin.cmdi.vlo.wicket.UpdateVcrIntegrationOnDomReadyBehavior;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import eu.clarin.cmdi.vlo.wicket.model.SearchResultExpansionStateModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -150,6 +149,8 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
             navigatorTop.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
             navigatorBottom.add(AjaxPiwikTrackingBehavior.newPageViewTrackingBehavior(PiwikEventConstants.PIWIK_PAGEVIEW_SEARCH));
         }
+        
+        add(new UpdateVcrIntegrationOnDomReadyBehavior());
     }
 
     public void resetExpansion() {
@@ -183,7 +184,6 @@ public class SearchResultsPanel extends GenericPanel<QueryFacetsSelection> {
     }
 
     protected void onAjaxSearchPagination(AjaxRequestTarget target) {
-
     }
 
 }

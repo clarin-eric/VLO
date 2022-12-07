@@ -95,6 +95,14 @@
     border-bottom: 1px solid #ccc;
     padding-bottom: 1em;
 
+    h3 a:hover {
+        text-decoration: none;
+
+        .searchresultitemtitle {
+            text-decoration: underline;
+        }
+    }
+
     .search-result-collection-label {
         margin-top: -(@line-height-computed / 2) + 2;
         margin-bottom: (@line-height-computed / 2) - 2;
@@ -172,7 +180,7 @@
             background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
 
             /* mixin from vlo-license-icons.less */
-            .license-icon-classes(); 
+            .license-icon-classes();
         }
     }
 
@@ -229,6 +237,25 @@
         .search-result-landing-page-link-location {
             font-style: italic;
         }
+    }
+
+
+
+    a.badge, a > .badge {
+        &:hover {
+            background: lighten(@badge-bg, 25%);
+        }
+
+        &[disabled] {
+            opacity: .2;
+            &:hover {
+                cursor: not-allowed;
+            }
+        }
+    }
+
+    .add-to-vcr-badge {
+
     }
 
 }
@@ -307,7 +334,7 @@ a.create-virtual-collection.disabled {
     #temporalCoverageBoundInputs {
         margin-bottom: .5em;
     }
-} 
+}
 
 /*******************
 /* SEARCH WORDS HIGHLIGHTING

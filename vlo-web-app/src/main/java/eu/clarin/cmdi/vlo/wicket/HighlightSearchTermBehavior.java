@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.JavaScriptResources;
+import eu.clarin.cmdi.vlo.VloWicketApplication;
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -40,7 +41,7 @@ public class HighlightSearchTermBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         // include highlight script
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getHighlightJS()));
+        response.render(JavaScriptHeaderItem.forReference(VloWicketApplication.get().getJavaScriptResources().getHighlightJS()));
 
         final String words = getWordList(component);
         if (!Strings.isEmpty(words)) {

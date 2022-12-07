@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-statistics</artifactId>
-    <version>4.11-SNAPSHOT</version>
+    <version>4.12-SNAPSHOT</version>
     <name>VLO Report Generator</name>
     
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.11-SNAPSHOT</version>
+        <version>4.12-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -45,7 +45,7 @@
             <!-- don't create jar, leave this to maven-assembly-->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.2</version>
                 <executions>
                     <execution>
                         <id>default-jar</id>

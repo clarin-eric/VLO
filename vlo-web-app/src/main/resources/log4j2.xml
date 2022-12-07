@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>        
+        <RollingFile
+            name="File"
+            fileName="${sys:catalina.base}/logs/vlo.log"
+            filePattern="${sys:catalina.base}/logs/vlo.%i.log.gz"
+            ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d %p [%c#%M:%L] - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="5" />
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %p [%c#%M:%L] - %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.apache.wicket" level="info" />
+        <Logger name="eu.clarin.cmdi.vlo" level="${vlo.logging.level}" />
+        <Root level="info">
+            <AppenderRef ref="${log4j.appender}"/>
+        </Root>
+    </Loggers>
+</Configuration>

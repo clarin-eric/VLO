@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class ValueMappingFactoryTest {
     private FacetConceptMapping conceptMapping;
     
-    @Before
+    @BeforeEach
     public void init() {
         this.conceptMapping = new VLOMarshaller().getFacetConceptMapping(ImporterTestcase.getTestFacetConceptFilePath());
     }

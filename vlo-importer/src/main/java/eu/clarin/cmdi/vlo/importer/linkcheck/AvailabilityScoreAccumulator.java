@@ -17,7 +17,6 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import com.google.common.base.Predicates;
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import java.util.Collection;
 import java.util.Map;
@@ -31,10 +30,10 @@ import java.util.stream.Stream;
  */
 public class AvailabilityScoreAccumulator {
 
-    public ResourceAvailabilityScore calculateAvailabilityScore(Map<?, CheckedLink> linkStatusMap, int allResourcesCount) {
+    public ResourceAvailabilityScore calculateAvailabilityScore(Map<?, LinkStatus> linkStatusMap, int allResourcesCount) {
         final Supplier<Stream<Integer>> knownStatusStreamProvider
                 = () -> linkStatusMap.values().stream()
-                        .map(CheckedLink::getStatus)
+                        .map(LinkStatus::getStatus)
                         .filter((status) -> (status != null && status > 0));
 
         if (!knownStatusStreamProvider.get().findAny().isPresent()) {

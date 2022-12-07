@@ -28,7 +28,6 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.commons.io.FilenameUtils;

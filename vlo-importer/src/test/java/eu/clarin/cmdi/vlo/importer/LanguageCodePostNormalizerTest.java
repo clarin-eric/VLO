@@ -6,12 +6,12 @@ import eu.clarin.cmdi.vlo.importer.normalizer.LanguageCodePostNormalizer;
 
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class LanguageCodePostNormalizerTest extends ImporterTestcase {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
 
         // read the configuration from the packaged configuration file

@@ -53,6 +53,9 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
     private AutoCompleteService autoCompleteDao;
     @SpringBean
     private PiwikConfig piwikConfig;
+    @SpringBean
+    private JavaScriptResources javaScriptResources;
+    
     private final IModel<Long> recordCountModel;
 
     //private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
@@ -139,7 +142,7 @@ public abstract class SearchFormPanel extends GenericPanel<QueryFacetsSelection>
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSyntaxHelpJS()));
-        response.render(JavaScriptHeaderItem.forReference(JavaScriptResources.getSearchFormJS()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getSyntaxHelpJS()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getSearchFormJS()));
     }
 }

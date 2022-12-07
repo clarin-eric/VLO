@@ -96,8 +96,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
     /**
      * @param cmdiData representation of the CMDI document
      * @param nav VTD Navigator
-     * @param facetMapping A Map of facet-names (key)/ FacetDefinition
- (value)
+     * @param facetMapping A Map of facet-names (key)/ FacetDefinition (value)
      * @return A map of FacetConfigurations/Lists of ValueSets
      * @throws VTDException
      * @throws URISyntaxException
@@ -179,7 +178,12 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      */
     private boolean matchPattern(CMDIData cmdiData, FacetValuesMap facetValuesMap, VTDNav nav, FacetDefinition facetConfig, Pattern pattern) throws VTDException, URISyntaxException, UnsupportedEncodingException {
         final AutoPilot ap = new AutoPilot(nav);
-        SchemaParsingUtil.setNameSpace(ap, SchemaParsingUtil.extractXsd(nav));
+        String profileId = cmdiData.getProfileId();
+        if (profileId == null) {
+            profileId = SchemaParsingUtil.extractXsd(nav, cmdiData.getId());
+        }
+
+        SchemaParsingUtil.setNameSpace(ap, profileId);
         ap.selectXPath(pattern.getPattern());
 
         int index = ap.evalXPath();
@@ -267,8 +271,8 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param facetValuesMap A map of FacetConfigurations (key)/Lists of
      * ValueSets (value)
      * @param vtdIndex VTD Navigator
-     * @param facetConfig FacetDefinition of the origin facet (which might
- lead to different target facets)
+     * @param facetConfig FacetDefinition of the origin facet (which might lead
+     * to different target facets)
      * @param valueLanguagePair Value/language Pair
      * @param isDerived Is derived facet
      */

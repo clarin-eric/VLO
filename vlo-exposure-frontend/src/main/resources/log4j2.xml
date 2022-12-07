@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>        
+        <RollingFile
+            name="File"
+            fileName="${sys:catalina.base}/logs/vlo-exposure-frontend.log"
+            filePattern="${sys:catalina.base}/logs/vlo-exposure-frontend.%i.log.gz"
+            ignoreExceptions="false">
+            <PatternLayout>
+                <Pattern>%d %p [%c#%M:%L] - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="25MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" />
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %p [%c#%M:%L] - %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="eu.clarin.cmdi.vlo" 
+                level="${vlo.logging.level}" />
+        <Logger name="org.apache.wicket" 
+                level="info" />
+        <Logger name="org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer"
+                level="error" />
+        <Root level="info">
+            <AppenderRef ref="${log4j.appender}"/>
+        </Root>
+    </Loggers>
+</Configuration>

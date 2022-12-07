@@ -16,18 +16,22 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.historyapi.HistoryApiAjaxRequestTargetListener;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.pages.VloBasePage;
+import java.util.Map;
 import org.apache.wicket.request.resource.ContextRelativeResourceReference;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.apache.wicket.resource.TextTemplateResourceReference;
 
 /**
  *
  * @author twagoo
  */
-public final class JavaScriptResources {
+public class JavaScriptResources {
 
     private final static ResourceReference BOOTSTRAP = new ContextRelativeResourceReference("script/bootstrap.js"); //bootstrap scripts are extracted from CLARIN's base style bootstrap package
     private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "jquery.highlight.js");
@@ -41,24 +45,43 @@ public final class JavaScriptResources {
     private final static JavaScriptResourceReference FIELDS_TABLE = new JavaScriptResourceReference(RecordPage.class, "vlo-fields-table.js");
     private final static JavaScriptResourceReference HISTORY_API = new JavaScriptResourceReference(HistoryApiAjaxRequestTargetListener.class, "vlo-historyapi.js");
 
+    private final static ResourceReference VCR_PLUGIN_JS = new ContextRelativeResourceReference("assets/vcr-plugin/dist/vcr-integration.js", false);
+
     private final static ResourceReference BOOTSTRAP_TOC = new ContextRelativeResourceReference("assets/bootstrap-toc/bootstrap-toc.js");
     private final static ResourceReference BOOTSTRAP_TOUR = new ContextRelativeResourceReference("assets/bootstrap-tour/bootstrap-tourist.js", false);
 
     private final static ResourceReference CLIPBOARD_JS = new ContextRelativeResourceReference("assets/clipboardjs/dist/clipboard.js");
 
-    public static ResourceReference getBootstrapJS() {
+    private Map<String, Object> configMap;
+
+    public JavaScriptResources() {
+
+    }
+
+    public JavaScriptResources(VloConfig config) {
+        this.setConfig(config);
+    }
+
+    public final void setConfig(VloConfig config) {
+        //TODO: is there a nicer way to turn the entire configuration object into a Map<String,Object> ??
+        configMap = ImmutableMap.<String, Object>builder()
+                .put("vcrSubmitEndpoint", config.getVcrSubmitEndpoint())
+                .build();
+    }
+
+    public ResourceReference getBootstrapJS() {
         return BOOTSTRAP;
     }
 
-    public static JavaScriptResourceReference getVloFrontJS() {
+    public JavaScriptResourceReference getVloFrontJS() {
         return VLO_FRONT;
     }
 
-    public static JavaScriptResourceReference getVloHeaderJS() {
+    public JavaScriptResourceReference getVloHeaderJS() {
         return VLO_HEADER;
     }
 
-    public static JavaScriptResourceReference getHistoryApiJS() {
+    public JavaScriptResourceReference getHistoryApiJS() {
         return HISTORY_API;
     }
 
@@ -66,36 +89,45 @@ public final class JavaScriptResources {
         return VLO_FACETS;
     }
 
-    public static JavaScriptResourceReference getHighlightJS() {
+    public JavaScriptResourceReference getHighlightJS() {
         return HIGHLIGHT;
     }
 
-    public static JavaScriptResourceReference getSyntaxHelpJS() {
+    public JavaScriptResourceReference getSyntaxHelpJS() {
         return VLO_SYNTAX_HELP;
     }
 
-    public static JavaScriptResourceReference getSearchFormJS() {
+    public JavaScriptResourceReference getSearchFormJS() {
         return SEARCH;
     }
 
-    public static JavaScriptResourceReference getVloClipboardJS() {
+    public JavaScriptResourceReference getVloClipboardJS() {
         return VLO_CLIPBOARD;
     }
 
-    public static ResourceReference getFieldsTableJS() {
+    public ResourceReference getFieldsTableJS() {
         return FIELDS_TABLE;
     }
 
-    public static ResourceReference getBootstrapToc() {
+    public ResourceReference getVcrPluginConfigJS() {
+        return new TextTemplateResourceReference(VloBasePage.class, "vcr-integration-config.js", "text/javascript", "UTF-8", () -> {
+            return configMap;
+        });
+    }
+
+    public ResourceReference getVcrPluginJS() {
+        return VCR_PLUGIN_JS;
+    }
+
+    public ResourceReference getBootstrapToc() {
         return BOOTSTRAP_TOC;
     }
 
-    public static ResourceReference getBootstrapTour() {
+    public ResourceReference getBootstrapTour() {
         return BOOTSTRAP_TOUR;
     }
 
-    public static ResourceReference getClipBoardJS() {
+    public ResourceReference getClipBoardJS() {
         return CLIPBOARD_JS;
     }
-
 }

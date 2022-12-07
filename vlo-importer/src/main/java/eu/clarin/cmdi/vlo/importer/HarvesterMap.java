@@ -20,6 +20,7 @@ import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+import com.opencsv.exceptions.CsvException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -68,8 +69,8 @@ public class HarvesterMap {
                     LOG.info("Ignoring mapping line {}", Arrays.toString(lineArray));
                 }
             }
-        } catch (IOException ioe) {
-            LOG.error("Error when trying to read from harvester mapping file: {}.", ioe.getMessage());
+        } catch (IOException | CsvException ex) {
+            LOG.error("Error when trying to read from harvester mapping file", ex);
         }
 
         LOG.info("...found {} mappings.", endpointDescriptionMap.keySet().size());

@@ -8,6 +8,7 @@ DOCKER_PROJECT_PATH="${SRC_BASE_DIR}/docker-vlo"
 COMPOSE_PROJECT_PATH="${SRC_BASE_DIR}/compose_vlo/compose_vlo"
 CI_URL="https://app.travis-ci.com/github/clarin-eric/VLO/builds"
 DOCKER_CI_URL="https://gitlab.com/CLARIN-ERIC/docker-vlo-beta/pipelines"
+COMPOSE_CI_URL="https://gitlab.com/CLARIN-ERIC/compose_vlo/pipelines"
 
 VLO_NEW_VERSION=""
 IMAGE_NEW_VERSION=""
@@ -136,7 +137,7 @@ press_key_to_continue() {
 	echo "Existing tags for VLO ${VLO_NEW_VERSION}:"
 	git --no-pager tag --list 'vlo-'${VLO_NEW_VERSION}'*'
 
-	DOCKER_TARGET_VERSION_DEFAULT="vlo-${VLO_NEW_VERSION}-1"
+	DOCKER_TARGET_VERSION_DEFAULT="${VLO_NEW_VERSION}_1.0.0"
 	echo -n "Docker image version to release? [${DOCKER_TARGET_VERSION_DEFAULT}]"
 	read DOCKER_TARGET_VERSION
 	if [ "${DOCKER_TARGET_VERSION}" = "" ]; then
@@ -225,6 +226,7 @@ press_key_to_continue() {
 	git commit -m "VLO image version to ${IMAGE_NEW_VERSION}" "${COMPOSE_FILE}"
 	git push origin "${COMPOSE_RELEASE_BRANCH}"
 
+	echo "Check CI output before continuing! (${COMPOSE_CI_URL})"
 	ask_confirm_abort "Continue to tag?"
 	
 	# tag and push
@@ -232,6 +234,7 @@ press_key_to_continue() {
 	git push origin "${COMPOSE_TARGET_VERSION}"
 	
 	# merge if user wants to
+	echo "Check CI output before continuing! (${COMPOSE_CI_URL})"
 	if ask_confirm "Merge into '${COMPOSE_CURRENT_BRANCH}' branch?"; then
 		git checkout "${COMPOSE_CURRENT_BRANCH}"
 		git merge "${COMPOSE_RELEASE_BRANCH}"

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>        
+        <Console name="Stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %5p [%15.15t] [%c{1}#%M:%L] - %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="eu.clarin.cmdi.vlo" 
+                level="DEBUG" />
+        <Logger name="org.springframework" 
+                level="error" />
+        <Logger name="org.apache.solr.client.solrj.impl.StreamingUpdateSolrServer"
+                level="error" />
+        <Root level="info">
+            <AppenderRef ref="Stdout"/>
+        </Root>
+    </Loggers>
+</Configuration>

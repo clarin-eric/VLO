@@ -55,18 +55,21 @@ public class CMDIParserVTDXML<T> implements CMDIDataProcessor<T> {
     public CMDIData<T> process(File file, ResourceStructureGraph resourceStructureGraph) throws CMDIParsingException, VTDException, IOException, URISyntaxException {
         final CMDIData<T> cmdiData = cmdiDataFactory.newCMDIDataInstance();
         final VTDGen vg = new VTDGen();
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
+        try ( FileInputStream fileInputStream = new FileInputStream(file)) {
             vg.setDoc(IOUtils.toByteArray(fileInputStream));
             vg.parse(true);
         }
 
         final VTDNav nav = vg.getNav();
-        final String profileId = SchemaParsingUtil.extractXsd(nav);
+        final String profileId = SchemaParsingUtil.extractXsd(nav, file.getAbsolutePath());
         final FacetsMapping facetMapping = getFacetMapping(nav.cloneNav(), profileId);
 
         // CMDI profile information
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE_ID), profileId, true);
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), profileNameExtractor.process(profileId), true);
+        if (profileId != null) {
+            cmdiData.setProfileId(profileId);
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE_ID), profileId, true);
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.CLARIN_PROFILE), profileNameExtractor.process(profileId), true);
+        }
 
         if (facetMapping.getFacetDefinitions().isEmpty()) {
             LOG.error("Problems mapping facets for file: {}", file.getAbsolutePath());

@@ -16,9 +16,7 @@ import eu.clarin.cmdi.vlo.exposure.models.PageView;
 import eu.clarin.cmdi.vlo.exposure.models.SearchQuery;
 import eu.clarin.cmdi.vlo.exposure.models.SearchResult;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.List;
@@ -27,7 +25,9 @@ import java.util.ArrayList;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import com.opentable.db.postgres.junit.EmbeddedPostgresRules;
 import com.opentable.db.postgres.junit.PreparedDbRule;
+import org.junit.Ignore;
 
+@Ignore
 public class ExposureTest {
     private final static Logger logger = LoggerFactory.getLogger(ExposureTest.class);
     private EmbeddedPostgres pg = null;

@@ -19,14 +19,18 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 import eu.clarin.cmdi.vlo.wicket.LandingPageShortLinkLabelConverter;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
+import eu.clarin.cmdi.vlo.wicket.AddToVcrQueueButtonBehavior;
+import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermScriptFactory;
 import eu.clarin.cmdi.vlo.wicket.components.FacetSelectLink;
@@ -35,13 +39,17 @@ import eu.clarin.cmdi.vlo.wicket.components.ResourceAvailabilityWarningBadge;
 import eu.clarin.cmdi.vlo.wicket.components.ResourceTypeIcon;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.components.SolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.ActionableLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.PIDLinkModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.RecordPage;
 import eu.clarin.cmdi.vlo.wicket.model.IsPidModel;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
+import eu.clarin.cmdi.vlo.wicket.model.RecordMetadataLinksCountModel;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
+import eu.clarin.cmdi.vlo.wicket.model.TruncatingStringModel;
 import eu.clarin.cmdi.vlo.wicket.provider.ResouceTypeCountDataProvider;
 import java.util.Collection;
 import java.util.Optional;
@@ -49,6 +57,7 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxFallbackLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -78,6 +87,8 @@ public class SearchResultItemPanel extends Panel {
 
     @SpringBean
     private VloConfig config;
+    @SpringBean
+    private PiwikConfig piwikConfig;
     @SpringBean
     private ResourceTypeCountingService countingService;
     @SpringBean
@@ -109,8 +120,14 @@ public class SearchResultItemPanel extends Panel {
         this.selectionModel = selectionModel;
         this.documentModel = new PropertyModel<>(documentExpansionPairModel, "document");
 
+        // part count model to determine whether a record is a collection record
+        final RecordMetadataLinksCountModel recordMetadataLinksCountModel = new RecordMetadataLinksCountModel(documentModel);
+
         add(new RecordPageLink("recordLink", documentModel, selectionModel)
                 .add(new SingleValueSolrFieldLabel("title", documentModel, fieldNameService.getFieldName(FieldKey.NAME), new StringResourceModel("searchpage.unnamedrecord", this)))
+                // add icon to title for collection records
+                .add(new WebMarkupContainer("titleCollectionRecordIcon")
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> recordMetadataLinksCountModel.getObject() > 0)))
         );
 
         add(new FacetSelectLink("searchResultCollectionLink", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.COLLECTION)), Model.of(fieldNameService.getFieldName(FieldKey.COLLECTION)))
@@ -139,8 +156,6 @@ public class SearchResultItemPanel extends Panel {
         final SolrFieldModel<String> resourcesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE));
         // wrap with a count provider
         final ResouceTypeCountDataProvider countProvider = new ResouceTypeCountDataProvider(resourcesModel, countingService);
-        // part count model to determine whether a record is a collection record
-        final SolrFieldModel<String> partCountModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.HAS_PART_COUNT));
 
         final SolrFieldModel<Integer> resourceAvailabilityScoreModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE));
         final IModel<Boolean> resourceAvailabilityWarningModel = new LoadableDetachableModel<Boolean>() {
@@ -183,27 +198,17 @@ public class SearchResultItemPanel extends Panel {
                 .add(new ResourceCountDataView("resourceCount", countProvider))
                 //badge for collection records
                 .add(new WebMarkupContainer("collectionRecord")
-                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION))
                         // collection, go to hierarchy instead of records
+                        .add(new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.HIERARCHY_SECTION)
+                                .add(new Label("hierarchyChildrenCountLabel", recordMetadataLinksCountModel))
+                                .add(new AttributeModifier("title", new StringResourceModel("searchresult.hierarchy.badgetitle", recordMetadataLinksCountModel))))
                         //badge for records without resources (resource count data view will not yield any badges)
-                        .add(new Behavior() {
-                            @Override
-                            public void onConfigure(Component component) {
-                                component.setVisible(partCountModel.getObject() != null);
-                            }
-
-                        })
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> recordMetadataLinksCountModel.getObject() > 0))
                 )
                 //badge for record with no resources
                 .add(new WebMarkupContainer("noResources")
                         .add(new RecordPageLink("recordLink", documentModel, selectionModel)) //initial tab *not* resources as there are none...
-                        .add(new Behavior() {
-                            @Override
-                            public void onConfigure(Component component) {
-                                component.setVisible(countProvider.size() == 0 && partCountModel.getObject() == null);
-                            }
-
-                        })
+                        .add(BooleanVisibilityBehavior.visibleOnTrue(() -> countProvider.size() == 0 && recordMetadataLinksCountModel.getObject() <= 0))
                 )
                 //badge for availability warning
                 .add(new WebMarkupContainer("availabilityWarning")
@@ -214,6 +219,8 @@ public class SearchResultItemPanel extends Panel {
         );
 
         add(new SearchResultItemLicensePanel("licenseInfo", documentModel, selectionModel, availabilityOrdering));
+        add(createAddToVcrQueueLink("addToVcrQueueLink")
+        );
 
         add(new WebMarkupContainer("scoreContainer")
                 .add(new Label("score", new SolrFieldStringModel(documentModel, fieldNameService.getFieldName(FieldKey.SOLR_SCORE))))
@@ -225,6 +232,27 @@ public class SearchResultItemPanel extends Panel {
         add(createLandingPageLinkContainer("landingPageLinkContainer", documentModel));
 
         setOutputMarkupId(true);
+    }
+
+    private Component createAddToVcrQueueLink(String id) {
+        final Component link
+                = new WebMarkupContainer(id)
+                        .add(new AddToVcrQueueButtonBehavior(documentModel));
+        if (piwikConfig.isEnabled()) {
+            final AjaxPiwikTrackingBehavior.EventTrackingBehavior eventBehavior = new AjaxPiwikTrackingBehavior.EventTrackingBehavior("click", PiwikEventConstants.PIWIK_EVENT_CATEGORY_VCR, PiwikEventConstants.PIWIK_EVENT_ACTION_VCR_ADD_TO_QUEUE) {
+                @Override
+                protected String getName(AjaxRequestTarget target) {
+                    return "SearchResultItem";
+                }
+
+                @Override
+                protected String getValue(AjaxRequestTarget target) {
+                    return String.valueOf(documentModel.getObject().getFieldValue(fieldNameService.getFieldName(FieldKey.SELF_LINK)));
+                }
+            };
+            link.add(eventBehavior);
+        }
+        return link;
     }
 
     private Link createExpansionStateToggle(String id) {
@@ -345,7 +373,7 @@ public class SearchResultItemPanel extends Panel {
             final Link resourceLink = new RecordPageLink("recordLink", documentModel, selectionModel, RecordPage.RESOURCES_SECTION);
             item.add(resourceLink
                     .add(new Label("resourceCountLabel", new PropertyModel<String>(item.getModel(), "count")))
-                    .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<String>(item.getModel(), "resourceType")))
+                    .add(new ResourceTypeIcon("resourceTypeIcon", new PropertyModel<>(item.getModel(), "resourceType")))
                     .add(new AttributeModifier("title", getResourceCountModel(item.getModel())))
             );
         }

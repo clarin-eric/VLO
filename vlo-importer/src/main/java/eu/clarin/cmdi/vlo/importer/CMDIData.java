@@ -102,5 +102,9 @@ public interface CMDIData<T> extends DocFieldContainer {
     Collection<Object> getFieldValues(String name);
 
     void setId(String id);
+
+    public void setProfileId(String profileId);
+    
+    public String getProfileId();
     
 }
