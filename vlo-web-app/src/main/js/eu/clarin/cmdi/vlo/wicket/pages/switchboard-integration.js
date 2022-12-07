@@ -15,6 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+const preflightResultsCache = {};
+
 const switchboardConfig = {
     'preflightTimeout': 10000
 };
@@ -28,7 +31,7 @@ $(document).ready(function () {
     }
 });
 
-function handleTestSwitchboardMatches(element, baseText, data) {
+function handleTestSwitchboardMatches(element, link, baseText, data) {
     if (data.timeout) {
         console.error('testSwitchboardMatches: timeout');
         return;
@@ -44,7 +47,10 @@ function handleTestSwitchboardMatches(element, baseText, data) {
     }
 
     console.debug('Preflight result text: ', text);
+    // update item text
     element.text(text);
+    // cache the result
+    preflightResultsCache[link] = text;
 }
 
 function handleTestSwitchboardMatchesError(e) {
@@ -52,22 +58,18 @@ function handleTestSwitchboardMatchesError(e) {
 }
 
 function switchboardPreflight(link, item, baseText) {
-    if (typeof testSwitchboardMatches === 'function') {
-        testSwitchboardMatches([link])
-                .then(handleTestSwitchboardMatches.bind(null, item, baseText))
-                .catch(handleTestSwitchboardMatchesError);
+    if (preflightResultsCache[link] === undefined) {
+        if (typeof testSwitchboardMatches === 'function') {
+            testSwitchboardMatches([link])
+                    .then(handleTestSwitchboardMatches.bind(null, item, link, baseText))
+                    .catch(handleTestSwitchboardMatchesError);
+        } else {
+            console.error('testSwitchboardMatches function not found');
+        }
     } else {
-        console.error('testSwitchboardMatches function not found');
+        console.debug('From cache: ', preflightResultsCache);
+        item.text(preflightResultsCache[link]);
     }
-}
-
-const baseTextMap = {};
-
-function getBaseText(id, element) {
-    if (baseTextMap[id] === undefined) {
-        baseTextMap[id] = element.text();
-    }
-    return baseTextMap[id];
 }
 
 function registerSwitchboardPreflight(uri, dropdownSelector) {
@@ -82,6 +84,6 @@ function registerSwitchboardPreflight(uri, dropdownSelector) {
             return;
         }
 
-        switchboardPreflight(uri, item, getBaseText(dropdownSelector, item));
+        switchboardPreflight(uri, item, item.text());
     });
 }
