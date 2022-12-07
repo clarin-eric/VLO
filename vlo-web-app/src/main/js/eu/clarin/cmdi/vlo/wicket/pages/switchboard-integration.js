@@ -15,23 +15,32 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+const switchboardConfig = {
+    'preflightTimeout': 5000
+};
 
-function handleTestSwitchboardMatches(data) {
+$(document).ready(function () {
+    if (typeof setSwitchboardConfig === 'function') {
+        console.debug('switchboardConfig: ', switchboardConfig);
+        setSwitchboardConfig(switchboardConfig);
+    } else {
+        console.warn("Could not configure switchboard, 'setSwitchboardConfig' function not found");
+    }
+});
+
+function handleTestSwitchboardMatches(element, baseText, data) {
     if (data.timeout) {
         console.error('testSwitchboardMatches: timeout');
         return;
     }
-    console.log('testSwitchboardMatches: data retrieved', data);
-    const element = $('.resourceDropdownSwitchboardItem a span', dropDown);
-//            if (data.matches === 0)
-//                element.setAttribute('class', 'disabled');
-    let text = 'Process with Switchboard ';
+    console.debug('testSwitchboardMatches: data retrieved', data);
+    let text = baseText;
     if (data.matches === 0) {
-        text += '(no matches)';
+        text += ' (no matches)';
     } else if (data.matches === 1) {
-        text += '(one match)';
+        text += ' (one match)';
     } else {
-        text += `(${data.matches} matches)`;
+        text += ' (' + data.matches + ' matches)';
     }
     console.log('Text: ', text);
     element.text(text);
@@ -43,19 +52,28 @@ function handleTestSwitchboardMatchesError(e) {
 
 function switchboardPreflight(link, dropdownId) {
     console.debug('switchboardPreflight', link, dropdownId);
-
-    const dropDown = $(dropdownId);
-    if (dropDown.length === 0) {
-        console.error('Element not found: ', dropdownId);
+    const selector = dropdownId + ' a.resourceDropdownSwitchboardItem span';
+    const item = $(selector);
+    if (item.length === 0) {
+        console.error('Element not found: ', selector);
         return;
     }
+    const baseText = item.text();
+    console.debug('item base text:', baseText);
 
     if (typeof testSwitchboardMatches === 'function') {
         testSwitchboardMatches([link])
-                .then(handleTestSwitchboardMatches)
+                .then(handleTestSwitchboardMatches.bind(null, item, baseText))
                 .catch(handleTestSwitchboardMatchesError);
     } else {
         console.error('testSwitchboardMatches function not found');
     }
 
+}
+
+function registerSwitchboardPreflight(uri, dropdownSelector) {
+    console.debug('Registering switchboard preflight handler on dropdown shown event for ', dropdownSelector);
+    $(document).on('shown.bs.dropdown', dropdownSelector, function () {
+        switchboardPreflight(uri, dropdownSelector);
+    });
 }

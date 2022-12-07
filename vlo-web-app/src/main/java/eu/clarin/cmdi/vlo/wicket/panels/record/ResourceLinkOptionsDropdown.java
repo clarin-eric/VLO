@@ -98,13 +98,11 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
             @Override
             public void renderHead(Component component, IHeaderResponse response) {
                 response.render(JavaScriptReferenceHeaderItem.forReference(JavaScriptResources.getSwitchboardIntegrationJs()));
-                response.render(JavaScriptHeaderItem.forScript(String.format("$(document).on('shown.bs.dropdown', '#%s',", JavaScriptUtils.javaScriptEscape(component.getMarkupId()))
-                        + "    function() {"
-                        + String.format(
-                                " switchboardPreflight('%s', '#%s');",
+                response.render(JavaScriptHeaderItem.forScript(
+                        String.format("if (typeof registerSwitchboardPreflight === 'function') { registerSwitchboardPreflight('%s',  '#%s'); } else { console.warn('registerSwitchboardPreflight function not found'); }",
                                 JavaScriptUtils.javaScriptEscape(resourceInfoModel.getObject().getHref()),
-                                JavaScriptUtils.javaScriptEscape(component.getMarkupId()))
-                        + "    });", "onLinkDropdownShown" + component.getMarkupId()));
+                                JavaScriptUtils.javaScriptEscape(component.getMarkupId())),
+                        "onLinkDropdownShown" + component.getMarkupId()));
             }
 
         });
