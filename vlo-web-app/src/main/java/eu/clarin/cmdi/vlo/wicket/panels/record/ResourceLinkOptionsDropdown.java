@@ -94,18 +94,8 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
 
         setModel(new ListModel<>(optionsBuilder.build()));
 
-        add(new Behavior() {
-            @Override
-            public void renderHead(Component component, IHeaderResponse response) {
-                response.render(JavaScriptReferenceHeaderItem.forReference(JavaScriptResources.getSwitchboardIntegrationJs()));
-                response.render(JavaScriptHeaderItem.forScript(
-                        String.format("registerSwitchboardPreflight('%s',  '#%s');",
-                                JavaScriptUtils.javaScriptEscape(resourceInfoModel.getObject().getHref()),
-                                JavaScriptUtils.javaScriptEscape(component.getMarkupId())),
-                        "onLinkDropdownShown" + component.getMarkupId()));
-            }
-
-        });
+        // switchboard preflight
+        add(new SwitchboardDropdownItemPreflightBehavior(resourceInfoModel.map(ResourceInfo::getHref)));
 
         super.onInitialize();
     }
@@ -217,6 +207,53 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         documentModel.detach();
         resourceInfoModel.detach();
         linkModel.detach();
+    }
+
+    /**
+     * Behaviour that registers a Switchboard preflight action on a resource
+     * link options dropdown menu.
+     * 
+     * @see <a href="https://github.com/clarin-eric/switchboard-doc/blob/master/documentation/IntegrationProvider.md">Switchboard integration documentation</a>
+     */
+    private static class SwitchboardDropdownItemPreflightBehavior extends Behavior {
+
+        private final IModel<String> linkModel;
+
+        /**
+         * 
+         * @param linkModel model for the resource URL
+         */
+        public SwitchboardDropdownItemPreflightBehavior(IModel<String> linkModel) {
+            this.linkModel = linkModel;
+        }
+
+        @Override
+        public void bind(Component component) {
+            if (!(component instanceof ResourceLinkOptionsDropdown)) {
+                throw new UnsupportedOperationException("Switchboard preflight behaviour can only be registered on resource link option dropdowns!");
+            }
+        }
+
+        @Override
+        public void renderHead(Component component, IHeaderResponse response) {
+            assert (component instanceof ResourceLinkOptionsDropdown);
+            
+            // Script resource functions implementing the prefight call
+            response.render(JavaScriptReferenceHeaderItem.forReference(JavaScriptResources.getSwitchboardIntegrationJs()));
+
+            // Registration for this particular dropdown component
+            response.render(JavaScriptHeaderItem.forScript(
+                    String.format("registerSwitchboardPreflight('%s',  '#%s');",
+                            JavaScriptUtils.javaScriptEscape(linkModel.getObject()),
+                            JavaScriptUtils.javaScriptEscape(component.getMarkupId())),
+                    "onLinkDropdownShown" + component.getMarkupId()));
+        }
+
+        @Override
+        public void detach(Component component) {
+            linkModel.detach();
+        }
+
     }
 
 }
