@@ -16,13 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.time.Duration;
+import java.util.concurrent.CompletionException;
 
 /**
  *
@@ -33,20 +33,17 @@ public class CachingRecordFactory implements RecordFactory {
     private final LoadingCache<File, CmdRecord> recordCache;
 
     public CachingRecordFactory(RecordReader recordReader) {
-        recordCache = CacheBuilder.newBuilder().build(new CacheLoader<File, CmdRecord>() {
-            @Override
-            public CmdRecord load(File f) throws Exception {
-                return recordReader.readRecord(f);
-            }
-
-        });
+        recordCache = Caffeine.newBuilder()
+                .maximumSize(1_000) // TODO: configurable?
+                .expireAfterWrite(Duration.ofMinutes(60)) // TODO: configurable?
+                .build(recordReader::readRecord);
     }
 
     @Override
     public CmdRecord getRecord(File file) throws IOException, VloMappingException {
         try {
             return recordCache.get(file);
-        } catch (ExecutionException ex) {
+        } catch (CompletionException ex) {
             throw new VloMappingException("Error while loading reacord into cache: " + file.getAbsolutePath(), ex);
         }
     }
