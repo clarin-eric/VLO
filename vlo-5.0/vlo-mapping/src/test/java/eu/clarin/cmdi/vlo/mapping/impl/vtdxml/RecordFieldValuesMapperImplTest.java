@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class RecordFieldValuesMapperImplTest extends VtdImplIntegrationTest {
+public class RecordFieldValuesMapperImplTest extends AbstractVtdImplIntegrationTest {
 
     /**
      * Test of mapRecordToFields method, of class RecordFieldValuesMapperImpl.
