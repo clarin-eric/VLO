@@ -16,13 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
-import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
+import java.time.Duration;
+import java.util.concurrent.CompletionException;
 
 /**
  *
@@ -33,20 +32,17 @@ public class CachingProfileFactory implements ProfileFactory {
     private final LoadingCache<String, CmdProfile> profileCache;
 
     public CachingProfileFactory(ProfileReader profileReader) {
-        profileCache = CacheBuilder.newBuilder().build(new CacheLoader<String, CmdProfile>() {
-            @Override
-            public CmdProfile load(String id) throws Exception {
-                return profileReader.readProfile(id);
-            }
-
-        });
+        profileCache = Caffeine.newBuilder()
+                .maximumSize(100_000) // TODO: configurable?
+                .expireAfterWrite(Duration.ofMinutes(5)) // TODO: configurable?
+                .build(profileReader::readProfile);
     }
 
     @Override
     public CmdProfile getProfile(String profileId) throws IOException, VloMappingException {
         try {
             return profileCache.get(profileId);
-        } catch (ExecutionException ex) {
+        } catch (CompletionException ex) {
             throw new VloMappingException("Error while loading profile into cache: " + profileId, ex);
         }
     }
@@ -55,7 +51,7 @@ public class CachingProfileFactory implements ProfileFactory {
         profileCache.invalidateAll();
     }
 
-    public void invalidateCache(File file) {
-        profileCache.invalidate(file);
+    public void invalidateCache(String profile) {
+        profileCache.invalidate(profile);
     }
 }
