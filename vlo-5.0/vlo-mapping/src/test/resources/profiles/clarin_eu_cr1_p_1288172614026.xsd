@@ -1,0 +1,2350 @@
+<?xml version="1.0" encoding="UTF-8"?><xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:cmd="http://www.clarin.eu/cmd/1" xmlns:cue="http://www.clarin.eu/cmd/cues/1" xmlns:cue_old="http://www.clarin.eu/cmdi/cues/1" xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1288172614026" targetNamespace="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1288172614026" elementFormDefault="qualified">
+    <xs:annotation>
+        <xs:appinfo xmlns:ann="http://www.clarin.eu">
+            <cmd:Header>
+                <cmd:ID>clarin.eu:cr1:p_1288172614026</cmd:ID>
+                <cmd:Name>OLAC-DcmiTerms</cmd:Name>
+                <cmd:Description>OLAC profile, extension of the DCMI Terms profile with some OLAC-specific attributes</cmd:Description>
+                <cmd:Status>production</cmd:Status>
+            </cmd:Header>
+        </xs:appinfo>
+    </xs:annotation>
+    <xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+    <xs:import namespace="http://www.clarin.eu/cmd/1" schemaLocation="https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd"/>
+    <xs:element name="OLAC-DcmiTerms">
+        <xs:annotation/>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="abstract" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/abstract" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A summary of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="accessRights" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/accessRights" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Information about who can access the resource or an indication of its security status.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="accrualMethod" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/accrualMethod" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The method by which items are added to a collection.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="accrualPeriodicity" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/accrualPeriodicity" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The frequency with which items are added to a collection.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="accrualPolicy" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/accrualPolicy" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The policy governing the addition of items to a collection.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="alternative" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/alternative" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An alternative name for the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="audience" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/audience" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A class of entity for whom the resource is intended or useful.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="available" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/available" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date (often a range) that the resource became or will become available.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="bibliographicCitation" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/bibliographicCitation" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A bibliographic reference for the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="conformsTo" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/conformsTo" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An established standard to which the described resource conforms.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="contributor" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/contributor" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An entity responsible for making contributions to the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="olac-role">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="annotator"/>
+                                            <xs:enumeration value="author"/>
+                                            <xs:enumeration value="compiler"/>
+                                            <xs:enumeration value="consultant"/>
+                                            <xs:enumeration value="data_inputter"/>
+                                            <xs:enumeration value="depositor"/>
+                                            <xs:enumeration value="developer"/>
+                                            <xs:enumeration value="editor"/>
+                                            <xs:enumeration value="illustrator"/>
+                                            <xs:enumeration value="interpreter"/>
+                                            <xs:enumeration value="interviewer"/>
+                                            <xs:enumeration value="participant"/>
+                                            <xs:enumeration value="performer"/>
+                                            <xs:enumeration value="photographer"/>
+                                            <xs:enumeration value="recorder"/>
+                                            <xs:enumeration value="researcher"/>
+                                            <xs:enumeration value="research_participant"/>
+                                            <xs:enumeration value="responder"/>
+                                            <xs:enumeration value="signer"/>
+                                            <xs:enumeration value="singer"/>
+                                            <xs:enumeration value="speaker"/>
+                                            <xs:enumeration value="sponsor"/>
+                                            <xs:enumeration value="transcriber"/>
+                                            <xs:enumeration value="translator"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="coverage" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/coverage" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The spatial or temporal topic of the resource, the spatial applicability of the resource, or the jurisdiction under which the resource is relevant.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="created" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/created" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date of creation of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="creator" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/creator" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An entity primarily responsible for making the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="date" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/date" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A point or period of time associated with an event in the lifecycle of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dateAccepted" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/dateAccepted" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date of acceptance of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dateCopyrighted" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/dateCopyrighted" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date of copyright.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="dateSubmitted" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/dateSubmitted" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date of submission of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="description" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/description" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An account of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="educationLevel" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/educationLevel" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A class of entity, defined in terms of progression through an educational or training context, for which the described resource is intended.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="extent" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/extent" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The size or duration of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="format" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/format" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The file format, physical medium, or dimensions of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="hasFormat" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/hasFormat" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is substantially the same as the pre-existing described resource, but in another format.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="hasPart" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/hasPart" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is included either physically or logically in the described resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="hasVersion" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/hasVersion" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is a version, edition, or adaptation of the described resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="identifier" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/identifier" minOccurs="0" cue:DisplayPriority="4">
+                    <xs:annotation>
+                        <xs:documentation>An unambiguous reference to the resource within a given context.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="instructionalMethod" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/instructionalMethod" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A process, used to engender knowledge, attitudes and skills, that the described resource is designed to support.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isFormatOf" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/isFormatOf" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is substantially the same as the described resource, but in another format.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isPartOf" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/isPartOf" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource in which the described resource is physically or logically included.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isReferencedBy" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/isReferencedBy" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that references, cites, or otherwise points to the described resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isReplacedBy" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/isReplacedBy" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that supplants, displaces, or supersedes the described resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isRequiredBy" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/isRequiredBy" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that requires the described resource to support its function, delivery, or coherence.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="issued" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/issued" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date of formal issuance (e.g., publication) of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="isVersionOf" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/isVersionOf" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Changes in version imply substantive changes in content rather than differences in format.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="language" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/language" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A language of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="olac-language" cmd:ConceptLink="http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:pattern value="[A-Za-z][A-Za-z][A-Za-z]?"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="license" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/license" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A legal document giving official permission to do something with the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="mediator" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/mediator" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An entity that mediates access to the resource and for whom the resource is intended or useful.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="medium" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/medium" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The material or physical carrier of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="modified" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/modified" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date on which the resource was changed.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="provenance" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/provenance" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A statement of any changes in ownership and custody of the resource since its creation that are significant for its authenticity, integrity, and interpretation.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="publisher" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/publisher" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>An entity responsible for making the resource available.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="references" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/references" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is referenced, cited, or otherwise pointed to by the described resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="relation" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/relation" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="replaces" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/replaces" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is supplanted, displaced, or superseded by the described resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="requires" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/requires" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource that is required by the described resource to support its function, delivery, or coherence.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="rights" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/rights" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Information about rights held in and over the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="rightsHolder" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/rightsHolder" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A person or organization owning or managing rights over the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="source" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/source" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A related resource from which the described resource is derived.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="spatial" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/spatial" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Spatial characteristics of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="subject" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/subject" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The topic of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="olac-linguistic-field">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="anthropological_linguistics"/>
+                                            <xs:enumeration value="applied_linguistics"/>
+                                            <xs:enumeration value="cognitive_science"/>
+                                            <xs:enumeration value="computational_linguistics"/>
+                                            <xs:enumeration value="discourse_analysis"/>
+                                            <xs:enumeration value="forensic_linguistics"/>
+                                            <xs:enumeration value="general_linguistics"/>
+                                            <xs:enumeration value="historical_linguistics"/>
+                                            <xs:enumeration value="history_of_linguistics"/>
+                                            <xs:enumeration value="language_acquisition"/>
+                                            <xs:enumeration value="language_documentation"/>
+                                            <xs:enumeration value="lexicography"/>
+                                            <xs:enumeration value="linguistics_and_literature"/>
+                                            <xs:enumeration value="linguistic_theories"/>
+                                            <xs:enumeration value="mathematical_linguistics"/>
+                                            <xs:enumeration value="morphology"/>
+                                            <xs:enumeration value="neurolinguistics"/>
+                                            <xs:enumeration value="philosophy_of_language"/>
+                                            <xs:enumeration value="phonetics"/>
+                                            <xs:enumeration value="phonology"/>
+                                            <xs:enumeration value="pragmatics"/>
+                                            <xs:enumeration value="psycholinguistics"/>
+                                            <xs:enumeration value="semantics"/>
+                                            <xs:enumeration value="sociolinguistics"/>
+                                            <xs:enumeration value="syntax"/>
+                                            <xs:enumeration value="text_and_corpus_linguistics"/>
+                                            <xs:enumeration value="translating_and_interpreting"/>
+                                            <xs:enumeration value="typology"/>
+                                            <xs:enumeration value="writing_systems"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="olac-language">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:pattern value="[A-Za-z][A-Za-z][A-Za-z]?"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="olac-discourse-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="dialogue"/>
+                                            <xs:enumeration value="drama"/>
+                                            <xs:enumeration value="formulaic"/>
+                                            <xs:enumeration value="ludic"/>
+                                            <xs:enumeration value="oratory"/>
+                                            <xs:enumeration value="narrative"/>
+                                            <xs:enumeration value="procedural"/>
+                                            <xs:enumeration value="report"/>
+                                            <xs:enumeration value="singing"/>
+                                            <xs:enumeration value="unintelligible_speech"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="tableOfContents" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/tableOfContents" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>A list of subunits of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="temporal" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/temporal" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Temporal characteristics of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="title" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/title" minOccurs="0" cue:DisplayPriority="1">
+                    <xs:annotation>
+                        <xs:documentation>A name given to the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="type" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/type" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>The nature or genre of the resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="olac-linguistic-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="language_description"/>
+                                            <xs:enumeration value="lexicon"/>
+                                            <xs:enumeration value="primary_text"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="olac-discourse-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="dialogue"/>
+                                            <xs:enumeration value="drama"/>
+                                            <xs:enumeration value="formulaic"/>
+                                            <xs:enumeration value="ludic"/>
+                                            <xs:enumeration value="oratory"/>
+                                            <xs:enumeration value="narrative"/>
+                                            <xs:enumeration value="procedural"/>
+                                            <xs:enumeration value="report"/>
+                                            <xs:enumeration value="singing"/>
+                                            <xs:enumeration value="unintelligible_speech"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="valid" maxOccurs="unbounded" cmd:ConceptLink="http://purl.org/dc/terms/valid" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>Date (often a range) of validity of a resource.</xs:documentation>
+                    </xs:annotation>
+                    <xs:complexType>
+                        <xs:simpleContent>
+                            <xs:extension base="xs:string">
+                                <xs:attribute name="dcterms-type">
+                                    <xs:annotation/>
+                                    <xs:simpleType>
+                                        <xs:restriction base="xs:string">
+                                            <xs:enumeration value="DCMIType"/>
+                                            <xs:enumeration value="DDC"/>
+                                            <xs:enumeration value="IMT"/>
+                                            <xs:enumeration value="LCC"/>
+                                            <xs:enumeration value="LCSH"/>
+                                            <xs:enumeration value="MESH"/>
+                                            <xs:enumeration value="NLM"/>
+                                            <xs:enumeration value="TGN"/>
+                                            <xs:enumeration value="UDC"/>
+                                            <xs:enumeration value="Box"/>
+                                            <xs:enumeration value="ISO3166"/>
+                                            <xs:enumeration value="ISO639-2"/>
+                                            <xs:enumeration value="ISO639-3"/>
+                                            <xs:enumeration value="Period"/>
+                                            <xs:enumeration value="Point"/>
+                                            <xs:enumeration value="RFC1766"/>
+                                            <xs:enumeration value="RFC3066"/>
+                                            <xs:enumeration value="RFC4646"/>
+                                            <xs:enumeration value="RFC5646"/>
+                                            <xs:enumeration value="URI"/>
+                                            <xs:enumeration value="W3CDTF"/>
+                                        </xs:restriction>
+                                    </xs:simpleType>
+                                </xs:attribute>
+                                <xs:attribute ref="xml:lang"/>
+                            </xs:extension>
+                        </xs:simpleContent>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+            <xs:attribute ref="xml:base"/>
+            <xs:attribute ref="cmd:ref"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

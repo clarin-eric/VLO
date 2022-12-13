@@ -48,7 +48,7 @@ public class ProfileReaderImplTest {
      * Test of readProfile method, of class ProfileReaderImpl.
      */
     @Test
-    public void testReadProfile() throws Exception {
+    public void testReadProfile1() throws Exception {
 
         final ConceptLinkPathMapper conceptLinkPathMapper = new ConceptLinkPathMapperImpl(mappingConfig, parser);
         final ProfileReaderImpl instance = new ProfileReaderImpl(conceptLinkPathMapper);
@@ -74,5 +74,18 @@ public class ProfileReaderImplTest {
         ));
     }
 
+    @Test
+    public void testReadProfile2() throws Exception {
+
+        final ConceptLinkPathMapper conceptLinkPathMapper = new ConceptLinkPathMapperImpl(mappingConfig, parser);
+        final ProfileReaderImpl instance = new ProfileReaderImpl(conceptLinkPathMapper);
+
+        final String profileId = "clarin.eu:cr1:p_1288172614026";
+        final CmdProfile result = instance.readProfile(profileId);
+
+        assertNotNull(result);
+        Map<String, Context> xpathConceptPathMap = result.getXpathContextMap();
+        //TODO: assertions
+    }
 
 }

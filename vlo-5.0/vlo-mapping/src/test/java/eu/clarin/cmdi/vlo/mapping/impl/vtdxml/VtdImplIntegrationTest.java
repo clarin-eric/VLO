@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
+ * Copyright (C) 2022 twagoo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,78 +16,43 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
-import eu.clarin.cmdi.vlo.mapping.CachingProfileFactory;
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
-import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionProvider;
-import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionProviderImpl;
-import org.junit.jupiter.api.BeforeEach;
+import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
+import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import java.io.File;
+import static java.lang.StrictMath.log;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.isA;
+import org.junit.jupiter.api.Test;
 
 /**
- * Sets up {@link RecordFieldValuesMapperImpl} and required service
- * implementations with an adapted {@link VTDProfileParser} that resolves
- * profiles against the local test resources
- * ({@link TestResourceVTDProfileParser}).
  *
- * @author CLARIN ERIC <clarin@clarin.eu>
+ * @author twagoo
  */
-public abstract class VtdImplIntegrationTest {
+@Slf4j
+public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
 
-    private VloMappingConfiguration mappingConfig;
-    private VTDProfileParser profileParser;
-    private ProfileReaderImpl profileReader;
-    private ConceptLinkPathMapperImpl conceptLinkPathMapper;
-    private CachingProfileFactory profileFactory;
-    private MappingDefinitionProvider definitionProvider;
-    private RecordReaderImpl recordReader;
-    private RecordFieldValuesMapperImpl fieldValuesMapper;
+    /**
+     * Test of mapRecordToFields method, of class RecordFieldValuesMapperImpl.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testMapRecordToFields() throws Exception {
+        final URL recordUrl = getClass().getResource("/records/p_1288172614026.cmdi");
+        final File file = new File(recordUrl.getFile());
+        final RecordFieldValuesMapper instance = getFieldValuesMapper();
+        Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
 
-    @BeforeEach
-    protected void setUpServices() throws Exception {
-        mappingConfig = createConfig();
-        profileParser = new TestResourceVTDProfileParser(getMappingConfig());
-        conceptLinkPathMapper = new ConceptLinkPathMapperImpl(getMappingConfig(), getProfileParser());
-        profileReader = new ProfileReaderImpl(getConceptLinkPathMapper());
-        profileFactory = new CachingProfileFactory(getProfileReader());
-        recordReader = new RecordReaderImpl(getProfileFactory());
-        definitionProvider = new MappingDefinitionProviderImpl(getMappingConfig());
-        fieldValuesMapper = new RecordFieldValuesMapperImpl(getRecordReader(), getDefinitionProvider(), getMappingConfig());
     }
-
-    protected VloMappingConfiguration createConfig() {
-        return new VloMappingTestConfiguration();
-    }
-
-    protected RecordFieldValuesMapperImpl getFieldValuesMapper() {
-        return fieldValuesMapper;
-    }
-
-    protected VloMappingConfiguration getMappingConfig() {
-        return mappingConfig;
-    }
-
-    protected RecordReaderImpl getRecordReader() {
-        return recordReader;
-    }
-
-    protected CachingProfileFactory getProfileFactory() {
-        return profileFactory;
-    }
-
-    protected VTDProfileParser getProfileParser() {
-        return profileParser;
-    }
-
-    public ProfileReaderImpl getProfileReader() {
-        return profileReader;
-    }
-
-    public ConceptLinkPathMapperImpl getConceptLinkPathMapper() {
-        return conceptLinkPathMapper;
-    }
-
-    public MappingDefinitionProvider getDefinitionProvider() {
-        return definitionProvider;
-    }
-
 }
