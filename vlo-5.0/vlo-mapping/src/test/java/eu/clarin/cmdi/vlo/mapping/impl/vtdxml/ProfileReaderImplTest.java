@@ -42,22 +42,7 @@ public class ProfileReaderImplTest {
 
     final VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
 
-    final VTDProfileParser parser = new DefaultVTDProfileParser(mappingConfig) {
-        @Override
-        protected boolean doParse(VTDGen vg, String profileId, boolean ns) {
-            log.info("Trying to parse profile {} from schema in bundled resources", profileId);
-            final String resource = String.format("/profiles/%s.xsd", profileId.replaceAll("[:_\\.\\/\\\\]", "_"));
-            // get file from bundled resources
-            final URL resourceUri = getClass().getResource(resource);
-            if (resourceUri == null) {
-                log.error("Profile XSD not found for id {}: {}", profileId, resource);
-                throw new RuntimeException("Profile XSD not found - see logs");
-            } else {
-                return vg.parseFile(resourceUri.getFile(), ns);
-            }
-        }
-
-    };
+    final VTDProfileParser parser = new TestResourceVTDProfileParser(mappingConfig);
 
     /**
      * Test of readProfile method, of class ProfileReaderImpl.
@@ -88,5 +73,6 @@ public class ProfileReaderImplTest {
                 hasProperty("conceptPath", hasItem("http://hdl.handle.net/11459/CCR_C-4347_728552dd-4c23-0a69-390c-10214c05983f"))
         ));
     }
+
 
 }

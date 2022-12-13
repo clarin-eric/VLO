@@ -19,8 +19,6 @@ package eu.clarin.cmdi.vlo.mapping;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import eu.clarin.cmdi.vlo.mapping.ProfileFactory;
-import eu.clarin.cmdi.vlo.mapping.ProfileReader;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import java.io.File;
 import java.io.IOException;

@@ -52,7 +52,7 @@ public class RecordReaderImplTest {
      */
     @Test
     public void testReadRecord() throws Exception {
-        final RecordReaderImpl instance = new RecordReaderImpl(mappingConfig);
+        final RecordReaderImpl instance = TestResourceVTDProfileParser.inNewDefaultRecordReader(mappingConfig);
         final URL recordUrl = getClass().getResource("/records/p_1345561703673.cmdi");
         final File file = new File(recordUrl.getFile());
 

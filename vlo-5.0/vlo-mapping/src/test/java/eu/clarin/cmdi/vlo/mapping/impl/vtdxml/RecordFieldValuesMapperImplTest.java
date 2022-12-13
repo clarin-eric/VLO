@@ -17,8 +17,6 @@
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
 import java.net.URL;
@@ -34,9 +32,7 @@ import org.junit.jupiter.api.Test;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class RecordFieldValuesMapperImplTest {
-
-    final VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
+public class RecordFieldValuesMapperImplTest extends VtdImplIntegrationTest {
 
     /**
      * Test of mapRecordToFields method, of class RecordFieldValuesMapperImpl.
@@ -47,7 +43,7 @@ public class RecordFieldValuesMapperImplTest {
     public void testMapRecordToFields() throws Exception {
         final URL recordUrl = getClass().getResource("/records/p_1345561703673.cmdi");
         final File file = new File(recordUrl.getFile());
-        final RecordFieldValuesMapper instance = new RecordFieldValuesMapperImpl(mappingConfig);
+        final RecordFieldValuesMapper instance = getFieldValuesMapper();
         Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
         log.info("Result for {} fields", result.keySet().size());
         assertThat(result, aMapWithSize(4));
