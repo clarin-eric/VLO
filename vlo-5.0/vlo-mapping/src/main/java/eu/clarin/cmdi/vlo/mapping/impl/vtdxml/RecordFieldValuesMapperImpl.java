@@ -40,17 +40,17 @@ public class RecordFieldValuesMapperImpl extends BaseRecordFieldValuesMapper {
         this(new RecordReaderImpl(mappingConfig), new MappingDefinitionProviderImpl(mappingConfig), mappingConfig);
     }
 
-    private RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinitionProvider definitionProvider, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
+    public RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinitionProvider definitionProvider, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
         this(recordReader, definitionProvider.getDefinition(), mappingConfig);
     }
 
-    private RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinition mappingDefinition, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
+    public RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinition mappingDefinition, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
         this(new CachingRecordFactory(recordReader),
                 new ContextFieldValueMapperImpl(mappingDefinition.getRules(), mappingConfig),
                 mappingDefinition.getFieldValuesProcessor());
     }
 
-    private RecordFieldValuesMapperImpl(RecordFactory recordFactory, ContextFieldValueMapper fieldValueMapper, FieldValuesProcessor fieldValuesRootProcessor) throws VloMappingRulesException {
+    public RecordFieldValuesMapperImpl(RecordFactory recordFactory, ContextFieldValueMapper fieldValueMapper, FieldValuesProcessor fieldValuesRootProcessor) throws VloMappingRulesException {
         super(new ContextFactoryImpl(recordFactory), fieldValueMapper, fieldValuesRootProcessor);
     }
 }
