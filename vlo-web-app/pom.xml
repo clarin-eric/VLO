@@ -15,7 +15,7 @@
     <packaging>war</packaging>
     <version>4.11.2</version>
     <name>VLO Web Application</name>
-    <description></description>
+    <description/>
 
     <properties>
         <wicket.version>8.14.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>org.codehaus.jettison</groupId>
             <artifactId>jettison</artifactId>
-            <version>1.5.0</version>
+            <version>1.5.2</version>
             <type>jar</type>
         </dependency>
 
