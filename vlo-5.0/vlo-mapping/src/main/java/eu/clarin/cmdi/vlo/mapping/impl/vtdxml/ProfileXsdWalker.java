@@ -40,7 +40,7 @@ public class ProfileXsdWalker<R> {
 
     private final VTDNavProcessor<R> elementProcessor;
 
-    public ProfileXsdWalker(VTDProfileParser profileParser, Supplier<R> newResultObjectSupplier, VTDNavProcessor<R> attributeProcessor, VTDNavProcessor<R> elementProcessor) {
+    public ProfileXsdWalker(VTDProfileParser profileParser, Supplier<R> newResultObjectSupplier, VTDNavProcessor<R> elementProcessor, VTDNavProcessor<R> attributeProcessor) {
         this.profileParser = profileParser;
         this.newResultObjectSupplier = newResultObjectSupplier;
         this.attributeProcessor = attributeProcessor;
