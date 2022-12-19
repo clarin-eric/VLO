@@ -5,8 +5,8 @@ import java.util.Map;
 import com.ximpleware.NavException;
 import eu.clarin.cmdi.vlo.mapping.model.Context;
 
-public interface ConceptLinkPathMapper {
+public interface ProfileContextMapFactory {
 
-    Map<String, Context> createConceptLinkPathMapping(String profileId) throws NavException;
+    Map<String, Context> createProfileContextMap(String profileId) throws NavException;
 
 }

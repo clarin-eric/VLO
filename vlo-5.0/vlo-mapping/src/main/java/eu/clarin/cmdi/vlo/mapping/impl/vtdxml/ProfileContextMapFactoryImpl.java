@@ -16,15 +16,15 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
+public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
 
     private final ProfileXsdWalker<Map<String, Context>> xsdWalker;
 
-    public ConceptLinkPathMapperImpl(VloMappingConfiguration config) {
+    public ProfileContextMapFactoryImpl(VloMappingConfiguration config) {
         this(config, new DefaultVTDProfileParser(config));
     }
 
-    public ConceptLinkPathMapperImpl(VloMappingConfiguration config, VTDProfileParser profileParser) {
+    public ProfileContextMapFactoryImpl(VloMappingConfiguration config, VTDProfileParser profileParser) {
         this.xsdWalker = new ProfileXsdWalker<>(profileParser,
                 this::newResultObject,
                 new AttributeProcessor(config), new ElementProcessor(config));
@@ -83,12 +83,11 @@ public class ConceptLinkPathMapperImpl implements ConceptLinkPathMapper {
      * (isocat data catagories).
      *
      * @param profileId Id of CMDI profile the component registry
-     * @return Map (Data Category -> List of XPath expressions linked to the key
-     * data category which can be found in CMDI files with this schema)
+     * @return Map XPath -> Context (includes xpath, concept path and vocabulary)
      * @throws NavException
      */
     @Override
-    public Map<String, Context> createConceptLinkPathMapping(String profileId) throws NavException {
+    public Map<String, Context> createProfileContextMap(String profileId) throws NavException {
         return xsdWalker.walkProfile(profileId);
     }
 

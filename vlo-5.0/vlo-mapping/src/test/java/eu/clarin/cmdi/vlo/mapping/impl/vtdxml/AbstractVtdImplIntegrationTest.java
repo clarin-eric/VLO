@@ -36,7 +36,7 @@ public abstract class AbstractVtdImplIntegrationTest {
     private VloMappingConfiguration mappingConfig;
     private VTDProfileParser profileParser;
     private ProfileReaderImpl profileReader;
-    private ConceptLinkPathMapperImpl conceptLinkPathMapper;
+    private ProfileContextMapFactoryImpl conceptLinkPathMapper;
     private CachingProfileFactory profileFactory;
     private MappingDefinitionProvider definitionProvider;
     private RecordReaderImpl recordReader;
@@ -46,7 +46,7 @@ public abstract class AbstractVtdImplIntegrationTest {
     protected void setUpServices() throws Exception {
         mappingConfig = createConfig();
         profileParser = new TestResourceVTDProfileParser(getMappingConfig());
-        conceptLinkPathMapper = new ConceptLinkPathMapperImpl(getMappingConfig(), getProfileParser());
+        conceptLinkPathMapper = new ProfileContextMapFactoryImpl(getMappingConfig(), getProfileParser());
         profileReader = new ProfileReaderImpl(getConceptLinkPathMapper());
         profileFactory = new CachingProfileFactory(getProfileReader());
         recordReader = new RecordReaderImpl(getProfileFactory());
@@ -82,7 +82,7 @@ public abstract class AbstractVtdImplIntegrationTest {
         return profileReader;
     }
 
-    public ConceptLinkPathMapperImpl getConceptLinkPathMapper() {
+    public ProfileContextMapFactoryImpl getConceptLinkPathMapper() {
         return conceptLinkPathMapper;
     }
 

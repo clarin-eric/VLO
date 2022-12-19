@@ -31,14 +31,14 @@ import java.util.Map;
  */
 public class ProfileReaderImpl implements ProfileReader {
 
-    private final ConceptLinkPathMapper conceptLinkPathMapper;
+    private final ProfileContextMapFactory contextMapFactory;
 
     public ProfileReaderImpl(VloMappingConfiguration config) {
-        this(new ConceptLinkPathMapperImpl(config));
+        this(new ProfileContextMapFactoryImpl(config));
     }
 
-    public ProfileReaderImpl(ConceptLinkPathMapper conceptLinkPathMapper) {
-        this.conceptLinkPathMapper = conceptLinkPathMapper;
+    public ProfileReaderImpl(ProfileContextMapFactory contextMapFactory) {
+        this.contextMapFactory = contextMapFactory;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ProfileReaderImpl implements ProfileReader {
         final CmdProfile.CmdProfileBuilder profile = CmdProfile.builder().id(profileId);
 
         try {
-            final Map<String, Context> contextMap = conceptLinkPathMapper.createConceptLinkPathMapping(profileId);
+            final Map<String, Context> contextMap = contextMapFactory.createProfileContextMap(profileId);
             profile.xpathContextMap(contextMap);
             return profile.build();
         } catch (VTDException ex) {

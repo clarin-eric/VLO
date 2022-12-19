@@ -16,14 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
-import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
-import com.ximpleware.VTDGen;
-import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
-import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
-import eu.clarin.cmdi.vlo.mapping.model.Context;
-import java.net.URL;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import eu.clarin.cmdi.vlo.mapping.VloMappingTestConfiguration;
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.model.Context;
+import java.util.Map;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasKey;
 import static org.hamcrest.Matchers.hasEntry;
@@ -38,7 +35,7 @@ import org.junit.jupiter.api.Test;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class ProfileReaderImplTest {
+public class ProfileContextMapFactoryImplTest {
 
     final VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
 
@@ -50,14 +47,11 @@ public class ProfileReaderImplTest {
     @Test
     public void testReadProfile1() throws Exception {
 
-        final ConceptLinkPathMapper conceptLinkPathMapper = new ConceptLinkPathMapperImpl(mappingConfig, parser);
-        final ProfileReaderImpl instance = new ProfileReaderImpl(conceptLinkPathMapper);
+        final ProfileContextMapFactory instance = new ProfileContextMapFactoryImpl(mappingConfig, parser);
 
         final String profileId = "clarin.eu:cr1:p_1345561703673";
-        final CmdProfile result = instance.readProfile(profileId);
+        final Map<String, Context> xpathConceptPathMap = instance.createProfileContextMap(profileId);
 
-        assertNotNull(result);
-        Map<String, Context> xpathConceptPathMap = result.getXpathContextMap();
         assertNotNull(xpathConceptPathMap);
         assertThat(xpathConceptPathMap, hasKey("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/text()"));
         assertThat("Context's own concept", xpathConceptPathMap, hasEntry(
@@ -77,14 +71,12 @@ public class ProfileReaderImplTest {
     @Test
     public void testReadProfile2() throws Exception {
 
-        final ConceptLinkPathMapper conceptLinkPathMapper = new ConceptLinkPathMapperImpl(mappingConfig, parser);
-        final ProfileReaderImpl instance = new ProfileReaderImpl(conceptLinkPathMapper);
+        final ProfileContextMapFactory instance = new ProfileContextMapFactoryImpl(mappingConfig, parser);
 
         final String profileId = "clarin.eu:cr1:p_1288172614026";
-        final CmdProfile result = instance.readProfile(profileId);
+        final Map<String, Context> result = instance.createProfileContextMap(profileId);
 
         assertNotNull(result);
-        Map<String, Context> xpathConceptPathMap = result.getXpathContextMap();
         //TODO: assertions
     }
 
