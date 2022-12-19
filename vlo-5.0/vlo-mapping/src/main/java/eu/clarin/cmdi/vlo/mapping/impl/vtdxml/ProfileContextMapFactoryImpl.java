@@ -1,6 +1,7 @@
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -9,9 +10,9 @@ import com.ximpleware.VTDNav;
 
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.ProfileXsdWalker.Token;
+import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.ProfileXsdWalker.VTDNavProcessor;
 import eu.clarin.cmdi.vlo.mapping.model.Context;
 import eu.clarin.cmdi.vlo.mapping.model.ContextImpl;
-import java.util.HashMap;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,24 +21,38 @@ public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
 
     private final ProfileXsdWalker<Map<String, Context>> xsdWalker;
 
+    /**
+     * Constructs a context map factory with the default profile parser
+     * ({@link DefaultVTDProfileParser})
+     *
+     * @param config mapping configuration
+     */
     public ProfileContextMapFactoryImpl(VloMappingConfiguration config) {
+        //TODO: use a caching parser by default
         this(config, new DefaultVTDProfileParser(config));
     }
 
+    /**
+     * Constructs a context map factory with the specified profile parser
+     * (useful for loading profiles from cache or resources)
+     *
+     * @param config mapping configuration
+     * @param profileParser parser service to use
+     */
     public ProfileContextMapFactoryImpl(VloMappingConfiguration config, VTDProfileParser profileParser) {
-        this.xsdWalker = new ProfileXsdWalker<>(profileParser,
-                this::newResultObject,
-                new AttributeProcessor(config), new ElementProcessor(config));
-    }
-
-    protected Map<String, Context> newResultObject() {
-        return new HashMap<>();
+        // walker traverses the profile XSD; handling of elements and attributes
+        // happens in processors that we pass via the constructor
+        this.xsdWalker = new ProfileXsdWalker<>(
+                profileParser, // walker uses the provided parser
+                Maps::newHashMap, // results are stored in a hashmap 
+                new ElementProcessor(config), // element processor defined below
+                new AttributeProcessor(config)); // attribute processor defined below
     }
 
     /**
      * Processes an XML element
      */
-    protected class ElementProcessor extends VTDProfileProcessor implements ProfileXsdWalker.VTDNavProcessor<Map<String, Context>> {
+    protected class ElementProcessor extends VTDProfileProcessor implements VTDNavProcessor<Map<String, Context>> {
 
         public ElementProcessor(VloMappingConfiguration config) {
             super(config);
@@ -56,7 +71,7 @@ public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
     /**
      * Processes an XML attribute
      */
-    protected class AttributeProcessor extends VTDProfileProcessor implements ProfileXsdWalker.VTDNavProcessor<Map<String, Context>> {
+    protected class AttributeProcessor extends VTDProfileProcessor implements VTDNavProcessor<Map<String, Context>> {
 
         public AttributeProcessor(VloMappingConfiguration config) {
             super(config);
@@ -83,7 +98,8 @@ public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
      * (isocat data catagories).
      *
      * @param profileId Id of CMDI profile the component registry
-     * @return Map XPath -> Context (includes xpath, concept path and vocabulary)
+     * @return Map XPath -> Context (includes xpath, concept path and
+     * vocabulary)
      * @throws NavException
      */
     @Override
