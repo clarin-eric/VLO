@@ -61,7 +61,7 @@ public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
         @Override
         public void process(VTDNav vn, LinkedList<Token> elementPath, Map<String, Context> result) throws NavException {
             final String xpath = createXpath(elementPath, null);
-            final List<String> conceptPath = getConceptPath(vn, elementPath, result);
+            final List<String> conceptPath = getConceptPath(vn, getParentContextPath(elementPath, result), result);
             final Vocabulary vocab = getVocabulary(vn);
             result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
         }
@@ -84,8 +84,9 @@ public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
             if (attributeNameIndex != -1) {
                 final String attributeName = vn.toNormalizedString(attributeNameIndex);
                 final String xpath = createXpath(elementPath, attributeName);
+                final Context parentContext = result.get(createXpath(elementPath, null));
                 // TODO: fix failure at this point because of concept path with null elements!!!!
-                final List<String> conceptPath = ImmutableList.copyOf(getConceptPath(vn, elementPath, result));
+                final List<String> conceptPath = ImmutableList.copyOf(getConceptPath(vn, parentContext, result));
                 final Vocabulary vocab = getVocabulary(vn);
                 result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
             }

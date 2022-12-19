@@ -69,7 +69,7 @@ public class VTDProfileProcessor {
      * @return list representing the concept path
      * @throws NavException
      */
-    public List<String> getConceptPath(VTDNav vn, LinkedList<ProfileXsdWalker.Token> elementPath, Map<String, Context> result) throws NavException {
+    public List<String> getConceptPath(VTDNav vn, Context parentContext, Map<String, Context> result) throws NavException {
         // determine the concept link
         final String conceptLink;
         final int attributeConceptLinkIndex = getConceptLinkIndex(vn);
@@ -80,13 +80,10 @@ public class VTDProfileProcessor {
         }
 
         // consturct the complete context path
-        return constructContextPath(elementPath, result, conceptLink);
+        return constructContextPath(parentContext, conceptLink);
     }
 
-    private List<String> constructContextPath(LinkedList<ProfileXsdWalker.Token> elementPath, Map<String, Context> result, final String conceptLink) {
-        // look up parent's context path
-        final Context parentContext = getParentContextPath(elementPath, result);
-
+    private List<String> constructContextPath(Context parentContext, final String conceptLink) {
         final LinkedList<String> conceptPath;
         if (parentContext == null) {
             // no parent context path - we start from scratch
@@ -100,7 +97,7 @@ public class VTDProfileProcessor {
         return conceptPath;
     }
 
-    private Context getParentContextPath(LinkedList<ProfileXsdWalker.Token> elementPath, Map<String, Context> result) {
+    public Context getParentContextPath(LinkedList<ProfileXsdWalker.Token> elementPath, Map<String, Context> result) {
         final List<ProfileXsdWalker.Token> parentElementPath = getParentElementPath(elementPath);
         return result.get(createXpath(parentElementPath, null));
     }

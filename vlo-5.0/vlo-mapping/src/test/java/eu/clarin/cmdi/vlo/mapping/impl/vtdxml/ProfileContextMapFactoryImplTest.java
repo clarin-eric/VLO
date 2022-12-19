@@ -27,6 +27,7 @@ import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 
@@ -74,10 +75,32 @@ public class ProfileContextMapFactoryImplTest {
         final ProfileContextMapFactory instance = new ProfileContextMapFactoryImpl(mappingConfig, parser);
 
         final String profileId = "clarin.eu:cr1:p_1288172614026";
-        final Map<String, Context> result = instance.createProfileContextMap(profileId);
+        final Map<String, Context> map = instance.createProfileContextMap(profileId);
 
-        assertNotNull(result);
-        //TODO: assertions
+        assertNotNull(map);
+        assertThat(map, hasKey("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:date/text()"));
+        assertThat(map, hasKey("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:date/@dcterms-type"));
+        assertThat("Attribute concept path (without attribute concept)", map, hasEntry(
+                //key
+                equalTo("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:date/@dcterms-type"),
+                //value
+                hasProperty("conceptPath",
+                        contains(
+                                "",
+                                "http://purl.org/dc/terms/date",
+                                ""))
+        ));
+        assertThat("Attribute concept path (with attribute concept)", map, hasEntry(
+                //key
+                equalTo("/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:language/@olac-language"),
+                //value
+                hasProperty("conceptPath",
+                        contains(
+                                "http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17",
+                                "http://purl.org/dc/terms/language",
+                                ""))
+        ));
+
     }
 
 }
