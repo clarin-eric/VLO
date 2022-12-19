@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ConceptPathAssertionTest {
 
     private final ValueContext context = SimpleValueContext.builder()
-            .conceptPath(Arrays.asList("concept1", "concept2", null, "concept3"))
+            .conceptPath(Arrays.asList("concept1", "concept2", "", "concept3"))
             .build();
 
     /**
@@ -82,7 +82,7 @@ public class ConceptPathAssertionTest {
             assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
         }
         {
-            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", null, "concept2", null, "*");
+            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "", "concept2", "", "*");
             assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
         }
     }
@@ -94,12 +94,12 @@ public class ConceptPathAssertionTest {
     }
 
     {
-        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*", "concept3", null);
+        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*", "concept3", "");
         assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
     }
 
     {
-        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", null, "concept2", null, "concept3", null);
+        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "", "concept2", "", "concept3", "");
         assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
     }
     
