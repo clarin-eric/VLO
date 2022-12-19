@@ -90,7 +90,6 @@ public class ProfileContextMapFactoryImpl implements ProfileContextMapFactory {
                 result.computeIfAbsent(xpath, x -> new ContextImpl(x, conceptPath, vocab));
             }
         }
-
     }
 
     /**

@@ -74,7 +74,7 @@ public class VTDProfileProcessor {
         final String conceptLink;
         final int attributeConceptLinkIndex = getConceptLinkIndex(vn);
         if (attributeConceptLinkIndex < 0) {
-            conceptLink = null;
+            conceptLink = "";
         } else {
             conceptLink = vn.toNormalizedString(attributeConceptLinkIndex);
         }
