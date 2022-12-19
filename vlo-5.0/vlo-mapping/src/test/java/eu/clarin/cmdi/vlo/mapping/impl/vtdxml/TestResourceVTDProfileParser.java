@@ -51,7 +51,7 @@ public class TestResourceVTDProfileParser extends DefaultVTDProfileParser {
 
     /**
      * Create an instance of {@link RecordReaderImpl} with instances of
-     * {@link CachingProfileFactory}, {@link ProfileReaderImpl}, {@link ConceptLinkPathMapperImpl}
+     * {@link CachingProfileFactory}, {@link ProfileReaderImpl}, {@link ProfileContextMapFactoryImpl}
      * and {@link TestResourceVTDProfileParser} based on the provided
      * configuration.
      *
@@ -62,7 +62,7 @@ public class TestResourceVTDProfileParser extends DefaultVTDProfileParser {
         return new RecordReaderImpl(
                 new CachingProfileFactory(
                         new ProfileReaderImpl(
-                                new ConceptLinkPathMapperImpl(mappingConfig,
+                                new ProfileContextMapFactoryImpl(mappingConfig,
                                         new TestResourceVTDProfileParser(mappingConfig)))));
     }
 
