@@ -22,31 +22,36 @@ import com.ximpleware.VTDNav;
 import com.ximpleware.XPathEvalException;
 import com.ximpleware.XPathParseException;
 import java.util.LinkedList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- *
+ * Walks a CMDI profile schema
  * @author Twan Goosen <twan@clarin.eu>
  */
-public abstract class ProfileXsdWalker<R> {
-
-    private final static Logger LOG = LoggerFactory.getLogger(ProfileXsdWalker.class);
+@Slf4j
+public class ProfileXsdWalker<R> {
 
     private final VTDProfileParser profileParser;
 
-    public ProfileXsdWalker(VTDProfileParser profileParser) {
+    private final Supplier<R> newResultObjectSupplier;
+
+    private final VTDNavProcessor<R> attributeProcessor;
+
+    private final VTDNavProcessor<R> elementProcessor;
+
+    public ProfileXsdWalker(VTDProfileParser profileParser, Supplier<R> newResultObjectSupplier, VTDNavProcessor<R> attributeProcessor, VTDNavProcessor<R> elementProcessor) {
         this.profileParser = profileParser;
+        this.newResultObjectSupplier = newResultObjectSupplier;
+        this.attributeProcessor = attributeProcessor;
+        this.elementProcessor = elementProcessor;
     }
 
-    protected abstract R createResultObject();
-
     protected R walkProfile(String profileId) throws NavException {
-        final R result = createResultObject();
+        final R result = newResultObjectSupplier.get();
         final VTDNav vn = profileParser.parse(profileId);
         if (vn == null) {
-            LOG.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + profileId + ". All metadata instances that use this xsd will not be imported correctly.");
+            log.error("Cannot create ConceptLink Map from xsd (xsd is probably not reachable): " + profileId + ". All metadata instances that use this xsd will not be imported correctly.");
             return result; //return empty map, so the incorrect xsd is not tried for all metadata instances that specify it.
         }
 
@@ -58,7 +63,7 @@ public abstract class ProfileXsdWalker<R> {
             if (i != -1) {
                 String elementName = vn.toNormalizedString(i);
                 updateElementPath(vn, elementPath, elementName);
-                processElement(vn, elementPath, result);
+                elementProcessor.process(vn, elementPath, result);
                 // look for associated attributes with concept links
                 vn.push();
                 processAttributes(vn, elementPath, result, elementName);
@@ -76,34 +81,10 @@ public abstract class ProfileXsdWalker<R> {
         try {
             attributeAutopilot.selectXPath("./xs:complexType/xs:simpleContent/xs:extension/xs:attribute | ./xs:complexType/xs:attribute");
             while (attributeAutopilot.evalXPath() != -1) {
-                processAttribute(vn, elementPath, result);
+                attributeProcessor.process(vn, elementPath, result);
             }
         } catch (XPathParseException | XPathEvalException | NavException e) {
-            LOG.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
-        }
-    }
-
-    protected abstract void processAttribute(VTDNav vn, LinkedList<Token> elementPath, R result) throws NavException;
-
-    protected abstract void processElement(VTDNav vn, LinkedList<Token> elementPath, R result) throws NavException;
-
-    /**
-     * Given an xml-token path thingy create an xpath.
-     *
-     * @param elementPath
-     * @param attributeName will be appended as attribute to XPath expression if
-     * not null
-     * @return
-     */
-    protected String createXpath(List<Token> elementPath, String attributeName) {
-        final StringBuilder xpath = new StringBuilder("/cmd:CMD/cmd:Components/");
-        for (Token token : elementPath) {
-            xpath.append("cmdp:").append(token.name).append("/");
-        }
-        if (attributeName != null) {
-            return xpath.append("@").append(attributeName).toString();
-        } else {
-            return xpath.append("text()").toString();
+            log.error("Cannot extract attributes for element " + elementName + ". Will continue anyway...", e);
         }
     }
 
@@ -128,7 +109,7 @@ public abstract class ProfileXsdWalker<R> {
         elementPath.offerLast(new Token(currentDepth, elementName));
     }
 
-    protected class Token {
+    public static class Token {
 
         final String name;
         final int depth;
@@ -143,4 +124,11 @@ public abstract class ProfileXsdWalker<R> {
             return name + ":" + depth;
         }
     }
+
+    public static interface VTDNavProcessor<R> {
+
+        void process(VTDNav vn, LinkedList<Token> elementPath, R result) throws NavException;
+
+    }
+
 }
