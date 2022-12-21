@@ -16,23 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
+import com.google.common.collect.FluentIterable;
 import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
+import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.File;
-import static java.lang.StrictMath.log;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.aMapWithSize;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.isA;
+import org.hamcrest.collection.IsIterableContainingInOrder;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -41,6 +41,13 @@ import org.junit.jupiter.api.Test;
  */
 @Slf4j
 public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
+
+    @Override
+    protected VloMappingConfiguration getMappingConfig() {
+        final VloMappingConfiguration config = super.getMappingConfig();
+        config.setMappingDefinitionUri(getClass().getResource("/eu/clarin/cmdi/vlo/mapping/impl/vtdxml/integrationtest-mapping.xml").toString());
+        return config;
+    }
 
     /**
      * Test of mapRecordToFields method, of class RecordFieldValuesMapperImpl.
@@ -52,7 +59,30 @@ public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
         final URL recordUrl = getClass().getResource("/records/p_1288172614026.cmdi");
         final File file = new File(recordUrl.getFile());
         final RecordFieldValuesMapper instance = getFieldValuesMapper();
-        Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
+        final Map<String, Collection<ValueLanguagePair>> map = instance.mapRecordToFields(file);
 
+        assertThat(map, hasValues("title", "WALS Online Resources for Abui"));
+        assertThat(map, hasValues("format", "text/html"));
+        assertThat(map, hasValues("language", "English"));
     }
+
+    private static Matcher<Map<? extends String, ? extends Collection<ValueLanguagePair>>> hasValues(String field, String... values) {
+        return hasEntry(equalTo(field), hasValueLanguagePairsWithValues(values));
+    }
+
+    private static Matcher<Iterable<?>> hasValueLanguagePairsWithValues(String[] values) {
+        return IsIterableContainingInOrder.contains(// make list of value matchers 
+                FluentIterable.from(values)
+                        .transform(value -> isValueLanguagePairWithValue(value))
+                        .toList());
+    }
+
+    private static Matcher<Object> isValueLanguagePairWithValue(String value) {
+        return allOf(
+                isA(ValueLanguagePair.class),
+                hasProperty(
+                        "value",
+                        equalTo(value)));
+    }
+
 }

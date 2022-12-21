@@ -21,11 +21,17 @@ package eu.clarin.cmdi.vlo.mapping;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public class VloMappingTestConfiguration extends VloMappingConfiguration {
-    
+
+    public static final String DEFAULT_TEST_MAPPING_RESOURCE = "/mappings/test-mapping.xml";
+
     public VloMappingTestConfiguration() {
+        this(DEFAULT_TEST_MAPPING_RESOURCE);
+    }
+
+    public VloMappingTestConfiguration(String mappingDefinitionResourcePath) {
         setProfileSchemaUrl("https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd");
         setVocabularyRegistryUrl("http://clavas.clarin.eu/clavas/public/api/find-concepts");
-        setMappingDefinitionUri(getClass().getResource("/mappings/test-mapping.xml").toString());
+        setMappingDefinitionUri(getClass().getResource(mappingDefinitionResourcePath).toString());
     }
-    
+
 }
