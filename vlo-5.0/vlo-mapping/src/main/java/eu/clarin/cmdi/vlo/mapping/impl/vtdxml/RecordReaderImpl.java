@@ -240,7 +240,7 @@ public class RecordReaderImpl implements RecordReader {
      * @param ap
      * @param profileId
      */
-    private static void setNameSpace(AutoPilot ap, String profileId) {
+    public static void setNameSpace(AutoPilot ap, String profileId) {
         ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
         if (profileId != null) {
             ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/" + profileId);
