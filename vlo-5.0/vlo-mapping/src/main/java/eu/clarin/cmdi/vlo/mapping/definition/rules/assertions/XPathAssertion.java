@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.mapping.definition.rules.assertions;
 
 import eu.clarin.cmdi.vlo.mapping.XPathUtils;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import eu.clarin.cmdi.vlo.mapping.model.XPathAware;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlValue;
 import java.util.Objects;
@@ -48,8 +49,15 @@ public class XPathAssertion extends ContextAssertion {
 
     @Override
     public Boolean evaluate(ValueContext context) {
-        //TODO: evaluate in document context with XPath library!
-        return Objects.equals(target, normalize(context.getXpath()));
+        // always try quick check of canonical path first (string comparison)
+        if (Objects.equals(target, normalize(context.getXpath()))) {
+            return true;
+        } else if (context instanceof XPathAware xPathAwareContext) {
+            // context is xpath aware - test against contet
+            return xPathAwareContext.matchesXPath(target);
+        }
+        // no match, out of options to check
+        return false;
     }
 
     protected static String normalize(String xpath) {
