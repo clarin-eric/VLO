@@ -64,6 +64,7 @@ public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
         assertThat(map, hasValues("title", "WALS Online Resources for Abui"));
         assertThat(map, hasValues("format", "text/html"));
         assertThat(map, hasValues("language", "Anglais", "English"));
+        assertThat(map, hasValues("subject", "abz"));
     }
 
     private static Matcher<Map<? extends String, ? extends Collection<ValueLanguagePair>>> hasValues(String field, String... values) {

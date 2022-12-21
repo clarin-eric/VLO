@@ -73,6 +73,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </assertion>
         </assertions>
     </contextAssertionBasedRule>
+    
+   
+    <!-- Rules for the 'subject' field -->
+    <contextAssertionBasedRule>
+        <terminal>true</terminal>
+        <transformers>
+            <transformer field="subject" xsi:type="identityTransformer" />
+        </transformers>
+        <assertions>
+            <!-- xpaths -->
+            <assertion xsi:type="xPathAssertion">//cmdp:subject/@olac-language</assertion>
+        </assertions>
+    </contextAssertionBasedRule>
+
 
     <fieldValuesRootProcessor>
         <processor xsi:type="identityProcessor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
