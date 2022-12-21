@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <contextAssertionBasedRule>
         <assertions>
-            <assertion xsi:type="xPathAssertion">/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
+            <assertion xsi:type="xPathAssertion">//cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
         </assertions>
         <transformers>
             <transformer xsi:type="identityTransformer" field="id" />

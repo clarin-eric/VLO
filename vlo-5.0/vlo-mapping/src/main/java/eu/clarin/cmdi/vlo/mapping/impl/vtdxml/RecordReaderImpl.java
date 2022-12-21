@@ -33,7 +33,6 @@ import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import eu.clarin.cmdi.vlo.mapping.model.ValueContextImpl;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import eu.clarin.cmdi.vlo.util.CmdConstants;
 import java.io.File;
@@ -86,7 +85,7 @@ public class RecordReaderImpl implements RecordReader {
 
     private VTDNav openFile(File file) throws ParseException, IOException {
         final VTDGen vg = new VTDGen();
-        try ( FileInputStream fileInputStream = new FileInputStream(file)) {
+        try (FileInputStream fileInputStream = new FileInputStream(file)) {
             vg.setDoc(IOUtils.toByteArray(fileInputStream));
             vg.parse(true);
         }
@@ -109,7 +108,7 @@ public class RecordReaderImpl implements RecordReader {
                 final int index = ap.evalXPath();
                 final ImmutableList<ValueLanguagePair> values = getValues(nav, index, ap);
                 if (!values.isEmpty()) {
-                    contexts.add(new ValueContextImpl(context, values));
+                    contexts.add(new VTDValueContext(context, values, profileId, nav));
                 }
             } catch (VTDException ex) {
                 log.error("Processing exception in {} at path {}", file, path, ex);
