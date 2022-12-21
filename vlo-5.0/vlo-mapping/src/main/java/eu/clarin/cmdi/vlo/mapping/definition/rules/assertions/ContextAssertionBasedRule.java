@@ -26,6 +26,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -35,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @Slf4j
+@ToString
 public class ContextAssertionBasedRule extends MappingRule {
 
     @XmlElementWrapper(name = "assertions")

@@ -25,6 +25,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
@@ -33,6 +34,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
+@ToString
 public class IdentityTransformer extends BaseTransformer {
 
     public IdentityTransformer(String field) {
