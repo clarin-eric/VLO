@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.mapping.definition.rules.assertion;
 import eu.clarin.cmdi.vlo.mapping.definition.rules.assertions.XPathAssertion;
 import eu.clarin.cmdi.vlo.mapping.model.SimpleValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
+import eu.clarin.cmdi.vlo.mapping.model.XPathAware;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,31 +29,85 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class XPathAssertionTest {
 
+    private static final String XPATH = "/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()";
     private final ValueContext context = SimpleValueContext.builder()
-            .xpath("/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()")
+            .xpath(XPATH)
             .build();
 
     //TODO: test XPaths with same canonical version!!
+    /**
+     * Test of evaluate method, of class XPathAssertion.
+     */
+    @Test
+    public void testEvaluateCanonicalPathMatch() {
+        XPathAssertion instance = new XPathAssertion(XPATH);
+        assertTrue(instance.evaluate(context));
+    }
 
     /**
      * Test of evaluate method, of class XPathAssertion.
      */
     @Test
-    public void testEvaluateTrue() {
-        System.out.println("evaluate");
-        final String target = "/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()";
-        XPathAssertion instance = new XPathAssertion(target);
-        assertTrue(instance.evaluate(context));
+    public void testEvaluateCanonicalPathMismatch() {
+        XPathAssertion instance = new XPathAssertion("/foo/bar");
+        assertFalse(instance.evaluate(context));
     }
+
     /**
      * Test of evaluate method, of class XPathAssertion.
      */
     @Test
-    public void testEvaluateFalse() {
-        System.out.println("evaluate");
-        final String target = "/cmd:CMD/cmd:Header/cmd:SomethingElse/text()";
-        XPathAssertion instance = new XPathAssertion(target);
-        assertFalse(instance.evaluate(context));
+    public void testEvaluateXPathAwareMatch() {
+        final XPathAwareContextMock xPathAwareContext = new XPathAwareContextMock(true);
+
+        final XPathAssertion instance = new XPathAssertion("/foo/bar");
+
+        assertTrue(instance.evaluate(xPathAwareContext));
+    }
+
+    /**
+     * Test of evaluate method, of class XPathAssertion.
+     */
+    @Test
+    public void testEvaluateXPathAwareMismatch() {
+        final XPathAwareContextMock xPathAwareContext = new XPathAwareContextMock(false);
+
+        final XPathAssertion instance = new XPathAssertion("/foo/bar");
+
+        assertFalse(instance.evaluate(xPathAwareContext));
+    }
+
+    /**
+     * Test of evaluate method, of class XPathAssertion.
+     */
+    @Test
+    public void testEvaluateXPathAwareIgnored() {
+        final XPathAwareContextMock xPathAwareContext = new XPathAwareContextMock(false, XPATH);
+
+        final XPathAssertion instance = new XPathAssertion(XPATH);
+
+        assertTrue(instance.evaluate(xPathAwareContext));
+    }
+
+    private class XPathAwareContextMock extends SimpleValueContext implements XPathAware {
+
+        private final boolean matches;
+
+        public XPathAwareContextMock(boolean matches) {
+            super(null, null, null, null);
+            this.matches = matches;
+        }
+
+        public XPathAwareContextMock(boolean matches, String xpath) {
+            super(xpath, null, null, null);
+            this.matches = matches;
+        }
+
+        @Override
+        public boolean matchesXPath(String xPath) {
+            return matches;
+        }
+
     }
 
 }

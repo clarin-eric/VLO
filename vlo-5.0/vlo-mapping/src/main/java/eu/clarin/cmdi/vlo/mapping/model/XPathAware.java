@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
+ * Copyright (C) 2022 twagoo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,23 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.mapping.model;
 
-import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.Vocabulary;
-import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-
 /**
  *
- * @author CLARIN ERIC <clarin@clarin.eu>
+ * @author twagoo
  */
-@Data
-@Builder
-@AllArgsConstructor
-public class SimpleValueContext implements ValueContext {
+public interface XPathAware {
 
-    private final String xpath;
-    private final List<ValueLanguagePair> values;
-    private final List<String> conceptPath;
-    private final Vocabulary vocabulary;
+    boolean matchesXPath(String xPath);
 }
