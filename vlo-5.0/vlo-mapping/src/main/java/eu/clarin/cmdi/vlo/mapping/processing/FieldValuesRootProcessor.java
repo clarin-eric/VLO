@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.mapping.processing;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
@@ -53,7 +54,7 @@ public class FieldValuesRootProcessor extends FieldValuesProcessor {
     public FieldValuesRootProcessor() {
         this(new ArrayList<>());
     }
-    
+
     public FieldValuesRootProcessor(List<? extends FieldValuesProcessor> processors) {
         this.processors = processors;
     }
@@ -75,7 +76,11 @@ public class FieldValuesRootProcessor extends FieldValuesProcessor {
     }
 
     private Map<String, List<FieldMappingResult>> valuesToMappingResult(Map<String, Collection<ValueLanguagePair>> valuesMap) {
-        return Maps.transformEntries(valuesMap, (k, v) -> ImmutableList.of(new FieldMappingResult(k, null, v)));
+
+        return ImmutableMap.copyOf(
+                Maps.transformEntries(
+                        valuesMap,
+                        (k, v) -> ImmutableList.of(new FieldMappingResult(k, null, v))));
     }
 
 }

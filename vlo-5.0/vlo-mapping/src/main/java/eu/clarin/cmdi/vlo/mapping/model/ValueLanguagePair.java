@@ -17,12 +17,15 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import java.util.Objects;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Getter
 @ToString
 public class ValueLanguagePair {
 
@@ -32,14 +35,6 @@ public class ValueLanguagePair {
     public ValueLanguagePair(String value, String language) {
         this.value = value;
         this.language = language;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public String getLanguage() {
-        return language;
     }
 
     @Override
