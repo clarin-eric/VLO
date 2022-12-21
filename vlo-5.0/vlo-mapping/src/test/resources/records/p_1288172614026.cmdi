@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cmd:CMD xmlns:cmd="http://www.clarin.eu/cmd/1" xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1288172614026" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" CMDVersion="1.2" xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://infra.clarin.eu/CMDI/1.x/xsd/cmd-envelop.xsd http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1288172614026 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1288172614026/xsd">
-   <cmd:Header>
-      <cmd:MdCreator>olac2cmdi.xsl</cmd:MdCreator>
-      <cmd:MdCreationDate>2022-12-01</cmd:MdCreationDate>
-      <cmd:MdSelfLink>oai:wals.info:abv</cmd:MdSelfLink>
-      <cmd:MdProfile>clarin.eu:cr1:p_1288172614026</cmd:MdProfile>
-      <cmd:MdCollectionDisplayName>WALS Online</cmd:MdCollectionDisplayName>
-   </cmd:Header>
-   <cmd:Resources>
-      <cmd:ResourceProxyList>
-         <cmd:ResourceProxy id="d134986e16">
-            <cmd:ResourceType>Resource</cmd:ResourceType>
-            <cmd:ResourceRef>https://wals.info/languoid/lect/wals_code_abv</cmd:ResourceRef>
-         </cmd:ResourceProxy>
-      </cmd:ResourceProxyList>
-      <cmd:JournalFileProxyList/>
-      <cmd:ResourceRelationList/>
-   </cmd:Resources>
-   <cmd:Components>
-      <cmdp:OLAC-DcmiTerms>
-         <cmdp:date dcterms-type="W3CDTF">2022-12-01</cmdp:date>
-         <cmdp:description>
-      A page listing all resources in WALS Online which are relevant to the language Abui.
-    </cmdp:description>
-         <cmdp:format dcterms-type="IMT">text/html</cmdp:format>
-         <cmdp:identifier dcterms-type="URI">https://wals.info/languoid/lect/wals_code_abv</cmdp:identifier>
-         <cmdp:language olac-language="eng"/>
-         <cmdp:publisher>Max Planck Institute for Evolutionary Anthropology</cmdp:publisher>
-         <cmdp:subject olac-language="abz"/>
-         <cmdp:title>WALS Online Resources for Abui</cmdp:title>
-         <cmdp:type dcterms-type="DCMIType">Text</cmdp:type>
-         <cmdp:type olac-linguistic-type="language_description"/>
-      </cmdp:OLAC-DcmiTerms>
-   </cmd:Components>
+    <cmd:Header>
+        <cmd:MdCreator>olac2cmdi.xsl</cmd:MdCreator>
+        <cmd:MdCreationDate>2022-12-01</cmd:MdCreationDate>
+        <cmd:MdSelfLink>oai:wals.info:abv</cmd:MdSelfLink>
+        <cmd:MdProfile>clarin.eu:cr1:p_1288172614026</cmd:MdProfile>
+        <cmd:MdCollectionDisplayName>WALS Online</cmd:MdCollectionDisplayName>
+    </cmd:Header>
+    <cmd:Resources>
+        <cmd:ResourceProxyList>
+            <cmd:ResourceProxy id="d134986e16">
+                <cmd:ResourceType>Resource</cmd:ResourceType>
+                <cmd:ResourceRef>https://wals.info/languoid/lect/wals_code_abv</cmd:ResourceRef>
+            </cmd:ResourceProxy>
+        </cmd:ResourceProxyList>
+        <cmd:JournalFileProxyList/>
+        <cmd:ResourceRelationList/>
+    </cmd:Resources>
+    <cmd:Components>
+        <cmdp:OLAC-DcmiTerms>
+            <cmdp:date dcterms-type="W3CDTF">2022-12-01</cmdp:date>
+            <cmdp:description>
+                A page listing all resources in WALS Online which are relevant to the language Abui.
+            </cmdp:description>
+            <cmdp:format dcterms-type="IMT">text/html</cmdp:format>
+            <cmdp:identifier dcterms-type="URI">https://wals.info/languoid/lect/wals_code_abv</cmdp:identifier>
+            <cmdp:language olac-language="eng">Anglais</cmdp:language>
+            <cmdp:publisher>Max Planck Institute for Evolutionary Anthropology</cmdp:publisher>
+            <cmdp:subject olac-language="abz"/>
+            <cmdp:title>WALS Online Resources for Abui</cmdp:title>
+            <cmdp:type dcterms-type="DCMIType">Text</cmdp:type>
+            <cmdp:type olac-linguistic-type="language_description"/>
+        </cmdp:OLAC-DcmiTerms>
+    </cmd:Components>
 </cmd:CMD>

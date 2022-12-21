@@ -53,8 +53,10 @@ public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
         log.trace("Mapping value context {}", context);
         final Stream.Builder<Stream<FieldMappingResult>> builder = Stream.builder();
 
+        log.debug("Evaluating rules for context: {}", context);
         for (MappingRule rule : rules) {
             if (rule.applies(context)) {
+                log.debug("Rule applies to context: {}", rule);
                 builder.add(rule
                         .getTransformerStream().map(
                                 t -> new FieldMappingResult(
@@ -62,8 +64,11 @@ public class ContextFieldValueMapperImpl implements ContextFieldValueMapper {
                                         context,
                                         t.apply(context, mappingConfig).collect(Collectors.toList()))));
                 if (rule.isTerminal()) {
+                    log.debug("Rule is terminal, will not apply further rules to this context", rule);
                     break;
                 }
+            } else {
+                log.debug("Rule does not apply to context: {}", rule);
             }
         }
 

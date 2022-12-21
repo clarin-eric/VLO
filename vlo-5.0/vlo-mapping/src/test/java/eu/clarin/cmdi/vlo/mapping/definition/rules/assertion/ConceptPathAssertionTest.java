@@ -32,8 +32,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ConceptPathAssertionTest {
 
-    private final ValueContext context = SimpleValueContext.builder()
+    private final ValueContext context1 = SimpleValueContext.builder()
             .conceptPath(Arrays.asList("concept1", "concept2", "", "concept3"))
+            .build();
+
+    private final ValueContext context2 = SimpleValueContext.builder()
+            .conceptPath(Arrays.asList("", "conceptA", "", "conceptB"))
             .build();
 
     /**
@@ -43,15 +47,23 @@ public class ConceptPathAssertionTest {
     public void testEvaluateMisMatchNonPartial() {
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept4");
-            assertFalse(instance.evaluate(context), "Mismatch with non-partial match");
+            assertFalse(instance.evaluate(context1), "Mismatch with non-partial match");
         }
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept1");
-            assertFalse(instance.evaluate(context), "Mismatch with non-partial match (single matching concept)");
+            assertFalse(instance.evaluate(context1), "Mismatch with non-partial match (single matching concept)");
+        }
+        {
+            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3");
+            assertFalse(instance.evaluate(context1), "Mismatch with non-partial match");
         }
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3", "concept4");
-            assertFalse(instance.evaluate(context), "Mismatch with non-partial match (target too deep)");
+            assertFalse(instance.evaluate(context1), "Mismatch with non-partial match (target too deep)");
+        }
+        {
+            ConceptPathAssertion instance = new ConceptPathAssertion("conceptA", "conceptB");
+            assertFalse(instance.evaluate(context2), "Mismatch with partial match (concept at root)");
         }
     }
 
@@ -59,15 +71,19 @@ public class ConceptPathAssertionTest {
     public void testEvaluateMisMatchPartial() {
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept4", "*");
-            assertFalse(instance.evaluate(context), "Mismatch with partial match (single concept)");
+            assertFalse(instance.evaluate(context1), "Mismatch with partial match (single concept)");
         }
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept2", "concept1", "*");
-            assertFalse(instance.evaluate(context), "Mismatch with partial match (multiple concepts)");
+            assertFalse(instance.evaluate(context1), "Mismatch with partial match (multiple concepts)");
         }
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3", "concept4", "*");
-            assertFalse(instance.evaluate(context), "Mismatch with partial match (target too deep)");
+            assertFalse(instance.evaluate(context1), "Mismatch with partial match (target too deep)");
+        }
+        {
+            ConceptPathAssertion instance = new ConceptPathAssertion("conceptA", "*", "conceptB");
+            assertFalse(instance.evaluate(context2), "Mismatch with partial match (concept at root)");
         }
     }
 
@@ -75,34 +91,35 @@ public class ConceptPathAssertionTest {
     public void testEvaluatePartialMatch() {
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*");
-            assertTrue(instance.evaluate(context), "Match with partial match (single concept)");
+            assertTrue(instance.evaluate(context1), "Match with partial match (single concept)");
         }
         {
             ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "*");
-            assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
+            assertTrue(instance.evaluate(context1), "Match with partial match (multiple concept)");
         }
         {
-            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "", "concept2", "", "*");
-            assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
+            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*", "concept2", "*");
+            assertTrue(instance.evaluate(context1), "Match with partial match (multiple concept)");
+        }
+        {
+            ConceptPathAssertion instance = new ConceptPathAssertion("*", "conceptA", "*");
+            assertTrue(instance.evaluate(context2), "Match with partial match (wildcard at root)");
         }
     }
 
     @Test
     public void testEvaluateCompleteMatch() {
-        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3");
-        assertTrue(instance.evaluate(context), "Match with partial match (single concept)");
+        {
+            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*", "concept3");
+            assertTrue(instance.evaluate(context1), "Match with partial match (multiple concept)");
+        }
+
+        {
+            ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*", "concept2", "*", "concept3");
+            assertTrue(instance.evaluate(context1), "Match with partial match (multiple concept)");
+        }
     }
 
-    {
-        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "*", "concept3", "");
-        assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
-    }
-
-    {
-        ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "", "concept2", "", "concept3", "");
-        assertTrue(instance.evaluate(context), "Match with partial match (multiple concept)");
-    }
-    
     @Test
     public void testGetConceptPath() {
         ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3");
@@ -110,14 +127,19 @@ public class ConceptPathAssertionTest {
         instance = new ConceptPathAssertion("concept1", "*");
         assertEquals("concept1 *", instance.getConceptPath());
     }
-    
+
     @Test
     public void testSetConceptPath() {
         ConceptPathAssertion instance = new ConceptPathAssertion("concept1", "concept2", "concept3");
         instance.setConceptPath("concept1 concept2 concept3");
         assertThat(instance.getTargetPath(), hasSize(3));
         assertThat(instance.getTargetPath(), hasItems("concept1", "concept2", "concept3"));
-        instance.setConceptPath("concept1   concept2  *  ");
+
+        instance.setConceptPath("   concept1   concept2       *  ");
+        assertThat(instance.getTargetPath(), hasSize(3));
+        assertThat(instance.getTargetPath(), hasItems("concept1", "concept2", "*"));
+
+        instance.setConceptPath("   concept1\nconcept2 \n  *  ");
         assertThat(instance.getTargetPath(), hasSize(3));
         assertThat(instance.getTargetPath(), hasItems("concept1", "concept2", "*"));
     }

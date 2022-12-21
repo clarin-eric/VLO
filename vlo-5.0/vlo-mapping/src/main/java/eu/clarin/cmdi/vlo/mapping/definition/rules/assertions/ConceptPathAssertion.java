@@ -21,7 +21,6 @@ import static com.google.common.base.Predicates.not;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -48,6 +47,9 @@ import java.util.regex.Pattern;
  * // exact match of first concept, any actuals after that
  * new ConceptPathAssertion("http://concept1", "*");
  *
+ * // exact match of a concept, any actuals before that
+ * new ConceptPathAssertion("*", "http://concept1");
+ *
  * // match of two concepts with any actual between and after these
  * new ConceptPathAssertion("http://concept1", "*", "http://concept2", "*");
  * }</pre>
@@ -62,7 +64,7 @@ public class ConceptPathAssertion extends ContextAssertion {
 
     public static final String WILDCARD = "*";
     private final static Joiner pathJoiner = Joiner.on(' ');
-    private final static Splitter pathSplitter = Splitter.on(Pattern.compile(" +"));
+    private final static Splitter pathSplitter = Splitter.on(Pattern.compile("[\\s]+"));
 
     @XmlTransient
     private List<String> targetPath;
@@ -80,14 +82,15 @@ public class ConceptPathAssertion extends ContextAssertion {
     }
 
     public void setConceptPath(String path) {
-        setTargetPath(pathSplitter.splitToStream(path)
-                .map(String::trim)
-                .toList());
+        setTargetPath(pathSplitter.splitToList(path.trim()));
+    }
+
+    public final void setTargetPath(List<String> target) {
+        this.targetPath = target;
     }
 
     public final void setTargetPath(Iterable<String> target) {
-        //remove null
-        this.targetPath = ImmutableList.copyOf(Iterables.filter(target, not(Strings::isNullOrEmpty)));
+        this.targetPath = ImmutableList.copyOf(target);
     }
 
     public List<String> getTargetPath() {
@@ -97,8 +100,7 @@ public class ConceptPathAssertion extends ContextAssertion {
     @Override
     public Boolean evaluate(ValueContext context) {
         final Iterator<String> targetIterator = targetPath.iterator();
-        final Iterator<String> actualIterator = Iterators.filter(
-                context.getConceptPath().iterator(), not(Strings::isNullOrEmpty));
+        final Iterator<String> actualIterator = context.getConceptPath().iterator();
 
         return evaluate(targetIterator, actualIterator);
     }
