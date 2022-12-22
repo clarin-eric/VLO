@@ -17,33 +17,24 @@
 package eu.clarin.cmdi.vlo.mapping.model;
 
 import java.util.Collection;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
+@Getter
+@AllArgsConstructor
 public class FieldMappingResult {
 
     private final String field;
     private final ValueContext context;
     private final Collection<ValueLanguagePair> values;
+    private final int score;
 
     public FieldMappingResult(String field, ValueContext context, Collection<ValueLanguagePair> valueLanguagePair) {
-        this.field = field;
-        this.context = context;
-        this.values = valueLanguagePair;
-    }
-
-    public String getField() {
-        return field;
-    }
-
-    public ValueContext getContext() {
-        return context;
-    }
-
-    public Collection<ValueLanguagePair> getValues() {
-        return values;
+        this(field, context, valueLanguagePair, 0);
     }
 
 }

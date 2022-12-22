@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.mapping.definition.rules.transformation;
 
-import eu.clarin.cmdi.vlo.mapping.definition.rules.transformation.ValueMapTransformer;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -37,6 +36,7 @@ import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -379,6 +379,17 @@ public class ValueMapTransformerTest {
     }
 
     @Test
+    public void testGetScore() {
+        // no score
+        instance = new ValueMapTransformer(FIELD);
+        assertEquals(5, instance.getScore(5));
+        // override
+        instance = new ValueMapTransformer(FIELD, 10);
+        assertEquals(10, instance.getScore(5));
+    }
+
+    @Test
+    @Disabled
     public void regexPerformanceTest() {
         final int valuesCount = 1_000_000;
 

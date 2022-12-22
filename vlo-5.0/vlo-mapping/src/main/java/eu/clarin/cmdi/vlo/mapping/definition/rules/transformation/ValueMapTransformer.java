@@ -39,7 +39,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -98,14 +97,22 @@ public class ValueMapTransformer extends BaseTransformer {
     @Setter
     private Map<String, String> map;
 
+    @XmlAttribute
+    private Integer score;
+
     public ValueMapTransformer() {
         this(null);
     }
 
     public ValueMapTransformer(String field) {
+        this(field, null);
+    }
+
+    public ValueMapTransformer(String field, Integer score) {
         super(field);
         this.mapperSupplier = Suppliers.memoize(this::createMapperFunction);
         this.keyNormalizerSupplier = Suppliers.memoize(this::createKeyNormalizer);
+        this.score = score;
     }
 
     @Override
@@ -347,6 +354,11 @@ public class ValueMapTransformer extends BaseTransformer {
                     // value
                     ValueMapDefinition::getTarget));
         }
+    }
+
+    @Override
+    public int getScore(int ruleScore) {
+        return Optional.ofNullable(score).orElse(ruleScore);
     }
 
     @NoArgsConstructor

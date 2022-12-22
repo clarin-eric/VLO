@@ -23,8 +23,10 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContextImpl;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 
@@ -36,12 +38,20 @@ import lombok.NoArgsConstructor;
 @XmlAccessorType(XmlAccessType.NONE)
 public class TransformerChain extends BaseTransformer {
 
+    @XmlAttribute
+    private Integer score = null;
+
     @XmlElement(name = "transformer")
     private List<Transformer> transformers;
 
     public TransformerChain(String field, List<Transformer> transformers) {
+        this(field, transformers, null);
+    }
+    
+    public TransformerChain(String field, List<Transformer> transformers, Integer score) {
         super(field);
         this.transformers = transformers;
+        this.score = score;
     }
 
     @Override
@@ -52,6 +62,16 @@ public class TransformerChain extends BaseTransformer {
         }
 
         return Streams.stream(currentContext.getValues());
+    }
+
+    @Override
+    public int getScore(int ruleScore) {
+        return Optional.ofNullable(score)
+                // or else sum of scores in transformer chain
+                .orElse(transformers
+                        .stream().
+                        mapToInt(t -> t.getScore(ruleScore))
+                        .sum());
     }
 
 }
