@@ -17,11 +17,8 @@
 package eu.clarin.cmdi.vlo.mapping.definition.rules.assertions;
 
 import com.google.common.base.Joiner;
-import static com.google.common.base.Predicates.not;
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterators;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
