@@ -38,24 +38,26 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public class MappingDefinitionSample {
-    
+
     public static final MappingDefinition MAPPING_DEFINITION = new MappingDefinition();
-    
+
     static {
-        
+
         final ValueMapTransformer valueMapTransformer = new ValueMapTransformer();
         valueMapTransformer.setField("field2");
         valueMapTransformer.setBehaviour(ValueMappingBehaviour.REMOVE_ORIGINAL);
         valueMapTransformer.setCaseSensitive(false);
         valueMapTransformer.setRegex(true);
         valueMapTransformer.setMap(ImmutableMap.of("value1", "val1", "value2", "val2"));
-        
+
         MAPPING_DEFINITION.setRules(Arrays.asList(// composite rule: and(not(false), {concept path})
                 new ContextAssertionBasedRule(
                         Arrays.asList(
@@ -68,7 +70,7 @@ public class MappingDefinitionSample {
                                                 "concept1",
                                                 "concept2"))),
                         Arrays.asList(new IdentityTransformer("field1"), valueMapTransformer),
-                        true),
+                        true, 1),
                 // multiple value rules
                 new ContextAssertionBasedRule(
                         Arrays.asList(
@@ -76,8 +78,8 @@ public class MappingDefinitionSample {
                                 new ValueAssertion("value2", Boolean.FALSE, Boolean.TRUE, "fr"),
                                 new ValueAssertion("value[A-Z]", Boolean.TRUE, Boolean.FALSE)
                         ),
-                        Arrays.asList(new IdentityTransformer("field3")),
-                        false),
+                        Arrays.asList(new IdentityTransformer("field3", 3)),
+                        false, 2),
                 // xpath rules
                 new ContextAssertionBasedRule(
                         Arrays.asList(
@@ -87,14 +89,14 @@ public class MappingDefinitionSample {
                         Arrays.asList(new IdentityTransformer("field4")),
                         true)
         ));
-        
+
         MAPPING_DEFINITION.setFieldValuesProcessor(new FieldValuesRootProcessor(ImmutableList.of(new IdentityProcessor())));
-        
+
     }
-    
+
     public static final String MAPPING_DEFINITION_XML = """
         <mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <contextAssertionBasedRule>
+            <contextAssertionBasedRule score="1">
                 <assertions>
                     <assertion xsi:type="contextAssertionAndOperator">
                         <assertion xsi:type="contextAssertionNotOperator">
@@ -116,14 +118,14 @@ public class MappingDefinitionSample {
                 </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
-            <contextAssertionBasedRule>
+            <contextAssertionBasedRule score="2">
                 <assertions>
                     <assertion xsi:type="valueAssertion" regex="false" lang="en" caseSensitive="false">value1</assertion>
                     <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
                     <assertion xsi:type="valueAssertion" regex="true" caseSensitive="false">value[A-Z]</assertion>
                 </assertions>
                 <transformers>
-                    <transformer xsi:type="identityTransformer" field="field3"/>
+                    <transformer xsi:type="identityTransformer" field="field3" score="3" />
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
@@ -139,18 +141,18 @@ public class MappingDefinitionSample {
             </contextAssertionBasedRule>
         </mappingDefinition>
       """;
-    
+
     public static Source MAPPING_DEFINITION_XML_SOURCE() {
         return new StreamSource(new StringReader(MAPPING_DEFINITION_XML));
     }
-    
+
     public static void assertContents(final Iterable<? extends MappingRule> rules) {
         assertContents(ImmutableList.copyOf(rules));
     }
-    
+
     public static void assertContents(final List<? extends MappingRule> rules) {
         assertThat("Three rules in definition", rules, hasSize(3));
-        
+
         assertThat("Rules have assertions",
                 rules, hasItem(
                         hasProperty("assertions", hasSize(greaterThan(0)))));
@@ -160,13 +162,16 @@ public class MappingDefinitionSample {
          */
         {
             final ContextAssertionBasedRule rule1 = (ContextAssertionBasedRule) rules.get(0);
+            assertNotNull(rule1);
+
+            assertThat(rule1, hasProperty("score", equalTo(1)));
+
             final List<? extends ContextAssertion> rule1assertions = rule1.getAssertions();
-            
             assertThat(rule1assertions, hasSize(1));
             assertThat("one 'root' assertion in rule 1",
                     rule1assertions, hasItem(
                             isA(ContextAssertionAndOperator.class)));
-            
+
             final ContextAssertionAndOperator and = (ContextAssertionAndOperator) rule1assertions.get(0);
             assertThat("Number of assertions in rule",
                     and.getAssertions(), hasSize(2));
@@ -174,19 +179,19 @@ public class MappingDefinitionSample {
                     and.getAssertions(), hasItems(
                     isA(ContextAssertionNotOperator.class),
                     isA(ConceptPathAssertion.class)));
-            
+
             assertThat("Definition of concept path assertion",
                     and.getAssertions(), hasItem(
                     allOf(
                             isA(ConceptPathAssertion.class),
                             hasProperty("targetPath", hasItems("concept1", "concept2"))
                     )));
-            
+
             assertThat("Transformers", rule1,
                     hasProperty("transformers", hasItems(
                             isA(IdentityTransformer.class),
                             isA(ValueMapTransformer.class))));
-            
+
             assertThat("Value map transformer properties", rule1.getTransformers(), hasItem(
                     allOf(
                             hasProperty("field", equalTo("field2")),
@@ -195,7 +200,7 @@ public class MappingDefinitionSample {
                             hasProperty("regex", equalTo(true)),
                             hasProperty("map", aMapWithSize(2)))
             ));
-            
+
             assertThat("Terminal state of rule", rule1, hasProperty("terminal", equalTo(true)));
         }
         /**
@@ -203,12 +208,16 @@ public class MappingDefinitionSample {
          */
         {
             final ContextAssertionBasedRule rule2 = (ContextAssertionBasedRule) rules.get(1);
+            assertNotNull(rule2);
+
+            assertThat(rule2, hasProperty("score", equalTo(2)));
+
             final List<? extends ContextAssertion> rule2assertions = rule2.getAssertions();
             assertThat(rule2assertions, hasSize(3));
             assertThat("Only value assertions in rule 2", rule2assertions, allOf(
                     hasItem(isA(ValueAssertion.class)),
                     not(hasItem(not(isA(ValueAssertion.class))))));
-            
+
             assertThat("Definition of value assertions", rule2assertions, hasItems(
                     allOf(
                             hasProperty("target", equalTo("value1")),
@@ -227,9 +236,10 @@ public class MappingDefinitionSample {
                             hasProperty("language", nullValue())
                     )
             ));
-            
-            assertThat("Transformer", rule2, hasProperty("transformers", allOf(hasItem(isA(IdentityTransformer.class)))));
-            
+
+            assertThat("Transformer", rule2, hasProperty("transformers", hasItem(isA(IdentityTransformer.class))));
+            assertEquals(3, rule2.getTransformers().get(0).getScore(2), "Transformer score override");
+
             assertThat("Terminal state of rule", rule2, hasProperty("terminal", equalTo(false)));
         }
 

@@ -61,6 +61,7 @@ public class FieldValuesRootProcessor extends FieldValuesProcessor {
 
     @Override
     public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> input) {
+        //TODO: score aggregation?
         Map<String, List<FieldMappingResult>> currentInput = input;
         Optional<Map<String, Collection<ValueLanguagePair>>> intermediateResult = Optional.empty();
 
@@ -80,7 +81,7 @@ public class FieldValuesRootProcessor extends FieldValuesProcessor {
         return ImmutableMap.copyOf(
                 Maps.transformEntries(
                         valuesMap,
-                        (k, v) -> ImmutableList.of(new FieldMappingResult(k, null, v))));
+                        (k, v) -> ImmutableList.of(new FieldMappingResult(k, null, v)))); 
     }
 
 }

@@ -22,7 +22,9 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlRootElement;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -37,13 +39,26 @@ import lombok.ToString;
 @ToString
 public class IdentityTransformer extends BaseTransformer {
 
+    @XmlAttribute
+    private Integer score = null;
+
     public IdentityTransformer(String field) {
         super(field);
+    }
+
+    public IdentityTransformer(String field, int score) {
+        super(field);
+        this.score = score;
     }
 
     @Override
     public Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig) {
         return Streams.stream(valueContext.getValues());
+    }
+
+    @Override
+    public int getScore(int ruleScore) {
+        return Optional.ofNullable(score).orElse(ruleScore);
     }
 
 }

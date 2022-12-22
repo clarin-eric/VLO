@@ -36,4 +36,6 @@ public abstract class Transformer {
 
     public abstract Stream<ValueLanguagePair> apply(ValueContext valueContext, VloMappingConfiguration mappingConfig);
 
+    public abstract int getScore(int ruleScore);
+
 }
