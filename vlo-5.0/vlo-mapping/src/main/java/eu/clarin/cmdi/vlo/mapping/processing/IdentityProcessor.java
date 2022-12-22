@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
@@ -40,10 +41,10 @@ public class IdentityProcessor extends FieldValuesProcessor {
                         (k, v) -> mappingResultsToValues(v)));
     }
 
-    private Collection<ValueLanguagePair> mappingResultsToValues(List<FieldMappingResult> mappingResults) {
-        return mappingResults
-                .stream()
-                .flatMap(r -> r.getValues().stream())
+    protected static Collection<ValueLanguagePair> mappingResultsToValues(List<FieldMappingResult> mappingResults) {
+        return FluentIterable
+                .from(mappingResults)
+                .transformAndConcat(FieldMappingResult::getValues)
                 .toList();
     }
 
