@@ -29,6 +29,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,11 +96,8 @@ public class ScoreFilterProcessorTest {
                 equalTo("fieldA"),
                 contains(sameInstance(vlp2))));
 
-        assertThat("Untouched field", output, hasEntry(equalTo(
-                "fieldB"),
-                contains(sameInstance(vlp1),
-                        sameInstance(vlp2),
-                        sameInstance(vlp3))));
+        assertThat("Untouched field", output, hasEntry(
+                equalTo("fieldB"), hasSize(3)));
 
         assertThat("Processed field", output, hasEntry(equalTo(
                 "fieldC"),
@@ -120,19 +118,86 @@ public class ScoreFilterProcessorTest {
 
         final Map<String, Collection<ValueLanguagePair>> output = result.get();
 
-        assertThat("Processed field", output, hasEntry(equalTo(
+        assertThat("Processed field (keep highest)", output, hasEntry(equalTo(
                 "fieldA"),
                 contains(sameInstance(vlp2))));
 
-        assertThat("Processed field", output, hasEntry(equalTo(
+        assertThat("Processed field (keep highest)", output, hasEntry(equalTo(
                 "fieldB"),
                 contains(sameInstance(vlp1), sameInstance(vlp2))));
 
+        assertThat("Untouched field", output, hasEntry(
+                equalTo("fieldC"), hasSize(3)));
+    }
+
+    /**
+     * Test of process method, of class ScoreFilterProcessor.
+     */
+    @Test
+    public void testRangeFilterMin() {
+        instance.setFields("fieldA");
+        instance.setMinScore(2);
+        final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+
+        assertTrue(result.isPresent());
+
+        final Map<String, Collection<ValueLanguagePair>> output = result.get();
+
+        assertThat("Processed field (min filter)", output, hasEntry(equalTo(
+                "fieldA"),
+                contains(sameInstance(vlp2),
+                        sameInstance(vlp3))));
+
+        assertThat("Untouched field", output, hasEntry(
+                equalTo("fieldB"), hasSize(3)));
+
+        assertThat("Untouched field", output, hasEntry(
+                equalTo("fieldC"), hasSize(3)));
+
+    }
+
+    public void testRangeFilterMinMax() {
+        instance.setFields("fieldB");
+        instance.setMinScore(2);
+        instance.setMaxScore(2);
+        final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+
+        assertTrue(result.isPresent());
+
+        final Map<String, Collection<ValueLanguagePair>> output = result.get();
+
+        assertThat("Untouched field", output, hasEntry(
+                equalTo("fieldA"), hasSize(3)));
+
+        assertThat("Processed field (min+max filter)", output, hasEntry(equalTo(
+                "fieldB"),
+                contains(sameInstance(vlp1),
+                        sameInstance(vlp2))));
+
+        assertThat("Untouched field", output, hasEntry(
+                equalTo("fieldC"), hasSize(3)));
+    }
+
+    public void testRangeFilterMax() {
+
+        instance.setFields("fieldC");
+        instance.setMaxScore(2);
+        final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+
+        assertTrue(result.isPresent());
+
+        final Map<String, Collection<ValueLanguagePair>> output = result.get();
+
         assertThat("Untouched field", output, hasEntry(equalTo(
+                "fieldA"), hasSize(3)));
+
+        assertThat("Untouched field", output, hasEntry(equalTo(
+                "fieldB"), hasSize(3)));
+
+        assertThat("Processed field (max filter)", output, hasEntry(equalTo(
                 "fieldC"),
                 contains(sameInstance(vlp1),
-                        sameInstance(vlp2),
-                        sameInstance(vlp3))));
+                        sameInstance(vlp2))));
     }
 
 }
