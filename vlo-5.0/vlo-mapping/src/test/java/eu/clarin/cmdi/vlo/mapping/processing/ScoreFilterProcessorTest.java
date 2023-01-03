@@ -31,6 +31,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -55,37 +56,44 @@ public class ScoreFilterProcessorTest {
     @Mock
     private ValueLanguagePair vlp3;
 
+    private ScoreFilterProcessor instance;
+    private Map<String, List<FieldMappingResult>> input;
+
+    @BeforeEach
+    public void setUp() {
+        instance = new ScoreFilterProcessor();
+        input = ImmutableMap.of(
+                "fieldA", ImmutableList.of(
+                        new FieldMappingResult("fieldA", vc, ImmutableList.of(vlp1), 1),
+                        new FieldMappingResult("fieldA", vc, ImmutableList.of(vlp2), 3),
+                        new FieldMappingResult("fieldA", vc, ImmutableList.of(vlp3), 2)),
+                "fieldB", ImmutableList.of(
+                        new FieldMappingResult("fieldB", vc, ImmutableList.of(vlp1), 2),
+                        new FieldMappingResult("fieldB", vc, ImmutableList.of(vlp2), 2),
+                        new FieldMappingResult("fieldB", vc, ImmutableList.of(vlp3), 1)),
+                "fieldC", ImmutableList.of(
+                        new FieldMappingResult("fieldC", vc, ImmutableList.of(vlp1), 1),
+                        new FieldMappingResult("fieldC", vc, ImmutableList.of(vlp2), 2),
+                        new FieldMappingResult("fieldC", vc, ImmutableList.of(vlp3), 3)));
+    }
+
     /**
      * Test of process method, of class ScoreFilterProcessor.
      */
     @Test
-    public void testProcess() {
-        final ScoreFilterProcessor instance = new ScoreFilterProcessor("fieldA fieldC", 1);
+    public void testKeepTop() {
+        instance.setFields("fieldA fieldC");
+        instance.setKeepTop(1);
 
-        final Map<String, List<FieldMappingResult>> input
-                = ImmutableMap.of(
-                        "fieldA", ImmutableList.of(
-                                new FieldMappingResult("fieldA", vc, ImmutableList.of(vlp1), 1),
-                                new FieldMappingResult("fieldA", vc, ImmutableList.of(vlp2), 3),
-                                new FieldMappingResult("fieldA", vc, ImmutableList.of(vlp3), 2)),
-                        "fieldB", ImmutableList.of(
-                                new FieldMappingResult("fieldB", vc, ImmutableList.of(vlp1), 1),
-                                new FieldMappingResult("fieldB", vc, ImmutableList.of(vlp2), 3),
-                                new FieldMappingResult("fieldB", vc, ImmutableList.of(vlp3), 2)),
-                        "fieldC", ImmutableList.of(
-                                new FieldMappingResult("fieldC", vc, ImmutableList.of(vlp1), 1),
-                                new FieldMappingResult("fieldC", vc, ImmutableList.of(vlp2), 2),
-                                new FieldMappingResult("fieldC", vc, ImmutableList.of(vlp3), 3)));
         final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
 
         assertTrue(result.isPresent());
 
         final Map<String, Collection<ValueLanguagePair>> output = result.get();
 
-        assertThat("Processed field", output, hasEntry(equalTo(
-                "fieldA"),
+        assertThat("Processed field", output, hasEntry(
+                equalTo("fieldA"),
                 contains(sameInstance(vlp2))));
-        //hasSize(1)));
 
         assertThat("Untouched field", output, hasEntry(equalTo(
                 "fieldB"),
@@ -96,6 +104,35 @@ public class ScoreFilterProcessorTest {
         assertThat("Processed field", output, hasEntry(equalTo(
                 "fieldC"),
                 contains(sameInstance(vlp3))));
+    }
+
+    /**
+     * Test of process method, of class ScoreFilterProcessor.
+     */
+    @Test
+    public void testKeepHighestScoring() {
+        instance.setFields("fieldA fieldB");
+        instance.setKeepHighestScoring(true);
+
+        final Optional<Map<String, Collection<ValueLanguagePair>>> result = instance.process(input);
+
+        assertTrue(result.isPresent());
+
+        final Map<String, Collection<ValueLanguagePair>> output = result.get();
+
+        assertThat("Processed field", output, hasEntry(equalTo(
+                "fieldA"),
+                contains(sameInstance(vlp2))));
+
+        assertThat("Processed field", output, hasEntry(equalTo(
+                "fieldB"),
+                contains(sameInstance(vlp1), sameInstance(vlp2))));
+
+        assertThat("Untouched field", output, hasEntry(equalTo(
+                "fieldC"),
+                contains(sameInstance(vlp1),
+                        sameInstance(vlp2),
+                        sameInstance(vlp3))));
     }
 
 }
