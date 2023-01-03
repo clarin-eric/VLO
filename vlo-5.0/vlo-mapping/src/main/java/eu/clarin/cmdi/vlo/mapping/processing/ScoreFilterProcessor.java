@@ -23,6 +23,10 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import static java.util.stream.Collectors.teeing;
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toUnmodifiableList;
+import static java.util.stream.Collectors.maxBy;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,8 +35,6 @@ import lombok.Setter;
 
 /**
  * Filter and sort results based on score.
- *
- * TODO: keep all values with max score
  *
  * TODO: absolute range limit
  *
@@ -51,32 +53,61 @@ public class ScoreFilterProcessor extends FieldFilteredProcessor {
     @XmlElement(nillable = true)
     private Integer keepTop = null;
 
-    @XmlElement
+    @XmlElement(defaultValue = "false")
     private boolean keepHighestScoring = false;
+
+    @XmlElement(nillable = true)
+    private Integer minScore = null;
+
+    @XmlElement(nillable = true)
+    private Integer maxScore = null;
 
     @Override
     protected Collection<ValueLanguagePair> processForMatchedField(List<FieldMappingResult> results) {
-        Stream<FieldMappingResult> stream = results
-                .stream();
+        Stream<FieldMappingResult> stream = results.stream();
 
-        if (keepHighestScoring) {
-            final Stream<FieldMappingResult> oldStream = stream;
-            stream = results.stream()
-                    // get maximal value
-                    .max(scoreComparator)
-                    // filter stream by value if maximum found
-                    .map(maxResult -> oldStream.filter(r -> r.getScore() == maxResult.getScore()))
-                    // if not keep old stream
-                    .orElse(stream);
+        if (minScore != null || maxScore != null) {
+            stream = applyRangeFilter(stream, minScore, maxScore);
         }
 
-        stream = stream.sorted(scoreComparator.reversed());
+        if (keepHighestScoring) {
+            stream = keepHighestScoring(stream);
+        }
 
         if (keepTop != null) {
-            stream = stream.limit(keepTop);
+            stream = keepTop(stream, keepTop);
         }
 
         return stream.flatMap(r -> r.getValues().stream()).toList();
+    }
+
+    private static Stream<FieldMappingResult> applyRangeFilter(Stream<FieldMappingResult> stream, Integer minScore, Integer maxScore) {
+        if (minScore != null) {
+            stream = stream.filter(r -> r.getScore() >= minScore);
+        }
+        if (maxScore != null) {
+            stream = stream.filter(r -> r.getScore() <= maxScore);
+        }
+        return stream;
+    }
+
+    private static Stream<FieldMappingResult> keepHighestScoring(Stream<FieldMappingResult> stream) {
+        return stream.collect(teeing(
+                // get result with maximal score
+                maxBy(scoreComparator),
+                // simultaneously materialize results and produce a new stream
+                collectingAndThen(toUnmodifiableList(), List::stream),
+                // apply max value (if present) as a filter to the new stream
+                (max, stream2) -> max
+                        .map(maxResult -> stream2.filter(r -> r.getScore() == maxResult.getScore()))
+                        // there is no max value, so re-stream unfiltered
+                        .orElse(stream2)));
+    }
+
+    private static Stream<FieldMappingResult> keepTop(Stream<FieldMappingResult> stream, int keepTop) {
+        return stream
+                .sorted(scoreComparator.reversed())
+                .limit(keepTop);
     }
 
 }
