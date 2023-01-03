@@ -16,9 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.mapping.processing;
 
-import com.google.common.base.CharMatcher;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -26,66 +23,57 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Filter and sort results based on score.
- * 
+ *
  * TODO: keep all values with max score
+ *
  * TODO: absolute range limit
+ *
  * @author twagoo
  */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @XmlRootElement
-public class ScoreFilterProcessor extends FieldValuesProcessor {
+public class ScoreFilterProcessor extends FieldFilteredProcessor {
 
     private final static Comparator<FieldMappingResult> scoreComparator
-            = Comparator.comparingInt(FieldMappingResult::getScore).reversed();
-
-    @XmlElement
-    private String fields;
+            = Comparator.comparingInt(FieldMappingResult::getScore);
 
     @XmlElement(nillable = true)
-    private Integer keepHighest = null;
+    private Integer keepTop = null;
+
+    @XmlElement
+    private boolean keepHighestScoring = false;
 
     @Override
-    public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> resultsByField) {
-        if (fields.isBlank()) {
-            return Optional.empty();
-        }
-
-        final List<String> matchedFields = Splitter.on(CharMatcher.whitespace())
-                .splitToList(this.fields);
-
-        if (matchedFields.isEmpty()) {
-            return Optional.empty();
-        }
-
-        final boolean matchAll = matchedFields.contains("*");
-        return Optional.of(Maps.transformEntries(resultsByField, (field, results) -> {
-            if (matchAll || matchedFields.contains(field)) {
-                return processResultsList(results);
-            } else {
-                //unmatched fields are not processed
-                return IdentityProcessor.mappingResultsToValues(results);
-            }
-        }));
-    }
-
-    private Collection<ValueLanguagePair> processResultsList(List<FieldMappingResult> results) {
+    protected Collection<ValueLanguagePair> processForMatchedField(List<FieldMappingResult> results) {
         Stream<FieldMappingResult> stream = results
-                .stream()
-                .sorted(scoreComparator);
+                .stream();
 
-        if (keepHighest != null) {
-            stream = stream.limit(keepHighest);
+        if (keepHighestScoring) {
+            final Stream<FieldMappingResult> oldStream = stream;
+            stream = results.stream()
+                    // get maximal value
+                    .max(scoreComparator)
+                    // filter stream by value if maximum found
+                    .map(maxResult -> oldStream.filter(r -> r.getScore() == maxResult.getScore()))
+                    // if not keep old stream
+                    .orElse(stream);
+        }
+
+        stream = stream.sorted(scoreComparator.reversed());
+
+        if (keepTop != null) {
+            stream = stream.limit(keepTop);
         }
 
         return stream.flatMap(r -> r.getValues().stream()).toList();
