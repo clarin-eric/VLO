@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.batchimporter;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemWriter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -38,6 +39,11 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
     }
 
     @Override
+    public void write(Chunk<? extends Mono<VloRecord>> chunk) throws Exception {
+        //TODO: process chunk? (Spring boot 2.x -> 3.x)
+        write(chunk.getItems());
+    }
+
     public void write(List<? extends Mono<VloRecord>> items) throws Exception {
         log.debug("Writing items");
         final ParallelFlux<VloRecord> itemsFlux = Flux.concat(items).parallel();

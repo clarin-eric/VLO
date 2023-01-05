@@ -28,6 +28,8 @@ import org.springframework.batch.item.ItemProcessor;
 import reactor.core.publisher.Mono;
 
 /**
+ * Uses the VLO API client to map an individual item of the batch (a file) to a
+ * record.
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */

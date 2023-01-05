@@ -49,22 +49,22 @@ public class MetadataFileProcessorImpl implements MetadataFileProcessor {
     @Override
     public VloRecord processMappingRequest(VloRecordMappingRequest request) throws InputProcessingException {
         log.info("Parsing input from request {}", request);
-        final VloRecord.VloRecordBuilder builder = VloRecord.builder();
+        final VloRecord record = new VloRecord();
 
         try {
-            builder.dataRoot(request.getDataRoot());
-            builder.sourcePath(request.getFile());
-            xmlParse(request.getXmlContent(), builder);
-            log.trace("Mapping input builder state after parsing: {}", builder);
+            record.setDataRoot(request.getDataRoot());
+            record.setSourcePath(request.getFile());
+            xmlParse(request.getXmlContent(), record);
+            log.trace("Mapping input state after parsing: {}", record);
         } catch (IOException | VTDException ex) {
             throw new InputProcessingException(String.format("Error while trying to parse input file %s", request.getFile()), ex);
         }
 
         log.debug("Completed parsing input from request {}", request);
-        return builder.build();
+        return record;
     }
 
-    private void xmlParse(byte[] xmlContent, VloRecord.VloRecordBuilder builder) throws IOException, VTDException {
+    private void xmlParse(byte[] xmlContent, VloRecord record) throws IOException, VTDException {
         // prepare parser
         final VTDGen vg = new VTDGen();
         vg.setDoc(xmlContent);
@@ -73,7 +73,7 @@ public class MetadataFileProcessorImpl implements MetadataFileProcessor {
 
         // Profile ID
         final String profileId = SchemaParsingUtil.extractProfileId(nav);
-        builder.profileId(profileId);
+        record.setProfileId(profileId);
 
         nav.toElement(VTDNav.ROOT);
 
@@ -82,16 +82,16 @@ public class MetadataFileProcessorImpl implements MetadataFileProcessor {
         SchemaParsingUtil.setNameSpace(mdSelfLink, null);
         mdSelfLink.selectXPath("/cmd:CMD/cmd:Header/cmd:MdSelfLink");
         final String mdSelfLinkString = mdSelfLink.evalXPathToString();
-        builder.selflink(mdSelfLinkString);
+        record.setSelflink(mdSelfLinkString);
 
         //TODO: other header fields?
         // resources
         final List<VloRecord.Resource> resources = parseResources(nav);
-        builder.resources(resources);
+        record.setResources(resources);
 
         // component section
         final Map<String, List<String>> pathValuesMap = buildPathsMap(nav, profileId);
-        builder.pathValuesMap(pathValuesMap);
+        record.setPathValuesMap(pathValuesMap);
     }
 
     private ImmutableList<VloRecord.Resource> parseResources(final VTDNav nav) throws NavException, XPathParseException, XPathEvalException {
@@ -131,7 +131,7 @@ public class MetadataFileProcessorImpl implements MetadataFileProcessor {
 
             if (!ref.equals("") && !type.equals("")) {
                 // note that the mime type could be empty
-                resources.add(new VloRecord.Resource(id, ref, type, mimeType));
+                resources.add(new VloRecord.Resource(id, ref, mimeType, type));
             }
 
 //            // TODO: resource hierarchy information 

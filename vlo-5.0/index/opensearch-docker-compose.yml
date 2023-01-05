@@ -1,12 +1,14 @@
 version: '3'
 services:
   vlo-opensearch:
-    image: opensearchproject/opensearch:latest
+    image: opensearchproject/opensearch:2.4.1
     environment:
       - discovery.type=single-node
       - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
       - plugins.security.ssl.http.enabled=false
       - "OPENSEARCH_JAVA_OPTS=-Xms2g -Xmx2g" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - "DISABLE_INSTALL_DEMO_CONFIG=true" # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=true" # Disables security plugin
     ports:
       - 9200:9200
       - 9600:9600
@@ -28,14 +30,15 @@ services:
     networks:
       - opensearch-net
   vlo-opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:latest
+    image: opensearchproject/opensearch-dashboards:2.4.1
     container_name: opensearch-dashboards
     ports:
       - 5601:5601
     expose:
       - "5601"
     environment:
-      OPENSEARCH_HOSTS: https://vlo-opensearch:9200
+      - 'OPENSEARCH_HOSTS=["http://vlo-opensearch:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true" # disables security dashboards plugin in OpenSearch Dashboards
     networks:
       - opensearch-net
 volumes:

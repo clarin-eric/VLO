@@ -20,33 +20,28 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
-import org.springframework.data.elasticsearch.client.reactive.ReactiveElasticsearchClient;
-import org.springframework.data.elasticsearch.client.reactive.ReactiveRestClients;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
+import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchConfiguration;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Configuration
-public class ElasticsearchConfiguration  {
+public class VloElasticsearchConfiguration extends ReactiveElasticsearchConfiguration {
 
     @Value("${spring.data.elasticsearch.client.reactive.endpoints}")
     private String elasticSearchEndpoint;
+//
+//    @Bean
+//    public ReactiveElasticsearchClient reactiveElasticsearchClient() {
+//        return ElasticsearchClients.createReactive(clientConfiguration());
+//    }
 
-    @Bean
-    public ReactiveElasticsearchClient reactiveElasticsearchClient() {
-        final ClientConfiguration clientConfiguration = ClientConfiguration.builder()
-                .connectedTo(elasticSearchEndpoint) //
-                .withWebClientConfigurer(webClient -> {
-                    ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-                            .codecs(configurer -> configurer.defaultCodecs()
-                            .maxInMemorySize(-1))
-                            .build();
-                    return webClient.mutate().exchangeStrategies(exchangeStrategies).build();
-                })
+    @Override
+    public ClientConfiguration clientConfiguration() {
+        return ClientConfiguration.builder()
+                .connectedTo(elasticSearchEndpoint)
                 .build();
-        return ReactiveRestClients.create(clientConfiguration);
     }
 
 }

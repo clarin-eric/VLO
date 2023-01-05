@@ -114,11 +114,7 @@ public class LegacyCMDIParserFileProcessor implements MetadataFileProcessor {
                         data.getMetadataResources().stream(),
                         data.getSearchPageResources().stream(),
                         data.getSearchResources().stream())
-                        .map(r -> VloRecord.Resource.builder()
-                        .mediaType(r.getMimeType())
-                        .type(r.getType())
-                        .ref(r.getResourceName())
-                        .build())
+                        .map(r -> new VloRecord.Resource(null, r.getResourceName(), r.getType(), r.getMimeType()))
                         .collect(Collectors.toList()));
         return record;
     }

@@ -20,11 +20,13 @@ import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
+import java.nio.file.Path;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.ArgumentCaptor;
 import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Captor;
@@ -53,10 +55,11 @@ public class FileProcessorTest extends AbstractVloImporterTest {
 
     /**
      * Test of process method, of class FileProcessor.
+     * @param tempDir
      */
     @Test
-    public void testProcess() throws Exception {
-        MetadataFile inputFile = new MetadataFile("testRoot", getTestResource("test_record1.xml"));
+    public void testProcess(@TempDir Path tempDir) throws Exception {
+        MetadataFile inputFile = new MetadataFile("testRoot", getTestResource(tempDir, "test_record1.xml"));
         FileProcessor instance = new FileProcessor(apiClient);
         
         final VloRecordMappingProcessingTicket ticket = mock(VloRecordMappingProcessingTicket.class);

@@ -22,10 +22,6 @@ import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import eu.clarin.cmdi.vlo.util.Pagination;
 import java.net.URI;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.Query;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -36,6 +32,8 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 import java.util.Optional;
+import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.StringQuery;
 
 /**
  *
@@ -90,9 +88,7 @@ public class VloRecordHandler {
 
         return qMono
                 .doOnNext(q -> log.debug("Query in request: '{}'", q))
-                .flatMap(q -> Mono.just(QueryBuilders.queryStringQuery(q)))
-                .doOnNext(qb -> log.debug("Query builder: {}", qb.toString()))
-                .flatMap(qb -> Mono.just(new NativeSearchQuery(qb)));
+                .flatMap(q -> Mono.just(new StringQuery(q)));
     }
 
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {

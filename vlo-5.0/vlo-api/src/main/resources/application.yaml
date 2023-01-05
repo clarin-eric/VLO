@@ -1,8 +1,8 @@
 spring:
   codec:
     max-in-memory-size: 50MB
-  profiles:
-    active: legacy
+#  profiles:
+#    active: legacy
 server:
   port: 8708
 vlo:

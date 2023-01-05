@@ -70,10 +70,10 @@ public class VloApiClientImplTest {
 
     private Optional<VloRecordMappingProcessingTicket> instanceSendRecordMappingRequest() throws IOException {
         final VloRecordMappingRequest importRequest = VloRecordMappingRequest.builder()
-                        .dataRoot("testRoot")
-                        .file("/foo/bar.xml")
-                        .xmlContent("<cmd></cmd>".getBytes())
-                        .build();
+                .dataRoot("testRoot")
+                .file("/foo/bar.xml")
+                .xmlContent("<cmd></cmd>".getBytes())
+                .build();
         final Mono<VloRecordMappingProcessingTicket> response = instance.sendRecordMappingRequest(importRequest);
         return response.blockOptional(Duration.ofSeconds(10));
     }
@@ -89,7 +89,7 @@ public class VloApiClientImplTest {
         mockWebServer.enqueue(new MockResponse()
                 .setResponseCode(HttpStatus.OK.value())
                 .setBody(""));
-        
+
         //make request
         final Optional<VloRecordMappingProcessingTicket> result = instanceSendRecordMappingRequest();
 
@@ -149,7 +149,7 @@ public class VloApiClientImplTest {
 
         //make request
         final Optional<VloRecord> result = instanceRetrieveRecord();
-        
+
         result.ifPresentOrElse(resultObj -> {
             assertEquals("record1", resultObj.getId());
             assertEquals("bar", resultObj.getSelflink());

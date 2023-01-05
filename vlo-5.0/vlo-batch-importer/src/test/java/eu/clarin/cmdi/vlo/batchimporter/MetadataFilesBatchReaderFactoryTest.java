@@ -23,10 +23,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.batch.item.ItemReader;
-
-import static org.junit.Assert.assertEquals;
 import org.junit.jupiter.api.Test;
 
 /**

@@ -20,23 +20,30 @@ import eu.clarin.cmdi.vlo.batchimporter.FileProcessor;
 import eu.clarin.cmdi.vlo.batchimporter.MetadataFilesBatchReaderFactory;
 import eu.clarin.cmdi.vlo.batchimporter.VloApiClient;
 import eu.clarin.cmdi.vlo.batchimporter.VloApiClientImpl;
+import eu.clarin.cmdi.vlo.batchimporter.VloBatchImporterListenersConfiguration;
 import eu.clarin.cmdi.vlo.exception.VloImporterConfigurationException;
 import eu.clarin.cmdi.vlo.batchimporter.VloRecordWriter;
 import eu.clarin.cmdi.vlo.batchimporter.configuration.MetadataSourceConfiguration.DataRootConfiguration;
 import eu.clarin.cmdi.vlo.data.model.MetadataFile;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import jakarta.validation.constraints.NotEmpty;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.naming.OperationNotSupportedException;
-import javax.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.ItemProcessListener;
+import org.springframework.batch.core.ItemReadListener;
+import org.springframework.batch.core.ItemWriteListener;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
-import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.StepExecutionListener;
+import org.springframework.batch.core.StepListener;
+import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +51,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -56,8 +65,8 @@ import reactor.core.publisher.Mono;
  */
 @Configuration
 @Validated
-@EnableBatchProcessing
 @EnableConfigurationProperties(MetadataSourceConfiguration.class)
+@Import(VloBatchImporterListenersConfiguration.class)
 @Slf4j
 public class BatchConfiguration {
 
@@ -67,12 +76,6 @@ public class BatchConfiguration {
 
     @Autowired
     private MetadataSourceConfiguration metadataSourceConfiguration;
-
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
-
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
 
     @Autowired
     private WebClient.Builder webClientBuilder;
@@ -114,20 +117,20 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job processFileJob(Step step1) {
+    public Job processFileJob(JobRepository jobRepository, Step step, JobExecutionListener listener) {
         //TODO: Construct metadata hierarchy before processing
-
         //TODO: separate into multiple steps (multiple processors)?
         // -----> Read to mapping input  object, send to API (for mapping)
         // -----> Collect VLO record results, send to API (for index)
-        return jobBuilderFactory.get("processFileJob")
+
+        return new JobBuilder("processFileJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
-                //.listener(listener)
-                .flow(step1)
+                .flow(step)
                 .end()
+                .listener(listener)
                 .build();
     }
-    
+
     @Bean
     public TaskExecutor taskExecutor() {
         final ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
@@ -138,13 +141,18 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Step step1(ItemWriter<Mono<VloRecord>> writer, TaskExecutor taskExecutor) throws Exception {
-        return stepBuilderFactory.get("step1")
-                .<MetadataFile, Mono<VloRecord>>chunk(10)
+    public Step step1(JobRepository jobRepository, PlatformTransactionManager transactionManager, ItemWriter<Mono<VloRecord>> writer, TaskExecutor taskExecutor,
+            ItemReadListener<MetadataFile> readListener, ItemProcessListener<MetadataFile, Mono<VloRecord>> processListener, ItemWriteListener writeListener
+    ) throws Exception {
+        return new StepBuilder("step1", jobRepository)
+                .<MetadataFile, Mono<VloRecord>>chunk(10, transactionManager)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer)
                 .taskExecutor(taskExecutor)
+                .listener(processListener)
+                .listener(readListener)
+                .listener(writeListener)
                 .build();
     }
 }

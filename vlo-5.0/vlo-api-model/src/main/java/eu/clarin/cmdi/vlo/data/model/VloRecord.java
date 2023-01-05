@@ -22,10 +22,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -36,10 +37,10 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-@Data
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
+@Getter
+@Setter
 @ToString(onlyExplicitlyIncluded = true)
 @Document(indexName = "record", createIndex = true)
 public class VloRecord {
@@ -69,7 +70,7 @@ public class VloRecord {
     //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
     private Map<String, List<String>> pathValuesMap;
 
-    private final Map<String, List<Object>> fields = Maps.newHashMap();
+    private Map<String, List<Object>> fields = Maps.newHashMap();
 
     public void removeField(String name) {
         fields.remove(name);
@@ -87,21 +88,26 @@ public class VloRecord {
         fields.computeIfAbsent(name, v -> Lists.newArrayList()).add(value);
     }
 
-    @Builder
     @NoArgsConstructor
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     @Getter
+    @Setter
     @ToString(onlyExplicitlyIncluded = true)
     public static class Resource {
 
+        @NonNull
         private String id;
 
         @ToString.Include
+        @NonNull
         private String ref;
 
+        @NonNull
         private String type; //TODO: enum?
 
+        @NonNull
         private String mediaType;
+
     }
 
 }

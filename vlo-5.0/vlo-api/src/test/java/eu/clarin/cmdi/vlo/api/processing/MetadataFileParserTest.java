@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.io.TempDir;
 
 /**
  *
@@ -48,11 +49,12 @@ public class MetadataFileParserTest extends AbstractVloApiTest {
     /**
      * Test of parseFile method, of class MetadataFileParser.
      *
+     * @param tempDir temporary directory
      * @throws java.lang.Exception
      */
     @Test
-    public void testParseFile() throws Exception {
-        final Path testRecord1 = getTestResource("test_record1.xml");
+    public void testParseFile(@TempDir Path tempDir) throws Exception {
+        final Path testRecord1 = getTestResource(tempDir, "test_record1.xml");
 
         final VloRecordMappingRequest requestInput = VloRecordMappingRequest.builder()
                 .dataRoot("Test data root")

@@ -34,11 +34,8 @@ public abstract class AbstractVloImporterTest {
 
     private final static String TEST_RECORDS_RESOURCES_DIRECTORY = "test-records";
 
-    @TempDir
-    public Path tempDir;
-
-    protected Path getTestResource(String name) {
-        final Path targetPath = getTestResourceTargetPath(name);
+    protected Path getTestResource(Path tempDir, String name) {
+        final Path targetPath = getTestResourceTargetPath(tempDir, name);
 
         try {
             if (!Files.exists(targetPath)) {
@@ -51,7 +48,7 @@ public abstract class AbstractVloImporterTest {
         return targetPath;
     }
 
-    private Path getTestResourceTargetPath(String name) {
+    private Path getTestResourceTargetPath(Path tempDir, String name) {
         return tempDir.resolve(name);
     }
 

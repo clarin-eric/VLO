@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.io.TempDir;
 
 /**
  *
@@ -32,13 +31,10 @@ import org.junit.jupiter.api.io.TempDir;
 @Slf4j
 public abstract class AbstractVloApiTest {
 
-    private final static String TEST_RECORDS_RESOURCES_DIRECTORY = "test-records";
+    private final static String TEST_RECORDS_RESOURCES_DIRECTORY = "test-records";    
 
-    @TempDir
-    public Path tempDir;
-
-    protected Path getTestResource(String name) {
-        final Path targetPath = getTestResourceTargetPath(name);
+    protected Path getTestResource(Path tempDir, String name) {
+        final Path targetPath = getTestResourceTargetPath(tempDir, name);
 
         try {
             if (!Files.exists(targetPath)) {
@@ -51,7 +47,7 @@ public abstract class AbstractVloApiTest {
         return targetPath;
     }
 
-    private Path getTestResourceTargetPath(String name) {
+    private Path getTestResourceTargetPath(Path tempDir, String name) {
         return tempDir.resolve(name);
     }
 
