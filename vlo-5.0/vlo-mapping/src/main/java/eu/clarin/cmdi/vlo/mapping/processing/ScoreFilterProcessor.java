@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
 import java.util.Comparator;
@@ -68,21 +67,31 @@ public class ScoreFilterProcessor extends FieldFilteredProcessor {
 
     @Override
     protected Collection<ValueLanguagePair> processForMatchedField(List<FieldMappingResult> results) {
-        Stream<FieldMappingResult> stream = results.stream();
+        // create stream with configured filters applied
+        final Stream<FieldMappingResult> resultStream = processToStream(results);
+        
+        // Gather result values from stream
+        return resultStream
+                // we keep only the values from the mapping results
+                .map(FieldMappingResult::getValues)
+                // flatmap to single stream from results' value collections
+                .flatMap(Collection::stream)
+                // collect
+                .toList();
+    }
 
+    private Stream<FieldMappingResult> processToStream(List<FieldMappingResult> results) {
+        Stream<FieldMappingResult> stream = results.stream();
         if (minScore != null || maxScore != null) {
             stream = applyRangeFilter(stream, minScore, maxScore);
         }
-
         if (keepHighestScoring) {
             stream = keepHighestScoring(stream);
         }
-
         if (keepTop != null) {
             stream = keepTop(stream, keepTop);
         }
-
-        return stream.flatMap(r -> r.getValues().stream()).toList();
+        return stream;
     }
 
     private static Stream<FieldMappingResult> applyRangeFilter(Stream<FieldMappingResult> stream, Integer minScore, Integer maxScore) {

@@ -105,7 +105,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
     <fieldValuesRootProcessor>
-        <processor xsi:type="scoreFilterProcessor" keepHighestScoring="true" />
+        <processor xsi:type="scoreFilterProcessor" fields="language" keepHighestScoring="true" />
         <processor xsi:type="identityProcessor"/>
     </fieldValuesRootProcessor>
 </mappingDefinition>
