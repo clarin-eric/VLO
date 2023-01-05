@@ -45,7 +45,7 @@ public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
     @Override
     protected VloMappingConfiguration getMappingConfig() {
         final VloMappingConfiguration config = super.getMappingConfig();
-        config.setMappingDefinitionUri(getClass().getResource("/eu/clarin/cmdi/vlo/mapping/impl/vtdxml/integrationtest-mapping.xml").toString());
+        config.setMappingDefinitionUri(getClass().getResource("/mappings/integrationtest-mapping.xml").toString());
         return config;
     }
 
