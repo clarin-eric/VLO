@@ -55,6 +55,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Rules for the 'language' field (preferred) -->
     <!--     Preferred concepts -->
     <contextAssertionBasedRule>
+        <score>10</score>
         <terminal>true</terminal>
         <transformers>
             <transformer field="language" xsi:type="valueMapTransformer" behaviour="replaceOnMatch" regex="false" caseSensitive="false">
@@ -68,12 +69,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <assertion xsi:type="conceptPathAssertion">
                 <conceptPath>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17 *</conceptPath>
             </assertion>
+        </assertions>
+    </contextAssertionBasedRule>
+
+    <!--     Fallback concepts -->
+    <contextAssertionBasedRule>
+        <terminal>true</terminal>
+        <transformers>
+            <transformer field="language" xsi:type="valueMapTransformer" behaviour="replaceOnMatch" regex="false" caseSensitive="false">
+                <valueMap>
+                    <item source="eng" target="English"/>
+                </valueMap>
+            </transformer>
+        </transformers>
+        <assertions>
+            <!-- Concepts -->
             <assertion xsi:type="conceptPathAssertion">
                 <conceptPath>http://purl.org/dc/terms/language *</conceptPath>
             </assertion>
         </assertions>
     </contextAssertionBasedRule>
-    
+            
    
     <!-- Rules for the 'subject' field -->
     <contextAssertionBasedRule>
@@ -89,6 +105,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
     <fieldValuesRootProcessor>
-        <processor xsi:type="identityProcessor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+        <processor xsi:type="scoreFilterProcessor" keepHighestScoring="true" />
+        <processor xsi:type="identityProcessor"/>
     </fieldValuesRootProcessor>
 </mappingDefinition>

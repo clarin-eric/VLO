@@ -29,8 +29,10 @@ import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.mapping.definition.rules.transformation.IdentityTransformer;
 import eu.clarin.cmdi.vlo.mapping.definition.rules.transformation.ValueMapTransformer;
 import eu.clarin.cmdi.vlo.mapping.definition.rules.transformation.ValueMapTransformer.ValueMappingBehaviour;
+import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
 import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesRootProcessor;
 import eu.clarin.cmdi.vlo.mapping.processing.IdentityProcessor;
+import eu.clarin.cmdi.vlo.mapping.processing.ScoreFilterProcessor;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.List;
@@ -89,14 +91,22 @@ public class MappingDefinitionSample {
                         Arrays.asList(new IdentityTransformer("field4")),
                         true)
         ));
+        final ScoreFilterProcessor scoreFilterProcessor = new ScoreFilterProcessor();
+        scoreFilterProcessor.setFields("field2 field3");
+        scoreFilterProcessor.setKeepHighestScoring(true);
+        final IdentityProcessor identityProcessor = new IdentityProcessor();
 
-        MAPPING_DEFINITION.setFieldValuesProcessor(new FieldValuesRootProcessor(ImmutableList.of(new IdentityProcessor())));
+        MAPPING_DEFINITION.setFieldValuesProcessor(
+                new FieldValuesRootProcessor(ImmutableList.of(
+                        scoreFilterProcessor,
+                        identityProcessor)));
 
     }
 
     public static final String MAPPING_DEFINITION_XML = """
         <mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <contextAssertionBasedRule score="1">
+            <contextAssertionBasedRule>
+                <score>1</score>
                 <assertions>
                     <assertion xsi:type="contextAssertionAndOperator">
                         <assertion xsi:type="contextAssertionNotOperator">
@@ -118,7 +128,8 @@ public class MappingDefinitionSample {
                 </transformers>
                 <terminal>true</terminal>
             </contextAssertionBasedRule>
-            <contextAssertionBasedRule score="2">
+            <contextAssertionBasedRule>
+                <score>2</score>
                 <assertions>
                     <assertion xsi:type="valueAssertion" regex="false" lang="en" caseSensitive="false">value1</assertion>
                     <assertion xsi:type="valueAssertion" regex="false" lang="fr" caseSensitive="true">value2</assertion>
@@ -139,6 +150,12 @@ public class MappingDefinitionSample {
                 </transformers>
                 <terminal>false</terminal>
             </contextAssertionBasedRule>
+            <fieldValuesRootProcessor>
+                        <processor xsi:type="scoreFilterProcessor" 
+                                   fields="field2 field3"
+                                   keepHighestScoring="true" />
+                        <processor xsi:type="identityProcessor"/>
+            </fieldValuesRootProcessor>
         </mappingDefinition>
       """;
 
@@ -146,11 +163,17 @@ public class MappingDefinitionSample {
         return new StreamSource(new StringReader(MAPPING_DEFINITION_XML));
     }
 
-    public static void assertContents(final Iterable<? extends MappingRule> rules) {
-        assertContents(ImmutableList.copyOf(rules));
+    public static void assertContents(MappingDefinition definition) {
+        final Iterable<? extends MappingRule> rules = definition.getRules();
+        assertNotNull(rules);
+        assertRules(ImmutableList.copyOf(rules));
+
+        final FieldValuesRootProcessor processor = definition.getFieldValuesProcessor();
+        assertNotNull(processor);
+        assertProcessors(processor);
     }
 
-    public static void assertContents(final List<? extends MappingRule> rules) {
+    public static void assertRules(final List<? extends MappingRule> rules) {
         assertThat("Three rules in definition", rules, hasSize(3));
 
         assertThat("Rules have assertions",
@@ -254,5 +277,22 @@ public class MappingDefinitionSample {
                     hasItem(isA(XPathAssertion.class)),
                     not(hasItem(not(isA(XPathAssertion.class))))));
         }
+    }
+
+    private static void assertProcessors(FieldValuesRootProcessor processor) {
+        final List<? extends FieldValuesProcessor> processors = processor.getProcessors();
+        assertNotNull(processors);
+
+        assertThat(processors, hasSize(2));
+        assertThat(processors, hasItem(allOf(
+                isA(ScoreFilterProcessor.class),
+                hasProperty("fields", equalTo("field2 field3")),
+                hasProperty("keepHighestScoring", equalTo(true))
+        )));
+
+        assertThat(processors, hasItem(
+                isA(IdentityProcessor.class)
+        ));
+
     }
 }

@@ -18,6 +18,9 @@ package eu.clarin.cmdi.vlo.mapping.processing;
 
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import java.util.Collection;
@@ -45,21 +48,22 @@ import lombok.Setter;
 @Getter
 @Setter
 @XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ScoreFilterProcessor extends FieldFilteredProcessor {
 
     private final static Comparator<FieldMappingResult> scoreComparator
             = Comparator.comparingInt(FieldMappingResult::getScore);
 
-    @XmlElement(nillable = true)
+    @XmlAttribute(required = false)
     private Integer keepTop = null;
 
-    @XmlElement(defaultValue = "false")
+    @XmlAttribute(required = false)
     private boolean keepHighestScoring = false;
 
-    @XmlElement(nillable = true)
+    @XmlAttribute(required = false)
     private Integer minScore = null;
 
-    @XmlElement(nillable = true)
+    @XmlAttribute(required = false)
     private Integer maxScore = null;
 
     @Override

@@ -18,10 +18,13 @@ package eu.clarin.cmdi.vlo.mapping.processing;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +38,15 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@XmlAccessorType(XmlAccessType.FIELD)
 public abstract class FieldFilteredProcessor extends FieldValuesProcessor {
 
-    @XmlElement
+    @XmlAttribute
     private String fields;
 
     @Override
     public Optional<Map<String, Collection<ValueLanguagePair>>> process(Map<String, List<FieldMappingResult>> resultsByField) {
-        if (fields.isBlank()) {
+        if (Strings.nullToEmpty(fields).isBlank()) {
             return Optional.empty();
         }
 

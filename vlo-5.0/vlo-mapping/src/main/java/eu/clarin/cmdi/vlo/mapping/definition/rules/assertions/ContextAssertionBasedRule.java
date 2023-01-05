@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.mapping.definition.MappingRule;
 import eu.clarin.cmdi.vlo.mapping.definition.rules.transformation.Transformer;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlRootElement;
@@ -51,7 +50,7 @@ public class ContextAssertionBasedRule extends MappingRule {
     @XmlElement
     private Boolean terminal = false;
 
-    @XmlAttribute
+    @XmlElement
     private int score = 0;
 
     public ContextAssertionBasedRule() {

@@ -16,13 +16,12 @@
  */
 package eu.clarin.cmdi.vlo.mapping.definition;
 
-import eu.clarin.cmdi.vlo.mapping.definition.rules.assertions.ContextAssertionBasedRule;
 import static eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionSample.MAPPING_DEFINITION;
 import static eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionSample.MAPPING_DEFINITION_XML_SOURCE;
+import static eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionSample.assertContents;
 import jakarta.xml.bind.JAXBException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.util.List;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -49,7 +48,7 @@ public class MappingDefinitionMarshallerTest {
     public void testMarshall() throws Exception {
         log.info("Marshalling");
 
-        try ( StringWriter writer = new StringWriter()) {
+        try (StringWriter writer = new StringWriter()) {
             try {
                 final Result result = new StreamResult(writer);
                 instance.marshal(MAPPING_DEFINITION, result);
@@ -60,10 +59,10 @@ public class MappingDefinitionMarshallerTest {
             }
 
             log.info("Unmarshalling our own output");
-            try ( StringReader reader = new StringReader(writer.toString())) {
+            try (StringReader reader = new StringReader(writer.toString())) {
                 final MappingDefinition unmarshalled = instance.unmarshal(new StreamSource(reader));
                 assertNotNull(unmarshalled);
-                MappingDefinitionSample.assertContents(unmarshalled.getRules());
+                assertContents(unmarshalled);
             }
         }
     }
@@ -73,9 +72,7 @@ public class MappingDefinitionMarshallerTest {
         log.info("Unmarshalling from static XML input");
         final MappingDefinition unmarshalled = instance.unmarshal(MAPPING_DEFINITION_XML_SOURCE());
         assertNotNull(unmarshalled);
-
-        final List<ContextAssertionBasedRule> rules = unmarshalled.getRules();
-        MappingDefinitionSample.assertContents(rules);
+        assertContents(unmarshalled);
     }
 
 }
