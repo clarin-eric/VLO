@@ -60,10 +60,7 @@ public class MappingDefinitionProviderImplTest {
         final MappingDefinition definition = instance.getDefinition();
         assertNotNull(definition);
         
-        final Iterable<? extends MappingRule> rules = definition.getRules();
-        assertNotNull(rules);
-        
-        MappingDefinitionSample.assertContents(rules);
+        MappingDefinitionSample.assertContents(definition);
     }
 
     @Test
