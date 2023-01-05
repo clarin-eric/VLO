@@ -63,7 +63,8 @@ public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
 
         assertThat(map, hasValues("title", "WALS Online Resources for Abui"));
         assertThat(map, hasValues("format", "text/html"));
-        assertThat(map, hasValues("language", "Anglais", "English"));
+        // language: field values filter should keep highest scoring values only, i.e. 'Anglais' value is discared
+        assertThat(map, hasValues("language", "English"));
         assertThat(map, hasValues("subject", "abz"));
     }
 
