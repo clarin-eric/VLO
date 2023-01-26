@@ -17,9 +17,9 @@
 package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  * Generates all contexts (concept + XML paths with values) for an XML document
@@ -28,5 +28,5 @@ import java.util.stream.Stream;
  */
 public interface ContextFactory {
 
-    Stream<ValueContext> createContexts(File file) throws IOException, VloMappingException;
+    Stream<ValueContext> createContexts(StreamSource source) throws IOException, VloMappingException;
 }

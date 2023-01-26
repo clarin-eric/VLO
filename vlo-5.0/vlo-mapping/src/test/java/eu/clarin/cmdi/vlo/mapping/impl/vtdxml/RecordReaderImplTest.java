@@ -23,10 +23,13 @@ import eu.clarin.cmdi.vlo.mapping.model.CmdProfile;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Objects;
+import javax.xml.transform.stream.StreamSource;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anyOf;
@@ -55,8 +58,9 @@ public class RecordReaderImplTest {
         final RecordReaderImpl instance = TestResourceVTDProfileParser.inNewDefaultRecordReader(mappingConfig);
         final URL recordUrl = getClass().getResource("/records/p_1345561703673.cmdi");
         final File file = new File(recordUrl.getFile());
+        final StreamSource source = createStreamSource(file);
 
-        final CmdRecord result = instance.readRecord(file);
+        final CmdRecord result = instance.readRecord(source);
         assertNotNull(result);
 
         final CmdProfile profile = result.getProfile();
@@ -83,10 +87,18 @@ public class RecordReaderImplTest {
         final RecordReaderImpl instance = new RecordReaderImpl(mappingConfig);
         final URL recordUrl = RecordReaderImplTest.class.getResource("/records/p_1345561703673.cmdi");
         final File file = new File(recordUrl.getFile());
+        StreamSource source = createStreamSource(file);
 
-        final CmdRecord result = instance.readRecord(file);
+        final CmdRecord result = instance.readRecord(source);
         System.out.println("Done reading" + Objects.toString(result));
 
+    }
+
+    // TODO: make this a general test util
+    private static StreamSource createStreamSource(final File file) throws FileNotFoundException {
+        final StreamSource source = new StreamSource(file);
+        source.setInputStream(new FileInputStream(file));
+        return source;
     }
 
 }

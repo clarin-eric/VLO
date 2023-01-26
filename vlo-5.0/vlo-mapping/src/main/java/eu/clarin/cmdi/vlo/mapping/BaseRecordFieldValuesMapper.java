@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,17 +48,17 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
     }
     
     @Override
-    public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException {
-        log.info("Field mapping of record ({})", recordFile);
+    public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(StreamSource source) throws IOException, VloMappingException {
+        log.info("Field mapping of record ({})", source.getSystemId());
         
-        log.debug("Mapping all contexts (record {})", recordFile);
+        log.debug("Mapping all contexts (record {})", source.getSystemId());
         // Produce mapping results for all individual contexts
-        final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(recordFile);
+        final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(source);
         
-        log.debug("Producing field values (record {})", recordFile);
+        log.debug("Producing field values (record {})", source.getSystemId());
         // Distil field values out of mapping results
         return fieldValuesProcessor.process(resultsByField).orElseGet(() -> {
-            log.warn("Field values processor returns empty for {}. No fields produced!", recordFile);
+            log.warn("Field values processor returns empty for {}. No fields produced!", source.getSystemId());
             return Collections.emptyMap();
         });
     }
@@ -68,8 +69,8 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
      * @param recordFile
      * @return
      */
-    private Map<String, List<FieldMappingResult>> mapAllContexts(File recordFile) throws IOException, VloMappingException {
-        return contextFactory.createContexts(recordFile) // gets all contexts in the record
+    private Map<String, List<FieldMappingResult>> mapAllContexts(StreamSource source) throws IOException, VloMappingException {
+        return contextFactory.createContexts(source) // gets all contexts in the record
                 .flatMap(contextFieldValueMapper::mapContext) // maps all contexts to field value candidates
                 .collect(Collectors.groupingBy(FieldMappingResult::getField)); // collects results grouped by field
     }

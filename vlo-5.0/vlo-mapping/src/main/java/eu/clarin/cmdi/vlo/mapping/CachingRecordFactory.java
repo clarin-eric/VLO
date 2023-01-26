@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.CompletionException;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  *
@@ -30,21 +31,22 @@ import java.util.concurrent.CompletionException;
  */
 public class CachingRecordFactory implements RecordFactory {
 
-    private final LoadingCache<File, CmdRecord> recordCache;
+    private final LoadingCache<String, CmdRecord> recordCache;
 
     public CachingRecordFactory(RecordReader recordReader) {
         recordCache = Caffeine.newBuilder()
                 .maximumSize(1_000) // TODO: configurable?
                 .expireAfterWrite(Duration.ofMinutes(60)) // TODO: configurable?
-                .build(recordReader::readRecord);
+                .build(file -> recordReader.readRecord(new StreamSource(file)));
     }
 
     @Override
-    public CmdRecord getRecord(File file) throws IOException, VloMappingException {
+    public CmdRecord getRecord(StreamSource source) throws IOException, VloMappingException {
+        final String systemId = source.getSystemId();
         try {
-            return recordCache.get(file);
+            return recordCache.get(systemId);
         } catch (CompletionException ex) {
-            throw new VloMappingException("Error while loading reacord into cache: " + file.getAbsolutePath(), ex);
+            throw new VloMappingException("Error while loading reacord into cache: " + systemId, ex);
         }
     }
 
@@ -52,8 +54,8 @@ public class CachingRecordFactory implements RecordFactory {
         recordCache.invalidateAll();
     }
 
-    public void invalidateCache(File file) {
-        recordCache.invalidate(file);
+    public void invalidateCache(String systemId) {
+        recordCache.invalidate(systemId);
     }
 
 }

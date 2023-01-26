@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
-import java.io.File;
 import java.io.IOException;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  *
@@ -26,6 +26,6 @@ import java.io.IOException;
  */
 public interface RecordReader {
 
-    public CmdRecord readRecord(File file) throws IOException, VloMappingException;
+    public CmdRecord readRecord(StreamSource source) throws IOException, VloMappingException;
 
 }

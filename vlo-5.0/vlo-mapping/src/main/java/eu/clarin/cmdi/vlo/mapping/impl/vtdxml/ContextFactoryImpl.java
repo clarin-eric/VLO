@@ -21,9 +21,9 @@ import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
-import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  * Generates all contexts (concept + XML paths with values) for an XML document
@@ -39,8 +39,8 @@ public class ContextFactoryImpl implements ContextFactory {
     }
 
     @Override
-    public Stream<ValueContext> createContexts(File file) throws IOException, VloMappingException {
-        final CmdRecord record = recordFactory.getRecord(file);
+    public Stream<ValueContext> createContexts(StreamSource source) throws IOException, VloMappingException {
+        final CmdRecord record = recordFactory.getRecord(source);
         //TODO: get contexts from the record object
         return record.getContexts().stream();
     }

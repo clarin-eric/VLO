@@ -17,10 +17,10 @@
 package eu.clarin.cmdi.vlo.mapping;
 
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import javax.xml.transform.stream.StreamSource;
 
 /**
  *
@@ -28,6 +28,6 @@ import java.util.Map;
  */
 public interface RecordFieldValuesMapper {
 
-    Map<String, Collection<ValueLanguagePair>> mapRecordToFields(File recordFile) throws IOException, VloMappingException;
+    Map<String, Collection<ValueLanguagePair>> mapRecordToFields(StreamSource source) throws IOException, VloMappingException;
 
 }

@@ -38,7 +38,12 @@ import eu.clarin.cmdi.vlo.util.CmdConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
@@ -62,38 +67,63 @@ public class RecordReaderImpl implements RecordReader {
     }
 
     @Override
-    public CmdRecord readRecord(File file) throws IOException, VloMappingException {
+    public CmdRecord readRecord(StreamSource source) throws IOException, VloMappingException {
         try {
             // prepare
-            final VTDNav nav = openFile(file);
-            final String profileId = extractProfileId(nav, file.getAbsolutePath());
+            final VTDNav nav = openFile(source);
+            final String profileId = extractProfileId(nav, source.getSystemId());
             if (profileId == null) {
-                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + file.getAbsolutePath());
+                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + source.getSystemId());
             } else {
                 // we can now dive into the file and construct a record object
                 final CmdRecord.CmdRecordBuilder recordBuilder = CmdRecord.builder();
 
                 final VTDNav rootNav = nav.cloneNav();
                 rootNav.toElement(VTDNav.ROOT);
-                parse(file, rootNav, recordBuilder, profileId);
+                parse(source, rootNav, recordBuilder, profileId);
                 return recordBuilder.build();
             }
         } catch (VTDException ex) {
-            throw new VloMappingException("Exception while parsing record from file: " + String.valueOf(file), ex);
+            throw new VloMappingException("Exception while parsing record from file: " + source.getSystemId(), ex);
         }
     }
 
-    private VTDNav openFile(File file) throws ParseException, IOException {
+    private VTDNav openFile(StreamSource source) throws ParseException, IOException {
         final VTDGen vg = new VTDGen();
-        try (FileInputStream fileInputStream = new FileInputStream(file)) {
-            vg.setDoc(IOUtils.toByteArray(fileInputStream));
+
+        byte[] docBytes = sourceToBytes(source);
+        if (docBytes == null) {
+            throw new IOException("No InputStream or Reader provided by StreamSource with systemId " + source.getSystemId());
+        } else {
+            vg.setDoc(docBytes);
             vg.parse(true);
+
+            final VTDNav nav = vg.getNav();
+            return nav;
         }
-        final VTDNav nav = vg.getNav();
-        return nav;
     }
 
-    private void parse(File file, VTDNav nav, final CmdRecord.CmdRecordBuilder record, final String profileId) throws IOException, VloMappingException, VTDException {
+    private byte[] sourceToBytes(StreamSource source) throws IOException {
+        final byte[] docBytes;
+        final InputStream fileInputStream = source.getInputStream();
+        if (fileInputStream != null) {
+            try (fileInputStream) {
+                docBytes = IOUtils.toByteArray(fileInputStream);
+            }
+        } else {
+            final Reader reader = source.getReader();
+            if (reader == null) {
+                docBytes = null;
+            } else {
+                try (reader) {
+                    docBytes = IOUtils.toByteArray(reader, Charset.defaultCharset());
+                }
+            }
+        }
+        return docBytes;
+    }
+
+    private void parse(StreamSource source, VTDNav nav, final CmdRecord.CmdRecordBuilder record, final String profileId) throws IOException, VloMappingException, VTDException {
         //read the profile
         final CmdProfile profile = profileFactory.getProfile(profileId);
         record.profile(profile);
@@ -111,7 +141,7 @@ public class RecordReaderImpl implements RecordReader {
                     contexts.add(new VTDValueContext(context, values, profileId, nav));
                 }
             } catch (VTDException ex) {
-                log.error("Processing exception in {} at path {}", file, path, ex);
+                log.error("Processing exception in {} at path {}", source.getSystemId(), path, ex);
             }
         });
 
