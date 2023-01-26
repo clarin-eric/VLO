@@ -44,7 +44,7 @@ import org.junit.jupiter.api.io.TempDir;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class MetadataFileParserTest extends AbstractVloApiTest {
+public class SimpleMetadataFileProcessorImplTest extends AbstractVloApiTest {
 
     /**
      * Test of parseFile method, of class MetadataFileParser.
@@ -61,7 +61,7 @@ public class MetadataFileParserTest extends AbstractVloApiTest {
                 .file(testRecord1.toString())
                 .xmlContent(Files.readAllBytes(testRecord1))
                 .build();
-        final MetadataFileProcessorImpl instance = new MetadataFileProcessorImpl();
+        final SimpleMetadataFileProcessorImpl instance = new SimpleMetadataFileProcessorImpl();
         final VloRecord result = instance.processMappingRequest(requestInput);
 
         assertNotNull(result);

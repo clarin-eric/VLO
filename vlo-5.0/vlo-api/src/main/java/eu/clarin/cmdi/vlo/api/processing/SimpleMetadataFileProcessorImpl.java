@@ -44,7 +44,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("default")
 @Slf4j
-public class MetadataFileProcessorImpl implements MetadataFileProcessor {
+public class SimpleMetadataFileProcessorImpl implements MetadataFileProcessor {
 
     @Override
     public VloRecord processMappingRequest(VloRecordMappingRequest request) throws InputProcessingException {
