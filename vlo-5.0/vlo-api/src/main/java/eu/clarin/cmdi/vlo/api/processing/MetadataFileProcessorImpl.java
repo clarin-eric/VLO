@@ -20,8 +20,8 @@ import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
-import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.VloMappingException;
+import eu.clarin.cmdi.vlo.mapping.VloRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -41,37 +41,23 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class MetadataFileProcessorImpl implements MetadataFileProcessor {
 
-    private final RecordFieldValuesMapper fieldValuesMapper;
+    private final VloRecordFactory recordFactory;
 
-    public MetadataFileProcessorImpl(RecordFieldValuesMapper fieldValuesMapper) {
-        this.fieldValuesMapper = fieldValuesMapper;
+    public MetadataFileProcessorImpl(VloRecordFactory recordFactory) {
+        this.recordFactory = recordFactory;
     }
 
     @Override
     public VloRecord processMappingRequest(VloRecordMappingRequest request) throws InputProcessingException {
         log.info("Processing input from request {}", request);
-        final VloRecord result = new VloRecord();
 
         try {
-            result.setDataRoot(request.getDataRoot());
-            result.setSourcePath(request.getFile());
-
             final StreamSource source = new StreamSource(request.getFile());
             source.setInputStream(new ByteArrayInputStream(request.getXmlContent()));
-            final Map<String, Collection<ValueLanguagePair>> fieldValues = fieldValuesMapper.mapRecordToFields(source);
 
-            populateRecordWithFieldValues(result, fieldValues);
-
-            return result;
+            return recordFactory.mapToRecord(source, request.getDataRoot(), request.getFile());
         } catch (IOException | VloMappingException ex) {
             throw new InputProcessingException(String.format("Error while trying to parse input file %s", request.getFile()), ex);
         }
-    }
-
-    private void populateRecordWithFieldValues(VloRecord result, Map<String, Collection<ValueLanguagePair>> fieldValues) {
-        //TODO: selflink
-        //TODO: profile ID
-        result.setFields(
-                Maps.transformValues(fieldValues, values -> values.stream().map(vlp -> (Object) vlp.getValue()).toList()));
     }
 }

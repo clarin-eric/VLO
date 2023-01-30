@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.api.configuration;
 
 import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import eu.clarin.cmdi.vlo.mapping.VloRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.definition.VloMappingRulesException;
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.RecordFieldValuesMapperImpl;
 import java.io.IOException;
@@ -40,6 +41,11 @@ public class MappingConfiguration {
     private String vocabularyRegistryUrl; // = "http://clavas.clarin.eu/clavas/public/api/find-concepts";
     @Value("${vlo.api.mapping.profileSchemaUrl}")
     private String profileSchemaUrl; // = "https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd";    
+
+    @Bean
+    public VloRecordFactory recordFactory() throws IOException, VloMappingRulesException {
+        return new VloRecordFactory(fieldValuesMapper());
+    }
 
     @Bean
     public RecordFieldValuesMapper fieldValuesMapper() throws IOException, VloMappingRulesException {

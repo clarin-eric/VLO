@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.mapping;
 import eu.clarin.cmdi.vlo.mapping.model.FieldMappingResult;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
-import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -36,25 +35,25 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
-    
+
     private final ContextFactory contextFactory;
     private final ContextFieldValueMapper contextFieldValueMapper;
     private final FieldValuesProcessor fieldValuesProcessor;
-    
+
     public BaseRecordFieldValuesMapper(ContextFactory contextFactory, ContextFieldValueMapper contextFieldValueMapper, FieldValuesProcessor fieldValuesProcessor) {
         this.contextFactory = contextFactory;
         this.contextFieldValueMapper = contextFieldValueMapper;
         this.fieldValuesProcessor = fieldValuesProcessor;
     }
-    
+
     @Override
     public Map<String, Collection<ValueLanguagePair>> mapRecordToFields(StreamSource source) throws IOException, VloMappingException {
-        log.info("Field mapping of record ({})", source.getSystemId());
-        
+        log.debug("Field mapping of record ({})", source.getSystemId());
+
         log.debug("Mapping all contexts (record {})", source.getSystemId());
         // Produce mapping results for all individual contexts
         final Map<String, List<FieldMappingResult>> resultsByField = mapAllContexts(source);
-        
+
         log.debug("Producing field values (record {})", source.getSystemId());
         // Distil field values out of mapping results
         return fieldValuesProcessor.process(resultsByField).orElseGet(() -> {
@@ -74,5 +73,5 @@ public class BaseRecordFieldValuesMapper implements RecordFieldValuesMapper {
                 .flatMap(contextFieldValueMapper::mapContext) // maps all contexts to field value candidates
                 .collect(Collectors.groupingBy(FieldMappingResult::getField)); // collects results grouped by field
     }
-    
+
 }

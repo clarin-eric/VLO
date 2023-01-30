@@ -37,8 +37,19 @@ import reactor.core.scheduler.Scheduler;
 @Slf4j
 public class MappingRequestProcessorImpl implements MappingRequestProcessor {
 
+    /**
+     * Store - TODO use cache instead
+     */
     private final MappingResultStore<UUID> resultStore;
+
+    /**
+     * Processor that produces a VLO record based on a request
+     */
     private final MetadataFileProcessor fileProcessor;
+    
+    /**
+     * Request processing scheduler
+     */
     @Qualifier("mappingRequestProcessorScheduler")
     private final Scheduler scheduler;
 
@@ -46,6 +57,8 @@ public class MappingRequestProcessorImpl implements MappingRequestProcessor {
     public Mono<VloRecordMappingProcessingTicket> processMappingRequest(Mono<VloRecordMappingRequest> requestMono) {
         final UUID ticketId = UUID.randomUUID();
 
+        // TODO: change this so that the ticket is returned immediately after
+        // the mapping is queued on the cache
         return requestMono
                 .publishOn(scheduler)
                 .flatMap(request -> Mono.fromCallable(

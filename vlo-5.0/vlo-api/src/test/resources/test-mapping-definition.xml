@@ -18,42 +18,94 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <!-- Rules for 'title' field -->
     <contextAssertionBasedRule>
-        <assertions>
-            <assertion xsi:type="xPathAssertion">//cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
-        </assertions>
-        <transformers>
-            <transformer xsi:type="identityTransformer" field="id" />
-            <transformer xsi:type="identityTransformer" field="identifier" />
-        </transformers>
         <terminal>true</terminal>
-    </contextAssertionBasedRule>
-    
-    <contextAssertionBasedRule>
+        <transformers>
+            <transformer field="title" xsi:type="identityTransformer" />
+        </transformers>
         <assertions>
-            <!-- title of narrative via concept -->
+            <!-- Concepts -->
             <assertion xsi:type="conceptPathAssertion">
-                <!-- location manuscript * -->
-                <conceptPath>
-                    http://hdl.handle.net/11459/CCR_C-5470_264bbec8-0f10-7126-2925-23fe2594b0da
-                    http://hdl.handle.net/11459/CCR_C-4371_f6ca641a-b4ed-d4d1-8e6f-ca8f6b4762ed
-                    *
-                </conceptPath>
+                <conceptPath>http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce *</conceptPath>
+            </assertion>
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://purl.org/dc/terms/title *</conceptPath>
             </assertion>
         </assertions>
+    </contextAssertionBasedRule>
+
+    <!-- Rules for the 'format' field -->
+    <contextAssertionBasedRule>
+        <terminal>true</terminal>
         <transformers>
-            <transformer xsi:type="identityTransformer" field="location" />
-            <transformer xsi:type="valueMapTransformer" field="locationNormalized" behaviour="replaceOnMatch" regex="true" caseSensitive="false">
+            <transformer field="format" xsi:type="identityTransformer" />
+        </transformers>
+        <assertions>
+            <!-- Concepts -->
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df *</conceptPath>
+            </assertion>
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://purl.org/dc/terms/format *</conceptPath>
+            </assertion>
+        </assertions>
+    </contextAssertionBasedRule>
+
+    <!-- Rules for the 'language' field (preferred) -->
+    <!--     Preferred concepts -->
+    <contextAssertionBasedRule>
+        <score>10</score>
+        <terminal>true</terminal>
+        <transformers>
+            <transformer field="language" xsi:type="valueMapTransformer" behaviour="replaceOnMatch" regex="false" caseSensitive="false">
                 <valueMap>
-                    <item source="^location[0abc]+$" target="locationX"/>
-                    <item source="Nimwegen" target="Nijmegen"/>
+                    <item source="eng" target="English"/>
                 </valueMap>
             </transformer>
         </transformers>
-        <terminal>true</terminal>
+        <assertions>
+            <!-- Concepts -->
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17 *</conceptPath>
+            </assertion>
+        </assertions>
     </contextAssertionBasedRule>
 
+    <!--     Fallback concepts -->
+    <contextAssertionBasedRule>
+        <terminal>true</terminal>
+        <transformers>
+            <transformer field="language" xsi:type="valueMapTransformer" behaviour="replaceOnMatch" regex="false" caseSensitive="false">
+                <valueMap>
+                    <item source="eng" target="English"/>
+                </valueMap>
+            </transformer>
+        </transformers>
+        <assertions>
+            <!-- Concepts -->
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://purl.org/dc/terms/language *</conceptPath>
+            </assertion>
+        </assertions>
+    </contextAssertionBasedRule>
+            
+   
+    <!-- Rules for the 'subject' field -->
+    <contextAssertionBasedRule>
+        <terminal>true</terminal>
+        <transformers>
+            <transformer field="subject" xsi:type="identityTransformer" />
+        </transformers>
+        <assertions>
+            <!-- xpaths -->
+            <assertion xsi:type="xPathAssertion">//cmdp:subject/@olac-language</assertion>
+        </assertions>
+    </contextAssertionBasedRule>
+
+
     <fieldValuesRootProcessor>
-        <processor xsi:type="identityProcessor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+        <processor xsi:type="scoreFilterProcessor" fields="language" keepHighestScoring="true" />
+        <processor xsi:type="identityProcessor"/>
     </fieldValuesRootProcessor>
 </mappingDefinition>
