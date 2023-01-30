@@ -17,11 +17,11 @@
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
+import static eu.clarin.cmdi.vlo.mapping.VloMappingTestHelper.createStreamSourceForResource;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.io.File;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
+import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -41,10 +41,9 @@ public class RecordFieldValuesMapperImplTest extends AbstractVtdImplIntegrationT
      */
     @Test
     public void testMapRecordToFields() throws Exception {
-        final URL recordUrl = getClass().getResource("/records/p_1345561703673.cmdi");
-        final File file = new File(recordUrl.getFile());
+        final StreamSource source = createStreamSourceForResource(getClass(), "/records/p_1345561703673.cmdi");
         final RecordFieldValuesMapper instance = getFieldValuesMapper();
-        Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(file);
+        Map<String, Collection<ValueLanguagePair>> result = instance.mapRecordToFields(source);
         log.info("Result for {} fields", result.keySet().size());
         assertThat(result, aMapWithSize(4));
         assertThat(result, hasEntry(equalTo("id"), allOf(isA(Collection.class), hasSize(1))));

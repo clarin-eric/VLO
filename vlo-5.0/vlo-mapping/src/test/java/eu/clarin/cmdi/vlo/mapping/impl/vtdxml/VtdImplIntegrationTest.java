@@ -19,11 +19,11 @@ package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 import com.google.common.collect.FluentIterable;
 import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
+import static eu.clarin.cmdi.vlo.mapping.VloMappingTestHelper.createStreamSourceForResource;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
-import java.io.File;
-import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
+import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matcher;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -56,10 +56,9 @@ public class VtdImplIntegrationTest extends AbstractVtdImplIntegrationTest {
      */
     @Test
     public void testMapRecordToFields() throws Exception {
-        final URL recordUrl = getClass().getResource("/records/p_1288172614026.cmdi");
-        final File file = new File(recordUrl.getFile());
+        final StreamSource source = createStreamSourceForResource(getClass(), "/records/p_1288172614026.cmdi");
         final RecordFieldValuesMapper instance = getFieldValuesMapper();
-        final Map<String, Collection<ValueLanguagePair>> map = instance.mapRecordToFields(file);
+        final Map<String, Collection<ValueLanguagePair>> map = instance.mapRecordToFields(source);
 
         assertThat(map, hasValues("title", "WALS Online Resources for Abui"));
         assertThat(map, hasValues("format", "text/html"));
