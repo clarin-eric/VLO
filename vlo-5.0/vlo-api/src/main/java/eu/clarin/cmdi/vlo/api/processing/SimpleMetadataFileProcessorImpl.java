@@ -42,7 +42,7 @@ import org.springframework.stereotype.Component;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Component
-@Profile("default")
+@Profile("simpleMapper")
 @Slf4j
 public class SimpleMetadataFileProcessorImpl implements MetadataFileProcessor {
 

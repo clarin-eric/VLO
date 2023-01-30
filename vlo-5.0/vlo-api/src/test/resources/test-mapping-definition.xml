@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2022 CLARIN ERIC <clarin@clarin.eu>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+
+<mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <contextAssertionBasedRule>
+        <assertions>
+            <assertion xsi:type="xPathAssertion">//cmdp:ArthurianFiction/cmdp:manuscript/cmdp:id/text()</assertion>
+        </assertions>
+        <transformers>
+            <transformer xsi:type="identityTransformer" field="id" />
+            <transformer xsi:type="identityTransformer" field="identifier" />
+        </transformers>
+        <terminal>true</terminal>
+    </contextAssertionBasedRule>
+    
+    <contextAssertionBasedRule>
+        <assertions>
+            <!-- title of narrative via concept -->
+            <assertion xsi:type="conceptPathAssertion">
+                <!-- location manuscript * -->
+                <conceptPath>
+                    http://hdl.handle.net/11459/CCR_C-5470_264bbec8-0f10-7126-2925-23fe2594b0da
+                    http://hdl.handle.net/11459/CCR_C-4371_f6ca641a-b4ed-d4d1-8e6f-ca8f6b4762ed
+                    *
+                </conceptPath>
+            </assertion>
+        </assertions>
+        <transformers>
+            <transformer xsi:type="identityTransformer" field="location" />
+            <transformer xsi:type="valueMapTransformer" field="locationNormalized" behaviour="replaceOnMatch" regex="true" caseSensitive="false">
+                <valueMap>
+                    <item source="^location[0abc]+$" target="locationX"/>
+                    <item source="Nimwegen" target="Nijmegen"/>
+                </valueMap>
+            </transformer>
+        </transformers>
+        <terminal>true</terminal>
+    </contextAssertionBasedRule>
+
+    <fieldValuesRootProcessor>
+        <processor xsi:type="identityProcessor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+    </fieldValuesRootProcessor>
+</mappingDefinition>

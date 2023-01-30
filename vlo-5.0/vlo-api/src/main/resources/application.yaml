@@ -8,6 +8,8 @@ server:
 vlo:
   api:
     mapping:
+      vocabularyRegistryUrl: 'http://clavas.clarin.eu/clavas/public/api/find-concepts'
+      profileSchemaUrl: 'https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd'
       scheduler:
 #        parallel:
 #          threads: 10
