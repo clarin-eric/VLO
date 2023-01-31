@@ -28,7 +28,16 @@ import lombok.Data;
 @Builder
 public class CmdRecord {
 
+    private final Header header;
     private final CmdProfile profile;
     private final Collection<ValueContext> contexts;
 
+    @Data
+    @Builder
+    public static class Header {
+
+        private final String selfLink;
+        private final String profileId;
+        private final String collectionDisplayName;
+    }
 }

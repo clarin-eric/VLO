@@ -24,7 +24,7 @@ import javax.xml.transform.stream.StreamSource;
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
-public interface RecordFactory {
+public interface CmdRecordFactory {
 
     CmdRecord getRecord(StreamSource source) throws IOException, VloMappingException;
 

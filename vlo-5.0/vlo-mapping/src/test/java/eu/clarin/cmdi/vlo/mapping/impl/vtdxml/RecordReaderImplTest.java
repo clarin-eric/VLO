@@ -37,6 +37,9 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -46,32 +49,63 @@ import org.junit.jupiter.api.Test;
 public class RecordReaderImplTest {
 
     private final static VloMappingConfiguration mappingConfig = new VloMappingTestConfiguration();
+    private static final String PROFILE_ID_1 = "p_1345561703673";
+    private static final String TEST_RESOURCE_1 = "/records/" + PROFILE_ID_1 + ".cmdi";
 
-    /**
-     * Test of readRecord method, of class RecordReaderImpl.
-     *
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testReadRecord() throws Exception {
-        final RecordReaderImpl instance = TestResourceVTDProfileParser.inNewDefaultRecordReader(mappingConfig);
-        final StreamSource source = createStreamSourceForResource(getClass(),
-                "/records/p_1345561703673.cmdi");
+    @Nested
+    @DisplayName("Tests for reading of a single record")
+    public class ReadRecordTest {
 
-        final CmdRecord result = instance.readRecord(source);
-        assertNotNull(result);
+        static RecordReaderImpl instance;
+        static StreamSource source;
+        static CmdRecord result;
 
-        final CmdProfile profile = result.getProfile();
-        assertNotNull(profile);
-        assertEquals("clarin.eu:cr1:p_1345561703673", profile.getId());
+        @BeforeAll
+        public static void setUpClass() throws Exception {
+            instance = TestResourceVTDProfileParser.inNewDefaultRecordReader(mappingConfig);
+            source = createStreamSourceForResource(RecordReaderImplTest.class, TEST_RESOURCE_1);
+            result = instance.readRecord(source);
+        }
 
-        final Collection<ValueContext> contexts = result.getContexts();
-        assertThat(contexts, not(anyOf(nullValue(), empty())));
-        assertThat(contexts, hasItem(
-                allOf(
-                        hasProperty("xpath", equalTo("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:narrative/cmdp:id/text()")),
-                        hasProperty("values", hasItem(hasProperty("value", equalTo("id3")))),
-                        hasProperty("conceptPath", hasItem(equalTo("http://hdl.handle.net/11459/CCR_C-3894_4d08cc31-25fe-af0c-add4-ca7bdc12f5f7"))))));
+        @Test
+        public void testProcessing() throws Exception {
+            assertNotNull(result);
+            assertNotNull(result.getProfile(), "Profile read");
+            assertNotNull(result.getContexts(), "Contexts read");
+            assertNotNull(result.getHeader(), "Header read");
+        }
+
+        @Test
+        public void testProfile() throws Exception {
+            final CmdProfile profile = result.getProfile();
+            assertNotNull(profile);
+            assertEquals("clarin.eu:cr1:" + PROFILE_ID_1, profile.getId());
+        }
+
+        @Test
+        public void testContexts() throws Exception {
+            final Collection<ValueContext> contexts = result.getContexts();
+            assertThat(contexts, not(anyOf(nullValue(), empty())));
+            assertThat(contexts, hasItem(
+                    allOf(
+                            hasProperty("xpath", equalTo("/cmd:CMD/cmd:Components/cmdp:ArthurianFiction/cmdp:narrative/cmdp:id/text()")),
+                            hasProperty("values", hasItem(hasProperty("value", equalTo("id3")))),
+                            hasProperty("conceptPath", hasItem(equalTo("http://hdl.handle.net/11459/CCR_C-3894_4d08cc31-25fe-af0c-add4-ca7bdc12f5f7"))))));
+        }
+
+        @Test
+        public void testHeader() throws Exception {
+            CmdRecord.Header header = result.getHeader();
+            assertNotNull(header);
+            assertEquals("clarin.eu:cr1:" + PROFILE_ID_1, header.getProfileId());
+            assertEquals("my/project/test/resources/records/p_1345561703673.cmdi", header.getSelfLink());
+            assertEquals("Test collection", header.getCollectionDisplayName());
+        }
+
+        @Test
+        public void testResources() throws Exception {
+            // TODO
+        }
     }
 
     /**
@@ -83,8 +117,7 @@ public class RecordReaderImplTest {
      */
     public static void main(String[] args) throws IOException, VloMappingException {
         final RecordReaderImpl instance = new RecordReaderImpl(mappingConfig);
-        final StreamSource source = createStreamSourceForResource(
-                RecordReaderImplTest.class, "/records/p_1345561703673.cmdi");
+        final StreamSource source = createStreamSourceForResource(RecordReaderImplTest.class, TEST_RESOURCE_1);
 
         final CmdRecord result = instance.readRecord(source);
         System.out.println("Done reading" + Objects.toString(result));

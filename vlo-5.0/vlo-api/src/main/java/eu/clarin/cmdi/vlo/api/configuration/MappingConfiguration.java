@@ -16,11 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import eu.clarin.cmdi.vlo.mapping.CachingRecordFactory;
+import eu.clarin.cmdi.vlo.mapping.CmdRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordFieldValuesMapper;
+import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.VloRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.definition.VloMappingRulesException;
 import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.RecordFieldValuesMapperImpl;
+import eu.clarin.cmdi.vlo.mapping.impl.vtdxml.RecordReaderImpl;
 import java.io.IOException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -44,12 +48,22 @@ public class MappingConfiguration {
 
     @Bean
     public VloRecordFactory recordFactory() throws IOException, VloMappingRulesException {
-        return new VloRecordFactory(fieldValuesMapper());
+        return new VloRecordFactory(cmdRecordFactory(), fieldValuesMapper());
     }
 
     @Bean
     public RecordFieldValuesMapper fieldValuesMapper() throws IOException, VloMappingRulesException {
-        return new RecordFieldValuesMapperImpl(mappingConfig());
+        return new RecordFieldValuesMapperImpl(mappingConfig(), cmdRecordFactory());
+    }
+    
+    @Bean
+    public CmdRecordFactory cmdRecordFactory() {
+        return new CachingRecordFactory(recordReader());
+    }
+
+    @Bean
+    public RecordReader recordReader() {
+        return new RecordReaderImpl(mappingConfig());
     }
 
     @Bean

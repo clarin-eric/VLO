@@ -45,6 +45,8 @@ public class VloRecordWriter implements ItemWriter<Mono<VloRecord>> {
     }
 
     public void write(List<? extends Mono<VloRecord>> items) throws Exception {
+        //TODO: require value for "id" !
+        
         log.debug("Writing items");
         final ParallelFlux<VloRecord> itemsFlux = Flux.concat(items).parallel();
 

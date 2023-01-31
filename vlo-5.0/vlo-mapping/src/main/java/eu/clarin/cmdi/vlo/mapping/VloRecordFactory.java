@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.mapping;
 
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.IOException;
 import java.util.Collection;
@@ -35,13 +36,15 @@ import lombok.extern.slf4j.Slf4j;
 public class VloRecordFactory {
 
     private final RecordFieldValuesMapper fieldValuesMapper;
+    private final CmdRecordFactory cmdRecordFactory;
 
     /**
      * Value mapper to use to populate the fields of a record
      *
      * @param fieldValuesMapper
      */
-    public VloRecordFactory(RecordFieldValuesMapper fieldValuesMapper) {
+    public VloRecordFactory(CmdRecordFactory cmdRecordFactory, RecordFieldValuesMapper fieldValuesMapper) {
+        this.cmdRecordFactory = cmdRecordFactory;
         this.fieldValuesMapper = fieldValuesMapper;
     }
 
@@ -51,10 +54,12 @@ public class VloRecordFactory {
         final Map<String, Collection<ValueLanguagePair>> fieldValues = fieldValuesMapper.mapRecordToFields(source);
         log.trace("Field values obtained for source {}", source.getSystemId());
 
-        return constructRecord(fieldValues, dataRoot, sourcePath);
+        final CmdRecord cmdRecord = cmdRecordFactory.getRecord(source);
+
+        return constructRecord(cmdRecord, fieldValues, dataRoot, sourcePath);
     }
 
-    private VloRecord constructRecord(final Map<String, Collection<ValueLanguagePair>> fieldValues, String dataRoot, String sourcePath) {
+    private VloRecord constructRecord(final CmdRecord cmdRecord, final Map<String, Collection<ValueLanguagePair>> fieldValues, String dataRoot, String sourcePath) {
         // resturce field values map
         final Map<String, List<Object>> recordFields = Maps.transformValues(fieldValues,
                 values -> values.stream()
@@ -67,6 +72,11 @@ public class VloRecordFactory {
         record.setSourcePath(sourcePath);
         record.setFields(recordFields);
 
+        final CmdRecord.Header recordHeader = cmdRecord.getHeader();
+        //TODO: transfer logic to map to valid ID from old importer
+        record.setId(recordHeader.getSelfLink().replaceAll("[^A-z0-9]", "_")); 
+        //TODO
+        //record.setResources(
         return record;
     }
 

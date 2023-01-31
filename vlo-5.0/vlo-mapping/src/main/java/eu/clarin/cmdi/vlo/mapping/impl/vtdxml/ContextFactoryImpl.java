@@ -17,13 +17,13 @@
 package eu.clarin.cmdi.vlo.mapping.impl.vtdxml;
 
 import eu.clarin.cmdi.vlo.mapping.ContextFactory;
-import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import java.io.IOException;
 import java.util.stream.Stream;
 import javax.xml.transform.stream.StreamSource;
+import eu.clarin.cmdi.vlo.mapping.CmdRecordFactory;
 
 /**
  * Generates all contexts (concept + XML paths with values) for an XML document
@@ -32,9 +32,9 @@ import javax.xml.transform.stream.StreamSource;
  */
 public class ContextFactoryImpl implements ContextFactory {
 
-    private final RecordFactory recordFactory;
+    private final CmdRecordFactory recordFactory;
 
-    public ContextFactoryImpl(RecordFactory recordFactory) {
+    public ContextFactoryImpl(CmdRecordFactory recordFactory) {
         this.recordFactory = recordFactory;
     }
 

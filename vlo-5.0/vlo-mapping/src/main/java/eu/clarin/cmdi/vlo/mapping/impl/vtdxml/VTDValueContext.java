@@ -67,7 +67,7 @@ public class VTDValueContext extends ValueContextImpl implements XPathAware {
     public boolean matchesXPath(String xPath) {
         try {
             final AutoPilot ap = new AutoPilot(nav.cloneNav());
-            RecordReaderImpl.setNameSpace(ap, profileId);
+            RecordReaderImpl.setProfileNameSpace(ap, profileId);
 
             // determine index for context xpath (TODO: memoize this?)
             ap.selectXPath(getXpath());

@@ -35,14 +35,11 @@ import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
 import eu.clarin.cmdi.vlo.mapping.model.ValueContext;
 import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import eu.clarin.cmdi.vlo.util.CmdConstants;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
-import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -56,6 +53,10 @@ public class RecordReaderImpl implements RecordReader {
 
     public static final String ENGLISH_LANGUAGE = "code:eng";
     public static final String DEFAULT_LANGUAGE = "code:und";
+
+    private static final java.util.regex.Pattern PROFILE_ID_PATTERN
+            = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
+
     private final ProfileFactory profileFactory;
 
     public RecordReaderImpl(VloMappingConfiguration mappingConfig) {
@@ -68,23 +69,27 @@ public class RecordReaderImpl implements RecordReader {
 
     @Override
     public CmdRecord readRecord(StreamSource source) throws IOException, VloMappingException {
+        final String systemId = source.getSystemId();
+        log.debug("Reading record from source: {}", systemId);
+
         try {
             // prepare
             final VTDNav nav = openFile(source);
-            final String profileId = extractProfileId(nav, source.getSystemId());
-            if (profileId == null) {
-                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + source.getSystemId());
-            } else {
-                // we can now dive into the file and construct a record object
-                final CmdRecord.CmdRecordBuilder recordBuilder = CmdRecord.builder();
+            log.trace("VTD navigator opened for source: {}", systemId);
 
+            final String profileId = extractProfileId(nav, systemId);
+            log.trace("Profile id: {} for {}", profileId, systemId);
+
+            if (profileId == null) {
+                log.error("No profile id determined for {}", systemId);
+                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + systemId);
+            } else {
                 final VTDNav rootNav = nav.cloneNav();
                 rootNav.toElement(VTDNav.ROOT);
-                parse(source, rootNav, recordBuilder, profileId);
-                return recordBuilder.build();
+                return parse(rootNav, profileId, source);
             }
         } catch (VTDException ex) {
-            throw new VloMappingException("Exception while parsing record from file: " + source.getSystemId(), ex);
+            throw new VloMappingException("Exception while parsing record from file: " + systemId, ex);
         }
     }
 
@@ -123,15 +128,43 @@ public class RecordReaderImpl implements RecordReader {
         return docBytes;
     }
 
-    private void parse(StreamSource source, VTDNav nav, final CmdRecord.CmdRecordBuilder record, final String profileId) throws IOException, VloMappingException, VTDException {
-        //read the profile
-        final CmdProfile profile = profileFactory.getProfile(profileId);
-        record.profile(profile);
-
-        ImmutableList.Builder<ValueContext> contexts = ImmutableList.builder();
-
+    private CmdRecord parse(final VTDNav nav, final String profileId, StreamSource source) throws IOException, VloMappingException, VTDException {
         final AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap, profileId);
+
+        // read the header
+        final CmdRecord.Header header = readHeader(nav, ap);
+
+        //obtain the profile
+        final CmdProfile profile = profileFactory.getProfile(profileId);
+
+        // read the payload
+        final ImmutableList<ValueContext> contexts = readPayloadContexts(nav, ap, profileId, profile, source);
+
+        // TODO: record.resources();
+        // anything else?
+        // we can now construct a complete record object
+        return CmdRecord.builder()
+                .header(header)
+                .profile(profile)
+                .contexts(contexts)
+                .build();
+    }
+
+    private CmdRecord.Header readHeader(final VTDNav nav, final AutoPilot ap) throws XPathParseException, NavException, XPathEvalException {
+        setEnvelopeNameSpace(ap);
+        // header information building
+        final CmdRecord.Header.HeaderBuilder builder = CmdRecord.Header.builder();
+        builder.profileId(getStringValueFromXpath(nav, ap, "/cmd:CMD/cmd:Header/cmd:MdProfile/text()"));
+        builder.collectionDisplayName(getStringValueFromXpath(nav, ap, "/cmd:CMD/cmd:Header/cmd:MdCollectionDisplayName/text()"));
+        builder.selfLink(getStringValueFromXpath(nav, ap, "/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()"));
+        final CmdRecord.Header header = builder.build();
+        return header;
+    }
+
+    private ImmutableList<ValueContext> readPayloadContexts(final VTDNav nav, final AutoPilot ap, final String profileId, final CmdProfile profile, StreamSource source) {
+        final ImmutableList.Builder<ValueContext> contexts = ImmutableList.builder();
+
+        setProfileNameSpace(ap, profileId);
         profile.getXpathContextMap().forEach((path, context) -> {
             try {
                 ap.selectXPath(path);
@@ -145,13 +178,10 @@ public class RecordReaderImpl implements RecordReader {
             }
         });
 
-        // value contexts
-        record.contexts(contexts.build());
-        // resources
-        // anything else?
+        return contexts.build();
     }
 
-    private ImmutableList<ValueLanguagePair> getValues(VTDNav nav, int index, AutoPilot ap) throws VTDException {
+    private ImmutableList<ValueLanguagePair> getValues(final VTDNav nav, int index, final AutoPilot ap) throws VTDException {
         final ImmutableList.Builder<ValueLanguagePair> valuesBuilder = ImmutableList.builder();
         boolean matchedPattern = false;
         while (index != -1) {
@@ -175,7 +205,7 @@ public class RecordReaderImpl implements RecordReader {
         return values;
     }
 
-    private String extractLanguageCode(VTDNav nav) throws NavException {
+    private String extractLanguageCode(final VTDNav nav) throws NavException {
         // extract language code in xml:lang if available
         Integer langAttrIndex = nav.getAttrVal("xml:lang");
         String languageCode;
@@ -188,7 +218,17 @@ public class RecordReaderImpl implements RecordReader {
         return languageCode;
     }
 
-    private static String extractProfileId(VTDNav nav, String context) throws VTDException {
+    private String getStringValueFromXpath(final VTDNav nav, final AutoPilot ap, final String xPath) throws XPathEvalException, NavException, XPathParseException {
+        ap.selectXPath(xPath);
+        int index = ap.evalXPath();
+        if (index < 0) {
+            return null;
+        } else {
+            return nav.toString(index).trim();
+        }
+    }
+
+    private static String extractProfileId(final VTDNav nav, final String context) throws VTDException {
         String profileID = getProfileIdFromHeader(nav);
         if (profileID != null) {
             Matcher m = PROFILE_ID_PATTERN.matcher(profileID);
@@ -216,10 +256,10 @@ public class RecordReaderImpl implements RecordReader {
      * @throws XPathEvalException
      * @throws NavException
      */
-    private static String getProfileIdFromHeader(VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
+    private static String getProfileIdFromHeader(final VTDNav nav) throws XPathParseException, XPathEvalException, NavException {
         nav.toElement(VTDNav.ROOT);
         AutoPilot ap = new AutoPilot(nav);
-        setNameSpace(ap, null);
+        setEnvelopeNameSpace(ap);
         ap.selectXPath("/cmd:CMD/cmd:Header/cmd:MdProfile/text()");
         int index = ap.evalXPath();
         String profileId = null;
@@ -228,7 +268,6 @@ public class RecordReaderImpl implements RecordReader {
         }
         return profileId;
     }
-    private static final java.util.regex.Pattern PROFILE_ID_PATTERN = java.util.regex.Pattern.compile(".*(clarin.eu:cr1:p_[0-9]+).*");
 
     /**
      * Extract XSD schema information from schemaLocation or
@@ -238,7 +277,7 @@ public class RecordReaderImpl implements RecordReader {
      * @return ID of CMDI schema, or null if attributes don't exist
      * @throws NavException
      */
-    private static String getProfileIdFromSchemaLocation(VTDNav nav) throws NavException {
+    private static String getProfileIdFromSchemaLocation(final VTDNav nav) throws NavException {
         String result = null;
         nav.toElement(VTDNav.ROOT);
         int index = nav.getAttrValNS("http://www.w3.org/2001/XMLSchema-instance", "schemaLocation");
@@ -269,11 +308,15 @@ public class RecordReaderImpl implements RecordReader {
      * @param ap
      * @param profileId
      */
-    public static void setNameSpace(AutoPilot ap, String profileId) {
+    public static void setProfileNameSpace(final AutoPilot ap, final String profileId) {
         ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
         if (profileId != null) {
             ap.declareXPathNameSpace("cmdp", "http://www.clarin.eu/cmd/1/profiles/" + profileId);
         }
+    }
+
+    public static void setEnvelopeNameSpace(final AutoPilot ap) {
+        ap.declareXPathNameSpace("cmd", CmdConstants.CMD_NAMESPACE);
     }
 
 }

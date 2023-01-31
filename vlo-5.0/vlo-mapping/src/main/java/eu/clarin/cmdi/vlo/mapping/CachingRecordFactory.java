@@ -31,7 +31,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Slf4j
-public class CachingRecordFactory implements RecordFactory {
+public class CachingRecordFactory implements CmdRecordFactory {
 
     private final Cache<String, CmdRecord> recordCache;
     private final RecordReader recordReader;

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CMD xmlns="http://www.clarin.eu/cmd/1"
- xmlns:cue="http://www.clarin.eu/cmd/cues/1"
- xmlns:cue_old="http://www.clarin.eu/cmdi/cues/1"
- xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1345561703673"
- xmlns:dcr="http://www.isocat.org/ns/dcr"
- xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1345561703673/xsd" CMDVersion="1.2">
+     xmlns:cue="http://www.clarin.eu/cmd/cues/1"
+     xmlns:cue_old="http://www.clarin.eu/cmdi/cues/1"
+     xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1345561703673"
+     xmlns:dcr="http://www.isocat.org/ns/dcr"
+     xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.clarin.eu/cmd/1 https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/clarin.eu:cr1:p_1345561703673/xsd" CMDVersion="1.2">
     <Header>
         <MdCreator>MdCreator0</MdCreator>
         <MdCreationDate>2006-05-04</MdCreationDate>
-        <MdSelfLink>http://www.oxygenxml.com/</MdSelfLink>
-        <MdProfile>clarin.eu:cr1:p_1345561703673/</MdProfile>
-        <MdCollectionDisplayName>MdCollectionDisplayName0</MdCollectionDisplayName>
+        <MdSelfLink>my/project/test/resources/records/p_1345561703673.cmdi</MdSelfLink>
+        <MdProfile>clarin.eu:cr1:p_1345561703673</MdProfile>
+        <MdCollectionDisplayName>Test collection</MdCollectionDisplayName>
     </Header>
     <Resources>
         <ResourceProxyList>

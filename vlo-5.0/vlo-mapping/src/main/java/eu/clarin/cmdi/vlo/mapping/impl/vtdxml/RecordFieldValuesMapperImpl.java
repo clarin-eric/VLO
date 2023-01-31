@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.mapping.BaseRecordFieldValuesMapper;
 import eu.clarin.cmdi.vlo.mapping.CachingRecordFactory;
 import eu.clarin.cmdi.vlo.mapping.ContextFieldValueMapper;
 import eu.clarin.cmdi.vlo.mapping.ContextFieldValueMapperImpl;
-import eu.clarin.cmdi.vlo.mapping.RecordFactory;
 import eu.clarin.cmdi.vlo.mapping.RecordReader;
 import eu.clarin.cmdi.vlo.mapping.VloMappingConfiguration;
 import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinition;
@@ -29,6 +28,7 @@ import eu.clarin.cmdi.vlo.mapping.definition.VloMappingRulesException;
 import java.io.IOException;
 import eu.clarin.cmdi.vlo.mapping.definition.MappingDefinitionProvider;
 import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
+import eu.clarin.cmdi.vlo.mapping.CmdRecordFactory;
 
 /**
  *
@@ -36,21 +36,27 @@ import eu.clarin.cmdi.vlo.mapping.processing.FieldValuesProcessor;
  */
 public class RecordFieldValuesMapperImpl extends BaseRecordFieldValuesMapper {
 
-    public RecordFieldValuesMapperImpl(VloMappingConfiguration mappingConfig) throws VloMappingRulesException, IOException {
-        this(new RecordReaderImpl(mappingConfig), new MappingDefinitionProviderImpl(mappingConfig), mappingConfig);
+    public RecordFieldValuesMapperImpl(VloMappingConfiguration mappingConfig, CmdRecordFactory recordFactory) throws VloMappingRulesException, IOException {
+        this(mappingConfig, recordFactory, new MappingDefinitionProviderImpl(mappingConfig).getDefinition());
+    }
+
+    private RecordFieldValuesMapperImpl(VloMappingConfiguration mappingConfig, CmdRecordFactory recordFactory, MappingDefinition mappingDefinition) throws VloMappingRulesException, IOException {
+        this(recordFactory,
+                new ContextFieldValueMapperImpl(mappingDefinition.getRules(), mappingConfig),
+                mappingDefinition.getFieldValuesProcessor());
     }
 
     public RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinitionProvider definitionProvider, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
         this(recordReader, definitionProvider.getDefinition(), mappingConfig);
     }
 
-    public RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinition mappingDefinition, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
+    private RecordFieldValuesMapperImpl(RecordReader recordReader, MappingDefinition mappingDefinition, VloMappingConfiguration mappingConfig) throws VloMappingRulesException {
         this(new CachingRecordFactory(recordReader),
                 new ContextFieldValueMapperImpl(mappingDefinition.getRules(), mappingConfig),
                 mappingDefinition.getFieldValuesProcessor());
     }
 
-    public RecordFieldValuesMapperImpl(RecordFactory recordFactory, ContextFieldValueMapper fieldValueMapper, FieldValuesProcessor fieldValuesRootProcessor) throws VloMappingRulesException {
+    private RecordFieldValuesMapperImpl(CmdRecordFactory recordFactory, ContextFieldValueMapper fieldValueMapper, FieldValuesProcessor fieldValuesRootProcessor) throws VloMappingRulesException {
         super(new ContextFactoryImpl(recordFactory), fieldValueMapper, fieldValuesRootProcessor);
     }
 }
