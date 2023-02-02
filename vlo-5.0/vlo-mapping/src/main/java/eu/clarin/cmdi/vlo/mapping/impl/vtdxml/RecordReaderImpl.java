@@ -69,27 +69,27 @@ public class RecordReaderImpl implements RecordReader {
 
     @Override
     public CmdRecord readRecord(StreamSource source) throws IOException, VloMappingException {
-        final String systemId = source.getSystemId();
-        log.debug("Reading record from source: {}", systemId);
+        final String sourceSystemId = source.getSystemId();
+        log.debug("Reading record from source: {}", sourceSystemId);
 
         try {
             // prepare
             final VTDNav nav = openFile(source);
-            log.trace("VTD navigator opened for source: {}", systemId);
+            log.trace("VTD navigator opened for source: {}", sourceSystemId);
 
-            final String profileId = extractProfileId(nav, systemId);
-            log.trace("Profile id: {} for {}", profileId, systemId);
+            final String profileId = extractProfileId(nav, sourceSystemId);
+            log.trace("Profile id: {} for {}", profileId, sourceSystemId);
 
             if (profileId == null) {
-                log.error("No profile id determined for {}", systemId);
-                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + systemId);
+                log.error("No profile id determined for {}", sourceSystemId);
+                throw new VloMappingException("Profile could not be determined, mapping skipped for record " + sourceSystemId);
             } else {
                 final VTDNav rootNav = nav.cloneNav();
                 rootNav.toElement(VTDNav.ROOT);
                 return parse(rootNav, profileId, source);
             }
         } catch (VTDException ex) {
-            throw new VloMappingException("Exception while parsing record from file: " + systemId, ex);
+            throw new VloMappingException("Exception while parsing record from file: " + sourceSystemId, ex);
         }
     }
 

@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.mapping;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.mapping.model.CmdRecord;
@@ -37,15 +38,22 @@ public class VloRecordFactory {
 
     private final RecordFieldValuesMapper fieldValuesMapper;
     private final CmdRecordFactory cmdRecordFactory;
+    private IdNormalizer idNormalizer;
 
     /**
      * Value mapper to use to populate the fields of a record
      *
+     * @param cmdRecordFactory
      * @param fieldValuesMapper
      */
     public VloRecordFactory(CmdRecordFactory cmdRecordFactory, RecordFieldValuesMapper fieldValuesMapper) {
+        this(cmdRecordFactory, fieldValuesMapper, new IdNormalizer());
+    }
+
+    public VloRecordFactory(CmdRecordFactory cmdRecordFactory, RecordFieldValuesMapper fieldValuesMapper, IdNormalizer idNormalizer) {
         this.cmdRecordFactory = cmdRecordFactory;
         this.fieldValuesMapper = fieldValuesMapper;
+        this.idNormalizer = idNormalizer;
     }
 
     public VloRecord mapToRecord(StreamSource source, String dataRoot, String sourcePath) throws IOException, VloMappingException {
@@ -72,12 +80,24 @@ public class VloRecordFactory {
         record.setSourcePath(sourcePath);
         record.setFields(recordFields);
 
-        final CmdRecord.Header recordHeader = cmdRecord.getHeader();
-        //TODO: transfer logic to map to valid ID from old importer
-        record.setId(recordHeader.getSelfLink().replaceAll("[^A-z0-9]", "_")); 
+        final String docId = idNormalizer.normalizeIdString(getId(cmdRecord, sourcePath));
+        log.debug("Id for record {} determined to be {}", sourcePath, docId);
+        record.setId(docId);
+
         //TODO
         //record.setResources(
         return record;
+    }
+
+    private String getId(final CmdRecord cmdRecord, String sourcePath) {
+        final CmdRecord.Header recordHeader = cmdRecord.getHeader();
+
+        final String selfLink = recordHeader.getSelfLink();
+        if (Strings.isNullOrEmpty(selfLink)) {
+            return sourcePath;
+        } else {
+            return selfLink;
+        }
     }
 
 }
