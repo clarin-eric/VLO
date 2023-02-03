@@ -36,9 +36,9 @@ import reactor.core.scheduler.Scheduler;
 @AllArgsConstructor
 @Slf4j
 public class MappingRequestProcessorImpl implements MappingRequestProcessor {
-
+    
     /**
-     * Store - TODO use cache instead
+     * Mapping results are kept in this store so that they can be retrieved upon request
      */
     private final MappingResultStore<UUID> resultStore;
 

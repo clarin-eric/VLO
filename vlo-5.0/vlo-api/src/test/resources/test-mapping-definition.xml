@@ -19,10 +19,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <mappingDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <!-- Rules for 'title' field -->
-    <contextAssertionBasedRule>
+    <contextAssertionBasedRule label="name">
         <terminal>true</terminal>
         <transformers>
-            <transformer field="title" xsi:type="identityTransformer" />
+            <transformer field="name" xsi:type="identityTransformer" />
         </transformers>
         <assertions>
             <!-- Concepts -->
@@ -35,8 +35,34 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         </assertions>
     </contextAssertionBasedRule>
 
+    <!-- Rules for 'description' field -->
+    <contextAssertionBasedRule label="description">
+        <terminal>true</terminal>
+        <transformers>
+            <transformer field="description" xsi:type="identityTransformer" />
+        </transformers>
+        <assertions>
+            <!-- Concepts -->
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://hdl.handle.net/11459/CCR_C-2520_9eeedfb4-47d3-ddee-cfcb-99ac634bf1db *</conceptPath>
+            </assertion>
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://hdl.handle.net/11459/CCR_C-6124_2e45fdf9-ced2-89c9-a09d-b4769e9fede6 *</conceptPath>
+            </assertion>
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://purl.org/dc/terms/description *</conceptPath>
+            </assertion>
+            <assertion xsi:type="conceptPathAssertion">
+                <conceptPath>http://purl.org/dc/elements/1.1/description *</conceptPath>
+            </assertion>
+            <assertion xsi:type="xPathAssertion">
+                /cmd:CMD/cmd:Components/cmdp:mods/cmdp:abstract/text()
+            </assertion>
+        </assertions>
+    </contextAssertionBasedRule>
+
     <!-- Rules for the 'format' field -->
-    <contextAssertionBasedRule>
+    <contextAssertionBasedRule label="format">
         <terminal>true</terminal>
         <transformers>
             <transformer field="format" xsi:type="identityTransformer" />
@@ -54,7 +80,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Rules for the 'language' field (preferred) -->
     <!--     Preferred concepts -->
-    <contextAssertionBasedRule>
+    <contextAssertionBasedRule label="language (preferred)">
         <score>10</score>
         <terminal>true</terminal>
         <transformers>
@@ -73,7 +99,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </contextAssertionBasedRule>
 
     <!--     Fallback concepts -->
-    <contextAssertionBasedRule>
+    <contextAssertionBasedRule label="language (fallback)">
         <terminal>true</terminal>
         <transformers>
             <transformer field="language" xsi:type="valueMapTransformer" behaviour="replaceOnMatch" regex="false" caseSensitive="false">
@@ -92,7 +118,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             
    
     <!-- Rules for the 'subject' field -->
-    <contextAssertionBasedRule>
+    <contextAssertionBasedRule label="subject">
         <terminal>true</terminal>
         <transformers>
             <transformer field="subject" xsi:type="identityTransformer" />
