@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import co.elastic.clients.util.ObjectBuilder;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
@@ -32,9 +33,12 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
+import reactor.core.publisher.Flux;
 
 /**
  *
@@ -56,7 +60,7 @@ public class VloRecordHandler {
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
 
-        return getQuery(Optional.of(query))
+        return getQuery(Optional.of(query), Optional.empty())
                 //query to search result
                 .flatMap(q -> operations.count(q, VloRecord.class))
                 .doOnNext(count -> log.debug("Search result count: {}", count))
@@ -70,12 +74,7 @@ public class VloRecordHandler {
         int offset = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
         int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
 
-        return getQuery(query)
-                //query to search result
-                .flatMapMany(q -> operations.search(q.setPageable(Pagination.pageRequestFor(offset, size)), VloRecord.class))
-                .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
-                //get content (record) for each hit, turn into list
-                .flatMap(hit -> Mono.just(hit.getContent()))
+        return getRecords(query, offset, size)
                 //turn into list mono
                 .collectList()
                 .doOnNext(results -> log.debug("Results: {}", results))
@@ -84,16 +83,26 @@ public class VloRecordHandler {
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
     }
 
-    private Mono<? extends Query> getQuery(Optional<String> queryParam) {
+    private Flux<VloRecord> getRecords(final Optional<String> query, int offset, int size) {
+        return getQuery(query, Optional.of(Pagination.pageRequestFor(offset, size)))
+                //query to search result
+                .flatMapMany(q -> operations.search(q, VloRecord.class))
+                .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
+                //get content (record) for each hit, turn into list
+                .flatMap(hit -> Mono.just(hit.getContent()));
+    }
+
+    private Mono<? extends Query> getQuery(Optional<String> queryParam, Optional<Pageable> pageable) {
         final Mono<String> qMono = Mono.justOrEmpty(queryParam);
 
         return qMono
                 .doOnNext(qParam -> log.debug("Query in request: '{}'", qParam))
-                .map(qParam -> NativeQuery.builder()
-                .withQuery(
-                        q -> q.queryString(
-                                s -> s.query(qParam)))
-                .build())
+                .map(qParam -> {
+                    final NativeQueryBuilder builder = NativeQuery.builder();
+                    builder.withQuery(q -> q.queryString(s -> s.query(qParam)));
+                    pageable.ifPresent(builder::withPageable);
+                    return builder.build();
+                })
                 .doOnNext(q -> log.debug("Query prepared: {}", q));
     }
 

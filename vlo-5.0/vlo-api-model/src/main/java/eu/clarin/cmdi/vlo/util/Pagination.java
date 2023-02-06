@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.util;
 
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 /**
  *
@@ -33,10 +34,14 @@ public final class Pagination {
      * @param size size of result set
      * @return
      */
-    public static PageRequest pageRequestFor(int offset, int size) {
-        int page = Math.floorDiv(offset - 1, size);
+    public static Pageable pageRequestFor(int offset, int size) {
+        try {
+            int page = Math.floorDiv(offset - 1, size);
 
-        return PageRequest.of(page, size);
+            return PageRequest.of(page, size);
+        } catch (ArithmeticException ex) {
+            throw new ArithmeticException("Arithmetic exception while converting offset / size to Pageable" + ex.getMessage());
+        }
     }
 
 }
