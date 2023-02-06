@@ -17,12 +17,16 @@
 package eu.clarin.cmdi.vlo.elasticsearch;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
+import reactor.core.publisher.Flux;
 
 /**
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public interface VloRecordRepository extends ReactiveElasticsearchRepository<VloRecord, String> {
+
+    Flux<VloRecord> findByIdNotNull(Pageable pageable);
 
 }

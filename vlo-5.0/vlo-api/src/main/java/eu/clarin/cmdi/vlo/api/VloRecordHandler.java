@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
-import co.elastic.clients.util.ObjectBuilder;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
@@ -60,7 +59,7 @@ public class VloRecordHandler {
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
 
-        return getQuery(Optional.of(query), Optional.empty())
+        return getQuery(query, Optional.empty())
                 //query to search result
                 .flatMap(q -> operations.count(q, VloRecord.class))
                 .doOnNext(count -> log.debug("Search result count: {}", count))
@@ -83,16 +82,19 @@ public class VloRecordHandler {
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
     }
 
-    private Flux<VloRecord> getRecords(final Optional<String> query, int offset, int size) {
-        return getQuery(query, Optional.of(Pagination.pageRequestFor(offset, size)))
-                //query to search result
-                .flatMapMany(q -> operations.search(q, VloRecord.class))
-                .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
-                //get content (record) for each hit, turn into list
-                .flatMap(hit -> Mono.just(hit.getContent()));
+    private Flux<VloRecord> getRecords(final Optional<String> queryParam, int offset, int size) {
+        final Pageable pageable = Pagination.pageRequestFor(offset, size);
+        return queryParam.map(query
+                -> getQuery(query, Optional.of(pageable))
+                        //query to search result
+                        .flatMapMany(q -> operations.search(q, VloRecord.class))
+                        .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
+                        //get content (record) for each hit, turn into list
+                        .flatMap(hit -> Mono.just(hit.getContent()))
+        ).orElse(recordRepository.findByIdNotNull(pageable));
     }
 
-    private Mono<? extends Query> getQuery(Optional<String> queryParam, Optional<Pageable> pageable) {
+    private Mono<? extends Query> getQuery(String queryParam, Optional<Pageable> pageable) {
         final Mono<String> qMono = Mono.justOrEmpty(queryParam);
 
         return qMono
