@@ -124,6 +124,37 @@ public class VloRecordHandlerIntegrationTest {
     }
 
     @Test
+    public void testGetRecordCountWithquery() {
+        // random string that we will insert into a new record
+        final String randomString = UUID.randomUUID().toString();
+        final ServerRequest request = MockServerRequest.builder()
+                .queryParam("q", randomString)
+                .build();
+
+        {
+            Mono<ServerResponse> responseMono = instance.getRecordCount(request);
+            ServerResponse response = responseMono.block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            assertInstanceOf(EntityResponse.class, response);
+            Object entity = ((EntityResponse) response).entity();
+            assertInstanceOf(Number.class, entity);
+            assertEquals(0, ((Number) entity).intValue());
+        }
+
+        testHelper.newRecord(respository, insertedIds, r -> {
+            // set field 'name' with random string as value
+            r.setFields(ImmutableMap.of("name", ImmutableList.of(randomString)));
+        });
+
+        {
+            Mono<ServerResponse> responseMono = instance.getRecordCount(request);
+            ServerResponse response = responseMono.block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            assertEquals(1, ((Number) ((EntityResponse) response).entity()).intValue());
+        }
+    }
+
+    @Test
     public void testGetRecords() {
         // random string that we will insert into a new record
         final String randomString = UUID.randomUUID().toString();
