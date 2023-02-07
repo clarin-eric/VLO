@@ -25,8 +25,10 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,6 +52,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.web.reactive.function.server.EntityResponse;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  *
@@ -115,36 +120,82 @@ public class VloRecordHandlerIntegrationTest {
 
     @Test
     public void testGetRecords() {
+        // random string that we will insert into a new record
         final String randomString = UUID.randomUUID().toString();
 
+        // query for the string
         final ServerRequest request = MockServerRequest.builder()
                 .queryParam("q", randomString)
                 .build();
 
+        // 
         {
             final ServerResponse response = instance.getRecords(request).block(RESPONSE_TIMEOUT);
             assertNotNull(response);
             assertInstanceOf(EntityResponse.class, response);
             final Object entity = ((EntityResponse) response).entity();
             assertInstanceOf(Collection.class, entity);
-            final Collection collection = (Collection) entity;
+            final Collection<?> collection = (Collection) entity;
             assertTrue(collection.isEmpty());
         }
 
+        // create and insert record with random string
         final VloRecord record = testHelper.newRecord(respository, insertedIds, r -> {
             r.setId("my_id_testGetRecords");
             // set field 'name' with random string as value
             r.setFields(ImmutableMap.of("name", ImmutableList.of(randomString)));
         });
 
+        // search again after record insertion (assumed to be uniquely identifiable by random string)
         {
             final ServerResponse response = instance.getRecords(request).block(RESPONSE_TIMEOUT);
             assertNotNull(response);
-            final Collection collection = (Collection) ((EntityResponse) response).entity();
+            final Collection<VloRecord> collection = (Collection) ((EntityResponse) response).entity();
             assertEquals(1, collection.size());
             assertInstanceOf(VloRecord.class, collection.iterator().next());
             assertEquals("my_id_testGetRecords", ((VloRecord) collection.iterator().next()).getId());
         }
+
+        // create and insert another record
+        testHelper.newRecord(respository, insertedIds, Objects::nonNull);
+        // get all records - there should be at least two
+        {
+            final ServerRequest unfilteredRequest = MockServerRequest.builder()
+                    .build();
+            final ServerResponse response = instance.getRecords(unfilteredRequest).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            final Collection<?> collection = (Collection) ((EntityResponse) response).entity();
+            assertThat(collection.size(), greaterThanOrEqualTo(2));
+        }
+    }
+
+    @Test
+    public void testGetRecordsPagination() {
+        final String randomString = UUID.randomUUID().toString();
+
+        // add 10 records
+        for (int i = 0; i < 10; i++) {
+            testHelper.newRecord(respository, insertedIds, r -> {
+                // set field 'name' with random string as value
+                r.setFields(ImmutableMap.of("name", ImmutableList.of(randomString)));
+            });
+        }
+
+        List<Integer> sizes = ImmutableList.of(1, 5, 10, 20);
+
+        sizes.forEach(size -> {
+            final int expected = Math.min(size, 10);
+
+            final ServerRequest unfilteredRequest = MockServerRequest.builder()
+                    .queryParam("q", randomString)
+                    .queryParam("size", size.toString())
+                    .build();
+            final ServerResponse response = instance.getRecords(unfilteredRequest).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            final Collection<?> collection = (Collection) ((EntityResponse) response).entity();
+            assertThat(collection, hasSize(expected));
+        });
+
     }
 
 }
