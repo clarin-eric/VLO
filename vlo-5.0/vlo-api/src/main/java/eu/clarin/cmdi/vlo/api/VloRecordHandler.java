@@ -35,7 +35,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import org.springframework.data.elasticsearch.client.elc.ReactiveElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import reactor.core.publisher.Flux;
 
@@ -51,9 +50,9 @@ public class VloRecordHandler {
 
     private final ReactiveElasticsearchOperations operations;
 
-    public VloRecordHandler(VloRecordRepository recordRepository, ReactiveElasticsearchTemplate reactiveElasticsearchTemplate) {
-        this.recordRepository = recordRepository;
-        this.operations = reactiveElasticsearchTemplate;
+    public VloRecordHandler(VloRecordRepository respository, ReactiveElasticsearchOperations operations) {
+        this.recordRepository = respository;
+        this.operations = operations;
     }
 
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
