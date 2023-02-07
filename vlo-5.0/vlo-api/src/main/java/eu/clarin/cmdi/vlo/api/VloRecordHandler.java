@@ -58,7 +58,7 @@ public class VloRecordHandler {
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
 
-        return getQuery(query, Optional.empty())
+        return createQuery(query, Optional.empty())
                 //query to search result
                 .flatMap(q -> operations.count(q, VloRecord.class))
                 .doOnNext(count -> log.debug("Search result count: {}", count))
@@ -72,7 +72,7 @@ public class VloRecordHandler {
         int offset = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
         int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
 
-        return getRecords(query, offset, size)
+        return getRecordsFlux(query, offset, size)
                 //turn into list mono
                 .collectList()
                 .doOnNext(results -> log.debug("Results: {}", results))
@@ -81,10 +81,10 @@ public class VloRecordHandler {
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
     }
 
-    private Flux<VloRecord> getRecords(final Optional<String> queryParam, int offset, int size) {
+    private Flux<VloRecord> getRecordsFlux(final Optional<String> queryParam, int offset, int size) {
         final Pageable pageable = Pagination.pageRequestFor(offset, size);
         return queryParam.map(query
-                -> getQuery(query, Optional.of(pageable))
+                -> createQuery(query, Optional.of(pageable))
                         //query to search result
                         .flatMapMany(q -> operations.search(q, VloRecord.class))
                         .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
@@ -93,7 +93,7 @@ public class VloRecordHandler {
         ).orElse(recordRepository.findByIdNotNull(pageable));
     }
 
-    private Mono<? extends Query> getQuery(String queryParam, Optional<Pageable> pageable) {
+    private Mono<? extends Query> createQuery(String queryParam, Optional<Pageable> pageable) {
         final Mono<String> qMono = Mono.justOrEmpty(queryParam);
 
         return qMono

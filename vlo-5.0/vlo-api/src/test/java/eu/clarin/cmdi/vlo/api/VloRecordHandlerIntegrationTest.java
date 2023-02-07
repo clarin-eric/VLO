@@ -28,7 +28,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +53,13 @@ import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperatio
 import org.springframework.web.reactive.function.server.EntityResponse;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.iterableWithSize;
+import org.springframework.http.HttpStatusCode;
 
 /**
  *
@@ -196,6 +201,47 @@ public class VloRecordHandlerIntegrationTest {
             assertThat(collection, hasSize(expected));
         });
 
+    }
+
+    @Test
+    public void testGetRecord() {
+        // random string that we will insert into a new record
+        final String id = "my_id_testGetRecord";
+        // query for the string
+        final ServerRequest request = MockServerRequest.builder()
+                .pathVariable("id", id)
+                .build();
+
+        //  request record before insertion
+        {
+            final ServerResponse response = instance.getRecordFromRepository(request).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            assertEquals(HttpStatusCode.valueOf(404), response.statusCode());
+        }
+
+        // create and insert record with random string
+        testHelper.newRecord(respository, insertedIds, r -> {
+            r.setId(id);
+            r.setFields(ImmutableMap.of("name", ImmutableList.of("test record name")));
+        });
+
+        // request again after record insertion 
+        {
+            final ServerResponse response = instance.getRecordFromRepository(request).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            assertInstanceOf(EntityResponse.class, response);
+            final Object entity = ((EntityResponse) response).entity();
+            assertInstanceOf(VloRecord.class, entity);
+
+            final VloRecord record = (VloRecord) entity;
+            assertEquals("my_id_testGetRecord", record.getId());
+            assertThat(record.getFields(),
+                    hasEntry(
+                            equalTo("name"),
+                            allOf(
+                                    iterableWithSize(1),
+                                    hasItem("test record name"))));
+        }
     }
 
 }
