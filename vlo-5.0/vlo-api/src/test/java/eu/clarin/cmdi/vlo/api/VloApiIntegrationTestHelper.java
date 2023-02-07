@@ -70,13 +70,14 @@ public class VloApiIntegrationTestHelper {
     private Random random = new Random();
 
     public VloRecord newRecord(VloRecordRepository repo, Collection<String> identifiers, Consumer<VloRecord> processor) {
-        final String id = "id_" + random.nextLong();
-        VloRecord record = new VloRecord();
-        record.setId(id);
+        final VloRecord record = new VloRecord();
+        record.setId("id_" + random.nextLong());
         // custom processing
         processor.accept(record);
+        //save
         repo.save(record)
-                .then(Mono.fromCallable(() -> identifiers.add(id)))
+                // remember id
+                .then(Mono.fromCallable(() -> identifiers.add(record.getId())))
                 .block();
 
         return record;

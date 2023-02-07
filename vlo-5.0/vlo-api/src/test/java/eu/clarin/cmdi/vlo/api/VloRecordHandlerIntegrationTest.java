@@ -17,7 +17,8 @@
 package eu.clarin.cmdi.vlo.api;
 
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import com.google.common.base.Functions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.api.configuration.VloElasticsearchConfiguration;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
@@ -25,6 +26,7 @@ import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import java.time.Duration;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,6 +98,7 @@ public class VloRecordHandlerIntegrationTest {
                 .build();
         Mono<ServerResponse> responseMono = instance.getRecordCount(request);
         ServerResponse response = responseMono.block(RESPONSE_TIMEOUT);
+        assertNotNull(response);
         assertInstanceOf(EntityResponse.class, response);
         Object entity = ((EntityResponse) response).entity();
         assertInstanceOf(Number.class, entity);
@@ -104,9 +107,44 @@ public class VloRecordHandlerIntegrationTest {
         testHelper.newRecord(respository, insertedIds, Objects::requireNonNull);
 
         response = instance.getRecordCount(request).block(RESPONSE_TIMEOUT);
+        assertNotNull(response);
         Number secondCount = (Number) ((EntityResponse) response).entity();
 
         assertTrue(secondCount.longValue() - firstCount.longValue() == 1);
+    }
+
+    @Test
+    public void testGetRecords() {
+        final String randomString = UUID.randomUUID().toString();
+
+        final ServerRequest request = MockServerRequest.builder()
+                .queryParam("q", randomString)
+                .build();
+
+        {
+            final ServerResponse response = instance.getRecords(request).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            assertInstanceOf(EntityResponse.class, response);
+            final Object entity = ((EntityResponse) response).entity();
+            assertInstanceOf(Collection.class, entity);
+            final Collection collection = (Collection) entity;
+            assertTrue(collection.isEmpty());
+        }
+
+        final VloRecord record = testHelper.newRecord(respository, insertedIds, r -> {
+            r.setId("my_id_testGetRecords");
+            // set field 'name' with random string as value
+            r.setFields(ImmutableMap.of("name", ImmutableList.of(randomString)));
+        });
+
+        {
+            final ServerResponse response = instance.getRecords(request).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            final Collection collection = (Collection) ((EntityResponse) response).entity();
+            assertEquals(1, collection.size());
+            assertInstanceOf(VloRecord.class, collection.iterator().next());
+            assertEquals("my_id_testGetRecords", ((VloRecord) collection.iterator().next()).getId());
+        }
     }
 
 }
