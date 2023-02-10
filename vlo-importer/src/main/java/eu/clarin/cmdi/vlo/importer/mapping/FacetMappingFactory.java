@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import javax.xml.parsers.ParserConfigurationException;
+import org.xml.sax.SAXException;
 
 /**
  * Creates facet-mappings (xpaths) from a configuration. As they say "this is
@@ -57,6 +59,10 @@ public class FacetMappingFactory {
     private final FacetsMapping baseMapping;
 
     public FacetMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller) {
+        this(vloConfig, marshaller, new ValueMappingFactoryDOMImpl());
+    }
+
+    public FacetMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller, ValueMappingFactory valueMappingFactory) {
         this.vloConfig = vloConfig;
         this.fieldNameService = new FieldNameServiceImpl(vloConfig);
 
@@ -64,14 +70,19 @@ public class FacetMappingFactory {
         if (conceptMapping == null) {
             throw new RuntimeException("Cannot proceed without facet concept mapping");
         }
-        
+
         this.facetsConfiguration = marshaller.getFacetsConfiguration(vloConfig.getFacetsConfigFile());
         if (facetsConfiguration == null) {
             throw new RuntimeException("Cannot proceed without facets configuration");
         }
-        
+
         this.baseMapping = createBaseMapping(conceptMapping, facetsConfiguration);
-        new ValueMappingFactoryDOMImpl().createValueMapping(vloConfig.getValueMappingsFile(), conceptMapping, baseMapping);
+
+        try {
+            valueMappingFactory.createValueMapping(vloConfig.getValueMappingsFile(), conceptMapping, baseMapping);
+        } catch (SAXException | IOException | ParserConfigurationException ex) {
+            LOG.error("Value Mappings not initialized!", ex);
+        }
     }
 
     public FacetConceptMapping getConceptMapping() {

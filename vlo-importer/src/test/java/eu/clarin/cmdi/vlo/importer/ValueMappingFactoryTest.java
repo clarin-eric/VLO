@@ -26,7 +26,7 @@ public class ValueMappingFactoryTest {
     }
     
     @Test
-    public void testGeneralRepresentation() throws IOException {
+    public void testGeneralRepresentation() throws Exception {
         String fileName = createTmpFile(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
                 "\n" + 
@@ -71,7 +71,7 @@ public class ValueMappingFactoryTest {
     }
     
     @Test
-    public void testAttributeRepresentation() throws IOException {
+    public void testAttributeRepresentation() throws Exception {
         String fileName = createTmpFile(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
                 "\n" + 
@@ -131,7 +131,7 @@ public class ValueMappingFactoryTest {
     }
 
     @Test
-    public void testConditionMatch() throws IOException {
+    public void testConditionMatch() throws Exception {
         String fileName = createTmpFile(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
                 "\n" + 

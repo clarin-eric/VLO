@@ -35,37 +35,31 @@ public class ValueMappingFactoryDOMImpl implements ValueMappingFactory {
      * @see eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactory#getValueMappings(java.lang.String, eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping)
      */
     @Override
-    public final void createValueMapping(String fileName, FacetConceptMapping facetConceptMapping, FacetsMapping facetMapping) {
-
+    public final void createValueMapping(String fileName, FacetConceptMapping facetConceptMapping, FacetsMapping facetMapping) throws SAXException, IOException, ParserConfigurationException {
+        LOG.info("Parsing value mapping in {}", fileName);
         final DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
         fac.setXIncludeAware(true);
         fac.setNamespaceAware(true);
+        final InputSource valueMappingDefinitionStream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(fileName);
+        if (valueMappingDefinitionStream == null) {
+            throw new IOException("No input source for " + fileName);
+        }
+        final DocumentBuilder builder = fac.newDocumentBuilder();
+        final Document doc = builder.parse(valueMappingDefinitionStream);
 
-        try {
-            LOG.info("Parsing value mapping in {}", fileName);
-            final InputSource valueMappingDefinitionStream = mappingDefinitionResolver.tryResolveUrlFileOrResourceStream(fileName);
-            if (valueMappingDefinitionStream == null) {
-                throw new IOException("No input source for " + fileName);
-            }
-            final DocumentBuilder builder = fac.newDocumentBuilder();
-            final Document doc = builder.parse(valueMappingDefinitionStream);
+        final NodeList originFacets = doc.getElementsByTagName("origin-facet");
 
-            final NodeList originFacets = doc.getElementsByTagName("origin-facet");
+        LOG.info("Found {} origin-facet nodes", originFacets.getLength());
+        for (int a = 0; a < originFacets.getLength(); a++) {
 
-            LOG.info("Found {} origin-facet nodes", originFacets.getLength());
-            for (int a = 0; a < originFacets.getLength(); a++) {
+            Element originFacet = (Element) originFacets.item(a);
 
-                Element originFacet = (Element) originFacets.item(a);
+            final FacetDefinition facetDefinition = facetMapping.getFacetDefinition(originFacet.getAttribute("name"));
 
-                final FacetDefinition facetDefinition = facetMapping.getFacetDefinition(originFacet.getAttribute("name"));
+            final ConditionTargetSet conditionTargetSet = new ConditionTargetSet();
+            facetDefinition.setConditionTargetSet(conditionTargetSet);
 
-                final ConditionTargetSet conditionTargetSet = new ConditionTargetSet();
-                facetDefinition.setConditionTargetSet(conditionTargetSet);
-
-                processOriginFacet(facetMapping, facetConceptMapping, conditionTargetSet, originFacet);
-            }
-        } catch (SAXException | IOException | ParserConfigurationException ex) {
-            LOG.error("Value Mappings not initialized!", ex);
+            processOriginFacet(facetMapping, facetConceptMapping, conditionTargetSet, originFacet);
         }
     }
 

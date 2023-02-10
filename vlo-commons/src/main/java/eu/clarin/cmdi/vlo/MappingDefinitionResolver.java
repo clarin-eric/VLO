@@ -94,6 +94,8 @@ public class MappingDefinitionResolver {
     
     private InputSource getResourceStream(String resourceName) {
         LOG.trace("Looking for bundled resource {}", resourceName);
-        return new InputSource(resourceContextClass.getResourceAsStream(resourceName));
+        final InputSource is = new InputSource(resourceContextClass.getResourceAsStream(resourceName));
+        is.setSystemId("classpath:" + resourceName);
+        return is;
     }
 }
