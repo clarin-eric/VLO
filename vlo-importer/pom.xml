@@ -21,7 +21,8 @@
         <packaging>jar</packaging>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
-        <vlo.import.logging.level>INFO</vlo.import.logging.level>
+        <vlo.import.logging.level>${sys:IMPORTER_LOG_LEVEL:-INFO}</vlo.import.logging.level>
+        <vlo.import.logging.directory>${sys:IMPORTER_LOG_DIR:-.}</vlo.import.logging.directory>
         <spring.boot.version>2.6.14</spring.boot.version>
     </properties>
 
