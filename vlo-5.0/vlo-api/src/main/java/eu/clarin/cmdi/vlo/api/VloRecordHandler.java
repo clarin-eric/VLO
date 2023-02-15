@@ -24,6 +24,7 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 import java.net.URI;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -35,14 +36,11 @@ import reactor.core.publisher.Mono;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Component
+@AllArgsConstructor
 @Slf4j
 public class VloRecordHandler {
 
     private final ReactiveVloRecordService recordService;
-
-    public VloRecordHandler(ReactiveVloRecordService recordService) {
-        this.recordService = recordService;
-    }
 
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
