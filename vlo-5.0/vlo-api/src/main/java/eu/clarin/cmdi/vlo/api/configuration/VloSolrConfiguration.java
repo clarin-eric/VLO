@@ -16,13 +16,52 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import eu.clarin.cmdi.vlo.api.service.solr.SolrDocumentQueryFactoryImpl;
+import eu.clarin.cmdi.vlo.api.service.solr.SolrRecordService;
+import java.util.Arrays;
+import lombok.Setter;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
  *
  * @author twagoo
  */
+@Configuration
 @Profile("solr")
 public class VloSolrConfiguration {
-    //TODO
+
+    protected final static String[] DEFAULT_FIELDS = {
+        "name", "creator", "description", "collection", "languageCode", "_languageCount", "multilingual", "modality", "continent", "country", "genre", "subject", "organisation", "license", "licenseType", "availability", "accessInfo", "keywords", "nationalProject", "resourceClass", "_resourceRef", "_selfLink", "id"
+    };
+
+    @Value("solr.auth.username")
+    private String solrUsermame;
+
+    @Value("solr.auth.password")
+    private String solrPassword;
+
+    @Value("solr.url")
+    private String solrUrl;
+
+    @Bean
+    public SolrDocumentQueryFactoryImpl queryFactory() {
+        return new SolrDocumentQueryFactoryImpl(Arrays.asList(DEFAULT_FIELDS));
+    }
+
+    @Bean(destroyMethod = "close")
+    private SolrClient solrClient() {
+        return new HttpSolrClient.Builder(solrUrl).build();
+    }
+
+    @Bean
+    public SolrRecordService solrRecordService() {
+        return new SolrRecordService(queryFactory(), solrClient(), solrUsermame, solrPassword);
+
+    }
+
 }

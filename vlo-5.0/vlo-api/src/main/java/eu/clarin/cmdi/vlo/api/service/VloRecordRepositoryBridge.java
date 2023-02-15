@@ -21,11 +21,13 @@ import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import eu.clarin.cmdi.vlo.util.Pagination;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.client.elc.NativeQuery;
 import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
 import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -34,6 +36,8 @@ import reactor.core.publisher.Mono;
  * @author twagoo
  */
 @Slf4j
+@Component
+@Profile({"default", "elastic"})
 public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
 
     private final VloRecordRepository recordRepository;
