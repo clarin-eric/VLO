@@ -116,7 +116,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <systemPropertyVariables>
-                                <spring.profiles.active>elastic-test</spring.profiles.active>
+                                <spring.profiles.active>elastic-test,elastic</spring.profiles.active>
                             </systemPropertyVariables>
                         </configuration>
                     </plugin>

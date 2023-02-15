@@ -60,6 +60,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
 import org.springframework.http.HttpStatusCode;
+import eu.clarin.cmdi.vlo.api.service.VloRecordRepositoryBridge;
 
 /**
  *
@@ -94,7 +95,7 @@ public class VloRecordHandlerIntegrationTest {
     @BeforeEach
     public void setUp() {
         testHelper = new VloApiIntegrationTestHelper("record", elasticsearchClient);
-        instance = new VloRecordHandler(respository, operations);
+        instance = new VloRecordHandler(new VloRecordRepositoryBridge(respository, operations));
     }
 
     @AfterEach

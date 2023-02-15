@@ -17,26 +17,21 @@
 package eu.clarin.cmdi.vlo.api;
 
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
+import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
+import eu.clarin.cmdi.vlo.api.service.VloRecordRepositoryBridge;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
-import eu.clarin.cmdi.vlo.util.Pagination;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 import java.net.URI;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
-import java.util.Optional;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.elasticsearch.client.elc.NativeQuery;
-import org.springframework.data.elasticsearch.client.elc.NativeQueryBuilder;
-import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
-import reactor.core.publisher.Flux;
 
 /**
  *
@@ -46,21 +41,20 @@ import reactor.core.publisher.Flux;
 @Slf4j
 public class VloRecordHandler {
 
-    private final VloRecordRepository recordRepository;
-
-    private final ReactiveElasticsearchOperations operations;
+    private final ReactiveVloRecordService recordService;
 
     public VloRecordHandler(VloRecordRepository respository, ReactiveElasticsearchOperations operations) {
-        this.recordRepository = respository;
-        this.operations = operations;
+        this(new VloRecordRepositoryBridge(respository, operations));
+    }    
+    
+    protected VloRecordHandler(ReactiveVloRecordService recordService) {
+        this.recordService = recordService;
     }
 
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
 
-        return createQuery(query, Optional.empty())
-                //query to search result
-                .flatMap(q -> operations.count(q, VloRecord.class))
+        return recordService.getRecordCount(query)
                 .doOnNext(count -> log.debug("Search result count: {}", count))
                 //map to response
                 .flatMap(count -> ServerResponse.ok().bodyValue(count))
@@ -72,7 +66,7 @@ public class VloRecordHandler {
         int offset = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
         int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
 
-        return getRecordsFlux(query, offset, size)
+        return recordService.getRecords(query, offset, size)
                 //turn into list mono
                 .collectList()
                 .doOnNext(results -> log.debug("Results: {}", results))
@@ -81,50 +75,26 @@ public class VloRecordHandler {
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
     }
 
-    private Flux<VloRecord> getRecordsFlux(final Optional<String> queryParam, int offset, int size) {
-        final Pageable pageable = Pagination.pageRequestFor(offset, size);
-        return queryParam.map(query
-                -> createQuery(query, Optional.of(pageable))
-                        //query to search result
-                        .flatMapMany(q -> operations.search(q, VloRecord.class))
-                        .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
-                        //get content (record) for each hit, turn into list
-                        .flatMap(hit -> Mono.just(hit.getContent()))
-        ).orElse(recordRepository.findByIdNotNull(pageable));
-    }
-
-    private Mono<? extends Query> createQuery(String queryParam, Optional<Pageable> pageable) {
-        final Mono<String> qMono = Mono.justOrEmpty(queryParam);
-
-        return qMono
-                .doOnNext(qParam -> log.debug("Query in request: '{}'", qParam))
-                .map(qParam -> {
-                    final NativeQueryBuilder builder = NativeQuery.builder();
-                    builder.withQuery(q -> q.queryString(s -> s.query(qParam)));
-                    pageable.ifPresent(builder::withPageable);
-                    return builder.build();
-                })
-                .doOnNext(q -> log.debug("Query prepared: {}", q));
-    }
-
-    public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
-        final String id = request.pathVariable(VloApiRouteConfiguration.ID_PATH_VARIABLE);
-        return recordRepository.findById(id)
-                .flatMap(record -> ServerResponse.ok().bodyValue(record))
-                .switchIfEmpty(ServerResponse.notFound().build());
-    }
-
     public Mono<ServerResponse> saveRecord(ServerRequest request) {
         log.debug("Incoming saving request");
+
         return request.bodyToMono(VloRecord.class)
                 .doOnNext(record -> {
                     log.info("Saving record {} repository", record.getId());
                 })
-                .flatMap(recordRepository::save)
+                .flatMap(recordService::saveRecord)
                 .flatMap(response -> {
                     final URI uri = request.uriBuilder().pathSegment(response.getId()).build();
                     return ServerResponse.created(uri).bodyValue(response.toString());
                 })
                 .switchIfEmpty(ServerResponse.badRequest().build());
     }
+
+    public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
+        final String id = request.pathVariable(VloApiRouteConfiguration.ID_PATH_VARIABLE);
+        return recordService.getRecordById(id)
+                .flatMap(record -> ServerResponse.ok().bodyValue(record))
+                .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
 }

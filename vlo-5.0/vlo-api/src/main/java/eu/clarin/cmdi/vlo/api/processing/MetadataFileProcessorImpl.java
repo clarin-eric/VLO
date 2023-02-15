@@ -16,17 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.api.processing;
 
-import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.exception.InputProcessingException;
 import eu.clarin.cmdi.vlo.mapping.VloMappingException;
 import eu.clarin.cmdi.vlo.mapping.VloRecordFactory;
-import eu.clarin.cmdi.vlo.mapping.model.ValueLanguagePair;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
 import javax.xml.transform.stream.StreamSource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
