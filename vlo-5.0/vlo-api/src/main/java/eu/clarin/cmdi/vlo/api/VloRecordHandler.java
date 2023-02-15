@@ -18,16 +18,13 @@ package eu.clarin.cmdi.vlo.api;
 
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
-import eu.clarin.cmdi.vlo.api.service.VloRecordRepositoryBridge;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 import java.net.URI;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -43,11 +40,7 @@ public class VloRecordHandler {
 
     private final ReactiveVloRecordService recordService;
 
-    public VloRecordHandler(VloRecordRepository respository, ReactiveElasticsearchOperations operations) {
-        this(new VloRecordRepositoryBridge(respository, operations));
-    }    
-    
-    protected VloRecordHandler(ReactiveVloRecordService recordService) {
+    public VloRecordHandler(ReactiveVloRecordService recordService) {
         this.recordService = recordService;
     }
 
