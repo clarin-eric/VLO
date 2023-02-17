@@ -8,11 +8,9 @@
 	
 # What is the VLO?
 
-Using the VLO faceted browser, you can browse metadata by facet. It consists of three
-software components: a Solr server with VLO specific configuration, an importer and a
-web application front end.
-
-For more information, see the [wiki page](https://trac.clarin.eu/wiki/CmdiVirtualLanguageObservatory).
+Using the VLO faceted browser, metadata can be searched and browsed by facet. It consists
+of three software components: a Solr server with VLO specific configuration, an importer
+and a web application front end.
 
 # What should I read?
 
