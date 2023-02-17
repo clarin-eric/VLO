@@ -29,7 +29,7 @@ import org.springframework.data.elasticsearch.repository.config.EnableReactiveEl
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Configuration
-@Profile({"default", "elastic"})
+@Profile({"elastic"})
 @EnableReactiveElasticsearchRepositories(basePackageClasses = VloRecordRepository.class)
 public class VloElasticsearchConfiguration extends ReactiveElasticsearchConfiguration {
 

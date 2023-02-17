@@ -37,7 +37,7 @@ import reactor.core.publisher.Mono;
  */
 @Slf4j
 @Component
-@Profile({"default", "elastic"})
+@Profile({"elastic"})
 public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
 
     private final VloRecordRepository recordRepository;

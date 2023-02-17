@@ -19,9 +19,7 @@ package eu.clarin.cmdi.vlo.api.service.solr;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Optional;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -32,7 +30,6 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -42,7 +39,6 @@ import reactor.core.publisher.Mono;
  *
  * @author twagoo
  */
-@Component
 @Slf4j
 public class SolrRecordService implements ReactiveVloRecordService {
 

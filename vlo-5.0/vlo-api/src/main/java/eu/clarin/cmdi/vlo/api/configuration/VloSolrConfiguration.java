@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.api.configuration;
 import eu.clarin.cmdi.vlo.api.service.solr.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.api.service.solr.SolrRecordService;
 import java.util.Arrays;
-import lombok.Setter;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,13 +38,13 @@ public class VloSolrConfiguration {
         "name", "creator", "description", "collection", "languageCode", "_languageCount", "multilingual", "modality", "continent", "country", "genre", "subject", "organisation", "license", "licenseType", "availability", "accessInfo", "keywords", "nationalProject", "resourceClass", "_resourceRef", "_selfLink", "id"
     };
 
-    @Value("solr.auth.username")
+    @Value("${solr.auth.username}")
     private String solrUsermame;
 
-    @Value("solr.auth.password")
+    @Value("${solr.auth.password}")
     private String solrPassword;
 
-    @Value("solr.url")
+    @Value("${solr.url}")
     private String solrUrl;
 
     @Bean
@@ -54,14 +53,13 @@ public class VloSolrConfiguration {
     }
 
     @Bean(destroyMethod = "close")
-    private SolrClient solrClient() {
+    public SolrClient solrClient() {
         return new HttpSolrClient.Builder(solrUrl).build();
     }
 
     @Bean
     public SolrRecordService solrRecordService() {
         return new SolrRecordService(queryFactory(), solrClient(), solrUsermame, solrPassword);
-
     }
 
 }
