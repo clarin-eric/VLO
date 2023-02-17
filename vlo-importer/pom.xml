@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <name>VLO Importer</name>
-    <description></description>
+    <description/>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
