@@ -58,8 +58,8 @@ public class SolrDocumentQueryFactoryImpl {
         final SolrQuery query = getDefaultDocumentQuery();
 
         // set offset and limit
-        query.setStart(first);
-        query.setRows(count);
+        query.setStart(Math.max(0, first - 1));
+        query.setRows(Math.max(0, count));
         return query;
     }
 

@@ -16,9 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.api.service.solr;
 
+import com.google.common.base.Functions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrClient;
@@ -30,8 +37,6 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrException;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -50,7 +55,6 @@ public class SolrRecordService implements ReactiveVloRecordService {
 
     private final String solrPassword;
 
-
     public SolrRecordService(SolrDocumentQueryFactoryImpl queryFactory, SolrClient solrClient, String solrUsermame, String solrPassword) {
         this.queryFactory = queryFactory;
         this.solrClient = solrClient;
@@ -59,18 +63,30 @@ public class SolrRecordService implements ReactiveVloRecordService {
     }
 
     @Override
-    public Mono<Long> getRecordCount(String query) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Flux<VloRecord> getRecords(Optional<String> queryParam, int offset, int size) {
+        final SolrQuery query = queryFactory.createDocumentQuery(offset, size);
+        queryParam.ifPresent(query::setQuery);
+
+        return queryToRecordFlux(query)
+                .doOnNext(record -> log.debug("VloRecord: {}", record));
+    }
+
+    @Override
+    public Mono<Long> getRecordCount(String queryParam) {
+        final SolrQuery query = queryFactory.createDocumentQuery(1, 0);
+        query.setQuery(queryParam);
+
+        return queryToResponseMono(query)
+                .map(QueryResponse::getResults)
+                .doOnNext(r -> log.debug("Query response: {}", r))
+                .map(SolrDocumentList::getNumFound);
     }
 
     @Override
     public Mono<VloRecord> getRecordById(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public Flux<VloRecord> getRecords(Optional<String> queryParam, int offset, int size) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        final SolrQuery query = queryFactory.createDocumentQuery(id);
+        return queryToRecordFlux(query)
+                .next();
     }
 
     @Override
@@ -78,20 +94,41 @@ public class SolrRecordService implements ReactiveVloRecordService {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    private SolrDocumentList getDocuments(SolrQuery query) {
-        QueryResponse queryResponse = fireQuery(query);
-        final SolrDocumentList documents = queryResponse.getResults();
-        if (documents != null) {
-            log.debug("Found {} documents", documents.getNumFound());
-            return documents;
-        } else {
-            log.warn("Null result for query {}", query);
-            return new SolrDocumentList();
-        }
+    private Flux<VloRecord> queryToRecordFlux(final SolrQuery query) {
+        return queryToResponseMono(query)
+                // results (solr documents) iterable as flux
+                .flatMapIterable(QueryResponse::getResults)
+                // map solr documents to VloRecord pojos
+                .map(this::createVloRecord);
     }
 
-    private QueryResponse getQueryResponse(SolrQuery query) {
-        return fireQuery(query);
+    private Mono<QueryResponse> queryToResponseMono(final SolrQuery query) {
+        return Mono.just(query)
+                .doOnNext(q -> log.debug("Query: {}", q))
+                .map(this::fireQuery);
+    }
+
+    private VloRecord createVloRecord(SolrDocument solrDoc) {
+        final VloRecord record = new VloRecord();
+        record.setId(Objects.toString(solrDoc.getFieldValue("id")));
+        record.setFields(createFieldValuesdMap(solrDoc));
+        return record;
+    }
+
+    private Map<String, List<Object>> createFieldValuesdMap(SolrDocument solrDoc) {
+        // Note: this can NOT be implemented as a transformation of 
+        // solrDoc.getFieldValueMap() using Guava's Maps.transformValues(), as
+        // the map provided by the former does not support iteration
+
+        return solrDoc
+                .getFieldNames()
+                .stream()
+                //collect as map
+                .collect(ImmutableMap.toImmutableMap(
+                        // key: field name
+                        Functions.identity(),
+                        // value: field values from solr doc as a list
+                        f -> ImmutableList.copyOf(solrDoc.getFieldValues(f))));
     }
 
     protected QueryResponse fireQuery(SolrQuery query) {
