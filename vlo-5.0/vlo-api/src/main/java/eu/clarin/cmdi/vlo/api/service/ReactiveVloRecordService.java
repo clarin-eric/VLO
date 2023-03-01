@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.api.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import java.util.Optional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -31,7 +31,7 @@ public interface ReactiveVloRecordService {
 
     Mono<VloRecord> getRecordById(final String id);
 
-    Flux<VloRecord> getRecords(final Optional<String> queryParam, int offset, int size);
+    Mono<VloRecordSearchResult> getRecords(final Optional<String> queryParam, int offset, int size);
 
     Mono<VloRecord> saveRecord(VloRecord record);
 

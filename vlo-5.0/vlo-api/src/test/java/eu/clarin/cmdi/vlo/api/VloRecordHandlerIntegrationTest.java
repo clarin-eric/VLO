@@ -61,6 +61,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
 import org.springframework.http.HttpStatusCode;
 import eu.clarin.cmdi.vlo.api.service.VloRecordRepositoryBridge;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import static org.hamcrest.Matchers.isA;
 
 /**
  *
@@ -171,9 +173,10 @@ public class VloRecordHandlerIntegrationTest {
             assertNotNull(response);
             assertInstanceOf(EntityResponse.class, response);
             final Object entity = ((EntityResponse) response).entity();
-            assertInstanceOf(Collection.class, entity);
-            final Collection<?> collection = (Collection) entity;
-            assertTrue(collection.isEmpty());
+            assertInstanceOf(VloRecordSearchResult.class, entity);
+            final VloRecordSearchResult result = (VloRecordSearchResult) entity;
+            assertEquals(0, result.getNumFound());
+            assertTrue(result.getRecords().isEmpty());
         }
 
         // create and insert record with random string
@@ -187,10 +190,12 @@ public class VloRecordHandlerIntegrationTest {
         {
             final ServerResponse response = instance.getRecords(request).block(RESPONSE_TIMEOUT);
             assertNotNull(response);
-            final Collection<VloRecord> collection = (Collection) ((EntityResponse) response).entity();
-            assertEquals(1, collection.size());
-            assertInstanceOf(VloRecord.class, collection.iterator().next());
-            assertEquals("my_id_testGetRecords", ((VloRecord) collection.iterator().next()).getId());
+            final VloRecordSearchResult result = (VloRecordSearchResult) ((EntityResponse) response).entity();
+            assertEquals(1, result.getNumFound());
+            final List<VloRecord> records = result.getRecords();
+            assertEquals(1, records.size());
+            assertInstanceOf(VloRecord.class, records.iterator().next());
+            assertEquals("my_id_testGetRecords", ((VloRecord) records.iterator().next()).getId());
         }
 
         // create and insert another record
@@ -201,27 +206,29 @@ public class VloRecordHandlerIntegrationTest {
                     .build();
             final ServerResponse response = instance.getRecords(unfilteredRequest).block(RESPONSE_TIMEOUT);
             assertNotNull(response);
-            final Collection<?> collection = (Collection) ((EntityResponse) response).entity();
-            assertThat(collection.size(), greaterThanOrEqualTo(2));
+            final VloRecordSearchResult result = (VloRecordSearchResult) ((EntityResponse) response).entity();
+            assertThat(result.getNumFound(), greaterThanOrEqualTo(2L));
         }
     }
 
     @Test
     public void testGetRecordsPagination() {
         final String randomString = UUID.randomUUID().toString();
+        final int RECORD_COUNT = 10;
 
         // add 10 records
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < RECORD_COUNT; i++) {
             testHelper.newRecord(respository, insertedIds, r -> {
                 // set field 'name' with random string as value
                 r.setFields(ImmutableMap.of("name", ImmutableList.of(randomString)));
             });
         }
 
-        List<Integer> sizes = ImmutableList.of(1, 5, 10, 20);
+        final List<Integer> responseSizes = ImmutableList.of(1, 5, 10, 20);
 
-        sizes.forEach(size -> {
-            final int expected = Math.min(size, 10);
+        responseSizes.forEach(size -> {
+            // expect no more than requested or total record count
+            final int expected = Math.min(size, RECORD_COUNT);
 
             final ServerRequest unfilteredRequest = MockServerRequest.builder()
                     .queryParam("q", randomString)
@@ -229,8 +236,33 @@ public class VloRecordHandlerIntegrationTest {
                     .build();
             final ServerResponse response = instance.getRecords(unfilteredRequest).block(RESPONSE_TIMEOUT);
             assertNotNull(response);
-            final Collection<?> collection = (Collection) ((EntityResponse) response).entity();
-            assertThat(collection, hasSize(expected));
+            assertThat(response, isA(EntityResponse.class));
+            assertThat(((EntityResponse) response).entity(), isA(VloRecordSearchResult.class));
+            final VloRecordSearchResult result = (VloRecordSearchResult) ((EntityResponse) response).entity();
+            assertEquals(result.getNumFound(), RECORD_COUNT);
+            assertThat(result.getRecords(), hasSize(expected));
+            assertEquals(result.getStart(), 1L);
+        });
+        
+        // now with offest
+        
+                responseSizes.forEach(size -> {
+            // expect no more than requested or total record count
+            final int expected = Math.min(size, RECORD_COUNT);
+
+            final ServerRequest unfilteredRequest = MockServerRequest.builder()
+                    .queryParam("q", randomString)
+                    .queryParam("size", size.toString())
+                    .queryParam("size", size.toString())
+                    .build();
+            final ServerResponse response = instance.getRecords(unfilteredRequest).block(RESPONSE_TIMEOUT);
+            assertNotNull(response);
+            assertThat(response, isA(EntityResponse.class));
+            assertThat(((EntityResponse) response).entity(), isA(VloRecordSearchResult.class));
+            final VloRecordSearchResult result = (VloRecordSearchResult) ((EntityResponse) response).entity();
+            assertEquals(result.getNumFound(), RECORD_COUNT);
+            assertThat(result.getRecords(), hasSize(expected));
+            assertEquals(result.getStart(), 1L);
         });
 
     }

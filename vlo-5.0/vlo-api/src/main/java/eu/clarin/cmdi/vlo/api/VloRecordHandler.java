@@ -61,8 +61,6 @@ public class VloRecordHandler {
         int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
 
         return recordService.getRecords(query, offset, size)
-                //turn into list mono
-                .collectList()
                 .doOnNext(results -> log.debug("Results: {}", results))
                 //map to response
                 .flatMap(resultList -> ServerResponse.ok().bodyValue(resultList))

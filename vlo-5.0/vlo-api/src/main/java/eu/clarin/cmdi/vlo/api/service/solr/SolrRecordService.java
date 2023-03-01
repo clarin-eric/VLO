@@ -17,11 +17,12 @@
 package eu.clarin.cmdi.vlo.api.service.solr;
 
 import com.google.common.base.Functions;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -63,12 +64,18 @@ public class SolrRecordService implements ReactiveVloRecordService {
     }
 
     @Override
-    public Flux<VloRecord> getRecords(Optional<String> queryParam, int offset, int size) {
+    public Mono<VloRecordSearchResult> getRecords(Optional<String> queryParam, int offset, int size) {
         final SolrQuery query = queryFactory.createDocumentQuery(offset, size);
         queryParam.ifPresent(query::setQuery);
 
-        return queryToRecordFlux(query)
-                .doOnNext(record -> log.debug("VloRecord: {}", record));
+        return queryToResponseMono(query)
+                .map(response -> {
+                    final SolrDocumentList results = response.getResults();
+                    final List<VloRecord> records = FluentIterable.from(results)
+                            .transform(this::createVloRecord)
+                            .toList();
+                    return new VloRecordSearchResult(records, response.getResults().getNumFound(), offset);
+                });
     }
 
     @Override
