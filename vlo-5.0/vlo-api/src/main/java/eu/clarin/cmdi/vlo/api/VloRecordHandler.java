@@ -27,6 +27,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -42,6 +43,7 @@ public class VloRecordHandler {
 
     private final ReactiveVloRecordService recordService;
 
+    @CrossOrigin
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
 
@@ -52,6 +54,7 @@ public class VloRecordHandler {
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
     }
 
+    @CrossOrigin
     public Mono<ServerResponse> getRecords(ServerRequest request) {
         final Optional<String> query = request.queryParam(QUERY_PARAMETER);
         int offset = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
@@ -81,6 +84,7 @@ public class VloRecordHandler {
                 .switchIfEmpty(ServerResponse.badRequest().build());
     }
 
+    @CrossOrigin
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
         final String id = request.pathVariable(VloApiRouteConfiguration.ID_PATH_VARIABLE);
         return recordService.getRecordById(id)
