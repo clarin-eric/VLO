@@ -241,18 +241,19 @@ public class VloRecordHandlerIntegrationTest {
             final VloRecordSearchResult result = (VloRecordSearchResult) ((EntityResponse) response).entity();
             assertEquals(result.getNumFound(), RECORD_COUNT);
             assertThat(result.getRecords(), hasSize(expected));
-            assertEquals(result.getStart(), 1L);
+            assertEquals(result.getStart(), 0L);
         });
-        
+
         // now with offest
-        
-                responseSizes.forEach(size -> {
+        final int FROM = 5;
+        responseSizes.forEach(size -> {
+            int actualStart = size * (FROM / size);
             // expect no more than requested or total record count
-            final int expected = Math.min(size, RECORD_COUNT);
+            final int expected = Math.max(0, Math.min(size, RECORD_COUNT - actualStart));
 
             final ServerRequest unfilteredRequest = MockServerRequest.builder()
                     .queryParam("q", randomString)
-                    .queryParam("size", size.toString())
+                    .queryParam("from", Integer.toString(FROM))
                     .queryParam("size", size.toString())
                     .build();
             final ServerResponse response = instance.getRecords(unfilteredRequest).block(RESPONSE_TIMEOUT);
@@ -262,7 +263,7 @@ public class VloRecordHandlerIntegrationTest {
             final VloRecordSearchResult result = (VloRecordSearchResult) ((EntityResponse) response).entity();
             assertEquals(result.getNumFound(), RECORD_COUNT);
             assertThat(result.getRecords(), hasSize(expected));
-            assertEquals(result.getStart(), 1L);
+            assertEquals(result.getStart(), actualStart);
         });
 
     }

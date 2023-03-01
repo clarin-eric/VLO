@@ -30,6 +30,6 @@ public class VloApiConstants {
     
     public final static String QUERY_PARAMETER = "q";
     public final static String ROWS_PARAMETER = "size";
-    public final static String START_PARAMETER = "offset";
+    public final static String FROM_PARAMETER = "from";
     
 }

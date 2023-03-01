@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.START_PARAMETER;
 import java.net.URI;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 
 /**
  *
@@ -57,10 +57,10 @@ public class VloRecordHandler {
     @CrossOrigin
     public Mono<ServerResponse> getRecords(ServerRequest request) {
         final Optional<String> query = request.queryParam(QUERY_PARAMETER);
-        int offset = request.queryParam(START_PARAMETER).map(Integer::valueOf).orElse(1);
-        int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(5);
+        int from = request.queryParam(FROM_PARAMETER).map(Integer::valueOf).orElse(0);
+        int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(10);
 
-        return recordService.getRecords(query, offset, size)
+        return recordService.getRecords(query, from, size)
                 .doOnNext(results -> log.debug("Results: {}", results))
                 //map to response
                 .flatMap(resultList -> ServerResponse.ok().bodyValue(resultList))

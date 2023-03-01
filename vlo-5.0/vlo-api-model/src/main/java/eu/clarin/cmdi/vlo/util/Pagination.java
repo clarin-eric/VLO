@@ -25,18 +25,19 @@ import org.springframework.data.domain.Pageable;
  */
 public final class Pagination {
 
-    protected Pagination() {
+    private Pagination() {
     }
 
     /**
      *
-     * @param offset 1-based index of first result
+     * @param from 0-based index of first result; will be floored to the lowest
+     * integer dividable by size!
      * @param size size of result set
      * @return
      */
-    public static Pageable pageRequestFor(int offset, int size) {
+    public static Pageable pageRequestFor(int from, int size) {
         try {
-            int page = Math.floorDiv(offset - 1, size);
+            int page = Math.floorDiv(from, size);
 
             return PageRequest.of(page, size);
         } catch (ArithmeticException ex) {

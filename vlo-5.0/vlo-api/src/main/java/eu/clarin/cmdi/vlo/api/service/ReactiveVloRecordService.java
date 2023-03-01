@@ -31,7 +31,14 @@ public interface ReactiveVloRecordService {
 
     Mono<VloRecord> getRecordById(final String id);
 
-    Mono<VloRecordSearchResult> getRecords(final Optional<String> queryParam, int offset, int size);
+    /**
+     * 
+     * @param queryString query for filtering
+     * @param from records to skip (0 to request from first)
+     * @param size records to include in the results
+     * @return 
+     */
+    Mono<VloRecordSearchResult> getRecords(final Optional<String> queryString, int from, int size);
 
     Mono<VloRecord> saveRecord(VloRecord record);
 

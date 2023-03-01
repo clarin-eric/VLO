@@ -64,8 +64,8 @@ public class SolrRecordService implements ReactiveVloRecordService {
     }
 
     @Override
-    public Mono<VloRecordSearchResult> getRecords(Optional<String> queryParam, int offset, int size) {
-        final SolrQuery query = queryFactory.createDocumentQuery(offset, size);
+    public Mono<VloRecordSearchResult> getRecords(Optional<String> queryParam, int from, int size) {
+        final SolrQuery query = queryFactory.createDocumentQuery(from, size);
         queryParam.ifPresent(query::setQuery);
 
         return queryToResponseMono(query)
@@ -74,13 +74,13 @@ public class SolrRecordService implements ReactiveVloRecordService {
                     final List<VloRecord> records = FluentIterable.from(results)
                             .transform(this::createVloRecord)
                             .toList();
-                    return new VloRecordSearchResult(records, response.getResults().getNumFound(), offset);
+                    return new VloRecordSearchResult(records, response.getResults().getNumFound(), from);
                 });
     }
 
     @Override
     public Mono<Long> getRecordCount(String queryParam) {
-        final SolrQuery query = queryFactory.createDocumentQuery(1, 0);
+        final SolrQuery query = queryFactory.createDocumentQuery(0, 0);
         query.setQuery(queryParam);
 
         return queryToResponseMono(query)

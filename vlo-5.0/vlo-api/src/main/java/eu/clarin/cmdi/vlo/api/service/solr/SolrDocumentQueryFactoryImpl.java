@@ -53,40 +53,47 @@ public class SolrDocumentQueryFactoryImpl {
         defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
     }
 
-    public SolrQuery createDocumentQuery(int first, int count) {
+    /**
+     *
+     * @param start 0 based index of first item to include from results
+     * @param rows
+     * @return
+     */
+    public SolrQuery createDocumentQuery(int start, int rows) {
         // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
 
-        // set offset and limit
-        query.setStart(Math.max(0, first - 1));
-        query.setRows(Math.max(0, count));
+        // set start record and result size limit
+        query.setStart(Math.max(0, start));
+        query.setRows(Math.max(0, rows));
         return query;
     }
 
-    public SolrQuery createSortedDocumentQuery(String sortField, String sortDirection, int first, int count) {
+    public SolrQuery createSortedDocumentQuery(String sortField, String sortDirection, int start, int rows) {
         // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
         // apply field Sorting
         query.addSort(sortField, ORDER.valueOf(sortDirection.toLowerCase()));
-        // set offset and limit
-        query.setStart(first);
-        query.setRows(count);
+
+        // set start record and result size limit
+        query.setStart(start);
+        query.setRows(rows);
         return query;
     }
 
-    public SolrQuery createExpandedDocumentQuery(int first, int count) {
+    public SolrQuery createExpandedDocumentQuery(int start, int rows) {
         // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
         // we use the 'fast' request handler here to avoid collapsing (assume ranking is not of interest)
         query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         // set offset and limit
-        query.setStart(first);
-        query.setRows(count);
+        query.setStart(start);
+        query.setRows(rows);
         return query;
     }
 
-    public SolrQuery createDocumentQueryWithExpansion(int first, int count) {
-        final SolrQuery query = createDocumentQuery(first, count);
+    public SolrQuery createDocumentQueryWithExpansion(int start, int rows) {
+        final SolrQuery query = createDocumentQuery(start, rows);
         return enableExpansion(query);
     }
 
@@ -105,7 +112,7 @@ public class SolrDocumentQueryFactoryImpl {
         return query;
     }
 
-    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int offset, int expansionLimit) {
+    public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int start, int expansionLimit) {
         // make a query to look up a specific document by its ID
         SolrQuery query = getDefaultDocumentQuery()
                 // we can use the 'fast' request handler here, document ranking is of no interest
@@ -116,7 +123,7 @@ public class SolrDocumentQueryFactoryImpl {
                 .addFilterQuery(createFilterQuery(collapseField, collapseValue))
                 // exclude target document
                 .addFilterQuery(createNegativeFilterQuery(ID, docId))
-                .setStart(offset)
+                .setStart(start)
                 .setRows(expansionLimit);
         return query;
 

@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import eu.clarin.cmdi.vlo.util.Pagination;
-import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -52,16 +51,16 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
     }
 
     @Override
-    public Mono<VloRecordSearchResult> getRecords(final Optional<String> queryParam, int offset, int size) {
-        final Pageable pageable = Pagination.pageRequestFor(offset, size);
+    public Mono<VloRecordSearchResult> getRecords(final Optional<String> queryParam, int start, int size) {
+        final Pageable pageable = Pagination.pageRequestFor(start, size);
         return queryParam.map(query -> {
             final Flux<VloRecord> recordsFlux = queryToRecordsFlux(query, pageable);
             final Mono<Long> countMono = getRecordCount(query);
-            return createSearchResultMono(countMono, recordsFlux, offset);
+            return createSearchResultMono(countMono, recordsFlux, pageable);
         }).orElseGet(() -> {
             final Mono<Long> countMono = recordRepository.countByIdNotNull();
             final Flux<VloRecord> recordsFlux = recordRepository.findByIdNotNull(pageable);
-            return createSearchResultMono(countMono, recordsFlux, offset);
+            return createSearchResultMono(countMono, recordsFlux, pageable);
         });
     }
 
@@ -74,12 +73,12 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
                 .flatMap(hit -> Mono.just(hit.getContent()));
     }
 
-    private Mono<VloRecordSearchResult> createSearchResultMono(final Mono<Long> countMono, final Flux<VloRecord> recordsFux, long offset) {
+    private Mono<VloRecordSearchResult> createSearchResultMono(final Mono<Long> countMono, final Flux<VloRecord> recordsFux, Pageable pageable) {
         // combine count and records list into search results object
         return countMono.flatMap(count
                 -> recordsFux
                         .collectList()
-                        .map(records -> new VloRecordSearchResult(records, count, offset)));
+                        .map(records -> new VloRecordSearchResult(records, count, pageable.getOffset())));
     }
 
     @Override
