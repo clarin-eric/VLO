@@ -43,7 +43,7 @@
         <vlo.mapping.version>1.7.1</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
-        <solr.version>8.11.2</solr.version>
+        <solr.version>9.0.0</solr.version>
         <slf4j.version>1.7.36</slf4j.version>
         <log4j2.version>2.19.0</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
@@ -185,6 +185,6 @@
     <ciManagement>
         <system>travis</system>
         <url>https://travis-ci.org/clarin-eric/VLO</url>
-        <notifiers />
+        <notifiers/>
     </ciManagement>
 </project>
