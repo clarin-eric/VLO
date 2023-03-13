@@ -66,7 +66,7 @@ public class LegacyCMDIParser<T> implements LegacyCMDIDataProcessor<T>  {
         vg.parse(true);
 
         final VTDNav nav = vg.getNav();
-        final String profileId = SchemaParsingUtil.extractXsd(nav);
+        final String profileId = SchemaParsingUtil.extractXsd(nav, request.getFile());
         final FacetsMapping facetMapping = getFacetMapping(nav.cloneNav(), profileId);
 
         // CMDI profile information
