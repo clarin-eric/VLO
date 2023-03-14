@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.api.service.solr;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import java.util.Collection;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -33,6 +32,7 @@ import java.util.stream.Collectors;
 public class SolrDocumentQueryFactoryImpl {
 
     public static final String COLLAPSE_FIELD_QUERY = "{!collapse field=_signature}";
+    public static final String SOLR_REQUEST_HANDLER_FAST = "/fast";
 
     protected static final String SOLR_SEARCH_ALL = "*:*";
     protected static final String EXPAND_ROWS = "0"; //expansion rows to actually fetch
@@ -85,7 +85,7 @@ public class SolrDocumentQueryFactoryImpl {
         // make a query to get all documents that match the selection criteria
         final SolrQuery query = getDefaultDocumentQuery();
         // we use the 'fast' request handler here to avoid collapsing (assume ranking is not of interest)
-        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
+        query.setRequestHandler(SOLR_REQUEST_HANDLER_FAST);
         // set offset and limit
         query.setStart(start);
         query.setRows(rows);
@@ -101,7 +101,7 @@ public class SolrDocumentQueryFactoryImpl {
         // make a query to look up a specific document by its ID
         final SolrQuery query = getDefaultDocumentQuery();
         // we can use the 'fast' request handler here, document ranking is of no interest
-        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
+        query.setRequestHandler(SOLR_REQUEST_HANDLER_FAST);
         // consider all documents
         query.setQuery(SOLR_SEARCH_ALL);
         // filter by ID
@@ -116,7 +116,7 @@ public class SolrDocumentQueryFactoryImpl {
         // make a query to look up a specific document by its ID
         SolrQuery query = getDefaultDocumentQuery()
                 // we can use the 'fast' request handler here, document ranking is of no interest
-                .setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST)
+                .setRequestHandler(SOLR_REQUEST_HANDLER_FAST)
                 // consider all documents
                 .setQuery(SOLR_SEARCH_ALL)
                 // limit to matching signature
