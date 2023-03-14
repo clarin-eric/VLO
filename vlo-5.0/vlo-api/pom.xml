@@ -60,6 +60,16 @@
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo-importer</artifactId>
             <version>4.11.3-alpha5</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-slf4j2-impl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>eu.clarin.cmdi.vlo.mapping</groupId>
@@ -80,7 +90,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <executable>true</executable>
                     <mainClass>eu.clarin.cmdi.vlo.api.VloApiApplication</mainClass>
                     <layout>JAR</layout>
                     <excludes>
