@@ -44,14 +44,19 @@ public class VloApiRouteConfiguration {
     public final static String ID_PATH_VARIABLE = "id";
 
     @Bean
-    public RouterFunction<ServerResponse> route(VloMappingHandler mappingHandler, VloRecordHandler recordHandler) {
+    public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
         return RouterFunctions
                 // POST /recordMapping/request
                 .route(POST(RECORD_MAPPING_REQUEST_PATH).and(accept(MediaType.APPLICATION_JSON)), mappingHandler::requestMapping)
                 // GET /recordMapping/result/{id}
-                .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult)
+                .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> recordsRoute(VloRecordHandler recordHandler) {
+        return RouterFunctions
                 // GET /records
-                .andRoute(GET(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
+                .route(GET(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
                 // GET /records/count
                 .andRoute(GET(RECORDS_COUNT_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordCount)
                 // GET /records/{id}
