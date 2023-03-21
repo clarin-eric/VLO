@@ -106,11 +106,31 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
 
     @Override
     public Flux<Facet> getAllFacets(String queryParam) {
-        final SolrQuery query = queryFactory.createFacetQuery(queryParam, Optional.empty(), Optional.empty());
+        final SolrQuery query = queryFactory.createFacetQuery(queryParam,
+                // empty list for default fields selection
+                Optional.empty(),
+                // get default number of top values
+                Optional.of(queryFactory.getDefaultFacetValueCount()));
 
         return queryToResponseMono(query)
                 .mapNotNull(QueryResponse::getFacetFields)
                 .flatMapMany(Flux::fromIterable)
+                .map(this::solrFacetFieldToFacet);
+    }
+
+    @Override
+    public Mono<Facet> getFacet(String facet, String queryParam) {
+        // query to get all facet values for a specific facet
+        final SolrQuery query = queryFactory.createFacetQuery(queryParam,
+                // singleton facet fields list
+                Optional.of(ImmutableList.of(facet)),
+                // get maximum number of values
+                Optional.of(queryFactory.getMaxFacetValueCount()));
+
+        return queryToResponseMono(query)
+                .mapNotNull(QueryResponse::getFacetFields)
+                .flatMapMany(Flux::fromIterable)
+                .next()
                 .map(this::solrFacetFieldToFacet);
     }
 

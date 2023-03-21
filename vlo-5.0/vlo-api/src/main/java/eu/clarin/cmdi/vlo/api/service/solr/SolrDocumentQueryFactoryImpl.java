@@ -43,6 +43,8 @@ public class SolrDocumentQueryFactoryImpl {
     private final String ID = "id";
 
     private static final int FACET_LIMIT_DEFAULT = 10;
+    private static final int FACET_LIMIT_MAX = 10_0000;
+
     private static final String[] FACET_FIELDS_DEFAULT = {
         "languageCode",
         "collection",
@@ -160,6 +162,14 @@ public class SolrDocumentQueryFactoryImpl {
                 .setFacet(true)
                 .setFacetLimit(valueLimit.orElse(FACET_LIMIT_DEFAULT))
                 .addFacetField(facetFieldsArray);
+    }
+
+    public int getDefaultFacetValueCount() {
+        return FACET_LIMIT_DEFAULT;
+    }
+
+    public int getMaxFacetValueCount() {
+        return FACET_LIMIT_MAX;
     }
 
     private SolrQuery getDefaultDocumentQuery() {

@@ -44,4 +44,12 @@ public class VloFacetHandler {
                 .collectList()
                 .flatMap(count -> ServerResponse.ok().bodyValue(count));
     }
+
+    @CrossOrigin
+    public Mono<ServerResponse> getFacet(ServerRequest request) {
+        final String facet = request.pathVariable("facet");
+        final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
+        return facetsService.getFacet(facet, query)
+                .flatMap(result -> ServerResponse.ok().bodyValue(result));
+    }
 }

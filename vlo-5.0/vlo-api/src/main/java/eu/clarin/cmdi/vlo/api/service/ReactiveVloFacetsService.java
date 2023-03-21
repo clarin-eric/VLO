@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.api.service;
 
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  *
@@ -26,5 +27,7 @@ import reactor.core.publisher.Flux;
 public interface ReactiveVloFacetsService {
     
     public Flux<Facet> getAllFacets(String query);
+
+    public Mono<Facet> getFacet(String facet, String query);
     
 }

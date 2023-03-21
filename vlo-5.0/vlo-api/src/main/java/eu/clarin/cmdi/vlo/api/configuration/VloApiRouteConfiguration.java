@@ -42,6 +42,7 @@ import org.springframework.web.reactive.function.server.RequestPredicates;
 public class VloApiRouteConfiguration {
 
     public final static String ID_PATH_VARIABLE = "id";
+    public final static String FACET_PATH_VARIABLE = "facet";
 
     @Bean
     public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
@@ -76,7 +77,10 @@ public class VloApiRouteConfiguration {
         return RouterFunctions
                 // GET /facets
                 .route(GET(FACETS_PATH),
-                        facetHandler::getFacets);
+                        facetHandler::getFacets)
+                // GET /facets
+                .andRoute(GET(FACETS_PATH + "/{" + FACET_PATH_VARIABLE + "}"),
+                        facetHandler::getFacet);
     }
 
     private static RequestPredicate GET(String pattern) {
