@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 import java.net.URI;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -30,7 +31,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 
 /**
  *

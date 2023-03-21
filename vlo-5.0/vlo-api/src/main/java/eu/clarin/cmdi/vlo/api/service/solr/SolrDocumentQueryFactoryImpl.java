@@ -16,13 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.api.service.solr;
 
+import com.google.common.collect.ImmutableList;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.util.ClientUtils;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +41,20 @@ public class SolrDocumentQueryFactoryImpl {
     protected static final String EXPAND_ROWS = "0"; //expansion rows to actually fetch
 
     private final String ID = "id";
+
+    private static final int FACET_LIMIT_DEFAULT = 10;
+    private static final String[] FACET_FIELDS_DEFAULT = {
+        "languageCode",
+        "collection",
+        "resourceClass",
+        "modality",
+        "format",
+        "keywords",
+        "genre",
+        "subject",
+        "country",
+        "organisation"
+    };
 
     /**
      * Template query for new document queries
@@ -133,6 +150,16 @@ public class SolrDocumentQueryFactoryImpl {
         final SolrQuery query = new SolrQuery(String.format("%s:\"%s\"", ID, ClientUtils.escapeQueryChars(docId)));
         query.setRequestHandler("/mlt");
         return query;
+    }
+
+    public SolrQuery createFacetQuery(String queryParam, Optional<List<String>> facetFields, Optional<Integer> valueLimit) {
+        final String[] facetFieldsArray = facetFields.map(l -> l.toArray(String[]::new)).orElse(FACET_FIELDS_DEFAULT);
+        return getDefaultDocumentQuery()
+                .setRows(0)
+                .setQuery(queryParam)
+                .setFacet(true)
+                .setFacetLimit(valueLimit.orElse(FACET_LIMIT_DEFAULT))
+                .addFacetField(facetFieldsArray);
     }
 
     private SolrQuery getDefaultDocumentQuery() {

@@ -24,6 +24,9 @@ public class VloApiConstants {
     
     public final static String RECORDS_PATH = "/records";
     public final static String RECORDS_COUNT_PATH = RECORDS_PATH + "/count";
+
+    public final static String FACETS_PATH = "/facets";
+
     public final static String RECORD_MAPPING_PATH = "/recordMapping";
     public final static String RECORD_MAPPING_REQUEST_PATH = RECORD_MAPPING_PATH + "/request";
     public final static String RECORD_MAPPING_RESULT_PATH = RECORD_MAPPING_PATH + "/result";

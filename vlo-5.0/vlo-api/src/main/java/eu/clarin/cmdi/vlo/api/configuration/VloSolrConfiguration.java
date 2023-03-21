@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.api.configuration;
 
 import eu.clarin.cmdi.vlo.api.service.solr.SolrDocumentQueryFactoryImpl;
-import eu.clarin.cmdi.vlo.api.service.solr.SolrRecordService;
+import eu.clarin.cmdi.vlo.api.service.solr.SolrService;
 import java.util.Arrays;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
@@ -58,8 +58,8 @@ public class VloSolrConfiguration {
     }
 
     @Bean
-    public SolrRecordService solrRecordService() {
-        return new SolrRecordService(queryFactory(), solrClient(), solrUsermame, solrPassword);
+    public SolrService solrService() {
+        return new SolrService(queryFactory(), solrClient(), solrUsermame, solrPassword);
     }
 
 }

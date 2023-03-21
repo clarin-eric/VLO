@@ -16,23 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import eu.clarin.cmdi.vlo.api.VloFacetHandler;
 import eu.clarin.cmdi.vlo.api.VloMappingHandler;
 import eu.clarin.cmdi.vlo.api.VloRecordHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
-import static org.springframework.web.reactive.function.server.RequestPredicates.PUT;
-import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FACETS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_REQUEST_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH;
+import org.springframework.web.reactive.function.server.RequestPredicate;
+import org.springframework.web.reactive.function.server.RequestPredicates;
 
 /**
  *
@@ -47,21 +47,47 @@ public class VloApiRouteConfiguration {
     public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
         return RouterFunctions
                 // POST /recordMapping/request
-                .route(POST(RECORD_MAPPING_REQUEST_PATH).and(accept(MediaType.APPLICATION_JSON)), mappingHandler::requestMapping)
+                .route(POST(RECORD_MAPPING_REQUEST_PATH),
+                        mappingHandler::requestMapping)
                 // GET /recordMapping/result/{id}
-                .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), mappingHandler::getMappingResult);
+                .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}"),
+                        mappingHandler::getMappingResult);
     }
 
     @Bean
     public RouterFunction<ServerResponse> recordsRoute(VloRecordHandler recordHandler) {
         return RouterFunctions
                 // GET /records
-                .route(GET(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecords)
+                .route(GET(RECORDS_PATH),
+                        recordHandler::getRecords)
                 // GET /records/count
-                .andRoute(GET(RECORDS_COUNT_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordCount)
+                .andRoute(GET(RECORDS_COUNT_PATH),
+                        recordHandler::getRecordCount)
                 // GET /records/{id}
-                .andRoute(GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}").and(accept(MediaType.APPLICATION_JSON)), recordHandler::getRecordFromRepository)
+                .andRoute(GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}"),
+                        recordHandler::getRecordFromRepository)
                 // PUT /records
-                .andRoute(PUT(RECORDS_PATH).and(accept(MediaType.APPLICATION_JSON)), recordHandler::saveRecord);
+                .andRoute(PUT(RECORDS_PATH),
+                        recordHandler::saveRecord);
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> facetsRoute(VloFacetHandler facetHandler) {
+        return RouterFunctions
+                // GET /facets
+                .route(GET(FACETS_PATH),
+                        facetHandler::getFacets);
+    }
+
+    private static RequestPredicate GET(String pattern) {
+        return RequestPredicates.GET(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
+    }
+
+    private static RequestPredicate POST(String pattern) {
+        return RequestPredicates.POST(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
+    }
+
+    private static RequestPredicate PUT(String pattern) {
+        return RequestPredicates.PUT(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
 }

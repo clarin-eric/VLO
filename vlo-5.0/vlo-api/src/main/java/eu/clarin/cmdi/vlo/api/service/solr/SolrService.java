@@ -20,7 +20,9 @@ import com.google.common.base.Functions;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.api.service.ReactiveVloFacetsService;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
+import eu.clarin.cmdi.vlo.data.model.Facet;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import java.io.IOException;
@@ -33,6 +35,7 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
@@ -46,7 +49,7 @@ import reactor.core.publisher.Mono;
  * @author twagoo
  */
 @Slf4j
-public class SolrRecordService implements ReactiveVloRecordService {
+public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsService {
 
     private final SolrDocumentQueryFactoryImpl queryFactory;
 
@@ -56,7 +59,7 @@ public class SolrRecordService implements ReactiveVloRecordService {
 
     private final String solrPassword;
 
-    public SolrRecordService(SolrDocumentQueryFactoryImpl queryFactory, SolrClient solrClient, String solrUsermame, String solrPassword) {
+    public SolrService(SolrDocumentQueryFactoryImpl queryFactory, SolrClient solrClient, String solrUsermame, String solrPassword) {
         this.queryFactory = queryFactory;
         this.solrClient = solrClient;
         this.solrUsermame = solrUsermame;
@@ -99,6 +102,24 @@ public class SolrRecordService implements ReactiveVloRecordService {
     @Override
     public Mono<VloRecord> saveRecord(VloRecord record) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Flux<Facet> getAllFacets(String queryParam) {
+        final SolrQuery query = queryFactory.createFacetQuery(queryParam, Optional.empty(), Optional.empty());
+
+        return queryToResponseMono(query)
+                .mapNotNull(QueryResponse::getFacetFields)
+                .flatMapMany(Flux::fromIterable)
+                .map(this::solrFacetFieldToFacet);
+    }
+
+    private Facet solrFacetFieldToFacet(FacetField facetField) {
+        return new Facet(facetField.getName(), facetField.getValueCount(),
+                FluentIterable.from(facetField.getValues())
+                        .transform(c -> new Facet.ValeCount(c.getName(), c.getCount()))
+                        .toList()
+        );
     }
 
     private Flux<VloRecord> queryToRecordFlux(final SolrQuery query) {
