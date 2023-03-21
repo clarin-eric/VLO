@@ -35,7 +35,7 @@ language governing permissions and limitations under the License. -->
     </licenses>
     <properties>
         <wicket.version>8.12.0</wicket.version>
-        <spring.version>5.3.22</spring.version>
+        <spring.version>5.3.25</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vlo.logging.level>DEBUG</vlo.logging.level>
         <log4j.appender>Console</log4j.appender>

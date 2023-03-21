@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo.solr;
 
-import com.carrotsearch.ant.tasks.junit4.dependencies.com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -140,10 +140,10 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
     @Test
     public void testFieldAlias() throws Exception {
         assertNotEquals(0, getResultCount("_resourceRefCount:0"));
-        assertEquals(getResultCount("_resourceRefCount:0"), getResultCount("resources:0")); 
-        
+        assertEquals(getResultCount("_resourceRefCount:0"), getResultCount("resources:0"));
+
         assertNotEquals(0, getResultCount("_languageName:German"));
-        assertEquals(getResultCount("_languageName:German"), getResultCount("language:German"));       
+        assertEquals(getResultCount("_languageName:German"), getResultCount("language:German"));
     }
 
     @Test
@@ -187,24 +187,24 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
         final long numFound = getResultCount(query);
         assertEquals(String.format("Expected %d results, actual result count is %d", expectedCount, numFound), expectedCount, numFound);
     }
-    
+
     private long getResultCount(String query) throws SolrServerException, IOException {
         return getResults(query, 0).getNumFound();
     }
 
     private SolrDocumentList getResults(String query, int rows) throws SolrServerException, IOException {
-        return getResults(client, ImmutableMap.builder()
+        return getResults(client, ImmutableMap.<String, String>builder()
                 .put("q", query)
-                .put("rows", rows)
+                .put("rows", Integer.toString(rows))
                 .put("fq", "{!collapse field=id}") //effictively 'de-collapse' to get reliable result counts
                 .build()
         );
     }
 
     private SolrDocumentList getResultsForFilterQuery(String query, String filterQuery, int rows) throws SolrServerException, IOException {
-        return getResults(client, ImmutableMap.builder()
+        return getResults(client, ImmutableMap.<String, String>builder()
                 .put("q", query)
-                .put("rows", rows)
+                .put("rows", Integer.toString(rows))
                 .put("fq", filterQuery)
                 .build()
         );

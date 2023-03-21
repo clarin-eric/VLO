@@ -191,7 +191,7 @@
         <dependency>
             <groupId>eu.clarin</groupId>
             <artifactId>linkchecker-persistence</artifactId>
-            <version>0.0.1-alpha1</version>
+            <version>0.0.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>eu.clarin.cmdi</groupId>
@@ -221,7 +221,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.1.0</version>
+            <version>3.1.2</version>
             <scope>runtime</scope>
         </dependency>
     
