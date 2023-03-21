@@ -94,9 +94,11 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
 
         setModel(new ListModel<>(optionsBuilder.build()));
 
-        // switchboard preflight
+        // decision to not enable switchboard preflight in v4.11.3
+        /*
+        // switchboard preflight 
         add(new SwitchboardDropdownItemPreflightBehavior(resourceInfoModel.map(ResourceInfo::getHref)));
-
+         */
         super.onInitialize();
     }
 
@@ -212,15 +214,17 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     /**
      * Behaviour that registers a Switchboard preflight action on a resource
      * link options dropdown menu.
-     * 
-     * @see <a href="https://github.com/clarin-eric/switchboard-doc/blob/master/documentation/IntegrationProvider.md">Switchboard integration documentation</a>
+     *
+     * @see
+     * <a href="https://github.com/clarin-eric/switchboard-doc/blob/master/documentation/IntegrationProvider.md">Switchboard
+     * integration documentation</a>
      */
     private static class SwitchboardDropdownItemPreflightBehavior extends Behavior {
 
         private final IModel<String> linkModel;
 
         /**
-         * 
+         *
          * @param linkModel model for the resource URL
          */
         public SwitchboardDropdownItemPreflightBehavior(IModel<String> linkModel) {
@@ -237,7 +241,7 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         @Override
         public void renderHead(Component component, IHeaderResponse response) {
             assert (component instanceof ResourceLinkOptionsDropdown);
-            
+
             // Script resource functions implementing the prefight call
             response.render(JavaScriptReferenceHeaderItem.forReference(JavaScriptResources.getSwitchboardIntegrationJs()));
 
