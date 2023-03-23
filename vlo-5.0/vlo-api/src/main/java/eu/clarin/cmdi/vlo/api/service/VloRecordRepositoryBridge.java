@@ -20,6 +20,8 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import eu.clarin.cmdi.vlo.util.Pagination;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -51,21 +53,21 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
     }
 
     @Override
-    public Mono<VloRecordSearchResult> getRecords(final Optional<String> queryParam, int start, int size) {
+    public Mono<VloRecordSearchResult> getRecords(final String query, Map<String, ? extends Iterable<String>> filters, int start, int size) {
         final Pageable pageable = Pagination.pageRequestFor(start, size);
-        return queryParam.map(query -> {
-            final Flux<VloRecord> recordsFlux = queryToRecordsFlux(query, pageable);
-            final Mono<Long> countMono = getRecordCount(query);
-            return createSearchResultMono(countMono, recordsFlux, pageable);
-        }).orElseGet(() -> {
+        if (query == null) {
             final Mono<Long> countMono = recordRepository.countByIdNotNull();
             final Flux<VloRecord> recordsFlux = recordRepository.findByIdNotNull(pageable);
             return createSearchResultMono(countMono, recordsFlux, pageable);
-        });
+        } else {
+            final Flux<VloRecord> recordsFlux = queryToRecordsFlux(query, filters, pageable);
+            final Mono<Long> countMono = getRecordCount(query, filters);
+            return createSearchResultMono(countMono, recordsFlux, pageable);
+        }
     }
 
-    private Flux<VloRecord> queryToRecordsFlux(String query, final Pageable pageable) {
-        return createQuery(query, Optional.of(pageable))
+    private Flux<VloRecord> queryToRecordsFlux(String query, Map<String, ? extends Iterable<String>> filters, final Pageable pageable) {
+        return createQuery(query, filters, Optional.of(pageable))
                 //query to search result
                 .flatMapMany(q -> operations.search(q, VloRecord.class))
                 .doOnNext(hit -> log.trace("Search hit: {}", hit.getId()))
@@ -87,8 +89,8 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
     }
 
     @Override
-    public Mono<Long> getRecordCount(final String query) {
-        return createQuery(query, Optional.empty())
+    public Mono<Long> getRecordCount(final String query, Map<String, ? extends Iterable<String>> filters) {
+        return createQuery(query, filters, Optional.empty())
                 //query to search result
                 .flatMap(q -> operations.count(q, VloRecord.class));
     }
@@ -98,9 +100,11 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
         return recordRepository.save(record);
     }
 
-    private Mono<? extends Query> createQuery(String queryParam, Optional<Pageable> pageable) {
+    private Mono<? extends Query> createQuery(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<Pageable> pageable) {
         final Mono<String> qMono = Mono.justOrEmpty(queryParam);
 
+        //TODO: apply filters
+        
         return qMono
                 .doOnNext(qParam -> log.debug("Query in request: '{}'", qParam))
                 .map(qParam -> {

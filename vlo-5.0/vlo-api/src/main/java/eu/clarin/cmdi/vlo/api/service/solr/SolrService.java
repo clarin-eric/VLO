@@ -67,9 +67,12 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     }
 
     @Override
-    public Mono<VloRecordSearchResult> getRecords(Optional<String> queryParam, int from, int size) {
+    public Mono<VloRecordSearchResult> getRecords(String queryParam, Map<String, ? extends Iterable<String>> filters, int from, int size) {
         final SolrQuery query = queryFactory.createDocumentQuery(from, size);
-        queryParam.ifPresent(query::setQuery);
+        if (queryParam != null) {
+            query.setQuery(queryParam);
+        }
+        applyFilterQuery(query, filters);
 
         return queryToResponseMono(query)
                 .map(response -> {
@@ -82,14 +85,29 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     }
 
     @Override
-    public Mono<Long> getRecordCount(String queryParam) {
+    public Mono<Long> getRecordCount(String queryParam, Map<String, ? extends Iterable<String>> filters) {
         final SolrQuery query = queryFactory.createDocumentQuery(0, 0);
-        query.setQuery(queryParam);
+        if (query != null) {
+            query.setQuery(queryParam);
+        }
+        applyFilterQuery(query, filters);
 
         return queryToResponseMono(query)
                 .map(QueryResponse::getResults)
                 .doOnNext(r -> log.debug("Query response: {}", r))
                 .map(SolrDocumentList::getNumFound);
+    }
+
+    private void applyFilterQuery(final SolrQuery query, Map<String, ? extends Iterable<String>> filters) {
+        if (filters != null) {
+            filters.forEach((field, values) -> {
+                values.forEach(value -> {
+                    query.addFilterQuery(ClientUtils.escapeQueryChars(field) + ":" + ClientUtils.escapeQueryChars(value));
+                });
+            });
+        }
+        
+        
     }
 
     @Override

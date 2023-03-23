@@ -32,6 +32,7 @@ public class VloApiConstants {
     public final static String RECORD_MAPPING_RESULT_PATH = RECORD_MAPPING_PATH + "/result";
     
     public final static String QUERY_PARAMETER = "q";
+    public final static String FILTER_QUERY_PARAMETER = "fq";
     public final static String ROWS_PARAMETER = "size";
     public final static String FROM_PARAMETER = "from";
     

@@ -16,14 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimaps;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 import java.net.URI;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,13 +47,16 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class VloRecordHandler {
 
+    private final Splitter FQ_SPLITTER = Splitter.on(':').limit(2);
+
     private final ReactiveVloRecordService recordService;
 
     @CrossOrigin
     public Mono<ServerResponse> getRecordCount(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
+        final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
 
-        return recordService.getRecordCount(query)
+        return recordService.getRecordCount(query, filters)
                 .doOnNext(count -> log.debug("Search result count: {}", count))
                 //map to response
                 .flatMap(count -> ServerResponse.ok().bodyValue(count))
@@ -56,11 +65,12 @@ public class VloRecordHandler {
 
     @CrossOrigin
     public Mono<ServerResponse> getRecords(ServerRequest request) {
-        final Optional<String> query = request.queryParam(QUERY_PARAMETER);
+        final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
+        final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
         int from = request.queryParam(FROM_PARAMETER).map(Integer::valueOf).orElse(0);
         int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(10);
 
-        return recordService.getRecords(query, from, size)
+        return recordService.getRecords(query, filters, from, size)
                 .doOnNext(results -> log.debug("Results: {}", results))
                 //map to response
                 .flatMap(resultList -> ServerResponse.ok().bodyValue(resultList))
@@ -88,6 +98,26 @@ public class VloRecordHandler {
         return recordService.getRecordById(id)
                 .flatMap(record -> ServerResponse.ok().bodyValue(record))
                 .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
+    private Map<String, ? extends Iterable<String>> getFiltersFromRequest(ServerRequest request) {
+        final List<String> fq = request.queryParams().get(FILTER_QUERY_PARAMETER);
+        if (fq == null || fq.isEmpty()) {
+            return Collections.emptyMap();
+        } else {
+            final ArrayListMultimap<String, String> map = ArrayListMultimap.<String, String>create();
+            fq.forEach(fqVal -> {
+                List<String> fqDecomposed = FQ_SPLITTER.splitToList(fqVal);
+                if (fqDecomposed.size() == 2) {
+                    map.put(fqDecomposed.get(0), fqDecomposed.get(1));
+                } else {
+                    log.warn("Ignoring invalid fq parameter: {}", fq);
+                }
+            });
+
+            return map.asMap();
+        }
+
     }
 
 }

@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.api.service;
 
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
-import java.util.Optional;
+import java.util.Map;
 import reactor.core.publisher.Mono;
 
 /**
@@ -27,18 +27,27 @@ import reactor.core.publisher.Mono;
  */
 public interface ReactiveVloRecordService {
 
-    Mono<Long> getRecordCount(final String query);
+    /**
+     *
+     * @param query query for filtering (may be null or empty)
+     * @param filters filter queries in the format 'field -> [OR] values' (may
+     * be null or empty)
+     * @return
+     */
+    Mono<Long> getRecordCount(String query, Map<String, ? extends Iterable<String>> filters);
 
-    Mono<VloRecord> getRecordById(final String id);
+    Mono<VloRecord> getRecordById(String id);
 
     /**
-     * 
-     * @param queryString query for filtering
+     *
+     * @param query query for filtering (may be null or empty)
+     * @param filters filter queries in the format 'field -> [OR] values' (may
+     * be null or empty)
      * @param from records to skip (0 to request from first)
      * @param size records to include in the results
-     * @return 
+     * @return
      */
-    Mono<VloRecordSearchResult> getRecords(final Optional<String> queryString, int from, int size);
+    Mono<VloRecordSearchResult> getRecords(String query, Map<String, ? extends Iterable<String>> filters, int from, int size);
 
     Mono<VloRecord> saveRecord(VloRecord record);
 
