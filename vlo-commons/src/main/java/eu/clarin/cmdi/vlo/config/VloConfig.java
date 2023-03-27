@@ -198,6 +198,8 @@ public class VloConfig {
 
     private boolean lrSwitchboardPopupEnabled = true;
 
+    private boolean lrSwitchboardPreflightEnabled = false;
+
     private int linkCheckerMaxDaysSinceChecked = 100;
 
     // in milliseconds 
@@ -1476,6 +1478,14 @@ public class VloConfig {
 
     public void setLrSwitchboardPopupEnabled(boolean lrSwitchboardPopupEnabled) {
         this.lrSwitchboardPopupEnabled = lrSwitchboardPopupEnabled;
+    }
+
+    public boolean isLrSwitchboardPreflightEnabled() {
+        return lrSwitchboardPreflightEnabled;
+    }
+
+    public void setLrSwitchboardPreflightEnabled(boolean lrSwitchboardPreflightEnabled) {
+        this.lrSwitchboardPreflightEnabled = lrSwitchboardPreflightEnabled;
     }
 
     public long getHandleResolverTimeout() {

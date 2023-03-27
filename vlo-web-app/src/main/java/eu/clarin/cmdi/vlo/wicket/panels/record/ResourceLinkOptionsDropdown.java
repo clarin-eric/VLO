@@ -94,11 +94,10 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
 
         setModel(new ListModel<>(optionsBuilder.build()));
 
-        // decision to not enable switchboard preflight in v4.11.3
-        /*
-        // switchboard preflight 
-        add(new SwitchboardDropdownItemPreflightBehavior(resourceInfoModel.map(ResourceInfo::getHref)));
-         */
+        if (vloConfig.isLrSwitchboardPreflightEnabled()) {
+            // enable switchboard preflight
+            add(new SwitchboardDropdownItemPreflightBehavior(resourceInfoModel.map(ResourceInfo::getHref)));
+        }
         super.onInitialize();
     }
 
