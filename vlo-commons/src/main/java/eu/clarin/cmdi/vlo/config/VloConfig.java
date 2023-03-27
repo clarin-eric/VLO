@@ -196,8 +196,6 @@ public class VloConfig {
 
     private String lrSwitchboardPopupScriptUrl = "https://switchboard.clarin.eu/popup/switchboardpopup.js";
 
-    private String lrSwitchboardPopupStyleUrl = "https://switchboard.clarin.eu/popup/switchboardpopup.css";
-
     private boolean lrSwitchboardPopupEnabled = true;
 
     private int linkCheckerMaxDaysSinceChecked = 100;
@@ -1470,14 +1468,6 @@ public class VloConfig {
 
     public void setLrSwitchboardPopupScriptUrl(String lrSwitchboardPopupScriptUrl) {
         this.lrSwitchboardPopupScriptUrl = lrSwitchboardPopupScriptUrl;
-    }
-
-    public String getLrSwitchboardPopupStyleUrl() {
-        return lrSwitchboardPopupStyleUrl;
-    }
-
-    public void setLrSwitchboardPopupStyleUrl(String lrSwitchboardPopupStyleUrl) {
-        this.lrSwitchboardPopupStyleUrl = lrSwitchboardPopupStyleUrl;
     }
 
     public boolean isLrSwitchboardPopupEnabled() {

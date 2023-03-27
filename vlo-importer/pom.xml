@@ -4,13 +4,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.12-SNAPSHOT</version>
+        <version>4.11.3</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-importer</artifactId>
-    <version>4.12-SNAPSHOT</version>
+    <version>4.11.3</version>
     <packaging>jar</packaging>
 
     <name>VLO Importer</name>
@@ -21,8 +21,9 @@
         <packaging>jar</packaging>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
-        <vlo.import.logging.level>INFO</vlo.import.logging.level>
-        <spring.boot.version>2.6.13</spring.boot.version>
+        <vlo.import.logging.level>${sys:IMPORTER_LOG_LEVEL:-INFO}</vlo.import.logging.level>
+        <vlo.import.logging.directory>${sys:IMPORTER_LOG_DIR:-.}</vlo.import.logging.directory>
+        <spring.boot.version>2.6.14</spring.boot.version>
     </properties>
 
     <profiles>
@@ -220,7 +221,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.1.0</version>
+            <version>3.1.2</version>
             <scope>runtime</scope>
         </dependency>
     
