@@ -7,11 +7,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.11.3</version>
+        <version>4.12-SNAPSHOT</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-commons</artifactId>
-    <version>4.11.3</version>
+    <version>4.12-SNAPSHOT</version>
     <name>VLO Commons</name>
     <properties>
         <jackson.version>2.14.2</jackson.version>
