@@ -18,12 +18,12 @@ language governing permissions and limitations under the License. -->
     <parent>
         <artifactId>vlo</artifactId>
         <groupId>eu.clarin.cmdi</groupId>
-        <version>4.11.2</version>
+        <version>4.11.3</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-exposure-frontend</artifactId>
     <packaging>war</packaging>
-    <version>4.11.2</version>
+    <version>4.11.3</version>
     <!-- TODO project name -->
     <name>VLO Exposure Frontend</name>
     <licenses>
@@ -35,7 +35,7 @@ language governing permissions and limitations under the License. -->
     </licenses>
     <properties>
         <wicket.version>8.12.0</wicket.version>
-        <spring.version>5.3.22</spring.version>
+        <spring.version>5.3.25</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vlo.logging.level>DEBUG</vlo.logging.level>
         <log4j.appender>Console</log4j.appender>
@@ -108,7 +108,7 @@ language governing permissions and limitations under the License. -->
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
             <version>${log4j2.version}</version>
         </dependency>
 

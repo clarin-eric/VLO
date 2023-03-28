@@ -4,10 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.junit.Test;
-
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
+import org.junit.jupiter.api.Test;
 
 
 public class AvailabilityPostNormalizerTest extends ImporterTestcase {

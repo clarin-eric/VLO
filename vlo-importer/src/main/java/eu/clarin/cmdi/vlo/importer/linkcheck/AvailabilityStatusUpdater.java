@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.importer.linkcheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Streams;
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
@@ -51,12 +50,14 @@ import org.apache.solr.common.SolrInputDocument;
 import org.apache.solr.common.params.CursorMarkParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import static eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus.getCheckingDataAsUtcEpochMs;
+import java.io.Closeable;
 
 /**
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-public class AvailabilityStatusUpdater {
+public class AvailabilityStatusUpdater implements Closeable {
 
     private final static Logger logger = LoggerFactory.getLogger(AvailabilityStatusUpdater.class);
 
@@ -140,9 +141,6 @@ public class AvailabilityStatusUpdater {
 
         logger.info("All documents processed and committed. Shutting down Solr...");
 
-        // Commit and tidy up
-        shutdownSolr();
-
         logger.info("Done. Total number of documents updated: {}", updateCount);
 
     }
@@ -190,7 +188,7 @@ public class AvailabilityStatusUpdater {
             final Collection<ResourceInfo> landingPageInfoObjects = fieldToResourceInfos(landingPageValues);
 
             //check links for both landing page and resource refs
-            final Map<String, CheckedLink> statusCheckResults
+            final Map<String, LinkStatus> statusCheckResults
                     = statusChecker.getLinkStatusForRefs(
                             Streams.concat(resourceInfoObjects.stream(), landingPageInfoObjects.stream())
                                     .map(ResourceInfo::getUrl)); //extract URLs
@@ -239,9 +237,9 @@ public class AvailabilityStatusUpdater {
                 .collect(Collectors.toSet());
     }
 
-    private Stream<ResourceInfo> updateResourceInfo(Map<String, CheckedLink> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
+    private Stream<ResourceInfo> updateResourceInfo(Map<String, LinkStatus> statusCheckResults, ResourceInfo oldInfo, AtomicInteger changes) {
         {
-            final CheckedLink checkResult = statusCheckResults.get(oldInfo.getUrl());
+            final LinkStatus checkResult = statusCheckResults.get(oldInfo.getUrl());
 
             if (checkResult == null) {
                 if (oldInfo.getStatus() != null || oldInfo.getLastChecked() != null) {
@@ -255,8 +253,8 @@ public class AvailabilityStatusUpdater {
                     return Stream.of(oldInfo);
                 }
             } else {
-                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(checkResult.getTimestamp().getTime(), oldInfo.getLastChecked())) {
-                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), checkResult.getTimestamp().getTime());
+                if (!Objects.equals(checkResult.getStatus(), oldInfo.getStatus()) || !Objects.equals(getCheckingDataAsUtcEpochMs(checkResult), oldInfo.getLastChecked())) {
+                    final ResourceInfo newInfo = new ResourceInfo(oldInfo.getUrl(), oldInfo.getType(), checkResult.getStatus(), getCheckingDataAsUtcEpochMs(checkResult));
 
                     logger.info("Info changed for {} => {}", oldInfo, newInfo);
                     changes.incrementAndGet();
@@ -321,18 +319,26 @@ public class AvailabilityStatusUpdater {
         }
     }
 
+    @Override
+    public void close() throws IOException {
+        // Commit and tidy up
+        shutdownSolr();
+    }
+
     public final static void main(String[] args) {
         if (args.length == 0) {
             System.err.println("Provide location of VloConfig.xml as parameter");
             System.exit(1);
         } else {
-            File configFile = new File(args[0]);
+            final File configFile = new File(args[0]);
             try {
                 final VloConfig config = new XmlVloConfigFactory(configFile.toURI().toURL()).newConfig();
                 final SolrBridge solrBridge = MetadataImporter.DefaultSolrBridgeFactory.createDefaultSolrBridge(config);
-                final ResourceAvailabilityStatusChecker statusChecker = MetadataImporter.DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config);
-                final AvailabilityStatusUpdater updater = new AvailabilityStatusUpdater(config, solrBridge, statusChecker);
-                updater.run();
+                try ( ResourceAvailabilityStatusChecker statusChecker = ResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config)) {
+                    try ( AvailabilityStatusUpdater updater = new AvailabilityStatusUpdater(config, solrBridge, statusChecker)) {
+                        updater.run();
+                    }
+                }
             } catch (IOException ex) {
                 System.err.println("Could not read configuration file: " + ex.getMessage());
                 System.exit(1);

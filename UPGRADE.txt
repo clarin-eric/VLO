@@ -84,6 +84,12 @@ updated configuration file:
 
 
 -------------------------------
+Upgrading from 4.10.x to 4.11.x
+-------------------------------
+
+No changes in the configuration required.
+
+-------------------------------
 Upgrading from 4.10.0 to 4.10.1
 -------------------------------
 

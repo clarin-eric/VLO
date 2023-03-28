@@ -1,15 +1,15 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.normalizer.TemporalCoveragePostNormalizer;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class TemporalCoveragePostNormalizerTest extends ImporterTestcase {
     private TemporalCoveragePostNormalizer processor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         processor = new TemporalCoveragePostNormalizer(config);
     }

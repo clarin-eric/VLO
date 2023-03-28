@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.normalizer.CountryNamePostNormalizer;
 

@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
@@ -20,13 +20,13 @@ import java.util.Map;
 public class ValueMappingFactoryTest {
     private FacetConceptMapping conceptMapping;
     
-    @Before
+    @BeforeEach
     public void init() {
         this.conceptMapping = new VLOMarshaller().getFacetConceptMapping(ImporterTestcase.getTestFacetConceptFilePath());
     }
     
     @Test
-    public void testGeneralRepresentation() throws IOException {
+    public void testGeneralRepresentation() throws Exception {
         String fileName = createTmpFile(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
                 "\n" + 
@@ -71,7 +71,7 @@ public class ValueMappingFactoryTest {
     }
     
     @Test
-    public void testAttributeRepresentation() throws IOException {
+    public void testAttributeRepresentation() throws Exception {
         String fileName = createTmpFile(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
                 "\n" + 
@@ -131,7 +131,7 @@ public class ValueMappingFactoryTest {
     }
 
     @Test
-    public void testConditionMatch() throws IOException {
+    public void testConditionMatch() throws Exception {
         String fileName = createTmpFile(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" + 
                 "\n" + 

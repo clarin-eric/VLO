@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
@@ -35,14 +36,22 @@ import java.util.Optional;
 import org.apache.commons.lang.StringEscapeUtils;
 
 import org.apache.solr.common.SolrDocument;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptReferenceHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
+import org.springframework.web.util.JavaScriptUtils;
 
 /**
  *
@@ -84,24 +93,51 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         createDropdownOptions(optionsBuilder);
 
         setModel(new ListModel<>(optionsBuilder.build()));
+
+        // decision to not enable switchboard preflight in v4.11.3
+        /*
+        // switchboard preflight 
+        add(new SwitchboardDropdownItemPreflightBehavior(resourceInfoModel.map(ResourceInfo::getHref)));
+         */
         super.onInitialize();
     }
 
     protected void createDropdownOptions(ImmutableList.Builder<DropdownMenuItem> listBuilder) {
-        listBuilder.add(new BootstrapDropdown.DropdownMenuItem("Process with Language Resource Switchboard", "glyphicon glyphicon-open-file") {
+        listBuilder.add(createSwitchboardItem());
+
+        if (!Strings.isEmpty(vloConfig.getVcrSubmitEndpoint())) {
+            listBuilder.add(createVcrItem());
+        }
+    }
+
+    private DropdownMenuItem createSwitchboardItem() {
+        final Model<String> switchboardItemLabelModel = Model.of("Process with Language Resource Switchboard");
+        final DropdownMenuItem switchboardItem = new BootstrapDropdown.DropdownMenuItem(switchboardItemLabelModel, Model.of("glyphicon glyphicon-open-file")) {
             @Override
             protected Link getLink(String id) {
-                return getResourceLink(id);
+                return getSwitchboardLink(id);
             }
-        });
-        if (!Strings.isEmpty(vloConfig.getVcrSubmitEndpoint())) {
-            listBuilder.add(new BootstrapDropdown.DropdownMenuItem("Queue for submission to a Virtual Collection", "glyphicon glyphicon-plus") {
-                @Override
-                protected Link getLink(String id) {
-                    return getVcrQueueLink(id);
-                }
-            });
+        };
+        return switchboardItem;
+    }
+
+    private Link getSwitchboardLink(String id) {
+        final IModel<Collection<Object>> languageValuesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
+        final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
+        if (piwikConfig.isEnabled()) {
+            link.add(createPiwikActionTrackingBehavior(resourceInfoModel, PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE));
         }
+        link.add(new AttributeAppender("class", "resourceDropdownSwitchboardItem"));
+        return link;
+    }
+
+    private DropdownMenuItem createVcrItem() {
+        return new BootstrapDropdown.DropdownMenuItem(Model.of("Queue for submission to a Virtual Collection"), Model.of("glyphicon glyphicon-plus")) {
+            @Override
+            protected Link getLink(String id) {
+                return getVcrQueueLink(id);
+            }
+        };
     }
 
     public Link getVcrQueueLink(String id) {
@@ -128,15 +164,6 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
                 //title
                 StringEscapeUtils.escapeJavaScript(fileNameModel.getObject())
         );
-    }
-
-    private Link getResourceLink(String id) {
-        final IModel<Collection<Object>> languageValuesModel = new SolrFieldModel<>(documentModel, fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE));
-        final Link link = new LanguageResourceSwitchboardLink(id, linkModel, languageValuesModel, resourceInfoModel);
-        if (piwikConfig.isEnabled()) {
-            link.add(createPiwikActionTrackingBehavior(resourceInfoModel, PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE));
-        }
-        return link;
     }
 
     private AjaxPiwikTrackingBehavior.EventTrackingBehavior createPiwikActionTrackingBehavior(final IModel<ResourceInfo> resourceInfoModel, String category, String action) {
@@ -182,6 +209,55 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         documentModel.detach();
         resourceInfoModel.detach();
         linkModel.detach();
+    }
+
+    /**
+     * Behaviour that registers a Switchboard preflight action on a resource
+     * link options dropdown menu.
+     *
+     * @see
+     * <a href="https://github.com/clarin-eric/switchboard-doc/blob/master/documentation/IntegrationProvider.md">Switchboard
+     * integration documentation</a>
+     */
+    private static class SwitchboardDropdownItemPreflightBehavior extends Behavior {
+
+        private final IModel<String> linkModel;
+
+        /**
+         *
+         * @param linkModel model for the resource URL
+         */
+        public SwitchboardDropdownItemPreflightBehavior(IModel<String> linkModel) {
+            this.linkModel = linkModel;
+        }
+
+        @Override
+        public void bind(Component component) {
+            if (!(component instanceof ResourceLinkOptionsDropdown)) {
+                throw new UnsupportedOperationException("Switchboard preflight behaviour can only be registered on resource link option dropdowns!");
+            }
+        }
+
+        @Override
+        public void renderHead(Component component, IHeaderResponse response) {
+            assert (component instanceof ResourceLinkOptionsDropdown);
+
+            // Script resource functions implementing the prefight call
+            response.render(JavaScriptReferenceHeaderItem.forReference(JavaScriptResources.getSwitchboardIntegrationJs()));
+
+            // Registration for this particular dropdown component
+            response.render(JavaScriptHeaderItem.forScript(
+                    String.format("registerSwitchboardPreflight('%s',  '#%s');",
+                            JavaScriptUtils.javaScriptEscape(linkModel.getObject()),
+                            JavaScriptUtils.javaScriptEscape(component.getMarkupId())),
+                    "onLinkDropdownShown" + component.getMarkupId()));
+        }
+
+        @Override
+        public void detach(Component component) {
+            linkModel.detach();
+        }
+
     }
 
 }

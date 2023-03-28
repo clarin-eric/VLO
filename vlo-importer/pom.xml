@@ -4,13 +4,13 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.11.2</version>
+        <version>4.11.3</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-importer</artifactId>
-    <version>4.11.2</version>
+    <version>4.11.3</version>
     <packaging>jar</packaging>
 
     <name>VLO Importer</name>
@@ -21,8 +21,9 @@
         <packaging>jar</packaging>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
         <log4j.appender>File</log4j.appender>
-        <vlo.import.logging.level>INFO</vlo.import.logging.level>
-        <rasa.version>5.0.2</rasa.version>
+        <vlo.import.logging.level>${sys:IMPORTER_LOG_LEVEL:-INFO}</vlo.import.logging.level>
+        <vlo.import.logging.directory>${sys:IMPORTER_LOG_DIR:-.}</vlo.import.logging.directory>
+        <spring.boot.version>2.6.14</spring.boot.version>
     </properties>
 
     <profiles>
@@ -50,8 +51,8 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>log4j.properties</include>
                     <include>**/*.xml</include>
+                    <include>**/*.yml</include>
                 </includes>
             </resource>
             <resource>
@@ -86,8 +87,9 @@
                 <version>3.2.0</version>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/main/assembly/buildjar.xml</descriptor>
+                        <descriptor>src/main/assembly/build-dist.xml</descriptor>
                     </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
                 <executions>
                     <execution>
@@ -123,6 +125,19 @@
             <artifactId>vlo-vocabularies</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j2-impl</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        
         <dependency>
             <groupId>net.handle</groupId>
             <artifactId>handle-client</artifactId>
@@ -137,11 +152,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.12.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <version>${log4j2.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -170,42 +180,115 @@
             <artifactId>opencsv</artifactId>
             <version>5.7.1</version>
         </dependency>
-        
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.15</version>
         </dependency>
+        
+        <!-- Linkchecker persistence -->
+        
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>1.3</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>eu.clarin.cmdi</groupId>
-            <artifactId>rasa-api</artifactId>
-            <version>${rasa.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.clarin.cmdi</groupId>
-            <artifactId>rasa-mysql-impl</artifactId>
-            <version>${rasa.version}</version>
-        </dependency>
-    
-        <!-- JMOCK FOR MOCKING -->
-        <dependency>
-            <groupId>org.jmock</groupId>
-            <artifactId>jmock-junit4</artifactId>
-            <version>2.12.0</version>
-            <scope>test</scope>
+            <groupId>eu.clarin</groupId>
+            <artifactId>linkchecker-persistence</artifactId>
+            <version>0.0.1</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>junit-dep</artifactId>
-                    <groupId>junit</groupId>
+                    <groupId>eu.clarin.cmdi</groupId>
+                    <artifactId>vlo-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         
+        <!-- Linkchecker persistence database connection -->
+        
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>3.1.2</version>
+            <scope>runtime</scope>
+        </dependency>
+    
+        <!-- TEST DEPENDENCIES -->
+        
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>2.2</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit5</artifactId>
+            <version>2.12.0</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.jupiter</groupId>
+                    <artifactId>junit-jupiter-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-commons</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-engine</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.junit.platform</groupId>
+                    <artifactId>junit-platform-launcher</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>jul-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

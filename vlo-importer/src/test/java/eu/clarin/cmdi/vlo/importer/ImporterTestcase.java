@@ -10,10 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.io.TempDir;
 
 public abstract class ImporterTestcase {
 
@@ -25,28 +24,29 @@ public abstract class ImporterTestcase {
     protected VLOMarshaller marshaller;
     private char ch = 'a';
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    public File tempFolder;
 
     protected File createCmdiFile(String name, String content) throws IOException {
-        File file = tempFolder.newFile(name + System.currentTimeMillis() + "_" + ch++ + ".cmdi");
+
+        File file = new File(tempFolder, name + System.currentTimeMillis() + "_" + ch++ + ".cmdi");
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
 
     protected String createTmpFile(String content) throws IOException {
-        File file = tempFolder.newFile(System.currentTimeMillis() + ".tmp");
+        File file = new File(tempFolder, System.currentTimeMillis() + ".tmp");
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file.getAbsolutePath();
     }
 
     protected File createValueMappingsFile(String name, String content) throws IOException {
-        File file = tempFolder.newFile(name + System.currentTimeMillis() + "_" + ch++ + ".xml");
+        File file = new File(tempFolder, name + System.currentTimeMillis() + "_" + ch++ + ".xml");
         FileUtils.writeStringToFile(file, content, "UTF-8");
         return file;
     }
 
-    @BeforeClass
+    @BeforeAll
     public static void setupClass() throws Exception {
         // read the configuration defined in the packaged configuration file
         // and configure to use bundled mappings
@@ -62,7 +62,7 @@ public abstract class ImporterTestcase {
         languageCodeUtils = new LanguageCodeUtils(config);
     }
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         if (Thread.currentThread().getName().equals("main")) {
             Thread.currentThread().setName("test-main");

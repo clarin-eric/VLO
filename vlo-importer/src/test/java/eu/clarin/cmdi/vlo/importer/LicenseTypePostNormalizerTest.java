@@ -5,9 +5,9 @@ import com.google.common.collect.ImmutableMap;
 import static org.junit.Assert.assertEquals;
 
 import java.util.List;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.normalizer.LicenseTypePostNormalizer;
 import java.util.Collection;
@@ -17,7 +17,7 @@ public class LicenseTypePostNormalizerTest extends ImporterTestcase {
 
     private LicenseTypePostNormalizer processor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         processor = new LicenseTypePostNormalizer(config);
     }

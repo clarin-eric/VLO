@@ -1,13 +1,8 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
-
-import eu.clarin.cmdi.rasa.helpers.RasaFactory;
-import eu.clarin.cmdi.rasa.helpers.impl.RasaFactoryBuilderImpl;
-import eu.clarin.cmdi.rasa.linkResources.CheckedLinkResource;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,10 +34,8 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph.CmdiVertex;
-import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
+import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityFactory;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
-import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker;
-import eu.clarin.cmdi.vlo.importer.linkcheck.RasaResourceAvailabilityStatusChecker.RasaResourceAvailabilityStatusCheckerConfiguration;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
@@ -66,9 +59,7 @@ import eu.clarin.cmdi.vlo.importer.solr.SolrBridge;
 import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
 import java.io.Closeable;
 import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.SocketTimeoutException;
-import java.time.Duration;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -77,7 +68,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -131,11 +121,6 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      */
     private final SolrBridge solrBridge;
 
-    /**
-     * RASA database driver class
-     */
-    private static final String RASA_JDBC_DRIVER_CLASS_NAME = "org.mariadb.jdbc.Driver";
-
     private final CMDIRecordImporter<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final ResourceAvailabilityStatusChecker availabilityChecker;
@@ -146,73 +131,6 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
             final SolrBridgeImpl solrBridge = new BufferingSolrBridgeImpl(config);
             solrBridge.setCommit(true);
             return solrBridge;
-        }
-    }
-
-    public static class DefaultResourceAvailabilityFactory {
-
-        public static ResourceAvailabilityStatusChecker createDefaultResourceAvailabilityStatusChecker(final VloConfig config) {
-            final String rasaDbUri = config.getLinkCheckerDbConnectionString(); //jdbc:mysql://localhost:3306/linkchecker
-            final String rasaDbUser = config.getLinkCheckerDbUser(); //linkchecker
-            final String rasaDbPassword = config.getLinkCheckerDbPassword(); //linkchecker
-            final int rasaDbPoolsize = config.getLinkCheckerDbPoolsize();
-            final Duration checkAgeThreshold = Duration.ofDays(config.getLinkCheckerMaxDaysSinceChecked());
-
-            if (!Strings.isNullOrEmpty(rasaDbUri)) {
-                try {
-                    final RasaResourceAvailabilityStatusChecker checker = newRasaChecker(rasaDbUri, rasaDbUser, rasaDbPassword, rasaDbPoolsize, checkAgeThreshold);
-                    if (testChecker(checker)) {
-                        return checker;
-                    }
-                } catch (Exception ex) {
-                    LOG.error("Error while initialising resource availability checker", ex);
-                }
-                LOG.warn("Resource availability checker initialisation and/or test FAILED. Installing a NOOP availability checker. Availability status will NOT be checked!");
-                return new NoopResourceAvailabilityStatusChecker();
-            } else {
-                LOG.warn("No mysql configuration - installing a NOOP availability checker. Availability status will NOT be checked!");
-                return new NoopResourceAvailabilityStatusChecker();
-            }
-
-        }
-
-        private static RasaResourceAvailabilityStatusChecker newRasaChecker(final String rasaDbUri, final String rasaDbUser, final String rasaDbPassword, final int rasaDbPoolsize, final Duration checkAgeThreshold) {
-            LOG.debug("Connecting to RASA database '{}' for link checker information", rasaDbUri);
-            final Properties rasaProperties = new Properties();
-            rasaProperties.setProperty("driverClassName", RASA_JDBC_DRIVER_CLASS_NAME);
-            rasaProperties.setProperty("jdbcUrl", rasaDbUri);
-            rasaProperties.setProperty("username", rasaDbUser);
-            rasaProperties.setProperty("password", rasaDbPassword);
-            rasaProperties.setProperty("maximumPoolSize", String.valueOf(rasaDbPoolsize));
-            final RasaFactory factory = new RasaFactoryBuilderImpl().getRasaFactory(rasaProperties);
-            final CheckedLinkResource checkedLinkResource = factory.getCheckedLinkResource();
-            final RasaResourceAvailabilityStatusChecker checker
-                    = new RasaResourceAvailabilityStatusChecker(checkedLinkResource,
-                            new RasaResourceAvailabilityStatusCheckerConfiguration(checkAgeThreshold)) {
-                @Override
-                public void onClose() throws IOException {
-                    logger.info("Asking resource availability checker factory to tear down");
-                    factory.tearDown();
-                }
-
-                @Override
-                public void writeStatusSummary(Writer writer) throws IOException {
-                    factory.writeStatusSummary(writer);
-                }
-            };
-            return checker;
-        }
-
-        private static boolean testChecker(RasaResourceAvailabilityStatusChecker checker) {
-            LOG.debug("Carrying out functional check of RASA checker...");
-            final String testUrl = "https://www.clarin.eu";
-            try {
-                checker.getLinkStatusForRefs(Stream.of(testUrl));
-                return true;
-            } catch (IOException ex) {
-                LOG.error("Failed to carry out test check for {}", testUrl, ex);
-                return false;
-            }
         }
     }
 
@@ -239,7 +157,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList) {
         this(config, languageCodeUtils, mappingFactory, marshaller, clDatarootsList,
                 DefaultSolrBridgeFactory.createDefaultSolrBridge(config),
-                DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
+                ResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
     }
 
     public MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils, FacetMappingFactory mappingFactory, VLOMarshaller marshaller, String clDatarootsList, SolrBridge solrBrdige, ResourceAvailabilityStatusChecker availabilityChecker) {
@@ -882,7 +800,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     protected MetadataImporter(VloConfig config, LanguageCodeUtils languageCodeUtils) {
         this(config, languageCodeUtils, new VLOMarshaller(),
                 DefaultSolrBridgeFactory.createDefaultSolrBridge(config),
-                DefaultResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
+                ResourceAvailabilityFactory.createDefaultResourceAvailabilityStatusChecker(config));
     }
 
     /**

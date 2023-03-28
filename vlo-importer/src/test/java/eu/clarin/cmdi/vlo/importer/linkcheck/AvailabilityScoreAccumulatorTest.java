@@ -16,15 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
-import eu.clarin.cmdi.rasa.DAO.CheckedLink;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -33,9 +33,9 @@ import org.junit.Test;
 public class AvailabilityScoreAccumulatorTest {
 
     private AvailabilityScoreAccumulator instance;
-    private Map<URI, CheckedLink> map;
+    private Map<URI, LinkStatus> map;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new AvailabilityScoreAccumulator();
         map = new HashMap<>();
@@ -208,9 +208,28 @@ public class AvailabilityScoreAccumulatorTest {
     }
 
     private void addStatus(String uri, int status) {
-        final CheckedLink checkedLink = new CheckedLink();
-        checkedLink.setUrl(uri);
-        checkedLink.setStatus(status);
+        final LinkStatus checkedLink = new LinkStatus() {
+            @Override
+            public String getUrl() {
+                return uri;
+            }
+
+            @Override
+            public Integer getStatus() {
+                return status;
+            }
+
+            @Override
+            public LocalDateTime getCheckingDate() {
+                return null;
+            }
+
+            @Override
+            public String getContentType() {
+                return null;
+            }
+
+        };
         map.put(URI.create(uri), checkedLink);
     }
 
