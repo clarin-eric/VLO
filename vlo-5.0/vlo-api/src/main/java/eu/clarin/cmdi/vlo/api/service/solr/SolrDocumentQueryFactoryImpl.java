@@ -161,6 +161,7 @@ public class SolrDocumentQueryFactoryImpl {
                 .setQuery(queryParam)
                 .setFacet(true)
                 .setFacetLimit(valueLimit.orElse(FACET_LIMIT_DEFAULT))
+                .setFacetMinCount(1)
                 .addFacetField(facetFieldsArray);
     }
 

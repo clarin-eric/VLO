@@ -16,19 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
-import com.google.common.base.Splitter;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimaps;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,9 +39,8 @@ import reactor.core.publisher.Mono;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class VloRecordHandler {
+public class VloRecordHandler extends VloHandlerProvider {
 
-    private final Splitter FQ_SPLITTER = Splitter.on(':').limit(2);
 
     private final ReactiveVloRecordService recordService;
 
@@ -98,26 +91,6 @@ public class VloRecordHandler {
         return recordService.getRecordById(id)
                 .flatMap(record -> ServerResponse.ok().bodyValue(record))
                 .switchIfEmpty(ServerResponse.notFound().build());
-    }
-
-    private Map<String, ? extends Iterable<String>> getFiltersFromRequest(ServerRequest request) {
-        final List<String> fq = request.queryParams().get(FILTER_QUERY_PARAMETER);
-        if (fq == null || fq.isEmpty()) {
-            return Collections.emptyMap();
-        } else {
-            final ArrayListMultimap<String, String> map = ArrayListMultimap.<String, String>create();
-            fq.forEach(fqVal -> {
-                List<String> fqDecomposed = FQ_SPLITTER.splitToList(fqVal);
-                if (fqDecomposed.size() == 2) {
-                    map.put(fqDecomposed.get(0), fqDecomposed.get(1));
-                } else {
-                    log.warn("Ignoring invalid fq parameter: {}", fq);
-                }
-            });
-
-            return map.asMap();
-        }
-
     }
 
 }

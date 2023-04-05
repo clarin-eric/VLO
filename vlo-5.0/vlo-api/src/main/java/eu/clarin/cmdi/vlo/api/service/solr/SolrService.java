@@ -98,18 +98,6 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
                 .map(SolrDocumentList::getNumFound);
     }
 
-    private void applyFilterQuery(final SolrQuery query, Map<String, ? extends Iterable<String>> filters) {
-        if (filters != null) {
-            filters.forEach((field, values) -> {
-                values.forEach(value -> {
-                    query.addFilterQuery(ClientUtils.escapeQueryChars(field) + ":" + ClientUtils.escapeQueryChars(value));
-                });
-            });
-        }
-        
-        
-    }
-
     @Override
     public Mono<VloRecord> getRecordById(String id) {
         final SolrQuery query = queryFactory.createDocumentQuery(id);
@@ -123,12 +111,14 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     }
 
     @Override
-    public Flux<Facet> getAllFacets(String queryParam) {
+    public Flux<Facet> getAllFacets(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<List<String>> facets, Optional<Integer> valueCount) {
         final SolrQuery query = queryFactory.createFacetQuery(queryParam,
                 // empty list for default fields selection
                 Optional.empty(),
                 // get default number of top values
-                Optional.of(queryFactory.getDefaultFacetValueCount()));
+                valueCount.or(() -> Optional.of(queryFactory.getDefaultFacetValueCount())));
+
+        applyFilterQuery(query, filters);
 
         return queryToResponseMono(query)
                 .mapNotNull(QueryResponse::getFacetFields)
@@ -137,19 +127,31 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     }
 
     @Override
-    public Mono<Facet> getFacet(String facet, String queryParam) {
+    public Mono<Facet> getFacet(String facet, String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<Integer> valueCount) {
         // query to get all facet values for a specific facet
         final SolrQuery query = queryFactory.createFacetQuery(queryParam,
                 // singleton facet fields list
                 Optional.of(ImmutableList.of(facet)),
                 // get maximum number of values
-                Optional.of(queryFactory.getMaxFacetValueCount()));
+                valueCount.or(() -> Optional.of(queryFactory.getMaxFacetValueCount())));
+        
+        applyFilterQuery(query, filters);
 
         return queryToResponseMono(query)
                 .mapNotNull(QueryResponse::getFacetFields)
                 .flatMapMany(Flux::fromIterable)
                 .next()
                 .map(this::solrFacetFieldToFacet);
+    }
+
+    private void applyFilterQuery(final SolrQuery query, Map<String, ? extends Iterable<String>> filters) {
+        if (filters != null) {
+            filters.forEach((field, values) -> {
+                values.forEach(value -> {
+                    query.addFilterQuery(ClientUtils.escapeQueryChars(field) + ":" + ClientUtils.escapeQueryChars(value));
+                });
+            });
+        }
     }
 
     private Facet solrFacetFieldToFacet(FacetField facetField) {

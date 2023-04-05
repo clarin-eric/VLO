@@ -18,6 +18,8 @@ package eu.clarin.cmdi.vlo.api;
 
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloFacetsService;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import java.util.Map;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -33,14 +35,15 @@ import reactor.core.publisher.Mono;
 @Component
 @AllArgsConstructor
 @Slf4j
-public class VloFacetHandler {
+public class VloFacetHandler extends VloHandlerProvider {
 
     private final ReactiveVloFacetsService facetsService;
 
     @CrossOrigin
     public Mono<ServerResponse> getFacets(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
-        return facetsService.getAllFacets(query)
+        final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
+        return facetsService.getAllFacets(query, filters, Optional.empty(), Optional.empty())
                 .collectList()
                 .flatMap(count -> ServerResponse.ok().bodyValue(count));
     }
@@ -49,7 +52,8 @@ public class VloFacetHandler {
     public Mono<ServerResponse> getFacet(ServerRequest request) {
         final String facet = request.pathVariable("facet");
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
-        return facetsService.getFacet(facet, query)
+        final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
+        return facetsService.getFacet(facet, query, filters, Optional.empty())
                 .flatMap(result -> ServerResponse.ok().bodyValue(result));
     }
 }
