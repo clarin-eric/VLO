@@ -16,10 +16,14 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
-import eu.clarin.cmdi.vlo.api.service.solr.SolrDocumentQueryFactoryImpl;
-import eu.clarin.cmdi.vlo.api.service.solr.SolrService;
+import eu.clarin.cmdi.vlo.api.service.impl.FieldValueLabelServiceImpl;
+import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrDocumentQueryFactoryImpl;
+import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrService;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,9 +63,18 @@ public class VloSolrConfiguration {
     }
 
     @Bean
-    FieldValueLabelService fieldValueLabelService() {
+    public Map<String, Function<String, String>> fieldValueLabelFunctionsMap() {
+        return ImmutableMap.<String, Function<String, String>>builder()
+                .put("languageCode",
+                        new FieldValueLabelServiceImpl.PatternMatchingLabelFunction(
+                                "((code|name):)?(.*)", 3))
+                .build();
+    }
+
+    @Bean
+    public FieldValueLabelService fieldValueLabelService() {
         // identity
-        return (field, value) -> value;
+        return new FieldValueLabelServiceImpl(fieldValueLabelFunctionsMap());
     }
 
     @Bean

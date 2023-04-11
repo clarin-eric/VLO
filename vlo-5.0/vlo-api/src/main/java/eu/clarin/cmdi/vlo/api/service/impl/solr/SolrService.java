@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.api.service.solr;
+package eu.clarin.cmdi.vlo.api.service.impl.solr;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.FluentIterable;

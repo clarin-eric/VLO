@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.data.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,7 @@ public class Facet {
     @AllArgsConstructor
     @Getter
     @Setter
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class ValeCount {
 
         private String value;
