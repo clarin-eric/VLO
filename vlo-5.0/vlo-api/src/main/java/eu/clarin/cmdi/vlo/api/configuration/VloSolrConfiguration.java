@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.solr.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.api.service.solr.SolrService;
 import java.util.Arrays;
@@ -58,8 +59,14 @@ public class VloSolrConfiguration {
     }
 
     @Bean
+    FieldValueLabelService fieldValueLabelService() {
+        // identity
+        return (field, value) -> value;
+    }
+
+    @Bean
     public SolrService solrService() {
-        return new SolrService(queryFactory(), solrClient(), solrUsermame, solrPassword);
+        return new SolrService(queryFactory(), solrClient(), solrUsermame, solrPassword, fieldValueLabelService());
     }
 
 }

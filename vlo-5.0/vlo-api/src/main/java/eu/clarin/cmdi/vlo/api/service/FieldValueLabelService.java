@@ -14,37 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.data.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+package eu.clarin.cmdi.vlo.api.service;
 
 /**
  *
  * @author twagoo
  */
-@AllArgsConstructor
-@Getter
-@Setter
-public class Facet {
-
-    private final String name;
-
-    private long valueCount;
-
-    private final Iterable<ValeCount> values;
-
-    @AllArgsConstructor
-    @Getter
-    @Setter
-    public static class ValeCount {
-
-        private String value;
-
-        private final String label;
-
-        private long count;
-    }
-
+public interface FieldValueLabelService {
+    
+    String getLabelFor(String field, String value);
+    
 }

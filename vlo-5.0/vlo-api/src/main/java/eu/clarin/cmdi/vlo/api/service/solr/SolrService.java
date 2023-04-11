@@ -20,6 +20,7 @@ import com.google.common.base.Functions;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloFacetsService;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.Facet;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -48,6 +50,7 @@ import reactor.core.publisher.Mono;
  *
  * @author twagoo
  */
+@AllArgsConstructor
 @Slf4j
 public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsService {
 
@@ -59,12 +62,7 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
 
     private final String solrPassword;
 
-    public SolrService(SolrDocumentQueryFactoryImpl queryFactory, SolrClient solrClient, String solrUsermame, String solrPassword) {
-        this.queryFactory = queryFactory;
-        this.solrClient = solrClient;
-        this.solrUsermame = solrUsermame;
-        this.solrPassword = solrPassword;
-    }
+    private final FieldValueLabelService fieldValueLabelService;
 
     @Override
     public Mono<VloRecordSearchResult> getRecords(String queryParam, Map<String, ? extends Iterable<String>> filters, int from, int size) {
@@ -134,7 +132,7 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
                 Optional.of(ImmutableList.of(facet)),
                 // get maximum number of values
                 valueCount.or(() -> Optional.of(queryFactory.getMaxFacetValueCount())));
-        
+
         applyFilterQuery(query, filters);
 
         return queryToResponseMono(query)
@@ -155,9 +153,13 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     }
 
     private Facet solrFacetFieldToFacet(FacetField facetField) {
-        return new Facet(facetField.getName(), facetField.getValueCount(),
+        final String fieldName = facetField.getName();
+        return new Facet(fieldName, facetField.getValueCount(),
                 FluentIterable.from(facetField.getValues())
-                        .transform(c -> new Facet.ValeCount(c.getName(), c.getCount()))
+                        .transform(c -> new Facet.ValeCount(
+                        c.getName(),
+                        fieldValueLabelService.getLabelFor(fieldName, c.getName()),
+                        c.getCount()))
                         .toList()
         );
     }
