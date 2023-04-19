@@ -21,6 +21,7 @@ import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.impl.FieldValueLabelServiceImpl;
 import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrService;
+import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrVloRecordConverter;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.Arrays;
 import java.util.Map;
@@ -29,6 +30,8 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -81,8 +84,18 @@ public class VloSolrConfiguration {
     }
 
     @Bean
+    public JsonParser jsonParser() {
+        return JsonParserFactory.getJsonParser();
+    }
+
+    @Bean
+    public Converter<SolrDocument, VloRecord> recordConverter() {
+        return new SolrVloRecordConverter(jsonParser());
+    }
+
+    @Bean
     public SolrService solrService(Converter<SolrDocument, VloRecord> recordConverter) {
-        return new SolrService(queryFactory(), solrClient(), solrUsermame, solrPassword, fieldValueLabelService(), recordConverter);
+        return new SolrService(queryFactory(), solrClient(), solrUsermame, solrPassword, fieldValueLabelService(), recordConverter());
     }
 
 }

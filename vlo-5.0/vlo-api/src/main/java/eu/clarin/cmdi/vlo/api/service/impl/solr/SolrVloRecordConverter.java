@@ -17,13 +17,20 @@
 package eu.clarin.cmdi.vlo.api.service.impl.solr;
 
 import com.google.common.base.Functions;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.common.SolrDocument;
+import org.springframework.boot.json.JsonParseException;
+import org.springframework.boot.json.JsonParser;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -32,15 +39,24 @@ import org.springframework.stereotype.Component;
  *
  * @author twagoo
  */
-@Component
+@AllArgsConstructor
+@Slf4j
 @Profile("solr")
 public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord> {
+
+    private static final String SOLR_FIELD_ID = "id";
+    private static final String SOLR_FIELD_SELFLINK = "_selfLink";
+    private static final String SOLR_FIELD_RESOURCE_REF = "_resourceRef";
+
+    private final JsonParser jsonParser;
 
     @Override
     public VloRecord convert(SolrDocument solrDoc) {
         final VloRecord record = new VloRecord();
-        record.setId(Objects.toString(solrDoc.getFieldValue("id")));
+        record.setId(Objects.toString(solrDoc.getFieldValue(SOLR_FIELD_ID)));
+        record.setSelflink(Objects.toString(solrDoc.getFieldValue(SOLR_FIELD_SELFLINK)));
         record.setFields(createFieldValuesMap(solrDoc));
+        record.setResources(createResourceList(solrDoc));
         return record;
     }
 
@@ -58,6 +74,35 @@ public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord
                         Functions.identity(),
                         // value: field values from solr doc as a list
                         f -> ImmutableList.copyOf(solrDoc.getFieldValues(f))));
+    }
+
+    private List<VloRecord.Resource> createResourceList(SolrDocument solrDoc) {
+        return FluentIterable.from(
+                Optional.ofNullable(
+                        solrDoc.getFieldValues(SOLR_FIELD_RESOURCE_REF))
+                        // if the field is not found we get a null -- fall back to empty list
+                        .orElseGet(Collections::emptyList))
+                // resource refs are encoded in strings; filter out any unexpected garbage
+                .filter(String.class)
+                // convert to resource object
+                .transform(this::resourceRefStringToResource)
+                .toList();
+    }
+
+    private VloRecord.Resource resourceRefStringToResource(String object) {
+        try {
+            final Map<String, Object> resourceObject = jsonParser.parseMap(object);
+
+            return new VloRecord.Resource(
+                    "", //id
+                    Objects.toString(resourceObject.getOrDefault("url", "")),
+                    "Resource",
+                    Objects.toString(resourceObject.getOrDefault("type", ""))
+            );
+        } catch (JsonParseException ex) {
+            log.warn("Could not parse resource ref string from index: {}", object, ex);
+            return null;
+        }
     }
 
 }
