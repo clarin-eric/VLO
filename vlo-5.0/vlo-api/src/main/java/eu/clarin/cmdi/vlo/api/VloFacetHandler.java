@@ -20,8 +20,9 @@ import eu.clarin.cmdi.vlo.api.service.ReactiveVloFacetsService;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import java.util.Map;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -33,9 +34,16 @@ import reactor.core.publisher.Mono;
  * @author twagoo
  */
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class VloFacetHandler extends VloHandlerProvider {
+
+    @Value("${vlo.api.cache.facet.ttl.seconds:60}")
+    private Long facetCacheTTL;
+
+    private <T> Mono<T> applyFacetCache(Mono<T> mono) {
+        return applyCache(mono, facetCacheTTL);
+    }
 
     private final ReactiveVloFacetsService facetsService;
 
@@ -43,9 +51,9 @@ public class VloFacetHandler extends VloHandlerProvider {
     public Mono<ServerResponse> getFacets(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
         final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
-        return facetsService.getAllFacets(query, filters, Optional.empty(), Optional.empty())
-                .collectList()
-                .flatMap(count -> ServerResponse.ok().bodyValue(count));
+        return applyFacetCache(facetsService.getAllFacets(query, filters, Optional.empty(), Optional.empty())
+                .collectList())
+                .flatMap(facets -> ServerResponse.ok().bodyValue(facets));
     }
 
     @CrossOrigin
@@ -53,7 +61,7 @@ public class VloFacetHandler extends VloHandlerProvider {
         final String facet = request.pathVariable("facet");
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
         final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
-        return facetsService.getFacet(facet, query, filters, Optional.empty())
+        return applyFacetCache(facetsService.getFacet(facet, query, filters, Optional.empty()))
                 .flatMap(result -> ServerResponse.ok().bodyValue(result));
     }
 }

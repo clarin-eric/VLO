@@ -66,7 +66,7 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
 
     @Override
     public Mono<VloRecordSearchResult> getRecords(String queryParam, Map<String, ? extends Iterable<String>> filters, int from, int size) {
-        final SolrQuery query = queryFactory.createDocumentQuery(from, size);
+        final SolrQuery query = queryFactory.createLimitedDocumentQuery(from, size);
         if (queryParam != null) {
             query.setQuery(queryParam);
         }
@@ -84,7 +84,7 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
 
     @Override
     public Mono<Long> getRecordCount(String queryParam, Map<String, ? extends Iterable<String>> filters) {
-        final SolrQuery query = queryFactory.createDocumentQuery(0, 0);
+        final SolrQuery query = queryFactory.createLimitedDocumentQuery(0, 0);
         if (query != null) {
             query.setQuery(queryParam);
         }

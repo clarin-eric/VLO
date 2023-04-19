@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.impl.FieldValueLabelServiceImpl;
@@ -23,7 +24,7 @@ import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrService;
 import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrVloRecordConverter;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import org.apache.solr.client.solrj.SolrClient;
@@ -45,9 +46,13 @@ import org.springframework.core.convert.converter.Converter;
 @Profile("solr")
 public class VloSolrConfiguration {
 
-    protected final static String[] DEFAULT_FIELDS = {
-        "name", "creator", "description", "collection", "languageCode", "_languageCount", "multilingual", "modality", "continent", "country", "genre", "subject", "organisation", "license", "licenseType", "availability", "accessInfo", "keywords", "nationalProject", "resourceClass", "_resourceRef", "_selfLink", "id"
-    };
+    protected final static List<String> MINIMAL_FIELDS = ImmutableList.of(
+            "name", "description", "languageCode", "license", "licenseType", "availability", "_selfLink", "id"
+    );
+    
+    protected final static List<String> EXTRA_FIELDS = ImmutableList.of(
+            "creator", "collection", "_languageCount", "multilingual", "modality", "continent", "country", "genre", "subject", "organisation", "accessInfo", "keywords", "nationalProject", "resourceClass", "_resourceRef"
+    );
 
     @Value("${solr.auth.username}")
     private String solrUsermame;
@@ -60,7 +65,7 @@ public class VloSolrConfiguration {
 
     @Bean
     public SolrDocumentQueryFactoryImpl queryFactory() {
-        return new SolrDocumentQueryFactoryImpl(Arrays.asList(DEFAULT_FIELDS));
+        return new SolrDocumentQueryFactoryImpl(MINIMAL_FIELDS, EXTRA_FIELDS);
     }
 
     @Bean(destroyMethod = "close")

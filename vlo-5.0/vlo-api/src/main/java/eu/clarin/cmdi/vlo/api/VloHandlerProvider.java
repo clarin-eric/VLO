@@ -19,11 +19,13 @@ package eu.clarin.cmdi.vlo.api;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.server.ServerRequest;
+import reactor.core.publisher.Mono;
 
 /**
  *
@@ -33,6 +35,13 @@ import org.springframework.web.reactive.function.server.ServerRequest;
 public abstract class VloHandlerProvider {
 
     protected final Splitter FQ_SPLITTER = Splitter.on(':').limit(2);
+
+    protected final <T> Mono<T> applyCache(Mono<T> mono, long ttlSeconds) {
+        if (ttlSeconds > 0) {
+            mono.cache(Duration.ofSeconds(ttlSeconds));
+        }
+        return mono;
+    }
 
     protected Map<String, ? extends Iterable<String>> getFiltersFromRequest(ServerRequest request) {
         final List<String> fq = request.queryParams().get(FILTER_QUERY_PARAMETER);

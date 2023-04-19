@@ -16,8 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.api.service.impl.solr;
 
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;
@@ -61,15 +63,23 @@ public class SolrDocumentQueryFactoryImpl {
     /**
      * Template query for new document queries
      */
-    private final SolrQuery defaultQueryTemplate;
+    private final SolrQuery fullQueryTemplate;
+
+    private final SolrQuery minimalQueryTemplate;
 
     /**
      *
-     * @param documentFields fields that should be included in document queries
+     * @param minimalDocumentFields fields that should be included for all
+     * document queries
+     * @param extraDocumentFields fields that should be included for full
+     * document queries
      */
-    public SolrDocumentQueryFactoryImpl(Collection<String> documentFields) {
-        defaultQueryTemplate = new SolrQuery();
-        defaultQueryTemplate.setFields(documentFields.toArray(new String[]{}));
+    public SolrDocumentQueryFactoryImpl(Collection<String> minimalDocumentFields, Collection<String> extraDocumentFields) {
+        minimalQueryTemplate = new SolrQuery();
+        minimalQueryTemplate.setFields(FluentIterable.from(minimalDocumentFields).toArray(String.class));
+
+        fullQueryTemplate = new SolrQuery();
+        fullQueryTemplate.setFields(FluentIterable.concat(minimalDocumentFields, extraDocumentFields).toArray(String.class));
     }
 
     /**
@@ -80,7 +90,23 @@ public class SolrDocumentQueryFactoryImpl {
      */
     public SolrQuery createDocumentQuery(int start, int rows) {
         // make a query to get all documents that match the selection criteria
-        final SolrQuery query = getDefaultDocumentQuery();
+        final SolrQuery query = getFullDocumentQueryTemplate();
+
+        // set start record and result size limit
+        query.setStart(Math.max(0, start));
+        query.setRows(Math.max(0, rows));
+        return query;
+    }
+
+    /**
+     *
+     * @param start 0 based index of first item to include from results
+     * @param rows
+     * @return
+     */
+    public SolrQuery createLimitedDocumentQuery(int start, int rows) {
+        // make a query to get all documents that match the selection criteria
+        final SolrQuery query = getMinimalDocumentQueryTemplate();
 
         // set start record and result size limit
         query.setStart(Math.max(0, start));
@@ -90,7 +116,7 @@ public class SolrDocumentQueryFactoryImpl {
 
     public SolrQuery createSortedDocumentQuery(String sortField, String sortDirection, int start, int rows) {
         // make a query to get all documents that match the selection criteria
-        final SolrQuery query = getDefaultDocumentQuery();
+        final SolrQuery query = getFullDocumentQueryTemplate();
         // apply field Sorting
         query.addSort(sortField, ORDER.valueOf(sortDirection.toLowerCase()));
 
@@ -102,7 +128,7 @@ public class SolrDocumentQueryFactoryImpl {
 
     public SolrQuery createExpandedDocumentQuery(int start, int rows) {
         // make a query to get all documents that match the selection criteria
-        final SolrQuery query = getDefaultDocumentQuery();
+        final SolrQuery query = getFullDocumentQueryTemplate();
         // we use the 'fast' request handler here to avoid collapsing (assume ranking is not of interest)
         query.setRequestHandler(SOLR_REQUEST_HANDLER_FAST);
         // set offset and limit
@@ -118,7 +144,7 @@ public class SolrDocumentQueryFactoryImpl {
 
     public SolrQuery createDocumentQuery(String docId) {
         // make a query to look up a specific document by its ID
-        final SolrQuery query = getDefaultDocumentQuery();
+        final SolrQuery query = getFullDocumentQueryTemplate();
         // we can use the 'fast' request handler here, document ranking is of no interest
         query.setRequestHandler(SOLR_REQUEST_HANDLER_FAST);
         // consider all documents
@@ -133,7 +159,7 @@ public class SolrDocumentQueryFactoryImpl {
 
     public SolrQuery createDuplicateDocumentsQuery(String docId, String collapseField, String collapseValue, int start, int expansionLimit) {
         // make a query to look up a specific document by its ID
-        SolrQuery query = getDefaultDocumentQuery()
+        SolrQuery query = getFullDocumentQueryTemplate()
                 // we can use the 'fast' request handler here, document ranking is of no interest
                 .setRequestHandler(SOLR_REQUEST_HANDLER_FAST)
                 // consider all documents
@@ -156,7 +182,7 @@ public class SolrDocumentQueryFactoryImpl {
 
     public SolrQuery createFacetQuery(String queryParam, Optional<List<String>> facetFields, Optional<Integer> valueLimit) {
         final String[] facetFieldsArray = facetFields.map(l -> l.toArray(String[]::new)).orElse(FACET_FIELDS_DEFAULT);
-        return getDefaultDocumentQuery()
+        return getMinimalDocumentQueryTemplate()
                 .setRows(0)
                 .setQuery(queryParam)
                 .setFacet(true)
@@ -173,8 +199,12 @@ public class SolrDocumentQueryFactoryImpl {
         return FACET_LIMIT_MAX;
     }
 
-    private SolrQuery getDefaultDocumentQuery() {
-        return defaultQueryTemplate.getCopy();
+    private SolrQuery getFullDocumentQueryTemplate() {
+        return fullQueryTemplate.getCopy();
+    }
+
+    private SolrQuery getMinimalDocumentQueryTemplate() {
+        return minimalQueryTemplate.getCopy();
     }
 
     protected String createFilterQuery(String facetName, String value) {
