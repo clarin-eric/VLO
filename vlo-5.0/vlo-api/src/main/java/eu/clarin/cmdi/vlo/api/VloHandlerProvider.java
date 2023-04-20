@@ -16,9 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import com.github.benmanes.caffeine.cache.AsyncCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalCause;
+import com.github.benmanes.caffeine.cache.RemovalListener;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import java.time.Duration;
 import java.util.Collections;
@@ -49,9 +53,18 @@ public abstract class VloHandlerProvider {
 
         if (cacheStats) {
             builder.recordStats();
+            if (log.isDebugEnabled()) {
+                builder.evictionListener((Object key, Object value, RemovalCause cause) -> {
+                    log.debug("Evicted from cache: '{}'. Cause: {}", key, cause);
+                });
+            }
         }
 
         return builder;
+    }
+
+    protected void logCacheStats(String name, AsyncCache<?, ?> cache) {
+        log.info("Cache stats for {}: {}", name, cache.synchronous().stats());
     }
 
     protected Map<String, ? extends Iterable<String>> getFiltersFromRequest(ServerRequest request) {

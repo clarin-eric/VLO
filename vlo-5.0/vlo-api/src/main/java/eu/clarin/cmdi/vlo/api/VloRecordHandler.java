@@ -25,7 +25,6 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 import java.net.URI;
-import java.time.Duration;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,18 +112,21 @@ public class VloRecordHandler extends VloHandlerProvider {
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
         final String id = request.pathVariable(VloApiRouteConfiguration.ID_PATH_VARIABLE);
 
-        Mono<VloRecord> recordMono = Mono.fromFuture(recordCache.get(id, (i, executor) -> {
+        final Mono<VloRecord> cachedRecordMono = Mono.fromFuture(recordCache.get(id, (i, executor) -> {
             return recordService.getRecordById(i).toFuture();
         }));
 
-        if (cacheStats) {
-            log.info("Cache stats: {}", recordCache.synchronous().stats());
-        }
-
-//        final Mono<VloRecord> recordMono = recordService.getRecordById(id);
-        return recordMono
+        return cachedRecordMono
+                .doOnNext(r -> logCacheStats("Records", recordCache))
                 .flatMap(record -> ServerResponse.ok().bodyValue(record))
                 .switchIfEmpty(ServerResponse.notFound().build());
+    }
+
+    @Override
+    protected void logCacheStats(String name, AsyncCache<?, ?> cache) {
+        if (cacheStats) {
+            super.logCacheStats(name, cache);
+        }
     }
 
 }
