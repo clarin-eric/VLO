@@ -35,9 +35,10 @@ import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 
 /**
- * TODO: OpenAPI documentation with springdoc-openapi-webflux-core 
- * (see <a href="https://medium.com/walmartglobaltech/swagger-implementation-for-webflux-functional-programming-model-8ac55bfce2be">Swagger Implementation for Webflux functional programming model</a> blog post)
- * 
+ * TODO: OpenAPI documentation with springdoc-openapi-webflux-core (see
+ * <a href="https://medium.com/walmartglobaltech/swagger-implementation-for-webflux-functional-programming-model-8ac55bfce2be">Swagger
+ * Implementation for Webflux functional programming model</a> blog post)
+ *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Configuration

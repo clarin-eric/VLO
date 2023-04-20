@@ -41,18 +41,14 @@ public class VloFacetHandler extends VloHandlerProvider {
     @Value("${vlo.api.cache.facet.ttl.seconds:60}")
     private Long facetCacheTTL;
 
-    private <T> Mono<T> applyFacetCache(Mono<T> mono) {
-        return applyCache(mono, facetCacheTTL);
-    }
-
     private final ReactiveVloFacetsService facetsService;
 
     @CrossOrigin
     public Mono<ServerResponse> getFacets(ServerRequest request) {
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
         final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
-        return applyFacetCache(facetsService.getAllFacets(query, filters, Optional.empty(), Optional.empty())
-                .collectList())
+        return facetsService.getAllFacets(query, filters, Optional.empty(), Optional.empty())
+                .collectList()
                 .flatMap(facets -> ServerResponse.ok().bodyValue(facets));
     }
 
@@ -61,7 +57,7 @@ public class VloFacetHandler extends VloHandlerProvider {
         final String facet = request.pathVariable("facet");
         final String query = request.queryParam(QUERY_PARAMETER).orElse("*");
         final Map<String, ? extends Iterable<String>> filters = getFiltersFromRequest(request);
-        return applyFacetCache(facetsService.getFacet(facet, query, filters, Optional.empty()))
+        return facetsService.getFacet(facet, query, filters, Optional.empty())
                 .flatMap(result -> ServerResponse.ok().bodyValue(result));
     }
 }

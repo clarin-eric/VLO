@@ -61,7 +61,7 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     private final String solrPassword;
 
     private final FieldValueLabelService fieldValueLabelService;
-    
+
     private final Converter<SolrDocument, VloRecord> recordConverter;
 
     @Override
@@ -98,6 +98,8 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
 
     @Override
     public Mono<VloRecord> getRecordById(String id) {
+        log.info("Get record by id: {}", id);
+
         final SolrQuery query = queryFactory.createDocumentQuery(id);
         return queryToRecordFlux(query)
                 .next();

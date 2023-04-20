@@ -97,7 +97,7 @@ public class VloRecordHandlerIntegrationTest {
     @BeforeEach
     public void setUp() {
         testHelper = new VloApiIntegrationTestHelper("record", elasticsearchClient);
-        instance = new VloRecordHandler(new VloRecordRepositoryBridge(respository, operations));
+        instance = new VloRecordHandler(new VloRecordRepositoryBridge(respository, operations), null, null, false);
     }
 
     @AfterEach
