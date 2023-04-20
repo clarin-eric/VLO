@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.api.service.impl.solr;
 
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloFacetsService;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
@@ -65,20 +66,20 @@ public class SolrService implements ReactiveVloRecordService, ReactiveVloFacetsS
     private final Converter<SolrDocument, VloRecord> recordConverter;
 
     @Override
-    public Mono<VloRecordSearchResult> getRecords(String queryParam, Map<String, ? extends Iterable<String>> filters, int from, int size) {
-        final SolrQuery query = queryFactory.createLimitedDocumentQuery(from, size);
-        if (queryParam != null) {
-            query.setQuery(queryParam);
+    public Mono<VloRecordSearchResult> getRecords(VloRecordsRequest request) {
+        final SolrQuery solrQuery = queryFactory.createLimitedDocumentQuery(request.getFrom(), request.getSize());
+        if (request.getQuery() != null) {
+            solrQuery.setQuery(request.getQuery());
         }
-        applyFilterQuery(query, filters);
+        applyFilterQuery(solrQuery, request.getFilters());
 
-        return queryToResponseMono(query)
+        return queryToResponseMono(solrQuery)
                 .map(response -> {
                     final SolrDocumentList results = response.getResults();
                     final List<VloRecord> records = FluentIterable.from(results)
                             .transform(recordConverter::convert)
                             .toList();
-                    return new VloRecordSearchResult(records, response.getResults().getNumFound(), from);
+                    return new VloRecordSearchResult(records, response.getResults().getNumFound(), request.getFrom());
                 });
     }
 

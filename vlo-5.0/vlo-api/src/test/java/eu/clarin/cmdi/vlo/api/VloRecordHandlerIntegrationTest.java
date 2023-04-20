@@ -80,6 +80,9 @@ public class VloRecordHandlerIntegrationTest {
 
     private final static Duration RESPONSE_TIMEOUT = Duration.ofSeconds(10);
 
+    private static final long CACHE_MAX_SIZE = 0L;
+    private static final long CACHE_TTL = 0L;
+
     @Autowired
     private ElasticsearchClient elasticsearchClient;
 
@@ -97,7 +100,12 @@ public class VloRecordHandlerIntegrationTest {
     @BeforeEach
     public void setUp() {
         testHelper = new VloApiIntegrationTestHelper("record", elasticsearchClient);
-        instance = new VloRecordHandler(new VloRecordRepositoryBridge(respository, operations), null, null, false);
+        instance = new VloRecordHandler(
+                new VloRecordRepositoryBridge(respository, operations),
+                CACHE_TTL, CACHE_MAX_SIZE,
+                CACHE_TTL, CACHE_MAX_SIZE,
+                false);
+
     }
 
     @AfterEach
@@ -180,7 +188,7 @@ public class VloRecordHandlerIntegrationTest {
         }
 
         // create and insert record with random string
-        final VloRecord record = testHelper.newRecord(respository, insertedIds, r -> {
+        testHelper.newRecord(respository, insertedIds, r -> {
             r.setId("my_id_testGetRecords");
             // set field 'name' with random string as value
             r.setFields(ImmutableMap.of("name", ImmutableList.of(randomString)));

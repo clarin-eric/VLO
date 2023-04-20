@@ -16,11 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.api.service;
 
+import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import eu.clarin.cmdi.vlo.elasticsearch.VloRecordRepository;
 import eu.clarin.cmdi.vlo.util.Pagination;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -53,15 +53,17 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
     }
 
     @Override
-    public Mono<VloRecordSearchResult> getRecords(final String query, Map<String, ? extends Iterable<String>> filters, int start, int size) {
-        final Pageable pageable = Pagination.pageRequestFor(start, size);
+    public Mono<VloRecordSearchResult> getRecords(VloRecordsRequest request) {
+        final Pageable pageable = Pagination.pageRequestFor(request.getFrom(), request.getSize());
+        final String query = request.getQuery();
+
         if (query == null) {
             final Mono<Long> countMono = recordRepository.countByIdNotNull();
             final Flux<VloRecord> recordsFlux = recordRepository.findByIdNotNull(pageable);
             return createSearchResultMono(countMono, recordsFlux, pageable);
         } else {
-            final Flux<VloRecord> recordsFlux = queryToRecordsFlux(query, filters, pageable);
-            final Mono<Long> countMono = getRecordCount(query, filters);
+            final Flux<VloRecord> recordsFlux = queryToRecordsFlux(query, request.getFilters(), pageable);
+            final Mono<Long> countMono = getRecordCount(query, request.getFilters());
             return createSearchResultMono(countMono, recordsFlux, pageable);
         }
     }
@@ -104,7 +106,6 @@ public class VloRecordRepositoryBridge implements ReactiveVloRecordService {
         final Mono<String> qMono = Mono.justOrEmpty(queryParam);
 
         //TODO: apply filters
-        
         return qMono
                 .doOnNext(qParam -> log.debug("Query in request: '{}'", qParam))
                 .map(qParam -> {

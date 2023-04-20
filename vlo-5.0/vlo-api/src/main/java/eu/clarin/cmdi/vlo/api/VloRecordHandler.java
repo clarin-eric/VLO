@@ -16,11 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.api;
 
+import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
 import com.github.benmanes.caffeine.cache.AsyncCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
@@ -43,24 +45,25 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class VloRecordHandler extends VloHandlerProvider {
 
-    private final Long recordCacheTTL;
-    private final Long recordCacheMaxSize;
     private final boolean cacheStats;
 
-    private AsyncCache<String, VloRecord> recordCache;
+    private final AsyncCache<String, VloRecord> recordCache;
+    private final AsyncCache<VloRecordsRequest, VloRecordSearchResult> searchCache;
 
     private final ReactiveVloRecordService recordService;
 
-    public VloRecordHandler(ReactiveVloRecordService recordService, @Value("${vlo.api.cache.record.ttl.seconds:60}") Long recordCacheTTL, @Value("${vlo.api.cache.record.maxSize:1000}") Long recordCacheMaxSize, @Value("${vlo.api.cache.stats:false}") boolean cacheStats) {
+    public VloRecordHandler(ReactiveVloRecordService recordService,
+            @Value("${vlo.api.cache.record.ttl.seconds:60}") Long recordCacheTTL,
+            @Value("${vlo.api.cache.record.maxSize:1000}") Long recordCacheMaxSize,
+            @Value("${vlo.api.cache.search.ttl.seconds:60}") Long searchCacheTTL,
+            @Value("${vlo.api.cache.search.maxSize:1000}") Long searchCacheMaxSize,
+            @Value("${vlo.api.cache.stats:false}") boolean cacheStats) {
         this.recordService = recordService;
-        this.recordCacheTTL = recordCacheTTL;
         this.cacheStats = cacheStats;
-        this.recordCacheMaxSize = recordCacheMaxSize;
-        createCaches();
-    }
 
-    private void createCaches() {
+        // create caches
         recordCache = cacheBuilder(recordCacheTTL, recordCacheMaxSize).buildAsync();
+        searchCache = cacheBuilder(searchCacheTTL, searchCacheMaxSize).buildAsync();
     }
 
     private <KEY, VALUE> Caffeine<KEY, VALUE> cacheBuilder(Long ttlSeconds, Long maxSize) {
@@ -86,8 +89,14 @@ public class VloRecordHandler extends VloHandlerProvider {
         int from = request.queryParam(FROM_PARAMETER).map(Integer::valueOf).orElse(0);
         int size = request.queryParam(ROWS_PARAMETER).map(Integer::valueOf).orElse(10);
 
-        return recordService.getRecords(query, filters, from, size)
-                .doOnNext(results -> log.debug("Results: {}", results))
+        final VloRecordsRequest rr = new VloRecordsRequest(query, filters, from, size);
+
+        final Mono<VloRecordSearchResult> cachedRecordsMono = Mono.fromFuture(searchCache.get(rr,
+                (r, executor) -> recordService.getRecords(r).toFuture()
+        ));
+
+        return cachedRecordsMono
+                .doOnNext(r -> logCacheStats("Records (search)", recordCache))
                 //map to response
                 .flatMap(resultList -> ServerResponse.ok().bodyValue(resultList))
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
@@ -101,6 +110,10 @@ public class VloRecordHandler extends VloHandlerProvider {
                     log.info("Saving record {} repository", record.getId());
                 })
                 .flatMap(recordService::saveRecord)
+                //invalidate record cache for this id
+                .doOnSuccess(r -> recordCache.synchronous().invalidate(r.getId()))
+                //invalidate all of the search cache
+                .doOnSuccess(r -> searchCache.synchronous().invalidateAll())
                 .flatMap(response -> {
                     final URI uri = request.uriBuilder().pathSegment(response.getId()).build();
                     return ServerResponse.created(uri).bodyValue(response.toString());
@@ -112,12 +125,12 @@ public class VloRecordHandler extends VloHandlerProvider {
     public Mono<ServerResponse> getRecordFromRepository(ServerRequest request) {
         final String id = request.pathVariable(VloApiRouteConfiguration.ID_PATH_VARIABLE);
 
-        final Mono<VloRecord> cachedRecordMono = Mono.fromFuture(recordCache.get(id, (i, executor) -> {
-            return recordService.getRecordById(i).toFuture();
-        }));
+        final Mono<VloRecord> cachedRecordMono = Mono.fromFuture(recordCache.get(id,
+                (i, executor) -> recordService.getRecordById(i).toFuture()
+        ));
 
         return cachedRecordMono
-                .doOnNext(r -> logCacheStats("Records", recordCache))
+                .doOnNext(r -> logCacheStats("Record (by id)", recordCache))
                 .flatMap(record -> ServerResponse.ok().bodyValue(record))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
