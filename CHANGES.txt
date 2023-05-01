@@ -1,6 +1,11 @@
 Bug fixes and new features
 --------------------------
-VLO 4.11.3 (December 2022)
+
+VLO 4.11.4 (May 2022)
+
+* Using updated linkchecker persistence library (changes in database schema)
+
+VLO 4.11.3 (March 2023)
 
 * Using new linkchecker persistence library to access resource availability status
 information
