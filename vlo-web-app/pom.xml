@@ -6,19 +6,19 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.11.4-RC1</version>
+        <version>4.11.4</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-web-app</artifactId>
     <packaging>war</packaging>
-    <version>4.11.4-RC1</version>
+    <version>4.11.4</version>
     <name>VLO Web Application</name>
     <description></description>
 
     <properties>
-        <wicket.version>8.14.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
+        <wicket.version>8.15.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
         <spring.version>5.3.27</spring.version>
         <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
         <!-- selects the appender for the log4j root logger -->
