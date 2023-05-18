@@ -34,6 +34,8 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH
 import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.RequestPredicates;
 
+import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
+
 /**
  * TODO: OpenAPI documentation with springdoc-openapi-webflux-core (see
  * <a href="https://medium.com/walmartglobaltech/swagger-implementation-for-webflux-functional-programming-model-8ac55bfce2be">Swagger
@@ -60,19 +62,19 @@ public class VloApiRouteConfiguration {
 
     @Bean
     public RouterFunction<ServerResponse> recordsRoute(VloRecordHandler recordHandler) {
-        return RouterFunctions
+        return route()
                 // GET /records
-                .route(GET(RECORDS_PATH),
-                        recordHandler::getRecords)
+                .GET(RECORDS_PATH, recordHandler::getRecords,
+                        ops -> ops.operationId("getRecords")).build()
                 // GET /records/count
-                .andRoute(GET(RECORDS_COUNT_PATH),
-                        recordHandler::getRecordCount)
+                .and(route().GET(RECORDS_COUNT_PATH, recordHandler::getRecordCount,
+                        ops -> ops.operationId("countRecords")).build())
                 // GET /records/{id}
-                .andRoute(GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}"),
-                        recordHandler::getRecordFromRepository)
+                .and(route().GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}", recordHandler::getRecordFromRepository,
+                        ops -> ops.operationId("getRecord")).build())
                 // PUT /records
-                .andRoute(PUT(RECORDS_PATH),
-                        recordHandler::saveRecord);
+                .and(route().PUT(RECORDS_PATH, recordHandler::saveRecord,
+                        ops -> ops.operationId("saveRecord")).build());
     }
 
     @Bean

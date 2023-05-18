@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -56,6 +58,14 @@ public class VloApiConfiguration {
             return Schedulers.parallel();
         }
 
+    }
+
+    @Bean
+    public OpenAPI openApi() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Virtual Language Observatory API")
+                        .version("5.0"));
     }
 
 }
