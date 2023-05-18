@@ -22,6 +22,7 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import eu.clarin.cmdi.vlo.api.configuration.VloApiRouteConfiguration;
 import eu.clarin.cmdi.vlo.api.service.ReactiveVloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordCountResult;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
@@ -78,7 +79,7 @@ public class VloRecordHandler extends VloHandlerProvider {
         return recordService.getRecordCount(query, filters)
                 .doOnNext(count -> log.debug("Search result count: {}", count))
                 //map to response
-                .flatMap(count -> ServerResponse.ok().bodyValue(count))
+                .flatMap(count -> ServerResponse.ok().bodyValue(new VloRecordCountResult(count)))
                 .switchIfEmpty(ServerResponse.badRequest().bodyValue("No query in request"));
     }
 

@@ -61,6 +61,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.iterableWithSize;
 import org.springframework.http.HttpStatusCode;
 import eu.clarin.cmdi.vlo.api.service.VloRecordRepositoryBridge;
+import eu.clarin.cmdi.vlo.data.model.VloRecordCountResult;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import static org.hamcrest.Matchers.isA;
 
@@ -122,16 +123,16 @@ public class VloRecordHandlerIntegrationTest {
         assertNotNull(response);
         assertInstanceOf(EntityResponse.class, response);
         Object entity = ((EntityResponse) response).entity();
-        assertInstanceOf(Number.class, entity);
-        final Number firstCount = (Number) entity;
+        assertInstanceOf(VloRecordCountResult.class, entity);
+        final Long firstCount = ((VloRecordCountResult) entity).getNumFound();
 
         testHelper.newRecord(respository, insertedIds, Objects::requireNonNull);
 
         response = instance.getRecordCount(request).block(RESPONSE_TIMEOUT);
         assertNotNull(response);
-        Number secondCount = (Number) ((EntityResponse) response).entity();
+        final Long secondCount = ((EntityResponse<VloRecordCountResult>) response).entity().getNumFound();
 
-        assertTrue(secondCount.longValue() - firstCount.longValue() == 1);
+        assertEquals(1L, secondCount - firstCount);
     }
 
     @Test
@@ -148,8 +149,8 @@ public class VloRecordHandlerIntegrationTest {
             assertNotNull(response);
             assertInstanceOf(EntityResponse.class, response);
             Object entity = ((EntityResponse) response).entity();
-            assertInstanceOf(Number.class, entity);
-            assertEquals(0, ((Number) entity).intValue());
+            assertInstanceOf(VloRecordCountResult.class, entity);
+            assertEquals(0L, ((VloRecordCountResult) entity).getNumFound());
         }
 
         testHelper.newRecord(respository, insertedIds, r -> {
@@ -161,7 +162,7 @@ public class VloRecordHandlerIntegrationTest {
             Mono<ServerResponse> responseMono = instance.getRecordCount(request);
             ServerResponse response = responseMono.block(RESPONSE_TIMEOUT);
             assertNotNull(response);
-            assertEquals(1, ((Number) ((EntityResponse) response).entity()).intValue());
+            assertEquals(1L, ((VloRecordCountResult) ((EntityResponse) response).entity()).getNumFound());
         }
     }
 

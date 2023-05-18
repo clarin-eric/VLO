@@ -19,21 +19,34 @@ package eu.clarin.cmdi.vlo.api.configuration;
 import eu.clarin.cmdi.vlo.api.VloFacetHandler;
 import eu.clarin.cmdi.vlo.api.VloMappingHandler;
 import eu.clarin.cmdi.vlo.api.VloRecordHandler;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordCountResult;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FACETS_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_REQUEST_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.server.RequestPredicate;
+import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.FACETS_PATH;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_REQUEST_PATH;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORD_MAPPING_RESULT_PATH;
-import org.springframework.web.reactive.function.server.RequestPredicate;
-import org.springframework.web.reactive.function.server.RequestPredicates;
-
+import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
+import static org.springdoc.core.fn.builders.arrayschema.Builder.arraySchemaBuilder;
+import static org.springdoc.core.fn.builders.content.Builder.contentBuilder;
+import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
+import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
+import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
 import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
 
 /**
@@ -65,16 +78,63 @@ public class VloApiRouteConfiguration {
         return route()
                 // GET /records
                 .GET(RECORDS_PATH, recordHandler::getRecords,
-                        ops -> ops.operationId("getRecords")).build()
+                        ops -> ops
+                                .operationId("getRecords")
+                                .description("Get all records or a specific subset")
+                                .parameter(recordQueryParamBuilder())
+                                .parameter(recordFilterParamBuilder())
+                                .parameter(parameterBuilder().name(FROM_PARAMETER)
+                                        .description("Record offset (zero-based index)")
+                                        .example("0"))
+                                .parameter(parameterBuilder().name(ROWS_PARAMETER).description("Maximum number of rows to retrieve")
+                                        .example("10"))
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Records found")
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(VloRecordSearchResult.class))))
+                ).build()
                 // GET /records/count
                 .and(route().GET(RECORDS_COUNT_PATH, recordHandler::getRecordCount,
-                        ops -> ops.operationId("countRecords")).build())
+                        ops -> ops
+                                .operationId("countRecords")
+                                .description("Get the number of all records or a specific subset")
+                                .parameter(recordQueryParamBuilder())
+                                .parameter(recordFilterParamBuilder())
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Records found")
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(VloRecordCountResult.class))))
+                ).build())
                 // GET /records/{id}
                 .and(route().GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}", recordHandler::getRecordFromRepository,
-                        ops -> ops.operationId("getRecord")).build())
+                        ops -> ops
+                                .operationId("getRecord")
+                                .description("Get an individual record")
+                                .parameter(parameterBuilder().in(ParameterIn.PATH).name(ID_PATH_VARIABLE))
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Record found")
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(VloRecord.class))))
+                                .response(responseBuilder().responseCode("404")
+                                        .description("Record not found"))
+                ).build())
                 // PUT /records
-                .and(route().PUT(RECORDS_PATH, recordHandler::saveRecord,
-                        ops -> ops.operationId("saveRecord")).build());
+                .and(route().POST(RECORDS_PATH, recordHandler::saveRecord,
+                        ops -> ops
+                                .operationId("saveRecord")
+                                .description("Save a new record")
+                                .requestBody(requestBodyBuilder()
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(VloRecord.class))))
+                                .response(responseBuilder().responseCode("201")
+                                        .description("Record created"))
+                                .response(responseBuilder().responseCode("400")
+                                        .description("Empty or invalid request body"))
+                ).build());
     }
 
     @Bean
@@ -98,5 +158,17 @@ public class VloApiRouteConfiguration {
 
     private static RequestPredicate PUT(String pattern) {
         return RequestPredicates.PUT(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
+    }
+
+    private static org.springdoc.core.fn.builders.parameter.Builder recordQueryParamBuilder() {
+        return parameterBuilder().name(QUERY_PARAMETER)
+                .description("Query")
+                .example("*");
+    }
+
+    private static org.springdoc.core.fn.builders.parameter.Builder recordFilterParamBuilder() {
+        return parameterBuilder().name(FILTER_QUERY_PARAMETER)
+                .description("Filter query")
+                .array(arraySchemaBuilder());
     }
 }
