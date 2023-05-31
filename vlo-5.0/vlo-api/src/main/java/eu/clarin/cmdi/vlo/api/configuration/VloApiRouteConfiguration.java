@@ -80,6 +80,7 @@ public class VloApiRouteConfiguration {
                 .GET(RECORDS_PATH, recordHandler::getRecords,
                         ops -> ops
                                 .operationId("getRecords")
+                                .tag("Records")
                                 .description("Get all records or a specific subset")
                                 .parameter(recordQueryParamBuilder())
                                 .parameter(recordFilterParamBuilder())
@@ -98,6 +99,7 @@ public class VloApiRouteConfiguration {
                 .and(route().GET(RECORDS_COUNT_PATH, recordHandler::getRecordCount,
                         ops -> ops
                                 .operationId("countRecords")
+                                .tag("Records")
                                 .description("Get the number of all records or a specific subset")
                                 .parameter(recordQueryParamBuilder())
                                 .parameter(recordFilterParamBuilder())
@@ -111,6 +113,7 @@ public class VloApiRouteConfiguration {
                 .and(route().GET(RECORDS_PATH + "/{" + ID_PATH_VARIABLE + "}", recordHandler::getRecordFromRepository,
                         ops -> ops
                                 .operationId("getRecord")
+                                .tag("Records")
                                 .description("Get an individual record")
                                 .parameter(parameterBuilder().in(ParameterIn.PATH).name(ID_PATH_VARIABLE))
                                 .response(responseBuilder().responseCode("200")
@@ -125,6 +128,7 @@ public class VloApiRouteConfiguration {
                 .and(route().POST(RECORDS_PATH, recordHandler::saveRecord,
                         ops -> ops
                                 .operationId("saveRecord")
+                                .tag("Records")
                                 .description("Save a new record")
                                 .requestBody(requestBodyBuilder()
                                         .content(contentBuilder()
@@ -169,6 +173,6 @@ public class VloApiRouteConfiguration {
     private static org.springdoc.core.fn.builders.parameter.Builder recordFilterParamBuilder() {
         return parameterBuilder().name(FILTER_QUERY_PARAMETER)
                 .description("Filter query")
-                .array(arraySchemaBuilder());
+                .array(arraySchemaBuilder().minItems(1));
     }
 }

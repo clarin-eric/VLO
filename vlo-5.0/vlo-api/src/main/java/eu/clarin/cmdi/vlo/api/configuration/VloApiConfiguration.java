@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.api.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,8 +65,10 @@ public class VloApiConfiguration {
     public OpenAPI openApi() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Virtual Language Observatory API")
-                        .version("5.0"));
+                        .title("VLO API")
+                        .version("5.0")
+                        .summary("This API gives access to the indexed records of the Virtual Language Observatory (VLO) and its search facet, and makes it possible to carry out mapping operations.")
+                        .contact(new Contact().name("VLO developers").email("vlo@clarin.eu")));
     }
 
 }
