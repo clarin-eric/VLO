@@ -70,5 +70,4 @@ public class VloApiConfiguration {
                         .summary("This API gives access to the indexed records of the Virtual Language Observatory (VLO) and its search facet, and makes it possible to carry out mapping operations.")
                         .contact(new Contact().name("VLO developers").email("vlo@clarin.eu")));
     }
-
 }
