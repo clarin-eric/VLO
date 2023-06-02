@@ -47,6 +47,7 @@ import static org.springdoc.core.fn.builders.content.Builder.contentBuilder;
 import static org.springdoc.core.fn.builders.parameter.Builder.parameterBuilder;
 import static org.springdoc.core.fn.builders.requestbody.Builder.requestBodyBuilder;
 import static org.springdoc.core.fn.builders.schema.Builder.schemaBuilder;
+import static org.springdoc.core.fn.builders.securityrequirement.Builder.securityRequirementBuilder;
 import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
 
 /**
@@ -58,10 +59,10 @@ import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
  */
 @Configuration
 public class VloApiRouteConfiguration {
-
+    
     public final static String ID_PATH_VARIABLE = "id";
     public final static String FACET_PATH_VARIABLE = "facet";
-
+    
     @Bean
     public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
         return RouterFunctions
@@ -72,7 +73,7 @@ public class VloApiRouteConfiguration {
                 .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}"),
                         mappingHandler::getMappingResult);
     }
-
+    
     @Bean
     public RouterFunction<ServerResponse> recordsRoute(VloRecordHandler recordHandler) {
         return route()
@@ -130,6 +131,7 @@ public class VloApiRouteConfiguration {
                                 .operationId("saveRecord")
                                 .tag("Records")
                                 .description("Save a new record")
+                                .security(securityRequirementBuilder().name("basicAuth"))
                                 .requestBody(requestBodyBuilder()
                                         .content(contentBuilder()
                                                 .mediaType(MediaType.APPLICATION_JSON_VALUE)
@@ -138,9 +140,13 @@ public class VloApiRouteConfiguration {
                                         .description("Record created"))
                                 .response(responseBuilder().responseCode("400")
                                         .description("Empty or invalid request body"))
+                                .response(responseBuilder().responseCode("401")
+                                        .description("Not logged in with valid credentials"))
+                                .response(responseBuilder().responseCode("403")
+                                        .description("The authenticated user does not have the right to save new records"))
                 ).build());
     }
-
+    
     @Bean
     public RouterFunction<ServerResponse> facetsRoute(VloFacetHandler facetHandler) {
         return RouterFunctions
@@ -151,25 +157,25 @@ public class VloApiRouteConfiguration {
                 .andRoute(GET(FACETS_PATH + "/{" + FACET_PATH_VARIABLE + "}"),
                         facetHandler::getFacet);
     }
-
+    
     private static RequestPredicate GET(String pattern) {
         return RequestPredicates.GET(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
-
+    
     private static RequestPredicate POST(String pattern) {
         return RequestPredicates.POST(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
-
+    
     private static RequestPredicate PUT(String pattern) {
         return RequestPredicates.PUT(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
-
+    
     private static org.springdoc.core.fn.builders.parameter.Builder recordQueryParamBuilder() {
         return parameterBuilder().name(QUERY_PARAMETER)
                 .description("Query")
                 .example("*");
     }
-
+    
     private static org.springdoc.core.fn.builders.parameter.Builder recordFilterParamBuilder() {
         return parameterBuilder().name(FILTER_QUERY_PARAMETER)
                 .description("Filter query")
