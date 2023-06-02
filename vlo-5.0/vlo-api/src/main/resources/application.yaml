@@ -7,6 +7,10 @@ server:
   port: 8708
 vlo:
   api:
+    security:
+      admin:
+        username: 'admin'
+        #password: '{bcrypt}$2a$10$/0Dh/zJYIGpMPDKX2ZoW3OlBonhLhIAhvBfAT7TKz8BODcnEEwjQi'
     mapping:
       vocabularyRegistryUrl: 'http://clavas.clarin.eu/clavas/public/api/find-concepts'
       profileSchemaUrl: 'https://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/1.x/profiles/{PROFILE_ID}/xsd'

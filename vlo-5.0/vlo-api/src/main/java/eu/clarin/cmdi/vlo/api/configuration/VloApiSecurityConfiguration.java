@@ -16,6 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.api.configuration;
 
+import static eu.clarin.cmdi.vlo.api.VloApiSecurityRoles.ROLE_ADMIN;
+import static eu.clarin.cmdi.vlo.api.VloApiSecurityRoles.ROLE_USER;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -37,6 +40,15 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 public class VloApiSecurityConfiguration {
 
+    @Value("${vlo.api.security.admin.username}")
+    private String adminUser;
+
+    /**
+     * Encoded password, should start with something like {bcrypt}$2a$10$
+     */
+    @Value("${vlo.api.security.admin.password}")
+    private String adminPassword;
+
     @Bean
     public SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
@@ -45,7 +57,7 @@ public class VloApiSecurityConfiguration {
                 .authorizeExchange(exchanges
                         -> exchanges
                         .pathMatchers(HttpMethod.POST, "/records")
-                        .hasAnyRole("ADMIN")
+                        .hasAnyRole(ROLE_ADMIN)
                         .anyExchange().permitAll()
                 )
                 .httpBasic(withDefaults())
@@ -57,11 +69,10 @@ public class VloApiSecurityConfiguration {
 
     @Bean
     public MapReactiveUserDetailsService userDetailsService() {
-        //TODO: switcht to user builder that is fit for production
-        User.UserBuilder userBuilder = User.withDefaultPasswordEncoder();
-        UserDetails admin = userBuilder.username("admin")
-                .password("admin")
-                .roles("USER", "ADMIN")
+        final UserDetails admin = User
+                .withUsername(adminUser)
+                .password(adminPassword)
+                .roles(ROLE_USER, ROLE_ADMIN)
                 .build();
         return new MapReactiveUserDetailsService(admin);
     }
