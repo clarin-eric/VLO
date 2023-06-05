@@ -2,13 +2,15 @@ language: java
 jdk:
 - openjdk17
 
-before_install:
+install: skip
+before_script:
 - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
+- cd 'vlo-5.0/'
 script:
 - bash -c 'if [ "${TRAVIS_TAG}" ]; then mvn versions:set -DnewVersion=${TRAVIS_TAG} versions:commit; fi'
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 - mvn test -B
-- mvn clean install -DskipTests=true -Pdocker
+# - mvn clean install -DskipTests=true -Pdocker
 deploy:
   provider: releases
   prerelease: true
