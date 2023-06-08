@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.api.configuration;
 import eu.clarin.cmdi.vlo.api.VloFacetHandler;
 import eu.clarin.cmdi.vlo.api.VloMappingHandler;
 import eu.clarin.cmdi.vlo.api.VloRecordHandler;
+import eu.clarin.cmdi.vlo.data.model.Facet;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordCountResult;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
@@ -51,18 +52,18 @@ import static org.springdoc.core.fn.builders.securityrequirement.Builder.securit
 import static org.springdoc.webflux.core.fn.SpringdocRouteBuilder.route;
 
 /**
- * TODO: OpenAPI documentation with springdoc-openapi-webflux-core (see
- * <a href="https://medium.com/walmartglobaltech/swagger-implementation-for-webflux-functional-programming-model-8ac55bfce2be">Swagger
- * Implementation for Webflux functional programming model</a> blog post)
+ *
+ * This class defines the routes for the API, and specifies the OpenAPI
+ * documentation
  *
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 @Configuration
 public class VloApiRouteConfiguration {
-    
+
     public final static String ID_PATH_VARIABLE = "id";
     public final static String FACET_PATH_VARIABLE = "facet";
-    
+
     @Bean
     public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
         return RouterFunctions
@@ -73,7 +74,7 @@ public class VloApiRouteConfiguration {
                 .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}"),
                         mappingHandler::getMappingResult);
     }
-    
+
     @Bean
     public RouterFunction<ServerResponse> recordsRoute(VloRecordHandler recordHandler) {
         return route()
@@ -146,36 +147,63 @@ public class VloApiRouteConfiguration {
                                         .description("The authenticated user does not have the right to save new records"))
                 ).build());
     }
-    
+
     @Bean
     public RouterFunction<ServerResponse> facetsRoute(VloFacetHandler facetHandler) {
-        return RouterFunctions
+        return route()
                 // GET /facets
-                .route(GET(FACETS_PATH),
-                        facetHandler::getFacets)
-                // GET /facets
-                .andRoute(GET(FACETS_PATH + "/{" + FACET_PATH_VARIABLE + "}"),
-                        facetHandler::getFacet);
+                .GET(FACETS_PATH, facetHandler::getFacets,
+                        ops -> ops
+                                .operationId("getFacets")
+                                .tag("Facets")
+                                .description("Get the facets and their (top) values and their counts")
+                                .parameter(recordQueryParamBuilder())
+                                .parameter(recordFilterParamBuilder())
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Facets found")
+                                        .content(contentBuilder()
+                                                .array(arraySchemaBuilder()
+                                                        .schema(schemaBuilder().implementation(Facet.class))
+                                                )
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)))
+                ).build()
+                // GET /facets/{facet}
+                .and(route().GET(FACETS_PATH + "/{" + FACET_PATH_VARIABLE + "}", facetHandler::getFacet,
+                        ops -> ops
+                                .operationId("getFacet")
+                                .tag("Facets")
+                                .description("Get an individual facet and its (top) values and its counts")
+                                .parameter(parameterBuilder().in(ParameterIn.PATH).name(FACET_PATH_VARIABLE))
+                                .parameter(recordQueryParamBuilder())
+                                .parameter(recordFilterParamBuilder())
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Facet found")
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(Facet.class))))
+                                .response(responseBuilder().responseCode("404")
+                                        .description("Facet not found"))
+                ).build());
     }
-    
+
     private static RequestPredicate GET(String pattern) {
         return RequestPredicates.GET(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
-    
+
     private static RequestPredicate POST(String pattern) {
         return RequestPredicates.POST(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
-    
+
     private static RequestPredicate PUT(String pattern) {
         return RequestPredicates.PUT(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
     }
-    
+
     private static org.springdoc.core.fn.builders.parameter.Builder recordQueryParamBuilder() {
         return parameterBuilder().name(QUERY_PARAMETER)
                 .description("Query")
                 .example("*");
     }
-    
+
     private static org.springdoc.core.fn.builders.parameter.Builder recordFilterParamBuilder() {
         return parameterBuilder().name(FILTER_QUERY_PARAMETER)
                 .description("Filter query")

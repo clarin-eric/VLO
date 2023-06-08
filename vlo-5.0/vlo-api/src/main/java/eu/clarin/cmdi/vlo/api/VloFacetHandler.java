@@ -36,6 +36,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import reactor.core.publisher.Flux;
 
 /**
  *
@@ -93,9 +94,10 @@ public class VloFacetHandler extends VloHandlerProvider {
 
         return cachedFacetMono
                 // list to single facet
-                .map(list -> list.get(0))
+                .flatMap(list -> Flux.fromIterable(list).next()) // if the list is empty, this results in an empty mono
                 .doOnNext(r -> logCacheStats("Facet", facetCache))
-                .flatMap(result -> ServerResponse.ok().bodyValue(result));
+                .flatMap(result -> ServerResponse.ok().bodyValue(result))
+                .switchIfEmpty(ServerResponse.notFound().build());
     }
 
     @AllArgsConstructor
