@@ -22,6 +22,8 @@ import eu.clarin.cmdi.vlo.api.VloRecordHandler;
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordCountResult;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingProcessingTicket;
+import eu.clarin.cmdi.vlo.data.model.VloRecordMappingRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FACETS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
@@ -36,10 +38,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.server.RequestPredicate;
-import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import static org.springdoc.core.fn.builders.apiresponse.Builder.responseBuilder;
@@ -63,17 +62,6 @@ public class VloApiRouteConfiguration {
 
     public final static String ID_PATH_VARIABLE = "id";
     public final static String FACET_PATH_VARIABLE = "facet";
-
-    @Bean
-    public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
-        return RouterFunctions
-                // POST /recordMapping/request
-                .route(POST(RECORD_MAPPING_REQUEST_PATH),
-                        mappingHandler::requestMapping)
-                // GET /recordMapping/result/{id}
-                .andRoute(GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}"),
-                        mappingHandler::getMappingResult);
-    }
 
     @Bean
     public RouterFunction<ServerResponse> recordsRoute(VloRecordHandler recordHandler) {
@@ -186,16 +174,48 @@ public class VloApiRouteConfiguration {
                 ).build());
     }
 
-    private static RequestPredicate GET(String pattern) {
-        return RequestPredicates.GET(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
-    }
-
-    private static RequestPredicate POST(String pattern) {
-        return RequestPredicates.POST(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
-    }
-
-    private static RequestPredicate PUT(String pattern) {
-        return RequestPredicates.PUT(pattern).and(RequestPredicates.accept(MediaType.APPLICATION_JSON));
+    @Bean
+    public RouterFunction<ServerResponse> mappingRoute(VloMappingHandler mappingHandler) {
+        // POST /recordMapping/request
+        return route()
+                .POST(RECORD_MAPPING_REQUEST_PATH, mappingHandler::requestMapping,
+                        ops -> ops
+                                .operationId("submitMappingRequest")
+                                .tag("Mapping")
+                                .description("Submit a new mapping request")
+                                .security(securityRequirementBuilder().name("basicAuth"))
+                                .requestBody(requestBodyBuilder()
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(VloRecordMappingRequest.class))))
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Request accepted, ticket created")
+                                        .content(contentBuilder()
+                                                .schema(schemaBuilder()
+                                                        .implementation(VloRecordMappingProcessingTicket.class)))
+                                )
+                                .response(responseBuilder().responseCode("400")
+                                        .description("Empty or invalid request body"))
+                                .response(responseBuilder().responseCode("401")
+                                        .description("Not logged in with valid credentials"))
+                                .response(responseBuilder().responseCode("403")
+                                        .description("The authenticated user does not have the right to save new records"))
+                ).build()
+                // GET /recordMapping/result/{id}
+                .and(route().GET(RECORD_MAPPING_RESULT_PATH + "/{" + ID_PATH_VARIABLE + "}", mappingHandler::getMappingResult,
+                        ops -> ops
+                                .operationId("getMappingResult")
+                                .tag("Mapping")
+                                .description("Get results for mapping request")
+                                .parameter(parameterBuilder().in(ParameterIn.PATH)
+                                        .name(ID_PATH_VARIABLE)
+                                        .description("Mapping request identifier from the ticket obtained on request creation"))
+                                .response(responseBuilder().responseCode("200")
+                                        .description("Record found for mapping request")
+                                        .content(contentBuilder()
+                                                .mediaType(MediaType.APPLICATION_JSON_VALUE)
+                                                .schema(schemaBuilder().implementation(VloRecord.class))))
+                ).build());
     }
 
     private static org.springdoc.core.fn.builders.parameter.Builder recordQueryParamBuilder() {

@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.api.configuration;
 
 import static eu.clarin.cmdi.vlo.api.VloApiSecurityRoles.ROLE_ADMIN;
 import static eu.clarin.cmdi.vlo.api.VloApiSecurityRoles.ROLE_USER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,7 +57,8 @@ public class VloApiSecurityConfiguration {
                 // Best practice to use both for defense in depth
                 .authorizeExchange(exchanges
                         -> exchanges
-                        .pathMatchers(HttpMethod.POST, "/records")
+                        //posting of records requires authorization
+                        .pathMatchers(HttpMethod.POST, RECORDS_PATH)
                         .hasAnyRole(ROLE_ADMIN)
                         .anyExchange().permitAll()
                 )
