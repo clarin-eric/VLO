@@ -16,11 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.importer;
 
-import eu.clarin.cmdi.vlo.importer.linkcheck.AvailabilityScoreAccumulator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.google.common.collect.Sets;
-import com.google.common.collect.Streams;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
@@ -28,7 +26,6 @@ import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus;
-import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.TemporalCoveragePostNormalizer;
@@ -42,7 +39,6 @@ import java.util.List;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import java.util.Collection;
 import java.util.Map;
@@ -54,16 +50,11 @@ import java.util.Optional;
  * @author Twan Goosen <twan@clarin.eu>
  * @param <T>
  */
-public class CMDIRecordProcessor<T> {
+public abstract class CMDIRecordProcessor<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
-    private final AvailabilityScoreAccumulator availabilityScoreAccumulator = new AvailabilityScoreAccumulator();
     private final FieldNameServiceImpl fieldNameService;
-    private final ResourceAvailabilityStatusChecker availabilityChecker;
     private final CMDIDataProcessor<T> processor;
-    private final ImportStatistics stats;
-    private final DocumentStore documentStore;
-    private final DeduplicationSignature signature;
     private final ObjectMapper objectMapper;
 
     private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
@@ -73,13 +64,9 @@ public class CMDIRecordProcessor<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics importStatistics, List<String> signatureFieldNames) {
+    public CMDIRecordProcessor(CMDIDataProcessor<T> processor, FieldNameServiceImpl fieldNameService) {
         this.processor = processor;
-        this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
-        this.availabilityChecker = availabilityChecker;
-        this.stats = importStatistics;
-        this.signature = new DeduplicationSignature(signatureFieldNames);
         this.objectMapper = new ObjectMapper();
     }
 
@@ -87,16 +74,18 @@ public class CMDIRecordProcessor<T> {
      * Process single CMDI file with CMDIDataProcessor
      *
      * @param file CMDI input file
+     * @param listener
      * @param dataOrigin if left empty, a dummy data origin will be used to
      * populate the technical metadata
      * @param resourceStructureGraph leave empty skip hierarchy processing
      * @param endpointDescription if present, used to populate some fields
      * including national project
+     * @return Optional of CMDI data project, which is empty iff the record
+     * cannot be processed
      * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
-    public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
-        stats.nrOfFilesAnalyzed().incrementAndGet();
+    public Optional<CMDIData<T>> processRecord(File file, Optional<CMDIRecordProcessorListener> listener, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
         CMDIData<T> cmdiData = null;
         try {
             cmdiData = processor.process(file, resourceStructureGraph.orElse(null));
@@ -106,40 +95,71 @@ public class CMDIRecordProcessor<T> {
                                 dataOrigin.orElse(NOOP_DATAROOT).getOriginName()
                                 + "/"
                                 + file.getName())); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
-                stats.nrOfFilesWithoutId().incrementAndGet();
+                listener.ifPresent(l -> l.handleFileWithoutId(file));
             }
         } catch (Exception e) {
-            LOG.error("error in file: {}", file, e);
-            stats.nrOfFilesWithError().incrementAndGet();
+            listener.ifPresent(l -> l.handleErrorInFile(file, e));
         }
-        if (cmdiData != null) {
+
+        if (cmdiData == null) {
+            // This means that something has gone wrong
+            return Optional.empty();
+        } else {
+            // Carry out checks and post-processing
+            return checkAndPostProcessRecord(file, cmdiData, listener, dataOrigin, endpointDescription);
+        }
+    }
+
+    /**
+     * Perform checks and do post-processing on a record after standard field
+     * value mapping
+     *
+     * @param file
+     * @param cmdiData
+     * @param listener
+     * @param dataOrigin
+     * @param endpointDescription
+     * @return
+     */
+    private Optional<CMDIData<T>> checkAndPostProcessRecord(File file, CMDIData<T> cmdiData, Optional<CMDIRecordProcessorListener> listener, Optional<DataRoot> dataOrigin, Optional<EndpointDescription> endpointDescription) {
+        assert cmdiData.getId() != null;
+
+        // Detect lack of resources (and skip depending on config)
+        if (skipOnNoResources()) {
             if (!cmdiData.hasResources()) {
-                stats.nrOfFilesSkipped().incrementAndGet();
-                LOG.warn("Skipping {}, no resource proxy found", file);
-                return;
-            }
-
-            assert cmdiData.getId() != null; //idOk check guarantees this
-
-            if (processedIds.add(cmdiData.getId())) {
-                T document = cmdiData.getDocument();
-                if (document != null) {
-                    // add technical metadata
-                    addTechnicalMetadata(file, cmdiData, dataOrigin.orElse(NOOP_DATAROOT), endpointDescription);
-                    // add resource proxys      
-                    addResourceData(cmdiData);
-                    // update doc in store
-                    submitDocumentUpdate(document, file);
-                    // mark document as completed in graph
-                    if (resourceStructureGraph.isPresent() && resourceStructureGraph.get().getVertex(cmdiData.getId()) != null) {
-                        resourceStructureGraph.get().getVertex(cmdiData.getId()).setWasImported(true);
-                    }
-                }
-            } else {
-                stats.nrOfFilesSkipped().incrementAndGet();
-                LOG.warn("Skipping {}, already processed id: {}", file, cmdiData.getId());
+                listener.ifPresent(l -> l.handleFileSkipped(file, "No resource proxy found"));
+                return Optional.empty();
             }
         }
+
+        // Detect duplicate identifiers (and skip depending on config)
+        if (!processedIds.add(cmdiData.getId())) {
+            if (skipOnDuplicateId()) {
+                listener.ifPresent(l -> l.handleFileSkipped(file, "Already processed id"));
+                return Optional.empty();
+            } else {
+                LOG.info("Id found in file {} has already been processed - not skipping as per configuration", file, cmdiData.getId());
+            }
+        }
+
+        // Make sure that we have a document...            
+        if (cmdiData.getDocument() == null) {
+            LOG.error("Document not set in CMDI data object");
+            return Optional.empty();
+        }
+
+        return postProcessRecord(file, cmdiData, dataOrigin, endpointDescription);
+    }
+
+    private Optional<CMDIData<T>> postProcessRecord(File file, CMDIData<T> cmdiData, Optional<DataRoot> dataOrigin, Optional<EndpointDescription> endpointDescription) {
+        // Basic processing good so far, all checks passed - now we can add some extra info
+        // add technical metadata
+        addTechnicalMetadata(file, cmdiData, dataOrigin.orElse(NOOP_DATAROOT), endpointDescription);
+        
+        // add resource proxys      
+        addResourceData(cmdiData);
+
+        return Optional.of(cmdiData);
     }
 
     /**
@@ -259,16 +279,6 @@ public class CMDIRecordProcessor<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANGUAGE_COUNT), languageCount, false);
     }
 
-    private Optional<Map<String, LinkStatus>> getLinkStatusForLandingPages(final List<Resource> landingPageResources, File file) {
-        try {
-            // get link status information
-            return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName)));
-        } catch (Exception ex) {
-            LOG.error("Error while checking resource availability for {}", file, ex);
-            return Optional.empty();
-        }
-    }
-
     /**
      * Adds two fields FIELD_FORMAT and FIELD_RESOURCE. The Type can be
      * specified in the "ResourceType" element of an imdi file or possibly
@@ -314,18 +324,6 @@ public class CMDIRecordProcessor<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
     }
 
-    private Optional<Map<String, LinkStatus>> getLinkStatusForResources(final List<Resource> resources, final List<Resource> landingPages, CMDIData cmdiData) {
-        try {
-            return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(
-                    Streams
-                            .concat(resources.stream(), landingPages.stream())
-                            .map(Resource::getResourceName)));
-        } catch (Exception ex) {
-            LOG.error("Error while determining resource availability score for document {}", cmdiData.getId(), ex);
-            return Optional.empty();
-        }
-    }
-
     private ResourceInfo createResourceInfo(final Optional<Map<String, LinkStatus>> linkStatusMap, Resource resource, String fieldValue) {
         // check link status
         final Optional<LinkStatus> linkStatus = linkStatusMap.flatMap(s -> Optional.ofNullable(s.get(resource.getResourceName())));
@@ -347,22 +345,16 @@ public class CMDIRecordProcessor<T> {
 
     }
 
-    /**
-     * Adds some additional information from DataRoot to the document, add
-     * document to document store
-     *
-     * @param document
-     * @param file
-     * @throws DocumentStoreException
-     * @throws IOException
-     */
-    private void submitDocumentUpdate(T document, File file) throws DocumentStoreException,
-            IOException {
-        LOG.debug("Submitting to document store: {}", file);
+    public interface CMDIRecordProcessorListener {
 
-        documentStore.addDocument(document);
-        if (stats.nrOFDocumentsSent().incrementAndGet() % 250 == 0) {
-            LOG.info("Number of documents sent thus far: {}", stats.nrOFDocumentsSent());
-        }
+        void handleFileWithoutId(File file);
+
+        public void handleErrorInFile(File file, Exception e);
+
+        public void handleFileSkipped(File file, String reason);
     }
+
+    protected abstract boolean skipOnNoResources();
+
+    protected abstract boolean skipOnDuplicateId();
 }
