@@ -45,7 +45,9 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Handles a single record in the import process
+ * Handles a single record in the import process. A listener can be registered
+ * to obtain details on exceptional events (for example for statistics 
+ * gathering)
  *
  * @author Twan Goosen <twan@clarin.eu>
  * @param <T>
@@ -72,10 +74,24 @@ public abstract class CMDIRecordProcessor<T> {
     }
 
     /**
+     * Process single CMDI file with CMDIDataProcessor with default (no-op)
+     * behaviour for data roots, resource structure graph and endpoint
+     * descriptions.
+     *
+     * @param file CMDI input file
+     * @return Optional of CMDI data project, which is empty iff the record
+     * cannot be processed
+     * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
+     * @throws IOException
+     */
+    public Optional<CMDIData<T>> processRecord(File file) throws DocumentStoreException, IOException {
+        return processRecord(file, Optional.empty(), Optional.empty(), Optional.empty());
+    }
+
+    /**
      * Process single CMDI file with CMDIDataProcessor
      *
      * @param file CMDI input file
-     * @param listener
      * @param dataOrigin if left empty, a dummy data origin will be used to
      * populate the technical metadata
      * @param resourceStructureGraph leave empty skip hierarchy processing
