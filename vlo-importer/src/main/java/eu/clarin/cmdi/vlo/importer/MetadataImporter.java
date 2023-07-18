@@ -121,7 +121,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      */
     private final SolrBridge solrBridge;
 
-    private final CMDIRecordImporter<SolrInputDocument> recordHandler;
+    private final CMDIRecordProcessor<SolrInputDocument> recordHandler;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final ResourceAvailabilityStatusChecker availabilityChecker;
 
@@ -171,7 +171,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
         final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
-        this.recordHandler = new CMDIRecordImporter(processor, solrBrdige, fieldNameService, availabilityChecker, stats, config.getSignatureFieldNames());
+        this.recordHandler = new CMDIRecordProcessor(processor, solrBrdige, fieldNameService, availabilityChecker, stats, config.getSignatureFieldNames());
     }
 
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
@@ -749,7 +749,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         return stats;
     }
 
-    protected CMDIRecordImporter getRecordProcessor() {
+    protected CMDIRecordProcessor getRecordProcessor() {
         return recordHandler;
     }
 

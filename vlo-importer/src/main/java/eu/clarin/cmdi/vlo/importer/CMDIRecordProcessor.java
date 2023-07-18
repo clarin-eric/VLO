@@ -54,9 +54,9 @@ import java.util.Optional;
  * @author Twan Goosen <twan@clarin.eu>
  * @param <T>
  */
-public class CMDIRecordImporter<T> {
+public class CMDIRecordProcessor<T> {
 
-    protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordImporter.class);
+    protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
     private final AvailabilityScoreAccumulator availabilityScoreAccumulator = new AvailabilityScoreAccumulator();
     private final FieldNameServiceImpl fieldNameService;
     private final ResourceAvailabilityStatusChecker availabilityChecker;
@@ -73,7 +73,7 @@ public class CMDIRecordImporter<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics importStatistics, List<String> signatureFieldNames) {
+    public CMDIRecordProcessor(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics importStatistics, List<String> signatureFieldNames) {
         this.processor = processor;
         this.documentStore = documentStore;
         this.fieldNameService = fieldNameService;
