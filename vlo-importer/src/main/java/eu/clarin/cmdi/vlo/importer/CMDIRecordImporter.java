@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Imports a single record into the provided document store
  *
  * @author twagoo
  */
@@ -50,7 +51,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
     private final DocumentStore documentStore;
     private final FieldNameServiceImpl fieldNameService;
 
-    private final Optional<CMDIRecordProcessorListener> processorListener = Optional.of(new CMDIRecordProcessorListener() {
+    private final CMDIRecordProcessorListener processorListener = new CMDIRecordProcessorListener() {
         @Override
         public void handleFileWithoutId(File file) {
             LOG.debug("File without ID: {}", file);
@@ -68,7 +69,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
             stats.nrOfFilesSkipped().incrementAndGet();
             LOG.warn("Skipping {}: {}", file, reason);
         }
-    });
+    };
 
     public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics stats, List<String> signatureFields) {
         super(processor, fieldNameService);
@@ -77,6 +78,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
         this.stats = stats;
         this.signature = new DeduplicationSignature(signatureFields);
         this.documentStore = documentStore;
+        setProcessingListener(processorListener);
     }
 
     /**
@@ -93,7 +95,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
      */
     public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
         stats.nrOfFilesAnalyzed().incrementAndGet();
-        final Optional<CMDIData<T>> result = super.processRecord(file, processorListener, dataOrigin, resourceStructureGraph, endpointDescription);
+        final Optional<CMDIData<T>> result = super.processRecord(file, dataOrigin, resourceStructureGraph, endpointDescription);
         if (result.isPresent()) {
             final CMDIData<T> cmdiData = result.get();
             // update doc in store

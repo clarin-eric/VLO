@@ -54,8 +54,9 @@ public abstract class CMDIRecordProcessor<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
     private final FieldNameServiceImpl fieldNameService;
-    private final CMDIDataProcessor<T> processor;
+    private final CMDIDataProcessor<T> dataProcessor;
     private final ObjectMapper objectMapper;
+    private Optional<CMDIRecordProcessorListener> processingListener = Optional.empty();
 
     private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
 
@@ -64,8 +65,8 @@ public abstract class CMDIRecordProcessor<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(CMDIDataProcessor<T> processor, FieldNameServiceImpl fieldNameService) {
-        this.processor = processor;
+    public CMDIRecordProcessor(CMDIDataProcessor<T> dataProcessor, FieldNameServiceImpl fieldNameService) {
+        this.dataProcessor = dataProcessor;
         this.fieldNameService = fieldNameService;
         this.objectMapper = new ObjectMapper();
     }
@@ -85,20 +86,20 @@ public abstract class CMDIRecordProcessor<T> {
      * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
-    public Optional<CMDIData<T>> processRecord(File file, Optional<CMDIRecordProcessorListener> listener, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
+    public Optional<CMDIData<T>> processRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
         CMDIData<T> cmdiData = null;
         try {
-            cmdiData = processor.process(file, resourceStructureGraph.orElse(null));
+            cmdiData = dataProcessor.process(file, resourceStructureGraph.orElse(null));
             if (!idOk(cmdiData.getId())) {
                 cmdiData.setId(
                         StringUtils.normalizeIdString(
                                 dataOrigin.orElse(NOOP_DATAROOT).getOriginName()
                                 + "/"
                                 + file.getName())); //No id found in the metadata file so making one up based on the file name. Not quaranteed to be unique, but we have to set something.
-                listener.ifPresent(l -> l.handleFileWithoutId(file));
+                processingListener.ifPresent(l -> l.handleFileWithoutId(file));
             }
         } catch (Exception e) {
-            listener.ifPresent(l -> l.handleErrorInFile(file, e));
+            processingListener.ifPresent(l -> l.handleErrorInFile(file, e));
         }
 
         if (cmdiData == null) {
@@ -106,8 +107,12 @@ public abstract class CMDIRecordProcessor<T> {
             return Optional.empty();
         } else {
             // Carry out checks and post-processing
-            return checkAndPostProcessRecord(file, cmdiData, listener, dataOrigin, endpointDescription);
+            return checkAndPostProcessRecord(file, cmdiData, dataOrigin, endpointDescription);
         }
+    }
+
+    public final void setProcessingListener(CMDIRecordProcessorListener processingListener) {
+        this.processingListener = Optional.ofNullable(processingListener);
     }
 
     /**
@@ -121,13 +126,13 @@ public abstract class CMDIRecordProcessor<T> {
      * @param endpointDescription
      * @return
      */
-    private Optional<CMDIData<T>> checkAndPostProcessRecord(File file, CMDIData<T> cmdiData, Optional<CMDIRecordProcessorListener> listener, Optional<DataRoot> dataOrigin, Optional<EndpointDescription> endpointDescription) {
+    private Optional<CMDIData<T>> checkAndPostProcessRecord(File file, CMDIData<T> cmdiData, Optional<DataRoot> dataOrigin, Optional<EndpointDescription> endpointDescription) {
         assert cmdiData.getId() != null;
 
         // Detect lack of resources (and skip depending on config)
         if (skipOnNoResources()) {
             if (!cmdiData.hasResources()) {
-                listener.ifPresent(l -> l.handleFileSkipped(file, "No resource proxy found"));
+                processingListener.ifPresent(l -> l.handleFileSkipped(file, "No resource proxy found"));
                 return Optional.empty();
             }
         }
@@ -135,7 +140,7 @@ public abstract class CMDIRecordProcessor<T> {
         // Detect duplicate identifiers (and skip depending on config)
         if (!processedIds.add(cmdiData.getId())) {
             if (skipOnDuplicateId()) {
-                listener.ifPresent(l -> l.handleFileSkipped(file, "Already processed id"));
+                processingListener.ifPresent(l -> l.handleFileSkipped(file, "Already processed id"));
                 return Optional.empty();
             } else {
                 LOG.info("Id found in file {} has already been processed - not skipping as per configuration", file, cmdiData.getId());
@@ -355,6 +360,10 @@ public abstract class CMDIRecordProcessor<T> {
         return Optional.empty();
     }
 
+    protected abstract boolean skipOnNoResources();
+
+    protected abstract boolean skipOnDuplicateId();
+
     public interface CMDIRecordProcessorListener {
 
         void handleFileWithoutId(File file);
@@ -363,8 +372,4 @@ public abstract class CMDIRecordProcessor<T> {
 
         public void handleFileSkipped(File file, String reason);
     }
-
-    protected abstract boolean skipOnNoResources();
-
-    protected abstract boolean skipOnDuplicateId();
 }
