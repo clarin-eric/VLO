@@ -430,7 +430,7 @@ public class MetadataImporterTest extends ImporterTestcase {
                                  * in a suitable way.
                                  */
                                 try {
-                                    getRecordProcessor().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
+                                    getRecordImporter().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
                                 } catch (DocumentStoreException ex) {
                                     Logger.getLogger(MetadataImporterTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }

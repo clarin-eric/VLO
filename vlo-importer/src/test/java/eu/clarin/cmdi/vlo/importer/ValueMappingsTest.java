@@ -386,7 +386,7 @@ public class ValueMappingsTest extends ImporterTestcase {
                                  * never by raised because sendDocs is overriden
                                  * in a suitable way. */
                                 try {
-                                    getRecordProcessor().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
+                                    getRecordImporter().importRecord(file, Optional.of(dataRoot), Optional.empty(), Optional.empty());
                                 } catch (DocumentStoreException ex) {
                                     Logger.getLogger(ValueMappingsTest.class.getName()).log(Level.SEVERE, null, ex);
                                 }

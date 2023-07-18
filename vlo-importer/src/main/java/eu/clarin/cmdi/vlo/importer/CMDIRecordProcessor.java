@@ -155,7 +155,7 @@ public abstract class CMDIRecordProcessor<T> {
         // Basic processing good so far, all checks passed - now we can add some extra info
         // add technical metadata
         addTechnicalMetadata(file, cmdiData, dataOrigin.orElse(NOOP_DATAROOT), endpointDescription);
-        
+
         // add resource proxys      
         addResourceData(cmdiData);
 
@@ -172,7 +172,7 @@ public abstract class CMDIRecordProcessor<T> {
         return id != null && !id.trim().isEmpty();
     }
 
-    private void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {
+    protected void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
@@ -235,9 +235,6 @@ public abstract class CMDIRecordProcessor<T> {
         Date dt = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt), false);
-
-        // create and add document signature
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), signature.getSignature(cmdiData), false);
 
         // set number of days since last import to '0'
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);
@@ -317,8 +314,9 @@ public abstract class CMDIRecordProcessor<T> {
         }
 
         if (linkStatusMap.isPresent()) {
-            final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap.get(), resources.size() + landingPages.size());
-            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false);
+            calculateAvailabilityScore(linkStatusMap, resources, landingPages)
+                    .ifPresent(availabilityScore
+                            -> cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_AVAILABILITY_SCORE), availabilityScore.getScoreValue(), false));
         }
 
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT), resources.size(), false);
@@ -343,6 +341,18 @@ public abstract class CMDIRecordProcessor<T> {
                 linkStatus.map(LinkStatus::getCheckingDataAsUtcEpochMs).orElse(null)
         );
 
+    }
+
+    protected Optional<Map<String, LinkStatus>> getLinkStatusForLandingPages(List<Resource> landingPageResources, File file) {
+        return Optional.empty();
+    }
+
+    protected Optional<Map<String, LinkStatus>> getLinkStatusForResources(List<Resource> resources, List<Resource> landingPages, CMDIData cmdiData) {
+        return Optional.empty();
+    }
+
+    protected Optional<ResourceAvailabilityScore> calculateAvailabilityScore(final Optional<Map<String, LinkStatus>> linkStatusMap, final List<Resource> resources, final List<Resource> landingPages) {
+        return Optional.empty();
     }
 
     public interface CMDIRecordProcessorListener {

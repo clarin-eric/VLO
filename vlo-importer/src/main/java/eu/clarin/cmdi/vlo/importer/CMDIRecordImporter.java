@@ -17,9 +17,10 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import com.google.common.collect.Streams;
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.config.DataRoot;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
-import static eu.clarin.cmdi.vlo.importer.CMDIRecordProcessor.LOG;
 import eu.clarin.cmdi.vlo.importer.linkcheck.AvailabilityScoreAccumulator;
 import eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
@@ -47,6 +48,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
     private final ImportStatistics stats;
     private final DeduplicationSignature signature;
     private final DocumentStore documentStore;
+    private final FieldNameServiceImpl fieldNameService;
 
     private final Optional<CMDIRecordProcessorListener> processorListener = Optional.of(new CMDIRecordProcessorListener() {
         @Override
@@ -70,6 +72,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
 
     public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics stats, List<String> signatureFields) {
         super(processor, fieldNameService);
+        this.fieldNameService = fieldNameService;
         this.availabilityChecker = availabilityChecker;
         this.stats = stats;
         this.signature = new DeduplicationSignature(signatureFields);
@@ -100,11 +103,20 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
                 resourceStructureGraph.get().getVertex(cmdiData.getId()).setWasImported(true);
             }
         } else {
-            LOG.warn("Record not imported: {}", file);
+            LOG.info("Record not imported: {}", file);
         }
     }
 
-    private Optional<Map<String, LinkStatus>> getLinkStatusForLandingPages(final List<Resource> landingPageResources, File file) {
+    @Override
+    protected void addTechnicalMetadata(File file, CMDIData<T> cmdiData, DataRoot dataOrigin, Optional<EndpointDescription> endpointDescription) {
+        super.addTechnicalMetadata(file, cmdiData, dataOrigin, endpointDescription);
+
+        // create and add document signature
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.SIGNATURE), signature.getSignature(cmdiData), false);
+    }
+
+    @Override
+    protected Optional<Map<String, LinkStatus>> getLinkStatusForLandingPages(final List<Resource> landingPageResources, File file) {
         try {
             // get link status information
             return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(landingPageResources.stream().map(Resource::getResourceName)));
@@ -114,7 +126,8 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
         }
     }
 
-    private Optional<Map<String, LinkStatus>> getLinkStatusForResources(final List<Resource> resources, final List<Resource> landingPages, CMDIData cmdiData) {
+    @Override
+    protected Optional<Map<String, LinkStatus>> getLinkStatusForResources(final List<Resource> resources, final List<Resource> landingPages, CMDIData cmdiData) {
         try {
             return Optional.ofNullable(availabilityChecker.getLinkStatusForRefs(
                     Streams
@@ -124,6 +137,12 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
             LOG.error("Error while determining resource availability score for document {}", cmdiData.getId(), ex);
             return Optional.empty();
         }
+    }
+
+    @Override
+    protected Optional<ResourceAvailabilityScore> calculateAvailabilityScore(final Optional<Map<String, LinkStatus>> linkStatusMap, final List<Resource> resources, final List<Resource> landingPages) {
+        final ResourceAvailabilityScore availabilityScore = availabilityScoreAccumulator.calculateAvailabilityScore(linkStatusMap.get(), resources.size() + landingPages.size());
+        return Optional.of(availabilityScore);
     }
 
     /**

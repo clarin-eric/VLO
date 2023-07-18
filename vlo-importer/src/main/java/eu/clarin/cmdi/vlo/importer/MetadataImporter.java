@@ -749,7 +749,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         return stats;
     }
 
-    protected CMDIRecordProcessor getRecordProcessor() {
+    protected CMDIRecordImporter getRecordImporter() {
         return recordHandler;
     }
 
