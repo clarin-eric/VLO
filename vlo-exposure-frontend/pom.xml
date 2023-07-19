@@ -18,12 +18,12 @@ language governing permissions and limitations under the License. -->
     <parent>
         <artifactId>vlo</artifactId>
         <groupId>eu.clarin.cmdi</groupId>
-        <version>4.12-SNAPSHOT</version>
+        <version>4.11.5-alpha1</version>
     </parent>
     <groupId>eu.clarin.cmdi</groupId>
     <artifactId>vlo-exposure-frontend</artifactId>
     <packaging>war</packaging>
-    <version>4.12-SNAPSHOT</version>
+    <version>4.11.5-alpha1</version>
     <!-- TODO project name -->
     <name>VLO Exposure Frontend</name>
     <licenses>
