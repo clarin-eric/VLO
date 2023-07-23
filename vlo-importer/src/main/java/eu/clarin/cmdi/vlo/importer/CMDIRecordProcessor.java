@@ -24,7 +24,7 @@ import eu.clarin.cmdi.vlo.ResourceAvailabilityScore;
 import eu.clarin.cmdi.vlo.ResourceInfo;
 import eu.clarin.cmdi.vlo.StringUtils;
 import eu.clarin.cmdi.vlo.config.DataRoot;
-import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus;
 import eu.clarin.cmdi.vlo.importer.normalizer.FormatPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.MultilingualPostNormalizer;
@@ -55,7 +55,7 @@ import java.util.Optional;
 public abstract class CMDIRecordProcessor<T> {
 
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
-    private final FieldNameServiceImpl fieldNameService;
+    private final FieldNameService fieldNameService;
     private final CMDIDataProcessor<T> dataProcessor;
     private final ObjectMapper objectMapper;
     private Optional<CMDIRecordProcessorListener> processingListener = Optional.empty();
@@ -67,7 +67,7 @@ public abstract class CMDIRecordProcessor<T> {
      */
     private final Set<String> processedIds = Sets.newConcurrentHashSet();
 
-    public CMDIRecordProcessor(CMDIDataProcessor<T> dataProcessor, FieldNameServiceImpl fieldNameService) {
+    public CMDIRecordProcessor(CMDIDataProcessor<T> dataProcessor, FieldNameService fieldNameService) {
         this.dataProcessor = dataProcessor;
         this.fieldNameService = fieldNameService;
         this.objectMapper = new ObjectMapper();
