@@ -17,10 +17,10 @@
 package eu.clarin.cmdi.vlo.importer.linkcheck;
 
 import eu.clarin.linkchecker.persistence.service.StatusService;
+import jakarta.annotation.PostConstruct;
 import java.io.Writer;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
