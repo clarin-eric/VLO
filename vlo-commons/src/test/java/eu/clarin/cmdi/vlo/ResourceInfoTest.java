@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo;
 
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -36,16 +38,16 @@ public class ResourceInfoTest {
     private final static long LAST_CHECKED_TIME = 1580558400000L;
     private final static ResourceInfo RESOURCE_INFO = new ResourceInfo("urlValue", "typeValue", 999, LAST_CHECKED_TIME);
 
-    private ObjectMapper objectMapper;
+    private Jsonb jsonb;
 
     @Before
     public void setUp() {
-        objectMapper = new ObjectMapper();
+        jsonb = JsonbBuilder.create();
     }
 
     @Test
     public void testToJson() {
-        final String result = RESOURCE_INFO.toJson(objectMapper);
+        final String result = RESOURCE_INFO.toJson(jsonb);
         assertNotNull(result);
         assertTrue(result.contains("\"url\":"));
         assertTrue(result.contains("urlValue"));
@@ -59,7 +61,7 @@ public class ResourceInfoTest {
 
     @Test
     public void testFromJson() {
-        final ResourceInfo result = ResourceInfo.fromJson(objectMapper, JSON);
+        final ResourceInfo result = ResourceInfo.fromJson(jsonb, JSON);
         assertEquals(RESOURCE_INFO.getUrl(), result.getUrl());
         assertEquals(RESOURCE_INFO.getType(), result.getType());
         assertEquals(RESOURCE_INFO.getStatus(), result.getStatus());
