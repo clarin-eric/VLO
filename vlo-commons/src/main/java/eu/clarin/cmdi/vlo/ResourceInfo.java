@@ -16,9 +16,6 @@
  */
 package eu.clarin.cmdi.vlo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -37,7 +34,7 @@ public class ResourceInfo {
     private final Integer status;
     private final Long lastChecked;
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+    @JsonbCreator(mode = JsonbCreator.Mode.PROPERTIES)
     public ResourceInfo(@JsonProperty("url") String url, @JsonProperty("type") String type, @JsonProperty("status") Integer status, @JsonProperty("lastChecked") Long lastChecked) {
         this.url = url;
         this.type = type;

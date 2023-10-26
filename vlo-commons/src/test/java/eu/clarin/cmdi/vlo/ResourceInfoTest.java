@@ -16,10 +16,6 @@
  */
 package eu.clarin.cmdi.vlo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
