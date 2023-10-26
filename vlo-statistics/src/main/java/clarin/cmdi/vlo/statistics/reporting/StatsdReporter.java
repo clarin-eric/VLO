@@ -24,7 +24,7 @@ import com.timgroup.statsd.StatsDClient;
 import com.timgroup.statsd.StatsDClientException;
 import java.io.File;
 import java.util.stream.Stream;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;

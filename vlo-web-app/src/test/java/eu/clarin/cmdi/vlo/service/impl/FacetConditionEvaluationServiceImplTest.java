@@ -27,7 +27,7 @@ import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.junit.Test;

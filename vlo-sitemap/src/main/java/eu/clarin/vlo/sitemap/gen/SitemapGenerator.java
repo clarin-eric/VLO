@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 public class SitemapGenerator {
 

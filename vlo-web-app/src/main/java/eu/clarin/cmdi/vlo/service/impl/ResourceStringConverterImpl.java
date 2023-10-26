@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
@@ -26,6 +25,8 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
@@ -42,7 +43,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Jsonb jsonb = JsonbBuilder.create();
     private final UriResolver resolver;
     private final ExecutorService preflightPool;
 
@@ -68,7 +69,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
         } else {
             // serialize resource string to find href and mime type
-            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(objectMapper, resourceString);
+            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(jsonb, resourceString);
             if (resourceInfo == null) {
                 logger.warn("Resource string could not be parsed: {}", resourceString);
                 return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
@@ -98,7 +99,8 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     /**
      * Tries to put handle in cache before it is requested from the client
-     * @param uri 
+     *
+     * @param uri
      */
     @Override
     public void doPreflight(String uri) {

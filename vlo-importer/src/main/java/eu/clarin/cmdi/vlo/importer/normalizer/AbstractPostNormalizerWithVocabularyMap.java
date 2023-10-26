@@ -12,7 +12,7 @@ import eu.clarin.cmdi.vlo.pojo.VariantsMap;
 import eu.clarin.cmdi.vlo.transformers.VariantsMapMarshaller;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import org.xml.sax.InputSource;
 
 /* 

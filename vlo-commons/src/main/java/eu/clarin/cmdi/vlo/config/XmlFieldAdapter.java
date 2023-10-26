@@ -3,10 +3,9 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 
 /**
  * @author Wolfgang Walter SAUER (wowasa) &lt;wolfgang.sauer@oeaw.ac.at&gt;

@@ -16,11 +16,11 @@
  */
 package eu.clarin.cmdi.vlo;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
-import java.io.IOException;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbException;
+import jakarta.json.bind.annotation.JsonbCreator;
+import jakarta.json.bind.annotation.JsonbProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +37,8 @@ public class ResourceInfo {
     private final Integer status;
     private final Long lastChecked;
 
-    @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public ResourceInfo(@JsonProperty("url") String url, @JsonProperty("type") String type, @JsonProperty("status") Integer status, @JsonProperty("lastChecked") Long lastChecked) {
+    @JsonbCreator
+    public ResourceInfo(@JsonbProperty("url") String url, @JsonbProperty("type") String type, @JsonbProperty("status") Integer status, @JsonbProperty("lastChecked") Long lastChecked) {
         this.url = url;
         this.type = type;
         this.status = status;
@@ -73,7 +73,7 @@ public class ResourceInfo {
     }
 
     /**
-     * 
+     *
      * @return timestamp of last availability check
      */
     public Long getLastChecked() {
@@ -85,23 +85,23 @@ public class ResourceInfo {
         return "ResourceInfo{" + "url=" + url + ", type=" + type + ", status=" + status + ", lastChecked=" + lastChecked + '}';
     }
 
-    public String toJson(ObjectMapper objectMapper) {
+    public String toJson(Jsonb jsonb) {
         try {
-            return objectMapper.writeValueAsString(this);
-        } catch (IOException ex) {
+            return jsonb.toJson(this);
+        } catch (JsonbException ex) {
             logger.error("Error while writing ResourceInfo object to JSON: {}", this, ex);
             return null;
         }
     }
 
-    public static ResourceInfo fromJson(ObjectMapper objectMapper, String json) {
+    public static ResourceInfo fromJson(Jsonb jsonb, String json) {
         if (Strings.isNullOrEmpty(json)) {
             return null;
         }
 
         try {
-            return objectMapper.readValue(json, ResourceInfo.class);
-        } catch (IOException ex) {
+            return jsonb.fromJson(json, ResourceInfo.class);
+        } catch (JsonbException ex) {
             logger.error("Error while reading ResourceInfo object from JSON: {}", json, ex);
             return null;
         }

@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.Properties;
-import javax.xml.bind.ValidationEventHandler;
+import jakarta.xml.bind.ValidationEventHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import static org.junit.Assert.assertEquals;

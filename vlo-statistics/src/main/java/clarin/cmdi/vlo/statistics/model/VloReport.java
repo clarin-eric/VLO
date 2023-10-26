@@ -17,7 +17,7 @@
 package clarin.cmdi.vlo.statistics.model;
 
 import java.util.List;
-import javax.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 
 /**
  *

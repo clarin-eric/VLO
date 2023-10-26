@@ -32,7 +32,7 @@ import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;

@@ -19,7 +19,7 @@ package clarin.cmdi.vlo.statistics.reporting;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import clarin.cmdi.vlo.statistics.model.VloReportMarshaller;
 import java.io.File;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

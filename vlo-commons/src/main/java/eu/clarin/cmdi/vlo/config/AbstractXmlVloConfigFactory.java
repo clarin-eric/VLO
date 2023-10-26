@@ -16,10 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import javax.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

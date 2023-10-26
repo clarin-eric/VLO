@@ -64,7 +64,7 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.Properties;
 import javax.inject.Inject;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerConfigurationException;

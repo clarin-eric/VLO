@@ -1,0 +1,248 @@
+
+<cmd:CMD xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cmd="http://www.clarin.eu/cmd/" CMDVersion="1.1" xsi:schemaLocation="http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1407745712035/xsd">
+   <Header xmlns="http://www.clarin.eu/cmd/" xmlns:imdi="http://www.mpi.nl/IMDI/Schema/IMDI" xmlns:lat="http://lat.mpi.nl/" xmlns:iso="http://www.iso.org/" xmlns:sil="http://www.sil.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:functx="http://www.functx.com"><MdCreator>Arbil.2.4.36550:</MdCreator><MdCreationDate>2018-06-08</MdCreationDate><cmd:MdSelfLink lat:flatURI="lat:10050_00_0000_0000_0004_15AB_A">https://hdl.handle.net/10050/00-0000-0000-0004-15AB-A</cmd:MdSelfLink>
+      
+      
+      
+      <MdProfile>clarin.eu:cr1:p_1407745712035</MdProfile>
+   </Header>
+   <Resources xmlns="http://www.clarin.eu/cmd/" xmlns:imdi="http://www.mpi.nl/IMDI/Schema/IMDI" xmlns:lat="http://lat.mpi.nl/" xmlns:iso="http://www.iso.org/" xmlns:sil="http://www.sil.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:functx="http://www.functx.com">
+      <ResourceProxyList><ResourceProxy id="d926e299">
+            <ResourceType mimetype="audio/x-wav">Resource</ResourceType>
+            <ResourceRef lat:flatURI="lat:10050_00_0000_0000_0003_F31E_7">https://hdl.handle.net/10050/00-0000-0000-0003-F31E-7</ResourceRef>
+         </ResourceProxy><ResourceProxy id="d926e361">
+            <ResourceType mimetype="application/pdf">Resource</ResourceType>
+            <ResourceRef lat:flatURI="lat:10050_00_0000_0000_0004_15D0_D">https://hdl.handle.net/10050/00-0000-0000-0004-15D0-D</ResourceRef>
+         </ResourceProxy><ResourceProxy id="d926e445">
+            <ResourceType mimetype="text/x-pfsx+xml">Resource</ResourceType>
+            <ResourceRef lat:flatURI="lat:10050_00_0000_0000_0003_F320_6">https://hdl.handle.net/10050/00-0000-0000-0003-F320-6</ResourceRef>
+         </ResourceProxy><ResourceProxy id="d926e528">
+            <ResourceType mimetype="text/x-eaf+xml">Resource</ResourceType>
+            <ResourceRef lat:flatURI="lat:10050_00_0000_0000_0003_F31F_B">https://hdl.handle.net/10050/00-0000-0000-0003-F31F-B</ResourceRef>
+         </ResourceProxy><cmd:ResourceProxy id="home-10050_00_0000_0000_0004_15AB_A"><cmd:ResourceType mimetype="text/html">LandingPage</cmd:ResourceType><cmd:ResourceRef>http://flat.example.com//islandora/object/lat%3A10050_00_0000_0000_0004_15AB_A#</cmd:ResourceRef></cmd:ResourceProxy></ResourceProxyList>
+      <JournalFileProxyList></JournalFileProxyList>
+      <ResourceRelationList></ResourceRelationList>
+   </Resources>
+   <Components xmlns="http://www.clarin.eu/cmd/" xmlns:imdi="http://www.mpi.nl/IMDI/Schema/IMDI" xmlns:lat="http://lat.mpi.nl/" xmlns:iso="http://www.iso.org/" xmlns:sil="http://www.sil.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:functx="http://www.functx.com">
+      <lat-session>
+         <History>NAME:imdi2cmdi.xslt DATE:2021-10-22T15:55:03.539+02:00.</History>
+         <Name>000-036 Pg Goh/Pak Baleh</Name>
+         <Title>000-036 Pg Goh/Pak Baleh</Title>
+         <Date>1979-01-21</Date>
+         <descriptions>
+            <Description>A Lanoh text recorded at Dala in 1979. The audio recording is extracted from the Lanoh cassette (this is the first text on the tape) and the transcription is from p9-10 of the 1979 Lanoh notebook LNHGBIA790106_001.
+
+At the top of the transcription of the text there is a note from Tawai 21/1/79: &apos;This is identified as Lanoh Kobak, and a genuine example at that: that makes LK truly a Tm dialect!&apos;. Note from Geoffrey Benjamin (p.c.) on Lanoh Kobak (from Malay kobang): Benjamin had long suspected that this was actually a Temiar dialect, close to what Schebesta published as Temiar in his &apos;Grammatical Sketch of the Ple-Temer Language&apos; book from JRAS.
+
+The place of recording, Dala (or Dɛnlaaʔ), is located at the mouth of the Piah river and was home to various Lanoh subgroups plus some Temiar. This recording was made during Benjamin&apos;s first deliberate trip to work with Lanoh and Semnam speakers in Lanoh and Semnam country.</Description>
+         </descriptions>
+         <Location>
+            <Continent>Asia</Continent>
+            <Country>Malaysia</Country>
+            <Region>Perak</Region>
+            <Address>Dala</Address>
+         </Location>
+         <Project>
+            <Name>Benjamin Collection</Name>
+            <Title></Title>
+            <Id></Id>
+            <Contact>
+               <Name>Nicole Kruspe</Name>
+               <Address>http://projekt.ht.lu.se/rwaai/</Address>
+               <Email>Nicole.Kruspe@ling.lu.se</Email>
+               <Organisation>RWAAI</Organisation>
+            </Contact>
+         </Project>
+         <Content>
+            <Genre>Unspecified</Genre>
+            <SubGenre>Unspecified</SubGenre>
+            <Task>Unspecified</Task>
+            <Modalities></Modalities>
+            <Subject></Subject>
+            <CommunicationContext>
+               <Interactivity>Unspecified</Interactivity>
+               <PlanningType>Unspecified</PlanningType>
+               <Involvement>Unspecified</Involvement>
+               <SocialContext>Unspecified</SocialContext>
+               <EventStructure>Unspecified</EventStructure>
+               <Channel>Unspecified</Channel>
+            </CommunicationContext>
+            <Content_Languages>
+               <Content_Language>
+                  <Id>ISO639-3:lnh</Id>
+                  <Name>Lanoh</Name>
+                  <Dominant>Unspecified</Dominant>
+                  <SourceLanguage>Unspecified</SourceLanguage>
+                  <TargetLanguage>Unspecified</TargetLanguage>
+               </Content_Language>
+            </Content_Languages>
+         </Content>
+         <Actors>
+            <Actor>
+               <Role>Collector, researcher, recorder, transcriber</Role>
+               <Name>Geoffrey Benjamin</Name>
+               <FullName></FullName>
+               <Code></Code>
+               <FamilySocialRole></FamilySocialRole>
+               <EthnicGroup></EthnicGroup>
+               <BirthDate>Unspecified</BirthDate>
+               <Sex>Male</Sex>
+               <Education>Unspecified</Education>
+               <Anonymized>Unspecified</Anonymized>
+               <Age>
+                  <EstimatedAge>Unspecified</EstimatedAge>
+               </Age>
+               <Contact></Contact>
+               <Actor_Languages></Actor_Languages>
+            </Actor>
+            <Actor>
+               <Role>Consultant</Role>
+               <Name>Pg Goh</Name>
+               <FullName></FullName>
+               <Code></Code>
+               <FamilySocialRole></FamilySocialRole>
+               <EthnicGroup></EthnicGroup>
+               <BirthDate>Unspecified</BirthDate>
+               <Sex>Male</Sex>
+               <Education>Unspecified</Education>
+               <Anonymized>Unspecified</Anonymized>
+               <Age>
+                  <EstimatedAge>Unspecified</EstimatedAge>
+               </Age>
+               <Contact></Contact>
+               <Actor_Languages></Actor_Languages>
+            </Actor>
+            <Actor>
+               <Role>Digital transcriber</Role>
+               <Name>Joanne Yager</Name>
+               <FullName></FullName>
+               <Code></Code>
+               <FamilySocialRole></FamilySocialRole>
+               <EthnicGroup></EthnicGroup>
+               <BirthDate>Unspecified</BirthDate>
+               <Sex>Female</Sex>
+               <Education>Unspecified</Education>
+               <Anonymized>Unspecified</Anonymized>
+               <Age>
+                  <EstimatedAge>Unspecified</EstimatedAge>
+               </Age>
+               <Contact></Contact>
+               <Actor_Languages></Actor_Languages>
+            </Actor>
+         </Actors>
+         <Resources>
+            <MediaFile ref="d926e299">
+               <Type>audio</Type>
+               <Format>audio/x-wav</Format>
+               <Size></Size>
+               <Quality>Unspecified</Quality>
+               <RecordingConditions></RecordingConditions>
+               <TimePosition>
+                  <Start>Unspecified</Start>       
+           <End>Unspecified</End>
+               </TimePosition>
+               <Access>
+                  <Availability></Availability>
+                  <Date>Unspecified</Date>
+                  <Owner></Owner>
+                  <Publisher></Publisher>
+                  <Contact></Contact>
+               </Access>
+            </MediaFile>
+            <WrittenResource ref="d926e361">
+               <Date>Unspecified</Date>
+               <Type>Annotation</Type>
+               <SubType>Unspecified</SubType>
+               <Format>application/pdf</Format>
+               <Size>1226 KB</Size>
+               <Derivation>Translation</Derivation>
+               <CharacterEncoding></CharacterEncoding>
+               <ContentEncoding></ContentEncoding>
+               <LanguageId>Unspecified</LanguageId>
+               <Anonymized>Unspecified</Anonymized>
+               <Validation>
+                  <Type>Unspecified</Type>
+                  <Methodology>Unspecified</Methodology>
+                  <Level>Unspecified</Level>
+               </Validation>
+               <Access>
+                  <Availability></Availability>
+                  <Date>Unspecified</Date>
+                  <Owner></Owner>
+                  <Publisher></Publisher>
+                  <Contact></Contact>
+               </Access>
+            </WrittenResource>
+            <WrittenResource ref="d926e445">
+               <Date>Unspecified</Date>
+               <Type>Annotation</Type>
+               <SubType>Unspecified</SubType>
+               <Format>text/x-pfsx+xml</Format>
+               <Size></Size>
+               <Derivation>Unspecified</Derivation>
+               <CharacterEncoding></CharacterEncoding>
+               <ContentEncoding></ContentEncoding>
+               <LanguageId>Unspecified</LanguageId>
+               <Anonymized>Unspecified</Anonymized>
+               <Validation>
+                  <Type>Unspecified</Type>
+                  <Methodology>Unspecified</Methodology>
+                  <Level>Unspecified</Level>
+               </Validation>
+               <Access>
+                  <Availability></Availability>
+                  <Date>Unspecified</Date>
+                  <Owner></Owner>
+                  <Publisher></Publisher>
+                  <Contact></Contact>
+               </Access>
+            </WrittenResource>
+            <WrittenResource ref="d926e528">
+               <Date>Unspecified</Date>
+               <Type>Annotation</Type>
+               <SubType>Unspecified</SubType>
+               <Format>text/x-eaf+xml</Format>
+               <Size></Size>
+               <Derivation>Unspecified</Derivation>
+               <CharacterEncoding></CharacterEncoding>
+               <ContentEncoding></ContentEncoding>
+               <LanguageId>Unspecified</LanguageId>
+               <Anonymized>Unspecified</Anonymized>
+               <Validation>
+                  <Type>Unspecified</Type>
+                  <Methodology>Unspecified</Methodology>
+                  <Level>Unspecified</Level>
+               </Validation>
+               <Access>
+                  <Availability></Availability>
+                  <Date>Unspecified</Date>
+                  <Owner></Owner>
+                  <Publisher></Publisher>
+                  <Contact></Contact>
+               </Access>
+            </WrittenResource>
+            <Source>
+               <Id>Text: LNHGBIA790106_001, Audio: LNHGBAC790121_001A</Id>
+               <Format></Format>
+               <Quality>Unspecified</Quality>
+               <CounterPosition>
+                  <Start>Unspecified</Start>
+                  <End>Unspecified</End>
+               </CounterPosition>
+               <TimePosition>
+                  <Start>Unspecified</Start>
+                  <End>Unspecified</End>
+               </TimePosition>
+               <Access>
+                  <Availability></Availability>
+                  <Date>Unspecified</Date>
+                  <Owner></Owner>
+                  <Publisher></Publisher>
+                  <Contact></Contact>
+               </Access>
+            </Source>       
+  </Resources>
+         <References></References>
+      </lat-session>
+   </Components>
+</cmd:CMD>
