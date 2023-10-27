@@ -23,7 +23,6 @@
         <log4j.appender>File</log4j.appender>
         <vlo.import.logging.level>${sys:IMPORTER_LOG_LEVEL:-INFO}</vlo.import.logging.level>
         <vlo.import.logging.directory>${sys:IMPORTER_LOG_DIR:-.}</vlo.import.logging.directory>
-        <spring.boot.version>3.1.4</spring.boot.version>
     </properties>
 
     <profiles>

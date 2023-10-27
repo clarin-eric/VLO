@@ -47,6 +47,7 @@
         <slf4j.version>2.0.7</slf4j.version>
         <log4j2.version>2.20.0</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
+        <spring.boot.version>3.1.4</spring.boot.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
