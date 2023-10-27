@@ -194,13 +194,11 @@
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
-            <scope>runtime</scope>
         </dependency>
         
         <dependency>
             <groupId>org.eclipse</groupId>
             <artifactId>yasson</artifactId>
-            <scope>runtime</scope>
         </dependency>
         
         <!-- Linkchecker persistence -->
