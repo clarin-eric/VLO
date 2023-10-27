@@ -28,7 +28,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.slf4j.Logger;
