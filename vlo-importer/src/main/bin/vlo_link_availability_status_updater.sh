@@ -5,8 +5,8 @@ if [ -z "$IMPORTER_JAVA_OPTS" ]; then
 fi
 
 # Get the script's source directory
-DIR="$(dirname "$0")"
-cd "${DIR}"
+SCRIPT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+cd "${SCRIPT_DIR}" || exit 1
 
 if [ -z "${JAVA}" ]; then
 	JAVA="$(which java 2>/dev/null)"
@@ -18,15 +18,15 @@ if ! [ -x "${JAVA}" ]; then
 fi
 
 #default configuration file
-DFLT_CONFIG=${DIR}/"../config/VloConfig.xml"
+DFLT_CONFIG="${SCRIPT_DIR}/../config/VloConfig.xml"
 
-LOGDIR="${DIR}/../log/"
+LOGDIR="${SCRIPT_DIR}/../log/"
 echo "Logging in ${LOGDIR}"
 
 # Please specify the configuration to the importer via a command line parameter
 
-$JAVA ${IMPORTER_JAVA_OPTS} \
-    -cp "${DIR}/lib/*" \
+$JAVA "${IMPORTER_JAVA_OPTS}" \
+    -cp "${SCRIPT_DIR}/lib/*" \
 	-DconfigFile="${DFLT_CONFIG}" \
     -DIMPORTER_LOG_DIR="${LOGDIR}" \
     -DIMPORTER_LOG_LEVEL="${IMPORTER_LOG_LEVEL:-INFO}" \
