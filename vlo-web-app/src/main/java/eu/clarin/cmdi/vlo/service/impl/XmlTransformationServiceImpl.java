@@ -34,7 +34,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
@@ -133,6 +132,10 @@ public class XmlTransformationServiceImpl implements XmlTransformationService {
             throw new TransformerException("Thread compiling stylesheet " + location.toString() + " was interrupted", ex);
         }
 
+    }
+    
+    protected Templates getTemplates() throws InterruptedException, ExecutionException {
+        return templatesFuture.get();
     }
 
 }
