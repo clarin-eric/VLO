@@ -1,8 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 
-# Get the script's source directory
-DIR="$(dirname "$0")"
-JAVA=`which java 2>/dev/null`
-
-cd "${DIR}"
-$JAVA -Xmx2G -jar "${DIR}/vlo-sitemap-${project.version}.jar" "$@"
+#shellcheck disable=SC2154
+cd "${SCRIPT_DIR}" && java -Xmx2G -jar "${SCRIPT_DIR}/vlo-sitemap-${project.version}.jar" "$@"
