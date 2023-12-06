@@ -209,7 +209,6 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>32.1.1-jre</version>
         </dependency>
         <dependency>
             <groupId>com.ximpleware</groupId>
