@@ -1,6 +1,12 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.11.6 (December 2023)
+* Using the new linkchecker persistence library (v1.0.0)
+* Upgraded Java XML and JSON binding framework versions
+* Various fixes in scripts
+* Various dependency updates
+
 VLO 4.11.5 (August 2023)
 
 * CMDIRecordProcessor designed to be used by curation to encapsulate the full
