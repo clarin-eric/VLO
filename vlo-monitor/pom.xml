@@ -5,11 +5,11 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo</artifactId>
-        <version>4.11.6</version>
+        <version>4.12-SNAPSHOT</version>
     </parent>
     <groupId>eu.clarin.cmdi.vlo</groupId>
     <artifactId>vlo-monitor</artifactId>
-    <version>4.11.6</version>
+    <version>4.12-SNAPSHOT</version>
     <name>VLO change monitor</name>
     <description>Command line utility that carries out rule based checks for changes in the VLO's index</description>
 
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo-commons</artifactId>
-            <version>4.11.6</version>
+            <version>4.12-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
