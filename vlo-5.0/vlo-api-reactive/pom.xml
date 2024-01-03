@@ -10,10 +10,10 @@
     </parent>
     
     <groupId>eu.clarin.cmdi</groupId>
-    <artifactId>vlo-api</artifactId>
+    <artifactId>vlo-api-reactive</artifactId>
     <version>5.0-SNAPSHOT</version>
-    <name>vlo-api</name>
-    <description>VLO API</description>
+    <name>vlo-api (reactive)</name>
+    <description>Reactive VLO API</description>
     
     <properties>
         <java.version>17</java.version>
