@@ -20,14 +20,18 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.ArrayListMultimap;
 import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
 import eu.clarin.cmdi.vlo.api.service.VloRecordService;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,23 +41,38 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/records")
 public class VloRecordController {
 
     protected final Splitter FQ_SPLITTER = Splitter.on(':').limit(2);
+    
+    private final VloRecordService service;
 
     public VloRecordController(VloRecordService service) {
         this.service = service;
     }
 
-    private final VloRecordService service;
-
-    @GetMapping
-    public VloRecordSearchResult records(@RequestParam(required = false, defaultValue = "*:*") String query,
+    @GetMapping(path = RECORDS_PATH, produces = "application/json")
+    public VloRecordSearchResult getRecords(@RequestParam(required = false, defaultValue = "*:*") String query,
             @RequestParam(required = false, defaultValue = "0") List<String> fq,
             @RequestParam(required = false, defaultValue = "0") Integer from,
             @RequestParam(required = false, defaultValue = "10") Integer size) {
         return service.getRecords(new VloRecordsRequest(query, createFilterMap(fq), from, size));
+    }
+
+    @GetMapping(path = RECORDS_COUNT_PATH, produces = "text/plain")
+    public Long recordsCount(@RequestParam(required = false, defaultValue = "*:*") String query,
+            @RequestParam(required = false, defaultValue = "0") List<String> fq) {
+        return service.getRecordCount(query, createFilterMap(fq));
+    }
+
+    @GetMapping(path = RECORDS_PATH + "/{id}", produces = "application/json")
+    public VloRecord getRecord(@PathVariable String id) {
+        return service.getRecordById(id).orElseThrow();
+    }
+
+    @PutMapping(path = RECORDS_PATH, consumes = "application/json", produces = "application/json")
+    public VloRecord saveRecord(@RequestBody VloRecord record) {
+        return service.saveRecord(record).orElseThrow();
     }
 
     protected Map<String, ? extends Iterable<String>> createFilterMap(List<String> fq) {
