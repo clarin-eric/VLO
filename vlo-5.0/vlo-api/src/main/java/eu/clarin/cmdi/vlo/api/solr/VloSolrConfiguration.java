@@ -14,15 +14,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.api.configuration;
+package eu.clarin.cmdi.vlo.api.solr;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.impl.FieldValueLabelServiceImpl;
-import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrDocumentQueryFactoryImpl;
-import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrService;
-import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrVloRecordConverter;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
 import java.util.Map;
