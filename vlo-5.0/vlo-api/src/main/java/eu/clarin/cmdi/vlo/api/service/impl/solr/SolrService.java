@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.api.service.impl.solr;
 
+import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
@@ -48,7 +49,7 @@ import org.springframework.core.convert.converter.Converter;
  */
 @AllArgsConstructor
 @Slf4j
-public class SolrService { //implements ReactiveVloRecordService, ReactiveVloFacetsService {
+public class SolrService implements VloRecordService { 
 
     private final SolrDocumentQueryFactoryImpl queryFactory;
 
@@ -62,6 +63,7 @@ public class SolrService { //implements ReactiveVloRecordService, ReactiveVloFac
 
     private final Converter<SolrDocument, VloRecord> recordConverter;
 
+    @Override
     public VloRecordSearchResult getRecords(VloRecordsRequest request) {
         final SolrQuery solrQuery = queryFactory.createLimitedDocumentQuery(request.getFrom(), request.getSize());
         if (request.getQuery() != null) {
@@ -79,6 +81,7 @@ public class SolrService { //implements ReactiveVloRecordService, ReactiveVloFac
                 }).orElseThrow();
     }
 
+    @Override
     public Long getRecordCount(String queryParam, Map<String, ? extends Iterable<String>> filters) {
         final SolrQuery query = queryFactory.createLimitedDocumentQuery(0, 0);
         if (query != null) {
@@ -92,6 +95,7 @@ public class SolrService { //implements ReactiveVloRecordService, ReactiveVloFac
                 .orElse(0L);
     }
 
+    @Override
     public Optional<VloRecord> getRecordById(String id) {
         log.info("Get record by id: {}", id);
 
@@ -99,6 +103,7 @@ public class SolrService { //implements ReactiveVloRecordService, ReactiveVloFac
         return queryToRecords(query).findFirst();
     }
 
+    @Override
     public Optional<VloRecord> saveRecord(VloRecord record) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }

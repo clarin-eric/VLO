@@ -1,13 +1,52 @@
 package eu.clarin.cmdi.vlo.api;
 
+import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
+import eu.clarin.cmdi.vlo.api.service.VloRecordService;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
+@SpringBootTest()
+@ActiveProfiles("test")
 class VloApiApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @TestConfiguration
+    public static class VloApiApplicationTestsContextConfiguration {
+
+        @Bean
+        public VloRecordService recordService() {
+            return new VloRecordService() {
+                @Override
+                public Optional<VloRecord> getRecordById(String id) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
+                @Override
+                public Long getRecordCount(String queryParam, Map<String, ? extends Iterable<String>> filters) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
+                @Override
+                public VloRecordSearchResult getRecords(VloRecordsRequest request) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
+                @Override
+                public Optional<VloRecord> saveRecord(VloRecord record) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+            };
+        }
+    }
+
+    @Test
+    void contextLoads() {
+    }
 
 }

@@ -43,7 +43,7 @@ import org.springframework.core.convert.converter.Converter;
  * @author twagoo
  */
 @Configuration
-//@Profile("solr")
+@Profile("solr")
 public class VloSolrConfiguration {
 
     protected final static List<String> MINIMAL_FIELDS = ImmutableList.of(

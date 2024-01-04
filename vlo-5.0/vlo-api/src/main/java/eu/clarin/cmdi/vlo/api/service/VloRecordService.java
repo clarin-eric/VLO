@@ -14,34 +14,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.clarin.cmdi.vlo.api.controller;
+package eu.clarin.cmdi.vlo.api.service;
 
 import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
-import eu.clarin.cmdi.vlo.api.service.VloRecordService;
+import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
-import java.util.Collections;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
  * @author twagoo
  */
-@RestController
-@RequestMapping("/records")
-public class VloRecordController {
+public interface VloRecordService {
 
-    public VloRecordController(VloRecordService service) {
-        this.service = service;
-    }
+    Optional<VloRecord> getRecordById(String id);
 
-    private final VloRecordService service;
+    Long getRecordCount(String queryParam, Map<String, ? extends Iterable<String>> filters);
 
-    @GetMapping
-    public VloRecordSearchResult records() {
-        VloRecordsRequest request = new VloRecordsRequest("*:*", Collections.emptyMap(), 0, 10);
-        return service.getRecords(request);
-    }
+    VloRecordSearchResult getRecords(VloRecordsRequest request);
 
+    Optional<VloRecord> saveRecord(VloRecord record);
+    
 }
