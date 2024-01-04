@@ -16,9 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.api.controller;
 
+import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
 import eu.clarin.cmdi.vlo.api.service.impl.solr.SolrService;
-import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import java.util.List;
+import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import java.util.Collections;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,12 +35,13 @@ public class VloRecordController {
     public VloRecordController(SolrService service) {
         this.service = service;
     }
-    
+
     private final SolrService service;
 
     @GetMapping
-    List<VloRecord> records() {
-        return null;
+    public VloRecordSearchResult records() {
+        VloRecordsRequest request = new VloRecordsRequest("*:*", Collections.emptyMap(), 0, 10);
+        return service.getRecords(request);
     }
 
 }
