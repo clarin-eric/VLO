@@ -30,7 +30,6 @@ import static org.hamcrest.Matchers.iterableWithSize;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import static org.mockito.ArgumentMatchers.any;
 import org.mockito.Captor;
 import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +61,9 @@ public class VloRecordControllerTest {
     @MockBean
     private VloRecordService recordService;
 
+    @Captor
+    private ArgumentCaptor<VloRecordsRequest> recordsRequestCaptor;
+
     private final static VloRecordSearchResult TWO_RECORDS_RESULT
             = createSearchResult(2, 0,
                     record -> {
@@ -82,8 +84,8 @@ public class VloRecordControllerTest {
     };
 
     @Test
-    public void getRecordsNoParams() throws Exception {
-        when(recordService.getRecords(any(VloRecordsRequest.class)))
+    public void getRecordsWithoutParams() throws Exception {
+        when(recordService.getRecords(recordsRequestCaptor.capture()))
                 .thenReturn(TWO_RECORDS_RESULT);
 
         mvc.perform(MockMvcRequestBuilders
@@ -92,13 +94,13 @@ public class VloRecordControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpectAll(TWO_RECORDS_RESULT_MATCHERS);
+
+        final VloRecordsRequest recordsRequest = recordsRequestCaptor.getValue();
+        assertEquals("*:*", recordsRequest.getQuery());
     }
 
-    @Captor
-    private ArgumentCaptor<VloRecordsRequest> recordsRequestCaptor;
-
     @Test
-    public void getRecordsParams() throws Exception {
+    public void getRecordsWithParams() throws Exception {
         when(recordService.getRecords(recordsRequestCaptor.capture()))
                 .thenReturn(TWO_RECORDS_RESULT);
 
