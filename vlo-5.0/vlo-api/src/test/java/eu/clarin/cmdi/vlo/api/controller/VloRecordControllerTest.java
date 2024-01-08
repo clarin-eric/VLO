@@ -21,17 +21,13 @@ import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.api.service.impl.FilterMapFactoryImpl;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.iterableWithSize;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import static org.mockito.Mockito.when;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -42,6 +38,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -63,6 +66,8 @@ public class VloRecordControllerTest {
 
     @Captor
     private ArgumentCaptor<VloRecordsRequest> recordsRequestCaptor;
+    @Captor
+    private ArgumentCaptor<VloRecord> saveRequestCaptor;
 
     private final static VloRecordSearchResult TWO_RECORDS_RESULT
             = createSearchResult(2, 0,
@@ -123,17 +128,95 @@ public class VloRecordControllerTest {
         assertThat(recordsRequest.getFilters().get("field1"), hasItem("val1"));
     }
 
+    @Test
+    public void testSaveRecord() throws Exception {
+        final String recordJson
+                = """
+                  {
+                    "selflink": "selflink1",
+                    "profileId": "profile1",
+                    "fields": { 
+                        "field1": ["value1"] 
+                    }
+                  }
+                  """;
+
+        when(recordService.saveRecord(saveRequestCaptor.capture()))
+                .thenReturn(Optional.of(createVloRecord(r -> {
+                    r.setId("id1");
+                    r.setProfileId("profile1");
+                })));
+
+        mvc.perform(MockMvcRequestBuilders
+                .put("/records")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(recordJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+        //TODO: expectations on response
+
+        final VloRecord reqRecord = saveRequestCaptor.getValue();
+        assertThat(reqRecord, allOf(
+                hasProperty("selflink", equalTo("selflink1")),
+                hasProperty("profileId", equalTo("profile1")),
+                hasProperty("fields", allOf(
+                        is(aMapWithSize(1)),
+                        hasEntry(
+                                is("field1"),
+                                allOf(
+                                        iterableWithSize(1),
+                                        hasItem(equalTo("value1"))
+                                ))))));
+    }
+
+    @Test
+    public void testSaveRecordInvalidContent() throws Exception {
+        final String recordJson
+                = """
+                  {
+                    "foo": 
+                  """;
+
+        mvc.perform(MockMvcRequestBuilders
+                .put("/records")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(recordJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+        verify(recordService, never()).saveRecord(Mockito.any());
+    }
+
+    @Test
+    public void testSaveRecordServiceError() throws Exception {
+        final String recordJson = "{}";
+
+        when(recordService.saveRecord(Mockito.any()))
+                .thenReturn(Optional.empty());
+
+        mvc.perform(MockMvcRequestBuilders
+                .put("/records")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(recordJson)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is5xxServerError());
+    }
+
     private static VloRecordSearchResult createSearchResult(long numFound, long start, Consumer<VloRecord>... recordInitialisers) {
         final Stream<VloRecord> records = Stream.of(recordInitialisers)
-                .map(init -> {
-                    //create new record
-                    final VloRecord record = new VloRecord();
-                    //apply initialiser
-                    init.accept(record);
-                    return record;
-                });
+                .map(VloRecordControllerTest::createVloRecord);
 
         return new VloRecordSearchResult(records.toList(), numFound, start);
+    }
+
+    private static VloRecord createVloRecord(Consumer<VloRecord> init) {
+        final VloRecord record = new VloRecord();
+        //apply initialiser
+        init.accept(record);
+        return record;
     }
 
 }

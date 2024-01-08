@@ -105,7 +105,10 @@ public class VloRecordController {
      */
     @PutMapping(path = RECORDS_PATH, consumes = "application/json", produces = "application/json")
     public VloRecord saveRecord(@RequestBody VloRecord record) {
-        return service.saveRecord(record).orElseThrow();
+        return service.saveRecord(record)
+                .orElseThrow(() -> new VloApiProcessingException(
+                        "Unexpectedly failed to save record. Service did not return VloRecord upon save request.", 
+                        record));
     }
 
 }
