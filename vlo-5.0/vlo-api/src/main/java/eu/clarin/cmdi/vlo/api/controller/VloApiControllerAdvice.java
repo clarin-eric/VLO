@@ -20,10 +20,12 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
@@ -34,18 +36,27 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class VloApiControllerAdvice {
 
     @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(VloApiProcessingException.class)
     public ResponseEntity<?> handleControllerException(HttpServletRequest request, Throwable ex) {
         log.info("Handling exception in request handling for {}", request.getRequestURI(), ex);
-        if (ex instanceof VloApiProcessingException vloApiProcessingException) {
-            final VloRecord recordContext = vloApiProcessingException.getRecordContext();
-            if (recordContext != null) {
-                log.info("Record context of exception at {}: {}", request.getRequestURI(), recordContext);
+
+        final ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        if (ex != null) {
+            problemDetail.setDetail(ex.getMessage());
+            problemDetail.getProperties();
+            if (ex instanceof VloApiProcessingException vloApiProcessingException) {
+                final VloRecord recordContext = vloApiProcessingException.getRecordContext();
+                if (recordContext != null) {
+                    log.debug("Record context of exception at {}: {}", request.getRequestURI(), recordContext);
+                }
+                problemDetail.setProperty("recordContext", recordContext);
             }
         }
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ex.getMessage());
+
+        return ResponseEntity.of(problemDetail).build();
+
     }
 
 }

@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.api.solr;
 import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
+import eu.clarin.cmdi.vlo.api.controller.VloApiProcessingException;
 import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.data.model.Facet;
@@ -105,7 +106,7 @@ public class SolrService implements VloRecordService {
 
     @Override
     public Optional<VloRecord> saveRecord(VloRecord record) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new VloApiProcessingException("Saving of records is not supported by the Solr implementation of this service", record);
     }
 
     public Stream<Facet> getAllFacets(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<List<String>> facets, Optional<Integer> valueCount) {
