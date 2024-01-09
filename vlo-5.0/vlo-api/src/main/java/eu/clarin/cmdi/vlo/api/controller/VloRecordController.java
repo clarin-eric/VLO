@@ -30,6 +30,7 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -92,8 +93,10 @@ public class VloRecordController {
      * @return
      */
     @GetMapping(path = RECORDS_PATH + "/{id}", produces = "application/json")
-    public VloRecord getRecord(@PathVariable String id) {
-        return service.getRecordById(id).orElseThrow();
+    public ResponseEntity<VloRecord> getRecord(@PathVariable String id) {
+        return service.getRecordById(id)
+                .map((record) -> ResponseEntity.ok().body(record)
+                ).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
@@ -107,8 +110,8 @@ public class VloRecordController {
     public VloRecord saveRecord(@RequestBody VloRecord record) {
         return service.saveRecord(record)
                 .orElseThrow(() -> new VloApiProcessingException(
-                        "Unexpectedly failed to save record. Service did not return VloRecord upon save request.", 
-                        record));
+                "Unexpectedly failed to save record. Service did not return VloRecord upon save request.",
+                record));
     }
 
 }

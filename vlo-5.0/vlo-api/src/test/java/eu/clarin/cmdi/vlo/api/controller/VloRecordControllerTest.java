@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.api.service.impl.FilterMapFactoryImpl;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -67,6 +66,8 @@ public class VloRecordControllerTest {
     @Captor
     private ArgumentCaptor<VloRecordsRequest> recordsRequestCaptor;
     @Captor
+    private ArgumentCaptor<String> idCaptor;
+    @Captor
     private ArgumentCaptor<VloRecord> saveRequestCaptor;
 
     private final static VloRecordSearchResult TWO_RECORDS_RESULT
@@ -105,27 +106,37 @@ public class VloRecordControllerTest {
     }
 
     @Test
-    public void getRecordsWithParams() throws Exception {
-        when(recordService.getRecords(recordsRequestCaptor.capture()))
-                .thenReturn(TWO_RECORDS_RESULT);
+    public void getRecord() throws Exception {
+        when(recordService.getRecordById(idCaptor.capture()))
+                .thenReturn(Optional.of(createVloRecord(r -> {
+                    r.setId("id1");
+                })));
 
         mvc.perform(MockMvcRequestBuilders
-                .get("/records?q=test&from=1&size=5&fq=field1:val1&fq=field2:val2")
+                .get("/records/id1")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpectAll(TWO_RECORDS_RESULT_MATCHERS);
+        //TODO: expect more content
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("id1"));
+        
+        final String requestId = idCaptor.getValue();
+        assertEquals("id1", requestId);
+    }
 
-        final VloRecordsRequest recordsRequest = recordsRequestCaptor.getValue();
-        assertEquals("test", recordsRequest.getQuery());
-        assertEquals(5, recordsRequest.getSize());
-        assertEquals(1, recordsRequest.getFrom());
-        assertNotNull(recordsRequest.getFilters());
-        assertEquals(2, recordsRequest.getFilters().size());
-        assertTrue(recordsRequest.getFilters().containsKey("field1"));
-        assertTrue(recordsRequest.getFilters().containsKey("field2"));
-        assertThat(recordsRequest.getFilters().get("field1"), is(iterableWithSize(1)));
-        assertThat(recordsRequest.getFilters().get("field1"), hasItem("val1"));
+    @Test
+    public void getRecordNotFound() throws Exception {
+        when(recordService.getRecordById(idCaptor.capture()))
+                .thenReturn(Optional.empty());
+
+        mvc.perform(MockMvcRequestBuilders
+                .get("/records/id1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+        final String requestId = idCaptor.getValue();
+        assertEquals("id1", requestId);
     }
 
     @Test
@@ -202,7 +213,7 @@ public class VloRecordControllerTest {
                 .content(recordJson)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().is5xxServerError());
+                .andExpect(status().isInternalServerError());
     }
 
     private static VloRecordSearchResult createSearchResult(long numFound, long start, Consumer<VloRecord>... recordInitialisers) {
