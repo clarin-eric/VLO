@@ -27,6 +27,9 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,6 +66,7 @@ public class VloRecordController {
      * @param size
      * @return
      */
+    @Operation(summary = "Retrieve one or more records by query and/or filtered")
     @GetMapping(path = RECORDS_PATH, produces = "application/json")
     public VloRecordSearchResult getRecords(@RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq,
@@ -79,6 +83,7 @@ public class VloRecordController {
      * @param fq
      * @return
      */
+    @Operation(summary = "Retrieve the exact number of records that can be retrieved by query and/or filtered")
     @GetMapping(path = RECORDS_COUNT_PATH, produces = "text/plain")
     public Long recordsCount(@RequestParam(required = false, defaultValue = "*:*") String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
@@ -92,6 +97,11 @@ public class VloRecordController {
      * @param id
      * @return
      */
+    @Operation(summary = "Retrieve an individual record by its identifier")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "A record with the specified identifier that is present in the catalogue"),
+        @ApiResponse(responseCode = "404", description = "No record with the specified identifier is present in the catalogue", useReturnTypeSchema = false)
+    })
     @GetMapping(path = RECORDS_PATH + "/{id}", produces = "application/json")
     public ResponseEntity<VloRecord> getRecord(@PathVariable String id) {
         return service.getRecordById(id)
