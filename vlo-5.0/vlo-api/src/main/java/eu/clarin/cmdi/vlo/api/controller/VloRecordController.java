@@ -30,6 +30,7 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @AllArgsConstructor
 @RestController
+@Tag(name="Records", description = "Searching, retrieving and submitting of VLO records")
 public class VloRecordController {
 
     private final VloRecordService service;
