@@ -104,6 +104,19 @@ public class VloRecordControllerTest {
         final VloRecordsRequest recordsRequest = recordsRequestCaptor.getValue();
         assertEquals("*:*", recordsRequest.getQuery());
     }
+    
+    
+    @Test
+    public void getRecordCount() throws Exception {
+        when(recordService.getRecordCount(Mockito.any(), Mockito.any()))
+                .thenReturn(42L);
+
+        mvc.perform(MockMvcRequestBuilders
+                .get("/records/count")
+                .accept(MediaType.ALL))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
 
     @Test
     public void getRecord() throws Exception {

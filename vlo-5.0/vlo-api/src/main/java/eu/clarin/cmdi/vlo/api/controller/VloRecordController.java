@@ -30,7 +30,9 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -83,11 +85,11 @@ public class VloRecordController {
      * @param fq
      * @return
      */
-    @Operation(summary = "Retrieve the exact number of records that can be retrieved by query and/or filtered")
-    @GetMapping(path = RECORDS_COUNT_PATH, produces = "text/plain")
-    public Long recordsCount(@RequestParam(required = false, defaultValue = "*:*") String query,
+    @Operation(summary = "Retrieve the exact number of records that can be retrieved by query and/or filtered as JSON object with a single property 'numFound'")
+    @GetMapping(path = RECORDS_COUNT_PATH, produces = "application/json")
+    public Map<String, Object> getRecordsCount(@RequestParam(required = false, defaultValue = "*:*") String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
-        return service.getRecordCount(query, filterMapFactory.createFilterMap(fq));
+        return Collections.singletonMap("numFound", service.getRecordCount(query, filterMapFactory.createFilterMap(fq)));
     }
 
     /**
@@ -116,6 +118,7 @@ public class VloRecordController {
      * @param record
      * @return
      */
+    @Operation(summary = "Submit a new record")
     @PutMapping(path = RECORDS_PATH, consumes = "application/json", produces = "application/json")
     public VloRecord saveRecord(@RequestBody VloRecord record) {
         return service.saveRecord(record)
