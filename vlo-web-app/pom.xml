@@ -15,7 +15,7 @@
     <packaging>war</packaging>
     <version>4.11.6</version>
     <name>VLO Web Application</name>
-    <description></description>
+    <description/>
 
     <properties>
         <wicket.version>8.15.0</wicket.version> <!-- if you update, make sure to also check wicket-bootstrap-core -->
