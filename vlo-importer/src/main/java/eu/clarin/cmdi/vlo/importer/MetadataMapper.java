@@ -20,6 +20,8 @@ import eu.clarin.cmdi.vlo.config.XmlVloConfigFactory;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
 import org.apache.solr.common.SolrInputDocument;
 
 public class MetadataMapper {
@@ -44,10 +46,13 @@ public class MetadataMapper {
             // path to the record file
             String recordFile = null;
 
+            boolean printToFile = true;
+
             // use the Apache cli framework for getting command line parameters
             Options options = new Options();
             options.addOption("c", true, "-c <file> : use parameters specified in <file>");
             options.addOption("r", true, "-r <file> : process CMD record in <file>.");
+            options.addOption("p", false, "print mapping to stdout (if omitted, the mapping will be written to file");
 
             CommandLineParser parser = new PosixParser();
 
@@ -62,6 +67,14 @@ public class MetadataMapper {
 
                 if (cmd.hasOption("r")) {
                     recordFile = cmd.getOptionValue("r");
+                }
+
+                if (cmd.hasOption("p")) {
+                    //print to stdout
+                    printToFile = false;
+                    LOG.info("Mapping will be printed to stdout");
+                } else {
+                    LOG.info("Mapping will be printed to file");
                 }
 
             } catch (org.apache.commons.cli.ParseException ex) {
@@ -128,9 +141,16 @@ public class MetadataMapper {
 
             // finished importing
             if (config.printMapping()) {
-                File file = new File("xsdMapping.txt");
-                facetMappingFactory.printMapping(file);
-                LOG.info("Printed facetMapping in " + file);
+                if (printToFile) {
+                    File file = new File("xsdMapping.txt");
+                    try (FileWriter fw = new FileWriter(file)) {
+                        fw.append("Facet mapping for ").append(recordFile).append("\n\n");
+                        facetMappingFactory.printMapping(() -> fw);
+                    }
+                    LOG.info("Printed facetMapping in {}", file.getCanonicalPath());
+                } else {
+                    facetMappingFactory.printMapping(() -> new OutputStreamWriter(System.out));
+                }
             }
         } catch (Exception ex) {
             LOG.error("FATAL!", ex);
