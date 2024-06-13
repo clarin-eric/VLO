@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Streams;
 
@@ -32,10 +33,14 @@ import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.exposure.models.PageView;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
@@ -78,7 +83,6 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -122,6 +126,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private final static List<String> TABS_ORDER = ImmutableList.of(DETAILS_SECTION, RESOURCES_SECTION,
             AVAILABILITY_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
 
+    @SpringBean
+    private SolrDocumentService documentService;
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -177,10 +183,14 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         // get document from parameters
         final SolrDocument document = documentParamConverter.fromParameters(params);
         if (null == document) {
-            Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
-            final PageParameters errorParams = new PageParameters(params)
-                    .remove(VloWebAppParameters.DOCUMENT_ID);
-            ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
+            // no document in parameters, there may be a request to look up by selflink
+            if (!lookupBySelfLink(params)) {
+                // we have no lead to an (existing) document, prepare an error response
+                Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
+                final PageParameters errorParams = new PageParameters(params)
+                        .remove(VloWebAppParameters.DOCUMENT_ID);
+                ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
+            }
         } else {
             if (config.isVloExposureEnabled()) {
                 try {
@@ -239,6 +249,52 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         };
 
         addComponents(params);
+    }
+
+    /**
+     * Looks up a record to display by self link. If found it will set the
+     * corresponding respond page
+     *
+     * @param params request parameters
+     * @return true iff a matching respond page was set
+     */
+    private boolean lookupBySelfLink(PageParameters params) {
+        final StringValue selfLinkParam = params.get(VloWebAppParameters.SELF_LINK);
+
+        // We will take action only if a 'selfLink' param was set
+        if (!selfLinkParam.isEmpty()) {
+            final String selfLink = selfLinkParam.toString().trim();
+            // fetch the record for the specified self link
+            final QueryFacetsSelection selection = new QueryFacetsSelection(
+                    ImmutableMap.of(
+                            fieldNameService.getFieldName(FieldKey.SELF_LINK),
+                            new FacetSelection(FacetSelectionType.AND, ImmutableList.of(selfLink))));
+            final List<SolrDocument> documents = documentService.getDocuments(selection, 0, 2);
+            if (!documents.isEmpty()) {
+                // there is (at least) one matching document
+                if (documents.size() > 1) {
+                    // More than one record found with the same self link!
+                    // This should not happen but can also not be excluded so let's warn the user
+                    Session.get().warn("More than one record was found for self link " + selfLink + ". Showing only the first match.");
+                }
+
+                // we show the first (and normally only) map
+                final SolrDocument firstDoc = documents.get(0);
+                final String docId = firstDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)).toString();
+
+                if (docId != null) {
+                    // adapt page parameters (selflink out, id in)
+                    final PageParameters newParams = new PageParameters(params);
+                    newParams.remove(VloWebAppParameters.SELF_LINK);
+                    newParams.add(VloWebAppParameters.DOCUMENT_ID, docId);
+                    // set new response: current page but with updated parameters
+                    RequestCycle.get().setResponsePage(getClass(), newParams);
+                    return true;
+                }
+            }
+        }
+        // if we get here we did not find a document to redirect to
+        return false;
     }
 
     private void addComponents(PageParameters params) {
@@ -445,7 +501,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         if (tabs.getSelectedTab() > 0) {
             params.add(VloWebAppParameters.RECORD_PAGE_TAB, TABS_ORDER.get(tabs.getSelectedTab()));
         }
-        
+
         // exclude path encoded docId param 
         params.remove(VloWebAppParameters.DOCUMENT_ID);
 
@@ -485,7 +541,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour(), true));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
+        response
+                .render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class,
+                        "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourRecordPage();});", "initTourRecordPage"));
 
         response.render(JavaScriptHeaderItem.forUrl(config.getLrSwitchboardPopupScriptUrl(), "switchboard-popup", true));
