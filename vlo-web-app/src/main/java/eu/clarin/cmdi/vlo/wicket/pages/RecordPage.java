@@ -193,22 +193,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             }
         } else {
             if (config.isVloExposureEnabled()) {
-                try {
-                    // save these information (id, ip, url, referer) in postgresql DB for record
-                    // exposures
-                    String id = document.get("id").toString();
-                    HttpServletRequest httpRequest = ((ServletWebRequest) RequestCycle.get().getRequest())
-                            .getContainerRequest();
-                    String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
-                    // get user ip address
-                    String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
-                    String referer = httpRequest.getHeader("referer");
-                    // create PageView object and save it in the DB
-                    PageView pageView = new PageView(id, ip, pageUrl, referer);
-                    pageView.save(config);
-                } catch (Exception e) {
-                    logger.error("Error while storing page view statistics", e);
-                }
+                recordExposure(document);
             }
 
             final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
@@ -216,39 +201,28 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
         }
 
-        final IModel<Integer> childRecordsCountModel = new RecordMetadataLinksCountModel(getModel());
-        linksCountLabelModel = new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                final SolrDocument document = RecordPage.this.getModelObject();
-                if (document != null) {
-                    final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
-                    if (countValue instanceof Integer) {
-                        final Long fieldValuesCount
-                                = Streams.concat(
-                                        // landing page links
-                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
-                                        // search page links
-                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
-                                        // include FCS links count iff these links globally enabled
-                                        showFcsLinks
-                                                ? Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty())
-                                                : Stream.empty())
-                                        .collect(Collectors.counting())
-                                // add child records
-                                + childRecordsCountModel.getObject();
-                        if (fieldValuesCount == 0) {
-                            return ((Integer) countValue).toString();
-                        } else {
-                            return Long.toString(fieldValuesCount + (Integer) countValue);
-                        }
-                    }
-                }
-                return null;
-            }
-        };
+        linksCountLabelModel = new LinksCountLabelModel(getModel());
 
         addComponents(params);
+    }
+
+    private void recordExposure(final SolrDocument document) {
+        try {
+            // save these information (id, ip, url, referer) in postgresql DB for record
+            // exposures
+            String id = document.get("id").toString();
+            HttpServletRequest httpRequest = ((ServletWebRequest) RequestCycle.get().getRequest())
+                    .getContainerRequest();
+            String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
+            // get user ip address
+            String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
+            String referer = httpRequest.getHeader("referer");
+            // create PageView object and save it in the DB
+            PageView pageView = new PageView(id, ip, pageUrl, referer);
+            pageView.save(config);
+        } catch (Exception e) {
+            logger.error("Error while storing page view statistics", e);
+        }
     }
 
     /**
@@ -547,5 +521,55 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourRecordPage();});", "initTourRecordPage"));
 
         response.render(JavaScriptHeaderItem.forUrl(config.getLrSwitchboardPopupScriptUrl(), "switchboard-popup", true));
+    }
+
+    /**
+     * Model that provides a count of the total number of links to report for a record (eg in the links tab heading)
+     */
+    private class LinksCountLabelModel extends LoadableDetachableModel<String> {
+
+        private final IModel<SolrDocument> docModel;
+        private final RecordMetadataLinksCountModel childRecordsCountModel;
+
+        public LinksCountLabelModel(IModel<SolrDocument> docModel) {
+            this.docModel = docModel;
+            this.childRecordsCountModel = new RecordMetadataLinksCountModel(docModel);
+        }
+
+        @Override
+        protected String load() {
+            final SolrDocument document = docModel.getObject();
+            if (document != null) {
+                final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
+                if (countValue instanceof Integer) {
+                    final Long fieldValuesCount
+                            = Streams.concat(
+                                    // landing page links
+                                    Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                    // search page links
+                                    Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                    // include FCS links count iff these links globally enabled
+                                    showFcsLinks
+                                            ? Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty())
+                                            : Stream.empty())
+                                    .collect(Collectors.counting())
+                            // add child records
+                            + childRecordsCountModel.getObject();
+                    if (fieldValuesCount == 0) {
+                        return ((Integer) countValue).toString();
+                    } else {
+                        return Long.toString(fieldValuesCount + (Integer) countValue);
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void detach() {
+            childRecordsCountModel.detach();
+            docModel.detach();
+        }
+
     }
 }
