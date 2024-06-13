@@ -39,7 +39,6 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
-import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
@@ -68,12 +67,14 @@ import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -95,7 +96,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -122,6 +126,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     public final static String ALL_METADATA_SECTION = "cmdi";
     public final static String TECHNICAL_DETAILS_SECTION = "technical";
     public final static String HIERARCHY_SECTION = "hierarchy";
+
+    public final static String CMDI_MEDIA_TYPE = "application/x-cmdi+xml";
 
     private final static List<String> TABS_ORDER = ImmutableList.of(DETAILS_SECTION, RESOURCES_SECTION,
             AVAILABILITY_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
@@ -196,9 +202,13 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 recordExposure(document);
             }
 
-            final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
-            setModel(documentModel);
-            add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
+            // check if the client requested a CMDI file (via content negotiation)
+            if (!redirectToCmdiFile(document)) {
+                // CMDI file not requested
+                final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
+                setModel(documentModel);
+                add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
+            }
         }
 
         linksCountLabelModel = new LinksCountLabelModel(getModel());
@@ -254,20 +264,43 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
                 // we show the first (and normally only) map
                 final SolrDocument firstDoc = documents.get(0);
-                final String docId = firstDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)).toString();
 
-                if (docId != null) {
-                    // adapt page parameters (selflink out, id in)
-                    final PageParameters newParams = new PageParameters(params);
-                    newParams.remove(VloWebAppParameters.SELF_LINK);
-                    newParams.add(VloWebAppParameters.DOCUMENT_ID, docId);
-                    // set new response: current page but with updated parameters
-                    RequestCycle.get().setResponsePage(getClass(), newParams);
+                // check if the client requested a CMDI file (via content negotiation)
+                if (redirectToCmdiFile(firstDoc)) {
                     return true;
+                } else {
+                    // redirect to record page
+                    final String docId = firstDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)).toString();
+
+                    if (docId != null) {
+                        // adapt page parameters (selflink out, id in)
+                        final PageParameters newParams = new PageParameters(params);
+                        newParams.remove(VloWebAppParameters.SELF_LINK);
+                        newParams.add(VloWebAppParameters.DOCUMENT_ID, docId);
+                        // set new response: current page but with updated parameters
+                        RequestCycle.get().setResponsePage(getClass(), newParams);
+                        return true;
+                    }
                 }
             }
         }
         // if we get here we did not find a document to redirect to
+        return false;
+    }
+
+    private boolean redirectToCmdiFile(SolrDocument document) {
+        final Request request = RequestCycle.get().getRequest();
+        if (request instanceof WebRequest) {
+            final String acceptHeader = ((WebRequest) request).getHeader("Accept");
+            if (acceptHeader != null && acceptHeader.startsWith(CMDI_MEDIA_TYPE)) {
+                final Collection<Object> cmdiUrlValues = document.getFieldValues(fieldNameService.getFieldName(FieldKey.COMPLETE_METADATA));
+                if (!cmdiUrlValues.isEmpty()) {
+                    throw new RedirectToUrlException(
+                            cmdiUrlValues.iterator().next().toString(),
+                            HttpServletResponse.SC_MOVED_TEMPORARILY);
+                }
+            }
+        }
         return false;
     }
 
@@ -524,7 +557,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     }
 
     /**
-     * Model that provides a count of the total number of links to report for a record (eg in the links tab heading)
+     * Model that provides a count of the total number of links to report for a
+     * record (eg in the links tab heading)
      */
     private class LinksCountLabelModel extends LoadableDetachableModel<String> {
 
