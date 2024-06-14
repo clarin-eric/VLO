@@ -23,4 +23,5 @@ package eu.clarin.cmdi.vlo;
 public class CmdConstants {
 
     public final static String CMD_NAMESPACE = "http://www.clarin.eu/cmd/1";
+    public final static String CMDI_MEDIA_TYPE = "application/x-cmdi+xml";
 }
