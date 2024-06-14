@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.centreregistry.CachingEndPointProvidersService;
 import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService;
 import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
 import eu.clarin.cmdi.vlo.service.impl.DOIResolver;
@@ -253,7 +254,7 @@ public class VloServicesSpringConfig {
 
     @Bean
     public EndpointProvidersService endpointProvidersService() {
-        return new CentreRegistryProvidersService(vloConfig);
+        return new CachingEndPointProvidersService(new CentreRegistryProvidersService(vloConfig));
     }
 
     @Bean
