@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.AfterClass;
@@ -148,7 +149,7 @@ public class CentreRegistryProvidersServiceTest {
 
         instance = new CentreRegistryProvidersService(centreJsonFile.toURI().toString(), endpointJsonFile.toURI().toString()) {
             @Override
-            protected List<EndpointProvider> parseEndpoints() throws IOException {
+            protected List<EndpointProvider> parseEndpoints() throws IOException, URISyntaxException {
                 // first call should succeed, after that an exception is thrown
                 if (count.incrementAndGet() > 1) {
                     throw new IOException("second call");

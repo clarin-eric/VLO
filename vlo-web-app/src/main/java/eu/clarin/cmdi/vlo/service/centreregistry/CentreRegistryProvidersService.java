@@ -20,7 +20,8 @@ import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -78,7 +79,7 @@ public class CentreRegistryProvidersService implements EndpointProvidersService 
             fillInCentreDetails(endpoints);
             endpoints.sort(Comparator.comparing(EndpointProvider::getCentreName));
             return endpoints;
-        } catch (IOException ex) {
+        } catch (URISyntaxException | IOException ex) {
             // try to return last response
             if (old != null) {
                 logger.warn("Error while retrieving new OAI-PMH endpoint list. Returning last response.", ex);
@@ -90,9 +91,10 @@ public class CentreRegistryProvidersService implements EndpointProvidersService 
         }
     }
 
-    protected List<EndpointProvider> parseEndpoints() throws IOException {
-        final URL url = new URL(endpointsJsonUrl);
-        try (InputStream is = url.openStream()) {
+    protected List<EndpointProvider> parseEndpoints() throws IOException, URISyntaxException {
+        final URI uri = new URI(endpointsJsonUrl);
+        logger.debug("Requesting list of centres from {}", uri);
+        try (InputStream is = uri.toURL().openStream()) {
             final JSONTokener tokener = new JSONTokener(is);
             final JSONArray jsonArray = new JSONArray(tokener);
             // make endpoint provider object for all endpoints
@@ -119,11 +121,12 @@ public class CentreRegistryProvidersService implements EndpointProvidersService 
         }
     }
 
-    protected void fillInCentreDetails(List<EndpointProvider> providers) throws IOException {
+    protected void fillInCentreDetails(List<EndpointProvider> providers) throws IOException, URISyntaxException {
         Collection<Integer> centreIds = providers.stream().map(EndpointProvider::getCentreKey).collect(Collectors.toSet());
 
-        final URL url = new URL(centresJsonUrl);
-        try (InputStream is = url.openStream()) {
+        final URI uri = new URI(centresJsonUrl);
+        logger.debug("Requesting centre details from {}", uri);
+        try (InputStream is = uri.toURL().openStream()) {
             final JSONTokener tokener = new JSONTokener(is);
             final JSONArray jsonArray = new JSONArray(tokener);
             final Stream<JSONObject> centres = jsonArrayToObjectStream(jsonArray)

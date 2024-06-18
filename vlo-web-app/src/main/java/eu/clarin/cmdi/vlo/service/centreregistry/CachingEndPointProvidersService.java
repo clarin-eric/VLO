@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,17 +32,11 @@ import org.slf4j.LoggerFactory;
  */
 public class CachingEndPointProvidersService implements EndpointProvidersService {
 
-    public final static Duration DEFAULT_EXPIRATION = Duration.ofHours(2);
-
     private final static Logger logger = LoggerFactory.getLogger(CachingEndPointProvidersService.class);
     private final static String CACHE_KEY = "CACHE_KEY";
 
     private final EndpointProvidersService service;
     private final LoadingCache<String, List<EndpointProvider>> cache;
-
-    public CachingEndPointProvidersService(EndpointProvidersService service) {
-        this(service, DEFAULT_EXPIRATION);
-    }
 
     public CachingEndPointProvidersService(EndpointProvidersService service, Duration expirationTime) {
         this.service = service;

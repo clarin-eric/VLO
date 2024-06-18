@@ -90,6 +90,7 @@ public class VloServicesSpringConfig {
      * Handle resolution cache expiry in seconds
      */
     private static final int HANDLE_CACHE_EXPIRY = 3600;
+    private static final Duration ENDPOINTS_CACHE_EXPIRY = Duration.ofHours(2);
 
     @Inject
     VloConfig vloConfig;
@@ -254,7 +255,7 @@ public class VloServicesSpringConfig {
 
     @Bean
     public EndpointProvidersService endpointProvidersService() {
-        return new CachingEndPointProvidersService(new CentreRegistryProvidersService(vloConfig));
+        return new CachingEndPointProvidersService(new CentreRegistryProvidersService(vloConfig), ENDPOINTS_CACHE_EXPIRY);
     }
 
     @Bean
