@@ -20,8 +20,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import java.net.URI;
+import java.time.Duration;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,11 +52,11 @@ public class CachingHandleResolver implements HandleResolver {
      * @param resolver inner resolver to use
      * @param expireTime expiry time for cached entries in seconds
      */
-    public CachingHandleResolver(HandleResolver resolver, int expireTime) {
+    public CachingHandleResolver(HandleResolver resolver, Duration expireTime) {
         logger.info("Results of the handle resolver [{}] will be cached for {} seconds", resolver, expireTime);
         this.inner = resolver;
         cache = CacheBuilder.newBuilder()
-                .expireAfterWrite(expireTime, TimeUnit.SECONDS)
+                .expireAfterWrite(expireTime)
                 .build(new CacheLoader<URI, URI>() {
 
                     @Override
