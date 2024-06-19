@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.importer.processor;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.ximpleware.AutoPilot;
 import com.ximpleware.NavException;
@@ -281,8 +282,11 @@ public class FacetProcessorVTDXML implements FacetProcessor {
             return;
         }
         boolean removeSourceValue = false;
+        final String trimmedValue = Optional.ofNullable(valueLanguagePair.getLeft())
+                .map(String::trim)
+                .orElse(null);
 
-        final List<String> postProcessed = postProcess(facetConfig.getName(), valueLanguagePair.getLeft(), facetValuesMap);
+        final List<String> postProcessed = postProcess(facetConfig.getName(), trimmedValue, facetValuesMap);
 
         if (facetConfig.getConditionTargetSet() != null) {
 
@@ -302,7 +306,7 @@ public class FacetProcessorVTDXML implements FacetProcessor {
                 }
             } else {
                 for (TargetFacet target : facetConfig.getConditionTargetSet()
-                        .getTargetsFor(valueLanguagePair.getLeft())) {
+                        .getTargetsFor(trimmedValue)) {
                     removeSourceValue |= target.getRemoveSourceValue();
 
                     ValueSet valueSet = new ValueSet(vtdIndex, facetConfig, target, ImmutablePair.of(target.getValue(), ENGLISH_LANGUAGE), false, true);
@@ -363,16 +367,16 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param facetName name of the facet for which value was extracted
      * @param extractedValue extracted value from CMDI file
      * @return value after applying matching PostProcessor or the original value
-     * if no PostProcessor was registered for the facet
+     * if no PostProcessor was registered for the facet. May be an immutable
+     * list!
      */
     private List<String> postProcess(String facetName, String extractedValue, FacetValuesMap facetValuesMap) {
-        List<String> resultList = new ArrayList<>();
         if (postProcessors.containsKey(facetName)) {
-            AbstractPostNormalizer processor = postProcessors.get(facetName);
-            resultList = processor.process(extractedValue, facetValuesMap);
+            return postProcessors
+                    .get(facetName)
+                    .process(extractedValue, facetValuesMap);
         } else {
-            resultList.add(extractedValue);
+            return ImmutableList.of(extractedValue);
         }
-        return resultList;
     }
 }
