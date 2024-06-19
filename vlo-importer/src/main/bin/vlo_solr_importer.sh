@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -z "$IMPORTER_JAVA_OPTS" ]; then
-	IMPORTER_JAVA_OPTS="-Xmx4G"
+if [ -z "${IMPORTER_JAVA_OPTS[@]}" ]; then
+	IMPORTER_JAVA_OPTS=("-Xmx4G")
 fi
 
 # Get the script's source directory
@@ -39,7 +39,7 @@ echo "Logging in ${LOGDIR}"
 # -l path OR -l "path1 path2 ..."
 #
 
-$JAVA "${IMPORTER_JAVA_OPTS}" \
+$JAVA "${IMPORTER_JAVA_OPTS[@]}" \
     -cp "${SCRIPT_DIR}/lib/*" \
 	-DconfigFile="${DFLT_CONFIG}" \
     -DIMPORTER_LOG_DIR="${LOGDIR}" \
