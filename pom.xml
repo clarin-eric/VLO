@@ -44,10 +44,10 @@
         
         <!-- Common runtime dependency versions -->
         <solr.version>8.11.2</solr.version>
-        <slf4j.version>2.0.9</slf4j.version>
+        <slf4j.version>2.0.13</slf4j.version>
         <log4j2.version>2.20.0</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
-        <spring.boot.version>3.2.0</spring.boot.version>
+        <spring.boot.version>3.3.0</spring.boot.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
@@ -76,7 +76,7 @@
             <dependency>
                 <groupId>com.sun.xml.bind</groupId>
                 <artifactId>jaxb-impl</artifactId>
-                <version>4.0.4</version>
+                <version>4.0.5</version>
                 <scope>runtime</scope>
             </dependency>
             <dependency>
@@ -87,7 +87,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.0.0-jre</version>
+                <version>33.2.1-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
