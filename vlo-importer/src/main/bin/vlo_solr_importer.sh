@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "${IMPORTER_JAVA_OPTS[@]}" ]; then
+if [ -z "${IMPORTER_JAVA_OPTS}" ]; then
 	IMPORTER_JAVA_OPTS=("-Xmx4G")
 fi
 
