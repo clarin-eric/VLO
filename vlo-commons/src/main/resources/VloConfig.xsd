@@ -247,6 +247,7 @@
             <xs:enumeration value="HARVESTER_ROOT" />
             <xs:enumeration value="DATA_PROVIDER" />
             <xs:enumeration value="FILENAME" />
+            <xs:enumeration value="METADATA_DIRECTORY" />
             <xs:enumeration value="FORMAT" />
             <xs:enumeration value="LANDINGPAGE" />
             <xs:enumeration value="SEARCHPAGE" />

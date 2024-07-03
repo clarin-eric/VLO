@@ -41,13 +41,14 @@ import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
 /**
  * Handles a single record in the import process. A listener can be registered
- * to obtain details on exceptional events (for example for statistics 
+ * to obtain details on exceptional events (for example for statistics
  * gathering)
  *
  * @author Twan Goosen <twan@clarin.eu>
@@ -198,6 +199,7 @@ public abstract class CMDIRecordProcessor<T> {
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT), dataOrigin.getOriginName(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.ID), cmdiData.getId(), false);
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FILENAME), file.getAbsolutePath(), false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.METADATA_DIRECTORY), getRelativeDirectory(file, dataOrigin), false);
 
         // data provided by CLARIN's OAI-PMH harvester
         endpointDescription.ifPresent(
@@ -363,6 +365,20 @@ public abstract class CMDIRecordProcessor<T> {
                 linkStatus.map(LinkStatus::getCheckingDataAsUtcEpochMs).orElse(null)
         );
 
+    }
+
+    private String getRelativeDirectory(File file, DataRoot dataOrigin) {
+        final Path directory = file.toPath().getParent();
+        if (directory != null) {
+            final Path base = new File(dataOrigin.getToStrip()).toPath();
+            if (base.isAbsolute()) {
+                return base.relativize(directory).toString();
+            } else {
+                return directory.toString();
+            }
+        } else {
+            return null;
+        }
     }
 
     protected Optional<Map<String, LinkStatus>> getLinkStatusForLandingPages(List<Resource> landingPageResources, File file) {
