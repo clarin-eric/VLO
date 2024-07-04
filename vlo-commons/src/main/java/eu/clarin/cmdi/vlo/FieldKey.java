@@ -40,6 +40,7 @@ public enum FieldKey {
     LICENSE_TYPE,
     SOLR_SCORE,
     SELF_LINK,
+    NORMALIZED_SELF_LINK,
     FILENAME,
     METADATA_DIRECTORY,
     RESOURCE,

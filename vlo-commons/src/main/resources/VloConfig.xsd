@@ -243,6 +243,7 @@
             <xs:enumeration value="RESOURCE" />
             <xs:enumeration value="RESOURCE_AVAILABILITY_SCORE" />
             <xs:enumeration value="SELF_LINK" />
+            <xs:enumeration value="NORMALIZED_SELF_LINK" />
             <xs:enumeration value="ID" />
             <xs:enumeration value="HARVESTER_ROOT" />
             <xs:enumeration value="DATA_PROVIDER" />

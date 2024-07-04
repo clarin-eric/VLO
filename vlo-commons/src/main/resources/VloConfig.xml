@@ -109,6 +109,7 @@
         <field key="RESOURCE_CLASS">resourceClass</field>
         <field key="RESOURCE">_resourceRef</field>
         <field key="SELF_LINK">_selfLink</field>
+        <field key="NORMALIZED_SELF_LINK">_normalizedSelfLink</field>
         <field key="ID">id</field>
         <field key="HARVESTER_ROOT">_harvesterRoot</field>
         <field key="DATA_PROVIDER">dataProvider</field>
