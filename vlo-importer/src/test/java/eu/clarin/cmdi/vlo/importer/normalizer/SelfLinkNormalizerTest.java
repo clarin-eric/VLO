@@ -87,6 +87,13 @@ public class SelfLinkNormalizerTest {
     }
 
     @Test
+    public void testProcessHandleHDL() {
+        final String result = process("HDL:1234/5678");
+        assertNotNull(result);
+        assertEquals("hdl:1234/5678", result, "HDL: should be normalized to hdl:");
+    }
+
+    @Test
     public void testProcessHandleHdlHttp() {
         final String result = process("http://hdl.handle.net/1234/5678");
         assertNotNull(result);
@@ -108,6 +115,13 @@ public class SelfLinkNormalizerTest {
     }
 
     @Test
+    public void testProcessHandleDOI() {
+        final String result = process("DOI:10.0001/1234");
+        assertNotNull(result);
+        assertEquals("doi:10.0001/1234", result, "doi: should remain unchanged as doi:");
+    }
+
+    @Test
     public void testProcessHandleDoiHttp() {
         final String result = process("http://doi.org/10.0001/1234");
         assertNotNull(result);
@@ -117,6 +131,13 @@ public class SelfLinkNormalizerTest {
     @Test
     public void testProcessHandleDoiHttps() {
         final String result = process("https://doi.org/10.0001/1234");
+        assertNotNull(result);
+        assertEquals("doi:10.0001/1234", result, "DOI URL should get normalised to doi:");
+    }
+
+    @Test
+    public void testProcessHandleDoiHTTPS() {
+        final String result = process("HTTPS://DOI.ORG/10.0001/1234");
         assertNotNull(result);
         assertEquals("doi:10.0001/1234", result, "DOI URL should get normalised to doi:");
     }
