@@ -59,10 +59,24 @@ public class SelfLinkNormalizerTest {
     }
 
     @Test
+    public void testProcessHTTP() {
+        final String result = process("HTTP://www.clarin.eu");
+        assertNotNull(result);
+        assertEquals("http://www.clarin.eu", result, "HTTP upper case should become lower case http");
+    }
+
+    @Test
     public void testProcessHttps() {
         final String result = process("https://www.clarin.eu");
         assertNotNull(result);
         assertEquals("http://www.clarin.eu", result, "https: should get normalised to http:");
+    }
+
+    @Test
+    public void testProcessHTTPS() {
+        final String result = process("https://www.clarin.eu");
+        assertNotNull(result);
+        assertEquals("http://www.clarin.eu", result, "HTTPS: should get normalised to http:");
     }
 
     @Test

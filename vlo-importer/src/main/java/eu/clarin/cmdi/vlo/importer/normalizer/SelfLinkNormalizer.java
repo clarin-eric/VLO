@@ -26,6 +26,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * Carries out the following normalizations to incoming values:
+ * <ul>
+ * <li>All handles (as in handle.net) to `hdl:{ID}`</li>
+ * <li>All DOIs (as in doi.org) to `doi:{ID}`</li>
+ * <li>Urls starting with `https://` to `http://`</li>
+ * </ul>
  *
  * @author twagoo
  */
@@ -55,8 +61,8 @@ public class SelfLinkNormalizer extends AbstractPostNormalizer {
                 final URI uri = new URI(selfLink);
                 final String scheme = uri.getScheme();
                 if (scheme != null) {
-                    switch (scheme) {
-                        case "https" -> {
+                    switch (scheme.toLowerCase()) {
+                        case "http", "https" -> {
                             return "http:" + uri.getSchemeSpecificPart();
                         }
                     }
