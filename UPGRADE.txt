@@ -84,6 +84,20 @@ updated configuration file:
 
 
 -------------------------------
+Upgrading from 4.11.x to 4.12.x
+-------------------------------
+
+* Additions to VloConfig.xml:
+
+  - New fields:
+        <field key="NORMALIZED_SELF_LINK">_normalizedSelfLink</field>
+        <field key="METADATA_DIRECTORY">_metadataDirectory</field>
+        
+* VLO mapping definitions version 1.8.0 must be used (bundled and can be
+retrieved from <https://github.com/clarin-eric/VLO-mapping/releases/tag/1.8.0>).
+
+
+-------------------------------
 Upgrading from 4.10.x to 4.11.x
 -------------------------------
 

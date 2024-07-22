@@ -1,6 +1,25 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.12.0 (July 2024)
+* Requesting of a record by self link in URL
+    <https://github.com/clarin-eric/VLO/issues/383>
+* Search for records by normalized self link
+    <https://github.com/clarin-eric/VLO/issues/385>
+* Fewer requests made to centre registry on loading of contributors page
+    <https://github.com/clarin-eric/VLO/issues/382>
+* Custom user agent for requests from importer / web app
+    <https://github.com/clarin-eric/VLO/issues/381>
+* Label for 'Format' facet changed 'File type'
+    <https://github.com/clarin-eric/VLO/issues/379>
+* Whitespace properly trimmed in field values
+    <https://github.com/clarin-eric/VLO/issues/378>
+* Adding of a field _metadataDirectory
+    <https://github.com/clarin-eric/VLO/issues/375>
+* `0` values ignored when populating temporal coverage field
+    <https://github.com/clarin-eric/VLO/issues/323>
+* Various dependency updates
+
 VLO 4.11.6 (December 2023)
 * Using the new linkchecker persistence library (v1.0.0)
 * Upgraded Java XML and JSON binding framework versions
