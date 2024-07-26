@@ -87,6 +87,10 @@ updated configuration file:
 Upgrading from 4.11.x to 4.12.x
 -------------------------------
 
+* There are changes to the Solr index definition, therefore an import must be
+run on a newly created index – i.e. this version should not be used with an
+index that was generated with an earlier version of the VLO).
+
 * Additions to VloConfig.xml:
 
   - New fields:
