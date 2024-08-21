@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo;
 
 import com.google.common.base.Strings;
 import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
 import jakarta.json.bind.annotation.JsonbCreator;
 import jakarta.json.bind.annotation.JsonbProperty;
@@ -85,21 +86,24 @@ public class ResourceInfo {
         return "ResourceInfo{" + "url=" + url + ", type=" + type + ", status=" + status + ", lastChecked=" + lastChecked + '}';
     }
 
-    public String toJson(Jsonb jsonb) {
+    public String toJson() {
         try {
-            return jsonb.toJson(this);
+            final Jsonb jsonb = JsonbBuilder.create();
+            final String json = jsonb.toJson(this);
+            return json;
         } catch (JsonbException ex) {
             logger.error("Error while writing ResourceInfo object to JSON: {}", this, ex);
             return null;
         }
     }
 
-    public static ResourceInfo fromJson(Jsonb jsonb, String json) {
+    public static ResourceInfo fromJson(String json) {
         if (Strings.isNullOrEmpty(json)) {
             return null;
         }
 
         try {
+            final Jsonb jsonb = JsonbBuilder.create();
             return jsonb.fromJson(json, ResourceInfo.class);
         } catch (JsonbException ex) {
             logger.error("Error while reading ResourceInfo object from JSON: {}", json, ex);

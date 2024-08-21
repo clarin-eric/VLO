@@ -39,8 +39,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
@@ -59,7 +57,6 @@ public abstract class CMDIRecordProcessor<T> {
     protected final static Logger LOG = LoggerFactory.getLogger(CMDIRecordProcessor.class);
     private final FieldNameService fieldNameService;
     private final CMDIDataProcessor<T> dataProcessor;
-    private final Jsonb jsonb;
     private Optional<CMDIRecordProcessorListener> processingListener = Optional.empty();
 
     private final static DataRoot NOOP_DATAROOT = new DataRoot("dataroot", new File("/"), "http://null", "", false);
@@ -72,7 +69,6 @@ public abstract class CMDIRecordProcessor<T> {
     public CMDIRecordProcessor(CMDIDataProcessor<T> dataProcessor, FieldNameService fieldNameService) {
         this.dataProcessor = dataProcessor;
         this.fieldNameService = fieldNameService;
-        this.jsonb = JsonbBuilder.create();
     }
 
     /**
@@ -244,7 +240,7 @@ public abstract class CMDIRecordProcessor<T> {
                             resource.getMimeType(),
                             landingPageStatus.map(LinkStatus::getStatus).orElse(null),
                             landingPageStatus.map(LinkStatus::getCheckingDataAsUtcEpochMs).orElse(null))
-                            .toJson(jsonb);
+                            .toJson();
                     cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LANDINGPAGE), landingPageValue, false);
                 }
             });
@@ -329,7 +325,8 @@ public abstract class CMDIRecordProcessor<T> {
 
             final ResourceInfo resourceInfo = createResourceInfo(linkStatusMap, resources.get(i), fieldValue);
 
-            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfo.toJson(jsonb), false);
+            final String resourceInfoJson = resourceInfo.toJson();
+            cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.RESOURCE), resourceInfoJson, false);
 
             // TODO check should probably be moved into Solr (by using some minimum length filter)
             if (!Strings.isNullOrEmpty(resourceInfo.getType())) {
