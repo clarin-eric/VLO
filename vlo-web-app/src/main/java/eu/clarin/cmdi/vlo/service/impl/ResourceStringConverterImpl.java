@@ -25,8 +25,6 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.UriResolver;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
@@ -43,7 +41,6 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
 
-    private final Jsonb jsonb = JsonbBuilder.create();
     private final UriResolver resolver;
     private final ExecutorService preflightPool;
 
@@ -69,7 +66,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
         } else {
             // serialize resource string to find href and mime type
-            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(jsonb, resourceString);
+            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(resourceString);
             if (resourceInfo == null) {
                 logger.warn("Resource string could not be parsed: {}", resourceString);
                 return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
