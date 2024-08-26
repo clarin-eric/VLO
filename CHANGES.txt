@@ -1,7 +1,7 @@
 Bug fixes and new features
 --------------------------
 
-VLO 4.12.0 (July 2024)
+VLO 4.12.0 (August 2024)
 * Requesting of a record by self link in URL
     <https://github.com/clarin-eric/VLO/issues/383>
 * Search for records by normalized self link
