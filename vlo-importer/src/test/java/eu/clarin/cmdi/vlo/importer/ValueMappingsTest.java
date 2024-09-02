@@ -91,7 +91,7 @@ public class ValueMappingsTest extends ImporterTestcase {
     public void testKeepSource() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\" CMDVersion=\"1.2\">\n";
         content += "   <cmd:Header>\n";
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
@@ -149,7 +149,7 @@ public class ValueMappingsTest extends ImporterTestcase {
     public void testRegEx() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\" CMDVersion=\"1.2\">\n";
         content += "   <cmd:Header>\n";
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
@@ -212,7 +212,7 @@ public class ValueMappingsTest extends ImporterTestcase {
     public void testTargetFacet() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\" CMDVersion=\"1.2\">\n";
         content += "   <cmd:Header>\n";
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";

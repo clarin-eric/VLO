@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 public class CMDIParserVTDXML<T> implements CMDIDataProcessor<T> {
 
     private final static Logger LOG = LoggerFactory.getLogger(CMDIParserVTDXML.class);
-    
+
     // Supported version of CMDI
     private final static List<String> SUPPORTED_CMDI_VERSIONS = ImmutableList.of(
             "1.2"
@@ -76,7 +76,7 @@ public class CMDIParserVTDXML<T> implements CMDIDataProcessor<T> {
         final Optional<String> documentCmdVersion = getDocumentCmdVersion(nav);
         final boolean supportedCmdiVersion = documentCmdVersion.map(
                 version -> SUPPORTED_CMDI_VERSIONS.contains(version))
-                .orElse(false);
+                .orElse(true); // version
 
         if (supportedCmdiVersion) {
             // CMDI profile information
