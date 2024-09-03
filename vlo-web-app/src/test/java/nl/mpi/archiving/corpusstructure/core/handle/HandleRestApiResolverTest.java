@@ -31,25 +31,6 @@ import static org.junit.Assert.*;
  */
 public class HandleRestApiResolverTest {
 
-    public HandleRestApiResolverTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     /**
      * Test of getUrlFromJson method, of class HandleRestApiResolver.
      */
@@ -65,19 +46,40 @@ public class HandleRestApiResolverTest {
         assertEquals(expResult, result);
     }
 
+    private boolean aliasRequestMade;
+
     /**
      * Test of getUrlFromJson method, of class HandleRestApiResolver.
      */
     @Test
     public void testGetUrlFromJsonWithAlias() throws Exception {
-        String handle = "11858/00-1734-0000-0002-16D6-5";
-        String jsonString = "{\"responseCode\":1,\"handle\":\"11858/00-1734-0000-0002-16D6-5\",\"values\":[{\"index\":1,\"type\":\"HS_ALIAS\",\"data\":{\"format\":\"string\",\"value\":\"21.11113/00-1734-0000-0002-16D6-5\"},\"ttl\":86400,\"timestamp\":\"2017-10-05T13:58:46Z\"},{\"index\":8,\"type\":\"DISABLED_CREATOR\",\"data\":{\"format\":\"string\",\"value\":\"1734\"},\"ttl\":86400,\"timestamp\":\"2017-10-05T13:58:46Z\"},{\"index\":100,\"type\":\"HS_ADMIN\",\"data\":{\"format\":\"admin\",\"value\":{\"handle\":\"0.NA/11858\",\"index\":200,\"permissions\":\"010001110000\",\"legacyByteLength\":true}},\"ttl\":86400}]}";
+        final String handle = "11858/00-1734-0000-0002-16D6-5";
+        final String ALIAS_HANDLE = "21.11113/00-1734-0000-0002-16D6-5";
+        final String TARGET_URL = "http://textgridrep.org/textgrid:k98p.0";
+        final String jsonString = "{\"responseCode\":1,\"handle\":\"11858/00-1734-0000-0002-16D6-5\",\"values\":[{\"index\":1,\"type\":\"HS_ALIAS\",\"data\":{\"format\":\"string\",\"value\":\"" + ALIAS_HANDLE + "\"},\"ttl\":86400,\"timestamp\":\"2017-10-05T13:58:46Z\"},{\"index\":8,\"type\":\"DISABLED_CREATOR\",\"data\":{\"format\":\"string\",\"value\":\"1734\"},\"ttl\":86400,\"timestamp\":\"2017-10-05T13:58:46Z\"},{\"index\":100,\"type\":\"HS_ADMIN\",\"data\":{\"format\":\"admin\",\"value\":{\"handle\":\"0.NA/11858\",\"index\":200,\"permissions\":\"010001110000\",\"legacyByteLength\":true}},\"ttl\":86400}]}";
 
-        HandleRestApiResolver instance = new HandleRestApiResolver();
-        String expResult = "http://textgridrep.org/textgrid:k98p.0";
+        aliasRequestMade = false;
+
+        final HandleRestApiResolver instance = new HandleRestApiResolver() {
+            @Override
+            public String getUrl(String handle) {
+                // mock this response to retrieve the alias which should be called by getUrlFromJson
+                if (handle.equals(ALIAS_HANDLE)) {
+                    aliasRequestMade = true;
+                    return TARGET_URL;
+                } else {
+                    return super.getUrl(handle);
+                }
+            }
+
+        };
+        String expResult = TARGET_URL;
         String result = instance.getUrlFromJson(handle, jsonString);
         assertNotNull(result);
         assertEquals(expResult, result);
+
+        // follow-up request should have been for the alias!
+        assertTrue(aliasRequestMade);
     }
 
 }

@@ -99,20 +99,15 @@ public class HandleRestApiResolver implements HandleResolver {
         final String requestUrl = handleApiBaseUrl + handle;
         logger.debug("Making request to {}", requestUrl);
 
-        final Client client = Client.create();
-        final WebResource resource = client.resource(requestUrl);
-
         try {
-            final ClientResponse response = resource
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(ClientResponse.class);
+            final ClientResponse response = requestHandleDataJson(requestUrl);
 
             if (Response.Status.OK.getStatusCode() != response.getStatus()) {
                 final Response.StatusType statusInfo = response.getStatusInfo();
                 logger.error("Unexpected response status {} - {} for {}", statusInfo.getStatusCode(), statusInfo.getReasonPhrase(), requestUrl);
             } else {
                 final String responseString = response.getEntity(String.class);
-                return getUrlFromJson(responseString);
+                return getUrlFromJson(handle, responseString);
             }
         } catch (UniformInterfaceException ex) {
             logger.error("Could not communicate with Handle API", ex);
@@ -124,26 +119,56 @@ public class HandleRestApiResolver implements HandleResolver {
         return null;
     }
 
-    public String getUrlFromJson(final String jsonString) throws JSONException {
+    protected String getUrlFromJson(final String handle, final String jsonString) throws JSONException {
         // The handle API returns a JSON structure with a number of handle
         // record fields. We are only interested in the value at
         // values[x].data.value where values[x].type == 'URL'
 
         final JSONObject jsonResponse = new JSONObject(jsonString);
         final JSONArray valuesArray = jsonResponse.getJSONArray("values");
+
+        String alias = null;
+
         for (int i = 0; i < valuesArray.length(); i++) {
             final JSONObject object = valuesArray.getJSONObject(i);
-            final String type = object.getString("type");
-            if ("URL".equals(type) && object.has("data")) {
-                final JSONObject data = object.getJSONObject("data");
-                if (data.has("value")) {
-                    // the field we were looking for
-                    return data.getString("value");
+
+            final String urlValue = getObjectValue(object, "URL");
+            if (urlValue != null) {
+                return urlValue;
+            } else {
+                final String aliasValue = getObjectValue(object, "HS_ALIAS");
+                if (aliasValue != null) {
+                    alias = aliasValue;
                 }
             }
         }
-        // no URL field??
-        logger.error("Handle API response did not incude a URL field");
+        // no URL field!
+
+        if (alias == null) {
+            logger.error("Handle API response for {} did not incude a URL field", handle);
+            logger.debug("Handle API response without URL field: {}", jsonString);
+            return null;
+        } else {
+            // resolve alias
+            return getUrl(alias);
+        }
+    }
+
+    private String getObjectValue(JSONObject object, String type) throws JSONException {
+        if (type.equals(object.getString("type")) && object.has("data")) {
+            final JSONObject data = object.getJSONObject("data");
+            if (data.has("value")) {
+                // the field we were looking for
+                return data.getString("value");
+            }
+        }
         return null;
+    }
+
+    protected ClientResponse requestHandleDataJson(final String requestUrl) throws UniformInterfaceException, ClientHandlerException {
+        final Client client = Client.create();
+        return client.resource(requestUrl)
+                .accept(MediaType.APPLICATION_JSON_TYPE)
+                .get(ClientResponse.class);
     }
 }
