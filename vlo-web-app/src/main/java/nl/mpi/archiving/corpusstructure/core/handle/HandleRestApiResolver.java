@@ -20,7 +20,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 import java.net.URI;
 import java.net.URISyntaxException;
 import javax.ws.rs.core.MediaType;
@@ -123,6 +122,9 @@ public class HandleRestApiResolver implements HandleResolver {
         // The handle API returns a JSON structure with a number of handle
         // record fields. We are only interested in the value at
         // values[x].data.value where values[x].type == 'URL'
+        // or, as a fallback
+        // values[x].data.value where values[x].type == 'HS_ALIAS'
+        // in which case we need to make a follow-up request for the defiend alias handle
 
         final JSONObject jsonResponse = new JSONObject(jsonString);
         final JSONArray valuesArray = jsonResponse.getJSONArray("values");
@@ -145,8 +147,8 @@ public class HandleRestApiResolver implements HandleResolver {
         // no URL field!
 
         if (alias == null) {
-            logger.error("Handle API response for {} did not incude a URL field", handle);
-            logger.debug("Handle API response without URL field: {}", jsonString);
+            logger.error("Handle API response for {} did not incude a URL or HS_ALIAS field", handle);
+            logger.debug("Handle API response without URL or HS_ALIAS field: {}", jsonString);
             return null;
         } else {
             // resolve alias
