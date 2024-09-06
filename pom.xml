@@ -47,7 +47,7 @@
         <slf4j.version>2.0.13</slf4j.version>
         <log4j2.version>2.23.1</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
-        <spring.boot.version>3.2.8</spring.boot.version>
+        <spring.boot.version>3.2.9</spring.boot.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
@@ -82,17 +82,17 @@
             <dependency>
                 <groupId>org.eclipse</groupId>
                 <artifactId>yasson</artifactId>
-                <version>3.0.3</version>
+                <version>3.0.4</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.2.1-jre</version>
+                <version>33.3.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.15.0</version>
+                <version>3.16.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
