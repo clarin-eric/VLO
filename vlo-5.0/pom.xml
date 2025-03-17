@@ -16,11 +16,14 @@
     <description>VLO (parent project)</description>
     
     <properties>
-        <java.version>17</java.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <spring.boot.version>3.4.3</spring.boot.version>
+        <!--<lombok.version>1.18.36</lombok.version>-->
+        <!-- See https://github.com/projectlombok/lombok/issues/3772#issuecomment-2675517450 -->
+        <lombok.version>1.18.36+d9d0767b</lombok.version>
     </properties>
     
     <modules>
@@ -54,6 +57,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
