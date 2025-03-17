@@ -1,6 +1,6 @@
 package eu.clarin.cmdi.vlo.api;
 
-import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
+import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
@@ -33,7 +33,7 @@ class VloApiApplicationTests {
                 }
 
                 @Override
-                public VloRecordSearchResult getRecords(VloRecordsRequest request) {
+                public VloRecordSearchResult getRecords(VloRequest request) {
                     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
                 }
 

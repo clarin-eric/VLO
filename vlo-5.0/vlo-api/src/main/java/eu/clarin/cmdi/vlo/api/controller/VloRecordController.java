@@ -16,15 +16,15 @@
  */
 package eu.clarin.cmdi.vlo.api.controller;
 
-import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
+import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.api.service.FilterMapFactory;
 import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.COUNT_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FROM_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
-import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_COUNT_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.RECORDS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.ROWS_PARAMETER;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -54,7 +55,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @AllArgsConstructor
 @RestController
-@Tag(name="Records", description = "Searching, retrieving and submitting of VLO records")
+@RequestMapping(RECORDS_PATH)
+@Tag(name = "Records", description = "Searching, retrieving and submitting of VLO records")
 public class VloRecordController {
 
     private final VloRecordService service;
@@ -71,12 +73,12 @@ public class VloRecordController {
      * @return
      */
     @Operation(summary = "Retrieve one or more records by query and/or filtered")
-    @GetMapping(path = RECORDS_PATH, produces = "application/json")
+    @GetMapping(produces = "application/json")
     public VloRecordSearchResult getRecords(@RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq,
             @RequestParam(required = false, defaultValue = "0", name = FROM_PARAMETER) Integer from,
             @RequestParam(required = false, defaultValue = "10", name = ROWS_PARAMETER) Integer size) {
-        return service.getRecords(new VloRecordsRequest(query, filterMapFactory.createFilterMap(fq), from, size));
+        return service.getRecords(new VloRequest(query, filterMapFactory.createFilterMap(fq), from, size));
     }
 
     /**
@@ -88,7 +90,7 @@ public class VloRecordController {
      * @return
      */
     @Operation(summary = "Retrieve the exact number of records that can be retrieved by query and/or filtered as JSON object with a single property 'numFound'")
-    @GetMapping(path = RECORDS_COUNT_PATH, produces = "application/json")
+    @GetMapping(path = COUNT_PATH, produces = "application/json")
     public Map<String, Object> getRecordsCount(@RequestParam(required = false, defaultValue = "*:*") String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
         return Collections.singletonMap("numFound", service.getRecordCount(query, filterMapFactory.createFilterMap(fq)));
@@ -106,7 +108,7 @@ public class VloRecordController {
         @ApiResponse(responseCode = "200", description = "A record with the specified identifier that is present in the catalogue"),
         @ApiResponse(responseCode = "404", description = "No record with the specified identifier is present in the catalogue", useReturnTypeSchema = false)
     })
-    @GetMapping(path = RECORDS_PATH + "/{id}", produces = "application/json")
+    @GetMapping(path = "/{id}", produces = "application/json")
     public ResponseEntity<VloRecord> getRecord(@PathVariable String id) {
         return service.getRecordById(id)
                 .map((record) -> ResponseEntity.ok().body(record)
@@ -121,7 +123,7 @@ public class VloRecordController {
      * @return
      */
     @Operation(summary = "Submit a new record")
-    @PostMapping(path = RECORDS_PATH, consumes = "application/json", produces = "application/json")
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public VloRecord saveRecord(@RequestBody VloRecord record) {
         return service.saveRecord(record)
                 .orElseThrow(() -> new VloApiProcessingException(

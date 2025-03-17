@@ -23,7 +23,9 @@ package eu.clarin.cmdi.vlo.util;
 public class VloApiConstants {
     
     public final static String RECORDS_PATH = "/records";
-    public final static String RECORDS_COUNT_PATH = RECORDS_PATH + "/count";
+    public final static String COUNT_PATH = "/count";
+    @Deprecated
+    public final static String RECORDS_COUNT_PATH = RECORDS_PATH + COUNT_PATH;
 
     public final static String FACETS_PATH = "/facets";
 

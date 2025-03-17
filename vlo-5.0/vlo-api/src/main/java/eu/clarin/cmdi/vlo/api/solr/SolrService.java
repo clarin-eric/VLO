@@ -20,8 +20,9 @@ import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.api.controller.VloApiProcessingException;
-import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
+import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
+import eu.clarin.cmdi.vlo.api.service.VloFacetService;
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
@@ -50,7 +51,7 @@ import org.springframework.core.convert.converter.Converter;
  */
 @AllArgsConstructor
 @Slf4j
-public class SolrService implements VloRecordService { 
+public class SolrService implements VloRecordService, VloFacetService {
 
     private final SolrDocumentQueryFactoryImpl queryFactory;
 
@@ -65,7 +66,7 @@ public class SolrService implements VloRecordService {
     private final Converter<SolrDocument, VloRecord> recordConverter;
 
     @Override
-    public VloRecordSearchResult getRecords(VloRecordsRequest request) {
+    public VloRecordSearchResult getRecords(VloRequest request) {
         final SolrQuery solrQuery = queryFactory.createLimitedDocumentQuery(request.getFrom(), request.getSize());
         if (request.getQuery() != null) {
             solrQuery.setQuery(request.getQuery());
@@ -109,7 +110,19 @@ public class SolrService implements VloRecordService {
         throw new VloApiProcessingException("Saving of records is not supported by the Solr implementation of this service", record);
     }
 
-    public Stream<Facet> getAllFacets(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<List<String>> facets, Optional<Integer> valueCount) {
+    @Override
+    public List<Facet> getFacets(VloRequest request) {
+        return getAllFacets(request.getQuery(), request.getFilters(),
+                Optional.empty(), Optional.empty()).toList();
+    }
+
+//    @Override
+    public List<Facet> getFacets(VloRequest request, int valueCount) {
+        return getAllFacets(request.getQuery(), request.getFilters(),
+                Optional.empty(), Optional.of(valueCount)).toList();
+    }
+
+    protected Stream<Facet> getAllFacets(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<List<String>> facets, Optional<Integer> valueCount) {
         final SolrQuery query = queryFactory.createFacetQuery(queryParam,
                 // empty list for default fields selection
                 Optional.empty(),

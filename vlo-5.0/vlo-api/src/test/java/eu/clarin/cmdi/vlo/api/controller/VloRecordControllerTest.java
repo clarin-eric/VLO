@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.api.controller;
 
-import eu.clarin.cmdi.vlo.api.model.VloRecordsRequest;
+import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.api.service.impl.FilterMapFactoryImpl;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
@@ -64,7 +64,7 @@ public class VloRecordControllerTest {
     private VloRecordService recordService;
 
     @Captor
-    private ArgumentCaptor<VloRecordsRequest> recordsRequestCaptor;
+    private ArgumentCaptor<VloRequest> recordsRequestCaptor;
     @Captor
     private ArgumentCaptor<String> idCaptor;
     @Captor
@@ -101,7 +101,7 @@ public class VloRecordControllerTest {
                 .andExpect(status().isOk())
                 .andExpectAll(TWO_RECORDS_RESULT_MATCHERS);
 
-        final VloRecordsRequest recordsRequest = recordsRequestCaptor.getValue();
+        final VloRequest recordsRequest = recordsRequestCaptor.getValue();
         assertEquals("*:*", recordsRequest.getQuery());
     }
     

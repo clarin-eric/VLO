@@ -30,7 +30,14 @@ import lombok.ToString;
 @EqualsAndHashCode
 @Getter
 @ToString
-public class VloRecordsRequest {
+public class VloRequest {
+
+    public VloRequest(String query, Map<String, ? extends Iterable<String>> filters) {
+        this.query = query;
+        this.filters = filters;
+        this.from = 0;
+        this.size = 0;
+    }
 
     /**
      * query for filtering (may be null or empty)

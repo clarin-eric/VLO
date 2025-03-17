@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2024 twagoo
+ * Copyright (C) 2025 twagoo
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,23 +17,15 @@
 package eu.clarin.cmdi.vlo.api.service;
 
 import eu.clarin.cmdi.vlo.api.model.VloRequest;
-import eu.clarin.cmdi.vlo.data.model.VloRecord;
-import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
-import java.util.Map;
-import java.util.Optional;
+import eu.clarin.cmdi.vlo.data.model.Facet;
+import java.util.List;
 
 /**
  *
  * @author twagoo
  */
-public interface VloRecordService {
-
-    Optional<VloRecord> getRecordById(String id);
-
-    Long getRecordCount(String queryParam, Map<String, ? extends Iterable<String>> filters);
-
-    VloRecordSearchResult getRecords(VloRequest request);
-
-    Optional<VloRecord> saveRecord(VloRecord record);
+public interface VloFacetService {
+    
+    List<Facet> getFacets(VloRequest request);
     
 }
