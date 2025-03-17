@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.api.controller;
 
 import eu.clarin.cmdi.vlo.api.model.VloRequest;
+import eu.clarin.cmdi.vlo.api.service.VloFacetService;
 import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.api.service.impl.FilterMapFactoryImpl;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
@@ -29,7 +30,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
@@ -44,6 +44,7 @@ import org.mockito.Mockito;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -60,8 +61,11 @@ public class VloRecordControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
+    @MockitoBean
     private VloRecordService recordService;
+    
+    @MockitoBean
+    private VloFacetService facetService;
 
     @Captor
     private ArgumentCaptor<VloRequest> recordsRequestCaptor;
