@@ -19,13 +19,16 @@ package eu.clarin.cmdi.vlo.api.service;
 import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
  * @author twagoo
  */
 public interface VloFacetService {
-    
+
     List<Facet> getFacets(VloRequest request);
-    
+
+    Optional<Facet> getFacet(String facet, VloRequest request);
+
 }

@@ -18,16 +18,18 @@ package eu.clarin.cmdi.vlo.api.controller;
 
 import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.api.service.FilterMapFactory;
-import eu.clarin.cmdi.vlo.api.solr.SolrService;
+import eu.clarin.cmdi.vlo.api.service.VloFacetService;
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FACETS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,12 +47,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Facets", description = "Searching, retrieving and submitting of VLO records")
 public class FacetController {
 
-    private final SolrService service;
+    private final VloFacetService service;
     private final FilterMapFactory filterMapFactory;
 
     /**
      * *
-     * GET /records
+     * GET /facets
      *
      * @param query
      * @param fq
@@ -61,6 +63,25 @@ public class FacetController {
     public List<Facet> getFacets(@RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
         return service.getFacets(new VloRequest(query, filterMapFactory.createFilterMap(fq)));
+    }
+
+    /**
+     * *
+     * GET /facet/{facetName}
+     *
+     * @param facetName
+     * @param query
+     * @param fq
+     * @return
+     */
+    @Operation(summary = "Get the facets and their (top) values and their counts")
+    @GetMapping(path = "/{facetName}", produces = "application/json")
+    public ResponseEntity<Facet> getFacet(@PathParam("facetName") String facetName, @RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
+            @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
+        return service.getFacet(facetName, new VloRequest(query, filterMapFactory.createFilterMap(fq)))
+                .map(facet -> ResponseEntity.ok(facet))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+
     }
 
 }
