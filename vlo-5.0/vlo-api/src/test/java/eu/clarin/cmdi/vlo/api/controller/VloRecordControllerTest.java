@@ -172,7 +172,7 @@ public class VloRecordControllerTest {
                 })));
 
         mvc.perform(MockMvcRequestBuilders
-                .put("/records")
+                .post("/records")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(recordJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -203,7 +203,7 @@ public class VloRecordControllerTest {
                   """;
 
         mvc.perform(MockMvcRequestBuilders
-                .put("/records")
+                .post("/records")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(recordJson)
                 .accept(MediaType.APPLICATION_JSON))
@@ -221,7 +221,7 @@ public class VloRecordControllerTest {
                 .thenReturn(Optional.empty());
 
         mvc.perform(MockMvcRequestBuilders
-                .put("/records")
+                .post("/records")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(recordJson)
                 .accept(MediaType.APPLICATION_JSON))
