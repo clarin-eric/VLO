@@ -32,18 +32,6 @@
             <artifactId>vlo-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>vlo-exposure</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!--         Importer only used in web app for testing 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>vlo-importer</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>        -->
         <!-- For exposure db in test -->
         <dependency>
             <groupId>org.postgresql</groupId>

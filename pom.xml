@@ -27,8 +27,6 @@
     <modules>
         <module>vlo-solr</module>
         <module>vlo-commons</module>
-        <module>vlo-exposure</module>
-        <module>vlo-exposure-frontend</module>
         <module>vlo-web-app</module>
         <module>vlo-importer</module>
         <module>vlo-vocabularies</module>

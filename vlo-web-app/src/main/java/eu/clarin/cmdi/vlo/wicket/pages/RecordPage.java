@@ -27,12 +27,10 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
-import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.exposure.models.PageView;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
@@ -73,7 +71,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -93,8 +90,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.RequestHandlerExecutor;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -203,36 +198,12 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
                 setModel(documentModel);
                 add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
-
-                // record exposure (for statistics)
-                if (config.isVloExposureEnabled()) {
-                    recordExposure(document);
-                }
             }
         }
 
         linksCountLabelModel = new LinksCountLabelModel(getModel());
 
         addComponents(params);
-    }
-
-    private void recordExposure(final SolrDocument document) {
-        try {
-            // save these information (id, ip, url, referer) in postgresql DB for record
-            // exposures
-            String id = document.get("id").toString();
-            HttpServletRequest httpRequest = ((ServletWebRequest) RequestCycle.get().getRequest())
-                    .getContainerRequest();
-            String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
-            // get user ip address
-            String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
-            String referer = httpRequest.getHeader("referer");
-            // create PageView object and save it in the DB
-            PageView pageView = new PageView(id, ip, pageUrl, referer);
-            pageView.save(config);
-        } catch (Exception e) {
-            logger.error("Error while storing page view statistics", e);
-        }
     }
 
     /**

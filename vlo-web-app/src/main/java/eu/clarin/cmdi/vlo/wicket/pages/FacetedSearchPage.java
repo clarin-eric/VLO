@@ -16,7 +16,6 @@ import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.TemporalCoverageRange;
-import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -89,8 +88,6 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
 
     @SpringBean
     private FacetFieldsService facetFieldsService;
-    @SpringBean
-    private ExposureTracker exposureTracker;
     @SpringBean
     private VloConfig vloConfig;
     @SpringBean
@@ -230,7 +227,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     }
 
     private void addComponents() {
-        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService, exposureTracker);
+        documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService);
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
         searchContainer = new WebMarkupContainer("searchContainer");
         searchContainer.add(new AttributeModifier("class", () -> simpleModeModel.getObject() ? "simple" : ""));
