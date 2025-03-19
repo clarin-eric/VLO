@@ -41,16 +41,16 @@
         <vlo.mapping.version>1.8.1</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
-        <solr.version>8.11.2</solr.version>
-        <slf4j.version>2.0.13</slf4j.version>
-        <log4j2.version>2.23.1</log4j2.version>
+        <solr.version>8.11.4</solr.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <log4j2.version>2.24.3</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
-        <spring.boot.version>3.2.9</spring.boot.version>
+        <spring.boot.version>3.2.12</spring.boot.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -85,12 +85,17 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.3.0-jre</version>
+                <version>33.4.0-jre</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.16.0</version>
+                <version>3.17.0</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.18.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -135,7 +140,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>3.0.0-M5</version>
+                    <version>3.5.2</version>
                     <configuration>
                         <systemPropertyVariables>
                             <java.security.egd>file:/dev/./urandom</java.security.egd>
@@ -143,35 +148,9 @@
                     </configuration>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <configuration>
-                        <!-- 
-                        <webapps>
-                            <webapp>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>vlo-web-app</artifactId>
-                                <contextPath>/vlo-web-app</contextPath>
-                                <version>${project.version}</version>
-                                <asWebapp>true</asWebapp> 
-                            </webapp>
-                            <webapp>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>vlo-exposure-frontend</artifactId>
-                                <contextPath>/vlo-exposure-frontend</contextPath>
-                                <version>${project.version}</version>
-                                <asWebapp>true</asWebapp>
-                            </webapp>
-                        </webapps> -->
-                        <port>8080</port>
-                        <path>/vlo</path>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.1</version>
+                    <version>3.14.0</version>
                     <configuration>
                         <release>${maven.compiler.source}</release>
                         <!--<compilerArgument>-Xlint:unchecked</compilerArgument>-->
@@ -180,17 +159,17 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
-                    <version>3.3.2</version>
+                    <version>3.4.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-dependency-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.8.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.1.0</version>
+                    <version>3.3.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>

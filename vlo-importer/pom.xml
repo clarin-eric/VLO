@@ -181,12 +181,11 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>5.9</version>
+            <version>5.10</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.17.1</version>
         </dependency>
         
         <dependency>
@@ -234,7 +233,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.4.1</version>
+            <version>3.5.2</version>
             <scope>runtime</scope>
         </dependency>
     
@@ -280,7 +279,7 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.14.18</version>
+            <version>1.14.19</version>
         </dependency>
         
         <dependency>
