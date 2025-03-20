@@ -1,6 +1,6 @@
 language: java
 jdk:
-- openjdk17
+- openjdk21
 
 before_install:
 - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
