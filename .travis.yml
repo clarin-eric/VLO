@@ -15,6 +15,7 @@ before_deploy:
   - gem install bundler
   - gem install uri
   - gem install logger
+  - gem install faraday-net_http
 deploy:
   provider: releases
   prerelease: true
