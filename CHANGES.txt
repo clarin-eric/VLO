@@ -1,6 +1,11 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.12.2 (March 2025)
+* Various dependency updates
+* Built for Java 21
+* Removed "exposure tracking" feature and corresponding components
+
 VLO 4.12.1 (September 2024)
 * Fixed: index change monitor JAR is not executable
     <https://github.com/clarin-eric/VLO/issues/389>
