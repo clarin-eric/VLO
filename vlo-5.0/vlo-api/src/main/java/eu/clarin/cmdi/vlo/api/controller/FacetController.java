@@ -25,12 +25,12 @@ import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.PathParam;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -76,7 +76,7 @@ public class FacetController {
      */
     @Operation(summary = "Get the facets and their (top) values and their counts")
     @GetMapping(path = "/{facetName}", produces = "application/json")
-    public ResponseEntity<Facet> getFacet(@PathParam("facetName") String facetName, @RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
+    public ResponseEntity<Facet> getFacet(@PathVariable("facetName") String facetName, @RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
             @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
         return service.getFacet(facetName, new VloRequest(query, filterMapFactory.createFilterMap(fq)))
                 .map(facet -> ResponseEntity.ok(facet))
