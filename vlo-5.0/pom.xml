@@ -20,8 +20,8 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
-        <spring.boot.version>3.4.3</spring.boot.version>
-        <lombok.version>1.18.36</lombok.version>
+        <spring.boot.version>3.4.4</spring.boot.version>
+        <lombok.version>1.18.38</lombok.version>
     </properties>
     
     <modules>
@@ -68,21 +68,6 @@
             </testResource>
         </testResources>
     </build>
-    
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <!-- 
-                    This may be needed to make lombok work with NetBeans,
-                    until a fix has been applied in an actual release.
-                    
-                    See https://github.com/projectlombok/lombok/issues/3772#issuecomment-2675517450 
-                -->
-                <lombok.version>1.18.36+d9d0767b</lombok.version>
-            </properties>
-        </profile>
-    </profiles>
     
     <repositories>
         <repository>
