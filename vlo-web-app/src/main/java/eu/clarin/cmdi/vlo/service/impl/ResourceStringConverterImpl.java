@@ -38,9 +38,9 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class ResourceStringConverterImpl implements ResourceStringConverter {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
-
+    
     private final UriResolver resolver;
     private final ExecutorService preflightPool;
 
@@ -59,7 +59,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
         this.resolver = resolver;
         preflightPool = Executors.newCachedThreadPool();
     }
-
+    
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         if (resourceString == null) {
@@ -79,7 +79,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             if (resolver == null) {
                 fileName = getFileName(href);
             } else {
-                fileName = getFileName(resolver.resolve(href));
+                fileName = getFileName(resolver.resolve(href).orElse(href));
             }
 
             // determine resource type based on mime type
@@ -109,7 +109,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             });
         }
     }
-
+    
     private String getFileName(final String href) {
         try {
             if (href.startsWith(HANDLE_PROXY) || href.startsWith(HANDLE_PROXY_HTTPS)) {
@@ -132,7 +132,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return href;
         }
     }
-
+    
     private ResourceType determineResourceType(final String mimeType) {
         final String normalizeMimeType = CommonUtils.normalizeMimeType(mimeType);
         // map to ResourceType and add to bag
@@ -152,10 +152,10 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return ResourceType.OTHER;
         }
     }
-
+    
     @Override
     public UriResolver getResolver() {
         return resolver;
     }
-
+    
 }
