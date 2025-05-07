@@ -20,6 +20,7 @@ import eu.clarin.cmdi.vlo.service.handle.impl.HandleRestApiClient;
 import eu.clarin.cmdi.vlo.PIDUtils;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,19 +50,15 @@ public class HandleClientUriResolverImpl implements UriResolver {
     }
 
     @Override
-    public String resolve(String uri) {
+    public Optional<String> resolve(String uri) {
         final String handle = getHandle(uri);
 
         if (handle == null) {
-            return uri;
+            return Optional.empty();
         } else {
             logger.debug("Calling handle client to resolve handle [{}]", uri);
             final String resolved = handleClient.getUrl(handle);
-            if (resolved == null) {
-                return uri;
-            } else {
-                return resolved;
-            }
+            return Optional.ofNullable(resolved);
         }
 
     }

@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.PIDResolver;
 import java.net.URI;
+import java.util.Optional;
 import java.util.stream.Stream;
 import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.jmock.Expectations;
@@ -26,6 +27,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,8 +62,9 @@ public class UriResolverImplTest {
      */
     @Test
     public void testResolveNonHandle() {
-        String result = instance.resolve("http://www.clarin.eu");
-        assertEquals("http://www.clarin.eu", result);
+        Optional<String> result = instance.resolve("http://www.clarin.eu");
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 
     /**
@@ -75,7 +78,7 @@ public class UriResolverImplTest {
                 will(returnValue(URI.create("http://www.clarin.eu")));
             }
         });
-        String result = instance.resolve("hdl:1234/5678");
+        String result = instance.resolve("hdl:1234/5678").orElseThrow();
         assertEquals("http://www.clarin.eu", result);
     }
 
@@ -90,7 +93,7 @@ public class UriResolverImplTest {
                 will(returnValue(URI.create("http://www.clarin.eu")));
             }
         });
-        String result = instance.resolve("http://hdl.handle.net/1234/5678");
+        String result = instance.resolve("http://hdl.handle.net/1234/5678").orElseThrow();
         assertEquals("http://www.clarin.eu", result);
     }
 
@@ -105,7 +108,7 @@ public class UriResolverImplTest {
                 will(returnValue(URI.create("http://www.clarin.eu")));
             }
         });
-        String result = instance.resolve("doi:1234/5678");
+        String result = instance.resolve("doi:1234/5678").orElseThrow();
         assertEquals("http://www.clarin.eu", result);
     }
 
@@ -120,7 +123,7 @@ public class UriResolverImplTest {
                 will(returnValue(URI.create("http://www.clarin.eu")));
             }
         });
-        String result = instance.resolve("https://doi.org/1234/5678");
+        String result = instance.resolve("https://doi.org/1234/5678").orElseThrow();
         assertEquals("http://www.clarin.eu", result);
     }
 
