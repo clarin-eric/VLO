@@ -3,6 +3,8 @@ Bug fixes and new features
 
 VLO 4.12.3 (May 2025)
 * Various dependency updates
+* Fixed: PID info shows identifier itself in case it can't be resolved
+    <https://github.com/clarin-eric/VLO/issues/392>
 * Fixed: URN:NBN resolver API changed
     <https://github.com/clarin-eric/VLO/issues/400>
 
