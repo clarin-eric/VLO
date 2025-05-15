@@ -16,6 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
+import com.google.common.base.Strings;
 import eu.clarin.cmdi.vlo.CommonUtils;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import static eu.clarin.cmdi.vlo.FacetConstants.HANDLE_PREFIX;
@@ -38,9 +39,9 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class ResourceStringConverterImpl implements ResourceStringConverter {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
-    
+
     private final UriResolver resolver;
     private final ExecutorService preflightPool;
 
@@ -59,7 +60,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
         this.resolver = resolver;
         preflightPool = Executors.newCachedThreadPool();
     }
-    
+
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         if (resourceString == null) {
@@ -72,7 +73,9 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
                 return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
             }
             final String mimeType = resourceInfo.getType();
-            final String href = resourceInfo.getUrl();
+            final String href = Strings.nullToEmpty(
+                    resourceInfo.getUrl())
+                    .trim(); //trim HREF because URIs can not have leading whitespace
 
             // if there is a resolver, get file name from resolved URL
             final String fileName;
@@ -109,7 +112,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             });
         }
     }
-    
+
     private String getFileName(final String href) {
         try {
             if (href.startsWith(HANDLE_PROXY) || href.startsWith(HANDLE_PROXY_HTTPS)) {
@@ -132,7 +135,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return href;
         }
     }
-    
+
     private ResourceType determineResourceType(final String mimeType) {
         final String normalizeMimeType = CommonUtils.normalizeMimeType(mimeType);
         // map to ResourceType and add to bag
@@ -152,10 +155,10 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return ResourceType.OTHER;
         }
     }
-    
+
     @Override
     public UriResolver getResolver() {
         return resolver;
     }
-    
+
 }
