@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.importer.ResourceStructureGraph;
 
 /**
  * Processes resource from a CMDI file. Not to be reused!
+ *
  * @author Twan Goosen <twan@clarin.eu>
  */
 public class ResourceProcessorVTDXML implements ResourceProcessor {
@@ -82,9 +83,9 @@ public class ResourceProcessorVTDXML implements ResourceProcessor {
         resourceMimeType.selectXPath("cmd:ResourceType/@mimetype");
 
         while (resourceProxy.evalXPath() != -1) {
-            String ref = resourceRef.evalXPathToString();
-            String type = resourceType.evalXPathToString();
-            String mimeType = resourceMimeType.evalXPathToString();
+            String ref = trimSafe(resourceRef.evalXPathToString());
+            String type = trimSafe(resourceType.evalXPathToString());
+            String mimeType = trimSafe(resourceMimeType.evalXPathToString());
 
             if (!ref.equals("") && !type.equals("")) {
                 // note that the mime type could be empty
@@ -96,5 +97,11 @@ public class ResourceProcessorVTDXML implements ResourceProcessor {
                 resourceStructureGraph.addEdge(ref, mdSelfLinkString);
             }
         }
+    }
+
+    private static String trimSafe(String v) {
+        return v == null
+                ? null
+                : v.trim();
     }
 }
