@@ -44,11 +44,16 @@ import org.springframework.core.convert.converter.Converter;
 public class VloSolrConfiguration {
 
     protected final static List<String> MINIMAL_FIELDS = ImmutableList.of(
-            "name", "description", "languageCode", "license", "licenseType", "availability", "_selfLink", "id"
+            "name", "description", "languageCode", "license",
+            "licenseType", "availability", "_selfLink", "id",
+            "resourceClass", "_resourceRefCount"
     );
-    
+
     protected final static List<String> EXTRA_FIELDS = ImmutableList.of(
-            "creator", "collection", "_languageCount", "multilingual", "modality", "continent", "country", "genre", "subject", "organisation", "accessInfo", "keywords", "nationalProject", "resourceClass", "_resourceRef"
+            "creator", "collection", "_languageCount", "multilingual",
+            "modality", "continent", "country", "genre", "subject",
+            "organisation", "accessInfo", "keywords", "nationalProject",
+            "_resourceRef"
     );
 
     @Value("${solr.auth.username}")
