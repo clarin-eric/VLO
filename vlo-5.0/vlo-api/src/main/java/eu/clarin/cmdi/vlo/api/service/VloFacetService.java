@@ -28,6 +28,8 @@ import java.util.Optional;
 public interface VloFacetService {
 
     List<Facet> getFacets(VloRequest request);
+    
+    List<Facet> getFacets(VloRequest request, List<String> fields);
 
     Optional<Facet> getFacet(String facet, VloRequest request);
 

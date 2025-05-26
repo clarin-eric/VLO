@@ -116,16 +116,22 @@ public class SolrService implements VloRecordService, VloFacetService {
                 Optional.empty(), Optional.empty()).toList();
     }
 
+    @Override
+    public List<Facet> getFacets(VloRequest request, List<String> fields) {
+        return getAllFacets(request.getQuery(), request.getFilters(),
+                Optional.ofNullable(fields), Optional.empty()).toList();
+    }
+
 //    @Override
     public List<Facet> getFacets(VloRequest request, int valueCount) {
         return getAllFacets(request.getQuery(), request.getFilters(),
                 Optional.empty(), Optional.of(valueCount)).toList();
     }
 
-    protected Stream<Facet> getAllFacets(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<List<String>> facets, Optional<Integer> valueCount) {
+    protected Stream<Facet> getAllFacets(String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<List<String>> fields, Optional<Integer> valueCount) {
         final SolrQuery query = queryFactory.createFacetQuery(queryParam,
                 // empty list for default fields selection
-                Optional.empty(),
+                fields,
                 // get default number of top values
                 valueCount.or(() -> Optional.of(queryFactory.getDefaultFacetValueCount())));
 

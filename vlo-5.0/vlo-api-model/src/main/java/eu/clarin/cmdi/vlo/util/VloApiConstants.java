@@ -37,5 +37,6 @@ public class VloApiConstants {
     public final static String FILTER_QUERY_PARAMETER = "fq";
     public final static String ROWS_PARAMETER = "size";
     public final static String FROM_PARAMETER = "from";
+    public final static String FIELDS_SELECTION_PARAMETER = "fields";
     
 }

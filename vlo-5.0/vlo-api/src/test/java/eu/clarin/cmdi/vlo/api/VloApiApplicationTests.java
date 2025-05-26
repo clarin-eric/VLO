@@ -31,6 +31,11 @@ class VloApiApplicationTests {
                 }
 
                 @Override
+                public List<Facet> getFacets(VloRequest request, List<String> fields) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
+                @Override
                 public Optional<Facet> getFacet(String facet, VloRequest request) {
                     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
                 }

@@ -16,6 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.api.controller;
 
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.api.service.FilterMapFactory;
 import eu.clarin.cmdi.vlo.api.service.VloFacetService;
@@ -23,12 +25,15 @@ import eu.clarin.cmdi.vlo.data.model.Facet;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FACETS_PATH;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.FILTER_QUERY_PARAMETER;
 import static eu.clarin.cmdi.vlo.util.VloApiConstants.QUERY_PARAMETER;
+import static eu.clarin.cmdi.vlo.util.VloApiConstants.FIELDS_SELECTION_PARAMETER;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,15 +59,22 @@ public class FacetController {
      * *
      * GET /facets
      *
-     * @param query
-     * @param fq
+     * @param query search query
+     * @param fq filter query
+     * @param fields fields to include facets for
      * @return
      */
     @Operation(summary = "Get the facets and their (top) values and their counts")
     @GetMapping(produces = "application/json")
     public List<Facet> getFacets(@RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
-            @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
-        return service.getFacets(new VloRequest(query, filterMapFactory.createFilterMap(fq)));
+            @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq,
+            @RequestParam(required = false, name = FIELDS_SELECTION_PARAMETER) List<String> fields) {
+        if (ObjectUtils.isEmpty(fields)) {
+            return service.getFacets(new VloRequest(query, filterMapFactory.createFilterMap(fq)));
+        } else {
+            return service.getFacets(new VloRequest(query, filterMapFactory.createFilterMap(fq)), fields);
+        }
+
     }
 
     /**
