@@ -20,8 +20,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
-        <spring.boot.version>3.4.4</spring.boot.version>
-        <lombok.version>1.18.38</lombok.version>
+        <spring.boot.version>3.4.5</spring.boot.version>
     </properties>
     
     <modules>
@@ -41,7 +40,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.5.3</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -56,7 +55,6 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
