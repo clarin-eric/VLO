@@ -1,3 +1,32 @@
 spring:
   profiles:
     active: "solr"
+
+solr:
+  record:
+    minimalFields: 
+      - name
+      - description
+      - languageCode
+      - license
+      - licenseType
+      - availability
+      - _selfLink
+      - id
+      - resourceClass
+      - _resourceRefCount
+    extraFields:
+      - creator
+      - collection
+      - _languageCount
+      - multilingual
+      - modality
+      - continent
+      - country
+      - genre
+      - subject
+      - organisation
+      - accessInfo
+      - keywords
+      - nationalProject
+      - _resourceRef

@@ -17,9 +17,7 @@
 package eu.clarin.cmdi.vlo.api.solr;
 
 import com.google.common.collect.FluentIterable;
-import com.google.common.collect.ImmutableList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.solr.client.solrj.SolrQuery;

@@ -16,7 +16,6 @@
  */
 package eu.clarin.cmdi.vlo.api.solr;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.impl.FieldValueLabelServiceImpl;
@@ -24,10 +23,13 @@ import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import lombok.Data;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrDocument;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.context.annotation.Bean;
@@ -43,36 +45,17 @@ import org.springframework.core.convert.converter.Converter;
 @Profile("solr")
 public class VloSolrConfiguration {
 
-    protected final static List<String> MINIMAL_FIELDS = ImmutableList.of(
-            "name", "description", "languageCode", "license",
-            "licenseType", "availability", "_selfLink", "id",
-            "resourceClass", "_resourceRefCount"
-    );
-
-    protected final static List<String> EXTRA_FIELDS = ImmutableList.of(
-            "creator", "collection", "_languageCount", "multilingual",
-            "modality", "continent", "country", "genre", "subject",
-            "organisation", "accessInfo", "keywords", "nationalProject",
-            "_resourceRef"
-    );
-
-    @Value("${solr.auth.username}")
-    private String solrUsermame;
-
-    @Value("${solr.auth.password}")
-    private String solrPassword;
-
-    @Value("${solr.url}")
-    private String solrUrl;
+    @Autowired
+    private SolrConfigurationProperties properties;
 
     @Bean
     public SolrDocumentQueryFactoryImpl queryFactory() {
-        return new SolrDocumentQueryFactoryImpl(MINIMAL_FIELDS, EXTRA_FIELDS);
+        return new SolrDocumentQueryFactoryImpl(properties.getRecordProperties().getMinimalFields(), properties.getRecordProperties().getExtraFields());
     }
 
     @Bean(destroyMethod = "close")
     public SolrClient solrClient() {
-        return new HttpSolrClient.Builder(solrUrl).build();
+        return new HttpSolrClient.Builder(properties.getUrl()).build();
     }
 
     @Bean
@@ -102,7 +85,44 @@ public class VloSolrConfiguration {
 
     @Bean
     public SolrService solrService(Converter<SolrDocument, VloRecord> recordConverter) {
-        return new SolrService(queryFactory(), solrClient(), solrUsermame, solrPassword, fieldValueLabelService(), recordConverter());
+        return new SolrService(queryFactory(), solrClient(),
+                properties.getAuthProperties().getUsername(),
+                properties.getAuthProperties().getPassword(),
+                fieldValueLabelService(), recordConverter());
+    }
+
+    @Configuration
+    @ConfigurationProperties(prefix = "solr")
+    @Data
+    public static class SolrConfigurationProperties {
+
+        private String url;
+        
+        @Autowired
+        @Name("record")
+        private RecordProperties recordProperties;
+        
+        @Autowired
+        @Name("auth")
+        private AuthProperties authProperties;
+
+        @Configuration
+        @Data
+        public static class RecordProperties {
+
+            private String test;
+            private List<String> minimalFields;
+            private List<String> extraFields;
+        }
+
+        @Configuration
+        @Data
+        public static class AuthProperties {
+
+            private String username;
+            private String password;
+        }
+
     }
 
 }
