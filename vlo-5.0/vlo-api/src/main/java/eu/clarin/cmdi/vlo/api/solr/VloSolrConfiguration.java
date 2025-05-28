@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.api.service.FieldValueLabelService;
 import eu.clarin.cmdi.vlo.api.service.impl.FieldValueLabelServiceImpl;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -125,7 +126,8 @@ public class VloSolrConfiguration {
         @Data
         public static class FacetsProperties {
 
-            private List<String> defaultFields;
+            private Integer defaultValueLimit;
+            private List<String> defaultFields = Collections.emptyList();
         }
 
         @Configuration

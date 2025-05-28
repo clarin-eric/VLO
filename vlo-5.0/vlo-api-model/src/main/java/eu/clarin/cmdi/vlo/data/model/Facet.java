@@ -19,28 +19,35 @@ package eu.clarin.cmdi.vlo.data.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
  *
  * @author twagoo
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class Facet {
 
+    @NonNull
     private final String name;
 
-    private long valueCount;
+    @NonNull
+    private Integer valueCount;
 
-    private final Iterable<ValeCount> values;
+    @NonNull
+    private Iterable<ValueCount> values;
+
+    private Boolean hasMore;
 
     @AllArgsConstructor
     @Getter
     @Setter
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    public static class ValeCount {
+    public static class ValueCount {
 
         private String value;
 

@@ -21,7 +21,7 @@ package eu.clarin.cmdi.vlo.util;
  * @author CLARIN ERIC <clarin@clarin.eu>
  */
 public class VloApiConstants {
-    
+
     public final static String RECORDS_PATH = "/records";
     public final static String COUNT_PATH = "/count";
     @Deprecated
@@ -32,11 +32,12 @@ public class VloApiConstants {
     public final static String RECORD_MAPPING_PATH = "/recordMapping";
     public final static String RECORD_MAPPING_REQUEST_PATH = RECORD_MAPPING_PATH + "/request";
     public final static String RECORD_MAPPING_RESULT_PATH = RECORD_MAPPING_PATH + "/result";
-    
+
     public final static String QUERY_PARAMETER = "q";
     public final static String FILTER_QUERY_PARAMETER = "fq";
     public final static String ROWS_PARAMETER = "size";
     public final static String FROM_PARAMETER = "from";
     public final static String FIELDS_SELECTION_PARAMETER = "fields";
-    
+    public final static String FACET_VALUES_COUNT_LIMIT = "valueCountLimit";
+
 }

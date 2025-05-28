@@ -25,6 +25,12 @@ class VloApiApplicationTests {
         @Bean
         public VloFacetService facetService() {
             return new VloFacetService() {
+
+                @Override
+                public Optional<Facet> getFacet(String facet, VloRequest request) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
                 @Override
                 public List<Facet> getFacets(VloRequest request) {
                     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
@@ -36,7 +42,12 @@ class VloApiApplicationTests {
                 }
 
                 @Override
-                public Optional<Facet> getFacet(String facet, VloRequest request) {
+                public List<Facet> getFacets(VloRequest request, int valueCount) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
+                @Override
+                public List<Facet> getFacets(VloRequest request, List<String> fields, int valueCount) {
                     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
                 }
             };

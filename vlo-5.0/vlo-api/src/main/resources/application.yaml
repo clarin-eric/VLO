@@ -2,6 +2,10 @@ spring:
   profiles:
     active: "solr"
 
+api:
+  facets:
+    defaultFacetValueCountLimit: 10
+
 solr:
   facets:
     defaultFields:
