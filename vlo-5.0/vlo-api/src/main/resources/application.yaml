@@ -3,6 +3,18 @@ spring:
     active: "solr"
 
 solr:
+  facets:
+    defaultFields:
+      - languageCode
+      - collection
+      - resourceClass
+      - modality
+      - format
+      - keywords
+      - genre
+      - subject
+      - country
+      - organisation
   record:
     minimalFields: 
       - name

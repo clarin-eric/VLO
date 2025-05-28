@@ -50,7 +50,10 @@ public class VloSolrConfiguration {
 
     @Bean
     public SolrDocumentQueryFactoryImpl queryFactory() {
-        return new SolrDocumentQueryFactoryImpl(properties.getRecordProperties().getMinimalFields(), properties.getRecordProperties().getExtraFields());
+        return new SolrDocumentQueryFactoryImpl(
+                properties.getRecordProperties().getMinimalFields(),
+                properties.getRecordProperties().getExtraFields(),
+                properties.getFacetsProperties().getDefaultFields());
     }
 
     @Bean(destroyMethod = "close")
@@ -97,11 +100,15 @@ public class VloSolrConfiguration {
     public static class SolrConfigurationProperties {
 
         private String url;
-        
+
         @Autowired
         @Name("record")
         private RecordProperties recordProperties;
-        
+
+        @Autowired
+        @Name("facets")
+        private FacetsProperties facetsProperties;
+
         @Autowired
         @Name("auth")
         private AuthProperties authProperties;
@@ -110,9 +117,15 @@ public class VloSolrConfiguration {
         @Data
         public static class RecordProperties {
 
-            private String test;
             private List<String> minimalFields;
             private List<String> extraFields;
+        }
+
+        @Configuration
+        @Data
+        public static class FacetsProperties {
+
+            private List<String> defaultFields;
         }
 
         @Configuration

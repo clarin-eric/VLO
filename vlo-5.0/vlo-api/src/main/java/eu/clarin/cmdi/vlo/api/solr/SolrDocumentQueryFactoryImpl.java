@@ -45,19 +45,6 @@ public class SolrDocumentQueryFactoryImpl {
     private static final int FACET_LIMIT_DEFAULT = 10;
     private static final int FACET_LIMIT_MAX = 10_0000;
 
-    private static final String[] FACET_FIELDS_DEFAULT = {
-        "languageCode",
-        "collection",
-        "resourceClass",
-        "modality",
-        "format",
-        "keywords",
-        "genre",
-        "subject",
-        "country",
-        "organisation"
-    };
-
     /**
      * Template query for new document queries
      */
@@ -65,19 +52,24 @@ public class SolrDocumentQueryFactoryImpl {
 
     private final SolrQuery minimalQueryTemplate;
 
+    private final String[] defaultFacetFields;
+
     /**
      *
      * @param minimalDocumentFields fields that should be included for all
      * document queries
      * @param extraDocumentFields fields that should be included for full
      * document queries
+     * @param defaultFacetFields facet fields to render by default
      */
-    public SolrDocumentQueryFactoryImpl(Collection<String> minimalDocumentFields, Collection<String> extraDocumentFields) {
+    public SolrDocumentQueryFactoryImpl(Collection<String> minimalDocumentFields, Collection<String> extraDocumentFields, Collection<String> defaultFacetFields) {
         minimalQueryTemplate = new SolrQuery();
         minimalQueryTemplate.setFields(FluentIterable.from(minimalDocumentFields).toArray(String.class));
 
         fullQueryTemplate = new SolrQuery();
         fullQueryTemplate.setFields(FluentIterable.concat(minimalDocumentFields, extraDocumentFields).toArray(String.class));
+
+        this.defaultFacetFields = defaultFacetFields.toArray(String[]::new);
     }
 
     /**
@@ -179,7 +171,7 @@ public class SolrDocumentQueryFactoryImpl {
     }
 
     public SolrQuery createFacetQuery(String queryParam, Optional<List<String>> facetFields, Optional<Integer> valueLimit) {
-        final String[] facetFieldsArray = facetFields.map(l -> l.toArray(String[]::new)).orElse(FACET_FIELDS_DEFAULT);
+        final String[] facetFieldsArray = facetFields.map(l -> l.toArray(String[]::new)).orElse(defaultFacetFields);
         return getMinimalDocumentQueryTemplate()
                 .setRows(0)
                 .setQuery(queryParam)
