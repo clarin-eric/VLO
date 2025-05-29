@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.data.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -39,7 +40,7 @@ public class Facet {
     private Integer valueCount;
 
     @NonNull
-    private Iterable<ValueCount> values;
+    private List<ValueCount> values;
 
     private Boolean hasMore;
 

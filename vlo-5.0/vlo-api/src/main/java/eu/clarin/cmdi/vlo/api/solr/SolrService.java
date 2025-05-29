@@ -154,7 +154,7 @@ public class SolrService implements VloRecordService, VloFacetService {
 
     public Optional<Facet> getFacet(String facet, String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<Integer> valueCount) {
         //TODO: check if facet exists; otherwise return an empty mono!!
-
+        
         // query to get all facet values for a specific facet
         final SolrQuery query = queryFactory.createFacetQuery(queryParam,
                 // singleton facet fields list
