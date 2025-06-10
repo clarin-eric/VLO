@@ -154,13 +154,14 @@
                             </p>
                             <p>
                                 The following <strong>field names</strong> are available: 
-                                language, country, continent, modality, genre, subject, format, organisation, resourcetype, keyword, resources.
+                                name, language, country, continent, modality, genre, subject, format, organisation, resourcetype, keyword, resources.
                                 <br />
                             </p>
 
                             Click any of the following <strong>examples</strong> to perform that query  on the actual data currently in the VLO:
                             <ul>
                                 <li><a class="example-query" href="search/?q=resourcetype:%22Linguistic+corpora%22">resourcetype:"Linguistic corpora"</a> (equivalent to selecting this value below the 'Resource Type' facet)</li>
+                                <li><a class="example-query" href="search/?q=name:*treebank*">name:*treebank*</a> (all records with a name (title) that contains the word 'treebank')</li>
                                 <li><a class="example-query" href="search/?q=language:Sign">language:Sign</a> (all records with a language name that contains the word 'sign')</li>
                                 <li><a class="example-query" href="search/?q=country:%28Belgium+-Netherlands%29">country:(Belgium -Netherlands)</a> (all records with Belgium as country but not also Netherlands)</li>
                                 <li><a class="example-query" href="search/?q=country:Finland+AND+language:Swedish+AND+NOT+language:Finnish">country:Finland AND language:Swedish AND NOT language:Finnish</a> (records in Finland with resources in the Swedish language but not in Finnish)</li>
