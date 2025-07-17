@@ -46,6 +46,10 @@ public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord
     private static final String SOLR_FIELD_ID = "id";
     private static final String SOLR_FIELD_SELFLINK = "_selfLink";
     private static final String SOLR_FIELD_RESOURCE_REF = "_resourceRef";
+    private static final String SOLR_FIELD_LANDINGPAGE_REF = "_landingPageRef";
+    
+    private static final String RESOURCE_TYPE_RESOURCE = "Resource";
+    private static final String RESOURCE_TYPE_LANDINGPAGE = "LandingPage";
 
     private final JsonParser jsonParser;
 
@@ -55,7 +59,8 @@ public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord
         record.setId(Objects.toString(solrDoc.getFieldValue(SOLR_FIELD_ID)));
         record.setSelflink(Objects.toString(solrDoc.getFieldValue(SOLR_FIELD_SELFLINK)));
         record.setFields(createFieldValuesMap(solrDoc));
-        record.setResources(createResourceList(solrDoc));
+        record.setResources(createResourceList(solrDoc, SOLR_FIELD_RESOURCE_REF, RESOURCE_TYPE_RESOURCE));
+        record.setLandingPages(createResourceList(solrDoc, SOLR_FIELD_LANDINGPAGE_REF, RESOURCE_TYPE_LANDINGPAGE));
         return record;
     }
 
@@ -75,27 +80,24 @@ public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord
                         f -> ImmutableList.copyOf(solrDoc.getFieldValues(f))));
     }
 
-    private List<VloRecord.Resource> createResourceList(SolrDocument solrDoc) {
-        return FluentIterable.from(
-                Optional.ofNullable(
-                        solrDoc.getFieldValues(SOLR_FIELD_RESOURCE_REF))
-                        // if the field is not found we get a null -- fall back to empty list
-                        .orElseGet(Collections::emptyList))
+    private List<VloRecord.Resource> createResourceList(SolrDocument solrDoc, String field, String type) {
+        return FluentIterable.from(Optional.ofNullable(solrDoc.getFieldValues(field))
+                // if the field is not found we get a null -- fall back to empty list
+                .orElseGet(Collections::emptyList))
                 // resource refs are encoded in strings; filter out any unexpected garbage
                 .filter(String.class)
                 // convert to resource object
-                .transform(this::resourceRefStringToResource)
+                .transform(obj -> resourceRefStringToResource(obj, type))
                 .toList();
     }
 
-    private VloRecord.Resource resourceRefStringToResource(String object) {
+    private VloRecord.Resource resourceRefStringToResource(String object, String type) {
         try {
             final Map<String, Object> resourceObject = jsonParser.parseMap(object);
 
             return new VloRecord.Resource(
                     "", //id
-                    Objects.toString(resourceObject.getOrDefault("url", "")),
-                    "Resource",
+                    Objects.toString(resourceObject.getOrDefault("url", "")), type,
                     Objects.toString(resourceObject.getOrDefault("type", ""))
             );
         } catch (JsonParseException ex) {

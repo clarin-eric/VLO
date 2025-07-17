@@ -65,6 +65,8 @@ public class VloRecord {
     private String profileId;
 
     private List<Resource> resources;
+    
+    private List<Resource> landingPages;
 
     //TODO: define a different structure for this that allows for disambiguating context
     //For instance two resource technical detail components with a @ref at component level and file size or access informationin a child element
