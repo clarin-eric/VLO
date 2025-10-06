@@ -1,6 +1,10 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.12.4 (October 2025)
+* Minor dependency updates
+* Updated bundled VLO mappings definition
+
 VLO 4.12.3 (May 2025)
 * Various dependency updates
 * Fixed: PID info shows identifier itself in case it can't be resolved
