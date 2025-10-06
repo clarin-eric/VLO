@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<facetConcepts>
+<?xml version="1.0" encoding="UTF-8"?><facetConcepts>
 	<facetConcept name="id">
 		<concept>http://www.isocat.org/datcat/DC-2573</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2573_ae7c2548-8a86-ab6e-7099-e28b7697d1a2</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2573_ae7c2548-8a86-ab6e-7099-e28b7697d1a2-->
+<concept>http://www.wikidata.org/entity/Q420330</concept>
+
 		<pattern>/cmd:CMD/cmd:Header/cmd:MdSelfLink/text()</pattern>
 	</facetConcept>
 	<facetConcept name="_selfLink">
@@ -19,6 +22,10 @@
 		<concept>http://www.isocat.org/datcat/DC-5414</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5414_55fd7a9e-edae-d8ad-a64f-c8e1058e7a6d</concept>
 
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5414_55fd7a9e-edae-d8ad-a64f-c8e1058e7a6d-->
+<concept>http://www.wikidata.org/entity/P859</concept>
+
+
 
 		<pattern>/cmd:CMD/cmd:Components/cmdp:teiHeader/cmdp:fileDesc/cmdp:publicationStmt/cmdp:publisher/cmdp:orgName/cmdp:orgName[@role="project"]/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:media-session-profile/cmdp:media-session/cmdp:Corpus</pattern>
@@ -27,6 +34,10 @@
 	<facetConcept name="name">
 		<concept>http://www.isocat.org/datcat/DC-5428</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5428_65670fd6-3426-68ac-8f29-faef6ffd02ce-->
+<concept>http://www.wikidata.org/entity/Q60558001</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-5127</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5127_f2721b23-921c-46ba-8d4d-88b46aef6976</concept>
 		<concept>http://www.isocat.org/datcat/DC-4160</concept>
@@ -34,6 +45,10 @@
 		<!-- CLARIN-D Webservices name -->
 		<concept>http://www.isocat.org/datcat/DC-4114</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-4114_747bf046-1208-940d-36ba-297e4de49e0c</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-4114_747bf046-1208-940d-36ba-297e4de49e0c-->
+<concept>http://www.wikidata.org/entity/Q115534925</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-2544</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2544_3626545e-a21d-058c-ebfd-241c0464e7e5</concept>
 		<concept>http://www.isocat.org/datcat/DC-2545</concept>
@@ -44,6 +59,10 @@
 		<concept>http://purl.org/dc/elements/1.1/title</concept>
 		<concept>http://www.isocat.org/datcat/DC-6119</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-6119_ea4226b5-8d55-e71e-730f-2a02e3adbeb4-->
+<concept>http://www.wikidata.org/entity/Q783521</concept>
+
                 <pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceName/text()</pattern> <!-- no concept in lrt schema -->
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:titleInfo/title/text()</pattern>
 
@@ -61,8 +80,16 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-2509_3b86afe2-ebde-ba09-8a1c-fe6bdc46a739</concept>
 		<concept>http://www.isocat.org/datcat/DC-2510</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2510_2402e609-046a-dfbf-c2d7-5a2f1ae6dc86</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2510_2402e609-046a-dfbf-c2d7-5a2f1ae6dc86-->
+<concept>http://www.wikidata.org/entity/Q131673289</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-2538</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2538_8b697452-7ef3-9fce-ccf9-a7f344f11317</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2538_8b697452-7ef3-9fce-ccf9-a7f344f11317-->
+<concept>http://www.wikidata.org/entity/P577</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-6176</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6176_647a4954-a958-7304-d8a6-5851f2003f7c</concept>
 
@@ -82,6 +109,10 @@
 	<facetConcept name="continent">
 		<concept>http://www.isocat.org/datcat/DC-2531</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2531_e0427265-2fc4-d23e-0a7c-a21981ec3734</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2531_e0427265-2fc4-d23e-0a7c-a21981ec3734-->
+<concept>http://www.wikidata.org/entity/Q5107</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-3791</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3791_8f409aa8-2d57-5fc6-23f0-f490471807d8</concept>
 
@@ -96,13 +127,25 @@
 	<facetConcept name="country">
 		<concept>http://www.isocat.org/datcat/DC-2532</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2532_d004b0a6-fd1d-3ca3-abf1-1e6aeb3e37b2</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2532_d004b0a6-fd1d-3ca3-abf1-1e6aeb3e37b2-->
+<concept>http://www.wikidata.org/entity/Q6256</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-3792</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3792_68c770a4-d58c-46dd-d429-5609ce5f81c3</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-3792_68c770a4-d58c-46dd-d429-5609ce5f81c3-->
+<concept>http://www.wikidata.org/entity/Q11420631</concept>
+
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:spatial[@dcterms-type="ISO3166"]/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:coverage[@dcterms-type="ISO3166"]/text()</pattern>
 
 		<concept>http://www.isocat.org/datcat/DC-2092</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2092_36cd7ca8-e412-9f29-7ea7-4a3ba4ba2c91</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2092_36cd7ca8-e412-9f29-7ea7-4a3ba4ba2c91-->
+<concept>http://www.wikidata.org/entity/Q906278</concept>
+
 		<!-- add? -->
 
 
@@ -117,20 +160,32 @@
 	<facetConcept name="languageCode">
 		<concept>http://www.isocat.org/datcat/DC-2482</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2482_08eded24-4086-7e3f-88e5-e0807fb01e17-->
+<concept>http://www.wikidata.org/entity/Q2092812</concept>
+
 		<!-- language code -->
 		<concept>http://www.isocat.org/datcat/DC-2484</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2484_669684e7-cb9e-ea96-59cb-a25fe89b9b9d</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2484_669684e7-cb9e-ea96-59cb-a25fe89b9b9d-->
+<concept>http://www.wikidata.org/entity/Q3109261</concept>
+
 		<!-- language name -->
 		<concept>http://www.isocat.org/datcat/DC-5361</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5361_ba085ec1-9746-52bf-8cc1-3c300ce16eb8</concept>
 		<!-- language usage (TEI) -->
 		<concept>http://www.isocat.org/datcat/DC-5358</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5358_3cd089fe-ad03-6181-b20c-635ea41ed818-->
+<concept>http://www.wikidata.org/entity/Q34770</concept>
+
 		<!--language (TEI) - MENZO: added for CLARIN-DK -->
                 <concept>http://purl.org/dc/terms/language</concept>
 
                 <acceptableContext includeAny="true" includeEmpty="true"/>
-                <rejectableContext includeAny="false"  includeEmpty="false">
+                <rejectableContext includeAny="false" includeEmpty="false">
                     <concept>http://www.isocat.org/datcat/DC-4146</concept>
                     <concept>http://hdl.handle.net/11459/CCR_C-4146_5ccc45c8-d729-c180-2bf1-fccc56dde24d</concept>
                 </rejectableContext>
@@ -166,8 +221,16 @@
         <facetConcept name="organisation">
 		<concept>http://www.isocat.org/datcat/DC-2459</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2459_fc4e74d6-84de-c8cd-1ae8-2c2be5ee90b1</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2459_fc4e74d6-84de-c8cd-1ae8-2c2be5ee90b1-->
+<concept>http://www.wikidata.org/entity/Q43229</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-2979</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2979_8030473e-bbcb-6b87-3fd2-90554429ec50</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2979_8030473e-bbcb-6b87-3fd2-90554429ec50-->
+<concept>http://www.wikidata.org/entity/Q43229</concept>
+
 		<concept>http://purl.org/dc/terms/publisher</concept>
 		<concept>http://purl.org/dc/elements/1.1/publisher</concept>
 		<concept>http://www.isocat.org/datcat/DC-6134</concept>
@@ -188,8 +251,16 @@
 	<facetConcept name="genre">
 		<concept>http://www.isocat.org/datcat/DC-2470</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2470_d191f2b2-6339-f031-b534-70d526b28357</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2470_d191f2b2-6339-f031-b534-70d526b28357-->
+<concept>http://www.wikidata.org/entity/Q483394</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-3899</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3899_c6c608e7-cb2e-1832-09ff-aee36e1f2ed4</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-3899_c6c608e7-cb2e-1832-09ff-aee36e1f2ed4-->
+<concept>http://www.wikidata.org/entity/Q18042594</concept>
+
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:type/@olac-linguistic-type</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:genre/text()</pattern>
 
@@ -202,14 +273,26 @@
   <facetConcept name="modality">
 		<concept>http://www.isocat.org/datcat/DC-2490</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2490_44bc38a3-1799-4149-c791-40ac0176f0ff</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2490_44bc38a3-1799-4149-c791-40ac0176f0ff-->
+<concept>http://www.wikidata.org/entity/Q1243600</concept>
+
 	</facetConcept>
 	<facetConcept name="subject">
 		<concept>http://www.isocat.org/datcat/DC-2591</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2591_f769d93b-c007-d2c9-aff2-99e9177e5764</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2591_f769d93b-c007-d2c9-aff2-99e9177e5764-->
+<concept>http://www.wikidata.org/entity/Q24238356</concept>
+
 		<concept>http://purl.org/dc/terms/subject</concept>
 		<concept>http://purl.org/dc/elements/1.1/subject</concept>
 		<concept>http://www.isocat.org/datcat/DC-6147</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6147_ebed915e-f911-f128-cddc-466aa41c9c73</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-6147_ebed915e-f911-f128-cddc-466aa41c9c73-->
+<concept>http://www.wikidata.org/entity/P9488</concept>
+
 		<concept>http://www.isocat.org/datcat/DC-5316</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5316_2c6244b4-4f10-5e8e-49b6-26fbf7004791</concept>
 		<concept>http://www.isocat.org/datcat/DC-6543</concept>
@@ -344,6 +427,10 @@
 		<concept>http://hdl.handle.net/11459/CCR_C-5424_3200a38b-344e-41de-e539-f71f80c38df8</concept>
 		<concept>http://www.isocat.org/datcat/DC-3786</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-3786_21c37142-994f-63a8-5a5b-a9fce07681a7</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-3786_21c37142-994f-63a8-5a5b-a9fce07681a7-->
+<concept>http://www.wikidata.org/entity/Q166142</concept>
+
 		<pattern>/cmd:CMD/cmd:Components/cmdp:LrtInventoryResource/cmdp:LrtCommon/cmdp:ResourceType/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:OLAC-DcmiTerms/cmdp:type/text()</pattern>
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:typeOfResource/text()</pattern>
@@ -354,6 +441,10 @@
   <facetConcept name="format">
 		<concept>http://www.isocat.org/datcat/DC-2571</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2571_2be2e583-e5af-34c2-3673-93359ec1f7df-->
+<concept>http://www.wikidata.org/entity/Q1667978</concept>
+
 		<concept>http://purl.org/dc/terms/format</concept>
 	</facetConcept>
 	<facetConcept name="text">
@@ -366,6 +457,10 @@
   <facetConcept name="keywords">
 		<concept>http://www.isocat.org/datcat/DC-5436</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5436_6ab57c2c-5f8d-3561-6db6-d75da23d2637</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5436_6ab57c2c-5f8d-3561-6db6-d75da23d2637-->
+<concept>http://www.wikidata.org/entity/Q658349</concept>
+
 		<!-- not an official ISOcat PID - added to support LrtInventoryResource, should be removed in the future -->
 		<pattern>/cmd:CMD/cmd:Components/cmdp:mods/cmdp:classification/text()</pattern>
 
@@ -378,6 +473,10 @@
     <facetConcept name="availability">
 		<concept>http://www.isocat.org/datcat/DC-2457</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6-->
+<concept>http://www.wikidata.org/entity/Q79719</concept>
+
 		<!-- A description of the licensing conditions... -->
 		<concept>http://www.isocat.org/datcat/DC-2453</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2453_1f0c3ea5-7966-ae11-d3c6-448424d4e6e8</concept>
@@ -387,6 +486,10 @@
 		<!-- licenceType: Indication of the type of a copyright licence. -->
 		<concept>http://www.isocat.org/datcat/DC-6846</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-6846_d6adb99c-15ac-fac7-7911-f64c48298ce3</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-6846_d6adb99c-15ac-fac7-7911-f64c48298ce3-->
+<concept>http://www.wikidata.org/entity/Q83966861</concept>
+
 		<!-- DASISH from DC Rights -->
 		<concept>http://www.isocat.org/datcat/DC-5439</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-5439_98bb103d-476a-7f62-54b4-bf9de24d2229</concept>
@@ -397,8 +500,16 @@
 		
 		<!-- TEI header license -->
                 <concept>http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0-->
+<concept>http://www.wikidata.org/entity/Q79719</concept>
+
 		<!-- TEI header availability -->
  		<concept>http://hdl.handle.net/11459/CCR_C-5302_8dfad601-5387-7317-57d1-1f0e65b75af2</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5302_8dfad601-5387-7317-57d1-1f0e65b75af2-->
+<concept>http://www.wikidata.org/entity/P7228</concept>
+
 				
 		<!-- the DC is used in the distributionType facet -->
 		<concept>http://purl.org/dc/terms/license</concept>
@@ -428,6 +539,10 @@
                 A description of the licensing conditions under which the resource can be used. -->
 		<concept>http://www.isocat.org/datcat/DC-2457</concept>
 		<concept>http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-2457_45bbaa1a-7002-2ecd-ab9d-57a189f694a6-->
+<concept>http://www.wikidata.org/entity/Q79719</concept>
+
                 
                 <!-- licence type
 		Possibly with filtering:
@@ -441,6 +556,10 @@
 
                 <!-- TEI header -->
                 <concept>http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0</concept>
+
+<!--Wikidata mapping from http://hdl.handle.net/11459/CCR_C-5362_8cffd964-f57e-09ed-daed-eeabbf2d22c0-->
+<concept>http://www.wikidata.org/entity/Q79719</concept>
+
                                 		
                 <!-- the DC is used in the distributionType facet -->
 		<concept>http://purl.org/dc/terms/license</concept>
