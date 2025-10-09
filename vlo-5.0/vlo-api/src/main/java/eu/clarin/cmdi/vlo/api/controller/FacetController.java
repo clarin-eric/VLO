@@ -89,7 +89,7 @@ public class FacetController {
         //retrieve one more so that we can decide which indication to given regarding "more values"
         final List<Facet> facets = getFacetsFromService(fields, query, fq, countLimit + 1);
         //apply the count limit
-        applyFacetValueLimit(facets, countLimit);
+        facets.forEach(facet -> applyFacetValueLimit(facet, countLimit));
         return facets;
     }
 
@@ -101,19 +101,17 @@ public class FacetController {
         }
     }
 
-    private void applyFacetValueLimit(final List<Facet> facets, final Integer countLimit) {
-        facets.forEach(facet -> {
-            if (facet.getValueCount() > countLimit) {
-                //there are more values than the requested limit; set inidicator and apply limit
-                facet.setHasMore(true);
-                facet.setValueCount(countLimit);
-                final Iterable<Facet.ValueCount> limited = Iterables.limit(facet.getValues(), countLimit);
-                facet.setValues(ImmutableList.copyOf(limited));
-            } else {
-                //there are fewer values than the requested limit, set inidicator and leave as is
-                facet.setHasMore(false);
-            }
-        });
+    private void applyFacetValueLimit(final Facet facet, final Integer countLimit) {
+        if (facet.getValueCount() > countLimit) {
+            //there are more values than the requested limit; set inidicator and apply limit
+            facet.setHasMore(true);
+            facet.setValueCount(countLimit);
+            final Iterable<Facet.ValueCount> limited = Iterables.limit(facet.getValues(), countLimit);
+            facet.setValues(ImmutableList.copyOf(limited));
+        } else {
+            //there are fewer values than the requested limit, set inidicator and leave as is
+            facet.setHasMore(false);
+        }
     }
 
     /**
@@ -123,14 +121,20 @@ public class FacetController {
      * @param facetName
      * @param query
      * @param fq
+     * @param valueCountLimit limit to value counts
      * @return
      */
     @Operation(summary = "Get the facets and their (top) values and their counts")
     @GetMapping(path = "/{facetName}", produces = "application/json")
     public ResponseEntity<Facet> getFacet(@PathVariable("facetName") String facetName, @RequestParam(required = false, defaultValue = "*:*", name = QUERY_PARAMETER) String query,
-            @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq) {
+            @RequestParam(required = false, name = FILTER_QUERY_PARAMETER) List<String> fq,
+            @RequestParam(required = false, name = FACET_VALUES_COUNT_LIMIT) Optional<Integer> valueCountLimit) {
         return service.getFacet(facetName, new VloRequest(query, filterMapFactory.createFilterMap(fq)))
-                .map(facet -> ResponseEntity.ok(facet))
+                .map(facet -> {
+                    valueCountLimit.ifPresent(
+                            countLimit -> applyFacetValueLimit(facet, countLimit));
+                    return ResponseEntity.ok(facet);
+                })
                 .orElseGet(() -> ResponseEntity.notFound().build());
 
     }
