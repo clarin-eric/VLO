@@ -31,11 +31,15 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -129,6 +133,33 @@ public class VloRecordController {
                 .orElseThrow(() -> new VloApiProcessingException(
                 "Unexpectedly failed to save record. Service did not return VloRecord upon save request.",
                 record));
+    }
+
+    /**
+     * *
+     * GET /records/{id}
+     *
+     * @param id
+     * @return
+     */
+    @Operation(summary = "Retrieves the full CMDI document, as imported, for an individual record")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "A CMDI document for the record specified identifier that is present in the catalogue"),
+        @ApiResponse(responseCode = "404", description = "No record with the specified identifier is present in the catalogue", useReturnTypeSchema = false)
+    })
+    @GetMapping(path = "/{id}/cmdi", produces = "text/xml")
+    public ResponseEntity<ByteArrayResource> getMetadataFile(@PathVariable String id) {
+        return service.getCmdiForRecord(id).map((InputStream cmdiStream) -> {
+            try {
+                final ByteArrayResource inputStreamResource = new ByteArrayResource(cmdiStream.readAllBytes());
+                return ResponseEntity
+                        .ok()
+                        .contentType(MediaType.TEXT_XML)
+                        .body(inputStreamResource);
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not read CMDI content for record " + id, ex);
+            }
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }

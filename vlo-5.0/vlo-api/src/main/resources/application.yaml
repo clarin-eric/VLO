@@ -31,6 +31,7 @@ solr:
       - id
       - resourceClass
       - _resourceRefCount
+      - _fileName
     extraFields:
       - creator
       - collection

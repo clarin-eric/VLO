@@ -47,7 +47,8 @@ public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord
     private static final String SOLR_FIELD_SELFLINK = "_selfLink";
     private static final String SOLR_FIELD_RESOURCE_REF = "_resourceRef";
     private static final String SOLR_FIELD_LANDINGPAGE_REF = "_landingPageRef";
-    
+    private static final String SOLR_FIELD_FILENAME = "_fileName";
+
     private static final String RESOURCE_TYPE_RESOURCE = "Resource";
     private static final String RESOURCE_TYPE_LANDINGPAGE = "LandingPage";
 
@@ -61,6 +62,7 @@ public class SolrVloRecordConverter implements Converter<SolrDocument, VloRecord
         record.setFields(createFieldValuesMap(solrDoc));
         record.setResources(createResourceList(solrDoc, SOLR_FIELD_RESOURCE_REF, RESOURCE_TYPE_RESOURCE));
         record.setLandingPages(createResourceList(solrDoc, SOLR_FIELD_LANDINGPAGE_REF, RESOURCE_TYPE_LANDINGPAGE));
+        record.setSourcePath(String.valueOf(solrDoc.getFieldValue(SOLR_FIELD_FILENAME)));
         return record;
     }
 

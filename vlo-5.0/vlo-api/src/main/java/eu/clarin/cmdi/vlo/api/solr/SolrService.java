@@ -26,7 +26,11 @@ import eu.clarin.cmdi.vlo.api.service.VloFacetService;
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -99,7 +103,7 @@ public class SolrService implements VloRecordService, VloFacetService {
 
     @Override
     public Optional<VloRecord> getRecordById(String id) {
-        log.info("Get record by id: {}", id);
+        log.debug("Getting record by id: {}", id);
 
         final SolrQuery query = queryFactory.createDocumentQuery(id);
         return queryToRecords(query).findFirst();
@@ -154,7 +158,7 @@ public class SolrService implements VloRecordService, VloFacetService {
 
     public Optional<Facet> getFacet(String facet, String queryParam, Map<String, ? extends Iterable<String>> filters, Optional<Integer> valueCount) {
         //TODO: check if facet exists; otherwise return an empty mono!!
-        
+
         // query to get all facet values for a specific facet
         final SolrQuery query = queryFactory.createFacetQuery(queryParam,
                 // singleton facet fields list
@@ -242,6 +246,25 @@ public class SolrService implements VloRecordService, VloFacetService {
             result = docs.get(0);
         }
         return result;
+    }
+
+    @Override
+    public Optional<InputStream> getCmdiForRecord(String id) {
+        log.debug("Getting CMDI by record id: {}", id);
+        final SolrQuery query = queryFactory.createDocumentQuery(id);
+        return queryToRecords(query)
+                .findFirst()
+                .flatMap(this::cmdiStreamForRecord);
+    }
+
+    private Optional<InputStream> cmdiStreamForRecord(VloRecord record) {
+        final File file = new File(record.getSourcePath());
+        try {
+            return Optional.of(new FileInputStream(file));
+        } catch (FileNotFoundException ex) {
+            log.warn("File not found: {}", file.getPath());
+            return Optional.empty();
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import eu.clarin.cmdi.vlo.api.service.VloRecordService;
 import eu.clarin.cmdi.vlo.data.model.Facet;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -73,6 +74,11 @@ class VloApiApplicationTests {
 
                 @Override
                 public Optional<VloRecord> saveRecord(VloRecord record) {
+                    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                }
+
+                @Override
+                public Optional<InputStream> getCmdiForRecord(String id) {
                     throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
                 }
             };

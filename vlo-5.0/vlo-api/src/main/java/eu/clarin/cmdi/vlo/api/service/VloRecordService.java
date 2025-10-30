@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.api.service;
 import eu.clarin.cmdi.vlo.api.model.VloRequest;
 import eu.clarin.cmdi.vlo.data.model.VloRecord;
 import eu.clarin.cmdi.vlo.data.model.VloRecordSearchResult;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.Optional;
 
@@ -35,5 +36,7 @@ public interface VloRecordService {
     VloRecordSearchResult getRecords(VloRequest request);
 
     Optional<VloRecord> saveRecord(VloRecord record);
+
+    public Optional<InputStream> getCmdiForRecord(String id);
     
 }
