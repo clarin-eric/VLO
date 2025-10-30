@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
 import eu.clarin.cmdi.vlo.facets.configuration.Facet;
-import static org.junit.Assert.assertEquals;
+import eu.clarin.cmdi.vlo.importer.mapping.ConditionTargetSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,9 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.mapping.FacetConceptMapping;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
+import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactoryDOMImpl;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import static org.junit.Assert.*;
 
 
 public class ValueMappingFactoryTest {
@@ -171,6 +174,39 @@ public class ValueMappingFactoryTest {
         assertEquals(0, facetMapping.getFacetDefinition("name").getConditionTargetSet().getTargetsFor("donaudampfschifffahrtsgesellschaftskaptitaen").size());
         
 
+    }
+    @Test
+    public void testCloneDefaultTarget() throws Exception {
+        String fileName = createTmpFile("""
+                                        <?xml version="1.0" encoding="UTF-8"?>
+                                         <value-mappings>
+                                             <origin-facet name="subject">
+                                                 <value-map>
+                                                     <target-facet name="subject" removeSourceValue="true" overrideExistingValues="false"/>
+                                                     <target-value-set>
+                                                         <target-value facet="subject" removeSourceValue="true"/>
+                                                         <source-value>Web application</source-value>
+                                                     </target-value-set>
+                                                     <target-value-set>
+                                                         <target-value facet="subject">Text processing</target-value>
+                                                         <source-value>Text Processing</source-value>
+                                                     </target-value-set>
+                                                 </value-map>
+                                             </origin-facet>
+                                         </value-mappings>
+                                        """);
+
+        final Map<String, Facet> facetsConfigMap = new HashMap<>();
+        final FacetsMapping facetMapping = new FacetsMapping(facetsConfigMap);
+        new ValueMappingFactoryDOMImpl().createValueMapping(fileName, this.conceptMapping, facetMapping);
+        final ConditionTargetSet cts = facetMapping.getFacetDefinition("subject").getConditionTargetSet();
+
+        final List<TargetFacet> targets = cts.getTargetsFor("Text processing");
+        assertEquals(1, targets.size());
+
+        final TargetFacet target = targets.get(0);
+        assertEquals("subject", target.getFacetConfiguration().getName());
+        assertTrue(target.getRemoveSourceValue());
     }
 
     
