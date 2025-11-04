@@ -33,6 +33,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -147,15 +148,15 @@ public class VloRecordController {
         @ApiResponse(responseCode = "200", description = "A CMDI document for the record specified identifier that is present in the catalogue"),
         @ApiResponse(responseCode = "404", description = "No record with the specified identifier is present in the catalogue", useReturnTypeSchema = false)
     })
-    @GetMapping(path = "/{id}/cmdi", produces = "text/xml")
-    public ResponseEntity<ByteArrayResource> getMetadataFile(@PathVariable String id) {
+    @GetMapping(path = "/{id}/cmdi", produces = "text/plain")
+    public ResponseEntity<String> getMetadataFile(@PathVariable String id) {
         return service.getCmdiForRecord(id).map((InputStream cmdiStream) -> {
             try {
-                final ByteArrayResource inputStreamResource = new ByteArrayResource(cmdiStream.readAllBytes());
+                final String cmdi = new String(cmdiStream.readAllBytes(), StandardCharsets.UTF_8);
                 return ResponseEntity
                         .ok()
-                        .contentType(MediaType.TEXT_XML)
-                        .body(inputStreamResource);
+                        .contentType(MediaType.TEXT_PLAIN)
+                        .body(cmdi);
             } catch (IOException ex) {
                 throw new RuntimeException("Could not read CMDI content for record " + id, ex);
             }
