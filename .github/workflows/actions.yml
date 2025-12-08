@@ -1,0 +1,70 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: 'maven'
+      
+      - name: Set Maven options
+        run: echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
+      
+      - name: Build with Maven
+        run: |
+          if [ "${{ github.ref_name }}" ]; then
+            mvn versions:set -DnewVersion=${{ github.ref_name }} versions:commit
+          fi
+          mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+          mvn test -B
+          mvn clean install -DskipTests=true -Pdocker
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-build
+          path: vlo-distribution/target/vlo-${{ github.ref_name }}-docker.tar.gz
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-build
+          path: vlo-distribution/target/
+      
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: 'maven'
+      
+      - name: Update gem and install dependencies
+        run: |
+          gem update --system --force
+          gem install bundler
+          gem install faraday-net_http -v '3.3.0'
+          gem install uri
+          gem install logger
+      
+      - name: Deploy to GitHub Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          files: vlo-distribution/target/vlo-${{ github.ref_name }}-docker.tar.gz
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
