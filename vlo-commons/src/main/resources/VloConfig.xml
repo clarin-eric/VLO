@@ -88,6 +88,7 @@
 
     <fields>
         <field key="NAME">name</field>
+        <field key="ALTERNATIVE_NAME">alternativeName</field>
         <field key="CREATOR">creator</field>
         <field key="DESCRIPTION">description</field>
         <field key="COLLECTION">collection</field>

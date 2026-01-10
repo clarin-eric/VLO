@@ -9,6 +9,7 @@ package eu.clarin.cmdi.vlo;
  */
 public enum FieldKey {
     ACCESS_INFO,
+    ALTERNATIVE_NAME,
     AVAILABILITY,
     COLLECTION,
     COMPLETE_METADATA,
