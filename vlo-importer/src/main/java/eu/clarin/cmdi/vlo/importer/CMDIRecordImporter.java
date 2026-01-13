@@ -29,9 +29,12 @@ import eu.clarin.cmdi.vlo.importer.solr.DocumentStore;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +53,8 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
     private final DeduplicationSignature signature;
     private final DocumentStore documentStore;
     private final FieldNameServiceImpl fieldNameService;
+
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 
     private final CMDIRecordProcessorListener processorListener = new CMDIRecordProcessorListener() {
         @Override
@@ -90,14 +95,20 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
      * @param resourceStructureGraph leave empty skip hierarchy processing
      * @param endpointDescription if present, used to populate some fields
      * including national project
+     * @param oldIdentifiers
      * @throws eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException
      * @throws IOException
      */
-    public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
+    public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription, Optional<Set<String>> oldIdentifiers) throws DocumentStoreException, IOException {
         stats.nrOfFilesAnalyzed().incrementAndGet();
         final Optional<CMDIData<T>> result = super.processRecord(file, dataOrigin, resourceStructureGraph, endpointDescription);
         if (result.isPresent()) {
             final CMDIData<T> cmdiData = result.get();
+
+            if (isFirstEncounter(oldIdentifiers, cmdiData)) {
+                setFirstSeenDate(cmdiData);
+            }
+
             // update doc in store
             submitDocumentUpdate(cmdiData.getDocument(), file);
             // mark document as completed in graph
@@ -107,6 +118,19 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
         } else {
             LOG.info("Record not imported: {}", file);
         }
+    }
+
+    private boolean isFirstEncounter(Optional<Set<String>> oldIdentifiers, final CMDIData<T> cmdiData) {
+        return oldIdentifiers.map(ids -> !ids.contains(cmdiData.getId())).orElse(false);
+    }
+
+    public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
+        importRecord(file, dataOrigin, resourceStructureGraph, endpointDescription, Optional.empty());
+    }
+
+    protected void setFirstSeenDate(CMDIData<T> cmdiData) {
+        //set a first seen date
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.FIRST_SEEN), dateFormat.format(new Date()), false);
     }
 
     @Override
