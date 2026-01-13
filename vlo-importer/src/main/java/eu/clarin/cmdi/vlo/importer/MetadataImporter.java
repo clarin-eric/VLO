@@ -2,7 +2,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
 import java.io.File;
@@ -62,15 +61,17 @@ import eu.clarin.cmdi.vlo.importer.solr.SolrBridgeImpl;
 import java.io.Closeable;
 import java.io.OutputStreamWriter;
 import java.net.SocketTimeoutException;
-import java.text.SimpleDateFormat;
+import java.time.Instant;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import static java.time.temporal.ChronoUnit.DAYS;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.TimeZone;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -245,12 +246,12 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
             LOG.info("Collecting existing identifiers from the index...");
             //get existing identifiers from index
-            final Set<String> oldIndexIds = getAllRecordIdentifiers();
-            LOG.info("Found {} existing record identifiers", oldIndexIds.size());
+            final Map<String, Instant> oldIndexIdDatesMap = getAllRecordIdentifiers();
+            LOG.info("Found {} existing record identifiers", oldIndexIdDatesMap.size());
 
             // Import the specified data roots
             for (DataRoot dataRoot : dataRoots) {
-                processDataRoot(dataRoot, oldIndexIds);
+                processDataRoot(dataRoot, oldIndexIdDatesMap);
             }
             // Delete outdated entries (based on maxDaysInSolr parameter)
             if (config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
@@ -293,10 +294,10 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     }
 
     protected void processDataRoot(DataRoot dataRoot) throws SolrServerException, IOException, InterruptedException {
-        processDataRoot(dataRoot, Collections.emptySet());
+        processDataRoot(dataRoot, Collections.emptyMap());
     }
 
-    protected void processDataRoot(DataRoot dataRoot, Set<String> oldIndexIds) throws SolrServerException, IOException, InterruptedException {
+    protected void processDataRoot(DataRoot dataRoot, Map<String, Instant> oldIndexIdDatesMap) throws SolrServerException, IOException, InterruptedException {
         LOG.info("Start of processing: " + dataRoot.getOriginName());
         //delete all records first?
         if (dataRoot.deleteFirst()) {
@@ -310,24 +311,26 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
         // import files from every centre/endpoint within the data root
         for (List<File> centreFiles : getFilesFromDataRoot(dataRoot.getRootFile())) {
-            processCentreFiles(centreFiles, dataRoot, directoryEndpointMap, oldIndexIds);
+            processCentreFiles(centreFiles, dataRoot, directoryEndpointMap, oldIndexIdDatesMap);
         }
         updateDaysSinceLastImport(dataRoot);
         LOG.info("End of processing: " + dataRoot.getOriginName());
     }
 
-    private Set<String> getAllRecordIdentifiers() throws SolrServerException, IOException {
+    private Map<String, Instant> getAllRecordIdentifiers() throws SolrServerException, IOException {
+        final TimeZone utc = TimeZone.getTimeZone("UTC");
         final String idField = fieldNameService.getFieldName(FieldKey.ID);
+        final String firstSeenField = fieldNameService.getFieldName(FieldKey.FIRST_SEEN);
         String cursorMark = CursorMarkParams.CURSOR_MARK_START;
 
         final SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
-        query.setFields(idField);
+        query.setFields(idField, firstSeenField);
         query.setRows(IDENTIFIER_QUERY_ROW_COUNT);
         query.setSort(idField, SolrQuery.ORDER.asc);
 
         //loop over query results
-        final ImmutableSet.Builder<String> builder = ImmutableSet.<String>builder();
+        final ImmutableMap.Builder<String, Instant> builder = ImmutableMap.builder();
         boolean done = false;
 
         while (!done) {
@@ -335,8 +338,17 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
             final QueryResponse response = solrBridge.getClient().query(query);
             final String nextCursorMark = response.getNextCursorMark();
             response.getResults().stream()
-                    .map(doc -> doc.get(idField).toString())
-                    .forEach(builder::add);
+                    //.map(doc -> doc.get(idField).toString())
+                    .forEach(doc -> {
+                        final Object firstSeen = doc.getFieldValue(firstSeenField);
+                        if (firstSeen instanceof Date firstSeenDate) {
+                            //dates are stored and retrieved in UTC, so we need
+                            //to interpret this as such explicitly
+                            final Calendar calendar = Calendar.getInstance(utc);
+                            calendar.setTime(firstSeenDate);
+                            builder.put(doc.get(idField).toString(), calendar.toInstant());
+                        }
+                    });
             if (nextCursorMark == null || nextCursorMark.equals(cursorMark)) {
                 done = true;
             }
@@ -349,7 +361,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         processCentreFiles(centreFiles, dataRoot, directoryEndpointMap, null);
     }
 
-    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String, EndpointDescription> directoryEndpointMap, Set<String> oldIndexIds) throws IOException, SolrServerException, InterruptedException {
+    protected void processCentreFiles(final List<File> centreFiles, final DataRoot dataRoot, final Map<String, EndpointDescription> directoryEndpointMap, Map<String, Instant> oldIndexIdDatesMap) throws IOException, SolrServerException, InterruptedException {
         LOG.info("Processing directory: {}", centreFiles.get(0).getParent());
         String centerDirName = centreFiles.get(0).getParentFile().getName();
 
@@ -389,7 +401,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                     recordHandler.importRecord(file, Optional.of(dataRoot),
                             Optional.ofNullable(resourceStructureGraph),
                             Optional.ofNullable(directoryEndpointMap.get(file.getParentFile().getName())),
-                            Optional.ofNullable(oldIndexIds));
+                            Optional.ofNullable(oldIndexIdDatesMap));
                 } catch (Exception ex) {
                     LOG.error("An unhandled exception occurred while importing {}", file.getAbsolutePath(), ex);
                     stats.nrOfFilesWithError().incrementAndGet();
