@@ -31,7 +31,7 @@
             <properties>
                 <log4j.appender>Stdout</log4j.appender>
                 <vlo.import.logging.directory>.</vlo.import.logging.directory>
-                <vlo.import.logging.level>DEBUG</vlo.import.logging.level>
+                <vlo.import.logging.level>${sys:IMPORTER_LOG_LEVEL:-DEBUG}</vlo.import.logging.level>
             </properties>
         </profile>
         <profile>
