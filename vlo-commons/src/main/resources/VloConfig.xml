@@ -120,6 +120,7 @@
         <field key="LANDINGPAGE">_landingPageRef</field>
         <field key="SEARCHPAGE">_searchPageRef</field>
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
+        <field key="FIRST_SEEN">_firstSeen</field>
         <field key="LAST_SEEN">_lastSeen</field>
         <field key="CLARIN_PROFILE">_componentProfile</field>
         <field key="CLARIN_PROFILE_ID">_componentProfileId</field>

@@ -253,6 +253,7 @@
             <xs:enumeration value="LANDINGPAGE" />
             <xs:enumeration value="SEARCHPAGE" />
             <xs:enumeration value="SEARCH_SERVICE" />
+            <xs:enumeration value="FIRST_SEEN" />
             <xs:enumeration value="LAST_SEEN" />
             <xs:enumeration value="CLARIN_PROFILE" />
             <xs:enumeration value="CLARIN_PROFILE_ID" />
@@ -276,6 +277,7 @@
             <xs:enumeration value="SIGNATURE" />
             <xs:enumeration value="RECORD_PID" />
             <xs:enumeration value="CREATOR" />
+            <xs:enumeration value="ALTERNATIVE_NAME" />
         </xs:restriction>
     </xs:simpleType>
 </xs:schema>
