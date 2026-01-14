@@ -40,6 +40,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -252,9 +253,7 @@ public abstract class CMDIRecordProcessor<T> {
         });
 
         // add timestamp
-        Date dt = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), df.format(dt), false);
+        cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.LAST_SEEN), Instant.now().toString(), false);
 
         // set number of days since last import to '0'
         cmdiData.addDocField(fieldNameService.getFieldName(FieldKey.DAYS_SINCE_LAST_SEEN), 0, false);
