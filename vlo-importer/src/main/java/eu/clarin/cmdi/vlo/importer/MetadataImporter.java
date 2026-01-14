@@ -229,6 +229,11 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         try {
             final List<DataRoot> dataRoots = filterDataRootsWithCLArgs(checkDataRoots());
 
+            LOG.info("Collecting existing identifiers from the index...");
+            //get existing identifiers from index
+            final Map<String, Instant> oldIndexIdDatesMap = getAllRecordIdentifiers();
+            LOG.info("Found {} existing record identifiers", oldIndexIdDatesMap.size());
+            
             // Delete the whole Solr db
             if (config.getDeleteAllFirst()) {
                 deleteAll();
@@ -243,11 +248,6 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                 fileProcessingPool = Executors.newWorkStealingPool();
                 LOG.info("Pool was created with parallelism level {}", ((ForkJoinPool) fileProcessingPool).getParallelism());
             }
-
-            LOG.info("Collecting existing identifiers from the index...");
-            //get existing identifiers from index
-            final Map<String, Instant> oldIndexIdDatesMap = getAllRecordIdentifiers();
-            LOG.info("Found {} existing record identifiers", oldIndexIdDatesMap.size());
 
             // Import the specified data roots
             for (DataRoot dataRoot : dataRoots) {
