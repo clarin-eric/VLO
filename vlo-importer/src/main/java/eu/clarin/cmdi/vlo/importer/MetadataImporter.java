@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.importer;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
+import eu.clarin.cmdi.vlo.FacetConstants;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,7 +125,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     /**
      * How many identifiers to catch at once when collecting all
      */
-    private static final int IDENTIFIER_QUERY_ROW_COUNT = 10_000;
+    private static final int IDENTIFIER_QUERY_ROW_COUNT = 100_000;
 
     /**
      * interface to the solr server
@@ -229,10 +230,10 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         try {
             final List<DataRoot> dataRoots = filterDataRootsWithCLArgs(checkDataRoots());
 
-            LOG.info("Collecting existing identifiers from the index...");
+            LOG.info("Collecting existing identifiers and timestamps from the index...");
             //get existing identifiers from index
-            final Map<String, Instant> oldIndexIdDatesMap = getAllRecordIdentifiers();
-            LOG.info("Found {} existing record identifiers", oldIndexIdDatesMap.size());
+            final Map<String, Instant> oldIndexFirstSeenDatesMap = getAllRecordIdentifiers();
+            LOG.info("Found {} existing record identifiers", oldIndexFirstSeenDatesMap.size());
             
             // Delete the whole Solr db
             if (config.getDeleteAllFirst()) {
@@ -251,7 +252,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
             // Import the specified data roots
             for (DataRoot dataRoot : dataRoots) {
-                processDataRoot(dataRoot, oldIndexIdDatesMap);
+                processDataRoot(dataRoot, oldIndexFirstSeenDatesMap);
             }
             // Delete outdated entries (based on maxDaysInSolr parameter)
             if (config.getMaxDaysInSolr() > 0 && config.getDeleteAllFirst() == false) {
@@ -324,6 +325,8 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         String cursorMark = CursorMarkParams.CURSOR_MARK_START;
 
         final SolrQuery query = new SolrQuery();
+        // use 'fast' handler which does not collapse results
+        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         query.setQuery("*:*");
         query.setFields(idField, firstSeenField);
         query.setRows(IDENTIFIER_QUERY_ROW_COUNT);
@@ -751,6 +754,8 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
 
     private SolrQuery createOldRecordsQuery(DataRoot dataRoot) {
         final SolrQuery query = new SolrQuery();
+        // use 'fast' handler which does not collapse results
+        query.setRequestHandler(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         query.setQuery(
                 //we're going to process all records in the current data root...
                 fieldNameService.getFieldName(FieldKey.HARVESTER_ROOT) + ":" + ClientUtils.escapeQueryChars(dataRoot.getOriginName())
