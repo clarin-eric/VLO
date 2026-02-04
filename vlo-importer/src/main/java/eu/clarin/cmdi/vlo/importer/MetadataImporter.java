@@ -39,6 +39,7 @@ import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityFactory;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
+import eu.clarin.cmdi.vlo.importer.normalizer.AlternativeNamePostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.ContinentNamePostNormalizer;
@@ -202,6 +203,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         registerPostProcessor(fieldNameService, imb, FieldKey.RESOURCE_CLASS, () -> new ResourceClassPostNormalizer());
         registerPostProcessor(fieldNameService, imb, FieldKey.LICENSE, () -> new LicensePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.NAME, () -> new NamePostNormalizer());
+        registerPostProcessor(fieldNameService, imb, FieldKey.ALTERNATIVE_NAME, () -> new AlternativeNamePostNormalizer(config));
         registerPostProcessor(fieldNameService, imb, FieldKey.CREATOR, () -> new CreatorPostNormalizer());
 
         return imb.build();
