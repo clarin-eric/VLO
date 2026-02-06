@@ -17,6 +17,7 @@ import eu.clarin.cmdi.vlo.pojo.FieldValuesFilter;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.TemporalCoverageRange;
 import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
+import eu.clarin.cmdi.vlo.pojo.ExpansionState;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
@@ -48,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.Set;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.AttributeModifier;
@@ -146,7 +148,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         createModels();
         this.simpleModeModel = simpleModeModel;
 
-        addComponents();
+        addComponents(queryModel);
     }
 
     public FacetedSearchPage(PageParameters parameters, IModel<Boolean> simpleModeModel) {
@@ -160,7 +162,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         createModels();
         this.simpleModeModel = simpleModeModel;
 
-        addComponents();
+        addComponents(queryModel);
 
         // add Piwik tracking behavior
         if (piwikConfig.isEnabled()) {
@@ -226,7 +228,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         }
     }
 
-    private void addComponents() {
+    private void addComponents(IModel<QueryFacetsSelection> queryModel) {
         documentsProvider = new SolrDocumentExpansionPairProvider(getModel(), fieldNameService);
         solrDocumentsProvider = new SolrDocumentProviderAdapter(documentsProvider, fieldNameService);
         searchContainer = new WebMarkupContainer("searchContainer");
@@ -253,7 +255,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                         || (facetSelection != null && !facetSelection.isEmpty()));
             }
         };
-        facetsPanel = createFacetsPanel("facets");
+        facetsPanel = createFacetsPanel("facets", queryModel.getObject());
         availabilityFacetPanel = createAvailabilityPanel("availability");
         temporalCoverageFacetPanel = createTemporalCoveragePanel("temporalCoverage");
         optionsPanel = createOptionsPanel("options");
@@ -407,9 +409,12 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         return form;
     }
 
-    private Panel createFacetsPanel(final String id) {
-
-        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, facetValuesFiltersModel, getModel(), facetSelectionTypeModeModel) {
+    private Panel createFacetsPanel(final String id, QueryFacetsSelection selection) {
+        /**
+         * Initial facet expansions based on facet selection state
+         */
+        final Map<String, ExpansionState> initialExpansionsMap = createExpansionsMap(selection);
+        final FacetsPanel panel = new FacetsPanel(id, facetNamesModel, fieldsModel, facetValuesFiltersModel, getModel(), facetSelectionTypeModeModel, initialExpansionsMap) {
 
             @Override
             protected void selectionChanged(Optional<AjaxRequestTarget> target) {
@@ -419,6 +424,17 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
         };
         panel.setOutputMarkupId(true);
         return panel;
+    }
+
+    public HashMap<String, ExpansionState> createExpansionsMap(QueryFacetsSelection selection) {
+        final HashMap<String, ExpansionState> facetExpansion = new HashMap<>();
+        if (selection != null) {
+            final Set<String> expandedFacets = selection.getSelection().keySet();
+            if (expandedFacets != null) {
+                expandedFacets.forEach(facet -> facetExpansion.put(facet, ExpansionState.EXPANDED));
+            }
+        }
+        return facetExpansion;
     }
 
     private void updateSelection(Optional<AjaxRequestTarget> target) {

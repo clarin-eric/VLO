@@ -18,6 +18,7 @@ package eu.clarin.cmdi.vlo.wicket.panels.search;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,11 +91,25 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
      * selection state
      * @param selectionTypeModeModel
      */
-    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, IModel<HashMap<String, FieldValuesFilter>> facetValuesFiltersModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel) {
+    public FacetsPanel(final String id, final IModel<List<String>> facetNamesModel, final FacetFieldsModel fieldsModel, IModel<HashMap<String, FieldValuesFilter>> facetValuesFiltersModel, final IModel<QueryFacetsSelection> selectionModel, final IModel<FacetSelectionType> selectionTypeModeModel, final Map<String, ExpansionState> initialExpansionState) {
         super(id, facetNamesModel);
+        final Collection<String> primaryFacetFields = facetsConfig.getPrimaryFacetFieldNames();
 
-        final Map<String, ExpansionState> expansionStateMap = new HashMap<>();
-        expansionModel = new MapModel<>(expansionStateMap);
+        //Facets expansion state
+        if (initialExpansionState == null) {
+            //no state given -> all facets in default state (collapsed)
+            expansionModel = new MapModel<>(new HashMap<>());
+        } else {
+            //initialise with provided initial expansion state
+            expansionModel = new MapModel<>(Maps.newHashMap(initialExpansionState));
+
+            //if any secondary facets are selected, initially enable the 'all shown' state
+            if (initialExpansionState.keySet().stream()
+                    .anyMatch(field -> !primaryFacetFields.contains(field))) {
+                allFacetsShown.setObject(true);
+            }
+        }
+
         final IModel<Boolean> conditionalFacetDisplayModel = () -> {
             //only enable show/hide secondary facets functionality if there are enoug (too many) available facets
             final int numberFacetsShown = getNumberFacetsShown(facetNamesModel.getObject(), fieldsModel.getObject());
@@ -143,7 +158,6 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                     //class appender that differentiates between primary and secondary facets (based on configuration)
                     @Override
                     public String getObject() {
-                        final Collection<String> primaryFacetFields = facetsConfig.getPrimaryFacetFieldNames();
                         if (primaryFacetFields == null || primaryFacetFields.isEmpty()) {
                             //no primary facets configured, don't set a class
                             return null;
