@@ -1,6 +1,21 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.13.0 (February 2025)
+* Dependency updates
+* New field: "alternative name"
+	<https://github.com/clarin-eric/VLO/issues/394>
+	<https://github.com/clarin-eric/VLO/issues/410>
+	<https://github.com/clarin-eric/VLO/issues/411>
+* New field: 'first seen'
+	<https://github.com/clarin-eric/VLO/issues/370>
+* Initially expand facets that have an active selection
+	<https://github.com/clarin-eric/VLO/issues/154>
+* Removed references to deprecated CLARIN website content (FAQs)
+	<https://github.com/clarin-eric/VLO/issues/409>
+* Language info page: MultiTree link removed
+	<https://github.com/clarin-eric/VLO/issues/406>
+
 VLO 4.12.4 (October 2025)
 * Minor dependency updates
 * Updated bundled VLO mappings definition
