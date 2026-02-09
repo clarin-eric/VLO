@@ -15,6 +15,7 @@
 
     <properties>
         <java.version>21</java.version>
+        <spring.boot.version>3.5.9</spring.boot.version>
     </properties>
 
     <dependencies>
