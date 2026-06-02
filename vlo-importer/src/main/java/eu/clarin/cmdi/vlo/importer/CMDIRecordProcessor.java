@@ -135,7 +135,6 @@ public abstract class CMDIRecordProcessor<T> {
      *
      * @param file
      * @param cmdiData
-     * @param listener
      * @param dataOrigin
      * @param endpointDescription
      * @return
@@ -302,7 +301,6 @@ public abstract class CMDIRecordProcessor<T> {
      * overwritten by some more specific xpath (as in the LRT cmdi files). So if
      * a type is overwritten and already in the document we take that type.
      *
-     * @param document
      * @param cmdiData
      */
     private void addResourceData(CMDIData cmdiData) {

@@ -108,7 +108,7 @@ public class ValueWriter {
     /**
      * @param cmdiData cmdiData representation of the CMDI document
      * @param facetConfig FacetDefinition of the target facet
-     * @param valueLangPair Value/language Pair
+     * @param valueSet ValueSet to insert into the CMDIData object
      */
     private void insertFacetValue(CMDIData cmdiData, FacetDefinition facetConfig, ValueSet valueSet) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.DESCRIPTION))) {

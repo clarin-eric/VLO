@@ -93,8 +93,6 @@ public class FacetMappingFactory {
 
     /**
      *
-     * @param facetConceptsFile path to facet concepts file, leave null or empty
-     * to use default
      * @param xsd
      * @param useLocalXSDCache
      * @return
@@ -109,7 +107,6 @@ public class FacetMappingFactory {
      * Get facet mapping used to map meta data based on a facet concepts file
      * and url to cmdi meta data profile.
      *
-     * @param facetConcepts name of the facet concepts file
      * @param xsd url of xml schema of cmdi profile
      * @param useLocalXSDCache use local XML schema files instead of accessing
      * the component registry
@@ -163,11 +160,6 @@ public class FacetMappingFactory {
      *
      * Create facet mapping used to map meta data based on a facet concept
      * mapping file and url to cmdi meta data profile.
-     *
-     * @param facetConcepts name of the facet concepts file
-     * @param xsd url of xml schema of cmdi profile
-     * @param useLocalXSDCache use local XML schema files instead of accessing
-     * the component registry
      *
      * @return the facet mapping used to map meta data to facets
      */

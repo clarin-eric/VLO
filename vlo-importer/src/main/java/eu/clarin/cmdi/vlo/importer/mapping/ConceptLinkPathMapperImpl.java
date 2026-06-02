@@ -55,9 +55,6 @@ public class ConceptLinkPathMapperImpl extends ProfileXsdWalker<Map<String, List
      * "this is where the magic happens". Finds paths in the xsd to all concepts
      * (isocat data catagories).
      *
-     * @param xsd URL of XML Schema of some CMDI profile
-     * @param useLocalXSDCache use local XML schema files instead of accessing
-     * the component registry
      * @return Map (Data Category -> List of XPath expressions linked to the key
      * data category which can be found in CMDI files with this schema)
      * @throws NavException

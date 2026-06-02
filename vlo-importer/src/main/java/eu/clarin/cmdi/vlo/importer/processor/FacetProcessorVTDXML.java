@@ -275,7 +275,6 @@ public class FacetProcessorVTDXML implements FacetProcessor {
      * @param facetConfig FacetDefinition of the origin facet (which might lead
      * to different target facets)
      * @param valueLanguagePair Value/language Pair
-     * @param isDerived Is derived facet
      */
     private void processRawValue(CMDIData cmdiData, FacetValuesMap facetValuesMap, int vtdIndex, FacetDefinition facetConfig, Pair<String, String> valueLanguagePair) {
         if (facetConfig.getName().equals(fieldNameService.getFieldName(FieldKey.LANGUAGE_CODE)) && !valueLanguagePair.getRight().equals(ENGLISH_LANGUAGE) && !valueLanguagePair.getRight().equals(DEFAULT_LANGUAGE)) {
