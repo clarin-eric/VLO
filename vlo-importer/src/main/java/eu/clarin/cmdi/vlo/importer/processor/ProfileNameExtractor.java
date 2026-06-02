@@ -69,7 +69,7 @@ public class ProfileNameExtractor {
      *
      * @param profileId
      * @return
-     * @throws VTDException
+     * @throws IOException
      */
     private String calculate(String profileId) throws IOException {
         LOG.debug("PARSING PROFILE: {}{}", registryBaseURl, profileId);
