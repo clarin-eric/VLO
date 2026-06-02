@@ -6,6 +6,10 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
 import eu.clarin.cmdi.vlo.importer.mapping.TargetFacet;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
+/**
+ * A {@Code ValueSet} object represents a set of data on raw value, as it is found in the CMDI document, the VTD index there,
+ * the configuration of the origin facet (by which it is looked up), the configuration of the target facet(s) as well as the target value(s).
+ */
 public class ValueSet {
 
     private int vtdIndex;
