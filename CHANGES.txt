@@ -1,7 +1,7 @@
 Bug fixes and new features
 --------------------------
 
-VLO 4.13.0 (February 2025)
+VLO 4.13.0 (February 2026)
 * Dependency updates
 * New field: "alternative name"
 	<https://github.com/clarin-eric/VLO/issues/394>
