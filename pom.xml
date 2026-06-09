@@ -48,11 +48,13 @@
         <log4j2.version>2.20.0</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
         <spring.boot.version>3.2.0</spring.boot.version>
+        <spring.version>6.2.8</spring.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <wicket.version>10.9.1</wicket.version>
     </properties>
 
     <dependencies>
@@ -142,32 +144,6 @@
                         <systemPropertyVariables>
                             <java.security.egd>file:/dev/./urandom</java.security.egd>
                         </systemPropertyVariables>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <configuration>
-                        <!-- 
-                        <webapps>
-                            <webapp>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>vlo-web-app</artifactId>
-                                <contextPath>/vlo-web-app</contextPath>
-                                <version>${project.version}</version>
-                                <asWebapp>true</asWebapp> 
-                            </webapp>
-                            <webapp>
-                                <groupId>${project.groupId}</groupId>
-                                <artifactId>vlo-exposure-frontend</artifactId>
-                                <contextPath>/vlo-exposure-frontend</contextPath>
-                                <version>${project.version}</version>
-                                <asWebapp>true</asWebapp>
-                            </webapp>
-                        </webapps> -->
-                        <port>8080</port>
-                        <path>/vlo</path>
                     </configuration>
                 </plugin>
                 <plugin>

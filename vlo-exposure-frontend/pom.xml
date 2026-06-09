@@ -34,8 +34,6 @@ language governing permissions and limitations under the License. -->
         </license>
     </licenses>
     <properties>
-        <wicket.version>8.12.0</wicket.version>
-        <spring.version>5.3.25</spring.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <vlo.logging.level>DEBUG</vlo.logging.level>
         <log4j.appender>Console</log4j.appender>
@@ -56,12 +54,20 @@ language governing permissions and limitations under the License. -->
         </dependency>
         
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>5.0.0</version>
             <scope>provided</scope>
         </dependency>
         
+        <!-- JAXB runtime implementation (API only is in vlo-commons, impl needed at runtime) -->
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>4.0.4</version>
+            <scope>runtime</scope>
+        </dependency>
+
         <!-- WICKET DEPENDENCIES -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -97,19 +103,26 @@ language governing permissions and limitations under the License. -->
         <dependency>
             <groupId>com.googlecode.wicket-jquery-ui</groupId>
             <artifactId>wicket-jquery-ui</artifactId>
-            <version>8.11.1</version>
+            <version>9.23.1</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.wicketstuff/wicketstuff-googlecharts -->
         <dependency>
             <groupId>org.wicketstuff</groupId>
             <artifactId>wicketstuff-googlecharts</artifactId>
-            <version>8.11.0</version>
+            <version>9.20.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j2-impl</artifactId>
             <version>${log4j2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-tester</artifactId>
+            <version>${wicket.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -174,12 +187,20 @@ language governing permissions and limitations under the License. -->
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven3-plugin</artifactId>
+                <version>1.10.13</version>
                 <configuration>
-                    <port>7070</port>
-                    <path>/exp</path>
+                    <container>
+                        <containerId>tomcat10x</containerId>
+                        <type>embedded</type>
+                    </container>
+                    <configuration>
+                        <properties>
+                            <cargo.servlet.port>7070</cargo.servlet.port>
+                            <cargo.context>exp</cargo.context>
+                        </properties>
+                    </configuration>
                 </configuration>
             </plugin>
         </plugins>

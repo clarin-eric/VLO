@@ -33,7 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.solr.client.solrj.SolrQuery;
 import org.hamcrest.Matchers;

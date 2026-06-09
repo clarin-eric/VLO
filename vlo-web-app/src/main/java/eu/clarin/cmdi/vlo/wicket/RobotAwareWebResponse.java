@@ -16,8 +16,8 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.regex.Pattern;
-import javax.servlet.http.HttpServletResponse;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.protocol.http.servlet.ServletWebResponse;
 import org.apache.wicket.request.http.WebRequest;

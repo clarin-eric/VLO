@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.web.configuration;
 
 import eu.clarin.cmdi.vlo.web.service.VloApiClient;
 import eu.clarin.cmdi.vlo.web.service.VloApiClientImpl;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

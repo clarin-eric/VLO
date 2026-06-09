@@ -49,7 +49,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
+import java.time.Duration;
 
 /**
  * Panel that displays a single facet based on the current query/value
@@ -62,7 +62,7 @@ import org.apache.wicket.util.time.Duration;
 public abstract class FacetPanel extends ExpandablePanel<String> {
 
     private final static Logger logger = LoggerFactory.getLogger(FacetPanel.class);
-    private final static Duration FILTER_RESPONSE_THROTTLE = Duration.milliseconds(250L);
+    private final static Duration FILTER_RESPONSE_THROTTLE = Duration.ofMillis(250L);
 
     @SpringBean
     private PiwikConfig piwikConfig;

@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.monitor;
 
 import eu.clarin.cmdi.vlo.monitor.service.VloMonitor;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
