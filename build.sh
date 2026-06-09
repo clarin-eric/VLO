@@ -18,7 +18,7 @@
 
 #configuration
 APP_NAME="vlo"
-MAVEN_IMAGE="maven:3.6.3-jdk-11-slim"
+MAVEN_IMAGE="maven:3.9.16-eclipse-temurin-21-alpine"
 CLEAN_CACHE=${CLEAN_CACHE:-false}
 
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
