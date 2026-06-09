@@ -46,11 +46,13 @@
         <log4j2.version>2.25.3</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
         <spring.boot.version>3.2.12</spring.boot.version>
+        <spring.version>6.2.8</spring.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <wicket.version>10.9.1</wicket.version>
     </properties>
 
     <dependencies>

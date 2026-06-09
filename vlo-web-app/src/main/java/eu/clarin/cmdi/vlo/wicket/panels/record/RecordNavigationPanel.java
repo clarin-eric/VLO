@@ -21,7 +21,6 @@ import eu.clarin.cmdi.vlo.wicket.components.RecordNavigationLink;
 import eu.clarin.cmdi.vlo.wicket.model.SearchContextModel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.migrate.StringResourceModelMigration;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;

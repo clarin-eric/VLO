@@ -19,7 +19,6 @@ package eu.clarin.cmdi.vlo.wicket.panels;
 import java.util.Optional;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,7 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 
 /**
- * Drop-in replacement for {@link ModalWindow} that uses bootstrap classes and
+ * Drop-in replacement for {wicket's v8 ModalWindow} that uses bootstrap classes and
  * JavaScript.
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;

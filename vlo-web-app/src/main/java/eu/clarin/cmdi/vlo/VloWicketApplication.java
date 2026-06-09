@@ -39,8 +39,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Predicate;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
@@ -117,6 +117,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     public void init() {
         super.init();
 
+        getCspSettings().blocking().disabled();
         initBootstrap();
 
         // register global resource bundles (from .properties files)
@@ -200,7 +201,7 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // configure cache by applying the vlo configuration settings to it
         final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
         logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
-        this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache);
+        // this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache); -> Nothing to it...
 
         final Bytes sessionCacheSize = Bytes.kilobytes((long) vloConfig.getSessionCacheSize());
         logger.info("Setting Wicket max size per session to {}", sessionCacheSize);

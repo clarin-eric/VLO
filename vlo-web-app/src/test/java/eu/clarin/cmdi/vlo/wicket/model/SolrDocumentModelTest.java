@@ -47,7 +47,7 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.junit.Assert.*;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

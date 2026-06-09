@@ -62,7 +62,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.time.Duration;
+import java.time.Duration;
 
 /**
  * A panel that shows all available values for a selected facet. Supports two
@@ -89,7 +89,7 @@ public class AllFacetValuesPanel extends GenericPanel<FacetField> {
             0, 2, 5, 10, 100, 1000
     );
 
-    private final static Duration FILTER_RESPONSE_THROTTLE = Duration.milliseconds(250L);
+    private final static Duration FILTER_RESPONSE_THROTTLE = Duration.ofMillis(250L);
 
     private static final StartsWithOptionsRenderer STARTS_WITH_OPTIONS_RENDERER = new StartsWithOptionsRenderer();
     private static final OccurenceOptionsRenderer OCCURENCE_OPTIONS_RENDERER = new OccurenceOptionsRenderer();

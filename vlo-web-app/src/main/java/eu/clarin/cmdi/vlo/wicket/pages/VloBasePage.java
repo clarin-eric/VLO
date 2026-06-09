@@ -17,11 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import eu.clarin.cmdi.vlo.wicket.panels.BootstrapFeedbackPanel;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.ImmutableNavbarComponent;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.Navbar.ComponentPosition;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarButton;
-import de.agilecoders.wicket.core.markup.html.bootstrap.navbar.NavbarExternalLink;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
@@ -32,7 +27,6 @@ import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -43,9 +37,10 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.include.Include;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -207,16 +202,16 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     @Override
     public void renderHead(IHeaderResponse response) {
         //render jQuery first, it is the most common dependency
-        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference(), true));
+        response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()).setDefer(true));
         // Include other JavaScript for header (e.g. permalink animation)
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloHeaderJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getHistoryApiJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getClipBoardJS(), true));
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloClipboardJS(), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloHeaderJS()).setDefer(true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getHistoryApiJS()).setDefer(true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getClipBoardJS()).setDefer(true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloClipboardJS()).setDefer(true));
 
         if (!Strings.isEmpty(vloConfig.getVcrSubmitEndpoint())) {
-            response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginJS(), true));
-            response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginConfigJS(), true));
+            response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginJS()).setDefer(true));
+            response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVcrPluginConfigJS()).setDefer(true));
         }
 
         if (bottomSnippet != null) {
@@ -254,38 +249,14 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     }
 
     private Component createHeaderMenu(String id) {
-        final Navbar navbar = new Navbar(id) {
-            @Override
-            protected Label newBrandLabel(String markupId) {
-                //set label to not escape model strings to allow HTML
-                return (Label) super.newBrandLabel(markupId).setEscapeModelStrings(false);
-            }
-
-        };
-        navbar.setBrandName(new StringResourceModel("vloMenuTitle", this).setModel(appTitleModel));
-
-        // link to CLARIN website
-        final Component clarinLink = new NavbarExternalLink(new StringResourceModel("vloNavigation.projectPageUrl", this)) {
-            @Override
-            protected Component newLabel(String markupId) {
-                return super.newLabel(markupId).setEscapeModelStrings(false);
-            }
-
-        }
-                .setLabel(Model.of("<span>CLARIN</span>"))
-                .add(new AttributeModifier("class", "clarin-logo hidden-xs"));
-
-        //add all menu compoennts
-        navbar.addComponents(
-                new ImmutableNavbarComponent(new NavbarButton(FacetedSearchPage.class, new StringResourceModel("vloNavigation.search", this))
-                        .add(new AttributeModifier("class", "search-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(ContributorsPage.class, new StringResourceModel("vloNavigation.contributors", this))
-                        .add(new AttributeModifier("class", "contributors-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(new NavbarButton(HelpPage.class, new StringResourceModel("vloNavigation.help", this))
-                        .add(new AttributeModifier("class", "help-link")), ComponentPosition.LEFT),
-                new ImmutableNavbarComponent(clarinLink, ComponentPosition.RIGHT)
-        );
-        return navbar;
+        final WebMarkupContainer menu = new WebMarkupContainer(id);
+        menu.add(new BookmarkablePageLink<>("brandLink", SimpleSearchPage.class)
+                .add(new Label("brandLabel", new StringResourceModel("vloMenuTitle", this).setModel(appTitleModel)).setEscapeModelStrings(false)));
+        menu.add(new BookmarkablePageLink<>("searchLink", FacetedSearchPage.class));
+        menu.add(new BookmarkablePageLink<>("contributorsLink", ContributorsPage.class));
+        menu.add(new BookmarkablePageLink<>("helpLink", HelpPage.class));
+        menu.add(new ExternalLink("clarinLink", new StringResourceModel("vloNavigation.projectPageUrl", this)));
+        return menu;
     }
 
     public final VloConfig getVloConfig() {

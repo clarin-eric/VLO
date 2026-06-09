@@ -18,11 +18,11 @@ package eu.clarin.cmdi.vlo;
 
 import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.Locale;
 import java.util.Optional;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.util.time.Time;
 
 /**
  *
@@ -32,11 +32,11 @@ public class VloWebSession extends WebSession {
 
     private static final String SELECTION_TYPE_ATTRIBUTE_NAME = "selectionType";
 
-    private final Time initTime;
+    private final Instant initTime;
 
     public VloWebSession(Request request, Optional<Locale> locale) {
         super(request);
-        this.initTime = Time.now();
+        this.initTime = Instant.now();
         locale.ifPresent(super::setLocale);
     }
 
@@ -57,7 +57,7 @@ public class VloWebSession extends WebSession {
         setAttribute(SELECTION_TYPE_ATTRIBUTE_NAME, value);
     }
 
-    public Time getInitTime() {
+    public Instant getInitTime() {
         return initTime;
     }
 

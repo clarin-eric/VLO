@@ -524,13 +524,11 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour(), true));
-        response
-                .render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class,
-                        "vlo-tour.js"), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour()).setDefer(true));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")).setDefer(true));
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourRecordPage();});", "initTourRecordPage"));
 
-        response.render(JavaScriptHeaderItem.forUrl(config.getLrSwitchboardPopupScriptUrl(), "switchboard-popup", true));
+        response.render(JavaScriptHeaderItem.forUrl(config.getLrSwitchboardPopupScriptUrl(), "switchboard-popup").setDefer(true));
     }
 
     /**

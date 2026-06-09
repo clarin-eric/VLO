@@ -23,7 +23,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import java.util.Comparator;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import eu.clarin.cmdi.vlo.service.FieldValueOrderingsFactory;
 import eu.clarin.cmdi.vlo.FieldKey;

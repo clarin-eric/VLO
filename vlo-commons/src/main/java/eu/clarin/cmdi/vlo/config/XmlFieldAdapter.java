@@ -17,7 +17,7 @@ public class XmlFieldAdapter extends XmlAdapter<Fields, Map<String, String>> {
     * (non-Javadoc)
     * 
     * @see
-    * javax.xml.bind.annotation.adapters.XmlAdapter#marshal(java.lang.Object)
+    * jakarta.xml.bind.annotation.adapters.XmlAdapter#marshal(java.lang.Object)
     */
    @Override
    public Fields marshal(Map<String, String> map) throws Exception {
@@ -34,7 +34,7 @@ public class XmlFieldAdapter extends XmlAdapter<Fields, Map<String, String>> {
     * (non-Javadoc)
     * 
     * @see
-    * javax.xml.bind.annotation.adapters.XmlAdapter#unmarshal(java.lang.Object)
+    * jakarta.xml.bind.annotation.adapters.XmlAdapter#unmarshal(java.lang.Object)
     */
    @Override
    public Map<String, String> unmarshal(Fields fields) throws Exception {

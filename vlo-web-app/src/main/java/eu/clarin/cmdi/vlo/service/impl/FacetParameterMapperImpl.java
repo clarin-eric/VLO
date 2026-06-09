@@ -16,7 +16,7 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.LanguageCodeUtils;
