@@ -16,14 +16,13 @@
  */
 package nl.mpi.archiving.corpusstructure.core.handle;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URISyntaxException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -99,18 +98,18 @@ public class HandleRestApiResolver implements HandleResolver {
         logger.debug("Making request to {}", requestUrl);
 
         try {
-            final ClientResponse response = requestHandleDataJson(requestUrl);
+            final Client client = ClientBuilder.newClient();
+            final Response response = client.target(requestUrl)
+                    .request(MediaType.APPLICATION_JSON_TYPE).get();
 
             if (Response.Status.OK.getStatusCode() != response.getStatus()) {
                 final Response.StatusType statusInfo = response.getStatusInfo();
                 logger.error("Unexpected response status {} - {} for {}", statusInfo.getStatusCode(), statusInfo.getReasonPhrase(), requestUrl);
             } else {
-                final String responseString = response.getEntity(String.class);
+                final String responseString = response.readEntity(String.class);
                 return getUrlFromJson(handle, responseString);
             }
-        } catch (UniformInterfaceException ex) {
-            logger.error("Could not communicate with Handle API", ex);
-        } catch (ClientHandlerException ex) {
+        } catch (ProcessingException ex) {
             logger.error("Could not communicate with Handle API", ex);
         } catch (JSONException ex) {
             logger.error("Could not parse Handle API response", ex);
@@ -165,12 +164,5 @@ public class HandleRestApiResolver implements HandleResolver {
             }
         }
         return null;
-    }
-
-    protected ClientResponse requestHandleDataJson(final String requestUrl) throws UniformInterfaceException, ClientHandlerException {
-        final Client client = Client.create();
-        return client.resource(requestUrl)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .get(ClientResponse.class);
     }
 }
