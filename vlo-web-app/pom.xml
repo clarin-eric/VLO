@@ -19,6 +19,8 @@
 
     <properties>
         <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
+        <jersey.version>3.1.11</jersey.version>
+        
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>
         <vlo.logging.level>INFO</vlo.logging.level>
@@ -127,11 +129,22 @@
         </dependency>
         
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.19.4</version>
+            <version>${jersey.version}</version>
         </dependency>
         
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
