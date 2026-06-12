@@ -39,17 +39,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <span class="qualifier snapshot">TESTING</span>
             <span class="qualifier beta">BETA</span>
-            <nav wicket:id="menu" class="navbar navbar-default navbar-static-top">
+            <nav wicket:id="menu" class="navbar-static-top navbar-default navbar" role="navigation">
                 <div class="container">
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed"
-                                data-toggle="collapse" data-target="#vlo-navbar">
-                            <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#vlo-navbar">
+                            <span class="sr-only">Toggle Navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
                         </button>
                         <a wicket:id="brandLink" class="navbar-brand"><span wicket:id="brandLabel"></span></a>
                     </div>
-                    <div class="collapse navbar-collapse" id="vlo-navbar">
-                        <ul class="nav navbar-nav">
+                    <div class="collapse navbar-collapse" role="navigation" id="vlo-navbar">
+                        <ul class="nav navbar-nav navbar-left">
                             <li><a wicket:id="searchLink" class="search-link"><wicket:message key="vloNavigation.search"/></a></li>
                             <li><a wicket:id="contributorsLink" class="contributors-link"><wicket:message key="vloNavigation.contributors"/></a></li>
                             <li><a wicket:id="helpLink" class="help-link"><wicket:message key="vloNavigation.help"/></a></li>
