@@ -40,9 +40,10 @@ function handleSearchFailure(message, status) {
     endSearch();
 }
 
-function transitionFromSimple(cb) {
+function transitionFromSimple() {
     var simpleBox = $('.simple-only:visible');
     if (simpleBox.length > 0) {
+        var continueCall = Wicket.Ajax.suspendCall();
         simpleBox.slideUp({
             duration: 'fast',
             start: function () {
@@ -50,11 +51,9 @@ function transitionFromSimple(cb) {
                 $('.hide-simple').slideDown('fast');
             },
             done: function () {
-                cb();
+                continueCall();
             }
         });
-    } else {
-        cb();
     }
 }
 

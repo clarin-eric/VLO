@@ -397,7 +397,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 //transition from simple
                 simpleModeModel.setObject(false);
                 target.ifPresent(t -> {
-                    t.prependJavaScript("cb|transitionFromSimple(cb);");
+                    t.prependJavaScript("transitionFromSimple();");
                     t.add(searchContainer); //update everything within container
                 });
 

@@ -89,7 +89,7 @@ public abstract class BootstrapModal extends Panel {
             visibilityModel.setObject(false);
             target.ifPresent(t -> {
                 t.add(this);
-                t.prependJavaScript(String.format("cb|hideModal($('#%s .modal'), cb);", getMarkupId(true)));
+                t.prependJavaScript(String.format("hideModal($('#%s .modal'));", getMarkupId(true)));
             });
         }
     }
