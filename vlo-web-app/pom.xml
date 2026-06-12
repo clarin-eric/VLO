@@ -56,7 +56,7 @@
         <dependency>
             <groupId>de.agilecoders.wicket</groupId>
             <artifactId>wicket-bootstrap-core</artifactId>
-            <version>7.0.10</version>
+            <version>7.0.14</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.wicket</groupId>
@@ -76,7 +76,7 @@
             <!-- Override outdated dependency with known vulnerability -->
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
-            <version>1.12.4</version>
+            <version>3.7.1</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
