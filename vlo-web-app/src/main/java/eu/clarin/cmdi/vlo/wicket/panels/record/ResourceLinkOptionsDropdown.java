@@ -33,7 +33,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.BootstrapDropdown;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Optional;
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -159,9 +159,9 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
     private static String createAddToVcrQueueJs(IModel<String> linkModel, IModel<String> fileNameModel) {
         return String.format(ADD_TO_VCR_QUEUE_JS_TEMPLATE,
                 // url
-                StringEscapeUtils.escapeJavaScript(linkModel.getObject()),
+                StringEscapeUtils.escapeEcmaScript(linkModel.getObject()),
                 //title
-                StringEscapeUtils.escapeJavaScript(fileNameModel.getObject())
+                StringEscapeUtils.escapeEcmaScript(fileNameModel.getObject())
         );
     }
 
