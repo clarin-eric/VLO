@@ -52,6 +52,12 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
     public static void setUpClass() throws Exception {
         INPUT_DOCUMENTS = getInputDocuments();
 
+        // Solr 9: SolrTestCaseJ4 defaults to RAMDirectoryFactory, but UpdateLog asks for
+        // 'none' lock which is incompatible with RAMDirectoryFactory.
+        // Use NRTCachingDirectoryFactory (the production default) which can do
+        // all lock types (but it's a bit heavier).
+        useFactory("solr.NRTCachingDirectoryFactory");
+
         SolrTestCaseJ4.initCore(
                 //config
                 getResourcePath("/solr/vlo-index/solrconfig.xml"),

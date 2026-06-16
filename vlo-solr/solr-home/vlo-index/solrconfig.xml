@@ -428,7 +428,7 @@
              autowarmCount - the number of entries to prepopulate from
                  and old cache.
         -->
-        <filterCache class="solr.FastLRUCache"
+        <filterCache class="solr.CaffeineCache"
                      size="512"
                      initialSize="512"
                      autowarmCount="0"/>
@@ -441,7 +441,7 @@
               maxRamMB - the maximum amount of RAM (in MB) that this cache is allowed
                          to occupy
         -->
-        <queryResultCache class="solr.LRUCache"
+        <queryResultCache class="solr.CaffeineCache"
                           size="512"
                           initialSize="512"
                           autowarmCount="0"/>
@@ -452,7 +452,7 @@
            document).  Since Lucene internal document ids are transient,
            this cache will not be autowarmed.
         -->
-        <documentCache class="solr.LRUCache"
+        <documentCache class="solr.CaffeineCache"
                        size="512"
                        initialSize="512"
                        autowarmCount="0"/>
@@ -464,7 +464,7 @@
            even if not configured here.
         -->
         <!--
-         <fieldValueCache class="solr.FastLRUCache"
+         <fieldValueCache class="solr.CaffeineCache"
                           size="512"
                           autowarmCount="128"
                           showItems="32" />
@@ -481,7 +481,7 @@
         -->
         <!--
          <cache name="myUserCache"
-                class="solr.LRUCache"
+                class="solr.CaffeineCache"
                 size="4096"
                 initialSize="1024"
                 autowarmCount="1024"
@@ -1394,12 +1394,7 @@
         <str name="template.base.dir">${velocity.template.base.dir:}</str>
     </queryResponseWriter>
 
-    <!-- XSLT response writer transforms the XML output by any xslt file found
-       in Solr's conf/xslt directory.  Changes to xslt files are checked for
-       every xsltCacheLifetimeSeconds.  
-    -->
-    <queryResponseWriter name="xslt" class="solr.XSLTResponseWriter">
-        <int name="xsltCacheLifetimeSeconds">5</int>
-    </queryResponseWriter>
+    <!-- XSLTResponseWriter was removed in Solr 9. It can be re-added via the
+         scripting contrib module if needed (solr-scripting jar). -->
 
 </config>
