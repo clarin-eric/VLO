@@ -13,16 +13,17 @@ import org.apache.solr.client.solrj.util.ClientUtils;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrException;
+import org.apache.solr.common.util.NamedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SolrDaoImpl {
 
     private final static Logger logger = LoggerFactory.getLogger(SolrDaoImpl.class);
-   
+
     private final SolrClient solrClient;
     private final VloConfig vloConfig;
-    
+
     private final String ID;
 
     public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig, FieldNameService fieldNameService) {
@@ -33,6 +34,17 @@ public class SolrDaoImpl {
 
     protected SolrClient getSolrClient() {
         return solrClient;
+    }
+
+    protected NamedList<Object> fireRawQuery(QueryRequest req) {
+        try {
+            logger.debug("Executing raw query: {}", req);
+            req.setBasicAuthCredentials(vloConfig.getSolrUserReadOnly(), vloConfig.getSolrUserReadOnlyPass());
+            return solrClient.request(req);
+        } catch (SolrServerException | IOException e) {
+            logger.error("Error getting data:", e);
+            throw new RuntimeException(e);
+        }
     }
 
     protected QueryResponse fireQuery(SolrQuery query) {
