@@ -5,8 +5,10 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -20,6 +22,8 @@ import org.apache.solr.common.util.NamedList;
  * @author Twan Goosen
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
+
+    private static final int MAX_SUGGESTIONS = 10;
 
     public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
         super(solrClient, config, fieldNameService);
@@ -40,21 +44,31 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
     }
 
     private Iterator<String> parseSuggestions(NamedList<Object> raw) {
-        if (!(raw.get("suggest") instanceof Map<?, ?> suggest) || suggest.isEmpty()) {
+        if (!(raw.get("suggest") instanceof Map<?, ?> suggestSection) || suggestSection.isEmpty()) {
             return Collections.emptyIterator();
         }
-        if (!(suggest.values().iterator().next() instanceof Map<?, ?> dict) || dict.isEmpty()) {
-            return Collections.emptyIterator();
+        // Collect results from all dictionaries in order (primary first, fallback second).
+        // LinkedHashSet deduplicates while preserving insertion order.
+        final Set<String> terms = new LinkedHashSet<>();
+        for (Object dictObj : suggestSection.values()) {
+            if (!(dictObj instanceof Map<?, ?> dict) || dict.isEmpty()) {
+                continue;
+            }
+            if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
+                continue;
+            }
+            if (!(result.get("suggestions") instanceof List<?> suggestions)) {
+                continue;
+            }
+            suggestions.stream()
+                    .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
+                    .map(s -> (String) ((Map<?, ?>) s).get("term"))
+                    .limit(MAX_SUGGESTIONS - terms.size())
+                    .forEach(terms::add);
+            if (terms.size() >= MAX_SUGGESTIONS) {
+                break;
+            }
         }
-        if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
-            return Collections.emptyIterator();
-        }
-        if (!(result.get("suggestions") instanceof List<?> suggestions)) {
-            return Collections.emptyIterator();
-        }
-        return suggestions.stream()
-                .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
-                .map(s -> (String) ((Map<?, ?>) s).get("term"))
-                .iterator();
+        return terms.iterator();
     }
 }
