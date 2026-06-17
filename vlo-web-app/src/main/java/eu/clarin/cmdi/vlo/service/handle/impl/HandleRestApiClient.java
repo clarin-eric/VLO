@@ -16,14 +16,13 @@
  */
 package eu.clarin.cmdi.vlo.service.handle.impl;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientHandlerException;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.UniformInterfaceException;
-import com.sun.jersey.api.client.WebResource;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.ProcessingException;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,24 +71,21 @@ public class HandleRestApiClient implements HandleClient {
         final String requestUrl = handleApiBaseUrl + handle;
         logger.debug("Making request to {}", requestUrl);
 
-        final Client client = Client.create();
-        final WebResource resource = client.resource(requestUrl);
+        final Client client = ClientBuilder.newClient();
+        final WebTarget resource = client.target(requestUrl);
 
         try {
-            final ClientResponse response = resource
-                    .accept(MediaType.APPLICATION_JSON_TYPE)
-                    .get(ClientResponse.class);
+            final Response response = resource
+                    .request(MediaType.APPLICATION_JSON_TYPE).get();
 
             if (Response.Status.OK.getStatusCode() != response.getStatus()) {
                 final Response.StatusType statusInfo = response.getStatusInfo();
                 logger.error("Unexpected response status {} - {} for {}", statusInfo.getStatusCode(), statusInfo.getReasonPhrase(), requestUrl);
             } else {
-                final String responseString = response.getEntity(String.class);
+                final String responseString = response.readEntity(String.class);
                 return getUrlFromJson(responseString);
             }
-        } catch (UniformInterfaceException ex) {
-            logger.error("Could not communicate with Handle API", ex);
-        } catch (ClientHandlerException ex) {
+        } catch (ProcessingException ex) {
             logger.error("Could not communicate with Handle API", ex);
         } catch (JSONException ex) {
             logger.error("Could not parse Handle API response", ex);

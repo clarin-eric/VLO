@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -26,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import javax.annotation.PostConstruct;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;

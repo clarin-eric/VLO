@@ -40,22 +40,24 @@ function handleSearchFailure(message, status) {
     endSearch();
 }
 
-function transitionFromSimple(cb) {
+function transitionFromSimple(onComplete) {
     var simpleBox = $('.simple-only:visible');
-    if (simpleBox.length > 0) {
-        simpleBox.slideUp({
-            duration: 'fast',
-            start: function () {
-                console.log("transition animation..");
-                $('.hide-simple').slideDown('fast');
-            },
-            done: function () {
-                cb();
-            }
-        });
-    } else {
-        cb();
+    if (simpleBox.length === 0) {
+        if (onComplete) onComplete();
+        return;
     }
+    var continueCall = onComplete ? null : Wicket.Ajax.suspendCall();
+    simpleBox.slideUp({
+        duration: 'fast',
+        start: function () {
+            console.log("transition animation..");
+            $('.hide-simple').slideDown('fast');
+        },
+        done: function () {
+            if (continueCall) continueCall();
+            if (onComplete) onComplete();
+        }
+    });
 }
 
 function showSearchContent() {

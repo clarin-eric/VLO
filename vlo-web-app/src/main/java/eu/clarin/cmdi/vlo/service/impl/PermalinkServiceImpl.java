@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Page;

@@ -39,16 +39,22 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.function.Predicate;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.wicket.Application;
 import org.apache.wicket.ConverterLocator;
+import org.apache.wicket.DefaultPageManagerProvider;
 import org.apache.wicket.IConverterLocator;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
+import org.apache.wicket.csp.CSPDirective;
+import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.markup.head.HeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.pageStore.CachingPageStore;
+import org.apache.wicket.pageStore.IPageStore;
+import org.apache.wicket.pageStore.InSessionPageStore;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.Request;
@@ -125,6 +131,13 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
         // mount pages on URL paths
         mountPages();
 
+        // remove the default style-src (which contains a nonce)
+        getCspSettings().blocking()
+                .remove(CSPDirective.STYLE_SRC)             // drop the nonce so 'unsafe-inline' takes effect
+                .add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF)
+                .add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.UNSAFE_INLINE)  // allow inline style="..."
+                .add(CSPDirective.STYLE_SRC, "code.jquery.com");
+
         // configure Wicket cache according to parameters set in VloConfig 
         setupCache();
 
@@ -199,12 +212,19 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     private void setupCache() {
         // configure cache by applying the vlo configuration settings to it
         final int pagesInApplicationCache = vloConfig.getPagesInApplicationCache();
-        logger.info("Setting Wicket in-memory cache size to {}", pagesInApplicationCache);
-        this.getStoreSettings().setInmemoryCacheSize(pagesInApplicationCache);
-
         final Bytes sessionCacheSize = Bytes.kilobytes((long) vloConfig.getSessionCacheSize());
-        logger.info("Setting Wicket max size per session to {}", sessionCacheSize);
-        this.getStoreSettings().setMaxSizePerSession(sessionCacheSize);
+        logger.info("Configuring Wicket page store: in-memory pages={}, max size per session={}",
+                pagesInApplicationCache, sessionCacheSize);
+
+        getStoreSettings().setMaxSizePerSession(sessionCacheSize);
+
+        // Override the default in-session cache size (1 page) with the configured value
+        setPageManagerProvider(new DefaultPageManagerProvider(this) {
+            @Override
+            protected IPageStore newCachingStore(IPageStore pageStore) {
+                return new CachingPageStore(pageStore, new InSessionPageStore(pagesInApplicationCache));
+            }
+        });
     }
 
     /**

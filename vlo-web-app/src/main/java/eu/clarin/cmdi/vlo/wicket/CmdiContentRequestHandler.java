@@ -21,7 +21,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import java.io.File;
 import java.util.Collection;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.RequestHandlerExecutor;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;

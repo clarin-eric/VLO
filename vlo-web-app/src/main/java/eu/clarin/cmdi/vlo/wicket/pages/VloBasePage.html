@@ -26,11 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta wicket:id="pageDescription" name="description" content="" />
         <meta name="msvalidate.01" content="5328C9E13F0CD2549D6E6F4218714CBC" />
+        <link wicket:id="canonicalUrl" rel="canonical" />
         <link rel="stylesheet" href="css/vlo.css" type="text/css" />
         <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css" />
         <link rel="icon" href="images/favicon.png" type="image/png"/> 
-        <link wicket:id="canonicalUrl" rel="canonical" />
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.14.2/themes/base/jquery-ui.css">
     </head>
     <body class="non-js">
         <header wicket:id="header" id="header" role="banner">
@@ -39,7 +39,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
             <span class="qualifier snapshot">TESTING</span>
             <span class="qualifier beta">BETA</span>
-            <div wicket:id="menu" class="navbar-static-top"  role="banner">[Navigation]</div>
+            <nav wicket:id="menu" class="navbar-static-top navbar-default navbar" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#vlo-navbar">
+                            <span class="sr-only">Toggle Navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a wicket:id="brandLink" class="navbar-brand"><span wicket:id="brandLabel"></span></a>
+                    </div>
+                    <div class="collapse navbar-collapse" role="navigation" id="vlo-navbar">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li><a wicket:id="searchLink" class="search-link"><wicket:message key="vloNavigation.search"/></a></li>
+                            <li><a wicket:id="contributorsLink" class="contributors-link"><wicket:message key="vloNavigation.contributors"/></a></li>
+                            <li><a wicket:id="helpLink" class="help-link"><wicket:message key="vloNavigation.help"/></a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a wicket:id="clarinLink" class="clarin-logo hidden-xs"><span>CLARIN</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
         </header>
 
         <div class="container">

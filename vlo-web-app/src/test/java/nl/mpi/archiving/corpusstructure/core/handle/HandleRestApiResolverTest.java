@@ -16,14 +16,26 @@
  */
 package nl.mpi.archiving.corpusstructure.core.handle;
 
+import java.net.URI;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 
 /**
  *
  * @author twagoo
  */
 public class HandleRestApiResolverTest {
+
+    @Test
+    @Ignore("Too brittle, relies on live handle. Can also be slow.")
+    public void testResolve() throws Exception {
+        final String uri = "hdl:11022/0000-0007-C9C6-7";
+
+        final HandleRestApiResolver instance = new HandleRestApiResolver();
+        final URI resolved = instance.resolve(URI.create(uri));
+        assertNotNull(resolved);
+    }
 
     /**
      * Test of getUrlFromJson method, of class HandleRestApiResolver.

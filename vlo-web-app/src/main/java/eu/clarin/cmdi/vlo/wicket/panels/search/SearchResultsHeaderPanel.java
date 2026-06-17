@@ -202,7 +202,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
             protected void populateItem(final Item<Map.Entry<String, FacetSelection>> item) {
                 final IModel<Map.Entry<String, FacetSelection>> selectionModel = item.getModel();
                 // add a label for the selected facet value(s)
-                final Label valueLabel = new Label("label", new PropertyModel(selectionModel, "value")) {
+                final Label valueLabel = new Label("label", selectionModel.map(Map.Entry::getValue)) {
 
                     @Override
                     public <C> IConverter<C> getConverter(Class<C> type) {
@@ -214,7 +214,7 @@ public class SearchResultsHeaderPanel extends GenericPanel<QueryFacetsSelection>
                 };
                 // add facet name as title attribute so that it becomes available through a tooltip
                 valueLabel.add(new AttributeModifier("title",
-                        new SolrFieldNameModel(new PropertyModel<>(selectionModel, "key"))));
+                        new SolrFieldNameModel(selectionModel.map(Map.Entry::getKey))));
 
                 //ajax indicator should go behind label even though behaviour is triggered by remove link...
                 final AjaxIndicatorAppender ajaxIndicatorAppender = new AjaxIndicatorAppender();

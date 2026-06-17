@@ -397,7 +397,7 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
                 //transition from simple
                 simpleModeModel.setObject(false);
                 target.ifPresent(t -> {
-                    t.prependJavaScript("cb|transitionFromSimple(cb);");
+                    t.prependJavaScript("transitionFromSimple();");
                     t.add(searchContainer); //update everything within container
                 });
 
@@ -512,8 +512,8 @@ public class FacetedSearchPage extends VloBasePage<QueryFacetsSelection> impleme
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour(), true));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour()).setDefer(true));
+        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js")).setDefer(true));
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourSearchPage();});", "initTourSearchPage"));
     }
 

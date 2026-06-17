@@ -18,25 +18,23 @@
 // functions called by show/hide methods of BootstrapModal panel
 // see https://getbootstrap.com/javascript/#modals-methods
 
-function showModal(obj, cb) {
-    if (cb) {
-        obj.one('shown.bs.modal', function (e) {
-            cb(); // wicket callback to proceed after showing the modal
-        });
-    }
+function showModal(obj) {
+    var continueCall = Wicket.Ajax.suspendCall();
+    obj.one('shown.bs.modal', function (e) {
+        continueCall();
+    });
     obj.modal({
-        'backdrop': 'static', 
-        'keyboard': false, 
+        'backdrop': 'static',
+        'keyboard': false,
         'show': true
     });
 }
 
-function hideModal(obj, cb) {
-    if (cb) {
-        obj.one('hidden.bs.modal', function (e) {
-            cb(); // wicket callback to proceed after hiding the modal
-        });
-    }
+function hideModal(obj) {
+    var continueCall = Wicket.Ajax.suspendCall();
+    obj.one('hidden.bs.modal', function (e) {
+        continueCall();
+    });
     obj.modal('hide');
 }
 

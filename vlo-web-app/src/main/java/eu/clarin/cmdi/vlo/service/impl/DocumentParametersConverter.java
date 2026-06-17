@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
 import eu.clarin.cmdi.vlo.FieldKey;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

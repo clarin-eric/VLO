@@ -19,9 +19,9 @@ package eu.clarin.cmdi.vlo.wicket;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
+import java.time.Duration;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.util.time.Duration;
 
 /**
  * A behavior that updates a {@link ResourceInfo} model using the provided
@@ -42,7 +42,7 @@ public abstract class LazyResourceInfoUpdateBehavior extends AbstractAjaxTimerBe
      * @param resourceInfoModel model that should be updated
      */
     public LazyResourceInfoUpdateBehavior(ResourceStringConverter converter, ResourceInfoModel resourceInfoModel) {
-        super(Duration.seconds(.2));
+        super(Duration.ofMillis(200L));
         this.converter = converter;
         this.resourceInfoModel = resourceInfoModel;
     }
