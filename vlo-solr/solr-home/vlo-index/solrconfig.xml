@@ -1393,8 +1393,4 @@
     <queryResponseWriter name="velocity" class="solr.VelocityResponseWriter" startup="lazy">
         <str name="template.base.dir">${velocity.template.base.dir:}</str>
     </queryResponseWriter>
-
-    <!-- XSLTResponseWriter was removed in Solr 9. It can be re-added via the
-         scripting contrib module if needed (solr-scripting jar). -->
-
 </config>

@@ -12,8 +12,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.util.NamedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * DAO that delivers suggestions for incomplete terms (autocomplete function)
@@ -23,43 +21,40 @@ import org.slf4j.LoggerFactory;
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AutoCompleteServiceImpl.class);
-
     public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
         super(solrClient, config, fieldNameService);
     }
 
     @Override
     public Iterator<String> getChoices(String input) {
-        if (input != null) {
-            final SolrQuery query = new SolrQuery();
-            query.setQuery(input.toLowerCase());
-
-            final QueryRequest req = new QueryRequest(query);
-            req.setPath("/suggest");
-
-            // Use fireRawQuery to bypass QueryResponse which crashes on the "suggest" key
-            // when using solrj 9 client against a Solr 8 server (LinkedHashMap vs NamedList cast).
-            // "suggest" is a LinkedHashMap, inner objects are SimpleOrderedMap — use Map for all levels.
-            final NamedList<Object> raw = fireRawQuery(req);
-
-            @SuppressWarnings("unchecked")
-            final Map<String, Object> suggestSection = (Map<String, Object>) raw.get("suggest");
-            if (suggestSection != null) {
-                @SuppressWarnings("unchecked")
-                final Map<String, Object> dictionary = (Map<String, Object>) suggestSection.values().iterator().next();
-                @SuppressWarnings("unchecked")
-                final Map<String, Object> queryResult = (Map<String, Object>) dictionary.values().iterator().next();
-                @SuppressWarnings("unchecked")
-                final List<Map<String, Object>> suggestions = (List<Map<String, Object>>) queryResult.get("suggestions");
-                if (suggestions != null && !suggestions.isEmpty()) {
-                    return suggestions.stream()
-                            .map(s -> (String) s.get("term"))
-                            .iterator();
-                }
-            }
+        if (input == null) {
+            return Collections.emptyIterator();
         }
+        final SolrQuery query = new SolrQuery();
+        query.setQuery(input.toLowerCase());
+        final QueryRequest req = new QueryRequest(query);
+        req.setPath("/suggest");
+        // fireRawQuery bypasses QueryResponse which crashes on the "suggest" key
+        // with solrj 9 + Solr 8 (LinkedHashMap vs NamedList cast)
+        return parseSuggestions(fireRawQuery(req));
+    }
 
-        return Collections.emptyIterator();
+    private Iterator<String> parseSuggestions(NamedList<Object> raw) {
+        if (!(raw.get("suggest") instanceof Map<?, ?> suggest) || suggest.isEmpty()) {
+            return Collections.emptyIterator();
+        }
+        if (!(suggest.values().iterator().next() instanceof Map<?, ?> dict) || dict.isEmpty()) {
+            return Collections.emptyIterator();
+        }
+        if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
+            return Collections.emptyIterator();
+        }
+        if (!(result.get("suggestions") instanceof List<?> suggestions)) {
+            return Collections.emptyIterator();
+        }
+        return suggestions.stream()
+                .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
+                .map(s -> (String) ((Map<?, ?>) s).get("term"))
+                .iterator();
     }
 }
