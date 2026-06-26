@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -47,7 +48,7 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
         }
         // Stream all dictionaries in order (primary first, fallback second);
         return suggestSection.values().stream()
-                .flatMap(dict -> getTermsFromSuggesterResult(dict).stream()) // flatten the terms
+                .flatMap(this::getTermsFromSuggesterResult) // flatten the terms
                 .distinct() // deduplicate preserving first occurrence
                 .limit(MAX_SUGGESTIONS)
                 .iterator();
@@ -60,20 +61,19 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
      *   suggest → { dictName → { query → { suggestions: [ { term, weight, payload }, ... ] } } }
      * This method receives the value at the dictName level and navigates deeper.
      */
-    private List<String> getTermsFromSuggesterResult(Object dictObj) {
+    private Stream<String> getTermsFromSuggesterResult(Object dictObj) {
         if (!(dictObj instanceof Map<?, ?> dict) || dict.isEmpty()) {
-            return List.of();
+            return Stream.empty();
         }
         // dict is keyed by the query string; exactly one entry since we sent one query
         if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
-            return List.of();
+            return Stream.empty();
         }
         if (!(result.get("suggestions") instanceof List<?> suggestions)) {
-            return List.of();
+            return Stream.empty();
         }
         return suggestions.stream()
                 .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
-                .map(s -> (String) ((Map<?, ?>) s).get("term"))
-                .toList();
+                .map(s -> (String) ((Map<?, ?>) s).get("term"));
     }
 }
