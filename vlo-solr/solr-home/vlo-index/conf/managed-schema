@@ -191,4 +191,10 @@
     <copyField source="text" dest="_suggester"/>
     <copyField source="name" dest="_suggester_primary"/>
     <copyField source="description" dest="_suggester_primary"/>
+    <copyField source="alternativeName" dest="_suggester_primary"/>
+    <copyField source="_languageName" dest="_suggester_primary"/>
+    <copyField source="keywords" dest="_suggester_primary"/>
+    <copyField source="subject" dest="_suggester_primary"/>
+    <copyField source="organisation" dest="_suggester_primary"/>
+    <copyField source="collection" dest="_suggester_primary"/>
 </schema>
