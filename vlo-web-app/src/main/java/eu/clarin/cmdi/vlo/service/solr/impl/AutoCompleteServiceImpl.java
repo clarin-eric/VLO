@@ -5,10 +5,8 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -47,28 +45,35 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
         if (!(raw.get("suggest") instanceof Map<?, ?> suggestSection) || suggestSection.isEmpty()) {
             return Collections.emptyIterator();
         }
-        // Collect results from all dictionaries in order (primary first, fallback second).
-        // LinkedHashSet deduplicates while preserving insertion order.
-        final Set<String> terms = new LinkedHashSet<>();
-        for (Object dictObj : suggestSection.values()) {
-            if (!(dictObj instanceof Map<?, ?> dict) || dict.isEmpty()) {
-                continue;
-            }
-            if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
-                continue;
-            }
-            if (!(result.get("suggestions") instanceof List<?> suggestions)) {
-                continue;
-            }
-            suggestions.stream()
-                    .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
-                    .map(s -> (String) ((Map<?, ?>) s).get("term"))
-                    .limit(MAX_SUGGESTIONS - terms.size())
-                    .forEach(terms::add);
-            if (terms.size() >= MAX_SUGGESTIONS) {
-                break;
-            }
+        // Stream all dictionaries in order (primary first, fallback second);
+        return suggestSection.values().stream()
+                .flatMap(dict -> getTermsFromSuggesterResult(dict).stream()) // flatten the terms
+                .distinct() // deduplicate preserving first occurrence
+                .limit(MAX_SUGGESTIONS)
+                .iterator();
+    }
+
+    /**
+     * Extracts suggestion terms from a single suggester dictionary entry in the Solr response.
+     *
+     * The Solr suggest response nests results as:
+     *   suggest → { dictName → { query → { suggestions: [ { term, weight, payload }, ... ] } } }
+     * This method receives the value at the dictName level and navigates deeper.
+     */
+    private List<String> getTermsFromSuggesterResult(Object dictObj) {
+        if (!(dictObj instanceof Map<?, ?> dict) || dict.isEmpty()) {
+            return List.of();
         }
-        return terms.iterator();
+        // dict is keyed by the query string; exactly one entry since we sent one query
+        if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
+            return List.of();
+        }
+        if (!(result.get("suggestions") instanceof List<?> suggestions)) {
+            return List.of();
+        }
+        return suggestions.stream()
+                .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
+                .map(s -> (String) ((Map<?, ?>) s).get("term"))
+                .toList();
     }
 }
