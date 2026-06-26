@@ -152,6 +152,7 @@
     <field name="_normalizedSelfLink" type="string" multiValued="false" indexed="true" stored="true"/>
     <field name="_signature" type="string" stored="true" indexed="true" multiValued="false"/>
     <field name="_suggester" type="textSuggest" multiValued="true" indexed="true" stored="true"/>
+    <field name="_suggester_primary" type="textSuggest" multiValued="true" indexed="true" stored="true"/>
     <field name="_version_" type="long" indexed="true" stored="true"/>
     <field name="accessInfo" type="string" multiValued="true" indexed="true" stored="true"/>
     <field name="alternativeName" type="text_general" multiValued="true" indexed="true" stored="true" termVectors="true" />
@@ -188,4 +189,12 @@
     <field name="text" type="text_general" multiValued="true" indexed="true" stored="true"/>
     <copyField source="_selfLink" dest="recordPid"/>
     <copyField source="text" dest="_suggester"/>
+    <copyField source="name" dest="_suggester_primary"/>
+    <copyField source="description" dest="_suggester_primary"/>
+    <copyField source="alternativeName" dest="_suggester_primary"/>
+    <copyField source="_languageName" dest="_suggester_primary"/>
+    <copyField source="keywords" dest="_suggester_primary"/>
+    <copyField source="subject" dest="_suggester_primary"/>
+    <copyField source="organisation" dest="_suggester_primary"/>
+    <copyField source="collection" dest="_suggester_primary"/>
 </schema>

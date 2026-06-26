@@ -1122,6 +1122,18 @@
        http://archive.apache.org/dist/lucene/solr/ref-guide
     -->
     <searchComponent name="suggest" class="solr.SuggestComponent">
+        <!-- Primary suggester: FreeText language model over name + description fields only -->
+        <lst name="suggester">
+            <str name="name">primarySuggester</str>
+            <str name="lookupImpl">FreeTextLookupFactory</str>
+            <str name="dictionaryImpl">DocumentDictionaryFactory</str>
+            <str name="field">_suggester_primary</str>
+            <str name="separator"> </str>
+            <str name="suggestAnalyzerFieldType">textSuggest</str>
+            <str name="buildOnStartup">false</str>
+            <str name="suggestFreeTextAnalyzerFieldType">textSuggest</str>
+        </lst>
+        <!-- Fallback suggester: FreeText language model over all text content -->
         <lst name="suggester">
             <str name="name">mySuggester</str>
             <str name="lookupImpl">FreeTextLookupFactory</str>
@@ -1138,7 +1150,10 @@
         <lst name="defaults">
             <str name="suggest">true</str>
             <str name="suggest.count">10</str>
-            <str name="suggest.dictionary">mySuggester</str>
+            <arr name="suggest.dictionary">
+                <str>primarySuggester</str>
+                <str>mySuggester</str>
+            </arr>
             <!-- 3,600,000ms = 1h; suggest building can take a long time -->
             <int name="timeAllowed">3600000</int>
         </lst>

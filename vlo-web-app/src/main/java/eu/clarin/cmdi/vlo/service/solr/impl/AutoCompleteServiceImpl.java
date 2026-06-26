@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -20,6 +21,8 @@ import org.apache.solr.common.util.NamedList;
  * @author Twan Goosen
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
+
+    private static final int MAX_SUGGESTIONS = 10;
 
     public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
         super(solrClient, config, fieldNameService);
@@ -40,21 +43,37 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
     }
 
     private Iterator<String> parseSuggestions(NamedList<Object> raw) {
-        if (!(raw.get("suggest") instanceof Map<?, ?> suggest) || suggest.isEmpty()) {
+        if (!(raw.get("suggest") instanceof Map<?, ?> suggestSection) || suggestSection.isEmpty()) {
             return Collections.emptyIterator();
         }
-        if (!(suggest.values().iterator().next() instanceof Map<?, ?> dict) || dict.isEmpty()) {
-            return Collections.emptyIterator();
+        // Stream all dictionaries in order (primary first, fallback second);
+        return suggestSection.values().stream()
+                .flatMap(this::getTermsFromSuggesterResult) // flatten the terms
+                .distinct() // deduplicate preserving first occurrence
+                .limit(MAX_SUGGESTIONS)
+                .iterator();
+    }
+
+    /**
+     * Extracts suggestion terms from a single suggester dictionary entry in the Solr response.
+     *
+     * The Solr suggest response nests results as:
+     *   suggest → { dictName → { query → { suggestions: [ { term, weight, payload }, ... ] } } }
+     * This method receives the value at the dictName level and navigates deeper.
+     */
+    private Stream<String> getTermsFromSuggesterResult(Object dictObj) {
+        if (!(dictObj instanceof Map<?, ?> dict) || dict.isEmpty()) {
+            return Stream.empty();
         }
+        // dict is keyed by the query string; exactly one entry since we sent one query
         if (!(dict.values().iterator().next() instanceof Map<?, ?> result)) {
-            return Collections.emptyIterator();
+            return Stream.empty();
         }
         if (!(result.get("suggestions") instanceof List<?> suggestions)) {
-            return Collections.emptyIterator();
+            return Stream.empty();
         }
         return suggestions.stream()
                 .filter(s -> s instanceof Map<?, ?> m && m.get("term") instanceof String)
-                .map(s -> (String) ((Map<?, ?>) s).get("term"))
-                .iterator();
+                .map(s -> (String) ((Map<?, ?>) s).get("term"));
     }
 }
