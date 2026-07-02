@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import org.apache.wicket.markup.html.WebComponent;
+import org.apache.wicket.protocol.http.WebApplication;
 
 /**
  *
@@ -37,9 +38,10 @@ class PiwikTracker extends WebComponent {
 
     @Override
     protected void onRender() {
+        final String nonce = WebApplication.get().getCspSettings().getNonce(getRequestCycle());
         getResponse().write("\n"
                 + "<!-- Piwik -->\n"
-                + "<script type=\"text/javascript\">\n"
+                + "<script type=\"text/javascript\" nonce=\"" + nonce + "\">\n"
                 + "  var canonicalLink = $('link[rel=\"canonical\"]');\n"
                 + "  if(canonicalLink.length > 0) {\n"
                 + "     var canonicalUrl = canonicalLink[0].getAttribute('href');\n"

@@ -8,6 +8,7 @@ import de.agilecoders.wicket.core.settings.ITheme;
 import de.agilecoders.wicket.core.settings.SingleThemeProvider;
 
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigWicketResource;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
@@ -97,6 +98,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
     @Inject
     private VloConfig vloConfig;
     @Inject
+    private PiwikConfig piwikConfig;
+    @Inject
     private FieldNameService fieldNameService;
     @Inject
     private PermalinkService permalinkService;
@@ -138,7 +141,16 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
                 .add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.UNSAFE_INLINE)  // allow inline style="..."
                 .add(CSPDirective.STYLE_SRC, "code.jquery.com");
 
-        // configure Wicket cache according to parameters set in VloConfig 
+        // when Piwik tracking is enabled, allow the browser to send tracking
+        // data to the configured Piwik host
+        if (piwikConfig.isEnabled()) {
+            final String piwikHost = piwikConfig.getPiwikHost();
+            getCspSettings().blocking()
+                    .add(CSPDirective.CONNECT_SRC, piwikHost)
+                    .add(CSPDirective.IMG_SRC, piwikHost);
+        }
+
+        // configure Wicket cache according to parameters set in VloConfig
         setupCache();
 
         // don't render comments from source in final markup
