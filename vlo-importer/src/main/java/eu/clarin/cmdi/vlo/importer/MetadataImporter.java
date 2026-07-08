@@ -133,7 +133,9 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      */
     private final SolrBridge solrBridge;
 
-    private final CMDIRecordImporter<SolrInputDocument> recordHandler;
+    // built per import in startImport(), once the morgue lookup can be created
+    private CMDIRecordImporter<SolrInputDocument> recordHandler;
+    private final CMDIDataProcessor<SolrInputDocument> processor;
     private final SelfLinkExtractor selfLinkExtractor = new SelfLinkExtractorImpl();
     private final ResourceAvailabilityStatusChecker availabilityChecker;
 
@@ -182,8 +184,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         this.availabilityChecker = availabilityChecker;
 
         final CMDIDataSolrImplFactory cmdiDataFactory = new CMDIDataSolrImplFactory(fieldNameService);
-        final CMDIDataProcessor<SolrInputDocument> processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
-        this.recordHandler = new CMDIRecordImporter<>(processor, solrBrdige, fieldNameService, availabilityChecker, stats, config.getSignatureFieldNames());
+        this.processor = new CMDIParserVTDXML<>(postProcessors, postMappingFilters, config, mappingFactory, marshaller, cmdiDataFactory, fieldNameService, false);
     }
 
     public static Map<String, AbstractPostNormalizer> registerPostProcessors(VloConfig config, FieldNameService fieldNameService, LanguageCodeUtils languageCodeUtils) {
@@ -218,6 +219,18 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         return builder.build();
     }
 
+    private void reconcileMorgueRecords(MorgueIndexer morgueIndex) {
+        try {
+            final int removed = morgueIndex.removeTombstonesForLiveRecords();
+            morgueIndex.commit();
+            if (removed > 0) {
+                LOG.info("Removed {} stale tombstone(s) from the morgue index", removed);
+            }
+        } catch (SolrServerException | IOException ex) {
+            LOG.warn("Could not reconcile the morgue index with the live index", ex);
+        }
+    }
+
     /**
      * Retrieve all files with VALID_CMDI_EXTENSIONS from all DataRoot entries
      * and starts processing for every single file
@@ -225,7 +238,11 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      * @throws MalformedURLException
      */
     void startImport() throws MalformedURLException {
+        // init the Solr bridge first: openMorgueLookup() needs its client, and the
+        // record handler is then built with the morgue lookup injected
         solrBridge.init();
+        final MorgueIndexer morgueLookup = openMorgueLookup();
+        recordHandler = buildRecordHandler(morgueLookup);
 
         final long start = System.currentTimeMillis();
         final ScheduledThreadPoolExecutor resourceAvailabilityCheckerMonitor = startAvailabilityCheckerStatusReport();
@@ -272,6 +289,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         } finally {
             try {
                 solrBridge.commit();
+                reconcileMorgueRecords(morgueLookup);
                 buildSuggesterIndex();
                 solrBridge.commit();
             } catch (SolrServerException | RemoteSolrException | IOException e) {
@@ -318,6 +336,16 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         }
         updateDaysSinceLastImport(dataRoot);
         LOG.info("End of processing: " + dataRoot.getOriginName());
+    }
+
+    /**
+     * Opens a morgue client for per-record first-seen lookups during import.
+     *
+     * @return an open {@link MorgueIndexer} (the caller is responsible for
+     * closing it)
+     */
+    private MorgueIndexer openMorgueLookup() {
+        return new MorgueIndexer(config, fieldNameService, solrBridge.getClient());
     }
 
     private Map<String, Instant> getAllRecordIdentifiers() throws SolrServerException, IOException {
@@ -484,8 +512,22 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     }
 
     protected void purgeOldDocs() throws SolrServerException, IOException {
-        LOG.info("Deleting old files that were not seen for more than " + config.getMaxDaysInSolr() + " days...");
-        solrBridge.getClient().deleteByQuery(fieldNameService.getFieldName(FieldKey.LAST_SEEN) + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]");
+        final String purgeQuery = fieldNameService.getFieldName(FieldKey.LAST_SEEN) + ":[* TO NOW-" + config.getMaxDaysInSolr() + "DAYS]";
+
+        // before deleting, archive a minimal representation of the records to the
+        // morgue index so the front end can show a tombstone
+        LOG.info("Archiving records to be purged to the morgue index...");
+        try (MorgueIndexer morgueIndexer = new MorgueIndexer(config, fieldNameService, solrBridge.getClient())) {
+            final int archived = morgueIndexer.archiveRemovedRecords(purgeQuery, Instant.now());
+            morgueIndexer.commit();
+            LOG.info("Archived {} record(s) to the morgue index", archived);
+        } catch (SolrServerException | IOException ex) {
+            // do not let a morgue failure prevent the regular purge
+            LOG.error("Failed to archive records to the morgue index; proceeding with deletion", ex);
+        }
+
+        LOG.info("Deleting old files that were not seen for more than {} days...", config.getMaxDaysInSolr());
+        solrBridge.getClient().deleteByQuery(purgeQuery);
         LOG.info("Deleting old files done.");
     }
 
@@ -825,7 +867,16 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
     }
 
     protected CMDIRecordImporter getRecordImporter() {
+        // normally built in startImport(); built lazily here for tests that
+        // exercise the record handler without running the full import
+        if (recordHandler == null) {
+            recordHandler = buildRecordHandler(openMorgueLookup());
+        }
         return recordHandler;
+    }
+
+    private CMDIRecordImporter<SolrInputDocument> buildRecordHandler(MorgueIndexer morgueLookup) {
+        return new CMDIRecordImporter<>(processor, solrBridge, fieldNameService, availabilityChecker, stats, config.getSignatureFieldNames(), morgueLookup);
     }
 
     @Override

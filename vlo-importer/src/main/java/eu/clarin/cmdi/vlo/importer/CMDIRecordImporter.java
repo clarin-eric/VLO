@@ -52,6 +52,10 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
     private final DocumentStore documentStore;
     private final FieldNameServiceImpl fieldNameService;
 
+    // Looks up the original first-seen date of a re-encountered, previously
+    // purged record.
+    private final MorgueIndexer morgueLookup;
+
     private final CMDIRecordProcessorListener processorListener = new CMDIRecordProcessorListener() {
         @Override
         public void handleFileWithoutId(File file) {
@@ -72,13 +76,14 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
         }
     };
 
-    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics stats, List<String> signatureFields) {
+    public CMDIRecordImporter(CMDIDataProcessor<T> processor, DocumentStore documentStore, FieldNameServiceImpl fieldNameService, ResourceAvailabilityStatusChecker availabilityChecker, ImportStatistics stats, List<String> signatureFields, MorgueIndexer morgueLookup) {
         super(processor, fieldNameService);
         this.fieldNameService = fieldNameService;
         this.availabilityChecker = availabilityChecker;
         this.stats = stats;
         this.signature = new DeduplicationSignature(signatureFields);
         this.documentStore = documentStore;
+        this.morgueLookup = morgueLookup;
         setProcessingListener(processorListener);
     }
 
@@ -102,7 +107,7 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
             final CMDIData<T> cmdiData = result.get();
 
             if (isFirstEncounter(oldIdentifiers, cmdiData)) {
-                setFirstSeenDate(cmdiData, Instant.now());
+                setFirstSeenDate(cmdiData, firstSeenForNewRecord(cmdiData.getId()));
             } else {
                 oldIdentifiers.ifPresent(firstSeenMap -> setFirstSeenDate(
                         cmdiData, firstSeenMap.get(cmdiData.getId())));
@@ -121,6 +126,15 @@ public class CMDIRecordImporter<T> extends CMDIRecordProcessor<T> {
 
     private boolean isFirstEncounter(Optional<Map<String, Instant>> oldIdentifiers, final CMDIData<T> cmdiData) {
         return oldIdentifiers.map(ids -> !ids.keySet().contains(cmdiData.getId())).orElse(false);
+    }
+
+    /**
+     * Resolves the first-seen date for a record that is not in the live index. If
+     * it was previously purged and archived in the morgue, its original date is
+     * restored
+     */
+    private Instant firstSeenForNewRecord(String id) {
+        return morgueLookup.getFirstSeen(id).orElse(Instant.now());
     }
 
     public void importRecord(File file, Optional<DataRoot> dataOrigin, Optional<ResourceStructureGraph> resourceStructureGraph, Optional<EndpointDescription> endpointDescription) throws DocumentStoreException, IOException {
