@@ -19,11 +19,13 @@ package eu.clarin.cmdi.vlo.config;
 import com.google.common.collect.ImmutableList;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
+import eu.clarin.cmdi.vlo.service.solr.MorgueDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.service.solr.SimilarDocumentsService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrFacetQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.impl.AutoCompleteServiceImpl;
+import eu.clarin.cmdi.vlo.service.solr.impl.MorgueDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SearchResultsDaoImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SimilarDocumentsServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
@@ -33,7 +35,7 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
 import jakarta.inject.Inject;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -87,7 +89,21 @@ public class VloSolrSpringConfig {
 
    @Bean(destroyMethod = "close")
    public SolrClient solrClient() {
-      return new HttpSolrClient.Builder(vloConfig.getSolrUrl()).build();
+      return new HttpJdkSolrClient.Builder(vloConfig.getSolrUrl()).build();
+   }
+
+   /**
+    * Client for the "morgue" core that holds minimal information about removed
+    * records.
+    */
+   @Bean(destroyMethod = "close")
+   public SolrClient morgueSolrClient() {
+      return new HttpJdkSolrClient.Builder(vloConfig.getSolrMorgueUrl()).build();
+   }
+
+   @Bean
+   public MorgueDocumentService morgueDocumentService() {
+      return new MorgueDocumentServiceImpl(morgueSolrClient(), vloConfig, fieldNameService);
    }
 
    @Bean(name = "documentFieldOrder")

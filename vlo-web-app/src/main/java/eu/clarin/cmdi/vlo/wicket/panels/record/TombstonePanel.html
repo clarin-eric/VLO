@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2026 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org" xml:lang="en">
+    <body>
+        <wicket:panel>
+            <div id="topnavigation" class="row">
+                <div class="col-md-12">
+                    <ul class="breadcrumb" id="breadcrumbs">
+                        <li><a wicket:id="backToSearch"><wicket:message key="tombstone.backToSearch">Back to the search results</wicket:message></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="record-preamble" class="row">
+                <div class="col-md-12">
+                    <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-warning" role="alert">
+                        <span class="fa fa-exclamation-triangle"></span>
+                        <wicket:message key="tombstone.notice.intro">This record has been removed from the VLO</wicket:message><wicket:enclosure child="removedAt"> <wicket:message key="tombstone.notice.on">on</wicket:message> <strong wicket:id="removedAt">[DATE]</strong></wicket:enclosure>.
+                        <wicket:message key="tombstone.notice.explanation">The information below was recorded while the record was still available and may help you find it elsewhere.</wicket:message>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 record-tabpanel" wicket:id="tabs">[Tabs]</div>
+            </div>
+        </wicket:panel>
+    </body>
+</html>
