@@ -148,6 +148,7 @@
             </activation>
             <properties>
                 <vloconfig.solrUrl>http://localhost:8983/solr/vlo-index/</vloconfig.solrUrl>
+                <vloconfig.solrMorgueUrl>http://localhost:8983/solr/vlo-morgue/</vloconfig.solrMorgueUrl>
                 <vloconfig.dataRootsFile>dataroots-local.xml</vloconfig.dataRootsFile>
                 <!-- bundled mapping files (package resources, from the VLO-mapping 
                 project) -->
