@@ -124,7 +124,7 @@
         <field key="SEARCH_SERVICE">_contentSearchRef</field>
         <field key="FIRST_SEEN">_firstSeen</field>
         <field key="LAST_SEEN">_lastSeen</field>
-        <field key="REMOVED_AT">_removedAt</field>
+        <field key="REMOVED_DATE">_removedDate</field>
         <field key="CLARIN_PROFILE">_componentProfile</field>
         <field key="CLARIN_PROFILE_ID">_componentProfileId</field>
         <field key="HIERARCHY_WEIGHT">_hierarchyWeight</field>

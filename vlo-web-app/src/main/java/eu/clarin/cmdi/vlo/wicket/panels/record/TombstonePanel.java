@@ -75,9 +75,9 @@ public class TombstonePanel extends GenericPanel<SolrDocument> {
                 fieldNameService.getFieldName(FieldKey.NAME), getString("tombstone.unnamedrecord")));
 
         // removal date shown inline in the notice banner
-        final IModel<Date> removedAtModel = new SolrFieldModel<Date>(getModel(), fieldNameService.getFieldName(FieldKey.REMOVED_AT))
+        final IModel<Date> removedDateModel = new SolrFieldModel<Date>(getModel(), fieldNameService.getFieldName(FieldKey.REMOVED_DATE))
                 .map(values -> values.isEmpty() ? null : values.iterator().next());
-        add(new Label("removedAt", removedAtModel).add(new InvisibleIfNullBehaviour<>(removedAtModel)));
+        add(new Label("removedDate", removedDateModel).add(new InvisibleIfNullBehaviour<>(removedDateModel)));
 
         // The record page sections shown as tabs similar to the live record view.
         final List<ITab> tabs = new ArrayList<>();

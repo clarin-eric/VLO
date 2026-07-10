@@ -64,5 +64,5 @@ public enum FieldKey {
     DEPRECATED_LANGUAGE,
     SIGNATURE,
     RECORD_PID,
-    REMOVED_AT
+    REMOVED_DATE
 }

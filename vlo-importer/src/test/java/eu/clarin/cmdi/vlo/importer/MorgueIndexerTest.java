@@ -56,7 +56,7 @@ public class MorgueIndexerTest extends ImporterTestcase {
     // Simple happy path test - archived data fields must match
     @Test
     public void archivesFieldsFromSourceDocument() throws Exception {
-        final Instant removedAt = Instant.parse("2026-03-01T12:00:00Z");
+        final Instant removedDate = Instant.parse("2026-03-01T12:00:00Z");
 
         final SolrDocument sourceDoc = new SolrDocument();
         sourceDoc.addField(fieldNameService.getFieldName(FieldKey.ID), "record-1");
@@ -71,7 +71,7 @@ public class MorgueIndexerTest extends ImporterTestcase {
         indexer = new MorgueIndexer(config, fieldNameService,
                 FakeSourceSolrClient.singlePage(List.of(sourceDoc)), morgueClient);
 
-        final int archived = indexer.archiveRemovedRecords("*:*", removedAt);
+        final int archived = indexer.archiveRemovedRecords("*:*", removedDate);
 
         Assertions.assertEquals(1, archived, "one record should be archived");
 
@@ -88,7 +88,7 @@ public class MorgueIndexerTest extends ImporterTestcase {
         Assertions.assertNotNull(morgueDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.LAST_SEEN)));
 
         // removal timestamp must be set
-        Assertions.assertEquals(Date.from(removedAt), morgueDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.REMOVED_AT)));
+        Assertions.assertEquals(Date.from(removedDate), morgueDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.REMOVED_DATE)));
 
         // fields not in the copy list must be absent (description is intentionally not archived)
         Assertions.assertNull(morgueDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.DESCRIPTION)));

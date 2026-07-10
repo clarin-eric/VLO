@@ -112,13 +112,13 @@ public class MorgueIndexer implements Closeable {
      *
      * @param query query selecting the records to archive (same query that will
      * be used to delete them)
-     * @param removedAt the removal timestamp to record
+     * @param removedDate the removal timestamp to record
      * @return the number of records archived
      * @throws SolrServerException
      * @throws IOException
      */
-    public int archiveRemovedRecords(String query, Instant removedAt) throws SolrServerException, IOException {
-        final Date removedAtDate = Date.from(removedAt);
+    public int archiveRemovedRecords(String query, Instant removedDate) throws SolrServerException, IOException {
+        final Date removedDateValue = Date.from(removedDate);
         final String idField = fieldNameService.getFieldName(FieldKey.ID);
 
         final SolrQuery solrQuery = new SolrQuery();
@@ -132,7 +132,7 @@ public class MorgueIndexer implements Closeable {
             final UpdateRequest updateRequest = new UpdateRequest();
             updateRequest.setBasicAuthCredentials(config.getSolrUserReadWrite(), config.getSolrUserReadWritePass());
             for (SolrDocument doc : results) {
-                updateRequest.add(toMorgueDocument(doc, removedAtDate));
+                updateRequest.add(toMorgueDocument(doc, removedDateValue));
             }
             updateRequest.process(morgueClient);
         });
@@ -325,14 +325,14 @@ public class MorgueIndexer implements Closeable {
         return fields.toArray(String[]::new);
     }
 
-    private SolrInputDocument toMorgueDocument(SolrDocument source, Date removedAt) {
+    private SolrInputDocument toMorgueDocument(SolrDocument source, Date removedDate) {
         final SolrInputDocument target = new SolrInputDocument();
         for (FieldKey key : COPIED_KEYS) {
             copyField(source, target, key);
         }
-        final String removedAtField = fieldNameService.getFieldName(FieldKey.REMOVED_AT);
-        if (removedAtField != null) {
-            target.setField(removedAtField, removedAt);
+        final String removedDateField = fieldNameService.getFieldName(FieldKey.REMOVED_DATE);
+        if (removedDateField != null) {
+            target.setField(removedDateField, removedDate);
         }
         return target;
     }
