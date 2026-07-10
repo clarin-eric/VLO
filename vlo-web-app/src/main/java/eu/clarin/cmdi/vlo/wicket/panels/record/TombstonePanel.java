@@ -22,6 +22,7 @@ import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
+import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 import de.agilecoders.wicket.core.markup.html.bootstrap.tabs.AjaxBootstrapTabbedPanel;
@@ -33,8 +34,10 @@ import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -78,6 +81,13 @@ public class TombstonePanel extends GenericPanel<SolrDocument> {
         final IModel<Date> removedDateModel = new SolrFieldModel<Date>(getModel(), fieldNameService.getFieldName(FieldKey.REMOVED_DATE))
                 .map(values -> values.isEmpty() ? null : values.iterator().next());
         add(new Label("removedDate", removedDateModel).add(new InvisibleIfNullBehaviour<>(removedDateModel)));
+
+        // if the removed record referenced a landing page, surface it prominently
+        final IModel<String> landingPageModel = new SolrFieldStringModel(getModel(),
+                fieldNameService.getFieldName(FieldKey.LANDINGPAGE), true);
+        add(new WebMarkupContainer("landingPageContainer")
+                .add(new ExternalLink("landingPage", landingPageModel, landingPageModel))
+                .add(new InvisibleIfNullBehaviour<>(landingPageModel)));
 
         // The record page sections shown as tabs similar to the live record view.
         final List<ITab> tabs = new ArrayList<>();

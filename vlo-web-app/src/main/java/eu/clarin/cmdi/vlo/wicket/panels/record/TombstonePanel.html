@@ -29,7 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <div id="record-preamble" class="row">
                 <div class="col-md-12">
-                    <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
+                    <h1 id="recordtitle"><wicket:message key="tombstone.title">Record no longer available</wicket:message></h1>
+                    <h2 wicket:id="name" id="recordname" class="text-muted">[NAME]</h2>
                 </div>
             </div>
 
@@ -37,8 +38,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div class="col-md-12">
                     <div class="alert alert-warning" role="alert">
                         <span class="fa fa-exclamation-triangle"></span>
-                        <wicket:message key="tombstone.notice.intro">This record has been removed from the VLO</wicket:message><wicket:enclosure child="removedDate"> <wicket:message key="tombstone.notice.on">on</wicket:message> <strong wicket:id="removedDate">[DATE]</strong></wicket:enclosure>.
-                        <wicket:message key="tombstone.notice.explanation">The information below was recorded while the record was still available and may help you find it elsewhere.</wicket:message>
+                        <wicket:message key="tombstone.notice.intro">This record was removed from the VLO</wicket:message><wicket:enclosure child="removedDate"> <wicket:message key="tombstone.notice.on">on</wicket:message> <strong wicket:id="removedDate">[DATE]</strong></wicket:enclosure>.
+                        <wicket:message key="tombstone.notice.explanation">The information below was recorded while the record was still available and may help you find the resource(s) that you are looking for.</wicket:message>
+                        <div wicket:id="landingPageContainer" class="tombstone-landingpage">
+                            <wicket:message key="tombstone.landingpage.intro">The deleted record contained a reference to the following landing page:</wicket:message>
+                            <a wicket:id="landingPage" class="tombstone-landingpage-link">[URL]</a>
+                        </div>
                     </div>
                 </div>
             </div>
