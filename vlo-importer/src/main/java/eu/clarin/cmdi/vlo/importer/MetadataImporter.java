@@ -300,6 +300,11 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                 }
             } finally {
                 resourceAvailabilityCheckerMonitor.shutdown();
+                try {
+                    morgueLookup.close();
+                } catch (IOException ex) {
+                    LOG.warn("Failed to close the morgue lookup client", ex);
+                }
                 shutdown();
             }
         }
