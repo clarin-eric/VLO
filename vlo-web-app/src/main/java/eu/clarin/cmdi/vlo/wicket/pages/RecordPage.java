@@ -67,6 +67,7 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.TombstonePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -96,6 +97,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.RequestHandlerExecutor;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -483,6 +485,16 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             final WebMarkupContainer navigationDummy = new WebMarkupContainer(id);
             navigationDummy.setVisible(false);
             return navigationDummy;
+        }
+    }
+
+    @Override
+    protected void configureResponse(WebResponse response) {
+        super.configureResponse(response);
+        if (removed) {
+            // the record was removed from the index and only a tombstone is
+            // shown; return a 404 status
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
