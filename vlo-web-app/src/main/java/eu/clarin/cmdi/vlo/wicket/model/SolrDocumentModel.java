@@ -19,6 +19,7 @@ package eu.clarin.cmdi.vlo.wicket.model;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.service.solr.MorgueDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Objects;
 import org.apache.solr.common.SolrDocument;
@@ -43,18 +44,18 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
     public enum Source {
         MAIN {
             @Override
-            SolrDocument load(String id) {
-                return VloWicketApplication.get().getDocumentService().getDocument(id);
+            SolrDocument load(SolrDocumentModel model, String id) {
+                return model.getDocumentService().getDocument(id);
             }
         },
         MORGUE {
             @Override
-            SolrDocument load(String id) {
-                return VloWicketApplication.get().getMorgueDocumentService().getById(id).orElse(null);
+            SolrDocument load(SolrDocumentModel model, String id) {
+                return model.getMorgueDocumentService().getById(id).orElse(null);
             }
         };
 
-        abstract SolrDocument load(String id);
+        abstract SolrDocument load(SolrDocumentModel model, String id);
     }
 
     private final IModel<String> docId;
@@ -100,12 +101,20 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
         if (id == null) {
             return null;
         }
-        return source.load(id);
+        return source.load(this, id);
     }
 
     private static IModel<String> idModel(SolrDocument document, FieldNameService fieldNameService) {
         return document == null ? null
                 : Model.of((String) document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
+    }
+
+    protected SolrDocumentService getDocumentService() {
+        return VloWicketApplication.get().getDocumentService();
+    }
+
+    protected MorgueDocumentService getMorgueDocumentService() {
+        return VloWicketApplication.get().getMorgueDocumentService();
     }
 
     @Override
