@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema name="vlo_morgue_schema" version="1.6">
+    <uniqueKey>id</uniqueKey>
+
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true"/>
+    <fieldType name="int"    class="solr.IntPointField" positionIncrementGap="0"/>
+    <fieldType name="long"   class="solr.LongPointField" positionIncrementGap="0"/>
+    <fieldType name="date"   class="solr.DatePointField" positionIncrementGap="0"/>
+    <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+        <analyzer type="index">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+        <analyzer type="query">
+            <tokenizer class="solr.StandardTokenizerFactory"/>
+            <filter class="solr.LowerCaseFilterFactory"/>
+        </analyzer>
+    </fieldType>
+
+    <field name="_version_"    type="long"         indexed="false" stored="false" docValues="true"/>
+    <field name="id"           type="string"       indexed="true"  stored="true"  required="true"/>
+    <field name="name"         type="text_general" indexed="false" stored="true"  multiValued="true"/>
+    <field name="description"  type="text_general" indexed="false" stored="true"  multiValued="true"/>
+    <field name="dataProvider" type="string"       indexed="false" stored="true"/>
+    <field name="_firstSeen"   type="date"         indexed="false" stored="true"/>
+    <field name="_lastSeen"    type="date"         indexed="false" stored="true"/>
+    <field name="_removedDate" type="date"         indexed="false" stored="true"/>
+
+    <!-- links -->
+    <field name="_selfLink"         type="string"       indexed="false" stored="true"/>
+    <field name="_landingPageRef"   type="string"       indexed="false" stored="true"  multiValued="true"/>
+    <field name="_searchPageRef"    type="string"       indexed="false" stored="true"  multiValued="true"/>
+    <field name="_contentSearchRef" type="string"       indexed="false" stored="true"  multiValued="true"/>
+    <field name="_resourceRef"      type="string"       indexed="false" stored="true"  multiValued="true"/>
+    <field name="_resourceRefCount" type="int"          indexed="false" stored="true"/>
+
+    <!-- technical details -->
+    <field name="_harvesterRoot"     type="string"       indexed="false" stored="true"/>
+    <field name="_componentProfile"   type="string"       indexed="false" stored="true"/>
+    <field name="_componentProfileId" type="string"       indexed="false" stored="true"/>
+    <field name="metadataSource"      type="text_general" indexed="false" stored="true"  multiValued="true"/>
+    <field name="_hasPartCount"       type="int"          indexed="false" stored="true"/>
+
+    <dynamicField name="*" type="string" indexed="false" stored="false"/>
+</schema>

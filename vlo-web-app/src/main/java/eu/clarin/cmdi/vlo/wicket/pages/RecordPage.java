@@ -37,6 +37,7 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.MorgueDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
 import eu.clarin.cmdi.vlo.wicket.CmdiContentRequestHandler;
@@ -62,9 +63,11 @@ import eu.clarin.cmdi.vlo.wicket.panels.record.RecordDetailsPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordLicenseInfoPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.RecordNavigationPanel;
 import eu.clarin.cmdi.vlo.wicket.panels.record.ResourceLinksPanel;
+import eu.clarin.cmdi.vlo.wicket.panels.record.TombstonePanel;
 import eu.clarin.cmdi.vlo.wicket.panels.search.SearchResultItemLicensePanel;
 import eu.clarin.cmdi.vlo.wicket.provider.DocumentFieldsProvider;
 
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -94,6 +97,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.RequestHandlerExecutor;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -128,6 +132,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
 
     @SpringBean
     private SolrDocumentService documentService;
+    @SpringBean
+    private MorgueDocumentService morgueDocumentService;
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -151,6 +157,13 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private final IModel<QueryFacetsSelection> selectionModel;
     private final IModel<String> linksCountLabelModel;
     private final boolean showFcsLinks;
+
+    /**
+     * Whether the requested record was not found in the main index but could be
+     * resolved from the morgue, in which case a "tombstone" view is shown
+     * in place of the regular record details (under the same record URL).
+     */
+    private final IModel<Boolean> removed = Model.of(false);
 
     /**
      * Constructor that derives document and selection models from page
@@ -185,11 +198,24 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         if (null == document) {
             // no document in parameters, there may be a request to look up by selflink
             if (!lookupBySelfLink(params)) {
-                // we have no lead to an (existing) document, prepare an error response
-                Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
-                final PageParameters errorParams = new PageParameters(params)
-                        .remove(VloWebAppParameters.DOCUMENT_ID);
-                ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
+                // the record may have been removed from the index; if some
+                // information about it is still kept in the morgue, show a
+                // "tombstone" view (on the same record URL)
+                final StringValue docIdParam = params.get(VloWebAppParameters.DOCUMENT_ID);
+                if (!docIdParam.isEmpty()) {
+                    final Optional<SolrDocument> removedDocument = morgueDocumentService.getById(docIdParam.toString());
+                    if (removedDocument.isPresent()) {
+                        setModel(SolrDocumentModel.forTombstone(removedDocument.get(), docIdParam.toString()));
+                        removed.setObject(true);
+                    }
+                }
+                if (!removed.getObject()) {
+                    // we have no lead to an (existing) document, prepare an error response
+                    Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
+                    final PageParameters errorParams = new PageParameters(params)
+                            .remove(VloWebAppParameters.DOCUMENT_ID);
+                    ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
+                }
             }
         } else {
             // check if the client requested a CMDI file (via content negotiation)
@@ -282,11 +308,26 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     }
 
     private void addComponents(PageParameters params) {
+        // regular record details; hidden when the record was found only in the
+        // morgue, in which case the tombstone view is shown in its place
+        final WebMarkupContainer liveRecordDetails = new WebMarkupContainer("liveRecordDetails");
+        liveRecordDetails.setVisible(!removed.getObject());
+        add(liveRecordDetails);
+
+        if (removed.getObject()) {
+            // removed record: show the tombstone and skip building the
+            // regular (live) record components
+            add(new TombstonePanel("tombstone", getModel()));
+            return;
+        }
+        // placeholder for the (hidden) tombstone slot on a live record
+        add(new WebMarkupContainer("tombstone").setVisible(false));
+
         // Navigation
-        add(createNavigation("recordNavigation"));
+        liveRecordDetails.add(createNavigation("recordNavigation"));
 
         final WebMarkupContainer topNavigation = new WebMarkupContainer("navigation");
-        add(topNavigation
+        liveRecordDetails.add(topNavigation
                 .add(new BreadCrumbPanel("breadcrumbs", selectionModel, getModel()))
                 .add(createPermalink("permalink", topNavigation))
                 .add(new Link("backToSearch") {
@@ -297,20 +338,20 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 }).setOutputMarkupId(true));
 
         // General information section
-        add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME), getString("recordpage.unnamedrecord")));
+        liveRecordDetails.add(new SingleValueSolrFieldLabel("name", getModel(), fieldNameService.getFieldName(FieldKey.NAME), getString("recordpage.unnamedrecord")));
 
         tabs = createTabs("tabs");
         final StringValue initialTab = params.get(VloWebAppParameters.RECORD_PAGE_TAB);
         if (!initialTab.isEmpty()) {
             switchToTab(initialTab.toString(), Optional.empty());
         }
-        add(tabs);
+        liveRecordDetails.add(tabs);
 
         //define the order for availability values
         final Ordering<String> availabilityOrdering = new PreferredExplicitOrdering<>(
                 //extract the 'primary' availability values from the configuration
                 FieldValueDescriptor.valuesList(config.getAvailabilityValues()));
-        add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering) {
+        liveRecordDetails.add(new SearchResultItemLicensePanel("licenseInfo", getModel(), navigationModel, availabilityOrdering) {
             @Override
             protected WebMarkupContainer createLink(String id) {
                 return new AjaxFallbackLink<Void>(id) {
@@ -447,6 +488,16 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         }
     }
 
+    @Override
+    protected void configureResponse(WebResponse response) {
+        super.configureResponse(response);
+        if (removed.getObject()) {
+            // the record was removed from the index and only a tombstone is
+            // shown; return a 404 status
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
     private CopyPageLinkPanel createPermalink(String id, final WebMarkupContainer topNavigation) {
         return new CopyPageLinkPanel(id, new PermaLinkModel(getPageClass(), selectionModel, getModel()), getTitleModel()) {
 
@@ -481,8 +532,9 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
             params.mergeWith(contextParamConverter.toParameters(navigationModel.getObject()));
         }
 
-        // Add tab id if selected tab is not the default tab
-        if (tabs.getSelectedTab() > 0) {
+        // Add tab id if selected tab is not the default tab (no tabs on a
+        // removed-record tombstone view)
+        if (tabs != null && tabs.getSelectedTab() > 0) {
             params.add(VloWebAppParameters.RECORD_PAGE_TAB, TABS_ORDER.get(tabs.getSelectedTab()));
         }
 

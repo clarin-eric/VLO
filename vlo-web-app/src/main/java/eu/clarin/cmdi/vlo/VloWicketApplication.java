@@ -13,6 +13,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigWicketResource;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.solr.MorgueDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
 import eu.clarin.cmdi.vlo.wicket.FormatDateConverter;
@@ -31,6 +32,7 @@ import eu.clarin.cmdi.vlo.wicket.provider.FieldValueConverterProvider;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.text.DateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -87,6 +89,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     @Inject
     private SolrDocumentService documentService;
+    @Inject
+    private MorgueDocumentService morgueDocumentService;
     @Inject
     private XmlTransformationService cmdiTransformationService;
     @Inject
@@ -148,6 +152,17 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
             getCspSettings().blocking()
                     .add(CSPDirective.CONNECT_SRC, piwikHost)
                     .add(CSPDirective.IMG_SRC, piwikHost);
+        }
+
+        // when the Language Resource Switchboard popup is enabled, its script
+        // (switchboardpopup.js) renders inline data: an image and embeds the
+        // Switchboard in an iframe; allow both
+        if (vloConfig.isLrSwitchboardPopupEnabled()) {
+            final URI switchboardUri = URI.create(vloConfig.getLrSwitchboardBaseUrl());
+            final String switchboardOrigin = switchboardUri.getScheme() + "://" + switchboardUri.getAuthority();
+            getCspSettings().blocking()
+                    .add(CSPDirective.IMG_SRC, "data:")
+                    .add(CSPDirective.FRAME_SRC, switchboardOrigin);
         }
 
         // configure Wicket cache according to parameters set in VloConfig
@@ -306,6 +321,13 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     public SolrDocumentService getDocumentService() {
         return documentService;
+    }
+
+    /**
+     * @return a service that retrieves SolrDocuments from the morgue index
+     */
+    public MorgueDocumentService getMorgueDocumentService() {
+        return morgueDocumentService;
     }
 
     /**

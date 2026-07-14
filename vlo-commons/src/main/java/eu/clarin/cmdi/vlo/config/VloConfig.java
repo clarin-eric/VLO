@@ -49,6 +49,10 @@ public class VloConfig {
     // data base related parameters
     private String solrUrl = "";
 
+    // URL of the Solr core that keeps minimal information about removed records
+    // ("morgue"), used for the tombstone pages
+    private String solrMorgueUrl = "";
+
     // directive for Simple
     private boolean deleteAllFirst = false;
 
@@ -713,6 +717,26 @@ public class VloConfig {
      */
     public void setSolrUrl(String param) {
         solrUrl = param;
+    }
+
+    /**
+     * Get the URL of the Solr "morgue" core that holds minimal information about
+     * removed records.
+     *
+     * @return the value
+     */
+    public String getSolrMorgueUrl() {
+        return solrMorgueUrl;
+    }
+
+    /**
+     * Set the URL of the Solr "morgue" core that holds minimal information about
+     * removed records.
+     *
+     * @param param the value
+     */
+    public void setSolrMorgueUrl(String param) {
+        solrMorgueUrl = param;
     }
 
     /**

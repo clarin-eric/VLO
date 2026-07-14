@@ -63,5 +63,6 @@ public enum FieldKey {
     SEARCHPAGE,
     DEPRECATED_LANGUAGE,
     SIGNATURE,
-    RECORD_PID
+    RECORD_PID,
+    REMOVED_DATE
 }

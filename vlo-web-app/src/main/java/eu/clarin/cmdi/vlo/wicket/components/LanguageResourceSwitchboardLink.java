@@ -23,7 +23,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
 import java.util.Optional;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.core.util.string.JavaScriptUtils;
@@ -56,25 +55,20 @@ public class LanguageResourceSwitchboardLink extends AjaxFallbackLink<String> {
         this.resourceInfoModel = resourceInfoModel;
         this.languagesModel = languagesModel;
 
-        if (isPopupEnabled()) {
-            add(new AttributeModifier("onclick", () -> {
-                final CharSequence alignId = LanguageResourceSwitchboardLink.this.getMarkupId();
-                final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
-                return String.format(
-                        "var dropDownId='#' + $('#%s').parents('.dropdown').attr('id');"
-                        + "showSwitchboardPopup({'alignSelector': dropDownId, 'alignRight': true}, {'url': '%s'});"
-                        + "return false;",
-                        alignId,
-                        resourceLink);
-            }));
-        }
-
         setOutputMarkupId(true);
     }
 
     @Override
     public void onClick(Optional<AjaxRequestTarget> target) {
-        if (!target.isPresent() || !isPopupEnabled()) {
+        if (target.isPresent() && isPopupEnabled()) {
+            final String markupId = getMarkupId();
+            final CharSequence resourceLink = JavaScriptUtils.escapeQuotes(resourceInfoModel.getObject().getHref());
+            target.get().appendJavaScript(String.format(
+                    "var dropDownId='#' + $('#%s').parents('.dropdown').attr('id');"
+                    + "showSwitchboardPopup({'alignSelector': dropDownId, 'alignRight': true}, {'url': '%s'});",
+                    markupId,
+                    resourceLink));
+        } else {
             //redirect browser to Switchboard website
             throw new RedirectToUrlException(getLanguageSwitchboardUrl(linkModel, resourceInfoModel.getObject()));
         }
