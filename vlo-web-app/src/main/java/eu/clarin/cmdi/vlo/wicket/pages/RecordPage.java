@@ -163,7 +163,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
      * resolved from the morgue, in which case a "tombstone" view is shown
      * in place of the regular record details (under the same record URL).
      */
-    private boolean removed = false;
+    private final IModel<Boolean> removed = Model.of(false);
 
     /**
      * Constructor that derives document and selection models from page
@@ -205,11 +205,11 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
                 if (!docIdParam.isEmpty()) {
                     final Optional<SolrDocument> removedDocument = morgueDocumentService.getById(docIdParam.toString());
                     if (removedDocument.isPresent()) {
-                        setModel(Model.of(removedDocument.get()));
-                        removed = true;
+                        setModel(SolrDocumentModel.forTombstone(removedDocument.get(), docIdParam.toString()));
+                        removed.setObject(true);
                     }
                 }
-                if (!removed) {
+                if (!removed.getObject()) {
                     // we have no lead to an (existing) document, prepare an error response
                     Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
                     final PageParameters errorParams = new PageParameters(params)
@@ -311,10 +311,10 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         // regular record details; hidden when the record was found only in the
         // morgue, in which case the tombstone view is shown in its place
         final WebMarkupContainer liveRecordDetails = new WebMarkupContainer("liveRecordDetails");
-        liveRecordDetails.setVisible(!removed);
+        liveRecordDetails.setVisible(!removed.getObject());
         add(liveRecordDetails);
 
-        if (removed) {
+        if (removed.getObject()) {
             // removed record: show the tombstone and skip building the
             // regular (live) record components
             add(new TombstonePanel("tombstone", getModel()));
@@ -491,7 +491,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     @Override
     protected void configureResponse(WebResponse response) {
         super.configureResponse(response);
-        if (removed) {
+        if (removed.getObject()) {
             // the record was removed from the index and only a tombstone is
             // shown; return a 404 status
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);

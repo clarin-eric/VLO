@@ -19,8 +19,10 @@ package eu.clarin.cmdi.vlo.wicket.panels.record;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
+import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
 import eu.clarin.cmdi.vlo.wicket.components.SingleValueSolrFieldLabel;
+import eu.clarin.cmdi.vlo.wicket.model.ResourceInfoModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldModel;
 import eu.clarin.cmdi.vlo.wicket.model.SolrFieldStringModel;
 import eu.clarin.cmdi.vlo.wicket.pages.FacetedSearchPage;
@@ -41,6 +43,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -63,6 +66,8 @@ public class TombstonePanel extends GenericPanel<SolrDocument> {
     private FieldFilter basicPropertiesFilter;
     @SpringBean(name = "technicalPropertiesFilter")
     private FieldFilter technicalPropertiesFilter;
+    @SpringBean(name = "resourceStringConverter")
+    private ResourceStringConverter resourceStringConverter;
 
     public TombstonePanel(String id, IModel<SolrDocument> model) {
         super(id, model);
@@ -83,8 +88,9 @@ public class TombstonePanel extends GenericPanel<SolrDocument> {
         add(new Label("removedDate", removedDateModel).add(new InvisibleIfNullBehaviour<>(removedDateModel)));
 
         // if the removed record referenced a landing page, surface it prominently
-        final IModel<String> landingPageModel = new SolrFieldStringModel(getModel(),
-                fieldNameService.getFieldName(FieldKey.LANDINGPAGE), true);
+        var landingPageResourceInfoModel = new ResourceInfoModel(resourceStringConverter,
+                new SolrFieldStringModel(getModel(), fieldNameService.getFieldName(FieldKey.LANDINGPAGE), true));
+        final IModel<String> landingPageModel = new PropertyModel<>(landingPageResourceInfoModel, "href");
         add(new WebMarkupContainer("landingPageContainer")
                 .add(new ExternalLink("landingPage", landingPageModel, landingPageModel))
                 .add(new InvisibleIfNullBehaviour<>(landingPageModel)));

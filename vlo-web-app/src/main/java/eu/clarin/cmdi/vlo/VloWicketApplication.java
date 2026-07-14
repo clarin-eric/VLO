@@ -13,6 +13,7 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloConfigWicketResource;
 import eu.clarin.cmdi.vlo.service.PermalinkService;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.solr.MorgueDocumentService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.FragmentEncodingMountedMapper;
 import eu.clarin.cmdi.vlo.wicket.FormatDateConverter;
@@ -88,6 +89,8 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
 
     @Inject
     private SolrDocumentService documentService;
+    @Inject
+    private MorgueDocumentService morgueDocumentService;
     @Inject
     private XmlTransformationService cmdiTransformationService;
     @Inject
@@ -318,6 +321,13 @@ public class VloWicketApplication extends WebApplication implements ApplicationC
      */
     public SolrDocumentService getDocumentService() {
         return documentService;
+    }
+
+    /**
+     * @return a service that retrieves SolrDocuments from the morgue index
+     */
+    public MorgueDocumentService getMorgueDocumentService() {
+        return morgueDocumentService;
     }
 
     /**

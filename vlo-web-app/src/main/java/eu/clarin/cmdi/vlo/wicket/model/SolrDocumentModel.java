@@ -16,40 +16,52 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
+import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.Objects;
-
-
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 
-import eu.clarin.cmdi.vlo.FieldKey;
-
 /**
- * Detachable model for Solr documents that uses the {@link SolrDocumentService}
- * registered on the application to load a single document.
+ * Detachable model for a Solr document.
+ *
+ * <p>
+ * By default it loads from the main index via the {@link SolrDocumentService};
+ * use {@link #forTombstone} to load a "tombstone" from the morgue index instead.</p>
  *
  * @author twagoo
- * @see VloWicketApplication#getDocumentService()
  */
 public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
 
-    
-    private final IModel<String> docId;
-    
+    /**
+     * The index a {@link SolrDocumentModel} loads its document from.
+     */
+    public enum Source {
+        MAIN {
+            @Override
+            SolrDocument load(String id) {
+                return VloWicketApplication.get().getDocumentService().getDocument(id);
+            }
+        },
+        MORGUE {
+            @Override
+            SolrDocument load(String id) {
+                return VloWicketApplication.get().getMorgueDocumentService().getById(id).orElse(null);
+            }
+        };
 
+        abstract SolrDocument load(String id);
+    }
+
+    private final IModel<String> docId;
+    private final Source source;
 
     public SolrDocumentModel(SolrDocument document, FieldNameService fieldNameService) {
-        super(document);
-        if (document == null) {
-            this.docId = null;
-        } else {
-            this.docId = Model.of((String) document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
-        }
+        this(document, idModel(document, fieldNameService), Source.MAIN);
     }
 
     public SolrDocumentModel(String docId) {
@@ -57,50 +69,63 @@ public class SolrDocumentModel extends LoadableDetachableModel<SolrDocument> {
     }
 
     public SolrDocumentModel(IModel<String> docId) {
+        this(docId, Source.MAIN);
+    }
+
+    /**
+     * @return a model that loads a tombstone document from the
+     * morgue index
+     */
+    public static SolrDocumentModel forTombstone(SolrDocument document, String docId) {
+        return new SolrDocumentModel(document, Model.of(docId), Source.MORGUE);
+    }
+
+    private SolrDocumentModel(SolrDocument document, IModel<String> docId, Source source) {
+        super(document);
         this.docId = docId;
+        this.source = source;
+    }
+
+    private SolrDocumentModel(IModel<String> docId, Source source) {
+        this.docId = docId;
+        this.source = source;
     }
 
     @Override
     protected SolrDocument load() {
         if (docId == null) {
             return null;
-        } else {
-            final String id = docId.getObject();
-            if (id == null) {
-                return null;
-            } else {
-                return getDocumentService().getDocument(id);
-            }
         }
+        final String id = docId.getObject();
+        if (id == null) {
+            return null;
+        }
+        return source.load(id);
+    }
+
+    private static IModel<String> idModel(SolrDocument document, FieldNameService fieldNameService) {
+        return document == null ? null
+                : Model.of((String) document.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)));
     }
 
     @Override
     public String toString() {
-        return String.format("%s docId=%s attached=%b", super.toString(), docId.getObject(), isAttached());
-    }
-
-    protected SolrDocumentService getDocumentService() {
-        return VloWicketApplication.get().getDocumentService();
+        return String.format("%s docId=%s source=%s attached=%b", super.toString(),
+                docId == null ? null : docId.getObject(), source, isAttached());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(this.docId);
+        return Objects.hash(this.docId, this.source);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         final SolrDocumentModel other = (SolrDocumentModel) obj;
-        if (!Objects.equals(this.docId, other.docId)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.docId, other.docId) && this.source == other.source;
     }
 
 }

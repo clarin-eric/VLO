@@ -123,6 +123,7 @@ public class MorgueIndexer implements Closeable {
 
         final SolrQuery solrQuery = new SolrQuery();
         solrQuery.setQuery(query);
+        solrQuery.set("defType", "lucene");
         solrQuery.setFields(fieldsToFetch());
         solrQuery.setRows(BATCH_SIZE);
         // a deterministic sort on the unique key is required for cursor paging
@@ -282,6 +283,7 @@ public class MorgueIndexer implements Closeable {
 
         final SolrQuery liveItemsQuery = new SolrQuery();
         liveItemsQuery.setQuery(orClause);
+        liveItemsQuery.set("defType", "lucene");
         liveItemsQuery.setFields(idField);
         liveItemsQuery.setRows(ids.size());
 
