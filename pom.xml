@@ -51,7 +51,7 @@
         <spring.data.version>3.5.12</spring.data.version>
         <netty.version>4.1.135.Final</netty.version>
         <zookeeper.version>3.9.5</zookeeper.version>
-        <jackson.version>2.18.8</jackson.version>
+        <jackson.version>2.18.9</jackson.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.license>gpl30</netbeans.hint.license>
@@ -130,6 +130,11 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.parsson</groupId>
+                <artifactId>parsson</artifactId>
+                <version>1.1.8</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
