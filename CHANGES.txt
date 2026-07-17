@@ -1,6 +1,14 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.14.0 (July 2026)
+* Tombstone records: minimal information is retained for removed records
+	<https://github.com/clarin-eric/VLO/issues/396>
+* Improved search suggestions: prioritise the most relevant imported fields and no longer suggest some e-mail addresses
+	<https://github.com/clarin-eric/VLO/issues/399>
+* Upgraded frameworks and dependencies: Tomcat 10, Wicket 10, Spring 6 and the Jakarta EE 9 APIs, updated Solr client, and various dependency and security updates
+	<https://github.com/clarin-eric/VLO/issues/321>
+
 VLO 4.13.0 (February 2026)
 * Dependency updates
 * New field: "alternative name"
