@@ -103,16 +103,6 @@
         </plugins>
     </build>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
-        </plugins>
-    </reporting>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -279,7 +269,7 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.14.19</version>
+            <version>1.18.11</version>
         </dependency>
         
         <dependency>
