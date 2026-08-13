@@ -39,8 +39,7 @@ public class ResourceTypeIcon extends WebMarkupContainer {
         super(id, model);
 
         iconModel = new StringResourceModel("resourcetype.${}.fonticonclass", model)
-                .setDefaultValue("glyphicon-question-sign");
-        add(new AttributeAppender("class", "glyphicon", " "));
+                .setDefaultValue("fa fa-question-circle");
         add(new AttributeAppender("class", iconModel, " "));
     }
 

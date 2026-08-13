@@ -20,9 +20,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <head>
         <title>PID info panel</title>
         <meta charset="UTF-8" />
-        <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/fontawesome.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/solid.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/regular.min.css" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/v4-shims.min.css" rel="stylesheet" />
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
         <wicket:panel>
@@ -50,8 +54,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                             </p>
 
                             <wicket:enclosure child="resolvedLinkPanel">
-                                <div wicket:id="resolvedLinkPanel" class="panel panel-default">
-                                    <div class="panel-body">
+                                <div wicket:id="resolvedLinkPanel" class="card">
+                                    <div class="card-body">
                                         <p>
                                             This identifier resolves to:
                                         </p>
@@ -62,7 +66,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                                 </div>
                             </wicket:enclosure>
                             <p>
-                                <a wicket:id="pidLink" href="#" class="btn btn-primary" target="_blank"><span class="glyphicon glyphicon-hand-right"></span>
+                                <a wicket:id="pidLink" href="#" class="btn btn-primary" target="_blank"><span class="fa fa-hand-o-right"></span>
                                     &nbsp;Go to the <span wicket:id="pidContextLabel3">record</span></a>
                             </p>
                         </div>
@@ -71,14 +75,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <!--                <div class="row">
                                     <div class="col-md-1"></div>
                                     <div class="col-md-10">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" id="whatIsPidHeading">
-                                                <h4 class="panel-title">
-                                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseAnswer" aria-expanded="true" aria-controls="collapseAnswer"><span class="glyphicon glyphicon-question-sign"></span> What is a persistent identifier?</a>
+                                        <div class="card">
+                                            <div class="card-header" id="whatIsPidHeading">
+                                                <h4 class="card-title">
+                                                    <a role="button" data-bs-toggle="collapse" data-bs-parent="#accordion" href="#collapseAnswer" aria-expanded="true" aria-controls="collapseAnswer"><span class="fa fa-question-circle"></span> What is a persistent identifier?</a>
                                                 </h4>
                                             </div>
-                                            <div id="collapseAnswer" class="panel-collapse collapse" role="tabpanel" aria-labelledby="whatIsPidHeading">
-                                                <div class="panel-body text-left" style="max-height: 8em; overflow-y: scroll;">
+                                            <div id="collapseAnswer" class="collapse" role="tabpanel" aria-labelledby="whatIsPidHeading">
+                                                <div class="card-body text-start" style="max-height: 8em; overflow-y: scroll;">
                                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
                                                     dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
                                                     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore

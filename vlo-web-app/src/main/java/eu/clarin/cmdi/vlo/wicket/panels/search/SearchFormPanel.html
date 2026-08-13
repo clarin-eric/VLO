@@ -25,16 +25,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <wicket:panel>
             <form id="search-form" wicket:id="search" role="search">
                 <div class="input-group">
-                    <input wicket:id="query" class="search-box form-control form-text" type="text" role="searchbox" placeholder="Search" 
-                           data-toggle="tooltip" data-trigger="hover" data-placement="bottom" data-container="body" data-delay='{"show": 1000, "hide": 100}'
+                    <input wicket:id="query" class="search-box form-control" type="text" role="searchbox" placeholder="Search"
+                           data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-placement="bottom" data-bs-container="body" data-bs-delay='{"show": 1000, "hide": 100}'
                            title="Enter one or more search terms. Advanced querying syntax using e.g. AND, OR and NOT is allowed."
                            />
                     <span class="input-group-btn">
                         <button type="submit" wicket:id="searchSubmit" class="search-button btn btn-primary">
-                            <span class="search-icon glyphicon glyphicon-search" aria-hidden="true"></span>
+                            <span class="search-icon fa fa-search" aria-hidden="true"></span>
                             <span class="loading-indicator">
                                 <i class="loading-icon fa fa-spinner fa-pulse" aria-hidden="true"></i>
-                                <span class="sr-only">Searching...</span>
+                                <span class="visually-hidden">Searching...</span>
                             </span>
                         </button>
                     </span>

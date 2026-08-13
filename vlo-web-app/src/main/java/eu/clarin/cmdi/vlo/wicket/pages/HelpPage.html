@@ -35,13 +35,15 @@
 
                 <div class="row">
                     <!-- sidebar, which will move to the top on a small screen -->
-                    <div class="col-sm-3 col-sm-push-9">
+                    <div class="col-sm-3 order-sm-2">
                         <!-- table of content generated using bootstrap-toc <https://afeld.github.io/bootstrap-toc/> -->
-                        <nav id="toc" data-spy="affix" data-toggle="toc" class="hidden-xs"></nav>
+                        <!-- data-spy="affix" dropped: the affix plugin no longer exists in Bootstrap 5;
+                             #toc is made sticky in CSS instead (see _bootstrap-toc.scss) -->
+                        <nav id="toc" data-toggle="toc" class="hidden-xs"></nav>
                         <nav id="toc-xs" data-toggle="toc" class="visible-xs-block"></nav>
                     </div>
                     <!-- main content area -->
-                    <div class="col-sm-pull-3 col-sm-9 content" id="help">
+                    <div class="order-sm-1 col-sm-9 content" id="help">
                         <h1>CLARIN Virtual Language Observatory: Help</h1>
 
                         <div class="help-section">
@@ -75,7 +77,7 @@
                                 and above the facet values (<em>'Type to search for more'</em>) in the panel next to the search results.
                             </p>
                             <p>
-                                <wicket:link><img src="res/images/facet-selection.png" class="img-responsive pull-right" alt="Facet selection" /></wicket:link>
+                                <wicket:link><img src="res/images/facet-selection.png" class="img-fluid float-end" alt="Facet selection" /></wicket:link>
                                 <strong>Multiple values</strong> can be selected within the same facet, thus <strong>broadening</strong> the selection. For example,
                                 to broaden the results to also include Occitan after having selected <em>French</em>, type that word or its first few letters in the filter box
                                 of the language facet. As soon as the option <em>Occitan; Provençal</em> appears, you can select it and consequently the search results will be
@@ -125,7 +127,7 @@
                                 <strong>Ranges</strong> can be specified using square brackets and the word 'TO' (see below for examples).
                             </p>
 
-                            <wicket:link><img src="res/images/advanced-search-syntax.png" class="img-responsive center-block" alt="Using the advanced search syntax" /></wicket:link>
+                            <wicket:link><img src="res/images/advanced-search-syntax.png" class="img-fluid d-block mx-auto" alt="Using the advanced search syntax" /></wicket:link>
 
                             The following <strong>examples</strong> illustrate the usage of these operators.
                             Click any of the following examples to perform that query  on the actual data currently in the VLO:
@@ -185,8 +187,8 @@
                             </p>
                             <p>
                                 In some cases, there may be icons 
-                                (<span class="badge badge-warning"><span class="glyphicon glyphicon-exclamation-sign"></span></span> or
-                                <span class="badge badge-warning"><span class="glyphicon glyphicon-lock"></span></span>)
+                                (<span class="badge badge-warning"><span class="fa fa-exclamation-circle"></span></span> or
+                                <span class="badge badge-warning"><span class="fa fa-lock"></span></span>)
                                 warning you that one or more of the resources the record links to may be unavailable and/or require special permissions to access. This 
                                 information is not provided by the record provider but is based on an automated check that is carried out regularly. If it appears, you can click 
                                 the icon to go to the record page where detailed information can be found. More information about the link checking process and the access status
@@ -195,7 +197,7 @@
                                 <a href="https://forum.clarin.eu/t/why-are-some-of-my-resources-marked-as-unavailable-or-having-restricted-access-in-the-vlo/458/1">FAQ item on this subject</a>.
                             </p>
 
-                            <wicket:link><img src="res/images/search-term-highlighting.png" class="img-responsive center-block" alt="Search term highlighting" /></wicket:link>
+                            <wicket:link><img src="res/images/search-term-highlighting.png" class="img-fluid d-block mx-auto" alt="Search term highlighting" /></wicket:link>
                             <p>
                                 You can <strong>expand</strong> a search result item (by pressing the <i aria-hidden="true" class="fa fa-plus-square-o"></i> icon) to see more 
                                 details. In addition to the full description in case it was truncated in the original view, a number of additional record properties
@@ -218,7 +220,7 @@
 
                             <h3>Hidden &quot;duplicate&quot; results</h3>
                             <p>
-                                <wicket:link><img src="res/images/hidden-result-count.png"class="img-responsive pull-right" alt="Shown and hidden result items" /></wicket:link>
+                                <wicket:link><img src="res/images/hidden-result-count.png"class="img-fluid float-end" alt="Shown and hidden result items" /></wicket:link>
                                 Above the search results, you will find a number that indicates how many search results are listed that match your query. This number
                                 does not necessarily equal the total number of records matching the query; in some cases, part of the matching records are initially hidden from
                                 the results. More specifically, the VLO groups together records among the search results that <strong>have their exact title and language 
@@ -227,7 +229,7 @@
                                 can easily be accessed by expanding the box that appears below the shown record:
                             </p>
                             <p>
-                                <wicket:link><img src="res/images/hidden-result-item.png"class="img-responsive pull-right" alt="Result item with expanded &quot;duplicates&quot;" /></wicket:link>
+                                <wicket:link><img src="res/images/hidden-result-item.png"class="img-fluid float-end" alt="Result item with expanded &quot;duplicates&quot;" /></wicket:link>
                             </p>
                             <p>
                                 In the example shown here, there are <strong>nineteen records</strong> matching the query that have the same name and have the same object language
@@ -244,7 +246,7 @@
                         <div class="help-section">
                             <h2 id="accessing-resources">Accessing resources and other links</h2>
                             <p>
-                                <wicket:link><img src="res/images/record-availability.png" class="img-responsive pull-right" alt="Availability information" style="clear: right;" /></wicket:link>
+                                <wicket:link><img src="res/images/record-availability.png" class="img-fluid float-end" alt="Availability information" style="clear: right;" /></wicket:link>
                                 Clicking the title of a search result (or <em>record</em>) brings you to a new page that can we will refer to as the <strong>record page</strong>.
                                 The page is organised into a number of <em>tabs</em>, showing different types of information relating to the record. If you are interested in
                                 obtaining or processing the resources provided by a record in any way, first have a look at the information under the <strong><em>Availability</em> tab</strong>.
@@ -254,10 +256,10 @@
                                 need to know more and no contact information whatsoever is available in relation to a record, please <a href="mailto:vlo@clarin.eu">contact CLARIN</a>.
                             </p>
                             <p>
-                                <wicket:link><img src="res/images/record-resources.png" class="img-responsive pull-right" alt="Links table"  style="clear: right;" /></wicket:link>
+                                <wicket:link><img src="res/images/record-resources.png" class="img-fluid float-end" alt="Links table"  style="clear: right;" /></wicket:link>
                                 A list of all linked resource(s) can be found by selecting the <strong><em>Links</em> tab</strong>. This list is presented as a table, which shows the 
                                 <strong>file names</strong> of all resources along with their <strong>type</strong>. Additional <strong>details</strong> for an individual resource can 
-                                be found by expanding a row (by clicking <span class="glyphicon glyphicon-chevron-right"></span>). Click a <strong>file name</strong> of a resource to access it
+                                be found by expanding a row (by clicking <span class="fa fa-chevron-right"></span>). Click a <strong>file name</strong> of a resource to access it
                                 directly. You may be presented with a request to authenticate depending on the accessibility of the file. Be aware that not all files within a record may have 
                                 the same level of accessibility, and different licences may apply.
                             </p>
@@ -273,11 +275,11 @@
                                 Using these, you will be able to access or use the described resource.
                             </p>
                             <p style="clear: both;">
-                                <wicket:link><img src="res/images/resources-restricted-detail.png" class="img-responsive pull-right" alt="A resource with restricted access indication"  style="clear: right;" /></wicket:link>
+                                <wicket:link><img src="res/images/resources-restricted-detail.png" class="img-fluid float-end" alt="A resource with restricted access indication"  style="clear: right;" /></wicket:link>
                                 All resources, pages and services linked to from records that appear in the VLO are <strong>checked for accessibility</strong> at a regular basis as part of the processing by the
                                 <a href="http://curate.acdh.oeaw.ac.at/">CLARIN Curation Module</a>. Links that have recently been checked and were found to either be
-                                unavailable or require special permissions to access are marked with an icon, either <span class="badge badge-warning"><span class="glyphicon glyphicon-exclamation-sign"></span></span> to
-                                indicate unavailability or <span class="badge badge-warning"><span class="glyphicon glyphicon-lock"></span></span> for restricted access. You can click
+                                unavailable or require special permissions to access are marked with an icon, either <span class="badge badge-warning"><span class="fa fa-exclamation-circle"></span></span> to
+                                indicate unavailability or <span class="badge badge-warning"><span class="fa fa-lock"></span></span> for restricted access. You can click
                                 this icon to expand the resource details and find more specific information about the checking result and the time of checking. 
                                 Note that it might be the case that at the time of display the resource is actually available despite the warning, since each individual link is checked
                                 only once in a while, and unavailability generally is only temporary. If you find that a resource is in fact unavailable or has restricted access but
@@ -286,7 +288,7 @@
                                 <a href="https://forum.clarin.eu/t/why-are-some-of-my-resources-marked-as-unavailable-or-having-restricted-access-in-the-vlo/458/1">FAQ item on this subject</a>.
                             </p>
                             <p style="clear: both;">
-                                <wicket:link><img src="res/images/record-hierarchy.png" class="img-responsive pull-right" alt="Record hierarchy ('Hierarchy' tab)"  style="clear: right;" /></wicket:link>
+                                <wicket:link><img src="res/images/record-hierarchy.png" class="img-fluid float-end" alt="Record hierarchy ('Hierarchy' tab)"  style="clear: right;" /></wicket:link>
                                 In some cases, you will find resources nor links to related pages. This is often the case for <strong>collection records</strong> that do not point to
                                 resources themselves, but instead are part of a <em>hierarchy</em>. If this is the case, a <strong><em>Hierarchy</em> tab</strong> is available, which 
                                 contains a tree that allows you to browse through this hierarchy and discover underlying records that may contain links to concrete resources or pages.
@@ -294,7 +296,7 @@
                             <p>
                                 If you encounter a record that contains no no links to resources or pages and is not part of a hierarchy either you can have a look at the content
                                 under the <strong><em>All metadata</em> tab</strong> to see if the metadata contains any pointers to resources. If this is not the case either, you may
-                                want to report the page (using the <span class="glyphicon glyphicon-flag" aria-hidden="true" title="Report an issue"></span> button) or send a report by e-mail
+                                want to report the page (using the <span class="fa fa-flag" aria-hidden="true" title="Report an issue"></span> button) or send a report by e-mail
                                 to <a href="mailto:vlo@clarin.eu">vlo@clarin.eu</a>.
                             </p>
                         </div>
@@ -316,10 +318,10 @@
                             </p>
                             <h3 id="lrs">The Language Resource Switchboard</h3>
                             <p>
-                                <wicket:link><img src="res/images/resources-lrs.png" class="img-responsive pull-right" alt="Connecting to the Language Resource Switchboard" /></wicket:link>
+                                <wicket:link><img src="res/images/resources-lrs.png" class="img-fluid float-end" alt="Connecting to the Language Resource Switchboard" /></wicket:link>
                                 The <em>Links</em> section of a record page (the page to which the title of a search results links) shows a table of individual resources collectively described
                                 by a record's metadata. All resources in this table (except for the landing page, which is also shown if linked)
-                                have an 'options' menu (triggered by clicking the "<span class="glyphicon glyphicon-option-horizontal"></span>" area).
+                                have an 'options' menu (triggered by clicking the "<span class="fa fa-ellipsis-h"></span>" area).
                                 From this menu, select the option <em>Process with Language Resource Switchboard</em>. This will take you to the <strong>Language Resource Switchboard (LRS)</strong>. Here you can
                                 either adjust the file type and content language values or go with the values detected by the LRS. Then click <em>Show Tools</em>, and if any tools supporting the
                                 chosen file type and language are known to the LRS, they will appear on the page in a categorised list. For each tool a description and some general information 
