@@ -30,7 +30,7 @@ var showCopiedTooltip = function (button) {
         //remove tooltip
         setTimeout(function () {
             button.attr('title', title);
-            button.tooltip('destroy');
+            button.tooltip('dispose');
         }, 1000);
     });
     button.tooltip('show');
@@ -51,7 +51,7 @@ $(document).ready(function () {
         var dropDownParent = cbBtn.closest('.dropdown');
         if (dropDownParent && dropDownParent.length > 0) {
             //feedback on the dropdown trigger
-            showCopiedTooltip(dropDownParent.find('.btn[data-toggle=dropdown]'));
+            showCopiedTooltip(dropDownParent.find('.btn[data-bs-toggle=dropdown]'));
         } else {
             //feedback on the button
             showCopiedTooltip($(e.trigger));

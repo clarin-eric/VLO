@@ -24,10 +24,43 @@
 
 var TOUR_QUERY_EXAMPLE = "speech corpus";
 
+/*
+ * Popover template in Bootstrap 5 markup. Bootstrap Tourist only ships Bootstrap 3
+ * and 4 templates; 5 renamed .arrow to .popover-arrow, so the arrow would otherwise
+ * never be positioned. The remaining structure (.popover-header/.popover-body and
+ * the data-role buttons Tourist wires up) follows its bootstrap4 template.
+ */
+var TOUR_TEMPLATE = ''
+        + '<div class="popover" role="tooltip">'
+        + ' <div class="popover-arrow"></div>'
+        + ' <h3 class="popover-header"></h3>'
+        + ' <div class="popover-body"></div>'
+        + ' <div class="popover-navigation">'
+        + '  <div class="btn-group">'
+        + '   <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button>'
+        + '   <button class="btn btn-sm btn-default" data-role="next">Next &raquo;</button>'
+        // Tourist removes this itself on steps without a `duration` (see _template),
+        // which is why the deployed tour shows no Pause button. Kept so the feature
+        // still works if a step ever sets one.
+        + '   <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button>'
+        + '  </div>'
+        + '  <button class="btn btn-sm btn-default" data-role="end">End Tour</button>'
+        + ' </div>'
+        + '</div>';
+
 function createTour(restart, step) {
     var opts = {
         name: 'vlo-tour',
-        framework: 'bootstrap3',
+        // 'bootstrap4' is the closest of the frameworks Tourist knows about; the
+        // differences that remain between 4 and 5 are covered by TOUR_TEMPLATE,
+        // getProgressTextHTML below and the Bootstrap 5 patches in bootstrap-tourist.js.
+        framework: 'bootstrap4',
+        template: TOUR_TEMPLATE,
+        // Tourist would emit Bootstrap 3/4's .pull-right/.float-right here, both of
+        // which Bootstrap 5 renamed to .float-end.
+        getProgressTextHTML: function (stepNumber, percent, stepCount) {
+            return '<span class="float-end">' + (stepNumber + 1) + '/' + stepCount + '</span>';
+        },
         debug: false,
         redirect: true,
         showProgressBar: false,
@@ -82,12 +115,12 @@ function createTourSteps() {
             element: "#search-form",
             title: "Enter search terms",
             content: "Enter some keywords reflecting your interest in the search box to search through all records. You can use AND, OR and NOT to create more advanced queries. These and other options are explained in detail in the <a href='help#syntax'>Help page</a>.",
-            placement: "auto top"
+            placement: "top"
         }, {
             element: "#search-form button",
             title: "Search",
             content: "Press the button to search",
-            placement: "auto bottom",
+            placement: "bottom",
             onShow: function () {
                 var searchInput = $('#search-form input.search-box')
                 if (searchInput.val() === '') {
@@ -106,7 +139,7 @@ function createTourSteps() {
             element: "#searchresultitems",
             title: "Results",
             content: "Search results are shown here",
-            placement: "auto top",
+            placement: "top",
             orphan: true,
             onShow: function () {
                 //unregister any remaining event handles on form submit
@@ -121,12 +154,12 @@ function createTourSteps() {
             element: "#facets",
             title: "Facets",
             content: "Various <em>facets</em> provide a quick overview of the available content, and allow for narrowing down the search results.",
-            placement: "auto right"
+            placement: "right"
         }, {
             element: "#facets .facet:first",
             title: "Expand facet",
             content: "Click the name of a facet to expand it and see the values found within the current search results. Try <strong>selecting and unselecting</strong> a couple of values in one or more facets to see how this affects the list of results.",
-            placement: "auto right",
+            placement: "right",
             onShown: function () {
                 //expand facet
                 if ($('#facets .facet:first').hasClass('collapsedfacet')) {
@@ -137,22 +170,22 @@ function createTourSteps() {
             element: "#searchresultitems .searchresultitem:first .searchresultmoreless",
             title: "Search result",
             content: "Each search result represent a record that matches the search criteria. More information about the record can be displayed by expanding the description (click the '+' button).",
-            placement: "auto left"
+            placement: "left"
         }, {
             element: "#searchresultitems .searchresultitem:first .searchresult-licenseInfo",
             title: "Rights information",
             content: "Basic rights information, if available, is shown next to each search result.",
-            placement: "auto left"
+            placement: "left"
         }, {
             element: "#searchresultitems .searchresultitem:first h3 a",
             title: "Find out more",
             content: "Click the record title to find out everything about the described resources, including how to access the content. Press <strong>next</strong> to go to the record page for this result.",
-            placement: "auto bottom"
+            placement: "bottom"
         }, {
             element: ".record-tabpanel .nav-tabs li:last",
             title: "Record information",
             content: "Each of these tabs represents a different aspect of the record. The first tab lists the most important information about the described resource(s).",
-            placement: "auto right",
+            placement: "right",
             path: RegExp(/.*\/record.*/i),
             redirect: function () {
                 var resultLink = $('#searchresultitems .searchresultitem:first h3 a');
@@ -169,7 +202,7 @@ function createTourSteps() {
             element: ".record-tabpanel .tab1",
             title: "Links tab",
             content: "This tab lists the described resource(s), a linked landing page, search pages and services, and/or other referenced metadata records. Click any of the available references to access it. Be aware that not all records link directly to the described resources. In such cases, look for a search link or browse the hierarchy if applicable.",
-            placement: "auto top",
+            placement: "top",
             path: RegExp(/.*\/record.*/i),
             onShow: function () {
                 $(".tab1 a").click();
@@ -178,7 +211,7 @@ function createTourSteps() {
             element: ".record-tabpanel .tab2",
             title: "Availability tab",
             content: "Here you will find an indication of the known information regarding rights to using, accessing and/or distributing resources. Make sure to always check at the primary source before actually using or redistributing any of the resources!",
-            placement: "auto top",
+            placement: "top",
             onShow: function () {
                 $(".tab2 a").click();
             }
@@ -186,7 +219,7 @@ function createTourSteps() {
             element: ".record-tabpanel .tab3",
             title: "&quot;All metadata&quot; tab",
             content: "Any available metadata that is not shown in the details can be found here.",
-            placement: "auto top",
+            placement: "top",
             onShow: function () {
                 $(".tab3 a").click();
             }
@@ -194,7 +227,7 @@ function createTourSteps() {
             element: ".record-tabpanel .tab4",
             title: "&quot;Technical details&quot; tab",
             content: "Any available metadata that is not shown in the details can be found here.",
-            placement: "auto top",
+            placement: "top",
             onShow: function () {
                 $(".tab4 a").click();
             }
@@ -202,7 +235,7 @@ function createTourSteps() {
             element: "#recordprevnext .btn:first",
             title: "Search results navigation",
             content: "Use these buttons to navigate to the previous or next item from the result results without having to go back to the list.",
-            placement: "auto bottom",
+            placement: "bottom",
             onShow: function () {
                 $("#recordprevnext").on('click', '.btn', function (evt) {
                     //make sure tour is continued after navigation
@@ -214,22 +247,22 @@ function createTourSteps() {
             element: "#topnavigation",
             title: "&quot;Breadcrumbs&quot;",
             content: "The links in this bar serve as 'breadcrumbs' that show you where you are in your exploration and allow you to go back one or more levels .",
-            placement: "auto bottom"
+            placement: "bottom"
         }, {
             element: "#feedbacklink",
             title: "Send feedback",
             content: "Use the feedback button to send feedback regarding any record, search results or the VLO to the maintainers of the VLO and CLARIN's metadata infrastructure.",
-            placement: "auto bottom"
+            placement: "bottom"
         }, {
             element: "#header .help-link",
             title: "Help and documentation",
             content: "You can always click the <em>Help</em> link in the header to learn about the VLO and how to use it. There you will also find contact information in case you have questions that you did not find answered on that page.",
-            placement: "auto bottom"
+            placement: "bottom"
         }, {
             element: ".breadcrumbs-searchresults",
             title: "Back to the search results",
             content: "Click the link in the breadcrumbs bar to go back to your search results and continue exploring the VLO. The tour ends here. Thanks for your attention and interest in using the VLO!",
-            placement: "auto bottom",
+            placement: "bottom",
             onShow: function (tour) {
                 $('.breadcrumbs-searchresults').one('click', function (evt) {
                     evt.preventDefault();

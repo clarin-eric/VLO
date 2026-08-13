@@ -35,6 +35,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * ========================================================================
+ * LOCAL CHANGES
+ *
+ * Upstream v0.3.2 supports Bootstrap 3 and 4 only. This copy carries a small
+ * set of fixes to run under Bootstrap 5, used with framework: 'bootstrap4'.
+ * They are marked "BS5:" and cover three upstream assumptions that no longer
+ * hold:
+ *
+ *   - popover instances live in Bootstrap's own registry, not in jQuery data
+ *   - the sanitiser allow-list was renamed whiteList -> allowList
+ *   - positioning is popper 2, whose offset API differs from popper 1's
+ *
+ * When re-vendoring a newer release, re-apply the "BS5:" hunks.
  * ========================================================================
  */
 (function (window, factory) {
@@ -239,13 +253,20 @@
 					defaultWhiteList = $.fn.popover.Constructor.Default.whiteList;
 				}
 
+				// BS5: renamed whiteList to allowList; without this the navigation
+				// buttons are stripped from the popover.
+				if($.fn.popover.Constructor.Default.allowList !== undefined)
+				{
+					defaultWhiteList = $.fn.popover.Constructor.Default.allowList;
+				}
+
 				if(this._options.framework == "bootstrap3" && $.fn.popover.Constructor.DEFAULTS.whiteList !== undefined)
 				{
 					defaultWhiteList = $.fn.popover.Constructor.DEFAULTS.whiteList;
 				}
 
 				var whiteListAdditions = {
-											"button":	["data-role", "style"],
+											"button":	["data-role", "style", "data-pause-text", "data-resume-text"],
 											"img":		["style"],
 											"div":		["style"]
 										};
@@ -603,7 +624,14 @@
 					var $element;
 
 					$element = $(step.element);
-					if (!($element.data('bs.popover') || $element.data('popover')))
+					// BS5: keeps popover instances in its own registry, not in jQuery
+					// data, so the original test always answered "no".
+					var hasPopover = (window.bootstrap && $element[0]
+							&& bootstrap.Popover.getInstance($element[0]))
+							|| $element.data('bs.popover')
+							|| $element.data('popover');
+
+					if (!hasPopover)
 					{
 						$element = $('body');
 					}
@@ -1330,6 +1358,7 @@
 									html: true,
 									//sanitize: false, // turns off all bootstrap sanitization of popover content, only use in last resort case - use whiteListAdditions instead!
 									whiteList: this._options.sanitizeWhitelist, // ignored if sanitizeFn is specified
+									allowList: this._options.sanitizeWhitelist, // BS5: renamed from whiteList
 									sanitizeFn: this._options.sanitizeFunction,
 									animation: step.animation,
 									container: step.container,
@@ -1342,28 +1371,16 @@
 				{
 					if(isOrphan)
 					{
-						// BS4 uses popper.js, which doesn't have a method of fixing the popper to the center of the viewport without an element. However
-						// BS4 wrapper does some extra funky stuff that means we can't just replace the BS4 popper init code. Instead, fudge the popper
-						// using the offset feature, which params don't seem to be documented properly!
-						popOpts.offset = function(obj)
-										{
-											//console.log(obj);
-
-											var top = Math.max(0, ( ($(window).height() - obj.popper.height) / 2) );
-											var left = Math.max(0, ( ($(window).width() - obj.popper.width) / 2) );
-
-											obj.popper.position="fixed";
-											obj.popper.top = top;
-											obj.popper.bottom = top + obj.popper.height;
-											obj.popper.left = left;
-											obj.popper.right = top + obj.popper.width;
-											return obj;
-										};
+						// BS5: the popper.js 1 offset fudge that was here does not apply
+						// to popper 2. The tip is centred after showing instead, see below.
 					}
 					else
 					{
-						// BS3 popover accepts jq object or string literal. BS4 popper.js of course doesn't, just to make life extra irritating.
-						popOpts.selector = "#" + step.element[0].id;
+						// BS5: upstream set popOpts.selector from step.element[0].id, which
+						// yields "#undefined" when a step declares `element` as a CSS string,
+						// and a truthy selector puts the popover into delegation mode. Neither
+						// is wanted: the popover is created directly on $element.
+						delete popOpts.selector;
 
 						// Allow manual repositioning of the popover
 						// THIS DOESN'T WORK - popper.js will only adjust on one axis even if both axis are specified...
@@ -1407,7 +1424,38 @@
 
 				if(this._options.framework == "bootstrap4")
 				{
-					$tip = $( ($element.data('bs.popover') ? $element.data('bs.popover').getTipElement() : $element.data('popover').getTipElement() ) );
+					// BS5: read the instance from Bootstrap's registry (see above); the
+					// rendered tip is exposed as instance.tip once shown.
+					var popoverInstance = (window.bootstrap && bootstrap.Popover.getInstance($element[0]))
+							|| $element.data('bs.popover')
+							|| $element.data('popover');
+
+					$tip = $(popoverInstance.tip
+							|| (typeof popoverInstance.getTipElement === 'function' ? popoverInstance.getTipElement() : null));
+
+					// BS5: replaces the popper 1 fudge removed above. An orphan step is
+					// anchored to <body>, which popper places off the top of the page, so
+					// detach popper and centre the tip in the viewport instead. Detached by
+					// hand: _disposePopper() would remove the tip element too.
+					if (isOrphan)
+					{
+						if (popoverInstance._popper)
+						{
+							popoverInstance._popper.destroy();
+							popoverInstance._popper = null;
+						}
+
+						// Popper positions with a transform and its own inset/margin; clear
+						// those or the centring below is applied on top of them.
+						$tip.css({
+							position: 'fixed',
+							transform: 'none',
+							margin: 0,
+							inset: 'auto'
+						});
+
+						this._center($tip);
+					}
 				}
 
 				$tip.attr('id', step.id);

@@ -203,6 +203,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
     public void renderHead(IHeaderResponse response) {
         // render jQuery first, it is the most common dependency
         response.render(JavaScriptHeaderItem.forReference(getApplication().getJavaScriptLibrarySettings().getJQueryReference()));
+        response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapJS()));
         // Include other JavaScript for header (e.g. permalink animation)
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getVloHeaderJS()).setDefer(true));
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getHistoryApiJS()).setDefer(true));
