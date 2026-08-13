@@ -91,7 +91,8 @@
 	margin-top: 0;
 }
 
-.popover[class*="tour-"].orphan .arrow {
+/* .arrow upstream; Bootstrap 5 renamed the popover arrow to .popover-arrow */
+.popover[class*="tour-"].orphan .popover-arrow {
 	display: none;
 }
 

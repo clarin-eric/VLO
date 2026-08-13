@@ -1,0 +1,323 @@
+/*
+Copyright (C) 2026 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*
+ * Bootstrap 3 class names still present in the VLO markup, re-implemented on
+ * Bootstrap 5. Remove each block once its markup is migrated.
+ */
+
+@use "bootstrap";
+@use "clarin-theme";
+
+/* ---- BS5 pads every `.row > *`; BS3 padded only columns ---- */
+.row > :not([class*="col-"]):not(.col) {
+    padding-right: 0;
+    padding-left: 0;
+}
+
+/* ---- Large buttons. ---- */
+.btn-lg, .btn-group-lg > .btn {
+    --bs-btn-padding-y: 10px;
+    --bs-btn-padding-x: 16px;
+    --bs-btn-font-size: 18px;
+    --bs-btn-line-height: 1.3333333;
+}
+
+/* ---- BS5 wants .form-select; .form-control strips the dropdown arrow ---- */
+select.form-control {
+    appearance: auto;
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+}
+
+/* ---- BS5 derives a darker grey, and has no variable for it ---- */
+.text-muted {
+    color: clarin-theme.$gray-light !important;   // #777
+}
+
+.popover {
+    box-shadow: var(--bs-popover-box-shadow);
+}
+.form-control {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+}
+
+/* ---- Navbar: what BS5's navbar variables cannot express ---- */
+/* turquoise hover background */
+.navbar .navbar-nav .nav-link {
+    &:hover, &:focus {
+        background-color: bootstrap.$primary;
+    }
+}
+
+/* keeps the brand within the 50px bar; BS5 would make it ~56px */
+.navbar-brand {
+    line-height: clarin-theme.$line-height-computed;   // 20px
+}
+
+/* links fill the bar height, so the hover background above is a full-height block.
+   Set via the custom property so .navbar-expand-*'s padding still works. */
+.navbar-nav {
+    --bs-nav-link-padding-y: 10px;
+
+    @include bootstrap.media-breakpoint-up(sm) {
+        --bs-nav-link-padding-y: 15px;
+    }
+}
+.navbar-text {
+    color: clarin-theme.$navbar-default-color;   // #777
+}
+
+/* ---- Reboot differences visible across the application ---- */
+label {
+    /* .checkbox/.radio labels stay normal, see below */
+    max-width: 100%;
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+ul, ol {
+    margin-bottom: 10px;    // BS5 reboot uses 1rem
+}
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid #eee;
+    opacity: 1;             // BS5 draws it at opacity .25
+}
+
+/* ---- Heading top margins, which BS5's reboot zeroes
+        (margin-bottom comes from $headings-margin-bottom in clarin-theme) ---- */
+h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 20px;
+}
+h4, .h4, h5, .h5, h6, .h6 {
+    margin-top: 10px;
+}
+/* ...but not headings inside a component, where it would push the title down */
+.popover-header,
+.modal-title,
+.card-title,
+.alert-heading,
+.list-group-item-heading {
+    margin-top: 0;
+}
+
+/* ---- BS5's relative `bolder` computes to 400 against the jumbotron's weight-200 text ---- */
+b, strong {
+    font-weight: 700;
+}
+
+/* ---- input-group-btn: display:contents promotes the wrapped button to flex child ---- */
+.input-group-btn { display: contents; }
+
+/* ---- form-group: supplies only the bottom margin ---- */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* ---- form-inline: one line from sm up, stacked below.
+        Deliberately not a flex container, so .float-end on a child works. ---- */
+.form-inline {
+    @include bootstrap.media-breakpoint-up(sm) {
+        .form-group {
+            display: inline-block;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+        .form-control {
+            display: inline-block;
+            width: auto;
+            vertical-align: middle;
+        }
+        label {
+            display: inline-block;
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+    }
+}
+
+/* ---- checkbox/radio blocks (BS5 uses .form-check) ---- */
+.checkbox, .radio {
+    display: block;
+    margin: .25rem 0;
+    label {
+        margin-bottom: 0;
+        font-weight: normal;
+    }
+    input[type="checkbox"], input[type="radio"] {
+        margin-right: .35em;
+    }
+}
+
+/* ---- BS5 leaves a bare .badge colourless. VLO's own per-badge
+        colours, loaded later, still override this. ---- */
+.badge:not([class*="bg-"]):not([class*="text-bg-"]) {
+    background-color: clarin-theme.$badge-bg;
+    color: #fff;
+}
+/* badges stay rounded even though everything else is square */
+.badge {
+    border-radius: 10px;
+    min-width: 10px;
+    vertical-align: middle;   // BS5 uses baseline, which sits the badge lower
+}
+
+/* ---- Jumbotron: the grey intro box on the landing page ---- */
+.jumbotron {
+    padding: 30px 15px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #eeeeee;
+
+    h1 {
+        color: inherit;
+    }
+    p {
+        margin-bottom: 15px;
+        font-size: 21px;
+        font-weight: 200;
+    }
+}
+.container .jumbotron {
+    padding-right: 60px;
+    padding-left: 60px;
+}
+@media (min-width: 768px) {
+    .jumbotron {
+        /* the space above the title is this plus the h1 top margin */
+        padding-top: 48px;
+        padding-bottom: 48px;
+    }
+    .jumbotron h1 {
+        font-size: 63px;
+    }
+}
+
+/* ---- Dropdown caret ---- */
+.caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+/* BS5 draws its own caret, which would double the explicit <span class="caret">.
+   Suppress BS5's rather than the span: the span is toggled per dropdown by
+   BootstrapDropdown.showCaret(), whereas ::after would apply to all of them. */
+.dropdown-toggle::after {
+    display: none;
+}
+
+/* the caret in the #topnavigation share button: forced black rather than
+   inheriting the button's text colour, and without the 2px left margin */
+.btn > .caret {
+    border-top-color: #000;
+}
+.btn .caret {
+    margin-left: 0;
+}
+
+/* ---- BS5's .btn-sm sets no line-height (padding/font-size: $btn-*-sm in clarin-theme) ---- */
+.btn-sm, .btn-group-sm > .btn {
+    --bs-btn-line-height: 1.5;
+}
+
+/* ---- CLARIN uses white on the turquoise; BS5's color-contrast() picks black ---- */
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-active-color: #fff;
+    --bs-btn-disabled-color: #fff;
+}
+
+/* ---- .btn-default: white/bordered ---- */
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+    &:hover, &:focus, &:active {
+        color: #333;
+        background-color: #e6e6e6;
+        border-color: #adadad;
+    }
+}
+
+/* ---- Breadcrumb: the markup is ul.breadcrumb > li, not .breadcrumb-item, so BS5
+        draws no "/" separators. Background comes from #topnavigation (_vlo-top). ---- */
+.breadcrumb {
+    display: block;
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    list-style: none;
+}
+.breadcrumb > li { display: inline-block; }
+.breadcrumb > li + li::before {
+    content: "/\00a0";   // the non-breaking space is part of the divider
+    padding: 0 5px;
+    color: #ccc;
+}
+
+/* ---- Card titles are dark, not the turquoise BS5 gives headings ---- */
+.card-title,
+.card-title a,
+.card-title a:hover {
+    color: inherit;
+}
+.card-header .card-title {
+    margin: 0;
+    font-size: 1rem;   // not the 24px an <h3> gets in BS5
+}
+/* BS5's .card has no bottom margin */
+.card {
+    margin-bottom: 20px;
+}
+
+/* ---- Contextual card classes, applied by ResourceLinksPanelItem to the
+        link-checking result card. (.panel-default needs nothing.) ---- */
+.panel-warning {
+    border-color: #faebcc;
+    > .card-header {
+        color: #8a6d3b;
+        background-color: #fcf8e3;
+        border-color: #faebcc;
+    }
+}
+.panel-danger {
+    border-color: #ebccd1;
+    > .card-header {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+}
+
+/* ---- Responsive display utilities: only the variants the markup uses ---- */
+.visible-xs, .visible-xs-block,
+.visible-sm, .visible-sm-block { display: none !important; }
+
+@include bootstrap.media-breakpoint-down(sm) {
+    .hidden-xs { display: none !important; }
+    .visible-xs, .visible-xs-block { display: block !important; }
+}
+@include bootstrap.media-breakpoint-only(sm) {
+    .hidden-sm { display: none !important; }
+    .visible-sm, .visible-sm-block { display: block !important; }
+}

@@ -6,9 +6,25 @@
  * Adaptations for CLARIN VLO by Twan Goosen <twan@clarin.eu>
  */
 
+@use "../../../clarin-theme";
+
 /* modified from https://github.com/afeld/bootstrap-toc/blob/3a1b07712d85b3a646904ded5604bb465992573b/dist/bootstrap-toc.css */
 
-@toc-link-color: @brand-primary;
+$toc-link-color: clarin-theme.$brand-primary;
+
+/* BS5 makes .nav a flex row; this plugin expects a block list */
+nav[data-toggle='toc'] .nav {
+  flex-direction: column;
+}
+
+/* Keeps the table of contents in view (BS5 has no affix plugin). Requires that no
+   ancestor is a scroll container — hence .container's overflow-x:clip (_vlo-common). */
+nav#toc {
+  position: sticky;
+  top: 1rem;
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+}
 
 /* All levels of nav */
 nav[data-toggle='toc'] .nav > li > a {
@@ -16,24 +32,28 @@ nav[data-toggle='toc'] .nav > li > a {
   padding: 4px 20px;
   font-size: 13px;
   font-weight: 500;
-  color: @gray;
+  color: clarin-theme.$gray;
 }
 nav[data-toggle='toc'] .nav > li > a:hover,
 nav[data-toggle='toc'] .nav > li > a:focus {
   padding-left: 19px;
-  color: @toc-link-color;
+  color: $toc-link-color;
   text-decoration: none;
   background-color: transparent;
-  border-left: 1px solid @toc-link-color;
+  border-left: 1px solid $toc-link-color;
 }
+/* scrollspy marks the <a> in BS5 and the <li> in BS3; match both */
 nav[data-toggle='toc'] .nav > .active > a,
 nav[data-toggle='toc'] .nav > .active:hover > a,
-nav[data-toggle='toc'] .nav > .active:focus > a {
+nav[data-toggle='toc'] .nav > .active:focus > a,
+nav[data-toggle='toc'] .nav > li > a.active,
+nav[data-toggle='toc'] .nav > li > a.active:hover,
+nav[data-toggle='toc'] .nav > li > a.active:focus {
   padding-left: 18px;
   font-weight: bold;
-  color: @toc-link-color;
+  color: $toc-link-color;
   background-color: transparent;
-  border-left: 2px solid @toc-link-color;
+  border-left: 2px solid $toc-link-color;
 }
 
 /* Nav: second level (shown on .active) */
@@ -54,12 +74,16 @@ nav[data-toggle='toc'] .nav .nav > li > a:focus {
 }
 nav[data-toggle='toc'] .nav .nav > .active > a,
 nav[data-toggle='toc'] .nav .nav > .active:hover > a,
-nav[data-toggle='toc'] .nav .nav > .active:focus > a {
+nav[data-toggle='toc'] .nav .nav > .active:focus > a,
+nav[data-toggle='toc'] .nav .nav > li > a.active,
+nav[data-toggle='toc'] .nav .nav > li > a.active:hover,
+nav[data-toggle='toc'] .nav .nav > li > a.active:focus {
   padding-left: 28px;
   font-weight: 500;
 }
 
 /* from https://github.com/twbs/bootstrap/blob/e38f066d8c203c3e032da0ff23cd2d6098ee2dd6/docs/assets/css/src/docs.css#L631-L634 */
-nav[data-toggle='toc'] .nav > .active > ul {
+nav[data-toggle='toc'] .nav > .active > ul,
+nav[data-toggle='toc'] .nav > li > a.active + ul {
   display: block;
 }

@@ -14,10 +14,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* 
     Created on : Apr 28, 2016, 4:46:26 PM
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
+/* Styles for the facet panels. */
+
+@use "../clarin-theme";
+@use "vlo-license-icons";
 
 #facets {
     &.sidebaritem {
@@ -36,6 +41,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     //toggle link to show/hide secondary facets
     .show-all-facets-toggle {
         display: none; //hidden unless 'show-conditionally' is on (see below)
+        // #facets is a .card (flex column), so children stretch full width;
+        // keep this button its natural size and left-aligned
+        align-self: flex-start;
 
         .button-text {
             display: none;
@@ -54,14 +62,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 .facet {
-    .panel {
+    .card {
         margin-bottom: 10px;
 
-        .panel-heading a.expandfacet {
+        .card-header a.expandfacet {
             &, &:hover, &:active {
                 &, & span {
                     text-decoration: none;
-                    color: @text-color;
+                    color: clarin-theme.$text-color;
                 }
             }
         }
@@ -72,7 +80,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
         /* hide show link */
         a.expandfacet {
-            display:  none;
+            display: none;
         }
 
         /* value display/remover for collapsed state - hide while expanded */
@@ -81,28 +89,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         }
     }
 
-    &.collapsedfacet { 
+    &.collapsedfacet {
 
         /* hide collapse link */
         a.collapsefacet {
-            display:  none;
+            display: none;
         }
 
         /* hide selection mechanism */
         .facetvalues, .filterform {
-            display:  none;
+            display: none;
         }
 
         /* show body only if facet has a value selection */
-        .panel-body {
+        .card-body {
             display: none;
         }
-        &.selected .panel-body {
+        &.selected .card-body {
             display: block;
         }
 
         /* always hide footer when collapsed */
-        .panel-footer {
+        .card-footer {
             display: none;
         }
     }
@@ -113,17 +121,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             padding-left: .5em;
             margin-bottom: 0;
-            border-bottom: 1px dotted @panel-default-border;
+            border-bottom: 1px dotted clarin-theme.$panel-default-border;
 
-            li { 
-                list-style: none; 
+            li {
+                list-style: none;
                 margin: .2em 0;
 
-                a, a:hover { 
+                a, a:hover {
                     height: 16px;
-                    text-decoration: none; 
+                    text-decoration: none;
                     width: 149px;
-                } 
+                }
 
                 .selectiontype {
                     font-weight: bold;
@@ -152,7 +160,7 @@ form#availability {
         background-position: .2em 0em;
         background-repeat: no-repeat;
 
-        .availability-icon-classes();
+        @include vlo-license-icons.availability-icon-classes;
 
     }
 }

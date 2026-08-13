@@ -20,46 +20,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Author     : twagoo
 */
 
-/* styles for auxiliary pages (help, about, ...) */
-@import "vlo-aux";
+/* VLO section partials. The load order here is the CSS output order. */
+@use "bootstrap";
+@use "vlo-aux";
+@use "vlo-license-icons";
+@use "vlo-top";
+@use "vlo-footer";
+@use "vlo-search";
+@use "vlo-facets";
+@use "vlo-record";
+@use "vlo-pidlabel";
+@use "assets/bootstrap-toc/bootstrap-toc";
+@use "assets/bootstrap-tour/bootstrap-tourist.css";
 
-/* icon images */
-@import "vlo-license-icons";
-
-/* styles for static top section */
-@import "vlo-top";
-
-/* styles for static footer section */
-@import "vlo-footer";
-
-/* styles for search bar and search results */
-@import "vlo-search";
-
-/* styles for facet panels */
-@import "vlo-facets";
-
-/* styles for record details */
-@import "vlo-record";
-
-/* styles for record details */
-@import "vlo-pidlabel";
-
-@import "assets/bootstrap-toc/bootstrap-toc";
-@import (less) "assets/bootstrap-tour/bootstrap-tourist.css";
-
-@media (max-width: @screen-sm-max) {
+/* The tier names are one step lower than a stock Bootstrap 5 project would
+   use, because $grid-breakpoints is pinned to the BS3 values (see clarin-theme):
+   media-breakpoint-down(md) is <992px, and (sm) is <768px. */
+@include bootstrap.media-breakpoint-down(md) {
     .collapsed-xs-sm {
         display: none;
     }
 }
 
-@media (max-width: @screen-xs-max) {
+@include bootstrap.media-breakpoint-down(sm) {
     .text-center-xs {
-        .text-center();
+        text-align: center;
     }
 }
 
 .container {
     /* to fix a bug(?) in bootstrap that causes a horizontal scrollbar to appear on narrow screens */
-    overflow-x: hidden;
+    /* 'clip', not 'hidden': 'hidden' would make this a scroll container and break the help page's sticky TOC */
+    overflow-x: clip;
 }

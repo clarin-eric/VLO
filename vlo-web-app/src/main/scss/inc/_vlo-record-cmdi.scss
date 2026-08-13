@@ -14,12 +14,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* 
     Styling for output of cmdi2xhtml.xsl
 
     Created on : Jun 6, 2016, 5:39:16 PM
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
+@use "bootstrap";
+@use "../clarin-theme";
+
 .cmdi-record {
     .node.leaf {
         .node_title {
@@ -32,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         .node_content {
             display: inline-block;
         }
-        .node_value, .node_attribute {        
+        .node_value, .node_attribute {
             display: block;
         }
     }
@@ -53,13 +57,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
         .node_resource_ref a {
-            color: @link-color
+            color: bootstrap.$link-color;
         }
     }
 
     .node_attributes {
         font-style: italic;
         font-family: monospace;
-        color: @text-color;
+        color: clarin-theme.$text-color;
     }
 }

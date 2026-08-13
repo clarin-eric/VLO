@@ -19,6 +19,9 @@
 
     <properties>
         <clarin-basestyle.version>0.4.0</clarin-basestyle.version>
+        <bootstrap.version>5.3.8</bootstrap.version>
+        <bootstrap.unpack.dir>${project.build.directory}/generated-sources/bootstrap5</bootstrap.unpack.dir>
+        <bootstrap.webjar.dir>${bootstrap.unpack.dir}/META-INF/resources/webjars/bootstrap/${bootstrap.version}</bootstrap.webjar.dir>
         <jersey.version>3.1.11</jersey.version>
         
         <!-- selects the appender for the log4j root logger -->
@@ -77,6 +80,12 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.7.1</version>
+        </dependency>
+        <dependency>
+            <!-- pins the version wicket-bootstrap-core pulls in to the one the build uses -->
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -376,7 +385,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <!-- Unpacks CLARIN flavoured bootstrap LESS sources -->
+                <!-- Bootstrap 5 SCSS + JS bundle, and the CLARIN fonts from base-style -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
@@ -389,12 +398,22 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
+                                    <groupId>org.webjars</groupId>
+                                    <artifactId>bootstrap</artifactId>
+                                    <version>${bootstrap.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <includes>**/scss/**,**/js/bootstrap.bundle.min.js</includes>
+                                    <outputDirectory>${bootstrap.unpack.dir}</outputDirectory>
+                                </artifactItem>
+                                <artifactItem>
                                     <groupId>eu.clarin.style</groupId>
                                     <artifactId>base-style</artifactId>
                                     <version>${clarin-basestyle.version}</version>
                                     <classifier>less-with-bootstrap</classifier>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>
+                                    <includes>fonts/**</includes>
                                     <outputDirectory>${project.build.directory}/generated-sources/bootstrap</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
@@ -403,25 +422,9 @@
                 </executions>
             </plugin>
             <plugin>
-                <!-- Copies 'local' LESS sources and fonts to the right destination -->
+                <!-- Copies the CLARIN fonts and the Bootstrap 5 JS bundle into the webapp -->
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
-                    <execution>
-                        <!-- copy less sources -->
-                        <id>copy-less</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/generated-sources/less</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>${project.basedir}/src/main/less</directory>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
                     <execution>
                         <!-- copy fonts from bootstrap distribution -->
                         <id>copy-fonts</id>
@@ -434,13 +437,22 @@
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/generated-sources/bootstrap/fonts</directory>
+                                    <!-- only the formats _clarin-fonts.scss declares -->
+                                    <includes>
+                                        <include>*.woff2</include>
+                                        <include>*.woff</include>
+                                        <include>*.ttf</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>glyphicons-halflings-*</exclude>
+                                    </excludes>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
                     <execution>
-                        <!-- copy scripts from bootstrap distribution -->
-                        <id>copy-script</id>
+                        <!-- copy the Bootstrap 5 JS bundle into script/ -->
+                        <id>copy-bootstrap5-js</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-resources</goal>
@@ -449,7 +461,10 @@
                             <outputDirectory>${project.build.directory}/${project.build.finalName}/script</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.build.directory}/generated-sources/bootstrap/js</directory>
+                                    <directory>${bootstrap.webjar.dir}/js</directory>
+                                    <includes>
+                                        <include>bootstrap.bundle.min.js</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
@@ -457,23 +472,25 @@
                 </executions>
             </plugin>
             <plugin>
-                <!-- Compiles combined LESS files into .css -->
-                <groupId>org.lesscss</groupId>
-                <artifactId>lesscss-maven-plugin</artifactId>
-                <version>1.7.0.1.1</version>
+                <!-- compiles src/main/scss into css/vlo.css -->
+                <groupId>us.hebi.sass</groupId>
+                <artifactId>sass-cli-maven-plugin</artifactId>
+                <version>1.0.4</version>
                 <configuration>
-                    <sourceDirectory>${project.build.directory}/generated-sources/less</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/${project.build.finalName}/css</outputDirectory>
-                    <compress>true</compress>
-                    <force>true</force>
-                    <includes>
-                        <include>vlo.less</include>
-                    </includes>
+                    <sassVersion>1.83.4</sassVersion>
+                    <args>
+                        <arg>--load-path=${bootstrap.webjar.dir}/scss</arg>
+                        <arg>--style=compressed</arg>
+                        <arg>--no-source-map</arg>
+                        <arg>--quiet-deps</arg>
+                        <arg>${project.basedir}/src/main/scss/vlo.scss:${project.build.directory}/${project.build.finalName}/css/vlo.css</arg>
+                    </args>
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>generate-resources</phase>
                         <goals>
-                            <goal>compile</goal>
+                            <goal>run</goal>
                         </goals>
                     </execution>
                 </executions>

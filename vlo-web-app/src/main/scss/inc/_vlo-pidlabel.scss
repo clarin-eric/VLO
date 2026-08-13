@@ -15,21 +15,24 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-@pid-label-border-color: @link-color;
-@pid-label-badge-color: @link-color;
-@pid-label-badge-text-color: #fff;
+@use "sass:color";
+@use "bootstrap";
+
+$pid-label-border-color: bootstrap.$link-color;
+$pid-label-badge-color: bootstrap.$link-color;
+$pid-label-badge-text-color: #fff;
 
 .pid-label {
     border: 1px solid;
-    border-color: @pid-label-border-color;
+    border-color: $pid-label-border-color;
     border-radius: 4px;
     white-space: nowrap;
     margin-right: .3em;
 
     .pid-label-badge {
         padding: 0 .5em;
-        background: @pid-label-badge-color;
-        color: @pid-label-badge-text-color;
+        background: $pid-label-badge-color;
+        color: $pid-label-badge-text-color;
     }
 
     .pid-label-link {
@@ -39,11 +42,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* hover behaviour when the label is (in) a link */
 a .pid-label:hover, a.pid-label:hover {
-    border-color: darken(@pid-label-border-color, 5%);
+    border-color: color.adjust($pid-label-border-color, $lightness: -5%, $space: hsl);
     text-decoration: none;
 
     .pid-label-badge {
-        background: darken(@pid-label-badge-color, 5%);
-        color: darken(@pid-label-badge-text-color, 5%);
+        background: color.adjust($pid-label-badge-color, $lightness: -5%, $space: hsl);
+        color: color.adjust($pid-label-badge-text-color, $lightness: -5%, $space: hsl);
     }
 }
