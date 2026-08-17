@@ -49,7 +49,7 @@
         <spring.boot.version>3.5.15</spring.boot.version>
         <spring.version>6.2.19</spring.version>
         <spring.data.version>3.5.12</spring.data.version>
-        <netty.version>4.1.135.Final</netty.version>
+        <netty.version>4.1.136.Final</netty.version>
         <zookeeper.version>3.9.5</zookeeper.version>
         <jackson.version>2.18.9</jackson.version>
         
