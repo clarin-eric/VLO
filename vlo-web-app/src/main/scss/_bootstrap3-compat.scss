@@ -73,9 +73,17 @@ select.form-control {
    Set via the custom property so .navbar-expand-*'s padding still works. */
 .navbar-nav {
     --bs-nav-link-padding-y: 10px;
+    --bs-nav-link-padding-x: 15px;
 
     @include bootstrap.media-breakpoint-up(sm) {
         --bs-nav-link-padding-y: 15px;
+    }
+}
+
+@include bootstrap.media-breakpoint-down(sm) {
+    .navbar-collapse {
+        margin-right: -(bootstrap.$grid-gutter-width * 0.5);
+        margin-left: -(bootstrap.$grid-gutter-width * 0.5);
     }
 }
 .navbar-text {
@@ -177,6 +185,56 @@ b, strong {
     vertical-align: middle;   // BS5 uses baseline, which sits the badge lower
 }
 
+a.badge {
+    cursor: pointer;
+
+    &:hover, &:focus {
+        text-decoration: underline;
+    }
+}
+
+.hidden {
+    display: none !important;
+}
+.close {
+    float: right;
+    padding: 0;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    background: transparent;
+    border: 0;
+    opacity: .2;
+
+    &:hover, &:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+        opacity: .5;
+    }
+}
+.well {
+    min-height: 20px;
+    padding: 19px;
+    margin-bottom: 20px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+}
+.well-sm {
+    padding: 9px;
+}
+
+.vcr-modal.modal.show {
+    display: block;
+}
+
+.vcr-modal .modal-header .close {
+    order: 1;
+}
+
 /* ---- Jumbotron: the grey intro box on the landing page ---- */
 .jumbotron {
     padding: 30px 15px;
@@ -237,6 +295,13 @@ b, strong {
 
 /* ---- BS5's .btn-sm sets no line-height (padding/font-size: $btn-*-sm in clarin-theme) ---- */
 .btn-sm, .btn-group-sm > .btn {
+    --bs-btn-line-height: 1.5;
+}
+
+.btn-xs, .btn-group-xs > .btn {
+    --bs-btn-padding-y: 1px;
+    --bs-btn-padding-x: 5px;
+    --bs-btn-font-size: 12px;
     --bs-btn-line-height: 1.5;
 }
 

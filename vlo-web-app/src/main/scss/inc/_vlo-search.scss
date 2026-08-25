@@ -68,6 +68,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         margin: 0;
     }
 
+    > .row:last-child .pagination {
+        margin-bottom: 20px;
+    }
+
     #searchresultitems {
         padding: 0;
         margin-bottom: 10px;
