@@ -126,7 +126,7 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         if (piwikConfig.isEnabled()) {
             link.add(createPiwikActionTrackingBehavior(resourceInfoModel, PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE));
         }
-        link.add(new AttributeAppender("class", "resourceDropdownSwitchboardItem"));
+        link.add(new AttributeAppender("class", "resourceDropdownSwitchboardItem", " "));
         return link;
     }
 

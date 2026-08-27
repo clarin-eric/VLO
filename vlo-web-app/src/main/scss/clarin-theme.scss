@@ -108,6 +108,12 @@ $clarin-color-3-40: rgb(218, 230, 175);
 
     $breadcrumb-bg: #f5f5f5,
 
+    // Dropdown menus: BS5 pads items 4px/16px against BS3's 3px/20px, which
+    // reads as cramped horizontally and loose vertically next to production
+    $dropdown-padding-y:      5px,
+    $dropdown-item-padding-y: 3px,
+    $dropdown-item-padding-x: 20px,
+
     // Popovers (the guided tour): BS5's smaller text and looser padding change
     // how the tour text wraps
     $popover-font-size:        0.875rem,
