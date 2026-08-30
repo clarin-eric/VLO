@@ -327,7 +327,7 @@ public abstract class RecordDetailsResourceInfoPanel extends GenericPanel<SolrDo
     }
 
     private BootstrapDropdown.DropdownMenuItem createResourceInfoDropdownOption() {
-        return new BootstrapDropdown.DropdownMenuItem(Model.of("Show resource details"), Model.of("glyphicon glyphicon-info-sign")) {
+        return new BootstrapDropdown.DropdownMenuItem(Model.of("Show resource details"), Model.of("fa fa-info-circle")) {
             @Override
             protected Link getLink(String id) {
                 return new Link<>(id) {

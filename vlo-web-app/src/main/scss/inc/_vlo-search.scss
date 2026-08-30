@@ -1,9 +1,33 @@
+/*
+Copyright (C) 2016 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+/* Styles for the search bar and search results. */
+
+
 /* style for autocomplete */
-@import "vlo-search-autocomplete";
 
 /*******************
 /* SEARCH FORM
 /*******************/
+@use "sass:color";
+@use "vlo-search-autocomplete";
+@use "bootstrap";
+@use "../clarin-theme";
+@use "vlo-license-icons";
+
 #search-form {
 
     .search-icon, .loading-indicator {
@@ -28,7 +52,7 @@
 
 /* disable search suggestions on mobile, this does not seem to work properly :( */
 /* TODO: fix this and re-enable this on narrow screens */
-@media (max-width: @screen-xs-max) {
+@media (max-width: clarin-theme.$screen-xs-max) {
 
     .wicket-aa-container {
         display: none !important;
@@ -44,6 +68,10 @@
         margin: 0;
     }
 
+    > .row:last-child .pagination {
+        margin-bottom: 20px;
+    }
+
     #searchresultitems {
         padding: 0;
         margin-bottom: 10px;
@@ -51,11 +79,17 @@
 }
 
 .search-results-header {
+    // grey band; BS5's navbar supplies neither the background nor the height
+    background-color: clarin-theme.$navbar-default-bg;
+    border: 1px solid clarin-theme.$navbar-default-border;
+    min-height: clarin-theme.$navbar-height;   // 50px
+    padding: .5rem (bootstrap.$grid-gutter-width * 0.5);
+    margin-bottom: 20px;
 
     .query-selection {
         .query-item {
             display: inline-block;
-            background-color: darken(@navbar-default-bg, 10%);
+            background-color: color.adjust(clarin-theme.$navbar-default-bg, $lightness: -10%, $space: hsl);
 
             border: 1px solid;
             border-radius: 8px;
@@ -66,9 +100,26 @@
                 padding-right: .5em;
             }
 
+            .query-item-remove {
+                float: right;
+                font-size: 21px;
+                font-weight: bold;
+                line-height: 1;
+                color: #000;
+                text-shadow: 0 1px 0 #fff;
+                opacity: .2;
+                cursor: pointer;
+
+                &:hover, &:focus {
+                    color: #000;
+                    text-decoration: none;
+                    opacity: .5;
+                }
+            }
+
             &:hover {
-                border-color: @link-color;
-                color: @link-color;
+                border-color: bootstrap.$link-color;
+                color: bootstrap.$link-color;
             }
         }
     }
@@ -80,8 +131,32 @@
         font-style: italic;
     }
 
-    .resultpagesizeform .form-group {
-        padding-right: 3px;
+    .resultpagesizeform {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+
+        @include bootstrap.media-breakpoint-up(sm) {
+            margin-right: -(bootstrap.$grid-gutter-width * 0.5);
+        }
+
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            padding-right: 3px;
+        }
+
+        label {
+            margin-bottom: 0;
+            margin-right: .5em;
+            white-space: nowrap;
+        }
+
+        select {
+            display: inline-block;
+            width: auto;
+        }
     }
 
 }
@@ -104,8 +179,8 @@
     }
 
     .search-result-collection-label {
-        margin-top: -(@line-height-computed / 2) + 2;
-        margin-bottom: (@line-height-computed / 2) - 2;
+        margin-top: -(clarin-theme.$line-height-computed * 0.5) + 2px;
+        margin-bottom: (clarin-theme.$line-height-computed * 0.5) - 2px;
     }
 
     .searchresultmoreless {
@@ -140,9 +215,9 @@
         }
 
         .searchresult-languageLabels-badge {
-            background-color: @body-bg;
-            border:1px solid @clarin-color-2;
-            color: @clarin-color-2;
+            background-color: bootstrap.$body-bg;
+            border: 1px solid clarin-theme.$clarin-color-2;
+            color: clarin-theme.$clarin-color-2;
 
             &.badge {
                 font-weight: normal;
@@ -162,7 +237,7 @@
             margin: 0;
             padding: 0;
 
-            background-image: url('@{license-icons-dir}other.png');
+            background-image: url('#{vlo-license-icons.$license-icons-dir}other.png');
             background-size: 1.2em 1.2em;
             background-position-y: .1em;
             background-position-x: .1em;
@@ -170,17 +245,17 @@
         }
 
         .availabilityTag {
-            /* mixins from vlo-license-icons.less */
-            .availability-icon-classes();
-            .availability-modifier-icon-classes();
+            /* mixins from vlo-license-icons */
+            @include vlo-license-icons.availability-icon-classes;
+            @include vlo-license-icons.availability-modifier-icon-classes;
         }
 
         .licenseTag {
             /* default icon indicating there is a known licence */
-            background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
+            background-image: url('#{vlo-license-icons.$license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
 
-            /* mixin from vlo-license-icons.less */
-            .license-icon-classes();
+            /* mixin from vlo-license-icons */
+            @include vlo-license-icons.license-icon-classes;
         }
     }
 
@@ -191,7 +266,7 @@
         .search-results-duplicates-heading {
             a.search-results-duplicates-expand-collapse {
                 text-decoration: none;
-                color: @text-color;
+                color: clarin-theme.$text-color;
 
                 .search-results-duplicates-preamble {
                     display: block;
@@ -210,18 +285,18 @@
 
         .duplicates-list-explanation {
             border-top: 1px solid;
-            border-top-color: @panel-inner-border;
+            border-top-color: clarin-theme.$panel-inner-border;
             padding-top: .5em;
         }
 
         .search-results-duplicates-list .list-group-item {
-            a{
-                color: @link-color;
+            a {
+                color: bootstrap.$link-color;
 
                 &:hover {
-                    color: @link-hover-color;
-                    background: @list-group-bg;
-                    text-decoration: @link-hover-decoration;
+                    color: bootstrap.$link-hover-color;
+                    background: bootstrap.$list-group-bg;
+                    text-decoration: bootstrap.$link-hover-decoration;
                 }
             }
 
@@ -243,7 +318,7 @@
 
     a.badge, a > .badge {
         &:hover {
-            background: lighten(@badge-bg, 25%);
+            background: color.adjust(clarin-theme.$badge-bg, $lightness: 25%, $space: hsl);
         }
 
         &[disabled] {
@@ -271,7 +346,7 @@
         display: none;
     }
 
-    .simple-only  {
+    .simple-only {
         display: initial;
     }
 
@@ -289,32 +364,32 @@
             display: none;
             font-size: large;
             text-align: center;
-            color: @gray-light;
+            color: clarin-theme.$gray-light;
         }
     }
 }
 
-.panel.panel-default.panel-expandable {
-    .panel-heading {
+.card.card-expandable {
+    .card-header {
         padding: 0;
 
         a.expandable-panel-toggle {
             display: block;
             width: 100%;
-            padding: @panel-heading-padding;
+            padding: clarin-theme.$panel-heading-padding;
 
             .toggle-icon {
-                color: @gray-light;
+                color: clarin-theme.$gray-light;
             }
 
             &:hover, &:active, &:focus {
                 text-decoration: inherit;
             }
             &:hover, &:active {
-                background-color: darken(@panel-default-heading-bg, 10%);
+                background-color: color.adjust(clarin-theme.$panel-default-heading-bg, $lightness: -10%, $space: hsl);
 
                 .toggle-icon {
-                    color: @panel-default-text;
+                    color: clarin-theme.$panel-default-text;
                 }
             }
         }
@@ -341,10 +416,9 @@ a.create-virtual-collection.disabled {
 /*******************/
 span.searchword {
     font-weight: bold;
-    background-color: darken(@body-bg, 10%);
+    background-color: color.adjust(bootstrap.$body-bg, $lightness: -10%, $space: hsl);
 
-    .table-striped>tbody>tr:nth-of-type(odd) & {
-        background-color: darken(@table-bg-accent, 10%);
+    .table-striped > tbody > tr:nth-of-type(odd) & {
+        background-color: color.adjust(clarin-theme.$table-bg-accent, $lightness: -10%, $space: hsl);
     }
 }
-

@@ -111,7 +111,7 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
 
     private DropdownMenuItem createSwitchboardItem() {
         final Model<String> switchboardItemLabelModel = Model.of("Process with Language Resource Switchboard");
-        final DropdownMenuItem switchboardItem = new BootstrapDropdown.DropdownMenuItem(switchboardItemLabelModel, Model.of("glyphicon glyphicon-open-file")) {
+        final DropdownMenuItem switchboardItem = new BootstrapDropdown.DropdownMenuItem(switchboardItemLabelModel, Model.of("fa fa-external-link")) {
             @Override
             protected Link getLink(String id) {
                 return getSwitchboardLink(id);
@@ -126,12 +126,12 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
         if (piwikConfig.isEnabled()) {
             link.add(createPiwikActionTrackingBehavior(resourceInfoModel, PiwikEventConstants.PIWIK_EVENT_CATEGORY_LRS, PiwikEventConstants.PIWIK_EVENT_ACTION_LRS_PROCESSRESOURCE));
         }
-        link.add(new AttributeAppender("class", "resourceDropdownSwitchboardItem"));
+        link.add(new AttributeAppender("class", "resourceDropdownSwitchboardItem", " "));
         return link;
     }
 
     private DropdownMenuItem createVcrItem() {
-        return new BootstrapDropdown.DropdownMenuItem(Model.of("Queue for submission to a Virtual Collection"), Model.of("glyphicon glyphicon-plus")) {
+        return new BootstrapDropdown.DropdownMenuItem(Model.of("Queue for submission to a Virtual Collection"), Model.of("fa fa-plus")) {
             @Override
             protected Link getLink(String id) {
                 return getVcrQueueLink(id);
@@ -194,7 +194,7 @@ class ResourceLinkOptionsDropdown extends BootstrapDropdown {
 
     @Override
     protected Serializable getButtonIconClass() {
-        return "glyphicon glyphicon-option-horizontal";
+        return "fa fa-ellipsis-h";
     }
 
     @Override

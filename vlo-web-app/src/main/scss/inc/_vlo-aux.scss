@@ -14,13 +14,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 /* 
     Created on : Jul 2, 2015, 4:15:10 PM
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
 
-/* "Help" page */
+/* Styles for auxiliary pages (help, about, ...). */
 
+@use "../clarin-theme";
+
+/* "Help" page */
 
 #help {
 
@@ -35,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     }
 
     .example-query {
-        font-style: italic;   
+        font-style: italic;
     }
 
     img {
@@ -46,7 +50,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* "About" page */
-
 .licenceText {
     font-style: italic;
     margin-left: 1em;
@@ -67,9 +70,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 /* Bootstrap badge styles */
-
 // based on https://codepen.io/MarcosBL/pen/uomCD
-
 .badge-error {
     background-color: #b94a48;
 }
@@ -107,8 +108,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     margin-left: 0;
 
     &  > [class*='col-'] {
-        padding-right:0;
-        padding-left:0;
+        padding-right: 0;
+        padding-left: 0;
     }
 }
 
@@ -125,5 +126,5 @@ body.non-js .js-only {
 }
 
 .tour-vlo-tour {
-    border: 3px solid @clarin-color-2-80;
+    border: 3px solid clarin-theme.$clarin-color-2-80;
 }

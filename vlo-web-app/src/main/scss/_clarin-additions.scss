@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<!--
-Copyright (C) 2016 CLARIN
+/*
+Copyright (C) 2026 CLARIN
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -14,10 +13,18 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<html>
-    <wicket:panel>
-        <!-- <span wicket:id="unavailableIcon" class="fa fa-exclamation-circle"></span><span wicket:id="restrictedIcon" class="fa fa-lock"></span> -->
-        <span class="badge badge-warning"><span wicket:id="icon" class="fa fa-exclamation-circle"></span></span>
-    </wicket:panel>
-</html>
+*/
+
+/*!
+ * CLARIN specific classes.
+ *
+ * Additional common classes for CLARIN applications that are NOT part of the
+ * default set of Bootstrap classes.
+ */
+
+.icon-facebook:hover { color: #3b5998; }
+.icon-twitter:hover  { color: #00aced; }
+.icon-gplus:hover    { color: #dd4b39; }
+.icon-linkedin:hover { color: #4875B4; }
+.icon-youtube:hover  { color: #FF3333; }
+.icon-github:hover   { color: #000000; }

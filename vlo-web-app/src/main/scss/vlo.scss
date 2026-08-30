@@ -14,22 +14,16 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-/* 
-    Created on : Jan 24, 2014, 10:06:50 AM
-    Author     : twagoo
+/*
+VLO main stylesheet entry point (Bootstrap 5 / SCSS).
+Compiles to css/vlo.css, loaded by VloBasePage.html.
 */
 
-/* global settings */
-@license-icons-dir: "../images/license/";
+/* CLARIN flavoured Bootstrap 5 */
+@use "clarin-theme";
 
-/* CLARIN flavoured bootstrap from the base_style project, included build time
- * usign the maven-dependency-plugin (unpack goal) and maven-resources-plugin
- * (copy-resources goal)
- *
- * See pom.xml and https://github.com/clarin-eric/base_style
- */
-@import "../bootstrap/less/clarin-bootstrap";
+/* Bootstrap 3 -> 5 compatibility shim (lets the still-BS3 HTML render on BS5) */
+@use "bootstrap3-compat";
 
 /* VLO styling */
-@import "inc/vlo-common";
+@use "inc/vlo-common";

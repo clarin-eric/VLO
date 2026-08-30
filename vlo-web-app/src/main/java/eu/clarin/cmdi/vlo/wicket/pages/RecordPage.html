@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <div wicket:id="navigation" id="topnavigation" class="row">
 
                     <!-- smaller screens: only link back to search results -->
-                    <div class="col-xs-8 visible-xs visible-sm">
+                    <div class="col-8 visible-xs visible-sm">
                         <ul class="breadcrumb" id="breadcrumbs">
                             <li><a wicket:id="backToSearch">Back to the search results</a></li>
                         </ul>
@@ -46,8 +46,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                         <ul class="breadcrumb" wicket:id="breadcrumbs" id="breadcrumbs">[BREADCRUMBS]</ul>
                     </div>
 
-                    <div class="col-md-2 col-xs-4">
-                        <div class="top-links padding pull-right">
+                    <div class="col-md-2 col-4">
+                        <div class="top-links padding float-end">
                             <wicket:container wicket:id="permalink">[permalink]</wicket:container>
                         </div>
                     </div>
@@ -57,10 +57,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <wicket:container wicket:id="recordNavigation"></wicket:container>
 
                 <div id="record-preamble" class="row">
-                    <div class="col-md-4 col-md-push-8">
-                        <div wicket:id="licenseInfo" id="record-license-availability-tags" class="pull-right">[license]</div>
+                    <div class="col-md-4 order-md-2">
+                        <div wicket:id="licenseInfo" id="record-license-availability-tags" class="float-end">[license]</div>
                     </div>
-                    <div class="col-md-8 col-md-pull-4">
+                    <div class="col-md-8 order-md-1">
                         <h1 wicket:id="name" id="recordtitle">[TITLE]</h1>
                     </div>
                 </div>

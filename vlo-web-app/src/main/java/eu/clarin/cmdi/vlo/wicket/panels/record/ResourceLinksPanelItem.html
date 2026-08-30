@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     </a>
                     <!-- alternative file name container in case the resource URI is not resolvable -->
                     <span wicket:id="fileNameNotResolvable" title="Resource location could not be resolved">
-                        <span class="glyphicon glyphicon-warning-sign"></span>
+                        <span class="fa fa-exclamation-triangle"></span>
                         <span wicket:id="fileName">resource.txt</span>
                     </span>
                 </td>
@@ -44,9 +44,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                     <div wicket:id="dropdown" class="dropdown">[dropdown]</div>
                 </td>
                 <td>
-                    <a wicket:id="details" class="pull-right">
-                        <span wicket:id="show" class="glyphicon glyphicon-chevron-right" title="Show details"></span>
-                        <span wicket:id="hide" class="glyphicon glyphicon-chevron-down" title="Hide details"></span>
+                    <a wicket:id="details" class="float-end">
+                        <span wicket:id="show" class="fa fa-chevron-right" title="Show details"></span>
+                        <span wicket:id="hide" class="fa fa-chevron-down" title="Hide details"></span>
                     </a>
                 </td>
             </tr>
@@ -54,19 +54,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             <tr wicket:id="detailsColumns" class="details">
                 <td></td>
                 <td colspan="4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
+                    <div class="card">
+                        <div class="card-header">
                             Resource details
                         </div>
-                        <div class="panel-body">
+                        <div class="card-body">
                             <p><strong>Mime type</strong>: <span wicket:id="mimeType">application/msword</span></p>
                             <p><strong>Link</strong>: <span wicket:id="href">location</span></p>
-                            <div wicket:id="linkCheckingResult" class="panel">
-                                <div class="panel-heading">Automatic link checking</div>
-                                <div class="panel-body">
+                            <div wicket:id="linkCheckingResult" class="card">
+                                <div class="card-header">Automatic link checking</div>
+                                <div class="card-body">
                                     <wicket:enclosure>
                                         <p>
-                                            <span class="glyphicon glyphicon-warning-sign"></span>
+                                            <span class="fa fa-exclamation-triangle"></span>
                                             <strong wicket:id="unavailableStatusMessage">The resource may not be available at this location.</strong>
                                         </p>
                                     </wicket:enclosure>

@@ -23,5 +23,5 @@ $(function () {
 function applyFacetTooltips() {
     //enable nicer bootstrap-style tooltip via plugin
     //http://getbootstrap.com/javascript/#tooltips
-    $('#facets [data-toggle="tooltip"]').tooltip();    
+    $('#facets [data-bs-toggle="tooltip"]').tooltip();    
 }

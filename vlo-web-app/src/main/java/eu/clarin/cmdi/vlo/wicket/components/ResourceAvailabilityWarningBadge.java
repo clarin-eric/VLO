@@ -32,8 +32,8 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class ResourceAvailabilityWarningBadge extends Panel {
 
-    private static final String UNAVAILABLE_ICON_CLASS = "glyphicon glyphicon-exclamation-sign";
-    private static final String RESTRICTED_ACCESS_ICON_CLASS = "glyphicon glyphicon-lock";
+    private static final String UNAVAILABLE_ICON_CLASS = "fa fa-exclamation-circle";
+    private static final String RESTRICTED_ACCESS_ICON_CLASS = "fa fa-lock";
     private final IModel<Boolean> isUnavailableModel;
     private final IModel<Boolean> isRestrictedAccessModel;
 

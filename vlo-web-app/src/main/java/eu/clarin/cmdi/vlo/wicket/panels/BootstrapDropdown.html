@@ -23,12 +23,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     </head>
     <body>
         <wicket:panel>
-            <a wicket:id="button" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a wicket:id="button" role="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i wicket:id="buttonIcon" class="fa fa-cog" aria-hidden="true"></i> <span wicket:id="caret" class="caret"></span>
             </a>
-            <ul wicket:id="menu" class="dropdown-menu dropdown-menu-right">
+            <ul wicket:id="menu" class="dropdown-menu dropdown-menu-end">
                 <li wicket:id="menuItem">
-                    <a wicket:id="link" href="#"><i wicket:id="icon" class="fa fa-bookmark fw" aria-hidden="true"></i> <span wicket:id="label">[LABEL]</span></a>
+                    <a wicket:id="link" href="#" class="dropdown-item"><i wicket:id="icon" class="fa fa-bookmark fa-fw" aria-hidden="true"></i> <span wicket:id="label">[LABEL]</span></a>
                 </li> 
             </ul>
         </wicket:panel>

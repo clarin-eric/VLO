@@ -25,9 +25,9 @@ function showModal(obj) {
     });
     obj.modal({
         'backdrop': 'static',
-        'keyboard': false,
-        'show': true
+        'keyboard': false
     });
+    obj.modal('show');
 }
 
 function hideModal(obj) {

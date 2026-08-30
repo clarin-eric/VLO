@@ -18,12 +18,12 @@
 $(function () {
     //enable nicer bootstrap-style tooltip via plugin
     //http://getbootstrap.com/javascript/#tooltips
-    $('form#search-form [data-toggle="tooltip"]').tooltip();
+    $('form#search-form [data-bs-toggle="tooltip"]').tooltip();
 });
 
 function startSearch() {
     //hide tooltip if shown
-    $('form#search-form [data-toggle="tooltip"]').tooltip('hide');
+    $('form#search-form [data-bs-toggle="tooltip"]').tooltip('hide');
     $('form#search-form').addClass('loading');
     $('form#search-form button').attr("disabled", "disabled");
 }
@@ -32,7 +32,7 @@ function endSearch() {
     $('form#search-form').removeClass('loading');
     $('form#search-form button').removeAttr("disabled");
     //re-enable tooltip
-    $('form#search-form [data-toggle="tooltip"]').tooltip();
+    $('form#search-form [data-bs-toggle="tooltip"]').tooltip();
 }
 
 function handleSearchFailure(message, status) {

@@ -1,0 +1,188 @@
+/*
+Copyright (C) 2026 CLARIN
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*!
+ * CLARIN flavoured Bootstrap 5 theme.
+ *
+ * Only the variables that CLARIN genuinely customises are overridden here; every
+ * other value comes from Bootstrap 5's own defaults.
+ */
+
+@use "sass:color";
+
+/* --- CLARIN brand colours --- */
+$clarin-color-1: rgb(7, 66, 110);
+$clarin-color-2: rgb(0, 128, 170);
+$clarin-color-3: rgb(162, 192, 55);
+
+$clarin-color-1-80: rgb(57, 104, 139);
+$clarin-color-1-40: rgb(156, 179, 197);
+$clarin-color-2-80: rgb(51, 153, 187);
+$clarin-color-2-40: rgb(153, 204, 221);
+$clarin-color-3-80: rgb(181, 205, 95);
+$clarin-color-3-40: rgb(218, 230, 175);
+
+/* --- Bootstrap 5 core, configured with the CLARIN overrides
+       these must be passed as a `with` configuration. */
+@use "bootstrap" with (
+    $primary:   $clarin-color-2,
+    $secondary: $clarin-color-1,
+
+    $body-color: #333333,
+    $headings-color: $clarin-color-2,
+
+    // square corners are a deliberate CLARIN design choice
+    $border-radius:    0,
+    $border-radius-sm: 0,
+    $border-radius-lg: 0,
+
+    // Typography
+    $font-family-sans-serif: ("Source Sans Pro", Calibri, Arial, Helvetica, sans-serif),
+    $font-family-monospace:  ("Source Code Pro", Menlo, Monaco, Consolas, "Courier New", monospace),
+    $font-size-base: 0.875rem,
+
+    $enable-rounded: false,
+    $line-height-base: 1.428571429,
+    $link-decoration: none,
+    $link-hover-decoration: underline,
+    $link-hover-color: color.adjust($clarin-color-2, $lightness: -15%, $space: hsl),
+    $headings-line-height: 1.1,
+    $headings-font-weight: 500,
+
+    $enable-rfs: false,
+
+    // BS3 type scale, off the 14px base
+    $h1-font-size: 36px,
+    $h2-font-size: 30px,
+    $h3-font-size: 24px,
+    $h4-font-size: 18px,
+    $h5-font-size: 14px,
+    $h6-font-size: 12px,
+    $font-size-lg: 18px,
+    $font-size-sm: 12px,
+    $small-font-size: 85%,
+    $paragraph-margin-bottom: 10px,
+
+    // Navbar: fills the 50px bar, which BS5's derived values do not
+    $navbar-brand-font-size: 18px,
+    $navbar-brand-padding-y: 15px,
+    $navbar-nav-link-padding-x: 15px,
+    $navbar-light-color:             #000,
+    $navbar-light-hover-color:       #eee,
+    $navbar-light-active-color:      #000,
+    $navbar-light-brand-color:       #000,
+    $navbar-light-brand-hover-color: #000,
+    $headings-margin-bottom: 10px,
+
+    /* BS3 breakpoints under the BS5 tier names: the markup uses `sm`/`md` with
+       BS3's meaning. The container map stops at `lg`, there was no wider tier,
+       and repeating 1170px would trip Bootstrap's -assert-ascending() check. */
+    $grid-breakpoints: (xs: 0, sm: 768px, md: 992px, lg: 1200px, xl: 1400px, xxl: 1600px),
+    $container-max-widths: (sm: 750px, md: 970px, lg: 1170px),
+    $grid-gutter-width: 30px,
+    $body-bg: #fff,
+    $input-border-color: #cccccc,
+    $input-color: #555555,
+    $input-placeholder-color: #999999,
+
+    $table-striped-bg: #f9f9f9,
+    $table-hover-bg:   #f5f5f5,
+
+    $badge-font-size: 12px,
+    $badge-padding-y: 3px,
+    $badge-padding-x: 7px,
+
+    $breadcrumb-bg: #f5f5f5,
+
+    // Dropdown menus: BS5 pads items 4px/16px against BS3's 3px/20px, which
+    // reads as cramped horizontally and loose vertically next to production
+    $dropdown-padding-y:      5px,
+    $dropdown-item-padding-y: 3px,
+    $dropdown-item-padding-x: 20px,
+
+    // Popovers (the guided tour): BS5's smaller text and looser padding change
+    // how the tour text wraps
+    $popover-font-size:        0.875rem,
+    $popover-header-font-size: 0.875rem,
+    $popover-header-bg:        #f7f7f7,
+    $popover-header-padding-y: 8px,
+    $popover-header-padding-x: 14px,
+    $popover-body-padding-y:   9px,
+    $popover-body-padding-x:   14px,
+    $popover-box-shadow:       (0 5px 10px rgba(0, 0, 0, .2)),
+
+    // Tooltips use the CLARIN brand turquoise; BS5 would default to black
+    $tooltip-bg:        $clarin-color-2,
+    $tooltip-color:     #fff,
+    $tooltip-padding-y: 3px,
+    $tooltip-padding-x: 8px,
+    $tooltip-font-size: 12px,
+
+    // Cards stand in for BS3 panels: solid grey header, #ddd border
+    $card-border-color:     #ddd,
+    $card-cap-bg:           #f5f5f5,
+    $card-cap-padding-y:    10px,
+    $card-cap-padding-x:    15px,
+    $card-spacer-y:         15px,
+    $card-spacer-x:         15px,
+
+    // Pagination: turquoise links, dark-blue active, grey disabled/hover
+    $pagination-color:                 $clarin-color-2,
+    $pagination-bg:                    #fff,
+    $pagination-border-color:          #ddd,
+    $pagination-hover-color:           $clarin-color-1,
+    $pagination-hover-bg:              #eeeeee,
+    $pagination-hover-border-color:    #ddd,
+    $pagination-active-bg:             $clarin-color-2,
+    $pagination-active-border-color:   $clarin-color-2,
+    $btn-padding-y-sm:  5px,
+    $btn-padding-x-sm:  10px,
+    $btn-font-size-sm:  12px,
+
+    $pagination-disabled-color:        #777,
+    $pagination-disabled-bg:           #fff,
+    $pagination-disabled-border-color: #ddd
+);
+
+/* --- Legacy Bootstrap 3 variable shims ---
+   The VLO SCSS (inc/*) still references Bootstrap 3 variable names that were
+   renamed or removed in Bootstrap 5. Map them here. Values are the BS3 defaults. */
+$text-color:               bootstrap.$body-color;
+$gray:                     #555555;
+$gray-light:               #777777;
+$line-height-computed:     20px;
+$screen-xs-max:            767.98px;
+$screen-sm-max:            991.98px;
+$container-sm:             750px;
+$container-md:             970px;
+$zindex-navbar:            1000;
+$navbar-height:            50px;
+$navbar-default-bg:        #eeeeee;
+$navbar-default-border:    #d5d5d5;
+$navbar-default-color:     #777777;
+$panel-default-border:     #dddddd;
+$panel-inner-border:       #dddddd;
+$panel-default-heading-bg: #f5f5f5;
+$panel-default-text:       #333333;
+$panel-heading-padding:    10px 15px;
+$badge-bg:                 $gray-light;
+$table-bg-accent:          #f9f9f9;
+$brand-primary:            bootstrap.$primary;
+
+/* --- CLARIN @font-face rules and additional CLARIN classes --- */
+@use "clarin-fonts";
+@use "clarin-additions";

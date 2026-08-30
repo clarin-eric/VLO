@@ -24,11 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     <body>
         <wicket:panel>
 
-            <div class="panel panel-default resource-info" wicket:id="landingPage">
-                <a wicket:id="showResources" class="pull-right detailslink"><span wicket:id="availabilityWarning"></span></a>
+            <div class="card resource-info" wicket:id="landingPage">
+                <a wicket:id="showResources" class="float-end detailslink"><span wicket:id="availabilityWarning"></span></a>
                 <a wicket:id="landingPageLink" class="resourcelink" title="The original provider's page for this record">
                     <span class="resource-type-icon">                         
-                        <span class="glyphicon glyphicon-home"></span>
+                        <span class="fa fa-home"></span>
                     </span>
                     <div>
                         <wicket:container wicket:id="landingPageLinkLabel">[HDL]1234/567-890</wicket:container>
@@ -40,10 +40,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
 
             <wicket:enclosure child="searchPage">
-                <div wicket:id="searchPage" class="panel panel-default resource-info">
+                <div wicket:id="searchPage" class="card resource-info">
                     <a wicket:id="searchLink" class="resourcelink" title="Search page for this record">
                         <span class="resource-type-icon">                         
-                            <span class="glyphicon glyphicon-search"></span>
+                            <span class="fa fa-search"></span>
                         </span>
                     </a>
                     <wicket:container wicket:id="searchPagePidLabel"></wicket:container>
@@ -52,7 +52,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </wicket:enclosure>
 
             <wicket:enclosure child="searchService">
-                <div wicket:id="searchService" class="panel panel-default resource-info">
+                <div wicket:id="searchService" class="card resource-info">
                     <div class="resourcelink" title="Federated Content search">
                         <a href="#" onclick="$(this).siblings('.searchserviceform').find('form').submit()">
                             <span class="resource-type-icon">                         
@@ -71,9 +71,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
             <h4 wicket:id="resourcesTitle" class="text-center">Linked resource</h4>
 
-            <div class="panel panel-default resource-info" wicket:id="resourceInfo">
-                <div wicket:id="dropdown" class="dropdown pull-right">[dropdown]</div>
-                <a wicket:id="showResources" class="detailslink pull-left"><span wicket:id="availabilityWarning"></span></a>
+            <div class="card resource-info" wicket:id="resourceInfo">
+                <div wicket:id="dropdown" class="dropdown float-end">[dropdown]</div>
+                <a wicket:id="showResources" class="detailslink float-start"><span wicket:id="availabilityWarning"></span></a>
                 <a wicket:id="resourceLink" class="resourcelink">
                     <span class="resource-type-icon">                            
                         <span wicket:id="resourceTypeIcon"></span>
@@ -86,16 +86,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
                 <wicket:container wicket:id="pidLabel">[HDL]1234/567-890</wicket:container>
             </div>
 
-            <div class="panel panel-default resource-info" wicket:id="resourcesInfo">
+            <div class="card resource-info" wicket:id="resourcesInfo">
                 <a wicket:id="showResources" class="resourcelink">
                     <span class="resource-type-icon">                            
-                        <span class="glyphicon glyphicon-folder-open"></span>
+                        <span class="fa fa-folder-open"></span>
                     </span>
                     <div><span class="badge"><wicket:container wicket:id="resourcesCount"></wicket:container> <wicket:message key="textResources">[resources]</wicket:message></span></div>
                 </a>
             </div>
 
-            <div class="panel panel-default resource-info" wicket:id="hierarchyLink">
+            <div class="card resource-info" wicket:id="hierarchyLink">
                 <a wicket:id="showHierarchy" class="resourcelink">
                     <span class="resource-type-icon">                            
                         <span class="fa fa-sitemap"></span>
@@ -106,9 +106,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
             </div>
 
             <wicket:enclosure>
-                <div class="panel panel-default resource-info">
+                <div class="card resource-info">
                     <a href="#" wicket:id="addToVcrQueueLink" class="resourcelink" title="Queue this record for submission to a Virtual Collection">
-                        <span><span class="badge badge-info"><span class="glyphicon glyphicon-plus-sign"></span> VCR</span></span>
+                        <span><span class="badge badge-info"><span class="fa fa-plus-circle"></span> VCR</span></span>
                         Add this record to the Virtual Collection submission queue
                     </a>
                 </div>

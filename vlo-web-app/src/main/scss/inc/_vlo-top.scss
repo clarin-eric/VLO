@@ -15,14 +15,29 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-@clarin-logo-ratio: (300/120);
-@top-clarin-logo-height: 4em;
-@top-clarin-logo-width: @clarin-logo-ratio * @top-clarin-logo-height;
-@navbar-clarin-logo-margin: 2px;
-@navbar-clarin-logo-height: @navbar-height - (2 * @navbar-clarin-logo-margin);
-@navbar-clarin-logo-width: @clarin-logo-ratio * @navbar-clarin-logo-height;
+/* Styles for the static top section (CLARIN logo bar / top navigation). */
+
+@use "bootstrap";
+@use "../clarin-theme";
+
+$clarin-logo-ratio: 2.5; // 300/120
+$top-clarin-logo-height: 4em;
+$top-clarin-logo-width: $clarin-logo-ratio * $top-clarin-logo-height;
+$navbar-clarin-logo-margin: 2px;
+$navbar-clarin-logo-height: clarin-theme.$navbar-height - (2 * $navbar-clarin-logo-margin);
+$navbar-clarin-logo-width: $clarin-logo-ratio * $navbar-clarin-logo-height;
 
 #header {
+    // grey background + bottom border, which BS5's navbar has neither of
+    .navbar {
+        background-color: clarin-theme.$navbar-default-bg;      // #eee
+        border-bottom: 1px solid clarin-theme.$navbar-default-border;
+        min-height: clarin-theme.$navbar-height;                // 50px
+        margin-bottom: 20px;                       // gap before the breadcrumb
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
     .qualifier {
         display: none; /* overridden depending on header class */
         color: #fff;
@@ -32,13 +47,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         left: 1em;
         padding: .2em;
         opacity: .8;
-        z-index: (@zindex-navbar + 1);
+        z-index: (clarin-theme.$zindex-navbar + 1);
 
         &.snapshot {
             background-color: #f00;
         }
         &.beta {
-            background-color: #333;            
+            background-color: #333;
         }
         &:hover {
             background: inherit;
@@ -53,28 +68,36 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     //clarin logo above navbar
     .clarin-top {
-        background-color: @navbar-default-bg;
-        border-bottom: 1px solid @navbar-default-border; 
+        background-color: clarin-theme.$navbar-default-bg;
+        border-bottom: 1px solid clarin-theme.$navbar-default-border;
         padding: .5em 0;
 
         .logo {
-            width: @top-clarin-logo-width;
-            height: @top-clarin-logo-height;
+            width: $top-clarin-logo-width;
+            height: $top-clarin-logo-height;
             background-image: url('../images/clarin-logo-wide.png');
             background-size: 100%;
             background-repeat: no-repeat;
         }
     }
 
-    //clarin logo in navbar
+    // clarin logo in navbar. .ms-auto only pushes the list right; the negative
+    // margin cancels the last nav link's 15px padding so the logo sits flush
+    // with the container edge.
+    .navbar-nav.ms-auto {
+        @include bootstrap.media-breakpoint-up(sm) {
+            margin-right: -(bootstrap.$grid-gutter-width * 0.5);
+        }
+    }
+
     .navbar-nav {
         a.clarin-logo {
-            min-height: @navbar-height;
-            width: (@navbar-clarin-logo-width + 2 * @navbar-clarin-logo-margin);
+            min-height: clarin-theme.$navbar-height;
+            width: ($navbar-clarin-logo-width + 2 * $navbar-clarin-logo-margin);
             background-image: url('../images/clarin-logo-wide.png');
-            background-size: @navbar-clarin-logo-width @navbar-clarin-logo-height;
-            background-position-x: @clarin-logo-ratio * @navbar-clarin-logo-margin;
-            background-position-y: @navbar-clarin-logo-margin;
+            background-size: $navbar-clarin-logo-width $navbar-clarin-logo-height;
+            background-position-x: $clarin-logo-ratio * $navbar-clarin-logo-margin;
+            background-position-y: $navbar-clarin-logo-margin;
             background-repeat: no-repeat;
 
             span {
@@ -90,7 +113,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #topnavigation.row {
     // entire top navigation should get a uniform background colour
-    background: @breadcrumb-bg;
+    background: bootstrap.$breadcrumb-bg;
 
     // we need to override some bootstrap behaviour to make this lign out nicely :(
     margin-left: 0px;
@@ -116,8 +139,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         display: inline;
     }
 
-    #permalinkfield
-    {
+    #permalinkfield {
         float: right;
         position: relative;
         top: 1em;
@@ -147,34 +169,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 }
 
 ul.feedbackPanel {
-
     padding-left: 0;
 
     li {
         display: block;
         list-style-type: none;
-    } 
+    }
 }
 
 /* share page link 'dropdown' (desirable dimensions relative to view port) */
-@media (min-width: @screen-sm-max) {
+@media (min-width: clarin-theme.$screen-sm-max) {
     .dropdown .share-page-link-controls {
-        width: 0.6 * @container-md ;
+        width: 0.6 * clarin-theme.$container-md;
         padding: 1em;
     }
 }
 
-@media (max-width: @screen-sm-max) {
+@media (max-width: clarin-theme.$screen-sm-max) {
     .dropdown .share-page-link-controls {
-        width: .8 * @container-sm ;
+        width: .8 * clarin-theme.$container-sm;
         padding: .5em;
     }
 }
 
-
-@media (max-width: @screen-xs-max) {
+@media (max-width: clarin-theme.$screen-xs-max) {
     .dropdown .share-page-link-controls {
-        width: 70vw ;
+        width: 70vw;
         padding: 2px;
     }
 }

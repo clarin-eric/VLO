@@ -182,7 +182,7 @@ public abstract class FacetsPanel extends GenericPanel<List<String>> {
                 allFacetsShown.setObject(Boolean.TRUE);
                 t.ifPresent(target -> {
                     target.add(container);
-                    target.appendJavaScript("$('[data-toggle=\"tooltip\"]').tooltip();");
+                    target.appendJavaScript("$('[data-bs-toggle=\"tooltip\"]').tooltip();");
                 });
             }
 

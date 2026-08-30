@@ -33,7 +33,7 @@ import org.apache.wicket.resource.TextTemplateResourceReference;
  */
 public class JavaScriptResources {
 
-    private final static ResourceReference BOOTSTRAP = new ContextRelativeResourceReference("script/bootstrap.js"); //bootstrap scripts are extracted from CLARIN's base style bootstrap package
+    private final static ResourceReference BOOTSTRAP = new ContextRelativeResourceReference("script/bootstrap.bundle.min.js");
     private final static JavaScriptResourceReference HIGHLIGHT = new JavaScriptResourceReference(RecordPage.class, "jquery.highlight.js");
 
     private final static JavaScriptResourceReference VLO_FRONT = new JavaScriptResourceReference(VloBasePage.class, "vlo-front.js");

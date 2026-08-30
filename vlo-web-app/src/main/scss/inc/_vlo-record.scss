@@ -18,19 +18,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     Created on : May 13, 2016, 4:23:38 PM
     Author     : Twan Goosen <twan.goosen@mpi.nl>
 */
+/* Styles for record details. */
 
-@import "vlo-record-cmdi";
+@use "vlo-record-cmdi";
+@use "bootstrap";
+@use "../clarin-theme";
+@use "vlo-license-icons";
 
-@resource-info-icon-width: 100px;
-@clarin-core-service-badge-bg: @clarin-color-2;
-@clarin-centre-content-badge-bg: @badge-bg;
+$resource-info-icon-width: 100px;
+$clarin-core-service-badge-bg: clarin-theme.$clarin-color-2;
+$clarin-centre-content-badge-bg: clarin-theme.$badge-bg;
 
 .badge {
     &.clarin-centre-content {
-        background-color: @clarin-centre-content-badge-bg;
+        background-color: $clarin-centre-content-badge-bg;
     }
     &.clarin-core-service {
-        background-color: @clarin-core-service-badge-bg;
+        background-color: $clarin-core-service-badge-bg;
     }
 }
 
@@ -58,33 +62,33 @@ h1#recordtitle {
         margin: 0;
         padding: 0;
 
-        background-image: url('@{license-icons-dir}other.png');
+        background-image: url('#{vlo-license-icons.$license-icons-dir}other.png');
         background-size: 1.2em 1.2em;
         background-position-y: .1em;
         background-position-x: .1em;
         background-repeat: no-repeat;
 
         &.availabilityTag {
-            /* mixins from vlo-license-icons.less */
-            .availability-icon-classes();
-            .availability-modifier-icon-classes();
+            /* mixins from vlo-license-icons */
+            @include vlo-license-icons.availability-icon-classes;
+            @include vlo-license-icons.availability-modifier-icon-classes;
         }
 
         &.licenseTag {
             /* default icon indicating there is a known licence */
-            background-image: url('@{license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
+            background-image: url('#{vlo-license-icons.$license-icons-dir}fine_print-64.png'); /* icon from icons8.com */
 
-            /* mixin from vlo-license-icons.less */
-            .license-icon-classes();
+            /* mixin from vlo-license-icons */
+            @include vlo-license-icons.license-icon-classes;
         }
     }
 }
 
 .record-tabpanel {
-    @content-top-bottom-padding: .5em;
+    $content-top-bottom-padding: .5em;
     .tab-content {
-        padding-top: @content-top-bottom-padding;
-        padding-bottom: @content-top-bottom-padding;
+        padding-top: $content-top-bottom-padding;
+        padding-bottom: $content-top-bottom-padding;
     }
 
     .recorddetailstable {
@@ -112,7 +116,7 @@ h1#recordtitle {
 
     table.resourcelist {
 
-        th,td {
+        th, td {
             &.recordresourcetypeicon {
                 width: 1.5em;
             }
@@ -142,6 +146,8 @@ h1#recordtitle {
     }
 
     .resource-info {
+        display: block;
+
         margin-left: 10px;
         text-align: center;
         padding: 10px;
@@ -154,17 +160,17 @@ h1#recordtitle {
 
             .resource-type-icon {
                 & > span {
-                    font-size: @resource-info-icon-width;
+                    font-size: $resource-info-icon-width;
                     padding: 4px;
-                    color: @text-color;
+                    color: clarin-theme.$text-color;
 
                     &:hover {
-                        color: @link-hover-color;
+                        color: bootstrap.$link-hover-color;
                     }
                 }
 
                 & > img {
-                    width: @resource-info-icon-width;
+                    width: $resource-info-icon-width;
                     padding: 4px;
                     text-align: center;
 
@@ -197,7 +203,7 @@ h1#recordtitle {
         }
     }
 
-    @licenseInfoIconSize: 2em;
+    $licenseInfoIconSize: 2em;
 
     div.recordLicenseInfo {
         ul {
@@ -213,14 +219,14 @@ h1#recordtitle {
                 }
 
                 &.licenseAvailability li {
-                    background-size: @licenseInfoIconSize;
+                    background-size: $licenseInfoIconSize;
                     background-position-y: .35em;
                     background-position-x: .25em;
                     background-repeat: no-repeat;
 
 
-                    padding: .25em 0 .25em @licenseInfoIconSize + 1em;
-                    min-height: @licenseInfoIconSize + .5em;
+                    padding: .25em 0 .25em $licenseInfoIconSize + 1em;
+                    min-height: $licenseInfoIconSize + .5em;
 
                     span {
                         display: block;
@@ -228,15 +234,15 @@ h1#recordtitle {
                     }
 
                     &.license {
-                        background-image: url('@{license-icons-dir}fine_print-64.png'); /* default (icon from icons8.com) */
-                        .license-icon-classes();
+                        background-image: url('#{vlo-license-icons.$license-icons-dir}fine_print-64.png'); /* default (icon from icons8.com) */
+                        @include vlo-license-icons.license-icon-classes;
                     }
 
                     &.availability {
-                        background-image: url('@{license-icons-dir}other.png'); /*default*/
-                        /* mixins from vlo-license-icons.less */
-                        .availability-icon-classes();
-                        .availability-modifier-icon-classes();
+                        background-image: url('#{vlo-license-icons.$license-icons-dir}other.png'); /*default*/
+                        /* mixins from vlo-license-icons */
+                        @include vlo-license-icons.availability-icon-classes;
+                        @include vlo-license-icons.availability-modifier-icon-classes;
                     }
                 }
             }
@@ -256,12 +262,12 @@ h1#recordtitle {
     }
 
     div.noRecordLicenseInfo {
-        padding-left: @licenseInfoIconSize + 1em;
-        background-image: url('@{license-icons-dir}unspecified.png');
-        background-size: @licenseInfoIconSize;
+        padding-left: $licenseInfoIconSize + 1em;
+        background-image: url('#{vlo-license-icons.$license-icons-dir}unspecified.png');
+        background-size: $licenseInfoIconSize;
         background-position: 0px 0px;
         background-repeat: no-repeat;
-        min-height: @licenseInfoIconSize + 1em;
+        min-height: $licenseInfoIconSize + 1em;
 
         p:last-child {
             padding-bottom: 0;
