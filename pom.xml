@@ -49,7 +49,7 @@
         <spring.boot.version>3.5.15</spring.boot.version>
         <spring.version>6.2.19</spring.version>
         <spring.data.version>3.5.12</spring.data.version>
-        <netty.version>4.1.136.Final</netty.version>
+        <netty.version>4.1.137.Final</netty.version>
         <zookeeper.version>3.9.5</zookeeper.version>
         <jackson.version>2.18.9</jackson.version>
         
@@ -146,15 +146,14 @@
                 <artifactId>zookeeper</artifactId>
                 <version>${zookeeper.version}</version>
             </dependency>
+            <!-- BOM keeps all io.netty:netty-* artifacts on one version; managing
+                 individual artifacts let the rest drift to older releases -->
             <dependency>
                 <groupId>io.netty</groupId>
-                <artifactId>netty-codec</artifactId>
+                <artifactId>netty-bom</artifactId>
                 <version>${netty.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-handler</artifactId>
-                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
