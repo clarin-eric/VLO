@@ -7,9 +7,9 @@
     <name>Virtual Language Observatory</name>
     <packaging>pom</packaging>
 
-    <!-- When updating the version number here, also update the version number 
-    in each module's pom.xml -->
-    <version>4.14-SNAPSHOT</version>
+    <!-- When updating the version number here, also update it in the <parent>
+    block of each module's pom.xml -->
+    <version>4.15-SNAPSHOT</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
