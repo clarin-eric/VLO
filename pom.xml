@@ -57,7 +57,7 @@
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <wicket.version>10.9.1</wicket.version>
+        <wicket.version>10.11.0</wicket.version>
         <junit.version>5.13.4</junit.version>
     </properties>
 
