@@ -262,6 +262,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
     .search-results-duplicates {
         clear: both;
         margin-top: .5em;
+        background-color: clarin-theme.$panel-default-heading-bg;
 
         .search-results-duplicates-heading {
             a.search-results-duplicates-expand-collapse {
