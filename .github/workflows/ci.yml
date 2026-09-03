@@ -6,6 +6,10 @@ on:
     tags: ['*']
   pull_request:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -13,6 +17,7 @@ jobs:
       contents: write # required to create the release on a tag build
     env:
       MAVEN_OPTS: -Xmx2g
+      MAVEN_ARGS: --batch-mode --no-transfer-progress
     steps:
       - uses: actions/checkout@v7
 
@@ -24,16 +29,16 @@ jobs:
 
       - name: Set version from tag
         if: startsWith(github.ref, 'refs/tags/')
-        run: mvn versions:set -DnewVersion=${{ github.ref_name }} versions:commit
+        run: ./mvnw versions:set -DnewVersion=${{ github.ref_name }} versions:commit
 
       - name: Build
-        run: mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+        run: ./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -V
 
       - name: Test
-        run: mvn test -B
+        run: ./mvnw test
 
       - name: Package distribution
-        run: mvn clean install -DskipTests=true -Pdocker
+        run: ./mvnw clean install -DskipTests=true -Pdocker
 
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/')
