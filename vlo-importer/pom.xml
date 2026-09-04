@@ -201,7 +201,7 @@
         <dependency>
             <groupId>eu.clarin</groupId>
             <artifactId>linkchecker-persistence</artifactId>
-            <version>1.0.0</version>
+            <version>2.2.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>${project.groupId}</groupId>
@@ -312,4 +312,23 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Boot BOM, scoped to this module only.
+                 linkchecker-persistence pulls in Spring Boot starters transitively;
+                 without this they can drift from the Boot version used by
+                 spring-boot-starter-test, and Boot 4's relocated JPA
+                 auto-configuration is then never applied.
+                 NB: deliberately NOT imported in the root pom - it also manages
+                 Jetty, which breaks Solr's SolrTestCaseJ4 in vlo-solr. -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>
