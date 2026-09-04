@@ -26,15 +26,15 @@ import java.util.Properties;
 import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  *
@@ -43,7 +43,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  *
  * @author Twan Goosen <twan@clarin.eu>
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public abstract class AbstractWicketTest {
 
@@ -52,7 +52,7 @@ public abstract class AbstractWicketTest {
 
     private WicketTester tester;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         final Properties testProperties = new Properties();
         try (InputStream is = getClass().getResourceAsStream("/vlo-test.properties")) {
