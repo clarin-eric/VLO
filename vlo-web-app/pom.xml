@@ -127,7 +127,7 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-statsd</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -303,10 +303,6 @@
             <artifactId>commons-text</artifactId>
             <version>1.15.0</version>
         </dependency>
-        
-        <!-- Lots of tests in this module are JUnit 4 and wicket-tester pulls in the
-             JUnit 5 engine. Without getting the vintage engine the JUnit 4 tests
-             are silently not run. -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
