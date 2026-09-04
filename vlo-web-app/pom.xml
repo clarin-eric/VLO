@@ -286,7 +286,12 @@
             <artifactId>commons-text</artifactId>
             <version>1.15.0</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JMOCK FOR MOCKING -->
         <dependency>
             <groupId>org.jmock</groupId>

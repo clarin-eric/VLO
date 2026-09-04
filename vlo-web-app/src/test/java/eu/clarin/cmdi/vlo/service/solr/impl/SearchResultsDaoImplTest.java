@@ -57,6 +57,8 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        useFactory("solr.NRTCachingDirectoryFactory");
+
         SolrTestCaseJ4.initCore(
                 //config
                 getResourcePath("/solr/vlo-index/solrconfig.xml"),
