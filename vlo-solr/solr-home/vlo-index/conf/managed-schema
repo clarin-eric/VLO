@@ -28,8 +28,9 @@
     <fieldType name="textSuggest" class="solr.TextField" positionIncrementGap="100">
         <analyzer>
             <tokenizer class="solr.WhitespaceTokenizerFactory" rule="java"/>
-            <filter class="solr.PatternReplaceFilterFactory" pattern="^(\W+)" replacement=""/>
-            <filter class="solr.PatternReplaceFilterFactory" pattern="(\W+)$" replacement=""/>
+            <!-- strip leading/trailing punctuation: (negations of unicode letters and numbers)-->
+            <filter class="solr.PatternReplaceFilterFactory" pattern="^[^\p{L}\p{N}]+" replacement=""/>
+            <filter class="solr.PatternReplaceFilterFactory" pattern="[^\p{L}\p{N}]+$" replacement=""/>
             <filter class="solr.LowerCaseFilterFactory"/>
         </analyzer>
     </fieldType>
