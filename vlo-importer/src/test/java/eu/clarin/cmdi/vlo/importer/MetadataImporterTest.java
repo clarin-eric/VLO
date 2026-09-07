@@ -23,13 +23,13 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.solr.common.SolrInputDocument;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInOrder.contains;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class MetadataImporterTest extends ImporterTestcase {
 
@@ -297,8 +297,8 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(1, docs.size());
         SolrInputDocument doc = docs.get(0);
 
-        assertEquals("ISO code mapping to langauge code", "code:nld", getValue(doc, FieldKey.LANGUAGE_CODE));
-        assertEquals("Language code -> language name post processing", "Dutch", getValue(doc, FieldKey.LANGUAGE_NAME));
+        assertEquals("code:nld", getValue(doc, FieldKey.LANGUAGE_CODE), "ISO code mapping to langauge code");
+        assertEquals("Dutch", getValue(doc, FieldKey.LANGUAGE_NAME), "Language code -> language name post processing");
     }
 
     @Test
@@ -327,8 +327,8 @@ public class MetadataImporterTest extends ImporterTestcase {
         SolrInputDocument doc = docs.get(0);
 
         // 'reflective' postprocessing, i.e. we have a post processor that acts on 'null' values, uses value from an already populated field to populate its target field
-        assertEquals("PRECONDITION: Availability filled in from doc value", "PUB", getValue(doc, FieldKey.AVAILABILITY));
-        assertEquals("Explicit license filled in from availability", "PUB", getValue(doc, FieldKey.LICENSE_TYPE));
+        assertEquals("PUB", getValue(doc, FieldKey.AVAILABILITY), "PRECONDITION: Availability filled in from doc value");
+        assertEquals("PUB", getValue(doc, FieldKey.LICENSE_TYPE), "Explicit license filled in from availability");
     }
 
     @Test

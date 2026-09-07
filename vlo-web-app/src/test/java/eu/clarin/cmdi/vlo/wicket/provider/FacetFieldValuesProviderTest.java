@@ -32,10 +32,10 @@ import org.apache.wicket.util.convert.converter.AbstractConverter;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Assert;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -49,7 +49,7 @@ public class FacetFieldValuesProviderTest {
     private FacetField facetField;
     private FieldValueConverterProvider valueConverterProvider;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         facetField = new FacetField("field");
         facetField.add("first value", 101);
@@ -71,7 +71,7 @@ public class FacetFieldValuesProviderTest {
 
                     @Override
                     public String convertToObject(String value, Locale locale) throws ConversionException {
-                        Assert.fail("convertToObject should not get called on the Field Value converter");
+                        Assertions.fail("convertToObject should not get called on the Field Value converter");
                         return null;
                     }
                 }));

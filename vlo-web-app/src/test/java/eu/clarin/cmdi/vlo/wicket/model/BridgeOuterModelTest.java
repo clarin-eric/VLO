@@ -18,10 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -37,7 +35,7 @@ public class BridgeOuterModelTest {
         IModel<String> inner = Model.of("inner value");
         IModel<Boolean> state = Model.of(false);
 
-        BridgeOuterModel instance = new BridgeOuterModel(inner, state, "initial outer");
+        var instance = new BridgeOuterModel<>(inner, state, "initial outer");
 
         assertEquals("initial outer", instance.getObject());
 
@@ -58,7 +56,7 @@ public class BridgeOuterModelTest {
         IModel<String> inner = Model.of("inner value");
         IModel<Boolean> state = Model.of(false);
 
-        BridgeOuterModel instance = new BridgeOuterModel(inner, state, "initial outer");
+        var instance = new BridgeOuterModel<>(inner, state, "initial outer");
 
         // set while bridge closed
         instance.setObject("new outer");

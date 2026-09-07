@@ -30,14 +30,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.Assert.*;
-import org.junit.Ignore;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -66,7 +62,7 @@ public class SelfLinkExtractorImplTest {
         instance = new SelfLinkExtractorImpl();
     }
 
-    @After
+    @AfterEach
     public void cleanUp() {
         if (testFile.exists()) {
             testFile.delete();
@@ -96,7 +92,7 @@ public class SelfLinkExtractorImplTest {
 //    final private int performanceTestIterations = 100000;
 //
 //    @Test
-//    @Ignore("Ignoring performance test")
+//    @Disabled("Ignoring performance test")
 //    public void testPerformance() throws Exception {
 //        final Logger logger = LogManager.getLogger(SelfLinkExtractorImpl.class);
 //        final Level level = logger.getLevel();
@@ -112,7 +108,7 @@ public class SelfLinkExtractorImplTest {
 //    }
 //
 //    @Test
-//    @Ignore("Ignoring performance test")
+//    @Disabled("Ignoring performance test")
 //    public void testPerformanceOld() throws Exception {
 //        final Logger logger = LogManager.getLogger(OldSelfLinkExtractor.class);
 //        final Level level = logger.getLevel();

@@ -19,11 +19,10 @@ package eu.clarin.cmdi.vlo.wicket;
 import java.util.Locale;
 import org.apache.wicket.util.convert.IConverter;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -39,7 +38,7 @@ public class CachingConverterTest {
     @Test
     public void testConvertToObject() {
         final IConverter<Object> inner = context.mock(IConverter.class, "Object");
-        final CachingConverter instance = new CachingConverter<>(inner);
+        final CachingConverter<Object> instance = new CachingConverter<>(inner);
         final Object result = new Object();
         context.checking(new Expectations() {
             {
@@ -77,7 +76,7 @@ public class CachingConverterTest {
     @Test
     public void testConvertToString() {
         final IConverter<Object> inner = context.mock(IConverter.class, "Object");
-        final CachingConverter instance = new CachingConverter<>(inner);
+        final CachingConverter<Object> instance = new CachingConverter<>(inner);
         final Object value = new Object();
         final String result = "result";
         context.checking(new Expectations() {

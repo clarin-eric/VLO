@@ -7,8 +7,8 @@ import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
 import eu.clarin.cmdi.vlo.importer.processor.SchemaParsingUtil;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 public class CMDIParserVTDXMLTest extends ImporterTestcase {
