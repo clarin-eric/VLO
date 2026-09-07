@@ -25,7 +25,7 @@ import eu.clarin.linkchecker.persistence.utils.Category;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Stream;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.BeforeEach;

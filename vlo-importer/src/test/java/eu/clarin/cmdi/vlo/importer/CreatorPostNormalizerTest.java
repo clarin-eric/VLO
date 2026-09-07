@@ -4,9 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.CreatorPostNormalizer;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class CreatorPostNormalizerTest extends ImporterTestcase {
 

@@ -22,17 +22,15 @@ import java.util.Optional;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.hamcrest.Description;
-import static org.jmock.AbstractExpectations.doAll;
-import static org.jmock.AbstractExpectations.returnValue;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.api.Action;
 import org.jmock.api.Invocation;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.concurrent.Synchroniser;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -50,7 +48,7 @@ public class HandleResolverWrapperTest {
 
     HandleResolver resolver;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         resolver = context.mock(HandleResolver.class);
     }
