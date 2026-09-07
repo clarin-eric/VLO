@@ -57,6 +57,7 @@
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
         <wicket.version>10.11.0</wicket.version>
         <junit.version>6.0.3</junit.version>
     </properties>
@@ -68,19 +69,12 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
     
     <dependencyManagement>
         <dependencies>
-            <!-- JUnit BOM: aligns junit-jupiter-api/-engine/-params pulled in
-                 transitively (e.g. by wicket-tester) with the version required
+            <!-- Pins junit-jupiter-api/-engine/-params pulled in
+                 transitively ( by wicket-tester) with the version required
                  by Spring Framework 7 / Spring Boot 4 -->
             <dependency>
                 <groupId>org.junit</groupId>
@@ -93,6 +87,14 @@
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
+            </dependency>
+            <!-- JUnit 4, still required by the two tests that extend Solr's
+                 SolrTestCaseJ4, and by the vintage engine that runs them. -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.vintage</groupId>

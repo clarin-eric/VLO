@@ -113,6 +113,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>${jakarta.servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>vlo-commons</artifactId>
             <version>${project.version}</version>
@@ -153,12 +164,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sf.saxon</groupId>
@@ -315,13 +320,8 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Spring Boot BOM, scoped to this module only.
-                 linkchecker-persistence pulls in Spring Boot starters transitively;
-                 without this they can drift from the Boot version used by
-                 spring-boot-starter-test, and Boot 4's relocated JPA
-                 auto-configuration is then never applied.
-                 NB: deliberately NOT imported in the root pom - it also manages
-                 Jetty, which breaks Solr's SolrTestCaseJ4 in vlo-solr. -->
+            <!-- Pin the spring boot version so that we avoid conflict with
+                 other project's spring boot starters (e.g. linkchecker persistence) -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
