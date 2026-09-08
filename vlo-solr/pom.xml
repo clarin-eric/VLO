@@ -73,6 +73,12 @@
     </build>
     
     <dependencies>
+        <!-- JUnit 4: required by SolrTestCaseJ4-based tests (see dependencyManagement). -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-solrj</artifactId>

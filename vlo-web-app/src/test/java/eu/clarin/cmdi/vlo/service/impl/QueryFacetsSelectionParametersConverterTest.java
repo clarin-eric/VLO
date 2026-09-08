@@ -45,9 +45,9 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -56,17 +56,17 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author twagoo
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(loader = AnnotationConfigContextLoader.class)
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD) // gives us a fresh context for each test
 public class QueryFacetsSelectionParametersConverterTest {
@@ -76,7 +76,7 @@ public class QueryFacetsSelectionParametersConverterTest {
     @Inject
     FieldNameService fieldNameService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new QueryFacetsSelectionParametersConverter(ImmutableSet.of("facet1", "facet2", "facet3", "facet4"));
     }

@@ -27,6 +27,17 @@
         <vlo.logging.level>INFO</vlo.logging.level>
     </properties>
     <dependencies>
+        <!-- JUnit 4: required by SolrTestCaseJ4-based tests (see dependencyManagement). -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- Intra-project dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -88,7 +99,7 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
+            <version>${jakarta.servlet.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -286,7 +297,12 @@
             <artifactId>commons-text</artifactId>
             <version>1.15.0</version>
         </dependency>
-        
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JMOCK FOR MOCKING -->
         <dependency>
             <groupId>org.jmock</groupId>
@@ -372,7 +388,7 @@
                 <version>1.10.13</version>
                 <configuration>
                     <container>
-                        <containerId>tomcat10x</containerId>
+                        <containerId>tomcat11x</containerId>
                         <type>embedded</type>
                     </container>
                     <configuration>

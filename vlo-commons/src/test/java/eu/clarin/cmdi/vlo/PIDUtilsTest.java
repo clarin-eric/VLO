@@ -19,8 +19,8 @@ package eu.clarin.cmdi.vlo;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -122,13 +122,13 @@ public class PIDUtilsTest {
      */
     @Test
     public void testIsPid() {
-        VALID_HANDLES.forEach(h -> assertTrue(h, PIDUtils.isPid(h)));
-        VALID_DOIS.forEach(h -> assertTrue(h, PIDUtils.isPid(h)));
-        VALID_URN_NBNS.forEach(h -> assertTrue(h, PIDUtils.isPid(h)));
+        VALID_HANDLES.forEach(h -> assertTrue(PIDUtils.isPid(h), h));
+        VALID_DOIS.forEach(h -> assertTrue(PIDUtils.isPid(h), h));
+        VALID_URN_NBNS.forEach(h -> assertTrue(PIDUtils.isPid(h), h));
 
         //negatives
-        NOT_PIDS.forEach(h -> assertFalse(h, PIDUtils.isPid(h)));
-        assertFalse("null", PIDUtils.isPid(null));
+        NOT_PIDS.forEach(h -> assertFalse(PIDUtils.isPid(h), h));
+        assertFalse(PIDUtils.isPid(null), "null");
     }
 
     /**
@@ -136,12 +136,12 @@ public class PIDUtilsTest {
      */
     @Test
     public void testIsHandle() {
-        VALID_HANDLES.forEach(h -> assertTrue(h, PIDUtils.isHandle(h)));
+        VALID_HANDLES.forEach(h -> assertTrue(PIDUtils.isHandle(h), h));
 
         //negatives
-        NOT_HANDLES.forEach(h -> assertFalse(h, PIDUtils.isHandle(h)));
-        NOT_PIDS.forEach(h -> assertFalse(h, PIDUtils.isHandle(h)));
-        assertFalse("null", PIDUtils.isHandle(null));
+        NOT_HANDLES.forEach(h -> assertFalse(PIDUtils.isHandle(h), h));
+        NOT_PIDS.forEach(h -> assertFalse(PIDUtils.isHandle(h), h));
+        assertFalse(PIDUtils.isHandle(null), "null");
     }
 
     /**
@@ -149,12 +149,12 @@ public class PIDUtilsTest {
      */
     @Test
     public void testIsDoi() {
-        VALID_DOIS.forEach(h -> assertTrue(h, PIDUtils.isDoi(h)));
+        VALID_DOIS.forEach(h -> assertTrue(PIDUtils.isDoi(h), h));
 
         //negatives
-        NOT_DOIS.forEach(h -> assertFalse(h, PIDUtils.isDoi(h)));
-        NOT_PIDS.forEach(h -> assertFalse(h, PIDUtils.isDoi(h)));
-        assertFalse("null", PIDUtils.isDoi(null));
+        NOT_DOIS.forEach(h -> assertFalse(PIDUtils.isDoi(h), h));
+        NOT_PIDS.forEach(h -> assertFalse(PIDUtils.isDoi(h), h));
+        assertFalse(PIDUtils.isDoi(null), "null");
     }
 
     /**
@@ -162,12 +162,12 @@ public class PIDUtilsTest {
      */
     @Test
     public void testIsUrnNbn() {
-        VALID_URN_NBNS.forEach(h -> assertTrue(h, PIDUtils.isUrnNbn(h)));
+        VALID_URN_NBNS.forEach(h -> assertTrue(PIDUtils.isUrnNbn(h), h));
 
         //negatives
-        NOT_URN_NBNS.forEach(h -> assertFalse(h, PIDUtils.isUrnNbn(h)));
-        NOT_PIDS.forEach(h -> assertFalse(h, PIDUtils.isUrnNbn(h)));
-        assertFalse("null", PIDUtils.isUrnNbn(null));
+        NOT_URN_NBNS.forEach(h -> assertFalse(PIDUtils.isUrnNbn(h), h));
+        NOT_PIDS.forEach(h -> assertFalse(PIDUtils.isUrnNbn(h), h));
+        assertFalse(PIDUtils.isUrnNbn(null), "null");
     }
 
     @Test
@@ -197,15 +197,15 @@ public class PIDUtilsTest {
         ACTIONABLE.forEach(h -> assertTrue(PIDUtils.isActionableLink(h)));
         NON_ACTIONABLE_PIDS.forEach(h -> assertFalse(PIDUtils.isActionableLink(h)));
         INVALID.forEach(h -> assertFalse(PIDUtils.isActionableLink(h)));
-        ACTIONABLE.forEach(h -> assertFalse("input should be trimmed", PIDUtils.isActionableLink(" " + h + " ")));
+        ACTIONABLE.forEach(h -> assertFalse(PIDUtils.isActionableLink(" " + h + " "), "input should be trimmed"));
     }
 
     @Test
     public void testGetActionableLinkForPid() {
-        ACTIONABLE_PIDS.forEach(h -> assertEquals("actionable pids should not be changed", h, PIDUtils.getActionableLinkForPid(h)));
-        ACTIONABLE.forEach(h -> assertEquals("actionable links should not be changed", h, PIDUtils.getActionableLinkForPid(h)));
+        ACTIONABLE_PIDS.forEach(h -> assertEquals(h, PIDUtils.getActionableLinkForPid(h), "actionable pids should not be changed"));
+        ACTIONABLE.forEach(h -> assertEquals(h, PIDUtils.getActionableLinkForPid(h), "actionable links should not be changed"));
         NON_ACTIONABLE_PIDS.forEach(h -> assertNotEquals("non-actionable PIDs should be changed into links", h, PIDUtils.getActionableLinkForPid(h)));
-        INVALID.forEach(h -> assertEquals("invalid links should not be changed", h, PIDUtils.getActionableLinkForPid(h)));
+        INVALID.forEach(h -> assertEquals(h, PIDUtils.getActionableLinkForPid(h), "invalid links should not be changed"));
     }
 
 }

@@ -31,11 +31,10 @@ import org.jmock.Expectations;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -49,7 +48,7 @@ public class SolrDocumentServiceImplTest {
     private SearchResultsDao dao;
     private SolrDocumentQueryFactory queryFactory;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dao = context.mock(SearchResultsDao.class);
         queryFactory = context.mock(SolrDocumentQueryFactory.class);

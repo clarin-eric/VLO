@@ -18,9 +18,9 @@ package eu.clarin.cmdi.vlo.pojo;
 
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.FacetField.Count;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -31,7 +31,7 @@ public class NameAndCountFieldValuesFilterTest {
     private Count count;
     private NameAndCountFieldValuesFilter filter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         filter = new NameAndCountFieldValuesFilter();
         count = new FacetField.Count(new FacetField("field"), "value", 0);
@@ -49,19 +49,19 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.matches(count, null));
 
         filter.setName("v");
-        assertTrue("Partial left match", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Partial left match");
 
         filter.setName("val");
-        assertTrue("Partial left match", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Partial left match");
 
         filter.setName("value");
-        assertTrue("Complete match", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Complete match");
 
         filter.setName("alue");
-        assertTrue("Partial middle match", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Partial middle match");
 
         filter.setName("values");
-        assertFalse("Complete match", filter.matches(count, null));
+        assertFalse(filter.matches(count, null), "Complete match");
     }
 
     /**
@@ -99,21 +99,21 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.matches(count, null));
 
         filter.setFirstCharacter('v');
-        assertTrue("Lower case", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Lower case");
 
         filter.setFirstCharacter('V');
-        assertTrue("Upper case", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Upper case");
 
         filter.setFirstCharacter('A');
-        assertFalse("Mismatch (alphabetical)", filter.matches(count, null));
+        assertFalse(filter.matches(count, null), "Mismatch (alphabetical)");
 
         filter.setFirstCharacter('?');
-        assertFalse("Mismatch (other char)", filter.matches(count, null));
+        assertFalse(filter.matches(count, null), "Mismatch (other char)");
 
         filter.setFirstCharacter(NameAndCountFieldValuesFilter.ANY_CHARACTER_SYMBOL);
-        assertTrue("Any character for non-empty string", filter.matches(count, null));
+        assertTrue(filter.matches(count, null), "Any character for non-empty string");
         count.setName("");
-        assertFalse("Any character for empty string", filter.matches(count, null));
+        assertFalse(filter.matches(count, null), "Any character for empty string");
     }
 
     /**
@@ -145,19 +145,19 @@ public class NameAndCountFieldValuesFilterTest {
         assertTrue(filter.isEmpty());
 
         filter.setName("value");
-        assertFalse("Name filter", filter.isEmpty());
+        assertFalse(filter.isEmpty(), "Name filter");
 
         filter.setName(null);
         assertTrue(filter.isEmpty());
 
         filter.setMinimalOccurence(10);
-        assertFalse("Count filter", filter.isEmpty());
+        assertFalse(filter.isEmpty(), "Count filter");
 
         filter.setMinimalOccurence(null);
         assertTrue(filter.isEmpty());
 
         filter.setFirstCharacter('c');
-        assertFalse("Character filter", filter.isEmpty());
+        assertFalse(filter.isEmpty(), "Character filter");
 
         filter.setFirstCharacter(null);
         assertTrue(filter.isEmpty());

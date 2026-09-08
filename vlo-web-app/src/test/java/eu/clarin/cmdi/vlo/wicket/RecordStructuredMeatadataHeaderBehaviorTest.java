@@ -38,9 +38,9 @@ import org.jmock.Mockery;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
@@ -81,7 +81,7 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
     @Inject
     private VloConfig vloConfig;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -218,9 +218,9 @@ public class RecordStructuredMeatadataHeaderBehaviorTest extends JsonLdHeaderBeh
 
         final JSONObject json = startPage(page);
 
-        assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("creator")).size());
-        assertEquals("limit exceeded - should be capped", limit, ((JSONArray) json.get("spatial")).size());
-        assertEquals("below limit - should NOT be capped", belowLimit, ((JSONArray) json.get("distribution")).size());
+        assertEquals(limit, ((JSONArray) json.get("creator")).size(), "limit exceeded - should be capped");
+        assertEquals(limit, ((JSONArray) json.get("spatial")).size(), "limit exceeded - should be capped");
+        assertEquals(belowLimit, ((JSONArray) json.get("distribution")).size(), "below limit - should NOT be capped");
     }
 
     @Test

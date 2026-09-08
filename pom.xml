@@ -46,9 +46,9 @@
         <logback.version>1.5.36</logback.version>
         <log4j2.version>2.26.0</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
-        <spring.boot.version>3.5.15</spring.boot.version>
-        <spring.version>6.2.19</spring.version>
-        <spring.data.version>3.5.12</spring.data.version>
+        <spring.boot.version>4.1.1</spring.boot.version>
+        <spring.version>7.0.9</spring.version>
+        <spring.data.version>4.1.1</spring.data.version>
         <netty.version>4.1.137.Final</netty.version>
         <zookeeper.version>3.9.5</zookeeper.version>
         <jackson.version>2.18.9</jackson.version>
@@ -57,8 +57,9 @@
         <netbeans.hint.license>gpl30</netbeans.hint.license>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
         <wicket.version>10.11.0</wicket.version>
-        <junit.version>5.13.4</junit.version>
+        <junit.version>6.0.3</junit.version>
     </properties>
 
     <dependencies>
@@ -68,21 +69,32 @@
             <version>${slf4j.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
     
     <dependencyManagement>
         <dependencies>
+            <!-- Pins junit-jupiter-api/-engine/-params pulled in
+                 transitively ( by wicket-tester) with the version required
+                 by Spring Framework 7 / Spring Boot 4 -->
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
                 <version>${junit.version}</version>
+            </dependency>
+            <!-- JUnit 4, still required by the two tests that extend Solr's
+                 SolrTestCaseJ4, and by the vintage engine that runs them. -->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.junit.vintage</groupId>

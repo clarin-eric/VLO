@@ -17,10 +17,10 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import java.net.URI;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 
 /**
  *
@@ -30,7 +30,7 @@ public class DOIResolverTest {
 
     private DOIResolver instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new DOIResolver();
     }
@@ -39,19 +39,19 @@ public class DOIResolverTest {
      * Test of resolve method, of class DOIResolver.
      */
     @Test
-    @Ignore("Depends on live DOI resolver")
+    @Disabled("Depends on live DOI resolver")
     public void testResolve() {
         final URI input = URI.create("https://doi.org/10.5076/e-codices-csg-0961");
         final URI expected = URI.create("https://www.e-codices.ch/en/list/one/csg/0961");
         final URI result = instance.resolve(input);
-        assertEquals("DOI should resolve to expected target", expected, result);
+        assertEquals(expected, result, "DOI should resolve to expected target");
     }
 
     @Test
     public void testResolveNonDoi() {
         final URI input = URI.create("https://www.google.com");
         final URI result = instance.resolve(input);
-        assertNull("Non-DOI should not resolve", result);
+        assertNull(result, "Non-DOI should not resolve");
     }
 
 }

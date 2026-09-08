@@ -16,12 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -31,7 +30,7 @@ public class ResourceStringConverterImplTest {
 
     private ResourceStringConverterImpl instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         instance = new ResourceStringConverterImpl();
     }
