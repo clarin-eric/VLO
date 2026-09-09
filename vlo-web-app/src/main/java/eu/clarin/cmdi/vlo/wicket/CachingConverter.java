@@ -16,12 +16,9 @@
  */
 package eu.clarin.cmdi.vlo.wicket;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
 import java.util.Locale;
-import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 import org.apache.wicket.util.convert.ConversionException;
 import org.apache.wicket.util.convert.IConverter;
 
@@ -32,33 +29,13 @@ import org.apache.wicket.util.convert.IConverter;
  *
  * @author Twan Goosen &lt;twan@clarin.eu&gt;
  * @param <C> The object to convert from and to String
- * @see Cache
  */
 public class CachingConverter<C> implements IConverter<C> {
 
     private final IConverter<C> inner;
 
-    private final LoadingCache<Key<String, Locale>, C> toObjectCache = CacheBuilder.newBuilder().
-            build(
-                    new CacheLoader<Key<String, Locale>, C>() {
-
-                        @Override
-                        public C load(Key<String, Locale> key) throws Exception {
-                            return inner.convertToObject(key.getKey1(), key.getKey2());
-                        }
-                    }
-            );
-
-    private final LoadingCache<Key<C, Locale>, String> toStringCache = CacheBuilder.newBuilder().
-            build(
-                    new CacheLoader<Key<C, Locale>, String>() {
-
-                        @Override
-                        public String load(Key<C, Locale> key) throws Exception {
-                            return inner.convertToString(key.getKey1(), key.getKey2());
-                        }
-                    }
-            );
+    private final LoadingCache<Key<String, Locale>, C> toObjectCache;
+    private final LoadingCache<Key<C, Locale>, String> toStringCache;
 
     /**
      *
@@ -66,6 +43,10 @@ public class CachingConverter<C> implements IConverter<C> {
      */
     public CachingConverter(IConverter<C> converter) {
         this.inner = converter;
+        this.toObjectCache = Caffeine.newBuilder()
+                .build(key -> inner.convertToObject(key.key1(), key.key2()));
+        this.toStringCache = Caffeine.newBuilder()
+                .build(key -> inner.convertToString(key.key1(), key.key2()));
     }
 
     /**
@@ -80,77 +61,26 @@ public class CachingConverter<C> implements IConverter<C> {
         if (inner == null) {
             return null;
         } else {
-            return new CachingConverter<C>(inner);
+            return new CachingConverter<>(inner);
         }
     }
 
     @Override
     public C convertToObject(String value, Locale locale) throws ConversionException {
-        try {
-            return toObjectCache.get(new Key<>(value, locale));
-        } catch (ExecutionException ex) {
-            throw new ConversionException(ex);
-        }
+        return toObjectCache.get(new Key<>(value, locale));
     }
 
     @Override
     public String convertToString(C value, Locale locale) {
-        try {
-            return toStringCache.get(new Key<>(value, locale));
-        } catch (ExecutionException ex) {
-            throw new ConversionException(ex);
-        }
+        return toStringCache.get(new Key<>(value, locale));
     }
 
-    private static class Key<K1, K2> {
-
-        private final K1 key1;
-        private final K2 key2;
-
-        public Key(K1 key1, K2 key2) {
-            this.key1 = key1;
-            this.key2 = key2;
-        }
-
-        public K1 getKey1() {
-            return key1;
-        }
-
-        public K2 getKey2() {
-            return key2;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 41 * hash + Objects.hashCode(this.key1);
-            hash = 41 * hash + Objects.hashCode(this.key2);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Key<?, ?> other = (Key<?, ?>) obj;
-            if (!Objects.equals(this.key1, other.key1)) {
-                return false;
-            }
-            if (!Objects.equals(this.key2, other.key2)) {
-                return false;
-            }
-            return true;
-        }
+    private record Key<K1, K2>(K1 key1, K2 key2) {
 
         @Override
         public String toString() {
-            return String.format("{%s, %s}", key1.toString(), key2.toString());
+            return String.format("{%s, %s}", key1, key2);
         }
-
     }
 
 }

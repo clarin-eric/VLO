@@ -19,11 +19,9 @@ package eu.clarin.cmdi.vlo.wicket;
 import java.util.Locale;
 import org.apache.wicket.util.convert.IConverter;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -31,7 +29,7 @@ import static org.junit.Assert.*;
  */
 public class CachingConverterTest {
 
-    private final Mockery context = new JUnit4Mockery();
+    private final Mockery context = new Mockery();
 
     /**
      * Test of convertToObject method, of class CachingConverter.
@@ -69,6 +67,8 @@ public class CachingConverterTest {
         assertSame(result, actual);
         actual = instance.convertToObject("otherValue", Locale.FRENCH);
         assertSame(result, actual);
+
+        context.assertIsSatisfied();
     }
 
     /**
@@ -77,7 +77,7 @@ public class CachingConverterTest {
     @Test
     public void testConvertToString() {
         final IConverter<Object> inner = context.mock(IConverter.class, "Object");
-        final CachingConverter instance = new CachingConverter<>(inner);
+        final CachingConverter<Object> instance = new CachingConverter<>(inner);
         final Object value = new Object();
         final String result = "result";
         context.checking(new Expectations() {
@@ -99,16 +99,18 @@ public class CachingConverterTest {
         final Object value2 = new Object();
         context.checking(new Expectations() {
             {
-                oneOf(inner).convertToString(value, Locale.CHINA);
+                oneOf(inner).convertToString(value, Locale.GERMANY);
                 will(returnValue(result));
-                oneOf(inner).convertToString(value2, Locale.CHINA);
+                oneOf(inner).convertToString(value2, Locale.GERMANY);
                 will(returnValue(result));
             }
         });
-        actual = instance.convertToString(value, Locale.CHINA);
+        actual = instance.convertToString(value, Locale.GERMANY);
         assertSame(result, actual);
-        actual = instance.convertToString(value2, Locale.CHINA);
+        actual = instance.convertToString(value2, Locale.GERMANY);
         assertSame(result, actual);
+
+        context.assertIsSatisfied();
     }
 
 }
