@@ -31,6 +31,6 @@ import org.springframework.context.annotation.Import;
  * @author twagoo
  */
 @Configuration
-@Import({VloApplicationSpringConfig.class, VloServicesSpringConfig.class, VloSolrSpringConfig.class})
+@Import({VloApplicationSpringConfig.class, VloCacheSpringConfig.class, VloServicesSpringConfig.class, VloSolrSpringConfig.class})
 public class VloSpringConfig {
 }

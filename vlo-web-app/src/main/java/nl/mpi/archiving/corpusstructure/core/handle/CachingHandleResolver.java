@@ -16,24 +16,17 @@
  */
 package nl.mpi.archiving.corpusstructure.core.handle;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import java.net.URI;
-import java.time.Duration;
-import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.Cache;
 
 /**
  * A wrapper for the handle resolvers that stores handle - URL mappings in a
  * cache that expires entries after a configurable amount of time.
  *
  * <p>
- * TODO: add automatic periodic background refreshing using {@link CacheBuilder#refreshAfterWrite(long, java.util.concurrent.TimeUnit)
- * }
- * and {@link CacheLoader#reload(java.lang.Object, java.lang.Object) } (see
- * {@link https://code.google.com/p/guava-libraries/wiki/CachesExplained#Refresh})
+ * TODO: add automatic periodic background refreshing using refreshAfterWrite
  * </p>
  *
  * @author Twan Goosen <twan.goosen@mpi.nl>
@@ -43,40 +36,32 @@ public class CachingHandleResolver implements HandleResolver {
     private final static Logger logger = LoggerFactory.getLogger(CachingHandleResolver.class);
 
     private final HandleResolver inner;
-    private final LoadingCache<URI, URI> cache;
+    private final Cache cache;
 
     /**
-     * Constructs a wrapper for the provided resolver that expires entries after
-     * the specified amount of time.
+     * Constructs a wrapper for the provided resolver that caches entries in the
+     * provided cache.
      *
      * @param resolver inner resolver to use
-     * @param expireTime expiry time for cached entries in seconds
+     * @param cache cache for resolved entries
      */
-    public CachingHandleResolver(HandleResolver resolver, Duration expireTime) {
-        logger.info("Results of the handle resolver [{}] will be cached for {} seconds", resolver, expireTime);
+    public CachingHandleResolver(HandleResolver resolver, Cache cache) {
+        logger.info("Results of the handle resolver [{}] will be cached in [{}]", resolver, cache.getName());
         this.inner = resolver;
-        cache = CacheBuilder.newBuilder()
-                .expireAfterWrite(expireTime)
-                .build(new CacheLoader<URI, URI>() {
-
-                    @Override
-                    public URI load(URI uri) throws Exception {
-                        return inner.resolve(uri);
-                    }
-                });
+        this.cache = cache;
     }
 
     @Override
     public URI resolve(URI uri) throws InvalidHandleException {
         try {
-            return cache.get(uri);
-        } catch (ExecutionException ex) {
+            return cache.get(uri, () -> inner.resolve(uri));
+        } catch (Cache.ValueRetrievalException ex) {
             if (ex.getCause() instanceof InvalidHandleException) {
                 throw (InvalidHandleException) ex.getCause();
             } else {
                 logger.error("Error while getting resolved handle from cache", ex);
             }
-        } catch (Exception ex) {
+        } catch (RuntimeException ex) {
             logger.error("Error while getting resolved handle from cache", ex);
         }
 

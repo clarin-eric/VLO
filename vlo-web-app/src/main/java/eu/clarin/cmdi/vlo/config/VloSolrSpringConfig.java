@@ -32,6 +32,7 @@ import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentQueryFactoryImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentServiceImpl;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetFieldsService;
 import eu.clarin.cmdi.vlo.service.solr.impl.SolrFacetQueryFactoryImpl;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.inject.Inject;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrClient;
@@ -51,6 +52,8 @@ public class VloSolrSpringConfig {
    private VloConfig vloConfig;
    @Inject
    FieldNameService fieldNameService;
+   @Inject
+   MeterRegistry meterRegistry;
 
    @Bean
    public FacetFieldsService facetFieldsService() {
@@ -74,7 +77,7 @@ public class VloSolrSpringConfig {
 
    @Bean
    public SearchResultsDao searchResultsDao() {
-      return new SearchResultsDaoImpl(solrClient(), vloConfig, fieldNameService);
+      return new SearchResultsDaoImpl(solrClient(), vloConfig, fieldNameService, meterRegistry);
    }
 
    @Bean
@@ -84,7 +87,7 @@ public class VloSolrSpringConfig {
 
    @Bean
    public AutoCompleteService autoCompleteService() {
-      return new AutoCompleteServiceImpl(solrClient(), vloConfig, fieldNameService);
+      return new AutoCompleteServiceImpl(solrClient(), vloConfig, fieldNameService, meterRegistry);
    }
 
    @Bean(destroyMethod = "close")
