@@ -4,6 +4,7 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,7 @@ public class AutoCompleteServiceImplTest {
         NamedList<Object> response = new NamedList<>();
         response.add("suggest", suggestSection);
 
-        AutoCompleteServiceImpl service = new AutoCompleteServiceImpl(null, new VloConfig(), stubFieldNames()) {
+        AutoCompleteServiceImpl service = new AutoCompleteServiceImpl(null, new VloConfig(), stubFieldNames(), new SimpleMeterRegistry()) {
             @Override
             protected NamedList<Object> fireRawQuery(QueryRequest req) {
                 return response;

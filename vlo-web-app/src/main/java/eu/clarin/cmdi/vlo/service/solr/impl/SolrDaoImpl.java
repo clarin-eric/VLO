@@ -3,7 +3,10 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -25,11 +28,13 @@ public class SolrDaoImpl {
     private final VloConfig vloConfig;
 
     private final String ID;
+    private final MeterRegistry meterRegistry;
 
-    public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig, FieldNameService fieldNameService) {
+    public SolrDaoImpl(SolrClient solrClient, VloConfig vloConfig, FieldNameService fieldNameService, MeterRegistry meterRegistry) {
         this.solrClient = solrClient;
         this.vloConfig = vloConfig;
         this.ID = fieldNameService.getFieldName(FieldKey.ID) + ":";
+        this.meterRegistry = meterRegistry;
     }
 
     protected SolrClient getSolrClient() {
@@ -47,13 +52,21 @@ public class SolrDaoImpl {
         }
     }
 
-    protected QueryResponse fireQuery(SolrQuery query) {
+    /**
+     * @param query query to execute
+     * @param type type of query, used to break the timings down;
+     *             the set of query types should be bounded
+     * @return the response
+     */
+    protected QueryResponse fireQuery(SolrQuery query, String type) {
+        final long start = System.nanoTime();
         try {
             logger.debug("Executing query: {}", query);
             QueryRequest req = new QueryRequest(query);
             req.setBasicAuthCredentials(vloConfig.getSolrUserReadOnly(), vloConfig.getSolrUserReadOnlyPass());
             final QueryResponse response = req.process(solrClient);
             logger.trace("Response: {}", response);
+            recordTimings(type, start, response.getQTime());
             return response;
         } catch(SolrException | SolrServerException e) {
             logger.error("Error getting data:", e);
@@ -64,21 +77,22 @@ public class SolrDaoImpl {
         }
     }
 
-    public SolrDocument getSolrDocument(String docId) {
-        if (docId == null) {
-            throw new NullPointerException("Cannot get SOLR document for null docId");
-        }
-        SolrDocument result = null;
-        SolrQuery query = new SolrQuery();
-        query.setQuery(ID + ClientUtils.escapeQueryChars(docId));
-        query.setFields("*");
-        SolrDocumentList docs = fireQuery(query).getResults();
-        if (docs.getNumFound() > 1) {
-            logger.error("Error: found multiple documents for id (will return first one): " + docId + " \nDocuments found: " + docs);
-            result = docs.get(0);
-        } else if (docs.getNumFound() == 1) {
-            result = docs.get(0);
-        }
-        return result;
+    /**
+     * Records how long a query took, we record solr's given query time and we also
+     * measure the end to end query local time of handling the query (serialization,
+     * network)
+     */
+    private void recordTimings(String type, long startNanos, int qTimeMillis) {
+        final long elapsed = System.nanoTime() - startNanos;
+        Timer.builder("solr.query.elapsed")
+                .tag("type", type)
+                .publishPercentiles(0.95, 0.99)
+                .register(meterRegistry)
+                .record(elapsed, TimeUnit.NANOSECONDS);
+        Timer.builder("solr.query.qtime")
+                .tag("type", type)
+                .publishPercentiles(0.95, 0.99)
+                .register(meterRegistry)
+                .record(qTimeMillis, TimeUnit.MILLISECONDS);
     }
 }

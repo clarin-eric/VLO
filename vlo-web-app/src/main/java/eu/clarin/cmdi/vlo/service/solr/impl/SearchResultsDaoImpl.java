@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.service.solr.SearchResultsDao;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
@@ -16,13 +17,13 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     private final static Logger logger = LoggerFactory.getLogger(SearchResultsDaoImpl.class);
 
-    public SearchResultsDaoImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
-        super(solrClient, config, fieldNameService);
+    public SearchResultsDaoImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService, MeterRegistry meterRegistry) {
+        super(solrClient, config, fieldNameService, meterRegistry);
     }
 
     @Override
     public List<FacetField> getFacets(SolrQuery query) {
-        final QueryResponse response = fireQuery(query);
+        final QueryResponse response = fireQuery(query, "facets");
         final List<FacetField> facetFields = response.getFacetFields();
         if (logger.isDebugEnabled()) {
             if (facetFields.size() == 1) {
@@ -37,7 +38,7 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     @Override
     public SolrDocumentList getDocuments(SolrQuery query) {
-        QueryResponse queryResponse = fireQuery(query);
+        QueryResponse queryResponse = fireQuery(query, "documents");
         final SolrDocumentList documents = queryResponse.getResults();
         if (documents != null) {
             logger.debug("Found {} documents", documents.getNumFound());
@@ -50,6 +51,6 @@ public class SearchResultsDaoImpl extends SolrDaoImpl implements SearchResultsDa
 
     @Override
     public QueryResponse getQueryResponse(SolrQuery query) {
-        return fireQuery(query);
+        return fireQuery(query, "expansion");
     }
 }

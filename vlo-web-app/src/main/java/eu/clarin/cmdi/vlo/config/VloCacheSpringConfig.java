@@ -45,9 +45,6 @@ public class VloCacheSpringConfig {
      */
     public static final String CENTRE_ENDPOINTS_CACHE = "centreEndpoints";
 
-    /**
-     * Handle resolution cache expiry in seconds
-     */
     private static final Duration HANDLE_CACHE_EXPIRY = Duration.ofHours(1);
     private static final long HANDLE_CACHE_MAX_SIZE = 20_000;
     private static final Duration ENDPOINTS_CACHE_EXPIRY = Duration.ofHours(2);
@@ -68,8 +65,8 @@ public class VloCacheSpringConfig {
                         .expireAfterWrite(HANDLE_CACHE_EXPIRY)
                         .recordStats()
                         .build(),
-                // a handle that does not resolve yields null; caching that
-                // prevents a repeated external call for every occurrence
+                // a handle that does not resolve yields null. We want
+                // to cache that to avoid continuos calls for that
                 true);
     }
 

@@ -36,6 +36,7 @@ import eu.clarin.cmdi.vlo.config.DefaultVloConfigFactory;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.apache.solr.SolrTestCaseJ4;
 import org.hamcrest.MatcherAssert;
 
@@ -76,7 +77,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         // set up an embedded solr server
         super.setUp();
         server = new EmbeddedSolrServer(h.getCoreContainer(), h.getCore().getName());
-        instance = new SearchResultsDaoImpl(server, vloConfig, fieldNameService);
+        instance = new SearchResultsDaoImpl(server, vloConfig, fieldNameService, new SimpleMeterRegistry());
 
         // add some documents
         int id = 1;
