@@ -62,7 +62,10 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
                 //config
                 getResourcePath("/solr/vlo-index/solrconfig.xml"),
                 //schema
-                getResourcePath("/solr/vlo-index/conf/managed-schema"),
+                // The "classic" (non-managed) schema name, which is what Solr
+                // itself defaults to. We have no classic schema and the managed
+                // conf/managed-schema.xml will be loaded by convention anyway
+                "schema.xml",
                 //solr home
                 getResourcePath("/solr"),
                 //core name
