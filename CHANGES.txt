@@ -1,6 +1,14 @@
 Bug fixes and new features
 --------------------------
 
+VLO 4.15.0 (September 2026)
+* UI migrated from Bootstrap 3 to Bootstrap 5: stylesheets are compiled with Sass instead of LESS, Font Awesome was upgraded and Glyphicons removed
+	<https://github.com/clarin-eric/VLO/pull/433>
+* Solr configuration brought up to date with Solr 9
+	<https://github.com/clarin-eric/VLO/issues/449>
+* Continuous integration migrated from Travis CI to GitHub Actions
+* Various dependency and security updates
+
 VLO 4.14.0 (July 2026)
 * Tombstone records: minimal information is retained for removed records
 	<https://github.com/clarin-eric/VLO/issues/396>
