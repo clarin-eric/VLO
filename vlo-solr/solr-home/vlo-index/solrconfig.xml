@@ -35,7 +35,12 @@
          that you fully re-index after changing this setting as it can
          affect both how text is indexed and queried.
     -->
-    <luceneMatchVersion>9.10.1</luceneMatchVersion>
+    <luceneMatchVersion>8.11.0</luceneMatchVersion>
+    <schemaFactory class="ManagedIndexSchemaFactory">
+        <bool name="mutable">true</bool>
+        <str name="managedSchemaResourceName">managed-schema.xml</str>
+    </schemaFactory>
+
 
     <!-- Data Directory
 
