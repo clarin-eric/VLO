@@ -57,11 +57,20 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
     @BeforeClass
     public static void setUpClass() throws Exception {
+        // Solr 9: SolrTestCaseJ4 defaults to RAMDirectoryFactory, but UpdateLog asks for
+        // 'none' lock which is incompatible with RAMDirectoryFactory.
+        // Use NRTCachingDirectoryFactory (the production default) which can do
+        // all lock types (but it's a bit heavier).
+        useFactory("solr.NRTCachingDirectoryFactory");
+
         SolrTestCaseJ4.initCore(
                 //config
                 getResourcePath("/solr/vlo-index/solrconfig.xml"),
                 //schema
-                getResourcePath("/solr/vlo-index/conf/managed-schema"),
+                // The "classic" (non-managed) schema name, which is what Solr
+                //itself defaults to. We have no classic schema and the managed
+                //conf/managed-schema.xml will be loaded by convention anyway
+                "schema.xml",
                 //solr home
                 getResourcePath("/solr"),
                 //core name
