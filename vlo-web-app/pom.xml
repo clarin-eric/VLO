@@ -287,6 +287,15 @@
             <version>1.15.0</version>
         </dependency>
         
+        <!-- Lots of tests in this module are JUnit 4 and wicket-tester pulls in the
+             JUnit 5 engine. Without getting the vintage engine the JUnit 4 tests
+             are silently not run. -->
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JMOCK FOR MOCKING -->
         <dependency>
             <groupId>org.jmock</groupId>

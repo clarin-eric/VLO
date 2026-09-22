@@ -37,62 +37,6 @@
     -->
     <luceneMatchVersion>7.6.0</luceneMatchVersion>
 
-    <!-- <lib/> directives can be used to instruct Solr to load any Jars
-       identified and use them to resolve any "plugins" specified in
-       your solrconfig.xml or schema.xml (ie: Analyzers, Request
-       Handlers, etc...).
-
-       All directories and paths are resolved relative to the
-       instanceDir.
-
-       Please note that <lib/> directives are processed in the order
-       that they appear in your solrconfig.xml file, and are "stacked" 
-       on top of each other when building a ClassLoader - so if you have 
-       plugin jars with dependencies on other jars, the "lower level" 
-       dependency jars should be loaded first.
-
-       If a "./lib" directory exists in your instanceDir, all files
-       found in it are included as if you had used the following
-       syntax...
-       
-              <lib dir="./lib" />
-    -->
-
-    <!-- A 'dir' option by itself adds any files found in the directory 
-       to the classpath, this is useful for including all jars in a
-       directory.
-
-       When a 'regex' is specified in addition to a 'dir', only the
-       files in that directory which completely match the regex
-       (anchored on both ends) will be included.
-
-       If a 'dir' option (with or without a regex) is used and nothing
-       is found that matches, a warning will be logged.
-
-       The examples below can be used to load some solr-contribs along 
-       with their external dependencies.
-    -->
-    <lib dir="${solr.install.dir:../../../..}/contrib/extraction/lib" regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-cell-\d.*\.jar" />
-
-    <lib dir="${solr.install.dir:../../../..}/contrib/clustering/lib/" regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-clustering-\d.*\.jar" />
-
-    <lib dir="${solr.install.dir:../../../..}/contrib/langid/lib/" regex=".*\.jar" />
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-langid-\d.*\.jar" />
-
-    <lib dir="${solr.install.dir:../../../..}/contrib/velocity/lib" regex=".*\.jar" />
-    <!-- browse-resources must come before solr-velocity JAR in order to override localized resources -->
-    <lib path="${solr.install.dir:../../../..}/example/files/browse-resources"/>
-    <lib dir="${solr.install.dir:../../../..}/dist/" regex="solr-velocity-\d.*\.jar" />
-    <!-- an exact 'path' can be used instead of a 'dir' to specify a 
-       specific jar file.  This will cause a serious error to be logged 
-       if it can't be loaded.
-    -->
-    <!--
-       <lib path="../a-jar-that-does-not-exist.jar" /> 
-    -->
-
     <!-- Data Directory
 
        Used to specify an alternate directory to hold all index data
@@ -245,25 +189,6 @@
         -->
         <!-- <infoStream file="INFOSTREAM.txt">false</infoStream> -->
     </indexConfig>
-
-
-    <!-- JMX
-       
-       This example enables JMX if and only if an existing MBeanServer
-       is found, use this if you want to configure JMX through JVM
-       parameters. Remove this to disable exposing Solr configuration
-       and statistics to JMX.
-
-       For more details see http://wiki.apache.org/solr/SolrJmx
-    -->
-    <jmx />
-    <!-- If you want to connect to a particular server, specify the
-       agentId 
-    -->
-    <!-- <jmx agentId="myAgent" /> -->
-    <!-- If you want to start a new MBeanServer, specify the serviceUrl -->
-    <!-- <jmx serviceUrl="service:jmx:rmi:///jndi/rmi://localhost:9999/solr"/>
-    -->
 
     <!-- The default high-performance update handler -->
     <updateHandler class="solr.DirectUpdateHandler2">
@@ -608,9 +533,6 @@
            what restrictions may be placed on the ContentStreams from
            those requests
   
-           enableRemoteStreaming - enables use of the stream.file
-           and stream.url parameters for specifying remote streams.
-  
            multipartUploadLimitInKB - specifies the max size (in KiB) of
            Multipart File Uploads that Solr will allow in a Request.
            
@@ -625,15 +547,8 @@
            key "httpRequest". It will not be used by any of the existing
            Solr components, but may be useful when developing custom 
            plugins.
-           
-           *** WARNING ***
-           The settings below authorize Solr to fetch remote files, You
-           should make sure your system has some authentication before
-           using enableRemoteStreaming="true"
-  
         -->
-        <requestParsers enableRemoteStreaming="true"
-                        multipartUploadLimitInKB="2048000"
+        <requestParsers multipartUploadLimitInKB="2048000"
                         formdataUploadLimitInKB="2048"
                         addHttpRequestToContext="false"/>
 
@@ -913,11 +828,7 @@
     </requestHandler>
 
 
-    <!--These useParams values are available in params.json-->
-    <requestHandler name="/browse" class="solr.SearchHandler" useParams="query,facets,velocity,browse"/>
-
-
-    <initParams path="/update/**,/query,/select,/tvrh,/elevate,/browse,/spell">
+    <initParams path="/update/**,/query,/select,/tvrh,/elevate,/spell">
         <lst name="defaults">
             <str name="df">text</str>
         </lst>
@@ -929,22 +840,6 @@
         </lst>
     </initParams>
 
-    <!-- Solr Cell Update Request Handler
-
-       http://wiki.apache.org/solr/ExtractingRequestHandler 
-
-    -->
-    <requestHandler name="/update/extract"
-                    startup="lazy"
-                    class="solr.extraction.ExtractingRequestHandler" >
-        <lst name="defaults">
-            <str name="xpath">/xhtml:html/xhtml:body/descendant:node()</str>
-            <str name="capture">content</str>
-            <str name="fmap.meta">attr_meta_</str>
-            <str name="uprefix">attr_</str>
-            <str name="lowernames">true</str>
-        </lst>
-    </requestHandler>
     <!-- Search Components
 
       Search components are registered to SolrCore and used by 
@@ -1405,7 +1300,4 @@
     <!--
      Custom response writers can be declared as needed...
     -->
-    <queryResponseWriter name="velocity" class="solr.VelocityResponseWriter" startup="lazy">
-        <str name="template.base.dir">${velocity.template.base.dir:}</str>
-    </queryResponseWriter>
 </config>
