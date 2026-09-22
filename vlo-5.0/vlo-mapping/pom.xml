@@ -6,7 +6,7 @@
     <parent>
         <groupId>eu.clarin.cmdi</groupId>
         <artifactId>vlo-parent</artifactId>
-        <version>5.0-SNAPSHOT</version>
+        <version>5.0.0-RC1</version>
     </parent>
     
     <groupId>eu.clarin.cmdi.vlo.mapping</groupId>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>eu.clarin.cmdi</groupId>
             <artifactId>vlo-api-model</artifactId>
-            <version>5.0-SNAPSHOT</version>
+            <version>5.0.0-RC1</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
