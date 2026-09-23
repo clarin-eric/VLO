@@ -51,7 +51,7 @@
         <spring.data.version>3.5.13</spring.data.version>
         <netty.version>4.2.18.Final</netty.version>
         <zookeeper.version>3.9.6</zookeeper.version>
-        <jackson.version>2.22.2</jackson.version>
+        <jackson.version>2.22.3</jackson.version>
         <jackson-annotations.version>2.22</jackson-annotations.version>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
