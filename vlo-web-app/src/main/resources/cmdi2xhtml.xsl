@@ -37,16 +37,16 @@
                     <xsl:otherwise>
                         <!-- parent -->
                         <xsl:variable name="collapseId" select="generate-id()"/>
-                        <xsl:attribute name="class">node parent panel panel-default</xsl:attribute>
-                        <div class="panel-heading node_title">
-                            <a role="button" data-toggle="collapse">
+                        <xsl:attribute name="class">node parent card</xsl:attribute>
+                        <div class="card-header node_title">
+                            <a role="button" data-bs-toggle="collapse">
                                 <xsl:attribute name="href" select="concat('#', $collapseId)"/>
                                 <xsl:value-of select="local-name()"/>
                             </a>
                             <xsl:apply-templates select="@cmd1:ref|@ref"/>
                             <xsl:apply-templates mode="attributes" select="."/>
                         </div>
-                        <div class="panel-body collapse in node_content">
+                        <div class="card-body collapse show node_content">
                             <xsl:attribute name="id" select="$collapseId"/>
                             <xsl:if test="child::node()">
                                 <div class="node_children">
@@ -67,7 +67,7 @@
                 <a>
                     <xsl:attribute name="href"
                         select="replace($resourceRef, '^hdl:', 'http://hdl.handle.net/')"/>
-                    <span class="glyphicon glyphicon-file">
+                    <span class="fa fa-file-o">
                         <xsl:attribute name="title" select="$resourceRef"/>
                     </span>
                     <xsl:text> </xsl:text>
