@@ -144,6 +144,26 @@ public class SolrFacetQueryFactoryImplTest {
     }
 
     /**
+     * Test of createFacetQuery method for an OR selection
+     */
+    @Test
+    public void testCreateFacetQueryOrSelectionSingleFacet() {
+        Map<String, FacetSelection> selection = new HashMap<>() {
+            {
+                put("facet1", new FacetSelection(FacetSelectionType.OR, List.of("valueA")));
+            }
+        };
+        SolrQuery query = instance.createFacetQuery(new QueryFacetsSelection("query string", selection), Collections.singletonList("facet1"), -1);
+
+        assertEquals("query string", query.getQuery());
+        assertArrayEquals(new String[]{"{!ex=facet1}facet1"}, query.getFacetFields());
+
+        // facet parameters of the base query should survive replacing the facet field
+        assertEquals("1", query.get("facet.mincount"));
+        assertEquals(-1, query.getFacetLimit());
+    }
+
+    /**
      * Test of createCountFacetsQuery method, of class SolrQueryFactoryImpl.
      */
     @Test
