@@ -75,9 +75,9 @@ public abstract class AbstractSolrQueryFactory {
                             // notice that OR ignores qualifiers, so it does not support e.g. (A OR (NOT B))
                             encodedQueries.add(createFacetOrQuery(facetName, selection.getValues()));
                             // replace facet field with version prefixed with exclude statement 
-                            // (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
-                            query.removeFacetField(facetName);
+                            // (see <https://solr.apache.org/guide/solr/latest/query-guide/faceting.html#tagging-and-excluding-filters>)
                             query.addFacetField(String.format("{!ex=%1$s}%1$s", facetName));
+                            query.removeFacetField(facetName);
                             break;
                         default:
                             throw new UnsupportedOperationException("Unsupported selection type: " + selection.getSelectionType());
@@ -132,7 +132,7 @@ public abstract class AbstractSolrQueryFactory {
         assert(!values.isEmpty());
         
         // escape value and wrap in quotes to make literal query
-        // prefix field name with tag statement (see <http://wiki.apache.org/solr/SimpleFacetParameters#Multi-Select_Faceting_and_LocalParams>)
+        // prefix field name with tag statement (see <https://solr.apache.org/guide/solr/latest/query-guide/faceting.html#tagging-and-excluding-filters>)
         final String prefix = String.format("{!tag=%1$s}%1$s:(", facetName);
         //close parentheses
         final String postfix = ")";
