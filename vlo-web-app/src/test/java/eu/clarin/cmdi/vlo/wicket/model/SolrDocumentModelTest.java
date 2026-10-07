@@ -18,8 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
-import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.MetricsAndCachesTestConfig;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
@@ -151,7 +151,8 @@ public class SolrDocumentModelTest {
     @Import({
         VloSolrTestConfig.class,
         VloApplicationTestConfig.class,
-        VloServicesSpringConfig.class})
+        VloServicesSpringConfig.class,
+        MetricsAndCachesTestConfig.class})
     static class ContextConfiguration {
 
         @Bean

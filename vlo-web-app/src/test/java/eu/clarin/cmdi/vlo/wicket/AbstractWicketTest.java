@@ -18,9 +18,9 @@ package eu.clarin.cmdi.vlo.wicket;
 
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.VloWicketApplication;
+import eu.clarin.cmdi.vlo.config.MetricsAndCachesTestConfig;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import jakarta.inject.Inject;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import org.apache.wicket.util.tester.WicketTester;
@@ -75,7 +75,8 @@ public abstract class AbstractWicketTest {
     @PropertySource(value = "classpath:/config.default.properties", ignoreResourceNotFound = false)
     @Import({
         VloApplicationTestConfig.class,
-        VloServicesSpringConfig.class})
+        VloServicesSpringConfig.class,
+        MetricsAndCachesTestConfig.class})
     static protected class WicketBaseContextConfiguration {
 
         @Bean
