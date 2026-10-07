@@ -13,6 +13,9 @@
                 <xs:element name="fileProcessingThreads" type="xs:string" />
                 <xs:element name="solrThreads" type="xs:string" />
                 <xs:element name="availabilityStatusUpdaterBatchSize" type="xs:string" />
+                <xs:element name="statsdHost" type="xs:string" minOccurs="0" />
+                <xs:element name="statsdPort" type="xs:string" minOccurs="0" />
+                <xs:element name="statsdPrefix" type="xs:string" minOccurs="0" />
                 <xs:element name="pagesInApplicationCache" type="xs:string" />
                 <xs:element name="sessionCacheSize" type="xs:string" />
                 <xs:element name="maxDocsInList" type="xs:string" />

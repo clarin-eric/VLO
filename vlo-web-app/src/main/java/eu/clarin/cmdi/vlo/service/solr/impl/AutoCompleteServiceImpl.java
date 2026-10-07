@@ -3,6 +3,7 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.service.solr.AutoCompleteService;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.VloConfig;
+import io.micrometer.core.instrument.MeterRegistry;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +25,8 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
 
     private static final int MAX_SUGGESTIONS = 10;
 
-    public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService) {
-        super(solrClient, config, fieldNameService);
+    public AutoCompleteServiceImpl(SolrClient solrClient, VloConfig config, FieldNameService fieldNameService, MeterRegistry meterRegistry) {
+        super(solrClient, config, fieldNameService, meterRegistry);
     }
 
     @Override

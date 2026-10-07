@@ -16,15 +16,11 @@
  */
 package eu.clarin.cmdi.vlo.service.centreregistry;
 
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.Cache;
 
 /**
  *
@@ -36,27 +32,18 @@ public class CachingEndPointProvidersService implements EndpointProvidersService
     private final static String CACHE_KEY = "CACHE_KEY";
 
     private final EndpointProvidersService service;
-    private final LoadingCache<String, List<EndpointProvider>> cache;
+    private final Cache cache;
 
-    public CachingEndPointProvidersService(EndpointProvidersService service, Duration expirationTime) {
+    public CachingEndPointProvidersService(EndpointProvidersService service, Cache cache) {
         this.service = service;
-        cache = CacheBuilder.newBuilder()
-                .maximumSize(1)
-                .expireAfterWrite(expirationTime)
-                .build(
-                        new CacheLoader<String, List<EndpointProvider>>() {
-                    @Override
-                    public List<EndpointProvider> load(String key) throws Exception {
-                        return service.retrieveCentreEndpoints();
-                    }
-                });
+        this.cache = cache;
     }
 
     @Override
     public List<EndpointProvider> retrieveCentreEndpoints() throws IOException {
         try {
-            return cache.get(CACHE_KEY);
-        } catch (ExecutionException ex) {
+            return cache.get(CACHE_KEY, service::retrieveCentreEndpoints);
+        } catch (Cache.ValueRetrievalException ex) {
             logger.warn("Failed to retrieve endpoints list from cache; falling back to uncached service!", ex);
             return service.retrieveCentreEndpoints();
         }

@@ -63,6 +63,7 @@ import jakarta.xml.bind.JAXBException;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -71,6 +72,7 @@ import javax.xml.transform.stream.StreamSource;
 import nl.mpi.archiving.corpusstructure.core.handle.CachingHandleResolver;
 import nl.mpi.archiving.corpusstructure.core.handle.HandleRestApiResolver;
 import org.apache.solr.common.SolrDocument;
+import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.xml.sax.InputSource;
@@ -84,14 +86,11 @@ import org.xml.sax.InputSource;
 @Configuration
 public class VloServicesSpringConfig {
 
-    /**
-     * Handle resolution cache expiry in seconds
-     */
-    private static final Duration HANDLE_CACHE_EXPIRY = Duration.ofHours(1);
-    private static final Duration ENDPOINTS_CACHE_EXPIRY = Duration.ofHours(2);
-
     @Inject
     VloConfig vloConfig;
+
+    @Inject
+    CacheManager cacheManager;
 
     @Inject
     FieldNameService fieldNameService;
@@ -117,7 +116,10 @@ public class VloServicesSpringConfig {
     }
 
     public PIDResolver handleResolver() {
-        return new HandleResolverWrapper(new CachingHandleResolver(new HandleRestApiResolver(), HANDLE_CACHE_EXPIRY), Duration.ofMillis(vloConfig.getHandleResolverTimeout()));
+        final CachingHandleResolver resolver = new CachingHandleResolver(
+                new HandleRestApiResolver(),
+                Objects.requireNonNull(cacheManager.getCache(VloCacheSpringConfig.HANDLE_RESOLUTION_CACHE)));
+        return new HandleResolverWrapper(resolver, Duration.ofMillis(vloConfig.getHandleResolverTimeout()));
     }
 
     public PIDResolver doiResolver() {
@@ -253,7 +255,9 @@ public class VloServicesSpringConfig {
 
     @Bean
     public EndpointProvidersService endpointProvidersService() {
-        return new CachingEndPointProvidersService(new CentreRegistryProvidersService(vloConfig), ENDPOINTS_CACHE_EXPIRY);
+        return new CachingEndPointProvidersService(
+                new CentreRegistryProvidersService(vloConfig),
+                cacheManager.getCache(VloCacheSpringConfig.CENTRE_ENDPOINTS_CACHE));
     }
 
     @Bean

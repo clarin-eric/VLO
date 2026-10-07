@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 
 import eu.clarin.cmdi.vlo.VloApplicationTestConfig;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
+import eu.clarin.cmdi.vlo.config.MetricsAndCachesTestConfig;
 import eu.clarin.cmdi.vlo.config.VloServicesSpringConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.pojo.FacetSelection;
@@ -128,7 +129,8 @@ public class SolrDocumentQueryFactoryImplTest {
     @Import({
         VloSolrTestConfig.class,
         VloApplicationTestConfig.class,
-        VloServicesSpringConfig.class})
+        VloServicesSpringConfig.class,
+        MetricsAndCachesTestConfig.class})
     static class ContextConfiguration {
 
         @Bean

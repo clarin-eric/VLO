@@ -41,6 +41,11 @@ public class VloConfig {
      * Please refer to the general VLO documentation for a description of the member
      * parameters.
      */
+    // metrics reporting
+    private String statsdHost = "";
+    private int statsdPort = 8125;
+    private String statsdPrefix = "";
+
     // page cache related parameters
     private int pagesInApplicationCache = 0;
 
@@ -226,6 +231,41 @@ public class VloConfig {
      *
      * @return the value
      */
+    /**
+     * @return host of the statsd collector to report metrics to; empty to
+     * disable reporting
+     */
+    public String getStatsdHost() {
+        return statsdHost;
+    }
+
+    public void setStatsdHost(String param) {
+        statsdHost = param;
+    }
+
+    /**
+     * @return port of the statsd collector
+     */
+    public int getStatsdPort() {
+        return statsdPort;
+    }
+
+    public void setStatsdPort(int param) {
+        statsdPort = param;
+    }
+
+    /**
+     * @return prefix that all metrics are reported under, matching the prefix
+     * used by the other reporters (e.g. 'vlo.beta')
+     */
+    public String getStatsdPrefix() {
+        return statsdPrefix;
+    }
+
+    public void setStatsdPrefix(String param) {
+        statsdPrefix = param;
+    }
+
     public int getPagesInApplicationCache() {
         return pagesInApplicationCache;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 CLARIN
+ * Copyright (C) 2026 CLARIN
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,21 +16,24 @@
  */
 package eu.clarin.cmdi.vlo.config;
 
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * Annotation based Spring configuration for the VLO web application. Note: this
- * class imports a number of configuration modules.
- *
- * Note: All of this works because
- * {@link org.apache.wicket.spring.SpringWebApplicationFactory} is used in place
- * of the standard Wicket application factory and annotation driven
- * configuration is enabled in WEB-INF/applicationContext.xml
- *
- * @author twagoo
+ * Provides the beans that {@link VloSolrSpringConfig} (meter registry) and
+ * {@link VloServicesSpringConfig} (cache manager) need, for test contexts
+ * that do not load the full {@link VloSpringConfig}
  */
 @Configuration
-@Import({VloApplicationSpringConfig.class, VloCacheSpringConfig.class, VloMetricsSpringConfig.class, VloServicesSpringConfig.class, VloSolrSpringConfig.class})
-public class VloSpringConfig {
+@Import(VloCacheSpringConfig.class)
+public class MetricsAndCachesTestConfig {
+
+    @Bean
+    public MeterRegistry meterRegistry() {
+        return new SimpleMeterRegistry();
+    }
+
 }
