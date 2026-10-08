@@ -54,7 +54,7 @@
         <jackson.version>2.22.3</jackson.version>
         <jackson-annotations.version>2.22</jackson-annotations.version>
         <caffeine.version>3.2.4</caffeine.version>
-        <micrometer.version>1.15.11</micrometer.version>
+        <micrometer.version>1.17.1</micrometer.version>
 
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
