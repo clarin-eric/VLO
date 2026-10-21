@@ -30,6 +30,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.client.solrj.request.QueryRequest;
@@ -287,7 +288,7 @@ public class MorgueIndexer implements Closeable {
         liveItemsQuery.setFields(idField);
         liveItemsQuery.setRows(ids.size());
 
-        final QueryRequest queryRequest = new QueryRequest(liveItemsQuery);
+        final QueryRequest queryRequest = new QueryRequest(liveItemsQuery, SolrRequest.METHOD.POST);
         // read the live index through the 'fast' handler, which does not collapse results
         queryRequest.setPath(FacetConstants.SOLR_REQUEST_HANDLER_FAST);
         queryRequest.setBasicAuthCredentials(config.getSolrUserReadOnly(), config.getSolrUserReadOnlyPass());

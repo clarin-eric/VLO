@@ -8,9 +8,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.common.SolrException;
 import org.apache.solr.common.util.NamedList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.empty;
 import org.junit.jupiter.api.Test;
 
 public class AutoCompleteServiceImplTest {
@@ -40,6 +42,19 @@ public class AutoCompleteServiceImplTest {
         var actual = Lists.newArrayList(service.getChoices("lang"));
         // "language" deduped, "languages" from primary first, "language05" from fallback after
         assertThat(actual, contains("language", "languages", "language05"));
+    }
+
+    @Test
+    public void solrErrorGivesNoSuggestionsInsteadOfException() {
+        // e.g. HTTP 500 "Lookup not supported at this time" from an unbuilt suggester
+        AutoCompleteServiceImpl service = new AutoCompleteServiceImpl(null, new VloConfig(), stubFieldNames()) {
+            @Override
+            protected NamedList<Object> fireRawQuery(QueryRequest req) {
+                throw new SolrException(SolrException.ErrorCode.SERVER_ERROR, "Lookup not supported at this time");
+            }
+        };
+
+        assertThat(Lists.newArrayList(service.getChoices("lang")), empty());
     }
 
     private static FieldNameService stubFieldNames() {
