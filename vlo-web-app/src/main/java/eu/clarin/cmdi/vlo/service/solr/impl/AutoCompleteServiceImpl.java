@@ -13,8 +13,6 @@ import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.request.QueryRequest;
 import org.apache.solr.common.util.NamedList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * DAO that delivers suggestions for incomplete terms (autocomplete function)
@@ -23,8 +21,6 @@ import org.slf4j.LoggerFactory;
  * @author Twan Goosen
  */
 public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoCompleteService {
-
-    private final static Logger logger = LoggerFactory.getLogger(AutoCompleteServiceImpl.class);
 
     private static final int MAX_SUGGESTIONS = 10;
 
@@ -41,13 +37,9 @@ public class AutoCompleteServiceImpl extends SolrDaoImpl implements AutoComplete
         query.setQuery(input.toLowerCase());
         final QueryRequest req = new QueryRequest(query);
         req.setPath("/suggest");
-        try {
-            return parseSuggestions(fireRawQuery(req));
-        } catch (RuntimeException ex) {
-            logger.warn("Could not get suggestions for '{}': {}", input, ex.toString());
-            logger.debug("Suggestion request failed", ex);
-            return Collections.emptyIterator();
-        }
+        // fireRawQuery bypasses QueryResponse which crashes on the "suggest" key
+        // with solrj 9 + Solr 8 (LinkedHashMap vs NamedList cast)
+        return parseSuggestions(fireRawQuery(req));
     }
 
     private Iterator<String> parseSuggestions(NamedList<Object> raw) {
