@@ -21,10 +21,10 @@ import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldNameServiceImpl;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
-import eu.clarin.cmdi.vlo.importer.CMDIDataFactory;
 import eu.clarin.cmdi.vlo.importer.CMDIRecordProcessor;
 import eu.clarin.cmdi.vlo.importer.MetadataImporter;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
+import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import eu.clarin.cmdi.vlo.importer.processor.CMDIParserVTDXML;
 import eu.clarin.cmdi.vlo.importer.processor.ValueSet;
@@ -35,64 +35,72 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 
 /**
- * Analyses a single CMDI file: applies VLO's facet mapping and returns the
- * resulting record, without importing anything.
+ * Analyses CMDI files with VLO's facet mapping, without importing anything.
+ *
+ * <p>
+ * Create one per run and reuse it: the facet mapping of each profile is built
+ * on first use and kept for the lifetime of the analyzer.
+ * </p>
  */
-@FunctionalInterface
-public interface CmdiRecordAnalyzer {
+public final class CmdiRecordAnalyzer {
+
+    private final AnalysisMappingFactory mappingFactory;
+    private final CMDIRecordProcessor<Map<String, List<ValueSet>>> processor;
 
     /**
-     * Analyses one CMDI file.
-     *
-     * @param file the CMDI record
-     * @return the analysed record, or empty if the processor skipped the file
-     * @throws DocumentStoreException if the record could not be turned into a
-     * document
-     * @throws IOException if the file could not be read
-     */
-    Optional<CMDIData<Map<String, List<ValueSet>>>> analyze(File file)
-            throws DocumentStoreException, IOException;
-
-    /**
-     * Creates an analyzer.
-     *
-     * <p>
-     * The provider is the only setting. Everything else is fixed for analysis
-     * rather than import: no record is skipped, and values are kept as full
-     * {@link ValueSet}s.
-     * </p>
-     *
      * @param vloConfig VLO configuration; supplies facet concepts, facets
-     * configuration and profile schema resolution
-     * @param facetsMappingProvider resolves a profile schema location to the
-     * mapping to apply, and is the natural place to cache
-     * @return a new analyzer
-     * @throws NullPointerException if either argument is {@code null}
+     * configuration, value mappings and the Component Registry URL
+     * @param conceptPaths for a profile schema location, the XPaths of each
+     * concept link in that profile (concept URI to XPaths); called once per
+     * profile
+     * @param extraFacets facets to extract in addition to VLO's, as facet name
+     * to XPath
+     * @throws NullPointerException if any argument is {@code null}
      */
-    static CmdiRecordAnalyzer create(VloConfig vloConfig, FacetsMappingProvider facetsMappingProvider) {
+    public CmdiRecordAnalyzer(VloConfig vloConfig,
+            Function<String, Map<String, List<String>>> conceptPaths,
+            Map<String, String> extraFacets) {
         Objects.requireNonNull(vloConfig, "vloConfig");
-        Objects.requireNonNull(facetsMappingProvider, "facetsMappingProvider");
+        Objects.requireNonNull(conceptPaths, "conceptPaths");
+        Objects.requireNonNull(extraFacets, "extraFacets");
 
         final FieldNameService fieldNames = new FieldNameServiceImpl(vloConfig);
-        final CMDIDataFactory<Map<String, List<ValueSet>>> dataFactory
-                = new ValueSetCmdiData.Factory(fieldNames);
-        final VLOMarshaller vloMarshaller = new VLOMarshaller();
+        final VLOMarshaller marshaller = new VLOMarshaller();
+        this.mappingFactory = new AnalysisMappingFactory(vloConfig, marshaller, conceptPaths, extraFacets);
 
-        final CMDIDataProcessor<Map<String, List<ValueSet>>> dataProcessor = new CMDIParserVTDXML<>(
+        final CMDIDataProcessor<Map<String, List<ValueSet>>> parser = new CMDIParserVTDXML<>(
                 MetadataImporter.registerPostProcessors(vloConfig, fieldNames, new LanguageCodeUtils(vloConfig)),
                 MetadataImporter.registerPostMappingFilters(fieldNames),
                 vloConfig,
-                new ProviderBackedMappingFactory(vloConfig, vloMarshaller, facetsMappingProvider),
-                vloMarshaller,
-                dataFactory,
+                mappingFactory,
+                marshaller,
+                new ValueSetCmdiData.Factory(fieldNames),
                 fieldNames,
                 false);
+        this.processor = new AnalysisRecordProcessor(parser, fieldNames);
+    }
 
-        final CMDIRecordProcessor<Map<String, List<ValueSet>>> processor
-                = new AnalysisRecordProcessor(dataProcessor, fieldNames);
+    /**
+     * Analyses one CMDI file. No record is skipped for a
+     * duplicate id or for having no resources.
+     */
+    public Optional<CMDIData<Map<String, List<ValueSet>>>> analyze(File file)
+            throws DocumentStoreException, IOException {
+        return processor.processRecord(file);
+    }
 
-        return processor::processRecord;
+    /**
+     * The facet mapping for a profile, as {@link #analyze(File)} applies it,
+     * including the extra facets.
+     *
+     * @param schemaLocation URL of the profile schema
+     * @return the mapping; same instance on every call if a remote schema
+     * location
+     */
+    public FacetsMapping getFacetsMapping(String schemaLocation) {
+        return mappingFactory.getFacetsMapping(Objects.requireNonNull(schemaLocation, "schemaLocation"));
     }
 }

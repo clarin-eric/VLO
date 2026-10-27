@@ -26,18 +26,17 @@
  *
  * <h2>Typical use</h2>
  * <pre>{@code
- * // 1. apply VLO's facet config to concept links you resolved yourself
- * FacetsMappingBuilder builder = new FacetsMappingBuilder(vloConfig);
- * Map<String, List<Pattern>> conceptLinkPaths = myProfileParser.conceptLinkPaths(schemaLocation);
- * FacetsMapping mapping = builder.build(schemaLocation, conceptLinkPaths);
+ * // once per run
+ * CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(
+ *         vloConfig,
+ *         schemaLocation -> myProfileParser.conceptPaths(schemaLocation),  // concept URI -> XPaths
+ *         Map.of("my_mdProfile", "/cmd:CMD/cmd:Header/cmd:MdProfile/text()"));
  *
- * // 2. optionally add facets that are not in facetConcepts.xml
- * mapping = new FacetsMappingDecorator(mapping, myExtraDefinitions);
- *
- * // 3. analyse records, caching mappings however you like
- * CmdiRecordAnalyzer analyzer = CmdiRecordAnalyzer.create(vloConfig, myCachingProvider);
- *
+ * // per record
  * Optional<CMDIData<Map<String, List<ValueSet>>>> record = analyzer.analyze(file);
+ *
+ * // per profile, e.g. for a coverage report
+ * FacetsMapping mapping = analyzer.getFacetsMapping(schemaLocation);
  * }</pre>
  *
  * <h2>Document type</h2>
@@ -45,17 +44,18 @@
  * The analyzer produces records whose document is
  * {@code Map<String, List<ValueSet>>}: every facet keeps its full
  * {@link eu.clarin.cmdi.vlo.importer.processor.ValueSet} rather than just the
- * string value, so the embedder can still see the VTD index a value came from
+ * string value, so the caller can still see the VTD index a value came from
  * and whether it was derived or produced by a value mapping. VLO's own importer
  * discards that; an analysis tool generally needs it.
  * </p>
  *
  * <h2>Compatibility</h2>
  * <p>
- * Treat the public types in this package as a published contract: additive
- * changes are fine, but changing an existing signature breaks embedders.
- * {@code CmdiRecordAnalyzerContractTest} in the test sources pins the surface;
- * if it stops compiling, the change is breaking.
+ * {@link eu.clarin.cmdi.vlo.importer.api.CmdiRecordAnalyzer} is the only public
+ * type in this package and is a published contract: additive changes are fine,
+ * but changing an existing signature breaks embedders.
+ * {@code CmdiRecordAnalyzerContractTest} in the test sources pins it; if it
+ * stops compiling, the change is breaking.
  * </p>
  */
 package eu.clarin.cmdi.vlo.importer.api;

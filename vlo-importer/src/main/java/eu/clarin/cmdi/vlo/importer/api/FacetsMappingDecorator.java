@@ -27,10 +27,9 @@ import java.util.Objects;
 
 /**
  * A {@link FacetsMapping} that adds extra facet definitions on top of another
- * mapping.
- *
+ * mapping, without changing that mapping.
  */
-public class FacetsMappingDecorator extends FacetsMapping {
+class FacetsMappingDecorator extends FacetsMapping {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -43,7 +42,7 @@ public class FacetsMappingDecorator extends FacetsMapping {
      * @param additionalFacets extra definitions, keyed by facet name; iteration
      * order is preserved
      */
-    public FacetsMappingDecorator(FacetsMapping delegate, Map<String, FacetDefinition> additionalFacets) {
+    FacetsMappingDecorator(FacetsMapping delegate, Map<String, FacetDefinition> additionalFacets) {
         super(Objects.requireNonNull(delegate, "delegate").getFacetsConfigurations());
         this.delegate = delegate;
         this.additional = new LinkedHashMap<>(Objects.requireNonNull(additionalFacets, "additionalFacets"));

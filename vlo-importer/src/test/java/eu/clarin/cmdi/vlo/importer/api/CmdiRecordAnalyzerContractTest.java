@@ -18,15 +18,17 @@ package eu.clarin.cmdi.vlo.importer.api;
 
 import eu.clarin.cmdi.vlo.importer.CMDIData;
 import eu.clarin.cmdi.vlo.importer.ImporterTestcase;
-import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.Resource;
-import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
 import eu.clarin.cmdi.vlo.importer.processor.ValueSet;
 import java.io.File;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,21 +41,21 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Contract test for {@link eu.clarin.cmdi.vlo.importer.api}.
+ * Contract test for {@link CmdiRecordAnalyzer}.
  *
  * <p>
- * This test is the guard on the published embedding API. It exercises the whole
- * path an embedder uses — supply your own concept links, decorate the mapping
- * with facets VLO does not define, cache mappings yourself, analyze a record and
- * read per-value provenance back out — so a change that breaks embedders fails
- * here rather than downstream.
+ * This test is the guard on the published curation analysis API. It exercises the whole
+ * path an embedder uses: supply concept links and extra facets, analyze a
+ * record, read per-value provenance back out and ask for a profile's mapping.
+ * A change that breaks embedders fails here rather than downstream.
  * </p>
  */
 public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
 
     private static final String PROFILE_ID = "clarin.eu:cr1:p_1274880881885";
 
-    private FacetsMappingBuilder mappingBuilder;
+    private static final Map<String, String> EXTRA_FACETS
+            = Map.of("test_mdProfile", "/cmd:CMD/cmd:Header/cmd:MdProfile/text()");
 
     @BeforeEach
     @Override
@@ -62,7 +64,6 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         config.setFacetConceptsFile(getTestFacetConceptFilePath());
         config.setFacetsConfigFile(
                 new File(Objects.requireNonNull(getClass().getResource("/facetConfigTest.xml")).toURI()).getAbsolutePath());
-        mappingBuilder = new FacetsMappingBuilder(config, marshaller);
     }
 
     /**
@@ -70,13 +71,8 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
      * itself, adds facets VLO does not define, and needs per-value provenance.
      */
     @Test
-    public void analysesRecordWithCallerSuppliedMappingAndExtraFacets() throws Exception {
-        final FacetsMappingProvider provider = schemaLocation
-                -> new FacetsMappingDecorator(
-                        mappingBuilder.build(schemaLocation, emptyConceptLinks()),
-                        extraFacets());
-
-        final CmdiRecordAnalyzer analyzer = CmdiRecordAnalyzer.create(config, provider);
+    public void analysesRecordWithCallerSuppliedConceptPathsAndExtraFacets() throws Exception {
+        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config, noConceptPaths(), EXTRA_FACETS);
 
         final Optional<CMDIData<Map<String, List<ValueSet>>>> result = analyzer.analyze(corpusRecord());
 
@@ -90,11 +86,11 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         assertEquals("../acqui_data/Corpusstructure/acqui.imdi.cmdi",
                 metadataResources.getFirst().getResourceName());
 
-        // the decorated facet, which exists only because the embedder added it,
+        // the extra facet, which exists only because the embedder added it,
         // captured a value that VLO itself never stores
         final Map<String, List<ValueSet>> document = data.getDocument();
         final List<ValueSet> mdProfile = document.get("test_mdProfile");
-        assertNotNull(mdProfile, "decorated facet should have been applied; facets present: " + document.keySet());
+        assertNotNull(mdProfile, "extra facet should have been applied; facets present: " + document.keySet());
         assertEquals(PROFILE_ID, mdProfile.getFirst().getValue());
 
         // provenance is retained, which is the reason for ValueSetCmdiData
@@ -107,63 +103,76 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
     }
 
     /**
-     * The provider is the embedder's caching seam: the analyzer must go through
-     * it for every record, and must resolve the profile id to a schema location
-     * before doing so.
+     * Concept paths are asked for once per profile, with the profile's schema
+     * location; analysis and {@code getFacetsMapping} share the same mapping.
      */
     @Test
-    public void routesEveryRecordThroughTheMappingProvider() throws Exception {
-        final Map<String, FacetsMapping> cache = new ConcurrentHashMap<>();
+    public void buildsEachProfileMappingOnce() throws Exception {
+        final List<String> requested = new CopyOnWriteArrayList<>();
+        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
+                schemaLocation -> {
+                    requested.add(schemaLocation);
+                    return Map.of();
+                },
+                EXTRA_FACETS);
+
+        analyzer.analyze(corpusRecord());
+        analyzer.analyze(corpusRecord());
+
+        final String schemaLocation = config.getComponentRegistryProfileSchema(PROFILE_ID);
+        assertEquals(List.of(schemaLocation), requested, "one lookup, with the resolved schema location");
+
+        final FacetsMapping mapping = analyzer.getFacetsMapping(schemaLocation);
+        assertSame(mapping, analyzer.getFacetsMapping(schemaLocation));
+        assertEquals(1, requested.size(), "the profile report reuses the mapping built for analysis");
+        assertEquals("test_mdProfile", mapping.getFacetDefinition("test_mdProfile").getName());
+    }
+
+    /**
+     * Local schema locations, such as an uploaded profile, are built on every
+     * call instead of being kept.
+     */
+    @Test
+    public void doesNotCacheLocalSchemaLocations() {
         final AtomicInteger lookups = new AtomicInteger();
+        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
+                schemaLocation -> {
+                    lookups.incrementAndGet();
+                    return Map.of();
+                },
+                Map.of());
 
-        final FacetsMappingProvider caching = schemaLocation -> {
-            lookups.incrementAndGet();
-            return cache.computeIfAbsent(schemaLocation,
-                    location -> mappingBuilder.build(location, emptyConceptLinks()));
-        };
+        analyzer.getFacetsMapping("file:///tmp/uploaded.xsd");
+        analyzer.getFacetsMapping("file:///tmp/uploaded.xsd");
 
-        final CmdiRecordAnalyzer analyzer = CmdiRecordAnalyzer.create(config, caching);
-
-        analyzer.analyze(corpusRecord());
-        analyzer.analyze(corpusRecord());
-
-        assertEquals(2, lookups.get(), "provider should be consulted per record");
-        assertEquals(1, cache.size(), "both records resolve to the same profile");
-
-        // the provider receives a resolved schema location, not the raw profile id
-        final String schemaLocation = cache.keySet().iterator().next();
-        assertEquals(config.getComponentRegistryProfileSchema(PROFILE_ID), schemaLocation);
+        assertEquals(2, lookups.get());
     }
 
     /**
-     * The decorator must not disturb the mapping it wraps.
+     * Supplied concept paths end up as the patterns of the facet whose concept
+     * they belong to.
      */
     @Test
-    public void decoratorAddsFacetsWithoutMutatingTheDelegate() {
-        final FacetsMapping delegate = mappingBuilder.build(
-                config.getComponentRegistryProfileSchema(PROFILE_ID), emptyConceptLinks());
-        final int facetsBefore = delegate.getFacetDefinitions().size();
+    public void appliesSuppliedConceptPathsToTheMatchingFacet() {
+        // mapped to the facet projectName in facetConceptsTest.xml
+        final String concept = "http://www.isocat.org/datcat/DC-2536";
+        final String xpath = "/cmd:CMD/cmd:Components/cmdp:Test/cmdp:Name/text()";
+        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
+                schemaLocation -> Map.of(concept, List.of(xpath)),
+                Map.of());
 
-        final FacetsMapping decorated = new FacetsMappingDecorator(delegate, extraFacets());
+        final FacetsMapping mapping = analyzer.getFacetsMapping("https://example.org/profile.xsd");
 
-        assertEquals(facetsBefore + 1, decorated.getFacetDefinitions().size());
-        assertEquals(facetsBefore, delegate.getFacetDefinitions().size(), "delegate must be untouched");
-        assertTrue(decorated.getFacetConfigurationNames().contains("test_mdProfile"));
-        assertFalse(delegate.getFacetConfigurationNames().contains("test_mdProfile"));
-
-        // added definitions resolve, delegate definitions still resolve through
-        assertEquals("test_mdProfile", decorated.getFacetDefinition("test_mdProfile").getName());
-        assertSame(delegate.getFacetsConfigurations(), decorated.getFacetsConfigurations());
+        assertTrue(mapping.getFacetDefinition("projectName").getPatterns().stream()
+                .anyMatch(pattern -> xpath.equals(pattern.getPattern())),
+                "the XPath of the concept should be a pattern of projectName");
     }
 
-    /**
-     * A missing mapping provider is the one misconfiguration worth failing loudly
-     * on, since everything else has a usable default.
-     */
     @Test
-    public void requiresAMappingProvider() {
-        assertThrows(NullPointerException.class,
-                () -> CmdiRecordAnalyzer.create(config, null));
+    public void requiresAllArguments() {
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(null, noConceptPaths(), Map.of()));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, null, Map.of()));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, noConceptPaths(), null));
     }
 
     /**
@@ -188,19 +197,31 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         assertNull(data.getDocField("some_facet"), "absent facet reads as null, not empty");
     }
 
-    private Map<String, List<Pattern>> emptyConceptLinks() {
-        // an embedder that finds no concept links still gets a usable mapping:
-        // the fallback patterns from facetConcepts.xml apply
-        return Map.of();
+    /**
+     * {@code addDocFieldIfNull} adds only to an absent facet, as in VLO's Solr
+     * implementation, so {@code replaceDocField} keeps the new value.
+     */
+    @Test
+    public void addsIfNullOnlyToAnAbsentFacet() {
+        final ValueSetCmdiData data = new ValueSetCmdiData(fieldNameService);
+        data.addDocField("some_facet", "first", false);
+        final ValueSet first = data.getDocument().get("some_facet").getFirst();
+
+        data.addDocFieldIfNull(first, false);
+        assertEquals(1, data.getDocument().get("some_facet").size(), "present facet is left alone");
+
+        data.replaceDocField(first, false);
+        assertEquals(List.of("first"), List.copyOf(data.getDocField("some_facet")), "replace keeps the value");
+
+        data.removeField("some_facet");
+        data.addDocFieldIfNull(first, false);
+        assertTrue(data.hasField("some_facet"), "absent facet is added");
     }
 
-    private Map<String, FacetDefinition> extraFacets() {
-        final FacetDefinition mdProfile = new FacetDefinition(null, "test_mdProfile");
-        mdProfile.setPattern(new Pattern("/cmd:CMD/cmd:Header/cmd:MdProfile/text()"));
-
-        final LinkedHashMap<String, FacetDefinition> extra = new LinkedHashMap<>();
-        extra.put("test_mdProfile", mdProfile);
-        return extra;
+    private static Function<String, Map<String, List<String>>> noConceptPaths() {
+        // an embedder that finds no concept links still gets a usable mapping:
+        // the fallback patterns from facetConcepts.xml apply
+        return schemaLocation -> Map.of();
     }
 
     private File corpusRecord() throws Exception {

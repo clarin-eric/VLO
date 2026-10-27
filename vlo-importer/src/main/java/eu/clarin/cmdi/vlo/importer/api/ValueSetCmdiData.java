@@ -41,12 +41,11 @@ import org.apache.commons.lang3.tuple.Pair;
  * VLO's import path keeps only the value, because that is all Solr needs. Curation
  * needs more info like: which VTD index in the source document a value came
  * from, whether it was derived from another facet, and whether it is
- * the result of a value mapping. This implementation keeps all of it, so
- * embedders no longer have to write their own subclass of
- * {@link CMDIDataBaseImpl} to get at it.
+ * the result of a value mapping. This implementation keeps all of it.
+ * {@link CmdiRecordAnalyzer} uses it internally.
  * </p>
  */
-public class ValueSetCmdiData extends CMDIDataBaseImpl<Map<String, List<ValueSet>>> {
+class ValueSetCmdiData extends CMDIDataBaseImpl<Map<String, List<ValueSet>>> {
 
     /**
      * Origin facet name recorded for values added by facet name rather than by
@@ -61,7 +60,7 @@ public class ValueSetCmdiData extends CMDIDataBaseImpl<Map<String, List<ValueSet
 
     private final Map<String, List<ValueSet>> facetValuesMap = new HashMap<>();
 
-    public ValueSetCmdiData(FieldNameService fieldNameService) {
+    ValueSetCmdiData(FieldNameService fieldNameService) {
         super(fieldNameService);
     }
 
@@ -82,7 +81,7 @@ public class ValueSetCmdiData extends CMDIDataBaseImpl<Map<String, List<ValueSet
 
     @Override
     public void addDocFieldIfNull(ValueSet valueSet, boolean caseInsensitive) {
-        if (this.facetValuesMap.containsKey(valueSet.getTargetFacetName())) {
+        if (!this.facetValuesMap.containsKey(valueSet.getTargetFacetName())) {
             addDocField(valueSet, caseInsensitive);
         }
     }
@@ -152,11 +151,11 @@ public class ValueSetCmdiData extends CMDIDataBaseImpl<Map<String, List<ValueSet
                 caseInsensitive);
     }
 
-    public static class Factory implements CMDIDataFactory<Map<String, List<ValueSet>>> {
+    static class Factory implements CMDIDataFactory<Map<String, List<ValueSet>>> {
 
         private final FieldNameService fieldNameService;
 
-        public Factory(FieldNameService fieldNameService) {
+        Factory(FieldNameService fieldNameService) {
             this.fieldNameService = fieldNameService;
         }
 
