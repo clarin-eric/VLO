@@ -140,7 +140,7 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
                     lookups.incrementAndGet();
                     return Map.of();
                 },
-                Map.of());
+                EXTRA_FACETS);
 
         analyzer.getFacetsMapping("file:///tmp/uploaded.xsd");
         analyzer.getFacetsMapping("file:///tmp/uploaded.xsd");
@@ -159,7 +159,7 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         final String xpath = "/cmd:CMD/cmd:Components/cmdp:Test/cmdp:Name/text()";
         final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
                 schemaLocation -> Map.of(concept, List.of(xpath)),
-                Map.of());
+                EXTRA_FACETS);
 
         final FacetsMapping mapping = analyzer.getFacetsMapping("https://example.org/profile.xsd");
 
@@ -170,9 +170,14 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
 
     @Test
     public void requiresAllArguments() {
-        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(null, noConceptPaths(), Map.of()));
-        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, null, Map.of()));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(null, noConceptPaths(), EXTRA_FACETS));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, null, EXTRA_FACETS));
         assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, noConceptPaths(), null));
+    }
+
+    @Test
+    public void rejectsEmptyExtraFacets() {
+        assertThrows(IllegalArgumentException.class, () -> new CmdiRecordAnalyzer(config, noConceptPaths(), Map.of()));
     }
 
     /**

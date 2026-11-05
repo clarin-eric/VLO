@@ -59,6 +59,7 @@ public final class CmdiRecordAnalyzer {
      * @param extraFacets facets to extract in addition to VLO's, as facet name
      * to XPath
      * @throws NullPointerException if any argument is {@code null}
+     * @throws IllegalArgumentException if {@code extraFacets} is empty
      */
     public CmdiRecordAnalyzer(VloConfig vloConfig,
             Function<String, Map<String, List<String>>> conceptPaths,
@@ -66,6 +67,9 @@ public final class CmdiRecordAnalyzer {
         Objects.requireNonNull(vloConfig, "vloConfig");
         Objects.requireNonNull(conceptPaths, "conceptPaths");
         Objects.requireNonNull(extraFacets, "extraFacets");
+        if (extraFacets.isEmpty()) {
+            throw new IllegalArgumentException("extraFacets must not be empty");
+        }
 
         final FieldNameService fieldNames = new FieldNameServiceImpl(vloConfig);
         final VLOMarshaller marshaller = new VLOMarshaller();

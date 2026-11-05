@@ -77,6 +77,8 @@ class AnalysisMappingFactory extends FacetMappingFactory {
                 .forEach((concept, xpaths) -> conceptLinkPaths.put(concept,
                         xpaths.stream().map(Pattern::new).collect(Collectors.toList())));
 
+        // TODO: try to have this introduces in the analyzer from the curation side -
+        // some ProcessingStrategy
         final FacetsMapping mapping = createMapping(new ConceptLinkPathMapper() {
             @Override
             public Map<String, List<Pattern>> createConceptLinkPathMapping() {
@@ -94,7 +96,7 @@ class AnalysisMappingFactory extends FacetMappingFactory {
                 return true;
             }
         });
-        return extraFacets.isEmpty() ? mapping : new FacetsMappingDecorator(mapping, extraFacets);
+        return new FacetsMappingDecorator(mapping, extraFacets);
     }
 
     private static boolean isRemote(String schemaLocation) {
