@@ -48,7 +48,7 @@ public class AutoCompleteServiceImplTest {
     @Test
     public void solrErrorGivesNoSuggestionsInsteadOfException() {
         // e.g. HTTP 500 "Lookup not supported at this time" from an unbuilt suggester
-        AutoCompleteServiceImpl service = new AutoCompleteServiceImpl(null, new VloConfig(), stubFieldNames()) {
+        AutoCompleteServiceImpl service = new AutoCompleteServiceImpl(null, new VloConfig(), stubFieldNames(), new SimpleMeterRegistry()) {
             @Override
             protected NamedList<Object> fireRawQuery(QueryRequest req) {
                 throw new SolrException(SolrException.ErrorCode.SERVER_ERROR, "Lookup not supported at this time");
