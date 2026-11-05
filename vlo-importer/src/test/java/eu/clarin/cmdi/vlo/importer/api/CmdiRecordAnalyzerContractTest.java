@@ -16,12 +16,23 @@
  */
 package eu.clarin.cmdi.vlo.importer.api;
 
+import eu.clarin.cmdi.vlo.FieldKey;
+import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.importer.CMDIData;
+import eu.clarin.cmdi.vlo.importer.CMDIDataBaseImpl;
+import eu.clarin.cmdi.vlo.importer.CMDIDataFactory;
+import eu.clarin.cmdi.vlo.importer.CMDIRecordProcessor;
 import eu.clarin.cmdi.vlo.importer.ImporterTestcase;
+import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.Resource;
+import eu.clarin.cmdi.vlo.importer.mapping.ConceptLinkPathMapper;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
+import eu.clarin.cmdi.vlo.importer.processor.CMDIDataProcessor;
 import eu.clarin.cmdi.vlo.importer.processor.ValueSet;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -29,26 +40,20 @@ import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Contract test for {@link CmdiRecordAnalyzer}.
- *
- * <p>
- * This test is the guard on the published curation analysis API. It exercises the whole
- * path an embedder uses: supply concept links and extra facets, analyze a
- * record, read per-value provenance back out and ask for a profile's mapping.
- * A change that breaks embedders fails here rather than downstream.
- * </p>
+ * Contract test for {@link CmdiRecordAnalyzer}: a change that breaks embedders
+ * fails here.
  */
 public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
 
@@ -66,34 +71,27 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
                 new File(Objects.requireNonNull(getClass().getResource("/facetConfigTest.xml")).toURI()).getAbsolutePath());
     }
 
-    /**
-     * The motivating end-to-end case: an embedder that resolves concept links
-     * itself, adds facets VLO does not define, and needs per-value provenance.
-     */
     @Test
     public void analysesRecordWithCallerSuppliedConceptPathsAndExtraFacets() throws Exception {
-        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config, noConceptPaths(), EXTRA_FACETS);
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> analyzer = new CmdiRecordAnalyzer<>(config, strategy(noConceptPaths()));
 
         final Optional<CMDIData<Map<String, List<ValueSet>>>> result = analyzer.analyze(corpusRecord());
 
         assertTrue(result.isPresent(), "record should not have been skipped");
         final CMDIData<Map<String, List<ValueSet>>> data = result.get();
 
-        // the record was really parsed, not just constructed
         assertEquals("test-hdl_58_1839_47_00-0000-0000-0000-0001-D", data.getId());
         final List<Resource> metadataResources = data.getMetadataResources();
         assertEquals(3, metadataResources.size());
         assertEquals("../acqui_data/Corpusstructure/acqui.imdi.cmdi",
                 metadataResources.getFirst().getResourceName());
 
-        // the extra facet, which exists only because the embedder added it,
-        // captured a value that VLO itself never stores
+        // a value that only the extra facet captures
         final Map<String, List<ValueSet>> document = data.getDocument();
         final List<ValueSet> mdProfile = document.get("test_mdProfile");
         assertNotNull(mdProfile, "extra facet should have been applied; facets present: " + document.keySet());
         assertEquals(PROFILE_ID, mdProfile.getFirst().getValue());
 
-        // provenance is retained, which is the reason for ValueSetCmdiData
         final ValueSet valueSet = mdProfile.getFirst();
         assertEquals("test_mdProfile", valueSet.getTargetFacetName());
         assertFalse(valueSet.isDerived());
@@ -102,19 +100,14 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         assertTrue(valueSet.getVtdIndex() >= 0, "value should carry its source position");
     }
 
-    /**
-     * Concept paths are asked for once per profile, with the profile's schema
-     * location; analysis and {@code getFacetsMapping} share the same mapping.
-     */
     @Test
     public void buildsEachProfileMappingOnce() throws Exception {
         final List<String> requested = new CopyOnWriteArrayList<>();
-        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
-                schemaLocation -> {
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> analyzer = new CmdiRecordAnalyzer<>(config,
+                strategy(schemaLocation -> {
                     requested.add(schemaLocation);
                     return Map.of();
-                },
-                EXTRA_FACETS);
+                }));
 
         analyzer.analyze(corpusRecord());
         analyzer.analyze(corpusRecord());
@@ -128,19 +121,14 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         assertEquals("test_mdProfile", mapping.getFacetDefinition("test_mdProfile").getName());
     }
 
-    /**
-     * Local schema locations, such as an uploaded profile, are built on every
-     * call instead of being kept.
-     */
     @Test
     public void doesNotCacheLocalSchemaLocations() {
         final AtomicInteger lookups = new AtomicInteger();
-        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
-                schemaLocation -> {
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> analyzer = new CmdiRecordAnalyzer<>(config,
+                strategy(_ -> {
                     lookups.incrementAndGet();
                     return Map.of();
-                },
-                EXTRA_FACETS);
+                }));
 
         analyzer.getFacetsMapping("file:///tmp/uploaded.xsd");
         analyzer.getFacetsMapping("file:///tmp/uploaded.xsd");
@@ -148,18 +136,13 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
         assertEquals(2, lookups.get());
     }
 
-    /**
-     * Supplied concept paths end up as the patterns of the facet whose concept
-     * they belong to.
-     */
     @Test
     public void appliesSuppliedConceptPathsToTheMatchingFacet() {
         // mapped to the facet projectName in facetConceptsTest.xml
         final String concept = "http://www.isocat.org/datcat/DC-2536";
         final String xpath = "/cmd:CMD/cmd:Components/cmdp:Test/cmdp:Name/text()";
-        final CmdiRecordAnalyzer analyzer = new CmdiRecordAnalyzer(config,
-                schemaLocation -> Map.of(concept, List.of(xpath)),
-                EXTRA_FACETS);
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> analyzer = new CmdiRecordAnalyzer<>(config,
+                strategy(_ -> Map.of(concept, List.of(new Pattern(xpath)))));
 
         final FacetsMapping mapping = analyzer.getFacetsMapping("https://example.org/profile.xsd");
 
@@ -170,67 +153,177 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
 
     @Test
     public void requiresAllArguments() {
-        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(null, noConceptPaths(), EXTRA_FACETS));
-        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, null, EXTRA_FACETS));
-        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer(config, noConceptPaths(), null));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer<>(null, strategy(noConceptPaths())));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer<>(config, null));
+        assertThrows(NullPointerException.class, () -> new CmdiRecordAnalyzer<>(config,
+                new TestStrategy(noConceptPaths(), null, false, false)));
     }
 
     @Test
     public void rejectsEmptyExtraFacets() {
-        assertThrows(IllegalArgumentException.class, () -> new CmdiRecordAnalyzer(config, noConceptPaths(), Map.of()));
+        assertThrows(IllegalArgumentException.class, () -> new CmdiRecordAnalyzer<>(config,
+                new TestStrategy(noConceptPaths(), Map.of(), false, false)));
     }
 
-    /**
-     * Values added by facet name rather than by {@link ValueSet} still arrive as
-     * ValueSets, so consumers never have to special-case them.
-     */
     @Test
-    public void synthesisesValueSetsForValuesAddedByName() {
-        final ValueSetCmdiData data = new ValueSetCmdiData(fieldNameService);
+    public void skipsDuplicateIdsOnlyIfTheStrategySaysSo() throws Exception {
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> keeping = new CmdiRecordAnalyzer<>(config,
+                new TestStrategy(noConceptPaths(), EXTRA_FACETS, false, false));
+        assertTrue(keeping.analyze(corpusRecord()).isPresent());
+        assertTrue(keeping.analyze(corpusRecord()).isPresent());
 
-        data.addDocField("some_facet", "some value", false);
-
-        final List<ValueSet> values = data.getDocument().get("some_facet");
-        assertEquals(1, values.size());
-        assertEquals("some value", values.get(0).getValue());
-        assertEquals(-1, values.get(0).getVtdIndex(), "no source position for synthesised values");
-        assertEquals(List.of("some value"), List.copyOf(data.getDocField("some_facet")));
-        assertTrue(data.hasField("some_facet"));
-
-        data.removeField("some_facet");
-        assertFalse(data.hasField("some_facet"));
-        assertNull(data.getDocField("some_facet"), "absent facet reads as null, not empty");
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> skipping = new CmdiRecordAnalyzer<>(config,
+                new TestStrategy(noConceptPaths(), EXTRA_FACETS, true, false));
+        assertTrue(skipping.analyze(corpusRecord()).isPresent());
+        assertFalse(skipping.analyze(corpusRecord()).isPresent());
     }
 
-    /**
-     * {@code addDocFieldIfNull} adds only to an absent facet, as in VLO's Solr
-     * implementation, so {@code replaceDocField} keeps the new value.
-     */
     @Test
-    public void addsIfNullOnlyToAnAbsentFacet() {
-        final ValueSetCmdiData data = new ValueSetCmdiData(fieldNameService);
-        data.addDocField("some_facet", "first", false);
-        final ValueSet first = data.getDocument().get("some_facet").getFirst();
+    public void skipsRecordsWithoutResourcesOnlyIfTheStrategySaysSo() throws Exception {
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> keeping = new CmdiRecordAnalyzer<>(config,
+                new TestStrategy(noConceptPaths(), EXTRA_FACETS, false, false));
+        assertTrue(keeping.analyze(recordWithoutResources()).isPresent());
 
-        data.addDocFieldIfNull(first, false);
-        assertEquals(1, data.getDocument().get("some_facet").size(), "present facet is left alone");
-
-        data.replaceDocField(first, false);
-        assertEquals(List.of("first"), List.copyOf(data.getDocField("some_facet")), "replace keeps the value");
-
-        data.removeField("some_facet");
-        data.addDocFieldIfNull(first, false);
-        assertTrue(data.hasField("some_facet"), "absent facet is added");
+        final CmdiRecordAnalyzer<Map<String, List<ValueSet>>> skipping = new CmdiRecordAnalyzer<>(config,
+                new TestStrategy(noConceptPaths(), EXTRA_FACETS, false, true));
+        assertFalse(skipping.analyze(recordWithoutResources()).isPresent());
     }
 
-    private static Function<String, Map<String, List<String>>> noConceptPaths() {
-        // an embedder that finds no concept links still gets a usable mapping:
-        // the fallback patterns from facetConcepts.xml apply
+    private static TestStrategy strategy(Function<String, Map<String, List<Pattern>>> conceptPaths) {
+        return new TestStrategy(conceptPaths, EXTRA_FACETS, false, false);
+    }
+
+    private static Function<String, Map<String, List<Pattern>>> noConceptPaths() {
+        // the fallback patterns from facetConcepts.xml still apply
         return schemaLocation -> Map.of();
     }
 
     private File corpusRecord() throws Exception {
-        final String content = """
+        return createCmdiFile("contractCorpus", CORPUS_RECORD);
+    }
+
+    private File recordWithoutResources() throws Exception {
+        return createCmdiFile("contractNoResources",
+                CORPUS_RECORD.replaceAll("(?s)<ResourceProxyList>.*</ResourceProxyList>", "<ResourceProxyList/>"));
+    }
+
+    private record TestStrategy(Function<String, Map<String, List<Pattern>>> conceptPaths,
+            Map<String, String> extraFacets, boolean skipDuplicates, boolean skipNoResources)
+            implements ProcessingStrategy<Map<String, List<ValueSet>>> {
+
+        @Override
+        public CMDIRecordProcessor<Map<String, List<ValueSet>>> recordProcessor(
+                CMDIDataProcessor<Map<String, List<ValueSet>>> parser, FieldNameService fieldNames) {
+            return new CMDIRecordProcessor<>(parser, fieldNames) {
+                @Override
+                protected boolean skipOnDuplicateId() {
+                    return skipDuplicates;
+                }
+
+                @Override
+                protected boolean skipOnNoResources() {
+                    return skipNoResources;
+                }
+            };
+        }
+
+        @Override
+        public CMDIDataFactory<Map<String, List<ValueSet>>> dataFactory(FieldNameService fieldNames) {
+            return () -> new ValueSetData(fieldNames);
+        }
+
+        @Override
+        public ConceptLinkPathMapper conceptLinkPathMapper(String schemaLocation) {
+            return new ConceptLinkPathMapper() {
+                @Override
+                public Map<String, List<Pattern>> createConceptLinkPathMapping() {
+                    return conceptPaths.apply(schemaLocation);
+                }
+
+                @Override
+                public String getXsd() {
+                    return schemaLocation;
+                }
+
+                @Override
+                public Boolean useLocalXSDCache() {
+                    return true;
+                }
+            };
+        }
+    }
+
+    /**
+     * Keeps the {@link ValueSet}s, so a test can read their source position.
+     */
+    private static class ValueSetData extends CMDIDataBaseImpl<Map<String, List<ValueSet>>> {
+
+        private final Map<String, List<ValueSet>> values = new HashMap<>();
+
+        ValueSetData(FieldNameService fieldNameService) {
+            super(fieldNameService);
+        }
+
+        @Override
+        public void addDocField(ValueSet valueSet, boolean caseInsensitive) {
+            if (fieldNameService.getFieldName(FieldKey.ID).equals(valueSet.getTargetFacetName())) {
+                setId(valueSet.getValue().trim());
+            } else {
+                values.computeIfAbsent(valueSet.getTargetFacetName(), name -> new ArrayList<>()).add(valueSet);
+            }
+        }
+
+        @Override
+        public void addDocField(String facetName, Object value, boolean caseInsensitive) {
+        }
+
+        @Override
+        public void addDocFieldIfNull(ValueSet valueSet, boolean caseInsensitive) {
+            if (!hasField(valueSet.getTargetFacetName())) {
+                addDocField(valueSet, caseInsensitive);
+            }
+        }
+
+        @Override
+        public Collection<Object> getDocField(String facetName) {
+            final List<ValueSet> valueSets = values.get(facetName);
+            return valueSets == null
+                    ? null
+                    : valueSets.stream().map(ValueSet::getValue).collect(Collectors.toList());
+        }
+
+        @Override
+        public Map<String, List<ValueSet>> getDocument() {
+            return values;
+        }
+
+        @Override
+        public void replaceDocField(ValueSet valueSet, boolean caseInsensitive) {
+            removeField(valueSet.getTargetFacetName());
+            addDocField(valueSet, caseInsensitive);
+        }
+
+        @Override
+        public void replaceDocField(String facetName, Object value, boolean caseInsensitive) {
+        }
+
+        @Override
+        public void removeField(String facetName) {
+            values.remove(facetName);
+        }
+
+        @Override
+        public boolean hasField(String facetName) {
+            return values.containsKey(facetName);
+        }
+
+        @Override
+        public Collection<Object> getFieldValues(String facetName) {
+            return getDocField(facetName);
+        }
+    }
+
+    private static final String CORPUS_RECORD = """
                 <?xml version="1.0" encoding="UTF-8"?>
                 <CMD xmlns="http://www.clarin.eu/cmd/1" xmlns:cmdp="http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1274880881885" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                    <Header>
@@ -269,6 +362,4 @@ public class CmdiRecordAnalyzerContractTest extends ImporterTestcase {
                    </Components>
                 </CMD>
                 """;
-        return createCmdiFile("contractCorpus", content);
-    }
 }
