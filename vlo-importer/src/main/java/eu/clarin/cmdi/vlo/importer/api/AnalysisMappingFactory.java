@@ -19,40 +19,34 @@ package eu.clarin.cmdi.vlo.importer.api;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.importer.Pattern;
 import eu.clarin.cmdi.vlo.importer.VLOMarshaller;
-import eu.clarin.cmdi.vlo.importer.mapping.ConceptLinkPathMapper;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetDefinition;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetMappingFactory;
 import eu.clarin.cmdi.vlo.importer.mapping.FacetsMapping;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
- * VLO's facet mapping factory, fed with the caller's concept links and extra
+ * VLO's facet mapping factory, fed with the strategy's concept links and extra
  * facets.
  *
  * <p>
- * The only class in this package that extends a VLO internal. Mappings are
- * built once per schema location and kept for the lifetime of the analyzer.
+ * Mappings of remote schemas are built once per schema location and kept for
+ * the lifetime of the analyzer.
  * </p>
  */
 class AnalysisMappingFactory extends FacetMappingFactory {
 
     private final VloConfig vloConfig;
-    private final Function<String, Map<String, List<String>>> conceptPaths;
+    private final ProcessingStrategy<?> strategy;
     private final Map<String, FacetDefinition> extraFacets;
     private final ConcurrentHashMap<String, FacetsMapping> mappings = new ConcurrentHashMap<>();
 
     AnalysisMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller,
-            Function<String, Map<String, List<String>>> conceptPaths, Map<String, String> extraFacets) {
+            ProcessingStrategy<?> strategy, Map<String, String> extraFacets) {
         super(vloConfig, marshaller);
         this.vloConfig = vloConfig;
-        this.conceptPaths = conceptPaths;
+        this.strategy = strategy;
         this.extraFacets = toDefinitions(extraFacets);
     }
 
@@ -72,30 +66,7 @@ class AnalysisMappingFactory extends FacetMappingFactory {
     }
 
     private FacetsMapping build(String schemaLocation) {
-        final Map<String, List<Pattern>> conceptLinkPaths = new HashMap<>();
-        Objects.requireNonNullElse(conceptPaths.apply(schemaLocation), Map.<String, List<String>>of())
-                .forEach((concept, xpaths) -> conceptLinkPaths.put(concept,
-                        xpaths.stream().map(Pattern::new).collect(Collectors.toList())));
-
-        // TODO: try to have this introduces in the analyzer from the curation side -
-        // some ProcessingStrategy
-        final FacetsMapping mapping = createMapping(new ConceptLinkPathMapper() {
-            @Override
-            public Map<String, List<Pattern>> createConceptLinkPathMapping() {
-                return conceptLinkPaths;
-            }
-
-            @Override
-            public String getXsd() {
-                return schemaLocation;
-            }
-
-            @Override
-            public Boolean useLocalXSDCache() {
-                // irrelevant: the concept links are supplied, so no XSD is fetched
-                return true;
-            }
-        });
+        final FacetsMapping mapping = createMapping(strategy.conceptLinkPathMapper(schemaLocation));
         return new FacetsMappingDecorator(mapping, extraFacets);
     }
 
