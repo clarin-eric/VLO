@@ -25,6 +25,7 @@ import eu.clarin.cmdi.vlo.config.SnippetConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.wicket.HideJavascriptFallbackControlsBehavior;
 import eu.clarin.cmdi.vlo.wicket.InvisibleIfNullBehaviour;
+import eu.clarin.cmdi.vlo.wicket.components.UrlContentLabel;
 import eu.clarin.cmdi.vlo.wicket.model.EnvironmentVariableModel;
 import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
 import org.apache.wicket.Component;
@@ -36,7 +37,6 @@ import org.apache.wicket.markup.html.GenericWebPage;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.include.Include;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -165,7 +165,7 @@ public class VloBasePage<T> extends GenericWebPage<T> {
         if (Strings.isEmpty(snippetConfig.getBottomSnippetFileUrl())) {
             add(new WebMarkupContainer("bottomSnippet"));
         } else {
-            add(new Include("bottomSnippet", snippetConfig.getBottomSnippetFileUrl()));
+            add(new UrlContentLabel("bottomSnippet", snippetConfig.getBottomSnippetFileUrl()));
         }
 
     }

@@ -20,12 +20,12 @@ import com.google.common.base.Strings;
 import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvider;
 import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
+import eu.clarin.cmdi.vlo.wicket.components.UrlContentLabel;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.include.Include;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -67,7 +67,7 @@ public class ContributorsPage extends VloBasePage {
         final String otherProvidersListFile = vloConfig.getOtherProvidersMarkupFile();
 
         if (!Strings.isNullOrEmpty(otherProvidersListFile) && new File(otherProvidersListFile).canRead()) {
-            add(new Include("othersList", "file://" + otherProvidersListFile));
+            add(new UrlContentLabel("othersList", "file://" + otherProvidersListFile));
         } else {
             logger.warn("Could not load list of 'other' metadata providers from {}", otherProvidersListFile);
             error("List of other metadata providers could not be loaded");

@@ -627,7 +627,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         }
 
         @Override
-        public void detach() {
+        protected void onDetachAlways() {
             childRecordsCountModel.detach();
             docModel.detach();
         }

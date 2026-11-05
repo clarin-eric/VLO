@@ -62,7 +62,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
-        <wicket.version>10.11.0</wicket.version>
+        <wicket.version>11.0.0</wicket.version>
         <junit.version>6.0.3</junit.version>
     </properties>
 
