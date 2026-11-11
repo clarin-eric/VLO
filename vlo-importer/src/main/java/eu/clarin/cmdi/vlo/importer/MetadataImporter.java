@@ -226,7 +226,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
             if (removed > 0) {
                 LOG.info("Removed {} stale tombstone(s) from the morgue index", removed);
             }
-        } catch (SolrServerException | IOException ex) {
+        } catch (SolrServerException | RemoteSolrException | IOException ex) {
             LOG.warn("Could not reconcile the morgue index with the live index", ex);
         }
     }
@@ -289,6 +289,10 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
         } finally {
             try {
                 solrBridge.commit();
+            } catch (SolrServerException | RemoteSolrException | IOException e) {
+                LOG.error("cannot commit:\n", e);
+            }
+            try {
                 reconcileMorgueRecords(morgueLookup);
                 buildSuggesterIndex();
                 solrBridge.commit();
@@ -296,7 +300,7 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
                 if (e instanceof SocketTimeoutException || e.getCause() instanceof SocketTimeoutException) {
                     LOG.warn("Retrieved a timeout while waiting for building of autocompletion index to complete.", e);
                 } else {
-                    LOG.error("cannot commit:\n", e);
+                    LOG.error("Could not build the autocompletion index:\n", e);
                 }
             } finally {
                 resourceAvailabilityCheckerMonitor.shutdown();
@@ -646,9 +650,9 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      * Builds suggester index for autocompletion
      *
      * @throws SolrServerException
-     * @throws MalformedURLException
+     * @throws IOException
      */
-    private void buildSuggesterIndex() throws SolrServerException, MalformedURLException, IOException {
+    private void buildSuggesterIndex() throws SolrServerException, IOException {
         LOG.info("Building index for autocompletion.");
         HashMap<String, String> paramMap = new HashMap<>();
         paramMap.put("qt", "/suggest");
@@ -661,10 +665,10 @@ public class MetadataImporter implements Closeable, MetadataImporterRunStatistic
      * Updates documents in Solr with their hierarchy weight and lists of
      * related resources (hasPart & isPartOf)
      *
-     * @throws SolrServerException
+     * @throws DocumentStoreException
      * @throws MalformedURLException
      */
-    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws DocumentStoreException, MalformedURLException, IOException {
+    private synchronized void updateDocumentHierarchy(ResourceStructureGraph resourceStructureGraph) throws DocumentStoreException, IOException {
         LOG.info(resourceStructureGraph.printStatistics(0));
         final AtomicInteger updateCount = new AtomicInteger();
         final Iterator<CmdiVertex> vertexIter = resourceStructureGraph.getFoundVertices().iterator();

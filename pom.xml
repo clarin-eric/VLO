@@ -9,7 +9,7 @@
 
     <!-- When updating the version number here, also update it in the <parent>
     block of each module's pom.xml -->
-    <version>4.15-SNAPSHOT</version>
+    <version>4.16-SNAPSHOT</version>
     
     <description>Virtual Language Observatory (VLO) parent project</description>
     <organization>
@@ -38,7 +38,7 @@
 
     <properties>
         <!-- VLO-mapping project version to obtain default mappings from at build time -->
-        <vlo.mapping.version>1.10.0</vlo.mapping.version>
+        <vlo.mapping.version>1.11.1</vlo.mapping.version>
         
         <!-- Common runtime dependency versions -->
         <solr.version>9.10.1</solr.version>
@@ -119,7 +119,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>33.7.1-jre</version>
+                <version>33.7.2-jre</version>
             </dependency>
             <dependency>
                 <groupId>com.github.ben-manes.caffeine</groupId>
