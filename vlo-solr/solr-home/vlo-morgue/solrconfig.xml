@@ -31,7 +31,7 @@
     <!-- Leader-follower index replication. Off by default; role is set in solr.in.sh:
            leader:   -Dvlo.replication.leader=true
            follower: -Dvlo.replication.follower=true -Dvlo.replication.leaderUrl=http://<leader>:8983/solr
-         Followers do not poll; the importer does a command=fetchindex after an import. -->
+         Followers do not poll; the follower needs to do a command=fetchindex after an import (control.sh ... sync) -->
     <requestHandler name="/replication" class="solr.ReplicationHandler">
         <lst name="leader">
             <str name="enable">${vlo.replication.leader:false}</str>
@@ -41,7 +41,7 @@
         </lst>
         <lst name="follower">
             <str name="enable">${vlo.replication.follower:false}</str>
-            <str name="leaderUrl">${vlo.replication.leaderUrl:http://localhost:8983/solr}/vlo-morgue/replication</str>
+            <str name="leaderUrl">${vlo.replication.leaderUrl:http://localhost:8983/solr}/vlo-morgue</str>
         </lst>
     </requestHandler>
 
