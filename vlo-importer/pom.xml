@@ -236,7 +236,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>3.5.10</version>
+            <version>3.5.11</version>
             <scope>runtime</scope>
         </dependency>
     
@@ -274,17 +274,6 @@
             </exclusions>
         </dependency>
         
-        <!-- 
-            This is needed to make hibernate work (for the linkchecker DB access) 
-            See <https://docs.jboss.org/hibernate/orm/5.4/topical/html_single/bytecode/BytecodeEnhancement.html>
-            and <https://medium.com/@jakubhal/instrumentation-of-spring-boot-application-with-byte-buddy-bbd28619b7c>
-        -->
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.14.19</version>
-        </dependency>
-        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -320,6 +309,15 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Before the Spring Boot BOM, so the netty (and tcnative) versions
+                 match the other modules instead of Spring Boot's -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- Pin the spring boot version so that we avoid conflict with
                  other project's spring boot starters (e.g. linkchecker persistence) -->
             <dependency>

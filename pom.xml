@@ -46,15 +46,15 @@
         <logback.version>1.5.36</logback.version>
         <log4j2.version>2.26.1</log4j2.version>
         <saxon.version>9.8.0-15</saxon.version>
-        <spring.boot.version>4.1.1</spring.boot.version>
-        <spring.version>7.0.9</spring.version>
-        <spring.data.version>4.1.1</spring.data.version>
-        <netty.version>4.2.18.Final</netty.version>
+        <spring.boot.version>4.1.2</spring.boot.version>
+        <spring.version>7.0.10</spring.version>
+        <spring.data.version>4.1.2</spring.data.version>
+        <netty.version>4.2.20.Final</netty.version>
         <zookeeper.version>3.9.6</zookeeper.version>
-        <jackson.version>2.22.3</jackson.version>
+        <jackson.version>2.22.4</jackson.version>
         <jackson-annotations.version>2.22</jackson-annotations.version>
         <caffeine.version>3.2.4</caffeine.version>
-        <micrometer.version>1.17.1</micrometer.version>
+        <micrometer.version>1.17.2</micrometer.version>
 
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -141,7 +141,7 @@
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.22.1</version>
+                <version>1.23.0</version>
             </dependency>
             <!-- Security: override transitive versions pulled in via solr-solrj and linkchecker-persistence-->
             <dependency>
