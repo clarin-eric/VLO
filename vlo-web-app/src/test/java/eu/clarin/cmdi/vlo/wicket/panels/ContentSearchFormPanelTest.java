@@ -22,11 +22,10 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.config.VloSolrSpringConfig;
 import eu.clarin.cmdi.vlo.wicket.AbstractWicketTest;
 import jakarta.inject.Inject;
-import java.io.IOException;
-import java.util.regex.Pattern;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.Model;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,6 +39,7 @@ public class ContentSearchFormPanelTest extends AbstractWicketTest {
     @Inject
     private VloConfig vloConfig;
 
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         vloConfig.setFederatedContentSearchUrl("http://fcs.org/aggregator");

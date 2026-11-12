@@ -37,7 +37,7 @@ public class CachingConverterTest {
     @Test
     public void testConvertToObject() {
         final IConverter<Object> inner = context.mock(IConverter.class, "Object");
-        final CachingConverter instance = new CachingConverter<>(inner);
+        final CachingConverter<Object> instance = new CachingConverter<>(inner);
         final Object result = new Object();
         context.checking(new Expectations() {
             {

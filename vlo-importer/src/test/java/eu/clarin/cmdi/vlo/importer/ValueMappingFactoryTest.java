@@ -17,8 +17,7 @@ import eu.clarin.cmdi.vlo.importer.mapping.ValueMappingFactoryDOMImpl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static org.junit.Assert.*;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ValueMappingFactoryTest {
     private FacetConceptMapping conceptMapping;

@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.service.impl;
 
 import java.util.Arrays;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *

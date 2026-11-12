@@ -25,19 +25,21 @@ import eu.clarin.linkchecker.persistence.utils.Category;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Stream;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  *
@@ -60,12 +62,20 @@ public class LinkcheckerAvailabilityStatusCheckerTest {
     private UrlRepository uRep;
     @Autowired
     private StatusRepository sRep;
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     private LinkcheckerAvailabilityStatusChecker instance;
 
     @BeforeEach
     public void setUp() {
-        instance = new LinkcheckerAvailabilityStatusChecker(statusService, null, null);
+        instance = new LinkcheckerAvailabilityStatusChecker(statusService, new TransactionTemplate(transactionManager), null, null);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        sRep.deleteAll();
+        uRep.deleteAll();
     }
 
     /**
@@ -75,7 +85,6 @@ public class LinkcheckerAvailabilityStatusCheckerTest {
      * @throws java.lang.Exception
      */
     @Test
-    @Transactional
     public void testGetLinkStatusForRefs() throws Exception {
         final String href1 = "http://www.clarin.eu";
         final String href2 = "http://www.wowasa.com/page2";

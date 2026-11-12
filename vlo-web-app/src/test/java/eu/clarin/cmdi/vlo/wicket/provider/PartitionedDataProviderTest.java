@@ -23,12 +23,11 @@ import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.ISortableDataProvider;
 import static org.hamcrest.Matchers.hasItems;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -74,7 +73,7 @@ public class PartitionedDataProviderTest {
             }
         });
 
-        assertEquals("ceil(9/2) = 5", 5, instance.size());
+        assertEquals(5, instance.size(), "ceil(9/2) = 5");
     }
 
     /**

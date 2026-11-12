@@ -1161,7 +1161,7 @@
 
 		Tour.prototype._redirect = function (step, i, path) {
 			var href;
-			if ($.isFunction(step.redirect)) {
+			if (typeof step.redirect === "function") {
 				return step.redirect.call(this, path);
 			} else {
 				href = {}
@@ -1494,7 +1494,7 @@
 				.toString.call(step.orphan) !== '[object Boolean]') {
 				template = step.orphan;
 			}
-			$template = $.isFunction(template) ? $(template(i, step)) : $(template);
+			$template = typeof template === "function" ? $(template(i, step)) : $(template);
 			$navigation = $template.find('.popover-navigation');
 			$prev = $navigation.find('[data-role="prev"]');
 			$next = $navigation.find('[data-role="next"]');
@@ -1730,7 +1730,7 @@
 		// pair of funcs therefore allows easy integration of user code to return callbacks or promises
 		Tour.prototype._makePromise = function (possiblePromise)
 		{
-			if (possiblePromise && $.isFunction(possiblePromise.then))
+			if (possiblePromise && typeof possiblePromise.then === "function")
 			{
 				return possiblePromise;
 			}

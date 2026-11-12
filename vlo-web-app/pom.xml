@@ -27,6 +27,17 @@
         <vlo.logging.level>INFO</vlo.logging.level>
     </properties>
     <dependencies>
+        <!-- JUnit 4: required by SolrTestCaseJ4-based tests (see dependencyManagement). -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!-- Intra-project dependencies -->
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -88,7 +99,7 @@
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
+            <version>${jakarta.servlet.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -127,7 +138,7 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-statsd</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
@@ -198,7 +209,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20250517</version>
+            <version>20260814</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -303,10 +314,6 @@
             <artifactId>commons-text</artifactId>
             <version>1.15.0</version>
         </dependency>
-        
-        <!-- Lots of tests in this module are JUnit 4 and wicket-tester pulls in the
-             JUnit 5 engine. Without getting the vintage engine the JUnit 4 tests
-             are silently not run. -->
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
@@ -398,7 +405,7 @@
                 <version>1.10.13</version>
                 <configuration>
                     <container>
-                        <containerId>tomcat10x</containerId>
+                        <containerId>tomcat11x</containerId>
                         <type>embedded</type>
                     </container>
                     <configuration>

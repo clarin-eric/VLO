@@ -26,10 +26,10 @@ import org.apache.wicket.mock.MockHomePage;
 import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Mockery;
 import org.json.simple.JSONObject;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
@@ -44,7 +44,7 @@ public class SitelinkSearchboxHeaderBehaviorTest extends JsonLdHeaderBehaviorTes
     private WicketTester tester;
     private SitelinkSearchboxHeaderBehavior instance;
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() throws Exception {
         super.setUp();

@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -39,7 +39,7 @@ public class FieldNameServiceImplTest {
     private VloConfig vloConfig;
     private HashMap<String, String> fieldsMap;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         vloConfig = new VloConfig();
         fieldsMap = new HashMap<>();

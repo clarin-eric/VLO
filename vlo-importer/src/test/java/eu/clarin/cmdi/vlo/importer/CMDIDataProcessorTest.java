@@ -12,13 +12,12 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.common.SolrInputDocument;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 
 public class CMDIDataProcessorTest extends ImporterTestcase {
 
@@ -536,7 +535,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals("Netherlands", doc.getFieldValue("country"));
         assertEquals("demo", doc.getFieldValue("genre"));
         assertEquals("{code:und}Test.", doc.getFieldValue("description"));
-        assertEquals("Should be null not empty string", null, doc.getFieldValue("organisation"));
+        assertEquals(null, doc.getFieldValue("organisation"), "Should be null not empty string");
         assertEquals(null, doc.getFieldValue("language"));
         assertEquals(null, doc.getFieldValue("subject"));
         assertEquals(null, doc.getFieldValue("year"));
@@ -900,7 +899,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         assertEquals(null, doc.getFieldValue("genre"));
         assertEquals("{code:eng}written general; 95 mio words; TEI/SGML", doc.getFieldValue("description"));
         assertEquals("Written Corpus", doc.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_CLASS)));
-        assertEquals(String.format("Expected field set different from %s", doc.getFieldNames()), 11, doc.getFieldNames().size());
+        assertEquals(11, doc.getFieldNames().size(), String.format("Expected field set different from %s", doc.getFieldNames()));
     }
 
     @Test
