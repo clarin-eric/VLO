@@ -36,6 +36,8 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * This factory bridges the Spring (boot) based link checker persistence
@@ -93,11 +95,16 @@ public class LinkcheckerAvailabilityStatusCheckerFactory {
         private DataSource dataSource;
 
         @Autowired
+        private PlatformTransactionManager transactionManager;
+
+        @Autowired
         private ConfigurableApplicationContext ctx;
 
         @Bean
         public LinkcheckerAvailabilityStatusChecker checker() {
-            return new LinkcheckerAvailabilityStatusChecker(statusService, statusWriter(), closeHandler());
+            final TransactionTemplate readOnlyTransaction = new TransactionTemplate(transactionManager);
+            readOnlyTransaction.setReadOnly(true);
+            return new LinkcheckerAvailabilityStatusChecker(statusService, readOnlyTransaction, statusWriter(), closeHandler());
         }
 
         @Bean
