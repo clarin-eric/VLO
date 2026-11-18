@@ -39,15 +39,13 @@ class AnalysisMappingFactory extends FacetMappingFactory {
 
     private final VloConfig vloConfig;
     private final ProcessingStrategy<?> strategy;
-    private final Map<String, FacetDefinition> extraFacets;
     private final ConcurrentHashMap<String, FacetsMapping> mappings = new ConcurrentHashMap<>();
 
     AnalysisMappingFactory(VloConfig vloConfig, VLOMarshaller marshaller,
-            ProcessingStrategy<?> strategy, Map<String, String> extraFacets) {
+            ProcessingStrategy<?> strategy) {
         super(vloConfig, marshaller);
         this.vloConfig = vloConfig;
         this.strategy = strategy;
-        this.extraFacets = toDefinitions(extraFacets);
     }
 
     /**
@@ -67,7 +65,7 @@ class AnalysisMappingFactory extends FacetMappingFactory {
 
     private FacetsMapping build(String schemaLocation) {
         final FacetsMapping mapping = createMapping(strategy.conceptLinkPathMapper(schemaLocation));
-        return new FacetsMappingDecorator(mapping, extraFacets);
+        return new FacetsMappingDecorator(mapping, toDefinitions(strategy.extraFacets()));
     }
 
     private static boolean isRemote(String schemaLocation) {

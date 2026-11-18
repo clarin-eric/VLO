@@ -65,7 +65,7 @@ public final class CmdiRecordAnalyzer<T> {
 
         final FieldNameService fieldNames = new FieldNameServiceImpl(vloConfig);
         final VLOMarshaller marshaller = new VLOMarshaller();
-        this.mappingFactory = new AnalysisMappingFactory(vloConfig, marshaller, strategy, extraFacets);
+        this.mappingFactory = new AnalysisMappingFactory(vloConfig, marshaller, strategy);
 
         final CMDIDataProcessor<T> parser = new CMDIParserVTDXML<>(
                 MetadataImporter.registerPostProcessors(vloConfig, fieldNames, new LanguageCodeUtils(vloConfig)),
