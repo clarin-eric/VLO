@@ -4,9 +4,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -20,7 +20,7 @@ public class DefaultVloConfigFactoryTest {
     private VloConfig config;
     private Properties testProps;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         config = new DefaultVloConfigFactory().newConfig();
         testProps = new Properties();
@@ -38,13 +38,13 @@ public class DefaultVloConfigFactoryTest {
         final List<DataRoot> rootsReturned = config.getDataRoots();
 
         assertNotNull(rootsReturned);
-        assertTrue("One or more data roots should be defined", rootsReturned.size() > 0);
+        assertTrue(rootsReturned.size() > 0, "One or more data roots should be defined");
         assertNotNull(rootsReturned.get(0).getOriginName());
-        assertTrue("Origin name cannot be empty", rootsReturned.get(0).getOriginName().length() > 0);
+        assertTrue(rootsReturned.get(0).getOriginName().length() > 0, "Origin name cannot be empty");
         assertNotNull(rootsReturned.get(0).getPrefix());
-        assertTrue("Prefix cannot be empty", rootsReturned.get(0).getPrefix().length() > 0);
+        assertTrue(rootsReturned.get(0).getPrefix().length() > 0, "Prefix cannot be empty");
         assertNotNull(rootsReturned.get(0).getRootFile());
-        assertTrue("Root file cannot be empty", rootsReturned.get(0).getRootFile().getName().length() > 0);
+        assertTrue(rootsReturned.get(0).getRootFile().getName().length() > 0, "Root file cannot be empty");
         assertNotNull(rootsReturned.get(0).getToStrip());
     }
 

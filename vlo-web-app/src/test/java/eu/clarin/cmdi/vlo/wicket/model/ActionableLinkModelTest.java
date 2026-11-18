@@ -17,8 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.model.Model;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -44,9 +44,9 @@ public class ActionableLinkModelTest {
     @Test
     public void testPID() {
         ActionableLinkModel instance = new ActionableLinkModel(Model.of("hdl:123/456"));
-        assertEquals("Link for handle", "http://hdl.handle.net/123/456", instance.getObject());
+        assertEquals("http://hdl.handle.net/123/456", instance.getObject(), "Link for handle");
         instance = new ActionableLinkModel(Model.of("doi:123/456"));
-        assertEquals("Link for DOI", "https://doi.org/123/456", instance.getObject());
+        assertEquals("https://doi.org/123/456", instance.getObject(), "Link for DOI");
     }
 
 }

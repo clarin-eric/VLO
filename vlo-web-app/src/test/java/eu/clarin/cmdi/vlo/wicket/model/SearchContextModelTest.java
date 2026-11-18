@@ -23,9 +23,9 @@ import org.apache.wicket.model.Model;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -40,7 +40,7 @@ public class SearchContextModelTest {
     private final static Long index = 123L;
     private final static Long resultCount = 400L;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         selection = new QueryFacetsSelection();
         instance = new SearchContextModel(index, resultCount, Model.of(selection));

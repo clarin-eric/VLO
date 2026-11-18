@@ -22,7 +22,7 @@ import eu.clarin.cmdi.vlo.pojo.ResourceTypeCount;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import java.util.Arrays;
 import java.util.Collection;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import org.jmock.Expectations;

@@ -19,14 +19,13 @@ package eu.clarin.cmdi.vlo.service.impl;
 import eu.clarin.cmdi.vlo.service.handle.HandleClient;
 import java.util.Optional;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -38,7 +37,7 @@ public class HandleClientUriResolverImplTest {
     private HandleClientUriResolverImpl instance;
     private HandleClient handleClient;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         handleClient = context.mock(HandleClient.class);
         instance = new HandleClientUriResolverImpl(handleClient);

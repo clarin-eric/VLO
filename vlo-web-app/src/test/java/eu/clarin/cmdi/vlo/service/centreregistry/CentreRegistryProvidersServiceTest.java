@@ -23,11 +23,11 @@ import java.io.Writer;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.BeforeClass;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeAll;
 
 /**
  *
@@ -39,19 +39,19 @@ public class CentreRegistryProvidersServiceTest {
     private static File centreJsonFile;
     private static File endpointJsonFile;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws IOException {
         centreJsonFile = getCentreJsonFile();
         endpointJsonFile = getEndpointJsonFile();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         centreJsonFile.delete();
         endpointJsonFile.delete();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         instance = new CentreRegistryProvidersService(centreJsonFile.toURI().toString(), endpointJsonFile.toURI().toString());
     }
@@ -159,8 +159,8 @@ public class CentreRegistryProvidersServiceTest {
 
         };
 
-        assertNotNull("first attempt should pass", instance.retrieveCentreEndpoints());
-        assertNotNull("second attempt should also pass", instance.retrieveCentreEndpoints());
+        assertNotNull(instance.retrieveCentreEndpoints(), "first attempt should pass");
+        assertNotNull(instance.retrieveCentreEndpoints(), "second attempt should also pass");
     }
 
     @Test

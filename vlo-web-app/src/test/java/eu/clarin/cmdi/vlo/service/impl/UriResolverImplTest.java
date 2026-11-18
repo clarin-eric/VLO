@@ -22,15 +22,14 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import nl.mpi.archiving.corpusstructure.core.handle.InvalidHandleException;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -43,7 +42,7 @@ public class UriResolverImplTest {
     private PIDResolver handleClient;
     private PIDResolver doiClient;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         handleClient = context.mock(PIDResolver.class, "handleResolver");
         doiClient = context.mock(PIDResolver.class, "doiResolver");
@@ -52,9 +51,9 @@ public class UriResolverImplTest {
 
     public void testCanResolve() {
         Stream.of("hdl:1234/5678", "http://hdl.handle.net/1234/5678", "doi:1234/5678", "https://doi.org/1234/5678")
-                .forEach(p -> assertTrue("can resolve " + p, instance.canResolve(p)));
+                .forEach(p -> assertTrue(instance.canResolve(p), "can resolve " + p));
         Stream.of("http://www.clarin.eu", "/relative", "zzzz")
-                .forEach(p -> assertFalse("cannot resolve " + p, instance.canResolve(p)));
+                .forEach(p -> assertFalse(instance.canResolve(p), "cannot resolve " + p));
     }
 
     /**

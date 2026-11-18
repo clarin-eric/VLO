@@ -16,19 +16,16 @@
  */
 package eu.clarin.cmdi.vlo.service.impl;
 
-import java.net.URL;
 import java.util.Properties;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.stream.StreamSource;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -41,7 +38,7 @@ public class XmlTransformationServiceImplTest {
     public XmlTransformationServiceImplTest() {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         final Source xsltSource = new StreamSource(getClass().getResourceAsStream("/cmdi2xhtml.xsl"));
         final Properties transformationProperties = new Properties();
@@ -51,7 +48,7 @@ public class XmlTransformationServiceImplTest {
         this.instance = new XmlTransformationServiceImpl(xsltSource, transformationProperties);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         instance = null;
     }

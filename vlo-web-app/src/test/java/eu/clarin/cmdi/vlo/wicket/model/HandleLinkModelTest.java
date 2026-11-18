@@ -18,13 +18,12 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.model.IModel;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -37,11 +36,11 @@ public class HandleLinkModelTest {
     public HandleLinkModelTest() {
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
     }
 
@@ -103,7 +102,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // handle proxy should be prepended
-            assertEquals("Expecting unchanged URL", "http://hdl.handle.net/1234/5678-90", result);
+            assertEquals("http://hdl.handle.net/1234/5678-90", result, "Expecting unchanged URL");
         }
         {
             // model holds a handle resolver URL
@@ -116,7 +115,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // handle proxy should be prepended
-            assertEquals("Expecting unchanged URL", "https://hdl.handle.net/1234/5678-90", result);
+            assertEquals("https://hdl.handle.net/1234/5678-90", result, "Expecting unchanged URL");
         }
     }
 
@@ -148,7 +147,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // handle proxy should be prepended
-            assertEquals("Expecting unchanged URL", "http://urn.fi/urn:nbn:fi:lb-2017021504", result);
+            assertEquals("http://urn.fi/urn:nbn:fi:lb-2017021504", result, "Expecting unchanged URL");
         }
 
     }
@@ -168,7 +167,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // handle proxy should be prepended
-            assertEquals("Expecting resolver URL", "https://doi.org/123/456", result);
+            assertEquals("https://doi.org/123/456", result, "Expecting resolver URL");
         }
         {
             // model holds a doi
@@ -181,7 +180,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // original value should be returned
-            assertEquals("Expecting unchanged URL", "https://doi.org/123/456", result);
+            assertEquals("https://doi.org/123/456", result, "Expecting unchanged URL");
         }
         {
             // model holds a doi
@@ -194,7 +193,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // original value should be returned
-            assertEquals("Expecting unchanged URL", "http://dx.doi.org/123/456", result);
+            assertEquals("http://dx.doi.org/123/456", result, "Expecting unchanged URL");
         }
     }
 

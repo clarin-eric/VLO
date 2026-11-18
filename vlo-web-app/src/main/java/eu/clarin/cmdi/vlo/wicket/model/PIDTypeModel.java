@@ -41,8 +41,7 @@ public class PIDTypeModel extends LoadableDetachableModel<PIDType> {
     }
 
     @Override
-    public void detach() {
-        super.detach();
+    protected void onDetachAlways() {
         linkModel.detach();
     }
 

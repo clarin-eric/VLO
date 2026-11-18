@@ -26,10 +26,10 @@ import java.util.List;
 import java.util.Map;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.hamcrest.Matchers;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -44,7 +44,7 @@ public class SolrFacetQueryFactoryImplTest {
      */
     private static SolrFacetQueryFactoryImpl instance;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() {
         instance = new SolrFacetQueryFactoryImpl();
     }
