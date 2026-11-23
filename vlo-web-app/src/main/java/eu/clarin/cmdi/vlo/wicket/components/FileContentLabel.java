@@ -17,23 +17,19 @@
 package eu.clarin.cmdi.vlo.wicket.components;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.URI;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Renders the content of a local file (passed as a {@code file:} URL) as
  * unescaped markup, so it can be used only for files from the vlo's configuration.
- * Renders nothing if there's no local file at the URL or if the file cannot be read.
  */
 public class FileContentLabel extends Label {
-
-    private static final Logger logger = LoggerFactory.getLogger(FileContentLabel.class);
 
     public FileContentLabel(String id, String fileUrl) {
         super(id, LoadableDetachableModel.of(() -> read(fileUrl)));
@@ -43,10 +39,17 @@ public class FileContentLabel extends Label {
     private static String read(String fileUrl) {
         try {
             // Only a local file: URL converts to a path; any other URL throws
-            return Files.readString(Path.of(URI.create(fileUrl)));
-        } catch (IOException | IllegalArgumentException | FileSystemNotFoundException ex) {
-            logger.error("Could not file at {}", fileUrl, ex);
-            return "";
+            return Files.readString(toPath(fileUrl));
+        } catch (IOException ex) {
+            throw new UncheckedIOException("Could not read file at " + fileUrl, ex);
+        }
+    }
+
+    private static Path toPath(String fileUrl) {
+        try {
+            return Path.of(URI.create(fileUrl));
+        } catch (IllegalArgumentException | FileSystemNotFoundException | NullPointerException ex) {
+            throw new IllegalArgumentException("Expected a file: URL, got: " + fileUrl, ex);
         }
     }
 }
