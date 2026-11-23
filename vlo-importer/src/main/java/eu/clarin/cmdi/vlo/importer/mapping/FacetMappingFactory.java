@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -315,27 +317,32 @@ public class FacetMappingFactory {
     }
 
     public void printMapping(File file) throws IOException {
-        Set<String> xsdNames = mapping.keySet();
-        FileWriter fileWriter = new FileWriter(file);
-        fileWriter.append("This file is generated on " + DateFormat.getDateTimeInstance().format(new Date())
-                + " and only used to document the mapping.\n");
-        fileWriter.append("This file contains xsd name and a list of conceptName with xpath mappings that are generated.\n");
-        fileWriter.append("---------------------\n");
-        fileWriter.flush();
-        for (String xsd : xsdNames) {
-            FacetsMapping facetMapping = mapping.get(xsd);
-            fileWriter.append(xsd + "\n");
-            for (FacetDefinition config : facetMapping.getFacetDefinitions()) {
-                fileWriter.append("FacetName:" + config.getName() + "\n");
-                fileWriter.append("Mappings:\n");
-                for (Pattern pattern : config.getPatterns()) {
-                    fileWriter.append("    " + pattern + "\n");
+        final FileWriter fileWriter = new FileWriter(file);
+        printMapping(() -> fileWriter);
+    }
+
+    public void printMapping(Supplier<Writer> writerFactory) throws IOException {
+        final Set<String> xsdNames = mapping.keySet();
+        try (Writer writer = writerFactory.get()) {
+            writer.append("This file is generated on " + DateFormat.getDateTimeInstance().format(new Date())
+                    + " and only used to document the mapping.\n");
+            writer.append("This file contains xsd name and a list of conceptName with xpath mappings that are generated.\n");
+            writer.append("---------------------\n");
+            writer.flush();
+            for (String xsd : xsdNames) {
+                FacetsMapping facetMapping = mapping.get(xsd);
+                writer.append(xsd + "\n");
+                for (FacetDefinition config : facetMapping.getFacetDefinitions()) {
+                    writer.append("FacetName:" + config.getName() + "\n");
+                    writer.append("Mappings:\n");
+                    for (Pattern pattern : config.getPatterns()) {
+                        writer.append("    " + pattern + "\n");
+                    }
                 }
+                writer.append("---------------------\n");
+                writer.flush();
             }
-            fileWriter.append("---------------------\n");
-            fileWriter.flush();
         }
-        fileWriter.close();
     }
 
     public FacetsMapping getBaseMapping() {

@@ -18,7 +18,6 @@ package eu.clarin.cmdi.vlo.importer;
 
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.LoggerFactory;
 
 /**
@@ -32,7 +31,8 @@ public class DeduplicationSignature {
     private final List<String> signatureFieldNames;
 
     /**
-     * @param signatureFieldNames document fields that are used to generate a signature for the document
+     * @param signatureFieldNames document fields that are used to generate a
+     * signature for the document
      */
     public DeduplicationSignature(List<String> signatureFieldNames) {
         this.signatureFieldNames = signatureFieldNames;
@@ -40,6 +40,7 @@ public class DeduplicationSignature {
 
     /**
      * Generate document signature for a Solr document
+     *
      * @param doc
      * @return document signature
      */

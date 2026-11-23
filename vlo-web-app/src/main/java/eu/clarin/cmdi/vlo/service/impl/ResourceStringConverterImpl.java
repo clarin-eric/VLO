@@ -25,8 +25,6 @@ import eu.clarin.cmdi.vlo.pojo.ResourceInfo;
 import eu.clarin.cmdi.vlo.pojo.ResourceType;
 import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.UriResolver;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
@@ -40,10 +38,9 @@ import org.slf4j.LoggerFactory;
  * @author twagoo
  */
 public class ResourceStringConverterImpl implements ResourceStringConverter {
-
+    
     private final static Logger logger = LoggerFactory.getLogger(ResourceStringConverterImpl.class);
-
-    private final Jsonb jsonb = JsonbBuilder.create();
+    
     private final UriResolver resolver;
     private final ExecutorService preflightPool;
 
@@ -62,14 +59,14 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
         this.resolver = resolver;
         preflightPool = Executors.newCachedThreadPool();
     }
-
+    
     @Override
     public ResourceInfo getResourceInfo(String resourceString) {
         if (resourceString == null) {
             return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
         } else {
             // serialize resource string to find href and mime type
-            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(jsonb, resourceString);
+            eu.clarin.cmdi.vlo.ResourceInfo resourceInfo = eu.clarin.cmdi.vlo.ResourceInfo.fromJson(resourceString);
             if (resourceInfo == null) {
                 logger.warn("Resource string could not be parsed: {}", resourceString);
                 return new eu.clarin.cmdi.vlo.pojo.ResourceInfo(null, null, null, null, null, ResourceType.OTHER);
@@ -82,7 +79,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             if (resolver == null) {
                 fileName = getFileName(href);
             } else {
-                fileName = getFileName(resolver.resolve(href));
+                fileName = getFileName(resolver.resolve(href).orElse(href));
             }
 
             // determine resource type based on mime type
@@ -112,7 +109,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             });
         }
     }
-
+    
     private String getFileName(final String href) {
         try {
             if (href.startsWith(HANDLE_PROXY) || href.startsWith(HANDLE_PROXY_HTTPS)) {
@@ -135,7 +132,7 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return href;
         }
     }
-
+    
     private ResourceType determineResourceType(final String mimeType) {
         final String normalizeMimeType = CommonUtils.normalizeMimeType(mimeType);
         // map to ResourceType and add to bag
@@ -155,10 +152,10 @@ public class ResourceStringConverterImpl implements ResourceStringConverter {
             return ResourceType.OTHER;
         }
     }
-
+    
     @Override
     public UriResolver getResolver() {
         return resolver;
     }
-
+    
 }

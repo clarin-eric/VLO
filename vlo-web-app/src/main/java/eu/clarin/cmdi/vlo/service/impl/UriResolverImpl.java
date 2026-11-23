@@ -23,6 +23,7 @@ import eu.clarin.cmdi.vlo.service.PIDResolver;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,26 +53,23 @@ public class UriResolverImpl implements UriResolver {
     }
 
     @Override
-    public String resolve(String uri) {
-        final URI resolved;
+    public Optional<String> resolve(String uri) {
         if (PIDUtils.isHandle(uri)) {
-            resolved = resolve(handleClient, HANDLE_PREFIX + PIDUtils.getSchemeSpecificId(uri));
+            return resolve(handleClient, HANDLE_PREFIX + PIDUtils.getSchemeSpecificId(uri)).map(Object::toString);
         } else if (PIDUtils.isDoi(uri)) {
-            resolved = resolve(doiClient, DOI_PREFIX + PIDUtils.getSchemeSpecificId(uri));
+            return resolve(doiClient, DOI_PREFIX + PIDUtils.getSchemeSpecificId(uri)).map(Object::toString);
         } else {
-            resolved = null;
+            return Optional.empty();
         }
-
-        return (resolved != null) ? resolved.toString() : uri;
     }
 
-    private static URI resolve(PIDResolver resolver, String pid) {
+    private static Optional<URI> resolve(PIDResolver resolver, String pid) {
         try {
             logger.debug("Using {} to resolve pid [{}]", resolver.getClass().getName(), pid);
-            return resolver.resolve(new URI(pid));
+            return Optional.ofNullable(resolver.resolve(new URI(pid)));
         } catch (URISyntaxException ex) {
             logger.warn("PID is not a valid URI: {}", pid);
-            return null;
+            return Optional.empty();
         }
     }
 

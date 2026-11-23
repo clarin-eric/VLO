@@ -20,7 +20,6 @@ import eu.clarin.cmdi.vlo.wicket.components.LanguageInfoLink;
 import com.google.common.collect.Ordering;
 import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
-import eu.clarin.cmdi.vlo.config.VloConfig;
 import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.config.FacetConfigurationService;
 import eu.clarin.cmdi.vlo.wicket.BooleanVisibilityBehavior;

@@ -21,45 +21,35 @@ import eu.clarin.cmdi.vlo.VloWicketApplication;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionList;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentExpansionPair;
-import eu.clarin.cmdi.vlo.service.solr.impl.SolrDocumentExpansionPairImpl;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.model.SolrDocumentExpansionPairModel;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 
-import eu.clarin.cmdi.vlo.VloWebSession;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.slf4j.LoggerFactory;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 
-import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
-import eu.clarin.cmdi.vlo.service.ExposureTracker;
 /**
  *
  * @author twagoo
  */
 public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocumentExpansionPair> {
+
     private final static org.slf4j.Logger logger = LoggerFactory.getLogger(SolrDocumentExpansionPairProvider.class);
 
     private final FieldNameService fieldNameService;
-    private final ExposureTracker exposureTracker;
     private final IModel<QueryFacetsSelection> selectionModel;
 
     private Long size;
 
     public SolrDocumentExpansionPairProvider(IModel<QueryFacetsSelection> selection,
-            FieldNameService fieldNameService, ExposureTracker exposureTracker) {
+            FieldNameService fieldNameService) {
         this.selectionModel = selection;
         this.fieldNameService = fieldNameService;
-        this.exposureTracker = exposureTracker;
     }
 
     @Override
@@ -67,8 +57,7 @@ public class SolrDocumentExpansionPairProvider implements IDataProvider<SolrDocu
         final SolrDocumentExpansionList documents = getDocumentService().getDocumentsWithExpansion(
                 selectionModel.getObject(), BigDecimal.valueOf(first).intValueExact(), // safe long->int conversion
                 BigDecimal.valueOf(count).intValueExact(), FacetConstants.COLLAPSE_FIELD_NAME); // safe long->int
-                                                                                                // conversion
-        exposureTracker.track(selectionModel.getObject(), documents, first, count);
+        // conversion
         return documents.iterator();
     }
 

@@ -2,15 +2,20 @@ language: java
 jdk:
 - openjdk21
 
-install: skip
-before_script:
+before_install:
 - echo "MAVEN_OPTS='-Xmx2g'" > ~/.mavenrc
-- cd 'vlo-5.0/'
 script:
 - bash -c 'if [ "${TRAVIS_TAG}" ]; then mvn versions:set -DnewVersion=${TRAVIS_TAG} versions:commit; fi'
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
 - mvn test -B
-# - mvn clean install -DskipTests=true -Pdocker
+- mvn clean install -DskipTests=true -Pdocker
+
+before_deploy:
+  - yes | gem update --system --force
+  - gem install bundler
+  - gem install faraday-net_http -v '3.3.0' # Fix faraday version
+  - gem install uri
+  - gem install logger
 deploy:
   provider: releases
   prerelease: true

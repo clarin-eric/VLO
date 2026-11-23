@@ -50,8 +50,6 @@ import org.apache.solr.common.params.CursorMarkParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import static eu.clarin.cmdi.vlo.importer.linkcheck.LinkStatus.getCheckingDataAsUtcEpochMs;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import java.io.Closeable;
 
 /**
@@ -66,7 +64,6 @@ public class AvailabilityStatusUpdater implements Closeable {
 
     private final SolrBridge solrBridge;
     private final ResourceAvailabilityStatusChecker statusChecker;
-    private final Jsonb jsonb = JsonbBuilder.create();
     private final AvailabilityScoreAccumulator scoreAccumulator = new AvailabilityScoreAccumulator();
 
     private final String ID_FIELD;
@@ -233,7 +230,7 @@ public class AvailabilityStatusUpdater implements Closeable {
                 .map(Collection::stream)
                 .orElse(Stream.empty())
                 .filter(r -> (r instanceof String)) // filter out null and non-String values
-                .map(r -> ResourceInfo.fromJson(jsonb, (String) r)) // deserialise
+                .map(r -> ResourceInfo.fromJson((String) r)) // deserialise
                 .filter(Objects::nonNull) //filter out failed deserialisations
                 .collect(Collectors.toSet());
     }
@@ -271,10 +268,10 @@ public class AvailabilityStatusUpdater implements Closeable {
     public void updateDocument(final Object docId, final ResourceAvailabilityScore score, final List<ResourceInfo> newResourceRefInfos, final List<ResourceInfo> newLandingPageInfos) {
         // serialize new resource ref values
         final List<String> newResourceRefValue = newResourceRefInfos.stream()
-                .map((info) -> info.toJson(jsonb))
+                .map((info) -> info.toJson())
                 .collect(Collectors.toList());
         final List<String> newLandingPageRefValue = newLandingPageInfos.stream()
-                .map((info) -> info.toJson(jsonb))
+                .map((info) -> info.toJson())
                 .collect(Collectors.toList());
 
         // make update document

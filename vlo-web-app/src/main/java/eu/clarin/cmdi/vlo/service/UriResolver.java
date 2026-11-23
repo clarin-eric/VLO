@@ -17,12 +17,14 @@
 
 package eu.clarin.cmdi.vlo.service;
 
+import java.util.Optional;
+
 /**
  *
  * @author twagoo
  */
 public interface UriResolver {
-    String resolve(String URI);
+    Optional<String> resolve(String URI);
     
     boolean canResolve(String URI);
 }

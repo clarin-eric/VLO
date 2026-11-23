@@ -10,7 +10,6 @@ import static eu.clarin.cmdi.vlo.importer.ImporterTestcase.getTestFacetsConfigFi
 import eu.clarin.cmdi.vlo.importer.linkcheck.NoopResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.linkcheck.ResourceAvailabilityStatusChecker;
 import eu.clarin.cmdi.vlo.importer.solr.DocumentStoreException;
-import jakarta.json.bind.JsonbBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +78,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals(sessionFile.getAbsolutePath(), getValue(doc, FieldKey.FILENAME));
         assertEquals("video/x-mpeg1", getValue(doc, FieldKey.FORMAT));
 
-        ResourceInfo resourceInfo = ResourceInfo.fromJson(JsonbBuilder.create(), getValue(doc, FieldKey.RESOURCE).toString());
+        ResourceInfo resourceInfo = ResourceInfo.fromJson(getValue(doc, FieldKey.RESOURCE).toString());
         assertNotNull(resourceInfo);
         assertEquals("video/x-mpeg1", resourceInfo.getType());
         assertEquals("../Media/elan-example1.mpg", resourceInfo.getUrl());
@@ -133,12 +132,12 @@ public class MetadataImporterTest extends ImporterTestcase {
         values = new ArrayList(fieldValues);
         Collections.sort(values);
 
-        ResourceInfo resourceInfo1 = ResourceInfo.fromJson(JsonbBuilder.create(), values.get(0));
+        ResourceInfo resourceInfo1 = ResourceInfo.fromJson(values.get(0));
         assertNotNull(resourceInfo1);
         assertEquals("unknown type", resourceInfo1.getType());
         assertEquals("file://bla.resource2.txt", resourceInfo1.getUrl());
 
-        ResourceInfo resourceInfo2 = ResourceInfo.fromJson(JsonbBuilder.create(), values.get(1));
+        ResourceInfo resourceInfo2 = ResourceInfo.fromJson(values.get(1));
         assertNotNull(resourceInfo2);
         assertEquals("unknown type", resourceInfo2.getType());
         assertEquals("http://terminotica.upf.es/CREL/LIC01.htm", resourceInfo2.getUrl());
@@ -147,7 +146,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     @Test
     public void testImportWithNameSpaceGalore() throws Exception {
         String content = "";
-        content += "<cmdi:CMD CMDVersion=\"1.1\" xmlns:cmdi=\"http://www.clarin.eu/cmd/1\" xmlns:cmdip=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1290431694629\"\n";
+        content += "<cmdi:CMD CMDVersion=\"1.2\" xmlns:cmdi=\"http://www.clarin.eu/cmd/1\" xmlns:cmdip=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1290431694629\"\n";
         content += "    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.clarin.eu/cmd/ http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1290431694629/xsd\">\n";
         content += "    <cmdi:Header/>\n";
         content += "    <cmdi:Resources>\n";
@@ -178,7 +177,7 @@ public class MetadataImporterTest extends ImporterTestcase {
         assertEquals("hdl_58_11858_47_00-175C-0000-0000-E180-8", getValue(doc, FieldKey.ID));
         assertEquals("L'Est R\u00e9publicain : \u00e9dition du 17 mai 1999", getValue(doc, FieldKey.NAME));
 
-        ResourceInfo resourceInfo = ResourceInfo.fromJson(JsonbBuilder.create(), getValue(doc, FieldKey.RESOURCE).toString());
+        ResourceInfo resourceInfo = ResourceInfo.fromJson(getValue(doc, FieldKey.RESOURCE).toString());
         assertNotNull(resourceInfo);
         assertEquals("unknown type", resourceInfo.getType());
         assertEquals("http://hdl.handle.net/11858/00-175C-0000-0000-E180-8?urlappend=/TEI", resourceInfo.getUrl());
@@ -219,7 +218,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testProjectName() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\">\n";
+        content += "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1280305685235\" CMDVersion=\"1.2\">\n";
         content += "   <cmd:Header>\n";
         content += "      <cmd:MdProfile>clarin.eu:cr1:p_1280305685235</cmd:MdProfile>\n";
         content += "   </cmd:Header>\n";
@@ -273,7 +272,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testDerivedFacetsWithPostProcessing() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1289827960126\">\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1289827960126\" CMDVersion=\"1.2\">\n"
                 + "    <cmd:Header>\n"
                 + "        <cmd:MdProfile>clarin.eu:cr1:p_1289827960126</cmd:MdProfile>\n"
                 + "    </cmd:Header>\n"
@@ -306,7 +305,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testDefaultValuePostProcessing() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\">\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:cmdp=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\"  CMDVersion=\"1.2\">\n"
                 + "    <cmd:Header>\n"
                 + "        <cmd:MdProfile>clarin.eu:cr1:p_1475136016208</cmd:MdProfile>\n"
                 + "    </cmd:Header>\n"
@@ -336,7 +335,7 @@ public class MetadataImporterTest extends ImporterTestcase {
     public void testMultilingualValues() throws Exception {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\">\n"
+                + "<cmd:CMD xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1475136016208\" CMDVersion=\"1.2\">\n"
                 + "    <cmd:Header>\n"
                 + "        <cmd:MdProfile>clarin.eu:cr1:p_1475136016208</cmd:MdProfile>\n"
                 + "    </cmd:Header>\n"

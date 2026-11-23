@@ -17,8 +17,6 @@
 package eu.clarin.cmdi.vlo.wicket.model;
 
 import eu.clarin.cmdi.vlo.ResourceInfo;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -30,7 +28,6 @@ import org.apache.wicket.model.LoadableDetachableModel;
 public class ResourceInfoObjectModel extends LoadableDetachableModel<ResourceInfo> {
 
     private final IModel<String> resourceInfoStringModel;
-    private Jsonb jsonb;
 
     public ResourceInfoObjectModel(IModel<SolrDocument> documentModel, String fieldName) {
         this(new SolrFieldStringModel(documentModel, fieldName));
@@ -43,29 +40,20 @@ public class ResourceInfoObjectModel extends LoadableDetachableModel<ResourceInf
 
     @Override
     public void setObject(ResourceInfo t) {
-        resourceInfoStringModel.setObject(t.toJson(jsonb));
+        resourceInfoStringModel.setObject(t.toJson());
         //require reload
         this.detach();
     }
 
     @Override
     protected ResourceInfo load() {
-        jsonb = JsonbBuilder.create();
-        return ResourceInfo.fromJson(jsonb, resourceInfoStringModel.getObject());
+        return ResourceInfo.fromJson(resourceInfoStringModel.getObject());
     }
 
     @Override
     protected void onDetach() {
         super.onDetach();
         resourceInfoStringModel.detach();
-        if (jsonb != null) {
-            try {
-                jsonb.close();
-            } catch (Exception ex) {
-                //not closing jsonb is acceptable
-            }
-            jsonb = null;
-        }
     }
 
 }

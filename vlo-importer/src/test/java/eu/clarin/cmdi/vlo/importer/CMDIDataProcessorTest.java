@@ -458,7 +458,7 @@ public class CMDIDataProcessorTest extends ImporterTestcase {
         String content = "";
         content += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
         content += "<cmd:CMD xmlns=\"http://www.clarin.eu/cmd/1/profiles/clarin.eu:cr1:p_1271859438204\" xmlns:cmd=\"http://www.clarin.eu/cmd/1\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n";
-        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\">\n";
+        content += "     xsi:schemaLocation=\"http://www.clarin.eu/cmd http://catalog.clarin.eu/ds/ComponentRegistry/rest/registry/profiles/clarin.eu:cr1:p_1271859438204/xsd\" CMDVersion=\"1.2\">\n";
         content += "   <cmd:Header>\n";
         content += "      <cmd:MdCreationDate>2008-05-27</cmd:MdCreationDate>\n";
         content += "      <cmd:MdSelfLink>test-hdl:1839/00-0000-0000-0009-294C-9</cmd:MdSelfLink>\n";

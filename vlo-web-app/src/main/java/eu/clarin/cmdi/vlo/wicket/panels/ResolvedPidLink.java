@@ -17,6 +17,8 @@
 package eu.clarin.cmdi.vlo.wicket.panels;
 
 import eu.clarin.cmdi.vlo.service.UriResolver;
+import eu.clarin.cmdi.vlo.wicket.model.NullFallbackModel;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
@@ -56,10 +58,10 @@ public class ResolvedPidLink extends GenericPanel<String> {
         super(id, model);
 
         //resolved link model
-        final LoadableDetachableModel<String> resolvedLinkModel = new LoadableDetachableModel<String>() {
+        final IModel<String> resolvedLinkModel = new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
-                return uriResolver.resolve(model.getObject());
+                return uriResolver.resolve(model.getObject()).orElse(null);
             }
         };
 
@@ -67,7 +69,26 @@ public class ResolvedPidLink extends GenericPanel<String> {
             label = resolvedLinkModel;
         }
 
-        add(new ExternalLink("link", resolvedLinkModel, resolvedLinkModel));
+        add(new ExternalLink("link",
+                new NullFallbackModel<>(resolvedLinkModel, model),
+                new NullFallbackModel<>(label, "")) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(resolvedLinkModel.getObject() != null);
+            }
+
+        });
+
+        // container that shows an error badge if the PID could not be resolved
+        add(new WebMarkupContainer("error") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                setVisible(resolvedLinkModel.getObject() == null);
+            }
+
+        });
     }
 
 }

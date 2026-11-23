@@ -27,7 +27,6 @@ import eu.clarin.cmdi.vlo.facets.FacetsConfigurationsMarshaller;
 import eu.clarin.cmdi.vlo.facets.configuration.FacetsConfiguration;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
-import eu.clarin.cmdi.vlo.service.ExposureTracker;
 import eu.clarin.cmdi.vlo.service.FacetConditionEvaluationService;
 import eu.clarin.cmdi.vlo.service.FacetParameterMapper;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
@@ -39,12 +38,12 @@ import eu.clarin.cmdi.vlo.service.ResourceStringConverter;
 import eu.clarin.cmdi.vlo.service.ResourceTypeCountingService;
 import eu.clarin.cmdi.vlo.service.UriResolver;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
+import eu.clarin.cmdi.vlo.service.centreregistry.CachingEndPointProvidersService;
 import eu.clarin.cmdi.vlo.service.centreregistry.CentreRegistryProvidersService;
 import eu.clarin.cmdi.vlo.service.centreregistry.EndpointProvidersService;
 import eu.clarin.cmdi.vlo.service.impl.DOIResolver;
 import eu.clarin.cmdi.vlo.service.impl.DocumentParametersConverter;
 import eu.clarin.cmdi.vlo.service.impl.ExclusiveFieldFilter;
-import eu.clarin.cmdi.vlo.service.impl.ExposureTrackerImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetConditionEvaluationServiceImpl;
 import eu.clarin.cmdi.vlo.service.impl.FacetParameterMapperImpl;
 import eu.clarin.cmdi.vlo.service.impl.FieldValueOrderingsFactoryImpl;
@@ -88,7 +87,8 @@ public class VloServicesSpringConfig {
     /**
      * Handle resolution cache expiry in seconds
      */
-    private static final int HANDLE_CACHE_EXPIRY = 3600;
+    private static final Duration HANDLE_CACHE_EXPIRY = Duration.ofHours(1);
+    private static final Duration ENDPOINTS_CACHE_EXPIRY = Duration.ofHours(2);
 
     @Inject
     VloConfig vloConfig;
@@ -253,12 +253,7 @@ public class VloServicesSpringConfig {
 
     @Bean
     public EndpointProvidersService endpointProvidersService() {
-        return new CentreRegistryProvidersService(vloConfig);
-    }
-
-    @Bean
-    public ExposureTracker exposureTracker() {
-        return new ExposureTrackerImpl(vloConfig);
+        return new CachingEndPointProvidersService(new CentreRegistryProvidersService(vloConfig), ENDPOINTS_CACHE_EXPIRY);
     }
 
     @Bean

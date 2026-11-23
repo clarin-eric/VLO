@@ -13,6 +13,7 @@ import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 import java.util.Collection;
 
 public class TemporalCoveragePostNormalizer extends AbstractPostNormalizer {
+
     private final FieldNameService fieldNameService;
 
     // Open Date Range Format (like "2019-12-02/2020-01-01")
@@ -47,18 +48,24 @@ public class TemporalCoveragePostNormalizer extends AbstractPostNormalizer {
         Matcher yearRangeMatcher;
         Matcher yearMatcher;
 
-        if (odrfMatcher.find()) {
-            String tmp = odrfMatcher.group(2);
-            if(tmp != null)
-                startYear = Integer.parseInt(tmp);
-            tmp = odrfMatcher.group(5);
-            if(tmp != null)
-                endYear = Integer.parseInt(tmp);
-        } else if ((yearRangeMatcher = YEAR_RANGE_PATTERN.matcher(coverageString)).find()) {
-            startYear = Integer.parseInt(yearRangeMatcher.group(1));
-            endYear = Integer.parseInt(yearRangeMatcher.group(4));
-        } else if ((yearMatcher = DATETIME_PATTERN.matcher(coverageString)).find()) {
-            startYear = Integer.parseInt(yearMatcher.group(1));
+        try {
+            if (odrfMatcher.find()) {
+                String tmp = odrfMatcher.group(2);
+                if (tmp != null) {
+                    startYear = Integer.valueOf(tmp);
+                }
+                tmp = odrfMatcher.group(5);
+                if (tmp != null) {
+                    endYear = Integer.valueOf(tmp);
+                }
+            } else if ((yearRangeMatcher = YEAR_RANGE_PATTERN.matcher(coverageString)).find()) {
+                startYear = Integer.valueOf(yearRangeMatcher.group(1));
+                endYear = Integer.valueOf(yearRangeMatcher.group(4));
+            } else if ((yearMatcher = DATETIME_PATTERN.matcher(coverageString)).find()) {
+                startYear = Integer.valueOf(yearMatcher.group(1));
+            }
+        } catch (NumberFormatException ex) {
+            LOG.info("Could not parse number(s) from temporal coverage value: " + value, ex);
         }
 
         // only one boundary is set --> startYear = endYear
@@ -75,19 +82,24 @@ public class TemporalCoveragePostNormalizer extends AbstractPostNormalizer {
                 if (temporalCoverageValues != null && !temporalCoverageValues.isEmpty()) {
                     // extract old values
                     Integer[] oldValues = extractDateRange(temporalCoverageValues.toArray()[0].toString());
-                    if(oldValues != null) {
-                        if(oldValues[0] < startYear)
+                    if (oldValues != null) {
+                        if (oldValues[0] < startYear) {
                             startYear = oldValues[0];
-                        if(oldValues[1] > endYear)
+                        }
+                        if (oldValues[1] > endYear) {
                             endYear = oldValues[1];
+                        }
                     }
                     // delete old value
                     cmdiData.removeField(fieldNameService.getFieldName(FieldKey.TEMPORAL_COVERAGE));
                 }
             }
 
-            // set new value
-            resultList.add(createDateRange(startYear, endYear));
+            // if not both are 0
+            if (startYear != 0 || endYear != 0) {
+                // set new value
+                resultList.add(createDateRange(startYear, endYear));
+            }
         }
 
         return resultList;

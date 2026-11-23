@@ -135,7 +135,7 @@ public class HandleLinkModelTest {
 
             final String result = instance.getObject();
             // handle proxy should be prepended
-            assertEquals("http://www.nbn-resolving.org/redirect/urn:nbn:de:kobv:b4-200905193201", result);
+            assertEquals("https://nbn-resolving.org/urn:nbn:de:kobv:b4-200905193201", result);
         }
         {
             // model holds a URN NBN link

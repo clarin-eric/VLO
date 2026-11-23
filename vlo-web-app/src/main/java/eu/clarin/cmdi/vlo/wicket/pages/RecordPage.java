@@ -17,6 +17,7 @@
 package eu.clarin.cmdi.vlo.wicket.pages;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Streams;
 
@@ -26,17 +27,19 @@ import eu.clarin.cmdi.vlo.FieldKey;
 import eu.clarin.cmdi.vlo.JavaScriptResources;
 import eu.clarin.cmdi.vlo.PiwikEventConstants;
 import eu.clarin.cmdi.vlo.VloWebAppParameters;
-import eu.clarin.cmdi.vlo.VloWebSession;
 import eu.clarin.cmdi.vlo.config.FieldNameService;
 import eu.clarin.cmdi.vlo.config.FieldValueDescriptor;
 import eu.clarin.cmdi.vlo.config.PiwikConfig;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import eu.clarin.cmdi.vlo.exposure.models.PageView;
+import eu.clarin.cmdi.vlo.pojo.FacetSelection;
+import eu.clarin.cmdi.vlo.pojo.FacetSelectionType;
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.pojo.SearchContext;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
 import eu.clarin.cmdi.vlo.service.PageParametersConverter;
+import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import eu.clarin.cmdi.vlo.wicket.AjaxPiwikTrackingBehavior;
+import eu.clarin.cmdi.vlo.wicket.CmdiContentRequestHandler;
 import eu.clarin.cmdi.vlo.wicket.HighlightSearchTermBehavior;
 import eu.clarin.cmdi.vlo.wicket.PreferredExplicitOrdering;
 import eu.clarin.cmdi.vlo.wicket.RecordStructuredMeatadataHeaderBehavior;
@@ -68,7 +71,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.Component;
@@ -78,7 +80,6 @@ import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -89,9 +90,10 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
-import org.apache.wicket.protocol.http.request.WebClientInfo;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.RequestHandlerExecutor;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.JavaScriptResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -99,6 +101,8 @@ import org.apache.wicket.util.string.StringValue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static eu.clarin.cmdi.vlo.CmdConstants.CMDI_MEDIA_TYPE;
 
 /**
  *
@@ -122,6 +126,8 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     private final static List<String> TABS_ORDER = ImmutableList.of(DETAILS_SECTION, RESOURCES_SECTION,
             AVAILABILITY_SECTION, ALL_METADATA_SECTION, TECHNICAL_DETAILS_SECTION, HIERARCHY_SECTION);
 
+    @SpringBean
+    private SolrDocumentService documentService;
     @SpringBean(name = "documentParamsConverter")
     private PageParametersConverter<SolrDocument> documentParamConverter;
     @SpringBean(name = "queryParametersConverter")
@@ -177,68 +183,102 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         // get document from parameters
         final SolrDocument document = documentParamConverter.fromParameters(params);
         if (null == document) {
-            Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
-            final PageParameters errorParams = new PageParameters(params)
-                    .remove(VloWebAppParameters.DOCUMENT_ID);
-            ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
-        } else {
-            if (config.isVloExposureEnabled()) {
-                try {
-                    // save these information (id, ip, url, referer) in postgresql DB for record
-                    // exposures
-                    String id = document.get("id").toString();
-                    HttpServletRequest httpRequest = ((ServletWebRequest) RequestCycle.get().getRequest())
-                            .getContainerRequest();
-                    String pageUrl = httpRequest.getRequestURL().toString() + "?" + httpRequest.getQueryString();
-                    // get user ip address
-                    String ip = ((WebClientInfo) VloWebSession.get().getClientInfo()).getProperties().getRemoteAddress();
-                    String referer = httpRequest.getHeader("referer");
-                    // create PageView object and save it in the DB
-                    PageView pageView = new PageView(id, ip, pageUrl, referer);
-                    pageView.save(config);
-                } catch (Exception e) {
-                    logger.error("Error while storing page view statistics", e);
-                }
+            // no document in parameters, there may be a request to look up by selflink
+            if (!lookupBySelfLink(params)) {
+                // we have no lead to an (existing) document, prepare an error response
+                Session.get().error(String.format("Document with ID %s could not be found", params.get(VloWebAppParameters.DOCUMENT_ID)));
+                final PageParameters errorParams = new PageParameters(params)
+                        .remove(VloWebAppParameters.DOCUMENT_ID);
+                ErrorPage.triggerErrorPage(ErrorType.DOCUMENT_NOT_FOUND, errorParams);
             }
-
-            final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
-            setModel(documentModel);
-            add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
+        } else {
+            // check if the client requested a CMDI file (via content negotiation)
+            if (!serveCmdiContent(document)) {
+                // CMDI file not requested
+                final SolrDocumentModel documentModel = new SolrDocumentModel(document, fieldNameService);
+                setModel(documentModel);
+                add(new RecordStructuredMeatadataHeaderBehavior(documentModel));
+            }
         }
 
-        final IModel<Integer> childRecordsCountModel = new RecordMetadataLinksCountModel(getModel());
-        linksCountLabelModel = new LoadableDetachableModel<String>() {
-            @Override
-            protected String load() {
-                final SolrDocument document = RecordPage.this.getModelObject();
-                if (document != null) {
-                    final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
-                    if (countValue instanceof Integer) {
-                        final Long fieldValuesCount
-                                = Streams.concat(
-                                        // landing page links
-                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
-                                        // search page links
-                                        Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
-                                        // include FCS links count iff these links globally enabled
-                                        showFcsLinks
-                                                ? Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty())
-                                                : Stream.empty())
-                                        .collect(Collectors.counting())
-                                // add child records
-                                + childRecordsCountModel.getObject();
-                        if (fieldValuesCount == 0) {
-                            return ((Integer) countValue).toString();
-                        } else {
-                            return Long.toString(fieldValuesCount + (Integer) countValue);
-                        }
-                    }
-                }
-                return null;
-            }
-        };
+        linksCountLabelModel = new LinksCountLabelModel(getModel());
 
         addComponents(params);
+    }
+
+    /**
+     * Looks up a record to display by self link. If found it will set the
+     * corresponding respond page
+     *
+     * @param params request parameters
+     * @return true iff a matching respond page was set
+     */
+    private boolean lookupBySelfLink(PageParameters params) {
+        final StringValue selfLinkParam = params.get(VloWebAppParameters.SELF_LINK);
+
+        // We will take action only if a 'selfLink' param was set
+        if (!selfLinkParam.isEmpty()) {
+            final String selfLink = selfLinkParam.toString().trim();
+            // fetch the record for the specified self link
+            final QueryFacetsSelection selection = new QueryFacetsSelection(
+                    ImmutableMap.of(
+                            fieldNameService.getFieldName(FieldKey.SELF_LINK),
+                            new FacetSelection(FacetSelectionType.AND, ImmutableList.of(selfLink))));
+            final List<SolrDocument> documents = documentService.getDocuments(selection, 0, 2);
+            if (!documents.isEmpty()) {
+                // there is (at least) one matching document
+                if (documents.size() > 1) {
+                    // More than one record found with the same self link!
+                    // This should not happen but can also not be excluded so let's warn the user
+                    Session.get().warn("More than one record was found for self link " + selfLink + ". Showing only the first match.");
+                }
+
+                // we show the first (and normally only) map
+                final SolrDocument firstDoc = documents.get(0);
+
+                // check if the client requested a CMDI file (via content negotiation)
+                if (serveCmdiContent(firstDoc)) {
+                    return true;
+                } else {
+                    // redirect to record page
+                    final String docId = firstDoc.getFieldValue(fieldNameService.getFieldName(FieldKey.ID)).toString();
+
+                    if (docId != null) {
+                        // adapt page parameters (selflink out, id in)
+                        final PageParameters newParams = new PageParameters(params);
+                        newParams.remove(VloWebAppParameters.SELF_LINK);
+                        newParams.add(VloWebAppParameters.DOCUMENT_ID, docId);
+                        // set new response: current page but with updated parameters
+                        RequestCycle.get().setResponsePage(getClass(), newParams);
+                        return true;
+                    }
+                }
+            }
+        }
+        // if we get here we did not find a document to redirect to
+        return false;
+    }
+
+    private boolean serveCmdiContent(SolrDocument document) {
+        // content negotiation may be used to request a raw CMDI document
+        return getAcceptHeaderFromRequest().map(acceptHeader -> {
+            if (acceptHeader.startsWith(CMDI_MEDIA_TYPE)) {
+                // replace request handler with a CMDI content rendering one
+                final CmdiContentRequestHandler cmdiContentRequestHandler = new CmdiContentRequestHandler(document, fieldNameService);
+                throw new RequestHandlerExecutor.ReplaceHandlerException(cmdiContentRequestHandler, true);
+            } else {
+                return false;
+            }
+        }).orElse(false);
+    }
+
+    private Optional<String> getAcceptHeaderFromRequest() {
+        final Request request = RequestCycle.get().getRequest();
+        if (request instanceof WebRequest) {
+            return Optional.ofNullable(((WebRequest) request).getHeader("Accept"));
+        } else {
+            return Optional.empty();
+        }
     }
 
     private void addComponents(PageParameters params) {
@@ -445,7 +485,7 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
         if (tabs.getSelectedTab() > 0) {
             params.add(VloWebAppParameters.RECORD_PAGE_TAB, TABS_ORDER.get(tabs.getSelectedTab()));
         }
-        
+
         // exclude path encoded docId param 
         params.remove(VloWebAppParameters.DOCUMENT_ID);
 
@@ -485,9 +525,62 @@ public class RecordPage extends VloBasePage<SolrDocument> implements HistoryApiA
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forReference(javaScriptResources.getBootstrapTour(), true));
-        response.render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class, "vlo-tour.js"), true));
+        response
+                .render(JavaScriptHeaderItem.forReference(new JavaScriptResourceReference(FacetedSearchPage.class,
+                        "vlo-tour.js"), true));
         response.render(JavaScriptHeaderItem.forScript("$(document).ready(function(){initTourRecordPage();});", "initTourRecordPage"));
 
         response.render(JavaScriptHeaderItem.forUrl(config.getLrSwitchboardPopupScriptUrl(), "switchboard-popup", true));
+    }
+
+    /**
+     * Model that provides a count of the total number of links to report for a
+     * record (eg in the links tab heading)
+     */
+    private class LinksCountLabelModel extends LoadableDetachableModel<String> {
+
+        private final IModel<SolrDocument> docModel;
+        private final RecordMetadataLinksCountModel childRecordsCountModel;
+
+        public LinksCountLabelModel(IModel<SolrDocument> docModel) {
+            this.docModel = docModel;
+            this.childRecordsCountModel = new RecordMetadataLinksCountModel(docModel);
+        }
+
+        @Override
+        protected String load() {
+            final SolrDocument document = docModel.getObject();
+            if (document != null) {
+                final Object countValue = document.getFieldValue(fieldNameService.getFieldName(FieldKey.RESOURCE_COUNT));
+                if (countValue instanceof Integer) {
+                    final Long fieldValuesCount
+                            = Streams.concat(
+                                    // landing page links
+                                    Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.LANDINGPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                    // search page links
+                                    Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCHPAGE))).map(f -> f.stream()).orElse(Stream.empty()),
+                                    // include FCS links count iff these links globally enabled
+                                    showFcsLinks
+                                            ? Optional.ofNullable(document.getFieldValues(fieldNameService.getFieldName(FieldKey.SEARCH_SERVICE))).map(f -> f.stream()).orElse(Stream.empty())
+                                            : Stream.empty())
+                                    .collect(Collectors.counting())
+                            // add child records
+                            + childRecordsCountModel.getObject();
+                    if (fieldValuesCount == 0) {
+                        return ((Integer) countValue).toString();
+                    } else {
+                        return Long.toString(fieldValuesCount + (Integer) countValue);
+                    }
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public void detach() {
+            childRecordsCountModel.detach();
+            docModel.detach();
+        }
+
     }
 }
