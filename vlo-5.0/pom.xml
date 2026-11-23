@@ -24,9 +24,7 @@
     </properties>
     
     <modules>
-        <module>vlo-api-model</module>
         <module>vlo-mapping</module>
-        <module>vlo-api</module>
         <module>vlo-batch-importer</module>
     </modules>
     
