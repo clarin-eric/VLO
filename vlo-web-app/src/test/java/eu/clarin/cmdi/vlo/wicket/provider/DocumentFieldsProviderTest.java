@@ -17,19 +17,16 @@
 package eu.clarin.cmdi.vlo.wicket.provider;
 
 import com.google.common.collect.ImmutableList;
-import eu.clarin.cmdi.vlo.pojo.DocumentField;
 import eu.clarin.cmdi.vlo.service.FieldFilter;
-import java.util.Iterator;
 import java.util.List;
 import org.apache.solr.common.SolrDocument;
 import org.apache.wicket.model.Model;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -42,7 +39,7 @@ public class DocumentFieldsProviderTest {
     private SolrDocument document;
     private FieldFilter filter;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         filter = context.mock(FieldFilter.class);
 
@@ -97,16 +94,16 @@ public class DocumentFieldsProviderTest {
 
         final long first = 0L;
         final long count = 100L;
-        final Iterator<? extends DocumentField> result = instance.iterator(first, count);
-        assertTrue(result.hasNext());
-        assertEquals("field4", result.next().getFieldName());
-        assertTrue(result.hasNext());
-        assertEquals("field2", result.next().getFieldName());
-        assertTrue(result.hasNext());
-        assertEquals("field1", result.next().getFieldName());
-        assertTrue(result.hasNext());
-        assertEquals("field3", result.next().getFieldName());
-        assertFalse(result.hasNext());
+        final var resultIterator = instance.iterator(first, count);
+        assertTrue(resultIterator.hasNext());
+        assertEquals("field4", resultIterator.next().getFieldName());
+        assertTrue(resultIterator.hasNext());
+        assertEquals("field2", resultIterator.next().getFieldName());
+        assertTrue(resultIterator.hasNext());
+        assertEquals("field1", resultIterator.next().getFieldName());
+        assertTrue(resultIterator.hasNext());
+        assertEquals("field3", resultIterator.next().getFieldName());
+        assertFalse(resultIterator.hasNext());
     }
 
     /**
@@ -133,13 +130,13 @@ public class DocumentFieldsProviderTest {
 
         final long first = 0L;
         final long count = 100L;
-        final Iterator<? extends DocumentField> result = instance.iterator(first, count);
-        assertTrue(result.hasNext());
-        assertEquals("field1", result.next().getFieldName());
-        assertTrue(result.hasNext());
+        final var resultIterator = instance.iterator(first, count);
+        assertTrue(resultIterator.hasNext());
+        assertEquals("field1", resultIterator.next().getFieldName());
+        assertTrue(resultIterator.hasNext());
         // field 2 filtered out
-        assertEquals("field3", result.next().getFieldName());
-        assertFalse(result.hasNext());
+        assertEquals("field3", resultIterator.next().getFieldName());
+        assertFalse(resultIterator.hasNext());
         // field 4 filtered out
     }
 
@@ -168,9 +165,9 @@ public class DocumentFieldsProviderTest {
 
         final long first = 1L;
         final long count = 1L;
-        final Iterator<? extends DocumentField> result = instance.iterator(first, count);
-        assertTrue(result.hasNext());
+        final var resultIterator = instance.iterator(first, count);
+        assertTrue(resultIterator.hasNext());
         // field 3 is the first field because of the offset of 1
-        assertEquals("field3", result.next().getFieldName());
+        assertEquals("field3", resultIterator.next().getFieldName());
     }
 }

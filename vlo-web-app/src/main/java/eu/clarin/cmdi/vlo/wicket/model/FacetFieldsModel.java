@@ -67,8 +67,7 @@ public class FacetFieldsModel extends LoadableDetachableModel<List<FacetField>> 
     }
 
     @Override
-    public void detach() {
-        super.detach();
+    protected void onDetachAlways() {
         selectionModel.detach();
     }
 

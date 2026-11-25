@@ -16,23 +16,20 @@
  */
 package eu.clarin.cmdi.vlo.wicket.model;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import eu.clarin.cmdi.vlo.service.XmlTransformationService;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.xml.transform.TransformerException;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.util.ListModel;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -45,7 +42,7 @@ public class XsltModelTest {
     private XsltModel instance;
     private XmlTransformationService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         service = context.mock(XmlTransformationService.class);
         urlModel = new ListModel<>();

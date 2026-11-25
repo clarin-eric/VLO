@@ -1,13 +1,12 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
 import eu.clarin.cmdi.vlo.importer.normalizer.AbstractPostNormalizer;
 import eu.clarin.cmdi.vlo.importer.normalizer.AvailabilityPostNormalizer;
 import org.junit.jupiter.api.Test;
-
 
 public class AvailabilityPostNormalizerTest extends ImporterTestcase {
     

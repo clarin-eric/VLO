@@ -1,7 +1,7 @@
 package eu.clarin.cmdi.vlo.importer;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +193,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 mapping.getPatterns().get(0).getPattern());
         assertEquals(4, mapping.getPatterns().size());
 
-        assertEquals("check to see we tested them all", facets.size(), index);
+        assertEquals(facets.size(), index, "check to see we tested them all");
     }
 
     @Test
@@ -329,7 +329,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 mapping.getPatterns().get(0).getPattern());
         assertEquals(3, mapping.getPatterns().size());
 
-        assertEquals("check to see we tested them all", facets.size(), index);
+        assertEquals(facets.size(), index, "check to see we tested them all");
     }
 
     @Test
@@ -475,7 +475,7 @@ public class FacetMappingFactoryTest extends ImporterTestcase {
                 mapping.getPatterns().get(0).getPattern());
         assertEquals(2, mapping.getPatterns().size());
 
-        assertEquals("check to see we tested them all", facets.size(), index);
+        assertEquals(facets.size(), index, "check to see we tested them all");
     }
 
     @Test

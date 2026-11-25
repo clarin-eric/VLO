@@ -29,6 +29,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.support.TransactionOperations;
 
 /**
  *
@@ -39,19 +40,25 @@ public class LinkcheckerAvailabilityStatusChecker implements ResourceAvailabilit
     private final static Logger logger = LoggerFactory.getLogger(LinkcheckerAvailabilityStatusChecker.class);
     
     private final StatusService statusService;
+    private final TransactionOperations transactionOperations;
     private final Consumer<Writer> statusWriter;
     private final Callable closeHandler;
     
-    public LinkcheckerAvailabilityStatusChecker(StatusService statusService, Consumer<Writer> satusWriter, Callable closeHandler) {
+    public LinkcheckerAvailabilityStatusChecker(StatusService statusService, TransactionOperations transactionOperations, Consumer<Writer> satusWriter, Callable closeHandler) {
         this.statusService = statusService;
+        this.transactionOperations = transactionOperations;
         this.statusWriter = satusWriter;
         this.closeHandler = closeHandler;
     }
-    
+
     @Override
     public Map<String, LinkStatus> getLinkStatusForRefs(Stream<String> hrefs) throws IOException {
-        final Map<String, Status> status = statusService.getStatus(hrefs.toArray(String[]::new));
-        return ImmutableMap.copyOf(Maps.transformEntries(status, (k, v) -> newLinkStatus(v)));
+        final String[] urls = hrefs.toArray(String[]::new);
+        // Status.url is lazy, so it has to be read in the same session as the status
+        return transactionOperations.execute(tx -> {
+            final Map<String, Status> status = statusService.getStatus(urls);
+            return ImmutableMap.copyOf(Maps.transformEntries(status, (k, v) -> newLinkStatus(v)));
+        });
     }
     
     @Override

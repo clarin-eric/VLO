@@ -21,18 +21,16 @@ import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import eu.clarin.cmdi.vlo.service.solr.FacetFieldsService;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.util.ListModel;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -46,7 +44,7 @@ public class FacetFieldModelTest {
     private QueryFacetsSelection selection;
     private FacetFieldsService service;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         service = context.mock(FacetFieldsService.class);
         selection = new QueryFacetsSelection();

@@ -30,10 +30,10 @@ import java.util.Map;
 import jakarta.xml.bind.JAXBException;
 import javax.xml.transform.stream.StreamSource;
 import org.apache.solr.client.solrj.response.FacetField;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -127,7 +127,7 @@ public class FacetConditionEvaluationServiceImplTest {
             final QueryFacetsSelection selection = new QueryFacetsSelection();
 
             final boolean evaluation = multilingualFacetCondition.evaluate(selection, facetFields);
-            assertFalse("Empty selection should not match conditions", evaluation);
+            assertFalse(evaluation, "Empty selection should not match conditions");
         }
 
         {
@@ -137,7 +137,7 @@ public class FacetConditionEvaluationServiceImplTest {
             selection.addSingleFacetValue("language", FacetSelectionType.AND, ImmutableList.of("test"));
 
             final boolean evaluation = multilingualFacetCondition.evaluate(selection, facetFields);
-            assertTrue("Any value for language facet should match conditions", evaluation);
+            assertTrue(evaluation, "Any value for language facet should match conditions");
         }
 
         {
@@ -145,16 +145,16 @@ public class FacetConditionEvaluationServiceImplTest {
             final List<FacetField> facetFields = Collections.emptyList();
             final QueryFacetsSelection selection = new QueryFacetsSelection();
             selection.addSingleFacetValue("testA", FacetSelectionType.AND, ImmutableList.of("test1"));
-            assertFalse("Accepted value for testA: only partial match", multilingualFacetCondition.evaluate(selection, facetFields));
+            assertFalse(multilingualFacetCondition.evaluate(selection, facetFields), "Accepted value for testA: only partial match");
 
             selection.addSingleFacetValue("testB", FacetSelectionType.AND, ImmutableList.of("test1"));
-            assertFalse("One out of two required values for testB: only partial match", multilingualFacetCondition.evaluate(selection, facetFields));
+            assertFalse(multilingualFacetCondition.evaluate(selection, facetFields), "One out of two required values for testB: only partial match");
 
             selection.addNewFacetValue("testB", FacetSelectionType.AND, ImmutableList.of("test2"));
-            assertTrue("Two out of two required values for testB: should match conditions", multilingualFacetCondition.evaluate(selection, facetFields));
+            assertTrue(multilingualFacetCondition.evaluate(selection, facetFields), "Two out of two required values for testB: should match conditions");
 
             selection.removeFacetSelection("testA");
-            assertFalse("Missing accepted value for testA: only partial match", multilingualFacetCondition.evaluate(selection, facetFields));
+            assertFalse(multilingualFacetCondition.evaluate(selection, facetFields), "Missing accepted value for testA: only partial match");
         }
 
     }

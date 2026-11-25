@@ -24,11 +24,11 @@ import java.util.Properties;
 import jakarta.xml.bind.ValidationEventHandler;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public class VloConfigMarshallerTest {
     private VloConfigMarshaller instance;
     private Properties testProps;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         instance = new VloConfigMarshaller();
         testProps = new Properties();

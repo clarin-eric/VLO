@@ -16,14 +16,10 @@
  */
 package eu.clarin.cmdi.vlo.importer.normalizer;
 
-import eu.clarin.cmdi.vlo.importer.DocFieldContainer;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *

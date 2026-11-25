@@ -20,9 +20,9 @@ import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -49,10 +49,10 @@ public class SmartLinkFieldValueLabelTest {
         map.forEach((text, target) -> {
             final Matcher matcher = pattern.matcher(text);
             if (target.isEmpty()) {
-                assertFalse("Expected no match in '" + text + "'", matcher.find());
+                assertFalse(matcher.find(), "Expected no match in '" + text + "'");
             } else {
                 matcher.find();
-                assertEquals("Expected match in '" + text + "'", target, matcher.group());
+                assertEquals(target, matcher.group(), "Expected match in '" + text + "'");
             }
         });
     }

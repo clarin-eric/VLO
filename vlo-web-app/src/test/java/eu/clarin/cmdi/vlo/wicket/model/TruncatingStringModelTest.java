@@ -18,9 +18,9 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -33,7 +33,7 @@ public class TruncatingStringModelTest {
     private IModel<String> innerModel;
     private TruncatingStringModel instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         innerModel = Model.of("");
         instance = new TruncatingStringModel(innerModel, maxLength, truncatePoint);

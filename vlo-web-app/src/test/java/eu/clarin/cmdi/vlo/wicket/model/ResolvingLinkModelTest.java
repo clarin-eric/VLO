@@ -21,8 +21,8 @@ import org.apache.wicket.model.Model;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -87,12 +87,12 @@ public class ResolvingLinkModelTest {
 
     private static void testResolves(String target, String object, String subject) {
         ResolvingLinkModel model = new ResolvingLinkModel(Model.of(object), Model.of(subject));
-        assertEquals(String.format("Expected [%1s] to resolve to [%2s] against [%3s]", subject, target, object), target, model.getObject());
+        assertEquals(target, model.getObject(), String.format("Expected [%1s] to resolve to [%2s] against [%3s]", subject, target, object));
     }
 
     private static void testResolvesNull(String object, String subject) {
         ResolvingLinkModel model = new ResolvingLinkModel(Model.of(object), Model.of(subject));
-        assertNull(String.format("Expected [%1s] to NOT resolve against [%3s]", subject, object), model.getObject());
+        assertNull(model.getObject(), String.format("Expected [%1s] to NOT resolve against [%3s]", subject, object));
     }
 
     /**

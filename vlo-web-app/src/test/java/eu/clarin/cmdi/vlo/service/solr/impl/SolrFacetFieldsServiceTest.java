@@ -24,12 +24,11 @@ import java.util.List;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -43,7 +42,7 @@ public class SolrFacetFieldsServiceTest {
     private SearchResultsDao dao;
     private SolrFacetFieldsService instance;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         dao = context.mock(SearchResultsDao.class);
         queryFactory = context.mock(SolrFacetQueryFactory.class);

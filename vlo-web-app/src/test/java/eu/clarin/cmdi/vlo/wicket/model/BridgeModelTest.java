@@ -18,10 +18,8 @@ package eu.clarin.cmdi.vlo.wicket.model;
 
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -39,7 +37,7 @@ public class BridgeModelTest {
         IModel<Boolean> state = Model.of(false);
         String falseValue = "false";
 
-        BridgeModel instance = new BridgeModel(inner, outer, state, falseValue);
+        var instance = new BridgeModel<>(inner, outer, state, falseValue);
 
         assertFalse(instance.getObject());
         instance.setObject(true);
@@ -56,7 +54,7 @@ public class BridgeModelTest {
         IModel<Boolean> state = Model.of(false);
         String falseValue = "bridge closed";
 
-        BridgeModel instance = new BridgeModel(inner, outer, state, falseValue);
+        var instance = new BridgeModel<>(inner, outer, state, falseValue);
 
         // initial values
         assertEquals("inner value", inner.getObject());
