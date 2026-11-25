@@ -127,6 +127,32 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${spring.boot.version}</version>
+            <exclusions>
+                <!-- Logback; the web app logs through Log4j2 -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <!-- Embedded Tomcat for 'java -jar' -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
@@ -400,20 +426,17 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.cargo</groupId>
-                <artifactId>cargo-maven3-plugin</artifactId>
-                <version>1.10.13</version>
-                <configuration>
-                    <container>
-                        <containerId>tomcat11x</containerId>
-                        <type>embedded</type>
-                    </container>
-                    <configuration>
-                        <properties>
-                            <cargo.servlet.port>8080</cargo.servlet.port>
-                        </properties>
-                    </configuration>
-                </configuration>
+                <!-- makes the war executable with 'java -jar' -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <!-- Bootstrap 5 SCSS + JS bundle, and the CLARIN fonts from base-style -->

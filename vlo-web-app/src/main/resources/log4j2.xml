@@ -3,8 +3,8 @@
     <Appenders>        
         <RollingFile
             name="File"
-            fileName="${sys:catalina.base}/logs/vlo.log"
-            filePattern="${sys:catalina.base}/logs/vlo.%i.log.gz"
+            fileName="${sys:vlo.log.dir:-logs}/vlo.log"
+            filePattern="${sys:vlo.log.dir:-logs}/vlo.%i.log.gz"
             ignoreExceptions="false">
             <PatternLayout>
                 <Pattern>%d %p [%c#%M:%L] - %m%n</Pattern>

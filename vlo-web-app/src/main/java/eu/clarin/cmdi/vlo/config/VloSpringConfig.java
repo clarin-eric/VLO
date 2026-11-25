@@ -25,8 +25,8 @@ import org.springframework.context.annotation.Import;
  *
  * Note: All of this works because
  * {@link org.apache.wicket.spring.SpringWebApplicationFactory} is used in place
- * of the standard Wicket application factory and annotation driven
- * configuration is enabled in WEB-INF/applicationContext.xml
+ * of the standard Wicket application factory, see
+ * {@link eu.clarin.cmdi.vlo.VloWebApplication}
  *
  * @author twagoo
  */
