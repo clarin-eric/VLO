@@ -1,6 +1,5 @@
 package eu.clarin.cmdi.vlo.monitor.service;
 
-import eu.clarin.cmdi.vlo.monitor.util.PreemptiveAuthInterceptor;
 import com.google.common.collect.ImmutableMap;
 import eu.clarin.cmdi.vlo.FacetConstants;
 import eu.clarin.cmdi.vlo.config.VloConfig;
@@ -10,16 +9,10 @@ import jakarta.inject.Inject;
 import java.io.IOException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.SolrParams;
 import org.springframework.stereotype.Service;
@@ -84,20 +77,10 @@ public class IndexServiceImpl implements IndexService {
     @PostConstruct
     protected void initSolrClient() {
         final String solrUrl = config.getSolrUrl();
-        final int nThreads = config.getSolrThreads();
-        log.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, nThreads);
-
-        // setting credentials for connection and enabling preemptive authentication
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(config.getSolrUserReadWrite(), config.getSolrUserReadWritePass()));
-        CloseableHttpClient httpClient = HttpClientBuilder.create().addInterceptorFirst(new PreemptiveAuthInterceptor()).setDefaultCredentialsProvider(credentialsProvider).build();
-
-        /* Specify the number of documents in the queue that will trigger the
-         * threads, two of them, emptying it.
-         */
-        solrClient = new ConcurrentUpdateSolrClient(new ConcurrentUpdateSolrClient.Builder(solrUrl)
-                .withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads).withHttpClient(httpClient)) {
-        };
+        log.info("Initializing Solr client on {}", solrUrl);
+        solrClient = new HttpJdkSolrClient.Builder(solrUrl)
+                .withBasicAuthCredentials(config.getSolrUserReadWrite(), config.getSolrUserReadWritePass())
+                .build();
     }
 
     @PreDestroy

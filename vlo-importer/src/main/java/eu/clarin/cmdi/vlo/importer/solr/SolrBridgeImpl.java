@@ -20,23 +20,10 @@ import eu.clarin.cmdi.vlo.config.VloConfig;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.AuthState;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.protocol.HttpContext;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.ConcurrentUpdateSolrClient;
+import org.apache.solr.client.solrj.impl.ConcurrentUpdateJdkSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,16 +66,17 @@ public class SolrBridgeImpl implements SolrBridge {
         final int nThreads = config.getSolrThreads();
         LOG.info("Initializing concurrent Solr Server on {} with {} threads", solrUrl, nThreads);
 
-        // setting credentials for connection and enabling preemptive authentication
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(config.getSolrUserReadWrite(), config.getSolrUserReadWritePass()));
-        CloseableHttpClient httpClient = HttpClientBuilder.create().addInterceptorFirst(new PreemptiveAuthInterceptor()).setDefaultCredentialsProvider(credentialsProvider).build();
+        // credentials are sent with every request
+        final HttpJdkSolrClient httpClient = new HttpJdkSolrClient.Builder(solrUrl)
+                .withBasicAuthCredentials(config.getSolrUserReadWrite(), config.getSolrUserReadWritePass())
+                .build();
 
         /* Specify the number of documents in the queue that will trigger the
          * threads, two of them, emptying it.
          */
-        solrClient = new ConcurrentUpdateSolrClient(new ConcurrentUpdateSolrClient.Builder(solrUrl)
-                .withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads).withHttpClient(httpClient)) {
+        final ConcurrentUpdateJdkSolrClient.Builder builder = new ConcurrentUpdateJdkSolrClient.Builder(solrUrl, httpClient, true);
+        builder.withQueueSize(config.getMinDocsInSolrQueue()).withThreadCount(nThreads);
+        solrClient = new ConcurrentUpdateJdkSolrClient(builder) {
             /*
                      * Let the super class method handle exceptions. Make the
                      * exception available to the importer in the form of the
@@ -158,24 +146,4 @@ public class SolrBridgeImpl implements SolrBridge {
         //do nothing
     }
 
-}
-
-class PreemptiveAuthInterceptor implements HttpRequestInterceptor {
-
-    @Override
-    public void process(final HttpRequest request, final HttpContext context) throws HttpException, IOException {
-        AuthState authState = (AuthState) context.getAttribute(HttpClientContext.TARGET_AUTH_STATE);
-
-        // If no auth scheme available yet, try to initialize it
-        // preemptively
-        if (authState.getAuthScheme() == null) {
-            CredentialsProvider credsProvider = (CredentialsProvider) context
-                    .getAttribute(HttpClientContext.CREDS_PROVIDER);
-            Credentials creds = credsProvider.getCredentials(AuthScope.ANY);
-            if (creds == null) {
-                throw new HttpException("No credentials for preemptive authentication");
-            }
-            authState.update(new BasicScheme(), creds);
-        }
-    }
 }

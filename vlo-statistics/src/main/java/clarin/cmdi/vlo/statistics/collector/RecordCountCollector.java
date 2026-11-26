@@ -20,10 +20,10 @@ import clarin.cmdi.vlo.statistics.VloReportGenerator;
 import java.io.IOException;
 import clarin.cmdi.vlo.statistics.model.VloReport;
 import eu.clarin.cmdi.vlo.config.VloConfig;
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.apache.solr.client.solrj.request.QueryRequest;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 
 /**

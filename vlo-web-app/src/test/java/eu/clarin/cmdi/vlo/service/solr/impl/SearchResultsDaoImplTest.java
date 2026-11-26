@@ -19,11 +19,11 @@ package eu.clarin.cmdi.vlo.service.solr.impl;
 import eu.clarin.cmdi.vlo.FieldKey;
 import static org.hamcrest.Matchers.equalTo;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
-import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.embedded.EmbeddedSolrServer;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -62,7 +62,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
 
         SolrTestCaseJ4.initCore(
                 //config
-                getResourcePath("/solr/vlo-index/solrconfig.xml"),
+                getResourcePath("/solr/vlo-index/solrconfig.xml").toString(),
                 //schema
                 // The "classic" (non-managed) schema name, which is what Solr
                 //itself defaults to. We have no classic schema and the managed
@@ -178,7 +178,7 @@ public class SearchResultsDaoImplTest extends SolrTestCaseJ4 {
         }
     }
 
-    public static String getResourcePath(String resource) throws Exception {
-        return new File(SearchResultsDaoImplTest.class.getResource(resource).toURI()).getAbsolutePath();
+    public static Path getResourcePath(String resource) throws Exception {
+        return Path.of(SearchResultsDaoImplTest.class.getResource(resource).toURI());
     }
 }

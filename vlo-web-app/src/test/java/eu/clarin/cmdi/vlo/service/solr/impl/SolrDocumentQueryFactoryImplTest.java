@@ -36,7 +36,7 @@ import java.util.Map;
 
 import jakarta.inject.Inject;
 
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.hamcrest.Matchers;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;

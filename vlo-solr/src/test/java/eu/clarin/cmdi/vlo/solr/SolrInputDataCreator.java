@@ -43,7 +43,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.SolrInputDocument;
@@ -145,10 +145,8 @@ public class SolrInputDataCreator {
 
     }
 
-    private static HttpSolrClient newSolrClient() {
-        return new HttpSolrClient.Builder()
-                .withBaseSolrUrl(SOLR_URL)
-                .build();
+    private static HttpJdkSolrClient newSolrClient() {
+        return new HttpJdkSolrClient.Builder(SOLR_URL).build();
     }
 
     /**

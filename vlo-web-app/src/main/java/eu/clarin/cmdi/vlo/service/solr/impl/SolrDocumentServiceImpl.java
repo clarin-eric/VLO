@@ -25,7 +25,7 @@ import eu.clarin.cmdi.vlo.service.solr.SolrDocumentQueryFactory;
 import eu.clarin.cmdi.vlo.service.solr.SolrDocumentService;
 import java.util.List;
 import java.util.Map;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;

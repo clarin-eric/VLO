@@ -20,7 +20,7 @@
         <bootstrap.version>5.3.8</bootstrap.version>
         <bootstrap.unpack.dir>${project.build.directory}/generated-sources/bootstrap5</bootstrap.unpack.dir>
         <bootstrap.webjar.dir>${bootstrap.unpack.dir}/META-INF/resources/webjars/bootstrap/${bootstrap.version}</bootstrap.webjar.dir>
-        <jersey.version>3.1.12</jersey.version>
+        <jersey.version>4.0.2</jersey.version>
         
         <!-- selects the appender for the log4j root logger -->
         <log4j.appender>File</log4j.appender>

@@ -1,9 +1,9 @@
 package eu.clarin.cmdi.vlo.solr;
 
 import com.google.common.collect.ImmutableMap;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import org.apache.solr.SolrTestCaseJ4;
@@ -60,7 +60,7 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
 
         SolrTestCaseJ4.initCore(
                 //config
-                getResourcePath("/solr/vlo-index/solrconfig.xml"),
+                getResourcePath("/solr/vlo-index/solrconfig.xml").toString(),
                 //schema
                 // The "classic" (non-managed) schema name, which is what Solr
                 // itself defaults to. We have no classic schema and the managed
@@ -225,8 +225,8 @@ public class SolrQueryTest extends SolrTestCaseJ4 {
                 .getResults();
     }
 
-    public static String getResourcePath(String resource) throws Exception {
-        return new File(SolrQueryTest.class.getResource(resource).toURI()).getAbsolutePath();
+    public static Path getResourcePath(String resource) throws Exception {
+        return Path.of(SolrQueryTest.class.getResource(resource).toURI());
     }
 
     /**

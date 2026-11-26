@@ -30,7 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 
 /**
  *
@@ -82,7 +82,7 @@ public class MetadataImporterBenchmarkRunner extends MetadataImporterRunner {
         LOG.info("Triggering Solr index optimization");
         //optimise solr server for a fair assessment
         try {
-            SolrClient s = new HttpSolrClient.Builder(config.getSolrUrl()).build();
+            SolrClient s = new HttpJdkSolrClient.Builder(config.getSolrUrl()).build();
             s.optimize();
             s.close();
         } catch (IOException | SolrServerException e) {

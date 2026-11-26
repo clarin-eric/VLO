@@ -17,7 +17,7 @@
 package eu.clarin.cmdi.vlo.service.solr;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 
 /**
  *

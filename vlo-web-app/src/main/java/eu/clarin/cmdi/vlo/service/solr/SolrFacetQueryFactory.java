@@ -18,7 +18,7 @@ package eu.clarin.cmdi.vlo.service.solr;
 
 import eu.clarin.cmdi.vlo.pojo.QueryFacetsSelection;
 import java.util.List;
-import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.request.SolrQuery;
 
 /**
  * A factory that constructs SOLR queries to be used in various services for

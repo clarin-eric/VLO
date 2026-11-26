@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import jakarta.xml.bind.JAXBException;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.impl.HttpSolrClient;
+import org.apache.solr.client.solrj.impl.HttpJdkSolrClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ public class VloReportGenerator {
     public static final String SOLR_REQUEST_HANDLER = "/fast";
 
     private final VloConfig config;
-    private final HttpSolrClient solrClient;
+    private final HttpJdkSolrClient solrClient;
     private final List<VloStatisticsCollector> collectors;
     private final List<VloReportHandler> resultHandlers;
 
@@ -68,7 +68,7 @@ public class VloReportGenerator {
         this.config = config;
         this.collectors = collectors;
         this.resultHandlers = resultHandlers;
-        this.solrClient = new HttpSolrClient.Builder(config.getSolrUrl()).build();
+        this.solrClient = new HttpJdkSolrClient.Builder(config.getSolrUrl()).build();
     }
 
     public void run() throws SolrServerException, IOException, JAXBException {
